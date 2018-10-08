@@ -1,0 +1,975 @@
+{
+  "title": "nodemon",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "583d6a9b8e130f66",
+      "text": "nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application - [https://github.com/remy/nodemon github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "694146b19825544b",
+      "text": "nodemon does not require any changes to your code or method of development. nodemon simply wraps your node application and keeps an eye on any files that have changed. "
+    },
+    {
+      "type": "paragraph",
+      "id": "92d58a70933c932a",
+      "text": "Remember that nodemon is a replacement wrapper for node, think of it as replacing the word \"node\" on the command line when you run your script."
+    },
+    {
+      "type": "markdown",
+      "id": "58e8c4f44765a112",
+      "text": "# Installation"
+    },
+    {
+      "type": "paragraph",
+      "id": "e3111f13b8c8a854",
+      "text": "First you install it globally:"
+    },
+    {
+      "type": "code",
+      "id": "73e5a3408becf406",
+      "text": "npm i nodemon -g"
+    },
+    {
+      "type": "paragraph",
+      "id": "d8e6dbee2aa4ce29",
+      "text": "Then you should simply swap the node command for the nodemon command:"
+    },
+    {
+      "type": "code",
+      "id": "38430d3f0a3f5c70",
+      "text": "node server.js"
+    },
+    {
+      "type": "paragraph",
+      "id": "70767e9503447100",
+      "text": "with:"
+    },
+    {
+      "type": "code",
+      "id": "dbb9d8617332fc95",
+      "text": "nodemon server.js\n  14 Nov 21:23:23 - [nodemon] v1.2.1\n  14 Nov 21:23:23 - [nodemon] to restart at any time, enter `rs`\n  14 Nov 21:23:23 - [nodemon] watching: *.*\n  14 Nov 21:23:23 - [nodemon] starting `node server.js`\n  14 Nov 21:24:14 - [nodemon] restarting due to changes...\n  14 Nov 21:24:14 - [nodemon] starting `node server.js`"
+    },
+    {
+      "type": "paragraph",
+      "id": "80292e6ef63fb02b",
+      "text": "Among the existing options for nodemon or node-supervisor, probably the most popular one is to ignore specific files or folders."
+    },
+    {
+      "type": "markdown",
+      "id": "824e07b25db82e0c",
+      "text": "# Manual restarting"
+    },
+    {
+      "type": "paragraph",
+      "id": "5a31a173319eab13",
+      "text": "Whilst nodemon is running, if you need to manually restart your application, instead of stopping and restart nodemon, you can simply type:"
+    },
+    {
+      "type": "code",
+      "id": "f6190bcb3460bef1",
+      "text": "rs"
+    },
+    {
+      "type": "paragraph",
+      "id": "36fa4ae815e01bdc",
+      "text": "with a carriage return, and nodemon will restart your process. "
+    },
+    {
+      "type": "paragraph",
+      "id": "141ccde5288368b4",
+      "text": "[[Note]]: you don't need to do this in a new terminal window, simply type `rs` in the existing terminal that is holding the current nodemon process  - not need to control-q."
+    },
+    {
+      "type": "markdown",
+      "id": "826dd95676e08459",
+      "text": "# Monitoring multiple directories"
+    },
+    {
+      "type": "paragraph",
+      "id": "812d5ead95507979",
+      "text": "By default nodemon monitors the current working directory. If you want to take control of that option, use the --watch option to add specific paths:"
+    },
+    {
+      "type": "code",
+      "id": "9690c15d968092ca",
+      "text": "nodemon --watch app --watch libs app/server.js"
+    },
+    {
+      "type": "paragraph",
+      "id": "db446ec486831fac",
+      "text": "Now nodemon will only restart if there are changes in the ./app or ./libs directory. By default nodemon will traverse sub-directories, so there's no need in explicitly including sub-directories."
+    },
+    {
+      "type": "paragraph",
+      "id": "37719da3700597ef",
+      "text": "Don't use unix globbing to pass multiple directories, e.g --watch ./lib/*, it won't work. You need a --watch flag per directory watched."
+    },
+    {
+      "type": "markdown",
+      "id": "d0aac2624a26808a",
+      "text": "# Ignoring files"
+    },
+    {
+      "type": "paragraph",
+      "id": "1df479c37de94720",
+      "text": "By default, nodemon will only restart when a .js JavaScript file changes. In some cases you will want to ignore some specific files, directories or file patterns, to prevent nodemon from prematurely restarting your application."
+    },
+    {
+      "type": "paragraph",
+      "id": "52f8d28c94790f54",
+      "text": "This can be done via the command line:"
+    },
+    {
+      "type": "code",
+      "id": "a4fb211ecc657414",
+      "text": "nodemon --ignore lib/ --ignore tests/"
+    },
+    {
+      "type": "paragraph",
+      "id": "9bb17fcd0624eb20",
+      "text": "Or specific files can be ignored:"
+    },
+    {
+      "type": "code",
+      "id": "621fc42eded98770",
+      "text": "nodemon --ignore lib/app.js"
+    },
+    {
+      "type": "paragraph",
+      "id": "b09e6291f57eb4fe",
+      "text": "Patterns can also be ignored (but be sure to quote the arguments):"
+    },
+    {
+      "type": "code",
+      "id": "d544f21de5004472",
+      "text": "nodemon --ignore 'lib/*.js'"
+    },
+    {
+      "type": "paragraph",
+      "id": "a9724224428bf3d8",
+      "text": "Note that by default, nodemon will ignore the .git, node_modules, bower_components and .sass-cache directories and add your ignored patterns to the list. If you want to indeed watch a directory like node_modules, you need to overriding the underlying default ignore rules."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "nodemon",
+        "story": []
+      },
+      "date": 1461499389325
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0c899f18eae3de09"
+      },
+      "id": "0c899f18eae3de09",
+      "type": "add",
+      "date": 1461499390642
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "583d6a9b8e130f66",
+        "text": "Let us take nodemon for example. First you install it globally:"
+      },
+      "after": "0c899f18eae3de09",
+      "id": "583d6a9b8e130f66",
+      "date": 1461499415483
+    },
+    {
+      "type": "remove",
+      "id": "0c899f18eae3de09",
+      "date": 1461499423956
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "73e5a3408becf406"
+      },
+      "id": "73e5a3408becf406",
+      "type": "add",
+      "after": "583d6a9b8e130f66",
+      "date": 1461499427824
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "38430d3f0a3f5c70"
+      },
+      "id": "38430d3f0a3f5c70",
+      "type": "add",
+      "after": "73e5a3408becf406",
+      "date": 1461499429313
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dbb9d8617332fc95"
+      },
+      "id": "dbb9d8617332fc95",
+      "type": "add",
+      "after": "38430d3f0a3f5c70",
+      "date": 1461499430183
+    },
+    {
+      "type": "edit",
+      "id": "73e5a3408becf406",
+      "item": {
+        "type": "code",
+        "id": "73e5a3408becf406",
+        "text": "npm i nodemon -g"
+      },
+      "date": 1461499438011
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d8e6dbee2aa4ce29",
+        "text": "Then you should simply swap the node command for the nodemon command:"
+      },
+      "after": "73e5a3408becf406",
+      "id": "d8e6dbee2aa4ce29",
+      "date": 1461499442802
+    },
+    {
+      "type": "edit",
+      "id": "38430d3f0a3f5c70",
+      "item": {
+        "type": "code",
+        "id": "38430d3f0a3f5c70",
+        "text": "node server.js"
+      },
+      "date": 1461499460828
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "70767e9503447100",
+        "text": "with:"
+      },
+      "after": "38430d3f0a3f5c70",
+      "id": "70767e9503447100",
+      "date": 1461499463714
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a95d02c987aa4a7c"
+      },
+      "id": "a95d02c987aa4a7c",
+      "type": "add",
+      "after": "dbb9d8617332fc95",
+      "date": 1461499470715
+    },
+    {
+      "type": "edit",
+      "id": "dbb9d8617332fc95",
+      "item": {
+        "type": "code",
+        "id": "dbb9d8617332fc95",
+        "text": "nodemon server.js\n  14 Nov 21:23:23 - [nodemon] v1.2.1\n  14 Nov 21:23:23 - [nodemon] to restart at any time, enter `rs`\n  14 Nov 21:23:23 - [nodemon] watching: *.*\n  14 Nov 21:23:23 - [nodemon] starting `node server.js`\n  14 Nov 21:24:14 - [nodemon] restarting due to changes...\n  14 Nov 21:24:14 - [nodemon] starting `node server.js`"
+      },
+      "date": 1461499486544
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "80292e6ef63fb02b",
+        "text": "Among the existing options for nodemon or node-supervisor, probably the most popular one is to ignore specific files or folders."
+      },
+      "after": "dbb9d8617332fc95",
+      "id": "80292e6ef63fb02b",
+      "date": 1461499495027
+    },
+    {
+      "type": "edit",
+      "id": "583d6a9b8e130f66",
+      "item": {
+        "type": "paragraph",
+        "id": "583d6a9b8e130f66",
+        "text": "nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.\n\nnodemon does not require any changes to your code or method of development. nodemon simply wraps your node application and keeps an eye on any files that have changed. Remember that nodemon is a replacement wrapper for node, think of it as replacing the word \"node\" on the command line when you run your script."
+      },
+      "date": 1461499520279
+    },
+    {
+      "type": "add",
+      "id": "e3111f13b8c8a854",
+      "item": {
+        "type": "paragraph",
+        "id": "e3111f13b8c8a854",
+        "text": "First you install it globally:"
+      },
+      "after": "583d6a9b8e130f66",
+      "date": 1461499522858
+    },
+    {
+      "type": "edit",
+      "id": "583d6a9b8e130f66",
+      "item": {
+        "type": "paragraph",
+        "id": "583d6a9b8e130f66",
+        "text": "nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application."
+      },
+      "date": 1461499525549
+    },
+    {
+      "type": "add",
+      "id": "694146b19825544b",
+      "item": {
+        "type": "paragraph",
+        "id": "694146b19825544b",
+        "text": "nodemon does not require any changes to your code or method of development. nodemon simply wraps your node application and keeps an eye on any files that have changed. "
+      },
+      "after": "583d6a9b8e130f66",
+      "date": 1461499533613
+    },
+    {
+      "type": "add",
+      "id": "92d58a70933c932a",
+      "item": {
+        "type": "paragraph",
+        "id": "92d58a70933c932a",
+        "text": "Remember that nodemon is a replacement wrapper for node, think of it as replacing the word \"node\" on the command line when you run your script."
+      },
+      "after": "694146b19825544b",
+      "date": 1461499535015
+    },
+    {
+      "type": "edit",
+      "id": "583d6a9b8e130f66",
+      "item": {
+        "type": "paragraph",
+        "id": "583d6a9b8e130f66",
+        "text": "nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application - [https://github.com/remy/nodemon github]"
+      },
+      "date": 1461499561792
+    },
+    {
+      "type": "add",
+      "id": "58e8c4f44765a112",
+      "item": {
+        "type": "paragraph",
+        "id": "58e8c4f44765a112",
+        "text": "# Installation"
+      },
+      "after": "92d58a70933c932a",
+      "date": 1461499573767
+    },
+    {
+      "type": "edit",
+      "id": "58e8c4f44765a112",
+      "item": {
+        "type": "markdown",
+        "id": "58e8c4f44765a112",
+        "text": "# Installation"
+      },
+      "date": 1461499574762
+    },
+    {
+      "type": "remove",
+      "id": "a95d02c987aa4a7c",
+      "date": 1461499581216
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "824e07b25db82e0c"
+      },
+      "id": "824e07b25db82e0c",
+      "type": "add",
+      "after": "80292e6ef63fb02b",
+      "date": 1461501718768
+    },
+    {
+      "type": "edit",
+      "id": "824e07b25db82e0c",
+      "item": {
+        "type": "paragraph",
+        "id": "824e07b25db82e0c",
+        "text": "# Manual restarting"
+      },
+      "date": 1461501730172
+    },
+    {
+      "type": "add",
+      "id": "5a31a173319eab13",
+      "item": {
+        "type": "paragraph",
+        "id": "5a31a173319eab13",
+        "text": "Whilst nodemon is running, if you need to manually restart your application, instead of stopping and restart nodemon, you can simply type rs with a carriage return, and nodemon will restart your process."
+      },
+      "after": "824e07b25db82e0c",
+      "date": 1461501737827
+    },
+    {
+      "type": "add",
+      "id": "826dd95676e08459",
+      "item": {
+        "type": "paragraph",
+        "id": "826dd95676e08459",
+        "text": "Monitoring multiple directories\n\nBy default nodemon monitors the current working directory. If you want to take control of that option, use the --watch option to add specific paths:\n\nnodemon --watch app --watch libs app/server.js\nNow nodemon will only restart if there are changes in the ./app or ./libs directory. By default nodemon will traverse sub-directories, so there's no need in explicitly including sub-directories.\n\nDon't use unix globbing to pass multiple directories, e.g --watch ./lib/*, it won't work. You need a --watch flag per directory watched.\n\nSpecifying extension watch list\n\nBy default, nodemon looks for files with the .js, .coffee, .litcoffee, and .json extensions. If you use the --exec option and monitor app.py nodemon will monitor files with the extension of .py. However, you can specify your own list with the -e (or --ext) switch like so:\n\nnodemon -e js,jade\nNow nodemon will restart on any changes to files in the directory (or subdirectories) with the extensions .js, .jade.\n\nIgnoring files\n\nBy default, nodemon will only restart when a .js JavaScript file changes. In some cases you will want to ignore some specific files, directories or file patterns, to prevent nodemon from prematurely restarting your application.\n\nThis can be done via the command line:\n\nnodemon --ignore lib/ --ignore tests/\nOr specific files can be ignored:\n\nnodemon --ignore lib/app.js\nPatterns can also be ignored (but be sure to quote the arguments):\n\nnodemon --ignore 'lib/*.js'\nNote that by default, nodemon will ignore the .git, node_modules, bower_components and .sass-cache directories and add your ignored patterns to the list. If you want to indeed watch a directory like node_modules, you need to overriding the underlying default ignore rules."
+      },
+      "after": "5a31a173319eab13",
+      "date": 1461501764376
+    },
+    {
+      "type": "edit",
+      "id": "824e07b25db82e0c",
+      "item": {
+        "type": "markdown",
+        "id": "824e07b25db82e0c",
+        "text": "# Manual restarting"
+      },
+      "date": 1461501776770
+    },
+    {
+      "type": "edit",
+      "id": "826dd95676e08459",
+      "item": {
+        "type": "paragraph",
+        "id": "826dd95676e08459",
+        "text": "# Monitoring multiple directories"
+      },
+      "date": 1461501798342
+    },
+    {
+      "type": "add",
+      "id": "812d5ead95507979",
+      "item": {
+        "type": "paragraph",
+        "id": "812d5ead95507979",
+        "text": "By default nodemon monitors the current working directory. If you want to take control of that option, use the --watch option to add specific paths:"
+      },
+      "after": "826dd95676e08459",
+      "date": 1461501802934
+    },
+    {
+      "type": "add",
+      "id": "8cefa76acb980560",
+      "item": {
+        "type": "paragraph",
+        "id": "8cefa76acb980560",
+        "text": "\nnodemon --watch app --watch libs app/server.js"
+      },
+      "after": "812d5ead95507979",
+      "date": 1461501805534
+    },
+    {
+      "type": "add",
+      "id": "db446ec486831fac",
+      "item": {
+        "type": "paragraph",
+        "id": "db446ec486831fac",
+        "text": "Now nodemon will only restart if there are changes in the ./app or ./libs directory. By default nodemon will traverse sub-directories, so there's no need in explicitly including sub-directories."
+      },
+      "after": "8cefa76acb980560",
+      "date": 1461501808422
+    },
+    {
+      "type": "add",
+      "id": "37719da3700597ef",
+      "item": {
+        "type": "paragraph",
+        "id": "37719da3700597ef",
+        "text": "Don't use unix globbing to pass multiple directories, e.g --watch ./lib/*, it won't work. You need a --watch flag per directory watched."
+      },
+      "after": "db446ec486831fac",
+      "date": 1461501813460
+    },
+    {
+      "type": "add",
+      "id": "d0aac2624a26808a",
+      "item": {
+        "type": "paragraph",
+        "id": "d0aac2624a26808a",
+        "text": "# Ignoring files"
+      },
+      "after": "37719da3700597ef",
+      "date": 1461501830782
+    },
+    {
+      "type": "add",
+      "id": "1df479c37de94720",
+      "item": {
+        "type": "paragraph",
+        "id": "1df479c37de94720",
+        "text": "By default, nodemon will only restart when a .js JavaScript file changes. In some cases you will want to ignore some specific files, directories or file patterns, to prevent nodemon from prematurely restarting your application."
+      },
+      "after": "d0aac2624a26808a",
+      "date": 1461501835223
+    },
+    {
+      "type": "add",
+      "id": "52f8d28c94790f54",
+      "item": {
+        "type": "paragraph",
+        "id": "52f8d28c94790f54",
+        "text": "This can be done via the command line:"
+      },
+      "after": "1df479c37de94720",
+      "date": 1461501839193
+    },
+    {
+      "type": "add",
+      "id": "3ba056521339b885",
+      "item": {
+        "type": "paragraph",
+        "id": "3ba056521339b885",
+        "text": "\nnodemon --ignore lib/ --ignore tests/"
+      },
+      "after": "52f8d28c94790f54",
+      "date": 1461501840878
+    },
+    {
+      "type": "add",
+      "id": "9bb17fcd0624eb20",
+      "item": {
+        "type": "paragraph",
+        "id": "9bb17fcd0624eb20",
+        "text": "Or specific files can be ignored:"
+      },
+      "after": "3ba056521339b885",
+      "date": 1461501843040
+    },
+    {
+      "type": "add",
+      "id": "e40fda0ada4dfef0",
+      "item": {
+        "type": "paragraph",
+        "id": "e40fda0ada4dfef0",
+        "text": "\nnodemon --ignore lib/app.js"
+      },
+      "after": "9bb17fcd0624eb20",
+      "date": 1461501845296
+    },
+    {
+      "type": "add",
+      "id": "b09e6291f57eb4fe",
+      "item": {
+        "type": "paragraph",
+        "id": "b09e6291f57eb4fe",
+        "text": "Patterns can also be ignored (but be sure to quote the arguments):"
+      },
+      "after": "e40fda0ada4dfef0",
+      "date": 1461501848193
+    },
+    {
+      "type": "add",
+      "id": "43761081229b3d83",
+      "item": {
+        "type": "paragraph",
+        "id": "43761081229b3d83",
+        "text": "\nnodemon --ignore 'lib/*.js'"
+      },
+      "after": "b09e6291f57eb4fe",
+      "date": 1461501849966
+    },
+    {
+      "type": "add",
+      "id": "a9724224428bf3d8",
+      "item": {
+        "type": "paragraph",
+        "id": "a9724224428bf3d8",
+        "text": "Note that by default, nodemon will ignore the .git, node_modules, bower_components and .sass-cache directories and add your ignored patterns to the list. If you want to indeed watch a directory like node_modules, you need to overriding the underlying default ignore rules."
+      },
+      "after": "43761081229b3d83",
+      "date": 1461501857016
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d544f21de5004472"
+      },
+      "id": "d544f21de5004472",
+      "type": "add",
+      "after": "a9724224428bf3d8",
+      "date": 1461501858142
+    },
+    {
+      "type": "move",
+      "order": [
+        "583d6a9b8e130f66",
+        "694146b19825544b",
+        "92d58a70933c932a",
+        "58e8c4f44765a112",
+        "e3111f13b8c8a854",
+        "73e5a3408becf406",
+        "d8e6dbee2aa4ce29",
+        "38430d3f0a3f5c70",
+        "70767e9503447100",
+        "dbb9d8617332fc95",
+        "80292e6ef63fb02b",
+        "824e07b25db82e0c",
+        "5a31a173319eab13",
+        "826dd95676e08459",
+        "812d5ead95507979",
+        "8cefa76acb980560",
+        "db446ec486831fac",
+        "37719da3700597ef",
+        "d0aac2624a26808a",
+        "1df479c37de94720",
+        "52f8d28c94790f54",
+        "3ba056521339b885",
+        "9bb17fcd0624eb20",
+        "e40fda0ada4dfef0",
+        "b09e6291f57eb4fe",
+        "43761081229b3d83",
+        "d544f21de5004472",
+        "a9724224428bf3d8"
+      ],
+      "id": "d544f21de5004472",
+      "date": 1461501859916
+    },
+    {
+      "type": "edit",
+      "id": "d0aac2624a26808a",
+      "item": {
+        "type": "markdown",
+        "id": "d0aac2624a26808a",
+        "text": "# Ignoring files"
+      },
+      "date": 1461501861954
+    },
+    {
+      "type": "edit",
+      "id": "826dd95676e08459",
+      "item": {
+        "type": "markdown",
+        "id": "826dd95676e08459",
+        "text": "# Monitoring multiple directories"
+      },
+      "date": 1461501863633
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9690c15d968092ca"
+      },
+      "id": "9690c15d968092ca",
+      "type": "add",
+      "after": "a9724224428bf3d8",
+      "date": 1461501866479
+    },
+    {
+      "type": "move",
+      "order": [
+        "583d6a9b8e130f66",
+        "694146b19825544b",
+        "92d58a70933c932a",
+        "58e8c4f44765a112",
+        "e3111f13b8c8a854",
+        "73e5a3408becf406",
+        "d8e6dbee2aa4ce29",
+        "38430d3f0a3f5c70",
+        "70767e9503447100",
+        "dbb9d8617332fc95",
+        "80292e6ef63fb02b",
+        "824e07b25db82e0c",
+        "5a31a173319eab13",
+        "826dd95676e08459",
+        "812d5ead95507979",
+        "9690c15d968092ca",
+        "8cefa76acb980560",
+        "db446ec486831fac",
+        "37719da3700597ef",
+        "d0aac2624a26808a",
+        "1df479c37de94720",
+        "52f8d28c94790f54",
+        "3ba056521339b885",
+        "9bb17fcd0624eb20",
+        "e40fda0ada4dfef0",
+        "b09e6291f57eb4fe",
+        "43761081229b3d83",
+        "d544f21de5004472",
+        "a9724224428bf3d8"
+      ],
+      "id": "9690c15d968092ca",
+      "date": 1461501868645
+    },
+    {
+      "type": "remove",
+      "id": "8cefa76acb980560",
+      "date": 1461501872297
+    },
+    {
+      "type": "edit",
+      "id": "9690c15d968092ca",
+      "item": {
+        "type": "code",
+        "id": "9690c15d968092ca",
+        "text": "nodemon --watch app --watch libs app/server.js"
+      },
+      "date": 1461501874778
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a4fb211ecc657414"
+      },
+      "id": "a4fb211ecc657414",
+      "type": "add",
+      "after": "a9724224428bf3d8",
+      "date": 1461501881940
+    },
+    {
+      "type": "move",
+      "order": [
+        "583d6a9b8e130f66",
+        "694146b19825544b",
+        "92d58a70933c932a",
+        "58e8c4f44765a112",
+        "e3111f13b8c8a854",
+        "73e5a3408becf406",
+        "d8e6dbee2aa4ce29",
+        "38430d3f0a3f5c70",
+        "70767e9503447100",
+        "dbb9d8617332fc95",
+        "80292e6ef63fb02b",
+        "824e07b25db82e0c",
+        "5a31a173319eab13",
+        "826dd95676e08459",
+        "812d5ead95507979",
+        "9690c15d968092ca",
+        "db446ec486831fac",
+        "37719da3700597ef",
+        "d0aac2624a26808a",
+        "1df479c37de94720",
+        "52f8d28c94790f54",
+        "3ba056521339b885",
+        "a4fb211ecc657414",
+        "9bb17fcd0624eb20",
+        "e40fda0ada4dfef0",
+        "b09e6291f57eb4fe",
+        "43761081229b3d83",
+        "d544f21de5004472",
+        "a9724224428bf3d8"
+      ],
+      "id": "a4fb211ecc657414",
+      "date": 1461501884004
+    },
+    {
+      "type": "remove",
+      "id": "3ba056521339b885",
+      "date": 1461501886769
+    },
+    {
+      "type": "edit",
+      "id": "a4fb211ecc657414",
+      "item": {
+        "type": "code",
+        "id": "a4fb211ecc657414",
+        "text": "nodemon --ignore lib/ --ignore tests/"
+      },
+      "date": 1461501889724
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "621fc42eded98770"
+      },
+      "id": "621fc42eded98770",
+      "type": "add",
+      "after": "a9724224428bf3d8",
+      "date": 1461501892113
+    },
+    {
+      "type": "move",
+      "order": [
+        "583d6a9b8e130f66",
+        "694146b19825544b",
+        "92d58a70933c932a",
+        "58e8c4f44765a112",
+        "e3111f13b8c8a854",
+        "73e5a3408becf406",
+        "d8e6dbee2aa4ce29",
+        "38430d3f0a3f5c70",
+        "70767e9503447100",
+        "dbb9d8617332fc95",
+        "80292e6ef63fb02b",
+        "824e07b25db82e0c",
+        "5a31a173319eab13",
+        "826dd95676e08459",
+        "812d5ead95507979",
+        "9690c15d968092ca",
+        "db446ec486831fac",
+        "37719da3700597ef",
+        "d0aac2624a26808a",
+        "1df479c37de94720",
+        "52f8d28c94790f54",
+        "a4fb211ecc657414",
+        "9bb17fcd0624eb20",
+        "e40fda0ada4dfef0",
+        "621fc42eded98770",
+        "b09e6291f57eb4fe",
+        "43761081229b3d83",
+        "d544f21de5004472",
+        "a9724224428bf3d8"
+      ],
+      "id": "621fc42eded98770",
+      "date": 1461501894593
+    },
+    {
+      "type": "remove",
+      "id": "e40fda0ada4dfef0",
+      "date": 1461501897513
+    },
+    {
+      "type": "edit",
+      "id": "621fc42eded98770",
+      "item": {
+        "type": "code",
+        "id": "621fc42eded98770",
+        "text": "nodemon --ignore lib/app.js"
+      },
+      "date": 1461501900107
+    },
+    {
+      "type": "remove",
+      "id": "43761081229b3d83",
+      "date": 1461501904297
+    },
+    {
+      "type": "edit",
+      "id": "d544f21de5004472",
+      "item": {
+        "type": "code",
+        "id": "d544f21de5004472",
+        "text": "nodemon --ignore 'lib/*.js'"
+      },
+      "date": 1461501906804
+    },
+    {
+      "type": "edit",
+      "id": "5a31a173319eab13",
+      "item": {
+        "type": "paragraph",
+        "id": "5a31a173319eab13",
+        "text": "Whilst nodemon is running, if you need to manually restart your application, instead of stopping and restart nodemon, you can simply type:"
+      },
+      "date": 1461501916594
+    },
+    {
+      "type": "add",
+      "id": "d153039d1c09b0d8",
+      "item": {
+        "type": "paragraph",
+        "id": "d153039d1c09b0d8",
+        "text": " rs "
+      },
+      "after": "5a31a173319eab13",
+      "date": 1461501923666
+    },
+    {
+      "type": "add",
+      "id": "36fa4ae815e01bdc",
+      "item": {
+        "type": "paragraph",
+        "id": "36fa4ae815e01bdc",
+        "text": "with a carriage return, and nodemon will restart your process."
+      },
+      "after": "d153039d1c09b0d8",
+      "date": 1461501926124
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f6190bcb3460bef1"
+      },
+      "id": "f6190bcb3460bef1",
+      "type": "add",
+      "after": "a9724224428bf3d8",
+      "date": 1461501928965
+    },
+    {
+      "type": "move",
+      "order": [
+        "583d6a9b8e130f66",
+        "694146b19825544b",
+        "92d58a70933c932a",
+        "58e8c4f44765a112",
+        "e3111f13b8c8a854",
+        "73e5a3408becf406",
+        "d8e6dbee2aa4ce29",
+        "38430d3f0a3f5c70",
+        "70767e9503447100",
+        "dbb9d8617332fc95",
+        "80292e6ef63fb02b",
+        "824e07b25db82e0c",
+        "5a31a173319eab13",
+        "f6190bcb3460bef1",
+        "d153039d1c09b0d8",
+        "36fa4ae815e01bdc",
+        "826dd95676e08459",
+        "812d5ead95507979",
+        "9690c15d968092ca",
+        "db446ec486831fac",
+        "37719da3700597ef",
+        "d0aac2624a26808a",
+        "1df479c37de94720",
+        "52f8d28c94790f54",
+        "a4fb211ecc657414",
+        "9bb17fcd0624eb20",
+        "621fc42eded98770",
+        "b09e6291f57eb4fe",
+        "d544f21de5004472",
+        "a9724224428bf3d8"
+      ],
+      "id": "f6190bcb3460bef1",
+      "date": 1461501932119
+    },
+    {
+      "type": "remove",
+      "id": "d153039d1c09b0d8",
+      "date": 1461501935411
+    },
+    {
+      "type": "edit",
+      "id": "f6190bcb3460bef1",
+      "item": {
+        "type": "code",
+        "id": "f6190bcb3460bef1",
+        "text": "rs"
+      },
+      "date": 1461501941165
+    },
+    {
+      "type": "edit",
+      "id": "36fa4ae815e01bdc",
+      "item": {
+        "type": "paragraph",
+        "id": "36fa4ae815e01bdc",
+        "text": "with a carriage return, and nodemon will restart your process. [[Note]]: you don't need to do this in a new terminal window, simply type `rs` in the existing terminal that is holding the current nodemon process  - not need to control-q."
+      },
+      "date": 1461502128805
+    },
+    {
+      "type": "edit",
+      "id": "36fa4ae815e01bdc",
+      "item": {
+        "type": "paragraph",
+        "id": "36fa4ae815e01bdc",
+        "text": "with a carriage return, and nodemon will restart your process. "
+      },
+      "date": 1461502132724
+    },
+    {
+      "type": "add",
+      "id": "141ccde5288368b4",
+      "item": {
+        "type": "paragraph",
+        "id": "141ccde5288368b4",
+        "text": "[[Note]]: you don't need to do this in a new terminal window, simply type `rs` in the existing terminal that is holding the current nodemon process  - not need to control-q."
+      },
+      "after": "36fa4ae815e01bdc",
+      "date": 1461502133116
+    }
+  ]
+}

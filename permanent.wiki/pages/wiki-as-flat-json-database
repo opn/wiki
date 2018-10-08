@@ -1,0 +1,256 @@
+{
+  "title": "Wiki as flat json database",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "845f0656a47fb925",
+      "text": "There is some interest in creating static HTML from a wiki.  Here is a pure javascript proof-of-concept."
+    },
+    {
+      "type": "markdown",
+      "id": "4c880249fae5040f",
+      "text": "# Try it yourself\nTested this in Firefox, Chrome & Safari\n1. Open an empy tab _(for Safari, visit a web page... e.g. [https://google.com google], cos it won't open a console on an empty tab)_\n2. Open the javascript console\n3. paste the following javascript:\n"
+    },
+    {
+      "type": "code",
+      "id": "213d0915318abed8",
+      "text": "fetch(\n'https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.js'\n)\n  .then(res => res.text())\n  .then(eval)\n\n  .then(() => {\n    return fetch('https://wiki.dbbs.co/wiki-as-flat-json-database.json');\n})\n  .then(res => res.json())\n  .then(page => { window.page = page; })\n\n  .then(() => {\n    converter = new showdown.Converter();\n    html = page.story\n      .filter(item => item.type === 'markdown')\n      .map(item => converter.makeHtml(item.text))\n      .join(\"\\n\");\n    document.body.innerHTML = html;\n  });\n"
+    },
+    {
+      "type": "markdown",
+      "id": "584f4bcd3c582920",
+      "text": "# Notes on the implementation\nThis example is broken into three stanzas.\n\n1. download and evaluate the `showdown` markdown converter (there are better ways, more secure ways).\n2. download a wiki page and store it in the `window` object.\n3. convert all the markdown items in the `page.story` to HTML and put them in the `document.body` for viewing.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "d61aa5799e6d1d50",
+      "text": "Every page in the federation gets its own json URL with already permisive CORS headers.  They can be accessed from anywhere.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "f706a19034b00c8b",
+      "text": "Wiki markdown is a subset of gitub markdown.  So the `showdown` library can parse our markdown.  What it cannot do is resolve our collaborative links.  That project is left as an exercise for the reader."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki as flat json database",
+        "story": []
+      },
+      "date": 1522775244908
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "845f0656a47fb925"
+      },
+      "id": "845f0656a47fb925",
+      "type": "add",
+      "date": 1522775265784
+    },
+    {
+      "type": "edit",
+      "id": "845f0656a47fb925",
+      "item": {
+        "type": "paragraph",
+        "id": "845f0656a47fb925",
+        "text": "There is some interest in the federation in being able to emit static HTML from a wiki.  Here is a pure javascript proof of concept."
+      },
+      "date": 1522775293674
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "213d0915318abed8"
+      },
+      "id": "213d0915318abed8",
+      "type": "add",
+      "after": "845f0656a47fb925",
+      "date": 1522775312632
+    },
+    {
+      "type": "edit",
+      "id": "213d0915318abed8",
+      "item": {
+        "type": "code",
+        "id": "213d0915318abed8",
+        "text": "fetch('https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.js')\n  .then(res => res.text())\n  .then(eval)\n\n  .then(() => {return fetch('http://david.bovill.me/two-sides-of-wiki.json')})\n  .then(res => res.json())\n  .then(page => { window.page = page; })\n\n  .then(() => {\n    converter = new showdown.Converter();\n    html = page.story.filter(item => item.type === 'markdown')\n      .map(item => converter.makeHtml(item.text)).join(\"\\n\");\n    document.body.innerHTML = html;\n  });\n"
+      },
+      "date": 1522775319886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4c880249fae5040f"
+      },
+      "id": "4c880249fae5040f",
+      "type": "add",
+      "after": "213d0915318abed8",
+      "date": 1522775343062
+    },
+    {
+      "type": "edit",
+      "id": "4c880249fae5040f",
+      "item": {
+        "type": "markdown",
+        "id": "4c880249fae5040f",
+        "text": "# Try it yourself\n1. Open an empy tab in Firefox (or any modern browser... but only tested with firefox)\n2. Open the javascript console\n3. paste the contents of firefox-console.js\n"
+      },
+      "date": 1522775351624
+    },
+    {
+      "type": "move",
+      "order": [
+        "845f0656a47fb925",
+        "4c880249fae5040f",
+        "213d0915318abed8"
+      ],
+      "id": "4c880249fae5040f",
+      "date": 1522775355390
+    },
+    {
+      "type": "edit",
+      "id": "4c880249fae5040f",
+      "item": {
+        "type": "markdown",
+        "id": "4c880249fae5040f",
+        "text": "# Try it yourself\n1. Open an empy tab in Firefox (or any modern browser... but only tested with firefox)\n2. Open the javascript console\n3. paste the following javascript:\n"
+      },
+      "date": 1522775370824
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "584f4bcd3c582920"
+      },
+      "id": "584f4bcd3c582920",
+      "type": "add",
+      "after": "213d0915318abed8",
+      "date": 1522775390302
+    },
+    {
+      "type": "edit",
+      "id": "584f4bcd3c582920",
+      "item": {
+        "type": "markdown",
+        "id": "584f4bcd3c582920",
+        "text": "# Notes on the implementation\nThis example is broken into three stanzas.\n\n1. download and evaluate the `showdown` markdown converter (there are better ways, more secure ways).\n2. download a wiki page and store it in the `window` object.\n3. convert all the markdown items in the `page.story` to HTML and put them in the `document.body` for viewing.\n\n"
+      },
+      "date": 1522775407798
+    },
+    {
+      "type": "add",
+      "id": "d61aa5799e6d1d50",
+      "item": {
+        "type": "markdown",
+        "id": "d61aa5799e6d1d50",
+        "text": "Every page in the federation gets its own json URL with already permisive CORS headers.  They can be accessed from anywhere.\n"
+      },
+      "after": "584f4bcd3c582920",
+      "date": 1522775436578
+    },
+    {
+      "type": "add",
+      "id": "f706a19034b00c8b",
+      "item": {
+        "type": "markdown",
+        "id": "f706a19034b00c8b",
+        "text": "Wiki markdown is a subset of gitub markdown.  So the `showdown` library can parse our markdown.  What it cannot do is resolve our collaborative links."
+      },
+      "after": "d61aa5799e6d1d50",
+      "date": 1522775519832
+    },
+    {
+      "type": "edit",
+      "id": "845f0656a47fb925",
+      "item": {
+        "type": "markdown",
+        "id": "845f0656a47fb925",
+        "text": "There is some interest inemit static HTML from a wiki.  Here is a pure javascript proof-of-concept."
+      },
+      "date": 1522775573162
+    },
+    {
+      "type": "edit",
+      "id": "213d0915318abed8",
+      "item": {
+        "type": "code",
+        "id": "213d0915318abed8",
+        "text": "fetch('https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.js')\n  .then(res => res.text())\n  .then(eval)\n\n  .then(() => {return fetch('http://wiki.dbbs.co/wiki-as-flat-json-database.json')})\n  .then(res => res.json())\n  .then(page => { window.page = page; })\n\n  .then(() => {\n    converter = new showdown.Converter();\n    html = page.story.filter(item => item.type === 'markdown')\n      .map(item => converter.makeHtml(item.text)).join(\"\\n\");\n    document.body.innerHTML = html;\n  });\n"
+      },
+      "date": 1522775612982
+    },
+    {
+      "type": "edit",
+      "id": "845f0656a47fb925",
+      "item": {
+        "type": "markdown",
+        "id": "845f0656a47fb925",
+        "text": "There is some interest in creating static HTML from a wiki.  Here is a pure javascript proof-of-concept."
+      },
+      "date": 1522775662910
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "188c50b74917f559"
+      },
+      "id": "188c50b74917f559",
+      "type": "add",
+      "after": "f706a19034b00c8b",
+      "date": 1522775779636
+    },
+    {
+      "type": "remove",
+      "id": "188c50b74917f559",
+      "date": 1522775945032
+    },
+    {
+      "type": "edit",
+      "id": "f706a19034b00c8b",
+      "item": {
+        "type": "markdown",
+        "id": "f706a19034b00c8b",
+        "text": "Wiki markdown is a subset of gitub markdown.  So the `showdown` library can parse our markdown.  What it cannot do is resolve our collaborative links.  That project is left as an exercise for the reader."
+      },
+      "date": 1522775964072
+    },
+    {
+      "type": "edit",
+      "id": "213d0915318abed8",
+      "item": {
+        "type": "code",
+        "id": "213d0915318abed8",
+        "text": "fetch(\n'https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.js'\n)\n  .then(res => res.text())\n  .then(eval)\n\n  .then(() => {\n    return fetch('https://wiki.dbbs.co/wiki-as-flat-json-database.json');\n})\n  .then(res => res.json())\n  .then(page => { window.page = page; })\n\n  .then(() => {\n    converter = new showdown.Converter();\n    html = page.story\n      .filter(item => item.type === 'markdown')\n      .map(item => converter.makeHtml(item.text))\n      .join(\"\\n\");\n    document.body.innerHTML = html;\n  });\n"
+      },
+      "date": 1522852842168
+    },
+    {
+      "type": "edit",
+      "id": "4c880249fae5040f",
+      "item": {
+        "type": "markdown",
+        "id": "4c880249fae5040f",
+        "text": "# Try it yourself\n1. Open an empy tab in a modern browser (tested in firefox and chrome)\n2. Open the javascript console\n3. paste the following javascript:\n"
+      },
+      "date": 1522852879324
+    },
+    {
+      "type": "edit",
+      "id": "4c880249fae5040f",
+      "item": {
+        "type": "markdown",
+        "id": "4c880249fae5040f",
+        "text": "# Try it yourself\nTested this in Firefox, Chrome & Safari\n1. Open an empy tab _(for Safari, visit a web page... e.g. [https://google.com google], cos it won't open a console on an empty tab)_\n2. Open the javascript console\n3. paste the following javascript:\n"
+      },
+      "date": 1522853293918
+    },
+    {
+      "type": "fork",
+      "site": "wiki.dbbs.co",
+      "date": 1523464882781
+    }
+  ]
+}

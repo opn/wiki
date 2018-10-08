@@ -1,0 +1,1274 @@
+{
+  "title": "Search Index Downloads",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a3ffc6dc39452c7f",
+      "text": "We make available the search index as downloadable files in several formats including json objects designed for network graphing."
+    },
+    {
+      "type": "paragraph",
+      "id": "0e7a898a15e16fc9",
+      "text": "Our sitemap scraper runs four times a day. Logs from each run can be viewed online. [http://search.fed.wiki.org:3030/logs page]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ae12be1f0cabb0b0",
+      "text": "We distribute the index files individually and in a single 35mb compressed tar file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+    },
+    {
+      "type": "code",
+      "id": "8f7fdff4c524ac07",
+      "text": "tar czf public/sites.tgz sites *.txt"
+    },
+    {
+      "type": "markdown",
+      "id": "43a099cf86f93c12",
+      "text": "# Index"
+    },
+    {
+      "type": "paragraph",
+      "id": "0a930120ae574a1d",
+      "text": "The index is organized as a collection of text files containing unique words extracted from various fields of each page. These are grouped into directories by site and then page within site. [http://search.fed.wiki.org:3030/sites/fed.wiki.org/pages/how-to-wiki/links.txt txt]"
+    },
+    {
+      "type": "code",
+      "id": "3fe1eb878d35a4a5",
+      "text": "sites/\n  fed.wiki.org/\n    words.txt\n    links.txt\n    sites.txt\n    items.txt\n    pages/\n      how-to-wiki/\n        words.txt\n        links.txt\n        sites.txt\n        items.txt"
+    },
+    {
+      "type": "paragraph",
+      "id": "94f92e89f34fd71a",
+      "text": "We include federation wide rollups of the files which we don't use to search but maintain anyway."
+    },
+    {
+      "type": "code",
+      "id": "27edfbda0a496c4b",
+      "text": "words.txt\nlinks.txt\nsites.txt\nitems.txt"
+    },
+    {
+      "type": "markdown",
+      "id": "6e0253beeefd0b20",
+      "text": "# Counts"
+    },
+    {
+      "type": "paragraph",
+      "id": "e0c50c258b8e9757",
+      "text": "We accumulate various counts in another text file with one line of json for each scrape. [http://search.fed.wiki.org:3030/counts.txt txt]"
+    },
+    {
+      "type": "code",
+      "id": "7bb2dcc792b91f3a",
+      "text": "counts.txt"
+    },
+    {
+      "type": "paragraph",
+      "id": "e81f7e3a4b94867c",
+      "text": "Here we show a sample line after being formatted as indented text. The scan counts are read from logs while the index counts are line counts of the site rollup text files."
+    },
+    {
+      "type": "code",
+      "id": "d126f0cb7ab1a6e0",
+      "text": "{\n    \"date\": 1441545903,\n    \"scan\": {\n        \"sites\": 676,\n        \"pages\": 31983\n    },\n    \"index\": {\n        \"counts\": 3,\n        \"items\": 258354,\n        \"links\": 48549,\n        \"plugins\": 48,\n        \"sites\": 776,\n        \"words\": 115927\n    }\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "722a6d5850506560",
+      "text": "See [[Sitemap Scrape Statistics]] for counts plotted."
+    },
+    {
+      "type": "markdown",
+      "id": "cc06a741bdcfee45",
+      "text": "# Graphs"
+    },
+    {
+      "type": "paragraph",
+      "id": "96004393e77ef0ed",
+      "text": "We aggregate information from the index into single files representing graphs as node and arcs in two forms."
+    },
+    {
+      "type": "paragraph",
+      "id": "f9759f660f6e16ff",
+      "text": "Nodes are site names and arcs are remote sites. [http://search.fed.wiki.org:3030/site-web.json json]"
+    },
+    {
+      "type": "code",
+      "id": "fdb337d9155247ac",
+      "text": "\"fed.wiki.org\": {\n    \"pages\": 86,\n    \"links\": [\n      \"design.fed.wiki.org\",\n      \"fed.coevolving.com\",\n      \"fed.wiki.org\",\n      \"fedwiki.rodwell.me\",\n      \"glossary.asia.wiki.org\"\n    ]\n  }\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "94c6563899670c20",
+      "text": "Nodes are page slugs and arcs are internal links. [http://search.fed.wiki.org:3030/slug-web.json json]"
+    },
+    {
+      "type": "code",
+      "id": "8d9089b26a445e5f",
+      "text": "\"how-to-wiki\": {\n    \"forks\": 37,\n    \"links\": [\n      \"add-pages\",\n      \"add-paragraphs\",\n      \"copy-pages\",\n      \"find-sites\",\n      \"follow-links\"\n    ]\n  }"
+    },
+    {
+      "type": "paragraph",
+      "id": "559a069828aa2289",
+      "text": "We offer javascript versions of the aggregated graph data files that can be included in a web page with a script tag. [http://search.fed.wiki.org:3030/site-web.js site-web.js] [http://search.fed.wiki.org:3030/slug-web.js slug-web.js]"
+    },
+    {
+      "type": "markdown",
+      "id": "60f59e9d4eefcabb",
+      "text": "# Applications"
+    },
+    {
+      "type": "paragraph",
+      "id": "b05451e3db31494a",
+      "text": "[[Title Network Browser]] allows one to navigate from page title to page title following links going forward and backwards."
+    },
+    {
+      "type": "paragraph",
+      "id": "7951695f31afa9a8",
+      "text": "[[Site Network Diagram]] shows all visible sites connected by arcs where there are neighborhood citations."
+    },
+    {
+      "type": "reference",
+      "id": "d39523a8f8f1deed",
+      "site": "search.fed.wiki.org:3030",
+      "slug": "recent-activity",
+      "title": "Recent Activity",
+      "text": "Here we report sites we find with recently edited pages."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Search Index Downloads",
+        "story": []
+      },
+      "date": 1441561522316
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a3ffc6dc39452c7f"
+      },
+      "id": "a3ffc6dc39452c7f",
+      "type": "add",
+      "date": 1441561526099
+    },
+    {
+      "type": "edit",
+      "id": "a3ffc6dc39452c7f",
+      "item": {
+        "type": "paragraph",
+        "id": "a3ffc6dc39452c7f",
+        "text": "We make available the search index as downloadable files in several formats including json objects designed for graphing."
+      },
+      "date": 1441561616230
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "Distribute the txt files in a single 35mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "after": "a3ffc6dc39452c7f",
+      "id": "ae12be1f0cabb0b0",
+      "date": 1441561659749
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "8f7fdff4c524ac07",
+        "text": "tar czf public/sites.tgz sites *.txt"
+      },
+      "after": "ae12be1f0cabb0b0",
+      "id": "8f7fdff4c524ac07",
+      "date": 1441561663602
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "We distribute the txt files in a single 35mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1441562202454
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3fe1eb878d35a4a5"
+      },
+      "id": "3fe1eb878d35a4a5",
+      "type": "add",
+      "after": "8f7fdff4c524ac07",
+      "date": 1441562216334
+    },
+    {
+      "type": "edit",
+      "id": "3fe1eb878d35a4a5",
+      "item": {
+        "type": "code",
+        "id": "3fe1eb878d35a4a5",
+        "text": "sites/\n  fed.wiki.org/\n    words.txt\n    links.txt\n    sites.txt\n    items.txt\n    pages/\n      how-to-wiki/\n        words.txt\n        links.txt\n        sites.txt\n        items.txt"
+      },
+      "date": 1441562443449
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "3fe1eb878d35a4a5",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "3fe1eb878d35a4a5",
+      "date": 1441562488968
+    },
+    {
+      "type": "add",
+      "id": "0a930120ae574a1d",
+      "item": {
+        "type": "paragraph",
+        "id": "0a930120ae574a1d",
+        "text": "The index is organized as a collection of text files containing unique words extracted from various fields of each page. These are organized by site and then page within site."
+      },
+      "after": "a3ffc6dc39452c7f",
+      "date": 1441562618925
+    },
+    {
+      "type": "edit",
+      "id": "0a930120ae574a1d",
+      "item": {
+        "type": "paragraph",
+        "id": "0a930120ae574a1d",
+        "text": "The index is organized as a collection of text files containing unique words extracted from various fields of each page. These are grouped into directories by site and then page within site."
+      },
+      "date": 1441562638463
+    },
+    {
+      "type": "add",
+      "id": "94f92e89f34fd71a",
+      "item": {
+        "type": "paragraph",
+        "id": "94f92e89f34fd71a",
+        "text": "We include federation wide rollups of the files which we don't use to search but maintain anyway."
+      },
+      "after": "0a930120ae574a1d",
+      "date": 1441562769028
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "27edfbda0a496c4b"
+      },
+      "id": "27edfbda0a496c4b",
+      "type": "add",
+      "after": "8f7fdff4c524ac07",
+      "date": 1441562774230
+    },
+    {
+      "type": "edit",
+      "id": "27edfbda0a496c4b",
+      "item": {
+        "type": "code",
+        "id": "27edfbda0a496c4b",
+        "text": "words.txt\nlinks.txt\nsites.txt\nitems.txt"
+      },
+      "date": 1441562781418
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "27edfbda0a496c4b"
+      ],
+      "id": "94f92e89f34fd71a",
+      "date": 1441562785902
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "27edfbda0a496c4b",
+      "date": 1441562789070
+    },
+    {
+      "type": "add",
+      "id": "e0c50c258b8e9757",
+      "item": {
+        "type": "paragraph",
+        "id": "e0c50c258b8e9757",
+        "text": "We accumulate various counts in another text file with one line of json for each scrape."
+      },
+      "after": "94f92e89f34fd71a",
+      "date": 1441562949411
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "e0c50c258b8e9757",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "e0c50c258b8e9757",
+      "date": 1441562954419
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d126f0cb7ab1a6e0"
+      },
+      "id": "d126f0cb7ab1a6e0",
+      "type": "add",
+      "after": "8f7fdff4c524ac07",
+      "date": 1441563074516
+    },
+    {
+      "type": "edit",
+      "id": "d126f0cb7ab1a6e0",
+      "item": {
+        "type": "code",
+        "id": "d126f0cb7ab1a6e0",
+        "text": "{\n    \"date\": 1441545903,\n    \"scan\": {\n        \"sites\": 676,\n        \"pages\": 31983\n    },\n    \"index\": {\n        \"counts\": 3,\n        \"items\": 258354,\n        \"links\": 48549,\n        \"plugins\": 48,\n        \"sites\": 776,\n        \"words\": 115927\n    }\n}"
+      },
+      "date": 1441563080220
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "e0c50c258b8e9757",
+        "d126f0cb7ab1a6e0",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "d126f0cb7ab1a6e0",
+      "date": 1441563087202
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7bb2dcc792b91f3a"
+      },
+      "id": "7bb2dcc792b91f3a",
+      "type": "add",
+      "after": "8f7fdff4c524ac07",
+      "date": 1441563109056
+    },
+    {
+      "type": "edit",
+      "id": "7bb2dcc792b91f3a",
+      "item": {
+        "type": "code",
+        "id": "7bb2dcc792b91f3a",
+        "text": "counts.txt"
+      },
+      "date": 1441563116886
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "d126f0cb7ab1a6e0",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "7bb2dcc792b91f3a",
+      "date": 1441563120547
+    },
+    {
+      "type": "add",
+      "id": "e81f7e3a4b94867c",
+      "item": {
+        "type": "paragraph",
+        "id": "e81f7e3a4b94867c",
+        "text": "Here we show a sample line after being formatted as indented text. The scan counts are read from logs while the index counts are line counts of the site rollup text files."
+      },
+      "after": "e0c50c258b8e9757",
+      "date": 1441563286284
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "e81f7e3a4b94867c",
+      "date": 1441563289866
+    },
+    {
+      "type": "edit",
+      "id": "0a930120ae574a1d",
+      "item": {
+        "type": "paragraph",
+        "id": "0a930120ae574a1d",
+        "text": "The index is organized as a collection of text files containing unique words extracted from various fields of each page. These are grouped into directories by site and then page within site. [http://search.fed.wiki.org:3030/sites/fed.wiki.org/pages/how-to-wiki/links.txt txt]"
+      },
+      "date": 1441563527076
+    },
+    {
+      "type": "edit",
+      "id": "e0c50c258b8e9757",
+      "item": {
+        "type": "paragraph",
+        "id": "e0c50c258b8e9757",
+        "text": "We accumulate various counts in another text file with one line of json for each scrape. [http://search.fed.wiki.org:3030/counts.txt txt]"
+      },
+      "date": 1441563664655
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "43a099cf86f93c12"
+      },
+      "id": "43a099cf86f93c12",
+      "type": "add",
+      "after": "8f7fdff4c524ac07",
+      "date": 1441563712520
+    },
+    {
+      "type": "edit",
+      "id": "43a099cf86f93c12",
+      "item": {
+        "type": "markdown",
+        "id": "43a099cf86f93c12",
+        "text": "# Index"
+      },
+      "date": 1441563721366
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "43a099cf86f93c12",
+      "date": 1441563727156
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6e0253beeefd0b20"
+      },
+      "id": "6e0253beeefd0b20",
+      "type": "add",
+      "after": "8f7fdff4c524ac07",
+      "date": 1441563738371
+    },
+    {
+      "type": "edit",
+      "id": "6e0253beeefd0b20",
+      "item": {
+        "type": "markdown",
+        "id": "6e0253beeefd0b20",
+        "text": "# Counts"
+      },
+      "date": 1441563753414
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "6e0253beeefd0b20",
+      "date": 1441563758474
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "We distribute the text files individually and in a single 35mb compressed tar file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1441563840895
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "We distribute the index files individually and in a single 35mb compressed tar file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1441563874163
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "ae12be1f0cabb0b0",
+      "date": 1441563885542
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0"
+      ],
+      "id": "8f7fdff4c524ac07",
+      "date": 1441563892609
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc06a741bdcfee45"
+      },
+      "id": "cc06a741bdcfee45",
+      "type": "add",
+      "after": "d126f0cb7ab1a6e0",
+      "date": 1441563960365
+    },
+    {
+      "type": "edit",
+      "id": "cc06a741bdcfee45",
+      "item": {
+        "type": "markdown",
+        "id": "cc06a741bdcfee45",
+        "text": "# Graphs"
+      },
+      "date": 1441564004884
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "96004393e77ef0ed"
+      },
+      "id": "96004393e77ef0ed",
+      "type": "add",
+      "after": "cc06a741bdcfee45",
+      "date": 1441564008669
+    },
+    {
+      "type": "edit",
+      "id": "96004393e77ef0ed",
+      "item": {
+        "type": "paragraph",
+        "id": "96004393e77ef0ed",
+        "text": "We aggregate information from the index into single files representing node and arc graphs of two forms."
+      },
+      "date": 1441564054666
+    },
+    {
+      "type": "add",
+      "id": "f9759f660f6e16ff",
+      "item": {
+        "type": "paragraph",
+        "id": "f9759f660f6e16ff",
+        "text": "Nodes are site names and arcs are remote sites known to the node."
+      },
+      "after": "96004393e77ef0ed",
+      "date": 1441564151904
+    },
+    {
+      "type": "edit",
+      "id": "f9759f660f6e16ff",
+      "item": {
+        "type": "paragraph",
+        "id": "f9759f660f6e16ff",
+        "text": "Nodes are site names and arcs are known remote sites."
+      },
+      "date": 1441564184517
+    },
+    {
+      "type": "add",
+      "id": "94c6563899670c20",
+      "item": {
+        "type": "paragraph",
+        "id": "94c6563899670c20",
+        "text": "Nodes are page slugs and arcs are internal links."
+      },
+      "after": "f9759f660f6e16ff",
+      "date": 1441564239021
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fdb337d9155247ac"
+      },
+      "id": "fdb337d9155247ac",
+      "type": "add",
+      "after": "94c6563899670c20",
+      "date": 1441564488171
+    },
+    {
+      "type": "edit",
+      "id": "fdb337d9155247ac",
+      "item": {
+        "type": "code",
+        "id": "fdb337d9155247ac",
+        "text": "\"fed.wiki.org\": {\n\"pages\": 86,\n\"links\": [\n\"design.fed.wiki.org\",\n\"fed.coevolving.com\",\n\"fed.wiki.org\",\n\"fedwiki.rodwell.me\",\n\"glossary.asia.wiki.org\",\n\"plugins.fed.wiki.org\",\n\"sites.fed.wiki.org\",\n\"video.fed.wiki.org\",\n\"ward.fed.wiki.org\",\n\"yala.fed.wiki.org\"\n]\n}"
+      },
+      "date": 1441564626278
+    },
+    {
+      "type": "edit",
+      "id": "fdb337d9155247ac",
+      "item": {
+        "type": "code",
+        "id": "fdb337d9155247ac",
+        "text": "\"fed.wiki.org\": {\n    \"pages\": 86,\n    \"links\": [\n      \"design.fed.wiki.org\",\n      \"fed.coevolving.com\",\n      \"fed.wiki.org\",\n      \"fedwiki.rodwell.me\",\n      \"glossary.asia.wiki.org\",\n      ...\n    ]\n  }\n"
+      },
+      "date": 1441564738503
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "cc06a741bdcfee45",
+        "96004393e77ef0ed",
+        "f9759f660f6e16ff",
+        "fdb337d9155247ac",
+        "94c6563899670c20"
+      ],
+      "id": "94c6563899670c20",
+      "date": 1441564746034
+    },
+    {
+      "type": "edit",
+      "id": "fdb337d9155247ac",
+      "item": {
+        "type": "code",
+        "id": "fdb337d9155247ac",
+        "text": "\"fed.wiki.org\": {\n    \"pages\": 86,\n    \"links\": [\n      \"design.fed.wiki.org\",\n      \"fed.coevolving.com\",\n      \"fed.wiki.org\",\n      \"fedwiki.rodwell.me\",\n      \"glossary.asia.wiki.org\"\n    ]\n  }\n"
+      },
+      "date": 1441564763976
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8d9089b26a445e5f"
+      },
+      "id": "8d9089b26a445e5f",
+      "type": "add",
+      "after": "94c6563899670c20",
+      "date": 1441564933934
+    },
+    {
+      "type": "edit",
+      "id": "8d9089b26a445e5f",
+      "item": {
+        "type": "code",
+        "id": "8d9089b26a445e5f",
+        "text": "\"how-to-wiki\": {\n    \"forks\": 37,\n    \"links\": [\n      \"add-links\",\n      \"add-pages\",\n      \"add-paragraphs\",\n      \"contribute-code\",\n      \"copy-pages\",\n      \"find-sites\",\n      \"follow-links\"\n    ]\n  }"
+      },
+      "date": 1441564940457
+    },
+    {
+      "type": "edit",
+      "id": "8d9089b26a445e5f",
+      "item": {
+        "type": "code",
+        "id": "8d9089b26a445e5f",
+        "text": "\"how-to-wiki\": {\n    \"forks\": 37,\n    \"links\": [\n      \"add-pages\",\n      \"add-paragraphs\",\n      \"copy-pages\",\n      \"find-sites\",\n      \"follow-links\"\n    ]\n  }"
+      },
+      "date": 1441565036094
+    },
+    {
+      "type": "edit",
+      "id": "f9759f660f6e16ff",
+      "item": {
+        "type": "paragraph",
+        "id": "f9759f660f6e16ff",
+        "text": "Nodes are site names and arcs are remote sites."
+      },
+      "date": 1441565129208
+    },
+    {
+      "type": "edit",
+      "id": "94c6563899670c20",
+      "item": {
+        "type": "paragraph",
+        "id": "94c6563899670c20",
+        "text": "Nodes are page slugs and arcs are internal links. [http://search.fed.wiki.org:3030/slug-web.json json]"
+      },
+      "date": 1441565153066
+    },
+    {
+      "type": "edit",
+      "id": "f9759f660f6e16ff",
+      "item": {
+        "type": "paragraph",
+        "id": "f9759f660f6e16ff",
+        "text": "Nodes are site names and arcs are remote sites. [http://search.fed.wiki.org:3030/site-web.json json]"
+      },
+      "date": 1441565178780
+    },
+    {
+      "type": "edit",
+      "id": "a3ffc6dc39452c7f",
+      "item": {
+        "type": "paragraph",
+        "id": "a3ffc6dc39452c7f",
+        "text": "We make available the search index as downloadable files in several formats including json objects designed for network graphing."
+      },
+      "date": 1441565263045
+    },
+    {
+      "type": "edit",
+      "id": "96004393e77ef0ed",
+      "item": {
+        "type": "paragraph",
+        "id": "96004393e77ef0ed",
+        "text": "We aggregate information from the index into single files representing graphs as node and arcs in two forms."
+      },
+      "date": 1441565344944
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "629bfc8b30edf1eb"
+      },
+      "id": "629bfc8b30edf1eb",
+      "type": "add",
+      "after": "8d9089b26a445e5f",
+      "date": 1441583073401
+    },
+    {
+      "type": "edit",
+      "id": "629bfc8b30edf1eb",
+      "item": {
+        "type": "paragraph",
+        "id": "629bfc8b30edf1eb",
+        "text": "We've modified the d3 bundle example to render site to/from site as arcs. "
+      },
+      "date": 1441583208250
+    },
+    {
+      "type": "edit",
+      "id": "629bfc8b30edf1eb",
+      "item": {
+        "type": "paragraph",
+        "id": "629bfc8b30edf1eb",
+        "text": "We've modified the d3 bundle example to render site to/from site as arcs. [http://mbostock.github.io/d3/talk/20111116/bundle.html original]"
+      },
+      "date": 1441583273137
+    },
+    {
+      "type": "edit",
+      "id": "629bfc8b30edf1eb",
+      "item": {
+        "type": "paragraph",
+        "id": "629bfc8b30edf1eb",
+        "text": "We've modified the d3 bundle example to render site to/from site as arcs. [http://mbostock.github.io/d3/talk/20111116/bundle.html original] [http://search.fed.wiki.org:3030/graph/bundle.html modified]"
+      },
+      "date": 1441583317043
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "daa27e557e7268a8"
+      },
+      "id": "daa27e557e7268a8",
+      "type": "add",
+      "after": "629bfc8b30edf1eb",
+      "date": 1441583647231
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"//search.fed.wiki.org:3030/graph/screen-shot.png style=\"width: 95%;\"><br>\n<i>screen shot of small portion of large display</i>"
+      },
+      "date": 1441583778459
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 95%;\"><br>\n<i>screen shot of small portion of large display</i>"
+      },
+      "date": 1441583835473
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 100%;\"><br>\n<i>screen shot of small portion of large display</i>"
+      },
+      "date": 1441583846608
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ebe2532eeda379de"
+      },
+      "id": "ebe2532eeda379de",
+      "type": "add",
+      "after": "daa27e557e7268a8",
+      "date": 1441584357915
+    },
+    {
+      "type": "edit",
+      "id": "ebe2532eeda379de",
+      "item": {
+        "type": "paragraph",
+        "id": "ebe2532eeda379de",
+        "text": "Showing  3 changed files with 23 additions and 12 deletions. "
+      },
+      "date": 1441584374343
+    },
+    {
+      "type": "edit",
+      "id": "ebe2532eeda379de",
+      "item": {
+        "type": "paragraph",
+        "id": "ebe2532eeda379de",
+        "text": "Showing  3 changed files with 23 additions and 12 deletions. [https://github.com/WardCunningham/search/commit/18dfe88d11cbdc96ab74f4601b6603448f3343c3 github]"
+      },
+      "date": 1441584400588
+    },
+    {
+      "type": "edit",
+      "id": "ebe2532eeda379de",
+      "item": {
+        "type": "paragraph",
+        "id": "ebe2532eeda379de",
+        "text": "Commit showing  3 changed files with 23 additions and 12 deletions. [https://github.com/WardCunningham/search/commit/18dfe88d11cbdc96ab74f4601b6603448f3343c3 github]"
+      },
+      "date": 1441584503030
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "cc06a741bdcfee45",
+        "96004393e77ef0ed",
+        "f9759f660f6e16ff",
+        "fdb337d9155247ac",
+        "94c6563899670c20",
+        "8d9089b26a445e5f",
+        "629bfc8b30edf1eb",
+        "ebe2532eeda379de",
+        "daa27e557e7268a8"
+      ],
+      "id": "daa27e557e7268a8",
+      "date": 1441584550448
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "cc06a741bdcfee45",
+        "96004393e77ef0ed",
+        "f9759f660f6e16ff",
+        "fdb337d9155247ac",
+        "94c6563899670c20",
+        "8d9089b26a445e5f",
+        "629bfc8b30edf1eb",
+        "daa27e557e7268a8",
+        "ebe2532eeda379de"
+      ],
+      "id": "ebe2532eeda379de",
+      "date": 1441584556915
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 100%;\"><br>\n<i>screen shot of small portion of large display<br>Hover shows out/in-bound links in red/green. Drag to rotate.</i>"
+      },
+      "date": 1441584664543
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 100%;\"><br>\n<i>screen shot of small portion of large display. Hover shows out/in-bound links in red/green. Drag to rotate.</i>"
+      },
+      "date": 1441584682737
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 100%;\"><br>\n<i>Screen shot of small portion of large display. Hover shows out/in-bound links in red/green. Drag rotates.</i>"
+      },
+      "date": 1441584735010
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 100%;\"><br>\n<i>Screen shot of small portion of large display. Hover shows out/in-bound links in red/green. Drag rotates. [ site]</i>"
+      },
+      "date": 1441584770635
+    },
+    {
+      "type": "edit",
+      "id": "daa27e557e7268a8",
+      "item": {
+        "type": "html",
+        "id": "daa27e557e7268a8",
+        "text": "<img src=\"http://search.fed.wiki.org:3030/graph/screen-shot.png\" style=\"width: 100%;\"><br>\n<i>Screen shot of small portion of large display. Hover shows out/in-bound links in red/green. Drag rotates. [http://search.fed.wiki.org:3030/graph/bundle.html site]</i>"
+      },
+      "date": 1441584788135
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d39523a8f8f1deed"
+      },
+      "id": "d39523a8f8f1deed",
+      "type": "add",
+      "after": "ebe2532eeda379de",
+      "date": 1441658054779
+    },
+    {
+      "type": "edit",
+      "id": "d39523a8f8f1deed",
+      "item": {
+        "type": "reference",
+        "id": "d39523a8f8f1deed",
+        "site": "search.fed.wiki.org:3030",
+        "slug": "recent-activity",
+        "title": "Recent Activity",
+        "text": "Here we report sites we find with recently edited pages."
+      },
+      "date": 1441658063646
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "559a069828aa2289",
+        "text": "We offer javascript versions of the aggregated graph data that can be included in a web page with the script tag."
+      },
+      "after": "629bfc8b30edf1eb",
+      "id": "559a069828aa2289",
+      "date": 1443271965244
+    },
+    {
+      "type": "edit",
+      "id": "559a069828aa2289",
+      "item": {
+        "type": "paragraph",
+        "id": "559a069828aa2289",
+        "text": "We offer javascript versions of the aggregated graph data that can be included in a web page with the script tag. [http://search.fed.wiki.org:3030/site-web.js site-web.js] [http://search.fed.wiki.org:3030/slug-web.js slug-web.js]"
+      },
+      "date": 1443272044036
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "cc06a741bdcfee45",
+        "96004393e77ef0ed",
+        "f9759f660f6e16ff",
+        "fdb337d9155247ac",
+        "94c6563899670c20",
+        "8d9089b26a445e5f",
+        "559a069828aa2289",
+        "629bfc8b30edf1eb",
+        "daa27e557e7268a8",
+        "ebe2532eeda379de",
+        "d39523a8f8f1deed"
+      ],
+      "id": "629bfc8b30edf1eb",
+      "date": 1443272106289
+    },
+    {
+      "type": "edit",
+      "id": "559a069828aa2289",
+      "item": {
+        "type": "paragraph",
+        "id": "559a069828aa2289",
+        "text": "We offer javascript versions of the aggregated graph data that can be included in a web page with a script tag. [http://search.fed.wiki.org:3030/site-web.js site-web.js] [http://search.fed.wiki.org:3030/slug-web.js slug-web.js]"
+      },
+      "date": 1443272175676
+    },
+    {
+      "type": "edit",
+      "id": "559a069828aa2289",
+      "item": {
+        "type": "paragraph",
+        "id": "559a069828aa2289",
+        "text": "We offer javascript versions of the aggregated graph data that can be included in a web page with an appropriate script tag. [http://search.fed.wiki.org:3030/site-web.js site-web.js] [http://search.fed.wiki.org:3030/slug-web.js slug-web.js]"
+      },
+      "date": 1443272204842
+    },
+    {
+      "type": "edit",
+      "id": "559a069828aa2289",
+      "item": {
+        "type": "paragraph",
+        "id": "559a069828aa2289",
+        "text": "We offer javascript versions of the aggregated graph data files that can be included in a web page with a script tag. [http://search.fed.wiki.org:3030/site-web.js site-web.js] [http://search.fed.wiki.org:3030/slug-web.js slug-web.js]"
+      },
+      "date": 1443272238014
+    },
+    {
+      "type": "add",
+      "id": "b05451e3db31494a",
+      "item": {
+        "type": "paragraph",
+        "id": "b05451e3db31494a",
+        "text": "[[Title Network Browser]] allows one to navigate from page title to page title following links going forward and backwards."
+      },
+      "after": "559a069828aa2289",
+      "date": 1443299532455
+    },
+    {
+      "type": "add",
+      "id": "60f59e9d4eefcabb",
+      "item": {
+        "type": "paragraph",
+        "id": "60f59e9d4eefcabb",
+        "text": "# Applications"
+      },
+      "after": "559a069828aa2289",
+      "date": 1443316672856
+    },
+    {
+      "type": "edit",
+      "id": "60f59e9d4eefcabb",
+      "item": {
+        "type": "markdown",
+        "id": "60f59e9d4eefcabb",
+        "text": "# Applications"
+      },
+      "date": 1443316674992
+    },
+    {
+      "type": "add",
+      "id": "7951695f31afa9a8",
+      "item": {
+        "type": "paragraph",
+        "id": "7951695f31afa9a8",
+        "text": "[[Site Network Diagram]] shows all visible sites connected by arcs where there are neighborhood citations."
+      },
+      "after": "b05451e3db31494a",
+      "date": 1443316875122
+    },
+    {
+      "type": "remove",
+      "id": "629bfc8b30edf1eb",
+      "date": 1443316994352
+    },
+    {
+      "type": "remove",
+      "id": "daa27e557e7268a8",
+      "date": 1443317000066
+    },
+    {
+      "type": "remove",
+      "id": "ebe2532eeda379de",
+      "date": 1443317011671
+    },
+    {
+      "type": "add",
+      "id": "722a6d5850506560",
+      "item": {
+        "type": "paragraph",
+        "id": "722a6d5850506560",
+        "text": "[[Sitemap Scrape Statistics]] plot counts.txt."
+      },
+      "after": "7951695f31afa9a8",
+      "date": 1447816741317
+    },
+    {
+      "type": "move",
+      "order": [
+        "a3ffc6dc39452c7f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "43a099cf86f93c12",
+        "0a930120ae574a1d",
+        "3fe1eb878d35a4a5",
+        "94f92e89f34fd71a",
+        "27edfbda0a496c4b",
+        "6e0253beeefd0b20",
+        "e0c50c258b8e9757",
+        "7bb2dcc792b91f3a",
+        "e81f7e3a4b94867c",
+        "d126f0cb7ab1a6e0",
+        "722a6d5850506560",
+        "cc06a741bdcfee45",
+        "96004393e77ef0ed",
+        "f9759f660f6e16ff",
+        "fdb337d9155247ac",
+        "94c6563899670c20",
+        "8d9089b26a445e5f",
+        "559a069828aa2289",
+        "60f59e9d4eefcabb",
+        "b05451e3db31494a",
+        "7951695f31afa9a8",
+        "d39523a8f8f1deed"
+      ],
+      "id": "722a6d5850506560",
+      "date": 1447817627922
+    },
+    {
+      "type": "edit",
+      "id": "722a6d5850506560",
+      "item": {
+        "type": "paragraph",
+        "id": "722a6d5850506560",
+        "text": "See [[Sitemap Scrape Statistics]] for counts plotted."
+      },
+      "date": 1447817655834
+    },
+    {
+      "type": "add",
+      "id": "0e7a898a15e16fc9",
+      "item": {
+        "type": "paragraph",
+        "id": "0e7a898a15e16fc9",
+        "text": "Our sitemap scraper runs four times a day. Logs from each run can be viewed online. [http://search.fed.wiki.org:3030/logs page]"
+      },
+      "after": "a3ffc6dc39452c7f",
+      "date": 1448225614169
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1448403689986
+    }
+  ]
+}

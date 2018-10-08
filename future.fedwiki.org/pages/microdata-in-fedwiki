@@ -1,0 +1,567 @@
+{
+  "title": "Microdata In Fedwiki",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "db9939a2206bf77f",
+      "text": "I've been experimenting a little with the use of [[Microdata In Fedwiki]]. This page is about my thoughts and progress in this area."
+    },
+    {
+      "type": "paragraph",
+      "id": "abfd76d53fbe8e6b",
+      "text": "The first thing is that we can use [[HTML5]] as a [[Long Term Storage Format]] for Fedwiki, and using [[microdata]] is a step in this future. Essentially we can experiment with [[Semantic HTML5 markup]], and look to see how we can marry this with things like [[pandoc]]."
+    },
+    {
+      "type": "markdown",
+      "id": "b3bd8f5539fa0c31",
+      "text": "# Microdata"
+    },
+    {
+      "type": "paragraph",
+      "id": "33c1b7ea46e45a3a",
+      "text": "We can achieve the look we want, while making the data machine readable. For instance, I needed to be able to markup video pages to be useful with an authoring transporter - so created HTML which looks like this in the browser:"
+    },
+    {
+      "type": "html",
+      "id": "151052fe16c9f8e2",
+      "text": "<section itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n\n<b>Episode\n<span itemprop=\"position\">12</span>\n:&nbsp;</b>\n\n<span itemprop=\"name\">[[Tom and Gary’s Decentralized Dance Party!]]</span>\n\n<span hidden itemprop=\"description\">Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.</span>\n\n<span>\n<br/>Replace with Youtube video id:&nbsp;\n\n<a itemprop=\"url\" href=\"https://www.youtube.com/watch?v=oETv32q70bE&index=48&list=PLbYZp8RGbKd3aC18KAsTj7HiVmy2hH6a0\" target=\"_none\">\n\noETv32q70bE\n\n<img src=\"http://c0de.academy/images/external-link-ltr-icon.png\">\n</a>\n</span>\n</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "18bff323b328872d",
+      "text": "Information can be revealed or hidden easily:"
+    },
+    {
+      "type": "html",
+      "id": "687d71dcad63695b",
+      "text": "<section itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n\n<b>Episode\n<span itemprop=\"position\">12</span>\n:&nbsp;</b>\n\n<span itemprop=\"name\">[[Tom and Gary’s Decentralized Dance Party!]]</span>\n\n<span hidden itemprop=\"description\">Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.</span>\n\n<span hidden>\n<br/>Replace with Youtube video id:&nbsp;\n\n<a itemprop=\"url\" href=\"https://www.youtube.com/watch?v=oETv32q70bE&index=48&list=PLbYZp8RGbKd3aC18KAsTj7HiVmy2hH6a0\" target=\"_none\">\n\noETv32q70bE\n\n<img src=\"http://c0de.academy/images/external-link-ltr-icon.png\">\n</a>\n</span>\n</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "a8dc1c681c438f2c",
+      "text": "The HTML is complicated, but logical, and should be produced by an appropriate plugin of [[Plugin Transporter]]:"
+    },
+    {
+      "type": "code",
+      "id": "9b01a68303dbc7ec",
+      "text": "<section itemscope itemtype=\"http://schema.org/TVEpisode\" itemprop=\"episode\">\n\n  <b>Episode&nbsp;\n  <span itemprop=\"position\">12</span>\n:&nbsp;</b>\n\n  <span itemprop=\"name\">[[Tom and Gary’s Decentralized Dance Party!]]</span>\n\n  <span hidden itemprop=\"description\">Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.</span>\n\n  <span hidden>\n    <br/>Replace with Youtube video id:&nbsp;\n\n    <a itemprop=\"url\" href=\"https://www.youtube.com/watch?v=oETv32q70bE&index=48&list=PLbYZp8RGbKd3aC18KAsTj7HiVmy2hH6a0\" target=\"_none\">\n\n    oETv32q70bE\n\n    <img src=\"http://c0de.academy/images/external-link-ltr-icon.png\">\n    </a>\n  </span>\n</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "a2cb1b61c08b26da",
+      "text": "This markup uses standard tags from [[schema.org]], which enables it to be indexed intelligently by search engines:"
+    },
+    {
+      "type": "paragraph",
+      "id": "1b5b9c0072b34fc4",
+      "text": "Let's see how we can map the conventional notion of a TV Series to a Youtube Video Podcast:"
+    },
+    {
+      "type": "markdown",
+      "id": "37740180854350a7",
+      "text": "# Hierarchy"
+    },
+    {
+      "type": "code",
+      "id": "26101ad6a6f2b18b",
+      "text": "TVSeries => TVSeason => TVEpisode\nChannel  => Playlist => Video"
+    },
+    {
+      "type": "paragraph",
+      "id": "4ae24f340d4e5145",
+      "text": "So a video (show) called [[Tom and Gary’s Decentralized Dance Party!]], in the playlist called [[MadBitcoins and Dogecoins]] of the \"World Crypto Network\" channel on Youtube, would be marked up like this:"
+    },
+    {
+      "type": "code",
+      "id": "4f6c31658b592bdd",
+      "text": "<section itemscope itemtype=\"http://schema.org/TVSeries\">\n   <span itemprop=\"name\">World Crypto Network</span>\n\n  <div itemprop=\"containsSeason\" itemscope itemtype=\"http://schema.org/TVSeason\">\n     <span itemprop=\"name\">MadBitcoins and Dogecoins</span>\n\n    <div itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n       <span itemprop=\"name\">Tom and Gary’s Decentralized Dance Party!</span>\n\n</div></div></section>"
+    },
+    {
+      "type": "html",
+      "id": "065267516489a80d",
+      "text": "And can look like this (using <code>div</code> tags) in HTML:"
+    },
+    {
+      "type": "html",
+      "id": "5799eff67c384d77",
+      "text": "<blockquote>\n<section itemscope itemtype=\"http://schema.org/TVSeries\">\n   <span itemprop=\"name\">World Crypto Network</span>\n\n  <div itemprop=\"containsSeason\" itemscope itemtype=\"http://schema.org/TVSeason\">\n     <span itemprop=\"name\">MadBitcoins and Dogecoins</span>\n\n    <div itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n       <span itemprop=\"name\">Tom and Gary’s Decentralized Dance Party!</span>\n\n</div></div></section>\n</blockquote>"
+    },
+    {
+      "type": "html",
+      "id": "65a4e482a5b8b4bd",
+      "text": "Or like this (using <code>span</code> tags):"
+    },
+    {
+      "type": "html",
+      "id": "796f7693108b0516",
+      "text": "<blockquote>\n<section itemscope itemtype=\"http://schema.org/TVSeries\">\n   <span itemprop=\"name\">World Crypto Network</span>\n\n  <span itemprop=\"containsSeason\" itemscope itemtype=\"http://schema.org/TVSeason\">\n     <span itemprop=\"name\">MadBitcoins and Dogecoins</span>\n\n    <span itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n       <span itemprop=\"name\">Tom and Gary’s Decentralized Dance Party!</span>\n\n</span></span></section>\n</blockquote>"
+    },
+    {
+      "type": "html",
+      "id": "c6e70a6ad5981c26",
+      "text": "[[Issue]]: Unfortunately we cannot link the [[<span itemprop=\"name\">World Crypto Network]]</span>]] because it shows up the tags, or we have to include brackets in the name. Which leads us to need to be able to [[Wiki Links in HTML]]."
+    },
+    {
+      "type": "markdown",
+      "id": "e19b964d48fc278e",
+      "text": "# However"
+    },
+    {
+      "type": "paragraph",
+      "id": "2aacd9bf7e5080c5",
+      "text": "While there are some [[Pretty Microdata Examples]] which would allow us a great deal of flexibility in formatting and display of content in an HTML item, there are a number of [[Drawbacks of Microdata]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "5831096187cbd592",
+      "text": "This leads me to look at using [[JSON-LD for Markup]]."
+    },
+    {
+      "type": "markdown",
+      "id": "bce1238fd735d848",
+      "text": "# See also"
+    },
+    {
+      "type": "reference",
+      "id": "d8b65f1e2c2c89a0",
+      "site": "wcn.cryptoacademy.org",
+      "slug": "tom-and-garys-decentralized-dance-party",
+      "title": "Tom and Gary’s Decentralized Dance Party!",
+      "text": "This video is part of the [[MadBitcoins and Dogecoins]] playlist, of the [[World Crypto Network]] channel on Youtube."
+    },
+    {
+      "type": "reference",
+      "id": "1090e2390dc3a72a",
+      "site": "c0de.academy",
+      "slug": "scema-for-tvseries",
+      "title": "Scema for TVSeries",
+      "text": "CreativeWorkSeries dedicated to TV broadcast and associated online delivery - [https://schema.org/TVSeries schema.org]"
+    },
+    {
+      "type": "reference",
+      "id": "85393ec293c00a7c",
+      "site": "c0de.academy",
+      "slug": "microdata",
+      "title": "Microdata",
+      "text": "Microdata is an HTML specification used to nest metadata within existing content on web pages - [https://en.wikipedia.org/wiki/Microdata_(HTML) wikipedia]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Microdata In Fedwiki",
+        "story": []
+      },
+      "date": 1458106049150
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1cf9a1a9de55080a"
+      },
+      "id": "1cf9a1a9de55080a",
+      "type": "add",
+      "date": 1458106051201
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "db9939a2206bf77f",
+        "text": "I've been experimenting a little with the use of [[Microdata In Fedwiki]]. This page is about my thoughts and progress in this area."
+      },
+      "id": "db9939a2206bf77f",
+      "date": 1458106053114
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "abfd76d53fbe8e6b",
+        "text": "The first thing is that we can use [[HTML5]] as a [[Long Term Storage Format]] for Fedwiki, and using microdata is a step in this future. Essentially we can experiment with [[Semantic HTML5 markup]], and look to see how we can marry this with things like [[pandoc]]."
+      },
+      "after": "db9939a2206bf77f",
+      "id": "abfd76d53fbe8e6b",
+      "date": 1458106054739
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "33c1b7ea46e45a3a",
+        "text": "We can achieve the look we want, while making the data machine readable. For instance, I needed to be able to markup video pages to be useful with an authoring transporter - so created HTML which looks like this in the browser:"
+      },
+      "after": "abfd76d53fbe8e6b",
+      "id": "33c1b7ea46e45a3a",
+      "date": 1458106063965
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "b3bd8f5539fa0c31",
+        "text": "# Microdata"
+      },
+      "after": "abfd76d53fbe8e6b",
+      "id": "b3bd8f5539fa0c31",
+      "date": 1458106074256
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "151052fe16c9f8e2",
+        "text": "<section itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n\n<b>Episode\n<span itemprop=\"position\">12</span>\n:&nbsp;</b>\n\n<span itemprop=\"name\">[[Tom and Gary’s Decentralized Dance Party!]]</span>\n\n<span hidden itemprop=\"description\">Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.</span>\n\n<span>\n<br/>Replace with Youtube video id:&nbsp;\n\n<a itemprop=\"url\" href=\"https://www.youtube.com/watch?v=oETv32q70bE&index=48&list=PLbYZp8RGbKd3aC18KAsTj7HiVmy2hH6a0\" target=\"_none\">\n\noETv32q70bE\n\n<img src=\"http://c0de.academy/images/external-link-ltr-icon.png\">\n</a>\n</span>\n</section>"
+      },
+      "after": "33c1b7ea46e45a3a",
+      "id": "151052fe16c9f8e2",
+      "date": 1458106081639
+    },
+    {
+      "type": "edit",
+      "id": "abfd76d53fbe8e6b",
+      "item": {
+        "type": "paragraph",
+        "id": "abfd76d53fbe8e6b",
+        "text": "The first thing is that we can use [[HTML5]] as a [[Long Term Storage Format]] for Fedwiki, and using [[microdata]] is a step in this future. Essentially we can experiment with [[Semantic HTML5 markup]], and look to see how we can marry this with things like [[pandoc]]."
+      },
+      "date": 1458106114560
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "18bff323b328872d",
+        "text": "Information can be revealed or hidden easily:"
+      },
+      "after": "151052fe16c9f8e2",
+      "id": "18bff323b328872d",
+      "date": 1458106119629
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "687d71dcad63695b",
+        "text": "<section itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n\n<b>Episode\n<span itemprop=\"position\">12</span>\n:&nbsp;</b>\n\n<span itemprop=\"name\">[[Tom and Gary’s Decentralized Dance Party!]]</span>\n\n<span hidden itemprop=\"description\">Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.</span>\n\n<span hidden>\n<br/>Replace with Youtube video id:&nbsp;\n\n<a itemprop=\"url\" href=\"https://www.youtube.com/watch?v=oETv32q70bE&index=48&list=PLbYZp8RGbKd3aC18KAsTj7HiVmy2hH6a0\" target=\"_none\">\n\noETv32q70bE\n\n<img src=\"http://c0de.academy/images/external-link-ltr-icon.png\">\n</a>\n</span>\n</section>"
+      },
+      "after": "18bff323b328872d",
+      "id": "687d71dcad63695b",
+      "date": 1458106123580
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a8dc1c681c438f2c",
+        "text": "The HTML is complicated, but logical, and should be produced by an appropriate plugin of [[Plugin Transporter]]:"
+      },
+      "after": "687d71dcad63695b",
+      "id": "a8dc1c681c438f2c",
+      "date": 1458106127598
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9b01a68303dbc7ec",
+        "text": "<section itemscope itemtype=\"http://schema.org/TVEpisode\" itemprop=\"episode\">\n\n  <b>Episode&nbsp;\n  <span itemprop=\"position\">12</span>\n:&nbsp;</b>\n\n  <span itemprop=\"name\">[[Tom and Gary’s Decentralized Dance Party!]]</span>\n\n  <span hidden itemprop=\"description\">Catch this exclusive interview with Dave Grohl and the Foo Fighters about their new album, Rope.</span>\n\n  <span hidden>\n    <br/>Replace with Youtube video id:&nbsp;\n\n    <a itemprop=\"url\" href=\"https://www.youtube.com/watch?v=oETv32q70bE&index=48&list=PLbYZp8RGbKd3aC18KAsTj7HiVmy2hH6a0\" target=\"_none\">\n\n    oETv32q70bE\n\n    <img src=\"http://c0de.academy/images/external-link-ltr-icon.png\">\n    </a>\n  </span>\n</section>"
+      },
+      "after": "a8dc1c681c438f2c",
+      "id": "9b01a68303dbc7ec",
+      "date": 1458106131662
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a2cb1b61c08b26da",
+        "text": "This markup uses standard tags from [[schema.org]], which enables it to be indexed intelligently by search engines:"
+      },
+      "after": "9b01a68303dbc7ec",
+      "id": "a2cb1b61c08b26da",
+      "date": 1458106140468
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1b5b9c0072b34fc4",
+        "text": "Let's see how we can map the conventional notion of a TV Series to a Youtube Video Podcast:"
+      },
+      "after": "a2cb1b61c08b26da",
+      "id": "1b5b9c0072b34fc4",
+      "date": 1458106144383
+    },
+    {
+      "type": "remove",
+      "id": "1cf9a1a9de55080a",
+      "date": 1458106148213
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "37740180854350a7",
+        "text": "# Hierarchy"
+      },
+      "after": "1b5b9c0072b34fc4",
+      "id": "37740180854350a7",
+      "date": 1458106157661
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "26101ad6a6f2b18b",
+        "text": "TVSeries => TVSeason => TVEpisode\nChannel  => Playlist => Video"
+      },
+      "after": "37740180854350a7",
+      "id": "26101ad6a6f2b18b",
+      "date": 1458106160713
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4ae24f340d4e5145",
+        "text": "So a video (show) called [[Tom and Gary’s Decentralized Dance Party!]], in the playlist called [[MadBitcoins and Dogecoins]] of the \"World Crypto Network\" channel on Youtube, would be marked up like this:"
+      },
+      "after": "26101ad6a6f2b18b",
+      "id": "4ae24f340d4e5145",
+      "date": 1458106163410
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "4f6c31658b592bdd",
+        "text": "<section itemscope itemtype=\"http://schema.org/TVSeries\">\n   <span itemprop=\"name\">World Crypto Network</span>\n\n  <div itemprop=\"containsSeason\" itemscope itemtype=\"http://schema.org/TVSeason\">\n     <span itemprop=\"name\">MadBitcoins and Dogecoins</span>\n\n    <div itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n       <span itemprop=\"name\">Tom and Gary’s Decentralized Dance Party!</span>\n\n</div></div></section>"
+      },
+      "after": "4ae24f340d4e5145",
+      "id": "4f6c31658b592bdd",
+      "date": 1458106167770
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "065267516489a80d",
+        "text": "And can look like this (using <code>div</code> tags) in HTML:"
+      },
+      "after": "4f6c31658b592bdd",
+      "id": "065267516489a80d",
+      "date": 1458106175066
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "5799eff67c384d77",
+        "text": "<blockquote>\n<section itemscope itemtype=\"http://schema.org/TVSeries\">\n   <span itemprop=\"name\">World Crypto Network</span>\n\n  <div itemprop=\"containsSeason\" itemscope itemtype=\"http://schema.org/TVSeason\">\n     <span itemprop=\"name\">MadBitcoins and Dogecoins</span>\n\n    <div itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n       <span itemprop=\"name\">Tom and Gary’s Decentralized Dance Party!</span>\n\n</div></div></section>\n</blockquote>"
+      },
+      "after": "4f6c31658b592bdd",
+      "id": "5799eff67c384d77",
+      "date": 1458106181440
+    },
+    {
+      "type": "move",
+      "order": [
+        "db9939a2206bf77f",
+        "abfd76d53fbe8e6b",
+        "b3bd8f5539fa0c31",
+        "33c1b7ea46e45a3a",
+        "151052fe16c9f8e2",
+        "18bff323b328872d",
+        "687d71dcad63695b",
+        "a8dc1c681c438f2c",
+        "9b01a68303dbc7ec",
+        "a2cb1b61c08b26da",
+        "1b5b9c0072b34fc4",
+        "37740180854350a7",
+        "26101ad6a6f2b18b",
+        "4ae24f340d4e5145",
+        "4f6c31658b592bdd",
+        "065267516489a80d",
+        "5799eff67c384d77"
+      ],
+      "id": "065267516489a80d",
+      "date": 1458106183478
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "65a4e482a5b8b4bd",
+        "text": "Or like this (using <code>span</code> tags):"
+      },
+      "after": "5799eff67c384d77",
+      "id": "65a4e482a5b8b4bd",
+      "date": 1458106186433
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "796f7693108b0516",
+        "text": "<blockquote>\n<section itemscope itemtype=\"http://schema.org/TVSeries\">\n   <span itemprop=\"name\">World Crypto Network</span>\n\n  <span itemprop=\"containsSeason\" itemscope itemtype=\"http://schema.org/TVSeason\">\n     <span itemprop=\"name\">MadBitcoins and Dogecoins</span>\n\n    <span itemprop=\"episode\" itemscope itemtype=\"http://schema.org/TVEpisode\">\n       <span itemprop=\"name\">Tom and Gary’s Decentralized Dance Party!</span>\n\n</span></span></section>\n</blockquote>"
+      },
+      "after": "65a4e482a5b8b4bd",
+      "id": "796f7693108b0516",
+      "date": 1458106193434
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "c6e70a6ad5981c26",
+        "text": "Unfortunately we cannot link the [[<span itemprop=\"name\">World Crypto Network]]</span>]] because it shows up the tags, or we have to include brackets in the name :("
+      },
+      "after": "796f7693108b0516",
+      "id": "c6e70a6ad5981c26",
+      "date": 1458106202282
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "6a2663d9347b0a7f",
+        "text": "Which leads us to need to be able to [[Wiki Links in HTML]]."
+      },
+      "after": "c6e70a6ad5981c26",
+      "id": "6a2663d9347b0a7f",
+      "date": 1458106237965
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "e19b964d48fc278e",
+        "text": "# However"
+      },
+      "after": "6a2663d9347b0a7f",
+      "id": "e19b964d48fc278e",
+      "date": 1458106241951
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "2fcde4ff62c7cb9e",
+        "site": "future.fedwiki.org",
+        "slug": "pretty-microdata-examples",
+        "title": "Pretty Microdata Examples",
+        "text": "Here are some [[Pretty Microdata Examples]]:"
+      },
+      "after": "e19b964d48fc278e",
+      "id": "2fcde4ff62c7cb9e",
+      "date": 1458106249395
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2aacd9bf7e5080c5",
+        "text": "While there are some [[Pretty Microdata Examples]] which would allow us a great deal of flexibility in formatting and display of content in an HTML item, there are a number of [[Drawbacks of Microdata]]."
+      },
+      "after": "e19b964d48fc278e",
+      "id": "2aacd9bf7e5080c5",
+      "date": 1458106253353
+    },
+    {
+      "type": "remove",
+      "id": "2fcde4ff62c7cb9e",
+      "date": 1458106258116
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5831096187cbd592",
+        "text": "This leads me to look at using [[JSON-LD for Markup]]."
+      },
+      "after": "2aacd9bf7e5080c5",
+      "id": "5831096187cbd592",
+      "date": 1458106265163
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "1090e2390dc3a72a",
+        "site": "c0de.academy",
+        "slug": "scema-for-tvseries",
+        "title": "Scema for TVSeries",
+        "text": "CreativeWorkSeries dedicated to TV broadcast and associated online delivery - [https://schema.org/TVSeries schema.org]"
+      },
+      "after": "5831096187cbd592",
+      "id": "1090e2390dc3a72a",
+      "date": 1458106268418
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "85393ec293c00a7c",
+        "site": "c0de.academy",
+        "slug": "microdata",
+        "title": "Microdata",
+        "text": "Microdata is an HTML specification used to nest metadata within existing content on web pages - [https://en.wikipedia.org/wiki/Microdata_(HTML) wikipedia]"
+      },
+      "after": "1090e2390dc3a72a",
+      "id": "85393ec293c00a7c",
+      "date": 1458106274232
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "d8b65f1e2c2c89a0",
+        "site": "wcn.cryptoacademy.org",
+        "slug": "tom-and-garys-decentralized-dance-party",
+        "title": "Tom and Gary’s Decentralized Dance Party!",
+        "text": "This video is part of the [[MadBitcoins and Dogecoins]] playlist, of the [[World Crypto Network]] channel on Youtube."
+      },
+      "after": "5831096187cbd592",
+      "id": "d8b65f1e2c2c89a0",
+      "date": 1458106279161
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "bce1238fd735d848",
+        "text": "# See also"
+      },
+      "after": "5831096187cbd592",
+      "id": "bce1238fd735d848",
+      "date": 1458106286752
+    },
+    {
+      "type": "edit",
+      "id": "c6e70a6ad5981c26",
+      "item": {
+        "type": "html",
+        "id": "c6e70a6ad5981c26",
+        "text": "[[Issue]]: Unfortunately we cannot link the [[<span itemprop=\"name\">World Crypto Network]]</span>]] because it shows up the tags, or we have to include brackets in the name :("
+      },
+      "date": 1460031289877
+    },
+    {
+      "type": "remove",
+      "id": "6a2663d9347b0a7f",
+      "date": 1460031306765
+    },
+    {
+      "type": "edit",
+      "id": "c6e70a6ad5981c26",
+      "item": {
+        "type": "html",
+        "id": "c6e70a6ad5981c26",
+        "text": "[[Issue]]: Unfortunately we cannot link the [[<span itemprop=\"name\">World Crypto Network]]</span>]] because it shows up the tags, or we have to include brackets in the name. Which leads us to need to be able to [[Wiki Links in HTML]]."
+      },
+      "date": 1460031312926
+    }
+  ]
+}

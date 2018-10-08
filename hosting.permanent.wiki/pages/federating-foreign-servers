@@ -1,0 +1,727 @@
+{
+  "title": "Federating Foreign Servers",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "94e1695493dc291f",
+      "text": "We consider what requests a server must handle in order to participate in wiki's federation. Such a server provides pages without taking responsibility for the client-side javascript conventionally used by federated wiki."
+    },
+    {
+      "type": "markdown",
+      "id": "4324fb2262ed8a11",
+      "text": "# Requirements"
+    },
+    {
+      "type": "paragraph",
+      "id": "d8c90d406ad4e8e1",
+      "text": "Wiki supports a small number of cross-origin endpoints which deliver pages and information about pages to client-side applications launched from other sites."
+    },
+    {
+      "type": "code",
+      "id": "e7e5d90bcf9ab8d6",
+      "text": "GET /welcome-visitors.json\nGET /other-page-slugs.json\nGET /system/sitemap.json\nGET /favicon.png"
+    },
+    {
+      "type": "paragraph",
+      "id": "c128abb9baf13113",
+      "text": "Wiki compatible servers are expected to deliver html hypertext content when a user's browser is directed to wiki related urls."
+    },
+    {
+      "type": "code",
+      "id": "ba8de10ff05da221",
+      "text": "http://example.com\nhttp://example.com/any-page-slug.html\nhttp://example.com/view/..."
+    },
+    {
+      "type": "paragraph",
+      "id": "6319a54270ac7d18",
+      "text": "In rare cases 'view' might be replaced with 'origin' or with the domain name, in our example, 'example.com'."
+    },
+    {
+      "type": "paragraph",
+      "id": "0c8fd68e7244e5ca",
+      "text": "Federated wiki servers provide additional endpoints used by the client-side javascript code they serve. These do not apply to foreign servers which presumably support unrelated interactions with their users."
+    },
+    {
+      "type": "markdown",
+      "id": "b83f6fcdf4fe1322",
+      "text": "# Strategy"
+    },
+    {
+      "type": "paragraph",
+      "id": "a249b205b041ebca",
+      "text": "One could serve only cross-origin requests for well known pages and be a useful member of the federation."
+    },
+    {
+      "type": "code",
+      "id": "dc537f30b292fc70",
+      "text": "GET /other-page-slugs.json"
+    },
+    {
+      "type": "paragraph",
+      "id": "b797c74ae2778939",
+      "text": "This could be joined into the federation by editing a lineup url to site the server/slug of the new resource and the resulting page dropped on a Factory to construct a lasting Reference that can move through the federation. The reference would expect a flag to be complete."
+    },
+    {
+      "type": "code",
+      "id": "cda3f1a71e0fad4d",
+      "text": "GET /favicon.png"
+    },
+    {
+      "type": "paragraph",
+      "id": "c60ced9f51859037",
+      "text": "Viewing such a Reference will induce a neighborhood inquiry. Failure here is inconsequential. But to be available to search add a sitemap."
+    },
+    {
+      "type": "code",
+      "id": "8d1007b652f53344",
+      "text": "GET /system/sitemap.json\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "9ab852afe0a4432b",
+      "text": "Presence in the neighborhood does suggest the availability of a site with welcome-visitors as it's root. When this is absent a potentially confusing Future appears upon clicks."
+    },
+    {
+      "type": "code",
+      "id": "8c9f62cc69c124f3",
+      "text": "GET /welcome-visitors.json\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2c5007f105a03247",
+      "text": "A good strategy is to use a private temporary instance of wiki to prepare these sorts of pages. If this static content is served from a 'pages' subdirectory then launch wiki on localhost:4000 to edit."
+    },
+    {
+      "type": "code",
+      "id": "58710b94417baadd",
+      "text": "wiki -d . -p 4000 --security_legacy"
+    },
+    {
+      "type": "paragraph",
+      "id": "900d1511b88783fd",
+      "text": "So far all of these api endpoints are well defined and easy to support independently of any other services a foreign server might offer."
+    },
+    {
+      "type": "paragraph",
+      "id": "e8dba18842a904aa",
+      "text": "Wiki will generate hyperlinks available to the host browser where one could expect to find html content. These are targeted to new tabs."
+    },
+    {
+      "type": "code",
+      "id": "1117d8a2603acf6e",
+      "text": "http://example.com\nhttp://example.com/any-page-slug.html\nhttp://example.com/view/..."
+    },
+    {
+      "type": "paragraph",
+      "id": "1dd79c89098b8fb7",
+      "text": "Here a foreign server is as free as any other traditional web site to take control of the browsing experience. Consider redirecting all of these into your own url scheme and leave federation browsing to the originating tab."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Federating Foreign Servers",
+        "story": []
+      },
+      "date": 1441822689591
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "94e1695493dc291f"
+      },
+      "id": "94e1695493dc291f",
+      "type": "add",
+      "date": 1441822708696
+    },
+    {
+      "type": "edit",
+      "id": "94e1695493dc291f",
+      "item": {
+        "type": "paragraph",
+        "id": "94e1695493dc291f",
+        "text": "We consider what requests a server must handle in order to participate in wiki's federation. Such a server provides pages without employing the client-side javascript conventionally used by federated wiki."
+      },
+      "date": 1441822895165
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d8c90d406ad4e8e1"
+      },
+      "id": "d8c90d406ad4e8e1",
+      "type": "add",
+      "after": "94e1695493dc291f",
+      "date": 1441823024710
+    },
+    {
+      "type": "edit",
+      "id": "d8c90d406ad4e8e1",
+      "item": {
+        "type": "paragraph",
+        "id": "d8c90d406ad4e8e1",
+        "text": "Wiki supports a small number of cross-origin endpoints which deliver pages and information about pages to client-side applications launched from other sites."
+      },
+      "date": 1441823152151
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e7e5d90bcf9ab8d6"
+      },
+      "id": "e7e5d90bcf9ab8d6",
+      "type": "add",
+      "after": "d8c90d406ad4e8e1",
+      "date": 1441823154391
+    },
+    {
+      "type": "edit",
+      "id": "e7e5d90bcf9ab8d6",
+      "item": {
+        "type": "code",
+        "id": "e7e5d90bcf9ab8d6",
+        "text": "/welcome-visitors.json\n/{other-page-slugs}.json\n/system/sitemap.json"
+      },
+      "date": 1441823247236
+    },
+    {
+      "type": "edit",
+      "id": "e7e5d90bcf9ab8d6",
+      "item": {
+        "type": "code",
+        "id": "e7e5d90bcf9ab8d6",
+        "text": "/welcome-visitors.json\n/other-page-slugs.json\n/system/sitemap.json"
+      },
+      "date": 1441823257806
+    },
+    {
+      "type": "edit",
+      "id": "e7e5d90bcf9ab8d6",
+      "item": {
+        "type": "code",
+        "id": "e7e5d90bcf9ab8d6",
+        "text": "GET /welcome-visitors.json\nGET /other-page-slugs.json\nGET /system/sitemap.json"
+      },
+      "date": 1441823282333
+    },
+    {
+      "type": "edit",
+      "id": "e7e5d90bcf9ab8d6",
+      "item": {
+        "type": "code",
+        "id": "e7e5d90bcf9ab8d6",
+        "text": "GET /welcome-visitors.json\nGET /other-page-slugs.json\nGET /system/sitemap.json\nGET /favicon.png"
+      },
+      "date": 1441823325362
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c128abb9baf13113"
+      },
+      "id": "c128abb9baf13113",
+      "type": "add",
+      "after": "e7e5d90bcf9ab8d6",
+      "date": 1441823346458
+    },
+    {
+      "type": "edit",
+      "id": "c128abb9baf13113",
+      "item": {
+        "type": "paragraph",
+        "id": "c128abb9baf13113",
+        "text": "Wiki compatible servers are expected to deliver html hypertext content when a user's browser is directed to related urls."
+      },
+      "date": 1441823645423
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ba8de10ff05da221"
+      },
+      "id": "ba8de10ff05da221",
+      "type": "add",
+      "after": "c128abb9baf13113",
+      "date": 1441823650075
+    },
+    {
+      "type": "edit",
+      "id": "ba8de10ff05da221",
+      "item": {
+        "type": "code",
+        "id": "ba8de10ff05da221",
+        "text": "http://example.com\nhttp://example.com/any-page-slug.html\nhttp://example.com/view/..."
+      },
+      "date": 1441823738117
+    },
+    {
+      "type": "edit",
+      "id": "c128abb9baf13113",
+      "item": {
+        "type": "paragraph",
+        "id": "c128abb9baf13113",
+        "text": "Wiki compatible servers are expected to deliver html hypertext content when a user's browser is directed to wiki related urls."
+      },
+      "date": 1441823770333
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6319a54270ac7d18"
+      },
+      "id": "6319a54270ac7d18",
+      "type": "add",
+      "after": "ba8de10ff05da221",
+      "date": 1441823977924
+    },
+    {
+      "type": "edit",
+      "id": "6319a54270ac7d18",
+      "item": {
+        "type": "paragraph",
+        "id": "6319a54270ac7d18",
+        "text": "In rare cases 'view' might be replaced with 'origin' or with the domain name, in our example, 'example.com'."
+      },
+      "date": 1441824052603
+    },
+    {
+      "type": "add",
+      "id": "0c8fd68e7244e5ca",
+      "item": {
+        "type": "paragraph",
+        "id": "0c8fd68e7244e5ca",
+        "text": "Federated wiki servers provide additional endpoints used by the client-side javascript code they serve. These do not apply to foreign servers which presumably support unrelated interactions with their users."
+      },
+      "after": "6319a54270ac7d18",
+      "date": 1441824253996
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4324fb2262ed8a11"
+      },
+      "id": "4324fb2262ed8a11",
+      "type": "add",
+      "after": "0c8fd68e7244e5ca",
+      "date": 1441896862513
+    },
+    {
+      "type": "edit",
+      "id": "4324fb2262ed8a11",
+      "item": {
+        "type": "markdown",
+        "id": "4324fb2262ed8a11",
+        "text": "# Requirements"
+      },
+      "date": 1441896876420
+    },
+    {
+      "type": "move",
+      "order": [
+        "94e1695493dc291f",
+        "4324fb2262ed8a11",
+        "d8c90d406ad4e8e1",
+        "e7e5d90bcf9ab8d6",
+        "c128abb9baf13113",
+        "ba8de10ff05da221",
+        "6319a54270ac7d18",
+        "0c8fd68e7244e5ca"
+      ],
+      "id": "4324fb2262ed8a11",
+      "date": 1441896883346
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b83f6fcdf4fe1322"
+      },
+      "id": "b83f6fcdf4fe1322",
+      "type": "add",
+      "after": "0c8fd68e7244e5ca",
+      "date": 1441896889134
+    },
+    {
+      "type": "edit",
+      "id": "b83f6fcdf4fe1322",
+      "item": {
+        "type": "markdown",
+        "id": "b83f6fcdf4fe1322",
+        "text": "# Strategy"
+      },
+      "date": 1441896897621
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a249b205b041ebca"
+      },
+      "id": "a249b205b041ebca",
+      "type": "add",
+      "after": "b83f6fcdf4fe1322",
+      "date": 1441897034660
+    },
+    {
+      "type": "edit",
+      "id": "a249b205b041ebca",
+      "item": {
+        "type": "paragraph",
+        "id": "a249b205b041ebca",
+        "text": "One could serve only cross-origin requests for well known pages and be a useful member of the federation."
+      },
+      "date": 1441897119423
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dc537f30b292fc70"
+      },
+      "id": "dc537f30b292fc70",
+      "type": "add",
+      "after": "a249b205b041ebca",
+      "date": 1441897135554
+    },
+    {
+      "type": "edit",
+      "id": "dc537f30b292fc70",
+      "item": {
+        "type": "code",
+        "id": "dc537f30b292fc70",
+        "text": "GET /other-page-slugs.json"
+      },
+      "date": 1441897139391
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b797c74ae2778939"
+      },
+      "id": "b797c74ae2778939",
+      "type": "add",
+      "after": "dc537f30b292fc70",
+      "date": 1441897202295
+    },
+    {
+      "type": "edit",
+      "id": "b797c74ae2778939",
+      "item": {
+        "type": "paragraph",
+        "id": "b797c74ae2778939",
+        "text": "This could be joined into the federation by editing a lineup url to site the server/slug of the new resource and the resulting page dropped on a Factory to construct a lasting Reference that can move through the federation. The reference would expect a flag that could be copied from anywhere."
+      },
+      "date": 1441897405408
+    },
+    {
+      "type": "edit",
+      "id": "b797c74ae2778939",
+      "item": {
+        "type": "paragraph",
+        "id": "b797c74ae2778939",
+        "text": "This could be joined into the federation by editing a lineup url to site the server/slug of the new resource and the resulting page dropped on a Factory to construct a lasting Reference that can move through the federation. The reference would expect a flag to be complete."
+      },
+      "date": 1441897428396
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cda3f1a71e0fad4d"
+      },
+      "id": "cda3f1a71e0fad4d",
+      "type": "add",
+      "after": "b797c74ae2778939",
+      "date": 1441897451289
+    },
+    {
+      "type": "edit",
+      "id": "cda3f1a71e0fad4d",
+      "item": {
+        "type": "code",
+        "id": "cda3f1a71e0fad4d",
+        "text": "GET /favicon.png"
+      },
+      "date": 1441897455825
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c60ced9f51859037"
+      },
+      "id": "c60ced9f51859037",
+      "type": "add",
+      "after": "cda3f1a71e0fad4d",
+      "date": 1441897564011
+    },
+    {
+      "type": "edit",
+      "id": "c60ced9f51859037",
+      "item": {
+        "type": "paragraph",
+        "id": "c60ced9f51859037",
+        "text": "Viewing such a Reference will induce a neighborhood inquiry. Failure here is inconsequential. But to be available to search add a sitemap."
+      },
+      "date": 1441897881204
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8d1007b652f53344"
+      },
+      "id": "8d1007b652f53344",
+      "type": "add",
+      "after": "c60ced9f51859037",
+      "date": 1441897936999
+    },
+    {
+      "type": "edit",
+      "id": "8d1007b652f53344",
+      "item": {
+        "type": "code",
+        "id": "8d1007b652f53344",
+        "text": "GET /system/sitemap.json\n"
+      },
+      "date": 1441897943003
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9ab852afe0a4432b"
+      },
+      "id": "9ab852afe0a4432b",
+      "type": "add",
+      "after": "8d1007b652f53344",
+      "date": 1441897973368
+    },
+    {
+      "type": "edit",
+      "id": "9ab852afe0a4432b",
+      "item": {
+        "type": "paragraph",
+        "id": "9ab852afe0a4432b",
+        "text": "Presence in the neighborhood does suggest the availability of a site with welcome-visitors as it's root."
+      },
+      "date": 1441898039638
+    },
+    {
+      "type": "edit",
+      "id": "9ab852afe0a4432b",
+      "item": {
+        "type": "paragraph",
+        "id": "9ab852afe0a4432b",
+        "text": "Presence in the neighborhood does suggest the availability of a site with welcome-visitors as it's root. When this is absent a potentially confusing Future appears upon clicks."
+      },
+      "date": 1441898247176
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8c9f62cc69c124f3"
+      },
+      "id": "8c9f62cc69c124f3",
+      "type": "add",
+      "after": "9ab852afe0a4432b",
+      "date": 1441898262866
+    },
+    {
+      "type": "edit",
+      "id": "8c9f62cc69c124f3",
+      "item": {
+        "type": "code",
+        "id": "8c9f62cc69c124f3",
+        "text": "GET /welcome-visitors.json\n"
+      },
+      "date": 1441898269184
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2c5007f105a03247"
+      },
+      "id": "2c5007f105a03247",
+      "type": "add",
+      "after": "8c9f62cc69c124f3",
+      "date": 1441898295501
+    },
+    {
+      "type": "edit",
+      "id": "2c5007f105a03247",
+      "item": {
+        "type": "paragraph",
+        "id": "2c5007f105a03247",
+        "text": "A good strategy is to use a private temporary instance of wiki to prepare these sorts of pages. If this static content is served from a 'pages' subdirectory then launch wiki on localhost:4000 to edit."
+      },
+      "date": 1441898456864
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "58710b94417baadd"
+      },
+      "id": "58710b94417baadd",
+      "type": "add",
+      "after": "2c5007f105a03247",
+      "date": 1441898460325
+    },
+    {
+      "type": "edit",
+      "id": "58710b94417baadd",
+      "item": {
+        "type": "code",
+        "id": "58710b94417baadd",
+        "text": "wiki -d . -p 4000"
+      },
+      "date": 1441898474897
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "900d1511b88783fd"
+      },
+      "id": "900d1511b88783fd",
+      "type": "add",
+      "after": "58710b94417baadd",
+      "date": 1441898541914
+    },
+    {
+      "type": "edit",
+      "id": "900d1511b88783fd",
+      "item": {
+        "type": "paragraph",
+        "id": "900d1511b88783fd",
+        "text": "So far all of these api endpoints are well defined and easy to support independently of any other services a foreign server might offer."
+      },
+      "date": 1441898760267
+    },
+    {
+      "type": "add",
+      "id": "e8dba18842a904aa",
+      "item": {
+        "type": "paragraph",
+        "id": "e8dba18842a904aa",
+        "text": "Wiki will generate hyperlinks available to the host browser where one could expect to find html content. Here a foreign server is as free as any other traditional web site to take control of the browsing experience. "
+      },
+      "after": "900d1511b88783fd",
+      "date": 1441899011443
+    },
+    {
+      "type": "edit",
+      "id": "e8dba18842a904aa",
+      "item": {
+        "type": "paragraph",
+        "id": "e8dba18842a904aa",
+        "text": "Wiki will generate hyperlinks available to the host browser where one could expect to find html content. These are targeted to new tabs. Here a foreign server is as free as any other traditional web site to take control of the browsing experience. Consider redirecting all of these into your own url scheme and leave federation browsing to the originating tab."
+      },
+      "date": 1441899124526
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1117d8a2603acf6e"
+      },
+      "id": "1117d8a2603acf6e",
+      "type": "add",
+      "after": "e8dba18842a904aa",
+      "date": 1441899139098
+    },
+    {
+      "type": "edit",
+      "id": "1117d8a2603acf6e",
+      "item": {
+        "type": "code",
+        "id": "1117d8a2603acf6e",
+        "text": "http://example.com\nhttp://example.com/any-page-slug.html\nhttp://example.com/view/..."
+      },
+      "date": 1441899142559
+    },
+    {
+      "type": "edit",
+      "id": "e8dba18842a904aa",
+      "item": {
+        "type": "paragraph",
+        "id": "e8dba18842a904aa",
+        "text": "Wiki will generate hyperlinks available to the host browser where one could expect to find html content. These are targeted to new tabs."
+      },
+      "date": 1441899158941
+    },
+    {
+      "type": "add",
+      "id": "1dd79c89098b8fb7",
+      "item": {
+        "type": "paragraph",
+        "id": "1dd79c89098b8fb7",
+        "text": "Here a foreign server is as free as any other traditional web site to take control of the browsing experience. Consider redirecting all of these into your own url scheme and leave federation browsing to the originating tab."
+      },
+      "after": "e8dba18842a904aa",
+      "date": 1441899160486
+    },
+    {
+      "type": "move",
+      "order": [
+        "94e1695493dc291f",
+        "4324fb2262ed8a11",
+        "d8c90d406ad4e8e1",
+        "e7e5d90bcf9ab8d6",
+        "c128abb9baf13113",
+        "ba8de10ff05da221",
+        "6319a54270ac7d18",
+        "0c8fd68e7244e5ca",
+        "b83f6fcdf4fe1322",
+        "a249b205b041ebca",
+        "dc537f30b292fc70",
+        "b797c74ae2778939",
+        "cda3f1a71e0fad4d",
+        "c60ced9f51859037",
+        "8d1007b652f53344",
+        "9ab852afe0a4432b",
+        "8c9f62cc69c124f3",
+        "2c5007f105a03247",
+        "58710b94417baadd",
+        "900d1511b88783fd",
+        "e8dba18842a904aa",
+        "1117d8a2603acf6e",
+        "1dd79c89098b8fb7"
+      ],
+      "id": "1dd79c89098b8fb7",
+      "date": 1441899165377
+    },
+    {
+      "type": "fork",
+      "site": "localhost",
+      "date": 1441899282759
+    },
+    {
+      "type": "edit",
+      "id": "94e1695493dc291f",
+      "item": {
+        "type": "paragraph",
+        "id": "94e1695493dc291f",
+        "text": "We consider what requests a server must handle in order to participate in wiki's federation. Such a server provides pages without taking responsibility for the client-side javascript conventionally used by federated wiki."
+      },
+      "date": 1441899529983
+    },
+    {
+      "type": "fork",
+      "site": "forage.ward.fed.wiki.org",
+      "date": 1441906318178
+    },
+    {
+      "type": "fork",
+      "site": "admin.asia.wiki.org",
+      "date": 1446916906667
+    },
+    {
+      "type": "edit",
+      "id": "58710b94417baadd",
+      "item": {
+        "type": "code",
+        "id": "58710b94417baadd",
+        "text": "wiki -d . -p 4000 --security_legacy"
+      },
+      "date": 1485371526159
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1511865862371
+    }
+  ]
+}

@@ -1,0 +1,902 @@
+{
+  "title": "tar",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "c965f7b32579afa8",
+      "text": "On Unix platform, tar command is the primary archiving utility - [http://www.thegeekstuff.com/2010/04/unix-tar-command-examples/ thegeekstuff.com]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "4b7723f6549681b4",
+      "text": "# Creating an archive using tar command\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "6db76f17e15e4c23",
+      "text": "Creating a compressed tar archive using option cvzf:\n"
+    },
+    {
+      "type": "code",
+      "id": "0ebb46bf9590b048",
+      "text": "tar cvf archive_name.tar dirname/"
+    },
+    {
+      "type": "markdown",
+      "id": "814ed25a3e3a3946",
+      "text": "In the above command:\n\n* c – create a new archive\n* v – verbosely list files which are processed\n* z – filter the archive through gzip\n* f – following is the archive file name\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "90eba2fce585ac60",
+      "text": "Note: .tgz is same as .tar.gz\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "9723cd8dfe8977d5",
+      "text": "Note: I like to keep the ‘cvf’ (or tvf, or xvf) option unchanged for all archive creation (or view, or extract) and add additional option at the end, which is easier to remember. i.e cvf for archive creation, cvfz for compressed gzip archive creation, cvfj for compressed bzip2 archive creation etc., For this method to work properly, don’t give – in front of the options."
+    },
+    {
+      "type": "markdown",
+      "id": "9ac78f61f4c6cba0",
+      "text": "# Extracting an archive (untar)"
+    },
+    {
+      "type": "paragraph",
+      "id": "445334215cde286d",
+      "text": "Extract a tar file using option x as shown below:"
+    },
+    {
+      "type": "code",
+      "id": "3cdf689afb5e19d3",
+      "text": "tar xvzf archive_name.tar"
+    },
+    {
+      "type": "markdown",
+      "id": "d35566367ab558e3",
+      "text": "* x – extract files from archive"
+    },
+    {
+      "type": "markdown",
+      "id": "096065e9dfaaae7c",
+      "text": "# tar then scp in one line"
+    },
+    {
+      "type": "paragraph",
+      "id": "96c6db05cf94351c",
+      "text": "scp works only on files that are already on the drive. Since you don't want to create the file (tar) before sending it, you have to use ssh and tar directly - [http://superuser.com/questions/620585/one-liner-linux-for-scping-thousands-of-files-as-a-tar superuser.com/]"
+    },
+    {
+      "type": "code",
+      "id": "5ddf7d62407bebfb",
+      "text": "tar -c -f - ./path/to/compress | ssh eee.lan tar -C /where/to/extract -x -f-"
+    },
+    {
+      "type": "paragraph",
+      "id": "ad33bea8d9268b95",
+      "text": "There are many ways to do what you want. The simplest is to use a pìpe - [http://unix.stackexchange.com/questions/70581/scp-and-compress-at-the-same-time-no-intermediate-save unix.stackexchange.com/]\n\n\n"
+    },
+    {
+      "type": "code",
+      "id": "eff9e011e988e41e",
+      "text": "tar zcvf -  MyBackups | ssh user@server \"cat > /path/to/backup/foo.tgz\""
+    },
+    {
+      "type": "paragraph",
+      "id": "52b1af9bd18c29aa",
+      "text": "Here, the compression is being handled by tar which calls gzip (z flag). You can also use compress (Z) and bzip (j). For 7z, do this:"
+    },
+    {
+      "type": "code",
+      "id": "627efb2ab5b207a6",
+      "text": "tar cf - MyBackups | 7za a -si -mx=9 -ms=on MyBackups.tar.7z | \n   ssh user@server \"cat > /path/to/backup/foo.7z\""
+    },
+    {
+      "type": "markdown",
+      "id": "f2e55640e158014c",
+      "text": "# Use [[rsync]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "650ca8baa7f7d44a",
+      "text": "The best way, however, is probably rsync.\n\n"
+    },
+    {
+      "type": "reference",
+      "id": "1c7bf9b13d32658d",
+      "site": "cli.livecode.world",
+      "slug": "rsync",
+      "title": "rsync",
+      "text": "Rsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  "
+    },
+    {
+      "type": "markdown",
+      "id": "099c97343a126705",
+      "text": "# Some more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "tar",
+        "story": []
+      },
+      "date": 1450461366072
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c965f7b32579afa8"
+      },
+      "id": "c965f7b32579afa8",
+      "type": "add",
+      "date": 1450461367713
+    },
+    {
+      "type": "edit",
+      "id": "c965f7b32579afa8",
+      "item": {
+        "type": "paragraph",
+        "id": "c965f7b32579afa8",
+        "text": "On Unix platform, tar command is the primary archiving utility. Understanding various tar command options will help you master the archive file manipulation.\n\nIn this article, let us review various tar examples including how to create tar archives (with gzip and bzip compression), extract a single file or directory, view tar archive contents, validate the integrity of tar archives, finding out the difference between tar archive and file system, estimate the size of the tar archives before creating it etc.,\n\n1. Creating an archive using tar command\n\nCreating an uncompressed tar archive using option cvf\nThis is the basic command to create a tar archive.\n\n$ tar cvf archive_name.tar dirname/\nIn the above command:\n\nc – create a new archive\nv – verbosely list files which are processed.\nf – following is the archive file name\nCreating a tar gzipped archive using option cvzf\nThe above tar cvf option, does not provide any compression. To use a gzip compression on the tar archive, use the z option as shown below.\n\n$ tar cvzf archive_name.tar.gz dirname/\nz – filter the archive through gzip\nNote: .tgz is same as .tar.gz\n\nNote: I like to keep the ‘cvf’ (or tvf, or xvf) option unchanged for all archive creation (or view, or extract) and add additional option at the end, which is easier to remember. i.e cvf for archive creation, cvfz for compressed gzip archive creation, cvfj for compressed bzip2 archive creation etc., For this method to work properly, don’t give – in front of the options.\n\n\n \nCreating a bzipped tar archive using option cvjf\nCreate a bzip2 tar archive as shown below:\n\n$ tar cvfj archive_name.tar.bz2 dirname/\nj – filter the archive through bzip2\ngzip vs bzip2: bzip2 takes more time to compress and decompress than gzip. bzip2 archival size is less than gzip.\n\nNote: .tbz and .tb2 is same as .tar.bz2\n\n2. Extracting (untar) an archive using tar command\n\nExtract a *.tar file using option xvf\nExtract a tar file using option x as shown below:\n\n$ tar xvf archive_name.tar\nx – extract files from archive\nExtract a gzipped tar archive ( *.tar.gz ) using option xvzf\nUse the option z for uncompressing a gzip tar archive.\n\n$ tar xvfz archive_name.tar.gz\nExtracting a bzipped tar archive ( *.tar.bz2 ) using option xvjf\nUse the option j for uncompressing a bzip2 tar archive.\n\n$ tar xvfj archive_name.tar.bz2\nNote: In all the above commands v is optional, which lists the file being processed."
+      },
+      "date": 1450461374555
+    },
+    {
+      "type": "edit",
+      "id": "c965f7b32579afa8",
+      "item": {
+        "type": "paragraph",
+        "id": "c965f7b32579afa8",
+        "text": "On Unix platform, tar command is the primary archiving utility - [http://www.thegeekstuff.com/2010/04/unix-tar-command-examples/ thegeekstuff.com]\n"
+      },
+      "date": 1450461416474
+    },
+    {
+      "type": "add",
+      "id": "4b7723f6549681b4",
+      "item": {
+        "type": "paragraph",
+        "id": "4b7723f6549681b4",
+        "text": "# Creating an archive using tar command\n"
+      },
+      "after": "c965f7b32579afa8",
+      "date": 1450461421472
+    },
+    {
+      "type": "edit",
+      "id": "4b7723f6549681b4",
+      "item": {
+        "type": "markdown",
+        "id": "4b7723f6549681b4",
+        "text": "# Creating an archive using tar command\n"
+      },
+      "date": 1450461423674
+    },
+    {
+      "type": "add",
+      "id": "6db76f17e15e4c23",
+      "item": {
+        "type": "paragraph",
+        "id": "6db76f17e15e4c23",
+        "text": "Creating a compressed tar archive using option cvzf:\n"
+      },
+      "after": "4b7723f6549681b4",
+      "date": 1450461467124
+    },
+    {
+      "type": "add",
+      "id": "814ed25a3e3a3946",
+      "item": {
+        "type": "paragraph",
+        "id": "814ed25a3e3a3946",
+        "text": "In the above command:\n\nc – create a new archive\nv – verbosely list files which are processed.\nf – following is the archive file name\n"
+      },
+      "after": "6db76f17e15e4c23",
+      "date": 1450461472906
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0ebb46bf9590b048"
+      },
+      "id": "0ebb46bf9590b048",
+      "type": "add",
+      "after": "90eba2fce585ac60",
+      "date": 1450461474446
+    },
+    {
+      "type": "add",
+      "id": "90eba2fce585ac60",
+      "item": {
+        "type": "paragraph",
+        "id": "90eba2fce585ac60",
+        "text": "Creating a tar gzipped archive using option cvzf\nThe above tar cvf option, does not provide any compression. To use a gzip compression on the tar archive, use the z option as shown below.\n\n$ tar cvzf archive_name.tar.gz dirname/\nz – filter the archive through gzip\nNote: .tgz is same as .tar.gz\n\nNote: I like to keep the ‘cvf’ (or tvf, or xvf) option unchanged for all archive creation (or view, or extract) and add additional option at the end, which is easier to remember. i.e cvf for archive creation, cvfz for compressed gzip archive creation, cvfj for compressed bzip2 archive creation etc., For this method to work properly, don’t give – in front of the options.\n\n\n \nCreating a bzipped tar archive using option cvjf\nCreate a bzip2 tar archive as shown below:\n\n$ tar cvfj archive_name.tar.bz2 dirname/\nj – filter the archive through bzip2\ngzip vs bzip2: bzip2 takes more time to compress and decompress than gzip. bzip2 archival size is less than gzip.\n\nNote: .tbz and .tb2 is same as .tar.bz2\n\n2. Extracting (untar) an archive using tar command\n\nExtract a *.tar file using option xvf\nExtract a tar file using option x as shown below:\n\n$ tar xvf archive_name.tar\nx – extract files from archive\nExtract a gzipped tar archive ( *.tar.gz ) using option xvzf\nUse the option z for uncompressing a gzip tar archive.\n\n$ tar xvfz archive_name.tar.gz\nExtracting a bzipped tar archive ( *.tar.bz2 ) using option xvjf\nUse the option j for uncompressing a bzip2 tar archive.\n\n$ tar xvfj archive_name.tar.bz2\nNote: In all the above commands v is optional, which lists the file being processed."
+      },
+      "after": "814ed25a3e3a3946",
+      "date": 1450461475529
+    },
+    {
+      "type": "edit",
+      "id": "0ebb46bf9590b048",
+      "item": {
+        "type": "code",
+        "id": "0ebb46bf9590b048",
+        "text": "tar cvf archive_name.tar dirname/"
+      },
+      "date": 1450461482469
+    },
+    {
+      "type": "move",
+      "order": [
+        "c965f7b32579afa8",
+        "4b7723f6549681b4",
+        "6db76f17e15e4c23",
+        "0ebb46bf9590b048",
+        "814ed25a3e3a3946",
+        "90eba2fce585ac60"
+      ],
+      "id": "0ebb46bf9590b048",
+      "date": 1450461490022
+    },
+    {
+      "type": "edit",
+      "id": "814ed25a3e3a3946",
+      "item": {
+        "type": "paragraph",
+        "id": "814ed25a3e3a3946",
+        "text": "In the above command:\n\n* c – create a new archive\n* v – verbosely list files which are processed.\n* f – following is the archive file name\n"
+      },
+      "date": 1450461504405
+    },
+    {
+      "type": "edit",
+      "id": "814ed25a3e3a3946",
+      "item": {
+        "type": "markdown",
+        "id": "814ed25a3e3a3946",
+        "text": "In the above command:\n\n* c – create a new archive\n* v – verbosely list files which are processed.\n* f – following is the archive file name\n"
+      },
+      "date": 1450461505266
+    },
+    {
+      "type": "edit",
+      "id": "90eba2fce585ac60",
+      "item": {
+        "type": "paragraph",
+        "id": "90eba2fce585ac60",
+        "text": "Note: I like to keep the ‘cvf’ (or tvf, or xvf) option unchanged for all archive creation (or view, or extract) and add additional option at the end, which is easier to remember. i.e cvf for archive creation, cvfz for compressed gzip archive creation, cvfj for compressed bzip2 archive creation etc., For this method to work properly, don’t give – in front of the options.\n\n\n \nCreating a bzipped tar archive using option cvjf\nCreate a bzip2 tar archive as shown below:\n\n$ tar cvfj archive_name.tar.bz2 dirname/\nj – filter the archive through bzip2\ngzip vs bzip2: bzip2 takes more time to compress and decompress than gzip. bzip2 archival size is less than gzip.\n\nNote: .tbz and .tb2 is same as .tar.bz2\n\n2. Extracting (untar) an archive using tar command\n\nExtract a *.tar file using option xvf\nExtract a tar file using option x as shown below:\n\n$ tar xvf archive_name.tar\nx – extract files from archive\nExtract a gzipped tar archive ( *.tar.gz ) using option xvzf\nUse the option z for uncompressing a gzip tar archive.\n\n$ tar xvfz archive_name.tar.gz\nExtracting a bzipped tar archive ( *.tar.bz2 ) using option xvjf\nUse the option j for uncompressing a bzip2 tar archive.\n\n$ tar xvfj archive_name.tar.bz2\nNote: In all the above commands v is optional, which lists the file being processed."
+      },
+      "date": 1450461557318
+    },
+    {
+      "type": "edit",
+      "id": "814ed25a3e3a3946",
+      "item": {
+        "type": "markdown",
+        "id": "814ed25a3e3a3946",
+        "text": "In the above command:\n\n* c – create a new archive\n* v – verbosely list files which are processed\n* z – filter the archive through gzip\n* f – following is the archive file name\n"
+      },
+      "date": 1450461568937
+    },
+    {
+      "type": "edit",
+      "id": "90eba2fce585ac60",
+      "item": {
+        "type": "paragraph",
+        "id": "90eba2fce585ac60",
+        "text": "Note: .tgz is same as .tar.gz\n"
+      },
+      "date": 1450461577368
+    },
+    {
+      "type": "add",
+      "id": "9723cd8dfe8977d5",
+      "item": {
+        "type": "paragraph",
+        "id": "9723cd8dfe8977d5",
+        "text": "Note: I like to keep the ‘cvf’ (or tvf, or xvf) option unchanged for all archive creation (or view, or extract) and add additional option at the end, which is easier to remember. i.e cvf for archive creation, cvfz for compressed gzip archive creation, cvfj for compressed bzip2 archive creation etc., For this method to work properly, don’t give – in front of the options."
+      },
+      "after": "90eba2fce585ac60",
+      "date": 1450461585880
+    },
+    {
+      "type": "add",
+      "id": "9ac78f61f4c6cba0",
+      "item": {
+        "type": "paragraph",
+        "id": "9ac78f61f4c6cba0",
+        "text": "# Extracting (untar) an archive using tar command"
+      },
+      "after": "9723cd8dfe8977d5",
+      "date": 1450461604312
+    },
+    {
+      "type": "add",
+      "id": "445334215cde286d",
+      "item": {
+        "type": "paragraph",
+        "id": "445334215cde286d",
+        "text": "Extract a tar file using option x as shown below:"
+      },
+      "after": "9ac78f61f4c6cba0",
+      "date": 1450461620193
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3cdf689afb5e19d3"
+      },
+      "id": "3cdf689afb5e19d3",
+      "type": "add",
+      "after": "d35566367ab558e3",
+      "date": 1450461624445
+    },
+    {
+      "type": "add",
+      "id": "d35566367ab558e3",
+      "item": {
+        "type": "paragraph",
+        "id": "d35566367ab558e3",
+        "text": "x – extract files from archive\nExtract a gzipped tar archive ( *.tar.gz ) using option xvzf\nUse the option z for uncompressing a gzip tar archive.\n\n$ tar xvfz archive_name.tar.gz\nExtracting a bzipped tar archive ( *.tar.bz2 ) using option xvjf\nUse the option j for uncompressing a bzip2 tar archive.\n\n$ tar xvfj archive_name.tar.bz2\nNote: In all the above commands v is optional, which lists the file being processed."
+      },
+      "after": "445334215cde286d",
+      "date": 1450461625632
+    },
+    {
+      "type": "edit",
+      "id": "9ac78f61f4c6cba0",
+      "item": {
+        "type": "markdown",
+        "id": "9ac78f61f4c6cba0",
+        "text": "# Extracting (untar) an archive using tar command"
+      },
+      "date": 1450461658862
+    },
+    {
+      "type": "edit",
+      "id": "3cdf689afb5e19d3",
+      "item": {
+        "type": "code",
+        "id": "3cdf689afb5e19d3",
+        "text": "tar xvf archive_name.tar"
+      },
+      "date": 1450461663428
+    },
+    {
+      "type": "edit",
+      "id": "9ac78f61f4c6cba0",
+      "item": {
+        "type": "markdown",
+        "id": "9ac78f61f4c6cba0",
+        "text": "# Extracting an archive using tar command"
+      },
+      "date": 1450461667717
+    },
+    {
+      "type": "edit",
+      "id": "9ac78f61f4c6cba0",
+      "item": {
+        "type": "markdown",
+        "id": "9ac78f61f4c6cba0",
+        "text": "# Extracting an archive (untar)"
+      },
+      "date": 1450461686470
+    },
+    {
+      "type": "move",
+      "order": [
+        "c965f7b32579afa8",
+        "4b7723f6549681b4",
+        "6db76f17e15e4c23",
+        "0ebb46bf9590b048",
+        "814ed25a3e3a3946",
+        "90eba2fce585ac60",
+        "9723cd8dfe8977d5",
+        "9ac78f61f4c6cba0",
+        "445334215cde286d",
+        "3cdf689afb5e19d3",
+        "d35566367ab558e3"
+      ],
+      "id": "3cdf689afb5e19d3",
+      "date": 1450461697415
+    },
+    {
+      "type": "edit",
+      "id": "d35566367ab558e3",
+      "item": {
+        "type": "paragraph",
+        "id": "d35566367ab558e3",
+        "text": "x – extract files from archive"
+      },
+      "date": 1450461706372
+    },
+    {
+      "type": "edit",
+      "id": "3cdf689afb5e19d3",
+      "item": {
+        "type": "code",
+        "id": "3cdf689afb5e19d3",
+        "text": "tar xvzf archive_name.tar"
+      },
+      "date": 1450461734602
+    },
+    {
+      "type": "edit",
+      "id": "d35566367ab558e3",
+      "item": {
+        "type": "paragraph",
+        "id": "d35566367ab558e3",
+        "text": "* x – extract files from archive"
+      },
+      "date": 1450461741271
+    },
+    {
+      "type": "edit",
+      "id": "d35566367ab558e3",
+      "item": {
+        "type": "markdown",
+        "id": "d35566367ab558e3",
+        "text": "* x – extract files from archive"
+      },
+      "date": 1450461742355
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "096065e9dfaaae7c"
+      },
+      "id": "096065e9dfaaae7c",
+      "type": "add",
+      "after": "d35566367ab558e3",
+      "date": 1450461823801
+    },
+    {
+      "type": "edit",
+      "id": "096065e9dfaaae7c",
+      "item": {
+        "type": "markdown",
+        "id": "096065e9dfaaae7c",
+        "text": "# tar then scp in one line"
+      },
+      "date": 1450461838003
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "96c6db05cf94351c"
+      },
+      "id": "96c6db05cf94351c",
+      "type": "add",
+      "after": "096065e9dfaaae7c",
+      "date": 1450461839330
+    },
+    {
+      "type": "edit",
+      "id": "96c6db05cf94351c",
+      "item": {
+        "type": "paragraph",
+        "id": "96c6db05cf94351c",
+        "text": "scp works only on files that are already on the drive. Since you don't want to create the file (tar) before sending it, you have to use ssh and tar directly:"
+      },
+      "date": 1450461848203
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5ddf7d62407bebfb"
+      },
+      "id": "5ddf7d62407bebfb",
+      "type": "add",
+      "after": "96c6db05cf94351c",
+      "date": 1450461850892
+    },
+    {
+      "type": "edit",
+      "id": "5ddf7d62407bebfb",
+      "item": {
+        "type": "code",
+        "id": "5ddf7d62407bebfb",
+        "text": "tar -c -f - ./path/to/compress | ssh eee.lan tar -C /where/to/extract -x -f-"
+      },
+      "date": 1450461854852
+    },
+    {
+      "type": "edit",
+      "id": "96c6db05cf94351c",
+      "item": {
+        "type": "paragraph",
+        "id": "96c6db05cf94351c",
+        "text": "scp works only on files that are already on the drive. Since you don't want to create the file (tar) before sending it, you have to use ssh and tar directly - [http://superuser.com/questions/620585/one-liner-linux-for-scping-thousands-of-files-as-a-tar superuser.com/]"
+      },
+      "date": 1450461877181
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ad33bea8d9268b95"
+      },
+      "id": "ad33bea8d9268b95",
+      "type": "add",
+      "after": "5ddf7d62407bebfb",
+      "date": 1450461982173
+    },
+    {
+      "type": "edit",
+      "id": "ad33bea8d9268b95",
+      "item": {
+        "type": "paragraph",
+        "id": "ad33bea8d9268b95",
+        "text": "There are many ways to do what you want. The simplest is to use a pìpe:\n\ntar zcvf -  MyBackups | ssh user@server \"cat > /path/to/backup/foo.tgz\"\nHere, the compression is being handled by tar which calls gzip (z flag). You can also use compress (Z) and bzip (j). For 7z, do this:\n\ntar cf - MyBackups | 7za a -si -mx=9 -ms=on MyBackups.tar.7z | \n   ssh user@server \"cat > /path/to/backup/foo.7z\"\nThe best way, however, is probably rsync.\n\n   Rsync is a fast and extraordinarily versatile  file  copying  tool.   It  can  copy\n   locally, to/from another host over any remote shell, or to/from a remote rsync dae‐\n   mon.  It offers a large number of options that control every aspect of its behavior\n   and  permit  very  flexible  specification of the set of files to be copied.  It is\n   famous for its delta-transfer algorithm, which reduces the amount of data sent over\n   the network by sending only the differences between the source files and the exist‐\n   ing files in the destination.  Rsync is widely used for backups and  mirroring  and\n   as an improved copy command for everyday use.\nrsync has way too many options. It really is worth reading through them but they are scary at first sight. The ones you care about in this context though are:\n\n    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\nrsync -z MyBackups user@server:/path/to/backup/\nThe files would be compressed while in transit and arrive decompressed at the destination.\n\nSome more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "date": 1450461984988
+    },
+    {
+      "type": "edit",
+      "id": "ad33bea8d9268b95",
+      "item": {
+        "type": "paragraph",
+        "id": "ad33bea8d9268b95",
+        "text": "There are many ways to do what you want. The simplest is to use a pìpe - [http://unix.stackexchange.com/questions/70581/scp-and-compress-at-the-same-time-no-intermediate-save unix.stackexchange.com/]\n\ntar zcvf -  MyBackups | ssh user@server \"cat > /path/to/backup/foo.tgz\"\nHere, the compression is being handled by tar which calls gzip (z flag). You can also use compress (Z) and bzip (j). For 7z, do this:\n\ntar cf - MyBackups | 7za a -si -mx=9 -ms=on MyBackups.tar.7z | \n   ssh user@server \"cat > /path/to/backup/foo.7z\"\nThe best way, however, is probably rsync.\n\n   Rsync is a fast and extraordinarily versatile  file  copying  tool.   It  can  copy\n   locally, to/from another host over any remote shell, or to/from a remote rsync dae‐\n   mon.  It offers a large number of options that control every aspect of its behavior\n   and  permit  very  flexible  specification of the set of files to be copied.  It is\n   famous for its delta-transfer algorithm, which reduces the amount of data sent over\n   the network by sending only the differences between the source files and the exist‐\n   ing files in the destination.  Rsync is widely used for backups and  mirroring  and\n   as an improved copy command for everyday use.\nrsync has way too many options. It really is worth reading through them but they are scary at first sight. The ones you care about in this context though are:\n\n    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\nrsync -z MyBackups user@server:/path/to/backup/\nThe files would be compressed while in transit and arrive decompressed at the destination.\n\nSome more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "date": 1450462070399
+    },
+    {
+      "type": "edit",
+      "id": "ad33bea8d9268b95",
+      "item": {
+        "type": "paragraph",
+        "id": "ad33bea8d9268b95",
+        "text": "There are many ways to do what you want. The simplest is to use a pìpe - [http://unix.stackexchange.com/questions/70581/scp-and-compress-at-the-same-time-no-intermediate-save unix.stackexchange.com/]\n\n\n"
+      },
+      "date": 1450462090612
+    },
+    {
+      "type": "add",
+      "id": "52b1af9bd18c29aa",
+      "item": {
+        "type": "paragraph",
+        "id": "52b1af9bd18c29aa",
+        "text": "Here, the compression is being handled by tar which calls gzip (z flag). You can also use compress (Z) and bzip (j). For 7z, do this:"
+      },
+      "after": "ad33bea8d9268b95",
+      "date": 1450462093956
+    },
+    {
+      "type": "add",
+      "id": "511bd89d24a3dd52",
+      "item": {
+        "type": "paragraph",
+        "id": "511bd89d24a3dd52",
+        "text": "tar cf - MyBackups | 7za a -si -mx=9 -ms=on MyBackups.tar.7z | \n   ssh user@server \"cat > /path/to/backup/foo.7z\"\n"
+      },
+      "after": "52b1af9bd18c29aa",
+      "date": 1450462105429
+    },
+    {
+      "type": "add",
+      "id": "f2e55640e158014c",
+      "item": {
+        "type": "paragraph",
+        "id": "f2e55640e158014c",
+        "text": "# Ue [[rsync]]"
+      },
+      "after": "511bd89d24a3dd52",
+      "date": 1450462126174
+    },
+    {
+      "type": "add",
+      "id": "650ca8baa7f7d44a",
+      "item": {
+        "type": "paragraph",
+        "id": "650ca8baa7f7d44a",
+        "text": "The best way, however, is probably rsync.\n\n   Rsync is a fast and extraordinarily versatile  file  copying  tool.   It  can  copy\n   locally, to/from another host over any remote shell, or to/from a remote rsync dae‐\n   mon.  It offers a large number of options that control every aspect of its behavior\n   and  permit  very  flexible  specification of the set of files to be copied.  It is\n   famous for its delta-transfer algorithm, which reduces the amount of data sent over\n   the network by sending only the differences between the source files and the exist‐\n   ing files in the destination.  Rsync is widely used for backups and  mirroring  and\n   as an improved copy command for everyday use.\nrsync has way too many options. It really is worth reading through them but they are scary at first sight. The ones you care about in this context though are:\n\n    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\nrsync -z MyBackups user@server:/path/to/backup/\nThe files would be compressed while in transit and arrive decompressed at the destination.\n\nSome more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "after": "f2e55640e158014c",
+      "date": 1450462128841
+    },
+    {
+      "type": "edit",
+      "id": "f2e55640e158014c",
+      "item": {
+        "type": "paragraph",
+        "id": "f2e55640e158014c",
+        "text": "# Use [[rsync]]"
+      },
+      "date": 1450462131760
+    },
+    {
+      "type": "edit",
+      "id": "f2e55640e158014c",
+      "item": {
+        "type": "markdown",
+        "id": "f2e55640e158014c",
+        "text": "# Use [[rsync]]"
+      },
+      "date": 1450462132603
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eff9e011e988e41e"
+      },
+      "id": "eff9e011e988e41e",
+      "type": "add",
+      "after": "650ca8baa7f7d44a",
+      "date": 1450462137753
+    },
+    {
+      "type": "edit",
+      "id": "eff9e011e988e41e",
+      "item": {
+        "type": "code",
+        "id": "eff9e011e988e41e",
+        "text": "tar zcvf -  MyBackups | ssh user@server \"cat > /path/to/backup/foo.tgz\""
+      },
+      "date": 1450462140609
+    },
+    {
+      "type": "move",
+      "order": [
+        "c965f7b32579afa8",
+        "4b7723f6549681b4",
+        "6db76f17e15e4c23",
+        "0ebb46bf9590b048",
+        "814ed25a3e3a3946",
+        "90eba2fce585ac60",
+        "9723cd8dfe8977d5",
+        "9ac78f61f4c6cba0",
+        "445334215cde286d",
+        "3cdf689afb5e19d3",
+        "d35566367ab558e3",
+        "096065e9dfaaae7c",
+        "96c6db05cf94351c",
+        "5ddf7d62407bebfb",
+        "ad33bea8d9268b95",
+        "eff9e011e988e41e",
+        "52b1af9bd18c29aa",
+        "511bd89d24a3dd52",
+        "f2e55640e158014c",
+        "650ca8baa7f7d44a"
+      ],
+      "id": "eff9e011e988e41e",
+      "date": 1450462148281
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "627efb2ab5b207a6"
+      },
+      "id": "627efb2ab5b207a6",
+      "type": "add",
+      "after": "650ca8baa7f7d44a",
+      "date": 1450462154184
+    },
+    {
+      "type": "move",
+      "order": [
+        "c965f7b32579afa8",
+        "4b7723f6549681b4",
+        "6db76f17e15e4c23",
+        "0ebb46bf9590b048",
+        "814ed25a3e3a3946",
+        "90eba2fce585ac60",
+        "9723cd8dfe8977d5",
+        "9ac78f61f4c6cba0",
+        "445334215cde286d",
+        "3cdf689afb5e19d3",
+        "d35566367ab558e3",
+        "096065e9dfaaae7c",
+        "96c6db05cf94351c",
+        "5ddf7d62407bebfb",
+        "ad33bea8d9268b95",
+        "eff9e011e988e41e",
+        "52b1af9bd18c29aa",
+        "627efb2ab5b207a6",
+        "511bd89d24a3dd52",
+        "f2e55640e158014c",
+        "650ca8baa7f7d44a"
+      ],
+      "id": "627efb2ab5b207a6",
+      "date": 1450462158446
+    },
+    {
+      "type": "remove",
+      "id": "511bd89d24a3dd52",
+      "date": 1450462165872
+    },
+    {
+      "type": "edit",
+      "id": "627efb2ab5b207a6",
+      "item": {
+        "type": "code",
+        "id": "627efb2ab5b207a6",
+        "text": "tar cf - MyBackups | 7za a -si -mx=9 -ms=on MyBackups.tar.7z | \n   ssh user@server \"cat > /path/to/backup/foo.7z\""
+      },
+      "date": 1450462168778
+    },
+    {
+      "type": "edit",
+      "id": "650ca8baa7f7d44a",
+      "item": {
+        "type": "paragraph",
+        "id": "650ca8baa7f7d44a",
+        "text": "The best way, however, is probably rsync.\n\nRsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  It offers a large number of options that control every aspect of its behavior and  permit  very  flexible  specification of the set of files to be copied.  It is famous for its delta-transfer algorithm, which reduces the amount of data sent over the network by sending only the differences between the source files and the existing files in the destination."
+      },
+      "date": 1450462259117
+    },
+    {
+      "type": "add",
+      "id": "2869eb9dc17aacc8",
+      "item": {
+        "type": "paragraph",
+        "id": "2869eb9dc17aacc8",
+        "text": "Rsync is widely used for backups and  mirroring  and as an improved copy command for everyday use.\nrsync has way too many options. It really is worth reading through them but they are scary at first sight. The ones you care about in this context though are:"
+      },
+      "after": "650ca8baa7f7d44a",
+      "date": 1450462272948
+    },
+    {
+      "type": "add",
+      "id": "ccb8fd406605716b",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb8fd406605716b",
+        "text": "\n    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\nrsync -z MyBackups user@server:/path/to/backup/\nThe files would be compressed while in transit and arrive decompressed at the destination.\n\nSome more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "after": "2869eb9dc17aacc8",
+      "date": 1450462275705
+    },
+    {
+      "type": "edit",
+      "id": "650ca8baa7f7d44a",
+      "item": {
+        "type": "paragraph",
+        "id": "650ca8baa7f7d44a",
+        "text": "The best way, however, is probably rsync.\n\nRsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  "
+      },
+      "date": 1450462285412
+    },
+    {
+      "type": "add",
+      "id": "cc0868b9983d06c3",
+      "item": {
+        "type": "paragraph",
+        "id": "cc0868b9983d06c3",
+        "text": "It offers a large number of options that control every aspect of its behavior and  permit  very  flexible  specification of the set of files to be copied.  "
+      },
+      "after": "650ca8baa7f7d44a",
+      "date": 1450462289484
+    },
+    {
+      "type": "add",
+      "id": "f4fb378957339035",
+      "item": {
+        "type": "paragraph",
+        "id": "f4fb378957339035",
+        "text": "It is famous for its delta-transfer algorithm, which reduces the amount of data sent over the network by sending only the differences between the source files and the existing files in the destination."
+      },
+      "after": "cc0868b9983d06c3",
+      "date": 1450462292630
+    },
+    {
+      "type": "remove",
+      "id": "650ca8baa7f7d44a",
+      "date": 1450462302542
+    },
+    {
+      "type": "remove",
+      "id": "f4fb378957339035",
+      "date": 1450462305330
+    },
+    {
+      "type": "remove",
+      "id": "2869eb9dc17aacc8",
+      "date": 1450462307803
+    },
+    {
+      "type": "remove",
+      "id": "ccb8fd406605716b",
+      "date": 1450462312545
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "099c97343a126705"
+      },
+      "id": "099c97343a126705",
+      "type": "add",
+      "after": "cc0868b9983d06c3",
+      "date": 1450462329408
+    },
+    {
+      "type": "edit",
+      "id": "099c97343a126705",
+      "item": {
+        "type": "paragraph",
+        "id": "099c97343a126705",
+        "text": "# Some more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "date": 1450462338640
+    },
+    {
+      "type": "edit",
+      "id": "099c97343a126705",
+      "item": {
+        "type": "markdown",
+        "id": "099c97343a126705",
+        "text": "# Some more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "date": 1450462339798
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "650ca8baa7f7d44a",
+        "text": "The best way, however, is probably rsync.\n\n"
+      },
+      "after": "f2e55640e158014c",
+      "id": "650ca8baa7f7d44a",
+      "date": 1450462356474
+    },
+    {
+      "type": "remove",
+      "id": "cc0868b9983d06c3",
+      "date": 1450462364137
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1c7bf9b13d32658d"
+      },
+      "id": "1c7bf9b13d32658d",
+      "type": "add",
+      "after": "099c97343a126705",
+      "date": 1450462424099
+    },
+    {
+      "type": "edit",
+      "id": "1c7bf9b13d32658d",
+      "item": {
+        "type": "reference",
+        "id": "1c7bf9b13d32658d",
+        "site": "cli.livecode.world",
+        "slug": "rsync",
+        "title": "rsync",
+        "text": "Rsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  "
+      },
+      "date": 1450462425912
+    },
+    {
+      "type": "move",
+      "order": [
+        "c965f7b32579afa8",
+        "4b7723f6549681b4",
+        "6db76f17e15e4c23",
+        "0ebb46bf9590b048",
+        "814ed25a3e3a3946",
+        "90eba2fce585ac60",
+        "9723cd8dfe8977d5",
+        "9ac78f61f4c6cba0",
+        "445334215cde286d",
+        "3cdf689afb5e19d3",
+        "d35566367ab558e3",
+        "096065e9dfaaae7c",
+        "96c6db05cf94351c",
+        "5ddf7d62407bebfb",
+        "ad33bea8d9268b95",
+        "eff9e011e988e41e",
+        "52b1af9bd18c29aa",
+        "627efb2ab5b207a6",
+        "f2e55640e158014c",
+        "650ca8baa7f7d44a",
+        "1c7bf9b13d32658d",
+        "099c97343a126705"
+      ],
+      "id": "1c7bf9b13d32658d",
+      "date": 1450462428020
+    }
+  ]
+}

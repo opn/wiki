@@ -1,0 +1,114 @@
+{
+  "title": "Imagine Routing",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "9d2eb19fc97977d6",
+      "text": "The [[Imagine Transport]] uses regular expressions and a case switch to route rest calls to other transporters."
+    },
+    {
+      "type": "code",
+      "id": "f4f12c0588ccec31",
+      "text": "begins with \"https://player.fm/series/\"\n -> /bbc/playerfm\"\n\nbegins with \"http://www.radiolab.org/story/\"\nbegins with \"http://www.bbc.co.uk/programmes/\"\nbegins with \"https://www.theguardian.com/science/audio/\"\n -> bbc\n\nbegins with \"http://www.openstreetmap.org/\"\nbegins with \"https://www.openstreetmap.org/\"\nbegins with \"https://www.google.co.uk/maps/place/\"\nbegins with \"https://www.google.com/maps/place/\"\ncase matchtext (droppedURL, \"^https://tools.wmflabs.org/geohack/geohack.php\\?pagename=(.+)&params=(.+)\", pageName, geoInfo)\n -> map\n            \n\ncase matchText (droppedURL, \"https://www.one-tab.com/page/(.+)\", oneTabID)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/onetab\"\n            break\n         case matchText (droppedURL, \"https://(.+).wikipedia.org/(.+)\", lastBit)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/mediawiki\"\n            break\n         case matchText (droppedURL, \"http://britishlibrary.typepad.co.uk/.a/(.+)\", assetID)\n         case matchText (droppedURL, \"https://static.+.squarespace.com/static/.+\", photoID)\n            photo droppedURL\n            break\n         case matchText (droppedURL, \"https://www.pinterest.com/pin/(.+)/|https://www.pinterest.co.uk/pin/(.+)/\", photoID)\n            pinterest droppedURL\n            break\n         case matchText (droppedURL, \"https://www.flickr.com/photos/(.+)/(.+)/in/.+\", userID, photoID)\n            flickr droppedURL\n            break\n         case matchText (droppedURL, \"https://twitter.com/.+/status/.+\")\n            twitter droppedURL\n            break\n         default\n            webpage droppedURL\n            break\n      end switch"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Imagine Routing",
+        "story": []
+      },
+      "date": 1520409124008
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9d2eb19fc97977d6"
+      },
+      "id": "9d2eb19fc97977d6",
+      "type": "add",
+      "date": 1520409124991
+    },
+    {
+      "type": "edit",
+      "id": "9d2eb19fc97977d6",
+      "item": {
+        "type": "paragraph",
+        "id": "9d2eb19fc97977d6",
+        "text": "The [[Imagine Transport]] "
+      },
+      "date": 1520409140322
+    },
+    {
+      "type": "edit",
+      "id": "9d2eb19fc97977d6",
+      "item": {
+        "type": "paragraph",
+        "id": "9d2eb19fc97977d6",
+        "text": "The [[Imagine Transport]] uses regular expressions and a case switch to route rest calls to other transporters."
+      },
+      "date": 1520409152554
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f4f12c0588ccec31"
+      },
+      "id": "f4f12c0588ccec31",
+      "type": "add",
+      "after": "9d2eb19fc97977d6",
+      "date": 1520409154105
+    },
+    {
+      "type": "edit",
+      "id": "f4f12c0588ccec31",
+      "item": {
+        "type": "code",
+        "id": "f4f12c0588ccec31",
+        "text": "uses regular expressions and a case switch to route rest calls to other transporters."
+      },
+      "date": 1520409241358
+    },
+    {
+      "type": "edit",
+      "id": "f4f12c0588ccec31",
+      "item": {
+        "type": "code",
+        "id": "f4f12c0588ccec31",
+        "text": "switch\n         case droppedURL begins with \"https://player.fm/series/\"\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/bbc/playerfm\"\n            break\n         case droppedURL begins with \"http://www.radiolab.org/story/\"\n         case droppedURL begins with \"http://www.bbc.co.uk/programmes/\"\n         case droppedURL begins with \"https://www.theguardian.com/science/audio/\" -- plenty of other podcast urls\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/bbc\"\n            break\n         case droppedURL begins with \"http://www.openstreetmap.org/\"\n         case droppedURL begins with \"https://www.openstreetmap.org/\"\n         case droppedURL begins with \"https://www.google.co.uk/maps/place/\"\n         case droppedURL begins with \"https://www.google.com/maps/place/\"\n         case matchtext (droppedURL, \"^https://tools.wmflabs.org/geohack/geohack.php\\?pagename=(.+)&params=(.+)\", pageName, geoInfo)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/map\"\n            break\n         case matchText (droppedURL, \"https://www.one-tab.com/page/(.+)\", oneTabID)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/onetab\"\n            break\n         case matchText (droppedURL, \"https://(.+).wikipedia.org/(.+)\", lastBit)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/mediawiki\"\n            break\n         case matchText (droppedURL, \"http://britishlibrary.typepad.co.uk/.a/(.+)\", assetID)\n         case matchText (droppedURL, \"https://static.+.squarespace.com/static/.+\", photoID)\n            photo droppedURL\n            break\n         case matchText (droppedURL, \"https://www.pinterest.com/pin/(.+)/|https://www.pinterest.co.uk/pin/(.+)/\", photoID)\n            pinterest droppedURL\n            break\n         case matchText (droppedURL, \"https://www.flickr.com/photos/(.+)/(.+)/in/.+\", userID, photoID)\n            flickr droppedURL\n            break\n         case matchText (droppedURL, \"https://twitter.com/.+/status/.+\")\n            twitter droppedURL\n            break\n         default\n            webpage droppedURL\n            break\n      end switch"
+      },
+      "date": 1520409279541
+    },
+    {
+      "type": "edit",
+      "id": "f4f12c0588ccec31",
+      "item": {
+        "type": "code",
+        "id": "f4f12c0588ccec31",
+        "text": "begins with \"https://player.fm/series/\"\n -> /bbc/playerfm\"\nbegins with \"http://www.radiolab.org/story/\"\nbegins with \"http://www.bbc.co.uk/programmes/\"\nbegins with \"https://www.theguardian.com/science/audio/\"\n -> bbc\n\n            break\n         case droppedURL begins with \"http://www.openstreetmap.org/\"\n         case droppedURL begins with \"https://www.openstreetmap.org/\"\n         case droppedURL begins with \"https://www.google.co.uk/maps/place/\"\n         case droppedURL begins with \"https://www.google.com/maps/place/\"\n         case matchtext (droppedURL, \"^https://tools.wmflabs.org/geohack/geohack.php\\?pagename=(.+)&params=(.+)\", pageName, geoInfo)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/map\"\n            break\n         case matchText (droppedURL, \"https://www.one-tab.com/page/(.+)\", oneTabID)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/onetab\"\n            break\n         case matchText (droppedURL, \"https://(.+).wikipedia.org/(.+)\", lastBit)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/mediawiki\"\n            break\n         case matchText (droppedURL, \"http://britishlibrary.typepad.co.uk/.a/(.+)\", assetID)\n         case matchText (droppedURL, \"https://static.+.squarespace.com/static/.+\", photoID)\n            photo droppedURL\n            break\n         case matchText (droppedURL, \"https://www.pinterest.com/pin/(.+)/|https://www.pinterest.co.uk/pin/(.+)/\", photoID)\n            pinterest droppedURL\n            break\n         case matchText (droppedURL, \"https://www.flickr.com/photos/(.+)/(.+)/in/.+\", userID, photoID)\n            flickr droppedURL\n            break\n         case matchText (droppedURL, \"https://twitter.com/.+/status/.+\")\n            twitter droppedURL\n            break\n         default\n            webpage droppedURL\n            break\n      end switch"
+      },
+      "date": 1520409368730
+    },
+    {
+      "type": "edit",
+      "id": "f4f12c0588ccec31",
+      "item": {
+        "type": "code",
+        "id": "f4f12c0588ccec31",
+        "text": "begins with \"https://player.fm/series/\"\n -> /bbc/playerfm\"\n\nbegins with \"http://www.radiolab.org/story/\"\nbegins with \"http://www.bbc.co.uk/programmes/\"\nbegins with \"https://www.theguardian.com/science/audio/\"\n -> bbc\n\nbegins with \"http://www.openstreetmap.org/\"\nbegins with \"https://www.openstreetmap.org/\"\nbegins with \"https://www.google.co.uk/maps/place/\"\nbegins with \"https://www.google.com/maps/place/\"\n         case matchtext (droppedURL, \"^https://tools.wmflabs.org/geohack/geohack.php\\?pagename=(.+)&params=(.+)\", pageName, geoInfo)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/map\"\n            break\n         case matchText (droppedURL, \"https://www.one-tab.com/page/(.+)\", oneTabID)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/onetab\"\n            break\n         case matchText (droppedURL, \"https://(.+).wikipedia.org/(.+)\", lastBit)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/mediawiki\"\n            break\n         case matchText (droppedURL, \"http://britishlibrary.typepad.co.uk/.a/(.+)\", assetID)\n         case matchText (droppedURL, \"https://static.+.squarespace.com/static/.+\", photoID)\n            photo droppedURL\n            break\n         case matchText (droppedURL, \"https://www.pinterest.com/pin/(.+)/|https://www.pinterest.co.uk/pin/(.+)/\", photoID)\n            pinterest droppedURL\n            break\n         case matchText (droppedURL, \"https://www.flickr.com/photos/(.+)/(.+)/in/.+\", userID, photoID)\n            flickr droppedURL\n            break\n         case matchText (droppedURL, \"https://twitter.com/.+/status/.+\")\n            twitter droppedURL\n            break\n         default\n            webpage droppedURL\n            break\n      end switch"
+      },
+      "date": 1520409427773
+    },
+    {
+      "type": "edit",
+      "id": "f4f12c0588ccec31",
+      "item": {
+        "type": "code",
+        "id": "f4f12c0588ccec31",
+        "text": "begins with \"https://player.fm/series/\"\n -> /bbc/playerfm\"\n\nbegins with \"http://www.radiolab.org/story/\"\nbegins with \"http://www.bbc.co.uk/programmes/\"\nbegins with \"https://www.theguardian.com/science/audio/\"\n -> bbc\n\nbegins with \"http://www.openstreetmap.org/\"\nbegins with \"https://www.openstreetmap.org/\"\nbegins with \"https://www.google.co.uk/maps/place/\"\nbegins with \"https://www.google.com/maps/place/\"\ncase matchtext (droppedURL, \"^https://tools.wmflabs.org/geohack/geohack.php\\?pagename=(.+)&params=(.+)\", pageName, geoInfo)\n -> map\n            \n\ncase matchText (droppedURL, \"https://www.one-tab.com/page/(.+)\", oneTabID)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/onetab\"\n            break\n         case matchText (droppedURL, \"https://(.+).wikipedia.org/(.+)\", lastBit)\n            fedwiki_ForwardAndReturn \"https://rest.livecode.world/mediawiki\"\n            break\n         case matchText (droppedURL, \"http://britishlibrary.typepad.co.uk/.a/(.+)\", assetID)\n         case matchText (droppedURL, \"https://static.+.squarespace.com/static/.+\", photoID)\n            photo droppedURL\n            break\n         case matchText (droppedURL, \"https://www.pinterest.com/pin/(.+)/|https://www.pinterest.co.uk/pin/(.+)/\", photoID)\n            pinterest droppedURL\n            break\n         case matchText (droppedURL, \"https://www.flickr.com/photos/(.+)/(.+)/in/.+\", userID, photoID)\n            flickr droppedURL\n            break\n         case matchText (droppedURL, \"https://twitter.com/.+/status/.+\")\n            twitter droppedURL\n            break\n         default\n            webpage droppedURL\n            break\n      end switch"
+      },
+      "date": 1520409462456
+    }
+  ]
+}

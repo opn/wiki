@@ -1,0 +1,365 @@
+{
+  "title": "Handler Documentation",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b9930347f94999c2",
+      "text": "Here is an example of how to document a Live Code [[Handler]]. See [[LiveCode Documentation Format Reference]] for further information."
+    },
+    {
+      "type": "markdown",
+      "id": "b1988b3bea35ba91",
+      "text": "Below are the tags that are supported by the handler documentation in Livecode:\n* Name:\n* Type:\n* Syntax: \n* Introduced: \n* OS: \n* Platforms: \n* Security: \n* Example:\n* Parameters:\n* number: \n* callbackMessage: \n* Description:\n* References: \n* Tags:"
+    },
+    {
+      "type": "paragraph",
+      "id": "55211a2f50497604",
+      "text": "You will also be able to document LiveCode script using exactly the same syntax, and autogenerate an API for it, if for example you are writing a library for distribution. The idea would be that you could add tabs in your dictionary viewer for each of the stacks that is currently being used as a library, as a handy reference tool."
+    },
+    {
+      "type": "paragraph",
+      "id": "8d5af2c26be48081",
+      "text": "Below are a couple of examples of a fully documented handler. Here is an example of what a handler will look like when documented and displayed in [[Fedwiki]]:"
+    },
+    {
+      "type": "reference",
+      "id": "06443d2f3af531f5",
+      "site": "ide.livecode.world",
+      "slug": "revmetadataset",
+      "title": "revMetadataSet",
+      "text": "Sets the specified metadata item for pObject to pValue"
+    },
+    {
+      "type": "paragraph",
+      "id": "311bf4b6b13d93a7",
+      "text": "The first example is for documentation in a separate file:"
+    },
+    {
+      "type": "code",
+      "id": "0f5ff75195877fa7",
+      "text": "Name: textEncode\n\nType: function\n\nSyntax: textEncode(<stringToEncode>, <encoding>)\n\nSummary: Converts from text to binary data.\n\nIntroduced: 7.0\n\nOS: mac,windows,linux,ios,android\n\nPlatforms: desktop,server,web,mobile\n\nExample:\ntextEncode(\"A\",\"UTF16\")\n\nExample:\nput textEncode(field \"output\",\"UTF-8\") into tOutput\nput tOutput into url (\"file:output.txt\")\n\nParameters:\nstringToEncode (string): Any string, or expression that evaluates to a string.\nencoding (enum): the encoding to be used\n- \"ASCII\"\n- \"ISO-8859-1\": Linux only\n- \"MacRoman\": OS X only\n- \"Native\": ISO-8859-1 on Minux, MacRoman on OS X, CP1252 on Windows\n- \"UTF-16\"\n- \"UTF-16BE\"\n- \"UTF-16LE\"\n- \"UTF-32\"\n- \"UTF-32BE\"\n- \"UTF-32LE\"\n- \"UTF-8\"\n- \"CP1252\"\n\nReturns: Returns the <stringToEncode> as binary data.\n\nDescription:\nConverts from text to binary data.\n\nThe <textEncode> function takes text, and returns it as binary data, encoded with the specified encoding.\n\nIt is highly recommended that any time you interface with things outside LiveCode (files, network sockets, processes, etc) that you explicitly textEncode any text you send outside LiveCode and <textDecode> all text received into LiveCode. If this doesn't happen, a platform-dependent encoding will be used (which normally does not support Unicode text).\n\nIt is not, in general, possible to reliably auto-detect text encodings so please check the documentation for the programme you are communicating with to find out what it expects. If in doubt, try UTF-8.\n\nReferences: textDecode (function)"
+    },
+    {
+      "type": "paragraph",
+      "id": "e84649b875ae99a0",
+      "text": "The next example is for inline markup in the [[Script Editor]]:"
+    },
+    {
+      "type": "code",
+      "id": "3507ea8cb4c7ba36",
+      "text": "/*\nSummary: Extracts the inline docs from a .lcb file\n\npFile: The path to the .lcb file to extract docs from\n\nReturns (string): A string consisting of all the docs for the library, and the syntax and handlers present in the .lcb file\n\nDescription:\n<revDocsGenerateDocsFileFromModularFile> is used when packaging a widget to create its API documentation.\nIt generates the Library and Type elements from the declaration in the <pFile> (either widget or library), and extracts\nthe comment block that precedes any initial declaration for use as the library-level Description element.\nIt then extracts the comment blocks that precede syntax and handler definitions in <pFile>, and generates the \nName, Type, Syntax, and Associated elements for each entry, as well as the parameter types.\n\nTags: Package building\n*/\n\nfunction revDocsGenerateDocsFileFromModularFile pFile\n...\nend revDocsGenerateDocsFileFromModularFile"
+    },
+    {
+      "type": "code",
+      "id": "e1c1b5a3b5327ec0",
+      "text": "Name: accept\n\nType: command\n\nSyntax: accept [datagram] connections on port <number> with message <callbackMessage> \n\nSummary: Accepts an internet connection and creates a <socket> for that connection.\n\nIntroduced: 1.0\n\nOS: mac,windows,linux\n\nPlatforms: desktop,server,web\n\nSecurity: network\n\nExample:\naccept connections on port 80 with message \"connectionMade\"\n\nExample:\naccept datagram connections on port 80 with message \"connectionMade\"\n\nExample:\non mouseUp\n   accept connections on port 80 with message \"connectionMade\"\nend mouseUp\n\non connectionMade pIPAddress\n   put \"Connection made:\" && pIPAddress\nend connectionMade\n\nParameters:\nnumber: \ncallbackMessage: The name of a message to be sent when a connection is made or a datagram is received.\nportNumber: The TCP port number on which to accept connections.\n\nDescription:\nUse the <accept> <command> when running a <server>, to accept <TCP> connections or <UDP> <datagram|datagrams> from other systems (or other <process|processes> on the same system).\nUse the datagram option if you want to accept UDP datagrams.\n\nWhen a connection is made or a datagram is received, the <accept> <command> creates a new <socket> that can be used to communicate with the other system (or <process>). When using the <close socket>, <read from socket>, or <write to socket> <command|commands>, you can refer to this <socket> with a socket identifier that looks like this:\nhost:port[|connectionID]\nwhere the connectionID is a number assigned by the <accept> <command>. (You only need to specify the connection number if there is more than one <socket> connected to a particular <port> and <host>.)\n\nThe <callbackMessage> is sent to the <object> whose <script> contains the <accept> <command>. Either one or two <parameter|parameters> are sent with this <message>. The first <parameter> is the <IP address> of the system or <process> making the connection. If a <datagram> is being accepted, the second <parameter> is the contents of the <datagram>.\n\nFor technical information about sockets, see RFC 147 at http://www.ietf.org/rfc/rfc147.txt.\nFor technical information about UDP datagrams, see RFC 768 at http://www.ietf.org/rfc/rfc0768.txt.\nFor technical information about the numbers used to designate standard ports, see the list of port numbers at http://www.iana.org/assignments/port-numbers, in particular the section entitled \"Well Known Port Numbers\".\n\nReferences: HTTPProxy (property), script (property), read from socket (command), write to socket (command), close socket (command), open socket (command), openSockets (function), hostAddressToName (function), hostName (function), hostAddress (function), peerAddress (function), hostNameToAddress (function), datagram (glossary), IP address (glossary), TCP (glossary), port (glossary), command (glossary), socket (glossary), UDP (glossary), host (glossary), server (glossary), message (glossary), parameter (glossary), process (glossary), object (object)\n\nTags: networking"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Handler Documentation",
+        "story": []
+      },
+      "date": 1458318651206
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b9930347f94999c2"
+      },
+      "id": "b9930347f94999c2",
+      "type": "add",
+      "date": 1458318652585
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3507ea8cb4c7ba36"
+      },
+      "id": "3507ea8cb4c7ba36",
+      "type": "add",
+      "after": "b9930347f94999c2",
+      "date": 1458318654966
+    },
+    {
+      "type": "edit",
+      "id": "3507ea8cb4c7ba36",
+      "item": {
+        "type": "code",
+        "id": "3507ea8cb4c7ba36",
+        "text": "/*\nSummary: Extracts the inline docs from a .lcb file\n\npFile: The path to the .lcb file to extract docs from\n\nReturns (string): A string consisting of all the docs for the library, and the syntax and handlers present in the .lcb file\n\nDescription:\n<revDocsGenerateDocsFileFromModularFile> is used when packaging a widget to create its API documentation.\nIt generates the Library and Type elements from the declaration in the <pFile> (either widget or library), and extracts\nthe comment block that precedes any initial declaration for use as the library-level Description element.\nIt then extracts the comment blocks that precede syntax and handler definitions in <pFile>, and generates the \nName, Type, Syntax, and Associated elements for each entry, as well as the parameter types.\n\nTags: Package building\n*/\n\nfunction revDocsGenerateDocsFileFromModularFile pFile\n...\nend revDocsGenerateDocsFileFromModularFile"
+      },
+      "date": 1458318658395
+    },
+    {
+      "type": "edit",
+      "id": "b9930347f94999c2",
+      "item": {
+        "type": "paragraph",
+        "id": "b9930347f94999c2",
+        "text": "Here is an example of how to document a Live Code [[Handler]]:"
+      },
+      "date": 1458318689738
+    },
+    {
+      "type": "edit",
+      "id": "b9930347f94999c2",
+      "item": {
+        "type": "paragraph",
+        "id": "b9930347f94999c2",
+        "text": "Here is an example of how to document a Live Code [[Handler]]. See [[LiveCode Documentation Format Reference]] for further information."
+      },
+      "date": 1458318752972
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "55211a2f50497604",
+        "text": "You will also be able to document LiveCode script using exactly the same syntax, and autogenerate an API for it, if for example you are writing a library for distribution. The idea would be that you could add tabs in your dictionary viewer for each of the stacks that is currently being used as a library, as a handy reference tool."
+      },
+      "after": "3507ea8cb4c7ba36",
+      "id": "55211a2f50497604",
+      "date": 1458391299410
+    },
+    {
+      "type": "move",
+      "order": [
+        "b9930347f94999c2",
+        "55211a2f50497604",
+        "3507ea8cb4c7ba36"
+      ],
+      "id": "55211a2f50497604",
+      "date": 1458392145452
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "b1988b3bea35ba91",
+        "text": "* Name:\n* Type:\n* Syntax: \n* Introduced: \n* OS: \n* Platforms: \n* Security: \n* Example:\n* Parameters:\n* number: \n* callbackMessage: \n* Description:\n* References: \n* Tags:"
+      },
+      "after": "b9930347f94999c2",
+      "id": "b1988b3bea35ba91",
+      "date": 1458392176977
+    },
+    {
+      "type": "edit",
+      "id": "b1988b3bea35ba91",
+      "item": {
+        "type": "markdown",
+        "id": "b1988b3bea35ba91",
+        "text": "Below are the tags that are supported by the handler documentation in Livecode:\n* Name:\n* Type:\n* Syntax: \n* Introduced: \n* OS: \n* Platforms: \n* Security: \n* Example:\n* Parameters:\n* number: \n* callbackMessage: \n* Description:\n* References: \n* Tags:"
+      },
+      "date": 1458392219209
+    },
+    {
+      "type": "add",
+      "id": "8d5af2c26be48081",
+      "item": {
+        "type": "paragraph",
+        "id": "8d5af2c26be48081",
+        "text": "Below are a couple of examples of a full handler:"
+      },
+      "after": "55211a2f50497604",
+      "date": 1458392291739
+    },
+    {
+      "type": "edit",
+      "id": "8d5af2c26be48081",
+      "item": {
+        "type": "paragraph",
+        "id": "8d5af2c26be48081",
+        "text": "Below are a couple of examples of a fully documented handler:"
+      },
+      "date": 1458392309564
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "96a4af4cd2e0c8a8"
+      },
+      "id": "96a4af4cd2e0c8a8",
+      "type": "add",
+      "after": "3507ea8cb4c7ba36",
+      "date": 1458392575118
+    },
+    {
+      "type": "edit",
+      "id": "96a4af4cd2e0c8a8",
+      "item": {
+        "type": "paragraph",
+        "id": "96a4af4cd2e0c8a8",
+        "text": "And here is an example of what the handler documentation would look like in [[Fedwiki]]:"
+      },
+      "date": 1458392609871
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "06443d2f3af531f5"
+      },
+      "id": "06443d2f3af531f5",
+      "type": "add",
+      "after": "96a4af4cd2e0c8a8",
+      "date": 1458392634126
+    },
+    {
+      "type": "edit",
+      "id": "06443d2f3af531f5",
+      "item": {
+        "type": "reference",
+        "id": "06443d2f3af531f5",
+        "site": "ide.livecode.world",
+        "slug": "revmetadataset",
+        "title": "revMetadataSet",
+        "text": "Sets the specified metadata item for pObject to pValue"
+      },
+      "date": 1458392637746
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0f5ff75195877fa7"
+      },
+      "id": "0f5ff75195877fa7",
+      "type": "add",
+      "after": "06443d2f3af531f5",
+      "date": 1458392837650
+    },
+    {
+      "type": "edit",
+      "id": "0f5ff75195877fa7",
+      "item": {
+        "type": "code",
+        "id": "0f5ff75195877fa7",
+        "text": "Name: textEncode\n\nType: function\n\nSyntax: textEncode(<stringToEncode>, <encoding>)\n\nSummary: Converts from text to binary data.\n\nIntroduced: 7.0\n\nOS: mac,windows,linux,ios,android\n\nPlatforms: desktop,server,web,mobile\n\nExample:\ntextEncode(\"A\",\"UTF16\")\n\nExample:\nput textEncode(field \"output\",\"UTF-8\") into tOutput\nput tOutput into url (\"file:output.txt\")\n\nParameters:\nstringToEncode (string): Any string, or expression that evaluates to a string.\nencoding (enum): the encoding to be used\n- \"ASCII\"\n- \"ISO-8859-1\": Linux only\n- \"MacRoman\": OS X only\n- \"Native\": ISO-8859-1 on Minux, MacRoman on OS X, CP1252 on Windows\n- \"UTF-16\"\n- \"UTF-16BE\"\n- \"UTF-16LE\"\n- \"UTF-32\"\n- \"UTF-32BE\"\n- \"UTF-32LE\"\n- \"UTF-8\"\n- \"CP1252\"\n\nReturns: Returns the <stringToEncode> as binary data.\n\nDescription:\nConverts from text to binary data.\n\nThe <textEncode> function takes text, and returns it as binary data, encoded with the specified encoding.\n\nIt is highly recommended that any time you interface with things outside LiveCode (files, network sockets, processes, etc) that you explicitly textEncode any text you send outside LiveCode and <textDecode> all text received into LiveCode. If this doesn't happen, a platform-dependent encoding will be used (which normally does not support Unicode text).\n\nIt is not, in general, possible to reliably auto-detect text encodings so please check the documentation for the programme you are communicating with to find out what it expects. If in doubt, try UTF-8.\n\nReferences: textDecode (function)"
+      },
+      "date": 1458392842022
+    },
+    {
+      "type": "move",
+      "order": [
+        "b9930347f94999c2",
+        "b1988b3bea35ba91",
+        "55211a2f50497604",
+        "8d5af2c26be48081",
+        "0f5ff75195877fa7",
+        "3507ea8cb4c7ba36",
+        "96a4af4cd2e0c8a8",
+        "06443d2f3af531f5"
+      ],
+      "id": "0f5ff75195877fa7",
+      "date": 1458392844412
+    },
+    {
+      "type": "edit",
+      "id": "8d5af2c26be48081",
+      "item": {
+        "type": "paragraph",
+        "id": "8d5af2c26be48081",
+        "text": "Below are a couple of examples of a fully documented handler. The first example is for documentation in a separate file:"
+      },
+      "date": 1458392922201
+    },
+    {
+      "type": "add",
+      "id": "e84649b875ae99a0",
+      "item": {
+        "type": "paragraph",
+        "id": "e84649b875ae99a0",
+        "text": "The next example is for inline markup in the [[Script Editor]]:"
+      },
+      "after": "8d5af2c26be48081",
+      "date": 1458392937420
+    },
+    {
+      "type": "move",
+      "order": [
+        "b9930347f94999c2",
+        "b1988b3bea35ba91",
+        "55211a2f50497604",
+        "8d5af2c26be48081",
+        "0f5ff75195877fa7",
+        "e84649b875ae99a0",
+        "3507ea8cb4c7ba36",
+        "96a4af4cd2e0c8a8",
+        "06443d2f3af531f5"
+      ],
+      "id": "e84649b875ae99a0",
+      "date": 1458392942051
+    },
+    {
+      "type": "move",
+      "order": [
+        "b9930347f94999c2",
+        "b1988b3bea35ba91",
+        "55211a2f50497604",
+        "8d5af2c26be48081",
+        "06443d2f3af531f5",
+        "0f5ff75195877fa7",
+        "e84649b875ae99a0",
+        "3507ea8cb4c7ba36",
+        "96a4af4cd2e0c8a8"
+      ],
+      "id": "06443d2f3af531f5",
+      "date": 1458392989500
+    },
+    {
+      "type": "edit",
+      "id": "8d5af2c26be48081",
+      "item": {
+        "type": "paragraph",
+        "id": "8d5af2c26be48081",
+        "text": "Below are a couple of examples of a fully documented handler. Here is an example of what a handler will look like when documented and displayed in [[Fedwiki]]:"
+      },
+      "date": 1458393033045
+    },
+    {
+      "type": "add",
+      "id": "311bf4b6b13d93a7",
+      "item": {
+        "type": "paragraph",
+        "id": "311bf4b6b13d93a7",
+        "text": "The first example is for documentation in a separate file:"
+      },
+      "after": "8d5af2c26be48081",
+      "date": 1458393034919
+    },
+    {
+      "type": "move",
+      "order": [
+        "b9930347f94999c2",
+        "b1988b3bea35ba91",
+        "55211a2f50497604",
+        "8d5af2c26be48081",
+        "06443d2f3af531f5",
+        "311bf4b6b13d93a7",
+        "0f5ff75195877fa7",
+        "e84649b875ae99a0",
+        "3507ea8cb4c7ba36",
+        "96a4af4cd2e0c8a8"
+      ],
+      "id": "311bf4b6b13d93a7",
+      "date": 1458393037588
+    },
+    {
+      "type": "remove",
+      "id": "96a4af4cd2e0c8a8",
+      "date": 1458393042406
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "e1c1b5a3b5327ec0",
+        "text": "Name: accept\n\nType: command\n\nSyntax: accept [datagram] connections on port <number> with message <callbackMessage> \n\nSummary: Accepts an internet connection and creates a <socket> for that connection.\n\nIntroduced: 1.0\n\nOS: mac,windows,linux\n\nPlatforms: desktop,server,web\n\nSecurity: network\n\nExample:\naccept connections on port 80 with message \"connectionMade\"\n\nExample:\naccept datagram connections on port 80 with message \"connectionMade\"\n\nExample:\non mouseUp\n   accept connections on port 80 with message \"connectionMade\"\nend mouseUp\n\non connectionMade pIPAddress\n   put \"Connection made:\" && pIPAddress\nend connectionMade\n\nParameters:\nnumber: \ncallbackMessage: The name of a message to be sent when a connection is made or a datagram is received.\nportNumber: The TCP port number on which to accept connections.\n\nDescription:\nUse the <accept> <command> when running a <server>, to accept <TCP> connections or <UDP> <datagram|datagrams> from other systems (or other <process|processes> on the same system).\nUse the datagram option if you want to accept UDP datagrams.\n\nWhen a connection is made or a datagram is received, the <accept> <command> creates a new <socket> that can be used to communicate with the other system (or <process>). When using the <close socket>, <read from socket>, or <write to socket> <command|commands>, you can refer to this <socket> with a socket identifier that looks like this:\nhost:port[|connectionID]\nwhere the connectionID is a number assigned by the <accept> <command>. (You only need to specify the connection number if there is more than one <socket> connected to a particular <port> and <host>.)\n\nThe <callbackMessage> is sent to the <object> whose <script> contains the <accept> <command>. Either one or two <parameter|parameters> are sent with this <message>. The first <parameter> is the <IP address> of the system or <process> making the connection. If a <datagram> is being accepted, the second <parameter> is the contents of the <datagram>.\n\nFor technical information about sockets, see RFC 147 at http://www.ietf.org/rfc/rfc147.txt.\nFor technical information about UDP datagrams, see RFC 768 at http://www.ietf.org/rfc/rfc0768.txt.\nFor technical information about the numbers used to designate standard ports, see the list of port numbers at http://www.iana.org/assignments/port-numbers, in particular the section entitled \"Well Known Port Numbers\".\n\nReferences: HTTPProxy (property), script (property), read from socket (command), write to socket (command), close socket (command), open socket (command), openSockets (function), hostAddressToName (function), hostName (function), hostAddress (function), peerAddress (function), hostNameToAddress (function), datagram (glossary), IP address (glossary), TCP (glossary), port (glossary), command (glossary), socket (glossary), UDP (glossary), host (glossary), server (glossary), message (glossary), parameter (glossary), process (glossary), object (object)\n\nTags: networking"
+      },
+      "after": "3507ea8cb4c7ba36",
+      "id": "e1c1b5a3b5327ec0",
+      "date": 1458393047361
+    }
+  ]
+}

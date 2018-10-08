@@ -1,0 +1,769 @@
+{
+  "title": "IPFS pubsub",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a9870f99f9b0373e",
+      "text": "[[IPFS]] recently merged a simple, experimental pubsub implementation into IPFS. This implementation is just a beginning. It is far from the performance and security goals we will achieve in our long-term target. However, even this early implementation opens the doors to several useful and interesting new applications."
+    },
+    {
+      "type": "markdown",
+      "id": "bfe610add627d04d",
+      "text": "# Why pubsub?"
+    },
+    {
+      "type": "paragraph",
+      "id": "74bd72073bfe4856",
+      "text": "Publish-Subscribe, called [[pubsub]] for short, is a pattern often used to handle events in large-scale networks. ‘Publishers’ send messages classified by topic or content and ‘subscribers’ receive only the messages they are interested in, all without direct connections between publishers and subscribers. This approach offers much greater network scalability and flexibility."
+    },
+    {
+      "type": "markdown",
+      "id": "2f61a2d15dafa8be",
+      "text": "Some applications include:\n\n- collaborative document editing\n- dynamic website content\n- chat applications\n- multiplayer games\n- continuously evolving datasets\n- webservice workers passing around messages. "
+    },
+    {
+      "type": "paragraph",
+      "id": "d2aa109cfb3a896d",
+      "text": "It gives us ways to make IPFS fast for large-scale networks such as datacenters, local area networks, and large p2p applications. In the near future, IPNS records will be pushed over pubsub, allowing lightning fast updates of peers’ IPNS entries. Peers could use pubsub to track the head of a merkle-linked global log."
+    },
+    {
+      "type": "markdown",
+      "id": "3bc172fefa6fa32a",
+      "text": "# Getting started with pubsub for go-ipfs"
+    },
+    {
+      "type": "paragraph",
+      "id": "d1eb902b50639660",
+      "text": "Note: There is also a js-ipfs implementation of pubsub."
+    },
+    {
+      "type": "paragraph",
+      "id": "d5db5cad479419ab",
+      "text": "First, you’ll need to enable the pubsub code. Make sure you’re running go-ipfs 0.4.5 or above. Once you have that version of ipfs installed, start the daemon with:"
+    },
+    {
+      "type": "code",
+      "id": "f518162f00ff0119",
+      "text": "ipfs daemon --enable-pubsub-experiment"
+    },
+    {
+      "type": "paragraph",
+      "id": "295fbaa7c34b0364",
+      "text": "This will tell ipfs to create and enable the pubsub service. It also implies that you will only be able to use pubsub with other peers who choose to enable it."
+    },
+    {
+      "type": "paragraph",
+      "id": "2705901e3baffa6a",
+      "text": "\nTo subscribe to the topic foo, run:"
+    },
+    {
+      "type": "code",
+      "id": "41e966d71c145c8f",
+      "text": "ipfs pubsub sub foo"
+    },
+    {
+      "type": "paragraph",
+      "id": "587d7ac97fa72724",
+      "text": "Now, any messages for the topic foo will print to your console."
+    },
+    {
+      "type": "paragraph",
+      "id": "3548a4018eea204d",
+      "text": "\nTo publish a message to the topic foo, open up another terminal and run:"
+    },
+    {
+      "type": "code",
+      "id": "de39d4b511361bb9",
+      "text": "ipfs pubsub pub foo \"hello world\""
+    },
+    {
+      "type": "paragraph",
+      "id": "ec8f9ec0816fadca",
+      "text": "You should see “hello world” printed out in the first terminal. You can also run the pub command on any other connected ipfs node and your node will receive the message. "
+    },
+    {
+      "type": "paragraph",
+      "id": "b336be907445809f",
+      "text": "Messages are routed through connected, subscribed peers. This means that if peers A, B, and C are all subscribed to foo, A is connected to B, and B is connected to C, but A is not directly connected to C, A will still receive messages that C published to foo through B. "
+    },
+    {
+      "type": "paragraph",
+      "id": "c3a1066f39920d49",
+      "text": "This can be very useful for routing messages in networks with poor NAT traversal or otherwise suboptimal connectivity."
+    },
+    {
+      "type": "paragraph",
+      "id": "7953ca44c956e216",
+      "text": "To see all peers with pubsub enabled, check the output of:"
+    },
+    {
+      "type": "code",
+      "id": "92003d9010cfb06f",
+      "text": "ipfs pubsub peers"
+    },
+    {
+      "type": "paragraph",
+      "id": "4e91249af5cb92d9",
+      "text": "To see all the topics you are currently subscribed to, run:"
+    },
+    {
+      "type": "code",
+      "id": "f96b98a9eed01017",
+      "text": "ipfs pubsub ls\n"
+    },
+    {
+      "type": "markdown",
+      "id": "3b68316fa7a4ff78",
+      "text": "# Pubsub in the wild\n\nIn the video and links below yo can see how you might use ipfs pubsub to build a collaborative editor - [https://ipfs.io/blog/25-pubsub/ ipfs.io]"
+    },
+    {
+      "type": "video",
+      "id": "03ea8813e791f3e6",
+      "text": "YOUTUBE -kdx8rJd8rQ\nThis is a tutorial on how to create Distributed Web Applications with CRDT (Conflict-Free Replicated Data Types) and the JavaScript Implementation of IPFS"
+    },
+    {
+      "type": "markdown",
+      "id": "a31e2294361f5d4e",
+      "text": "# References\n\n- js-ipfs - [https://github.com/ipfs/js-ipfs github]\n- Code for the Demo - [https://github.com/ipfs-labs/shared-editing-demo github]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "IPFS pubsub",
+        "story": []
+      },
+      "date": 1502991325359
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a9870f99f9b0373e"
+      },
+      "id": "a9870f99f9b0373e",
+      "type": "add",
+      "date": 1502991326541
+    },
+    {
+      "type": "edit",
+      "id": "a9870f99f9b0373e",
+      "item": {
+        "type": "paragraph",
+        "id": "a9870f99f9b0373e",
+        "text": "[[IPFS]] recently merged a simple, experimental pubsub implementation into IPFS. This implementation is just a beginning. It is far from the performance and security goals we will achieve in our long-term target. However, even this early implementation opens the doors to several useful and interesting new applications."
+      },
+      "date": 1502991377084
+    },
+    {
+      "type": "add",
+      "id": "bfe610add627d04d",
+      "item": {
+        "type": "paragraph",
+        "id": "bfe610add627d04d",
+        "text": "# Why pubsub?"
+      },
+      "after": "a9870f99f9b0373e",
+      "date": 1502991387467
+    },
+    {
+      "type": "add",
+      "id": "74bd72073bfe4856",
+      "item": {
+        "type": "paragraph",
+        "id": "74bd72073bfe4856",
+        "text": "Publish-Subscribe, called [[pubsub]] for short, is a pattern often used to handle events in large-scale networks. ‘Publishers’ send messages classified by topic or content and ‘subscribers’ receive only the messages they are interested in, all without direct connections between publishers and subscribers. This approach offers much greater network scalability and flexibility."
+      },
+      "after": "bfe610add627d04d",
+      "date": 1502991408278
+    },
+    {
+      "type": "add",
+      "id": "2f61a2d15dafa8be",
+      "item": {
+        "type": "paragraph",
+        "id": "2f61a2d15dafa8be",
+        "text": "Some applications include:- collaborative document editing- “dynamic” website content- chat applications- multiplayer games- continuously evolving datasets- and webservice workers passing around messages. "
+      },
+      "after": "74bd72073bfe4856",
+      "date": 1502991449022
+    },
+    {
+      "type": "edit",
+      "id": "2f61a2d15dafa8be",
+      "item": {
+        "type": "markdown",
+        "id": "2f61a2d15dafa8be",
+        "text": "Some applications include:- collaborative document editing- “dynamic” website content- chat applications- multiplayer games- continuously evolving datasets- and webservice workers passing around messages. "
+      },
+      "date": 1502991450222
+    },
+    {
+      "type": "add",
+      "id": "d2aa109cfb3a896d",
+      "item": {
+        "type": "paragraph",
+        "id": "d2aa109cfb3a896d",
+        "text": "It gives us ways to make IPFS fast for large-scale networks such as datacenters, local area networks, and large p2p applications. In the near future, IPNS records will be pushed over pubsub, allowing lightning fast updates of peers’ IPNS entries. Peers could use pubsub to track the head of a merkle-linked global log.\n\nGetting started with pubsub for go-ipfs\n\nNote: There is also a js-ipfs implementation of pubsub. Documentation will come soon.\n\nFirst, you’ll need to enable the pubsub code. Make sure you’re running go-ipfs 0.4.5 or above. Once you have that version of ipfs installed, start the daemon with:\n\n> ipfs daemon --enable-pubsub-experiment\nThis will tell ipfs to create and enable the pubsub service. It also implies that you will only be able to use pubsub with other peers who choose to enable it.\n\nTo subscribe to the topic foo, run:\n\n> ipfs pubsub sub foo\nNow, any messages for the topic foo will print to your console.\n\nTo publish a message to the topic foo, open up another terminal and run:\n\n> ipfs pubsub pub foo \"hello world\"\nYou should see “hello world” printed out in the first terminal. You can also run the pub command on any other connected ipfs node and your node will receive the message. Messages are routed through connected, subscribed peers. This means that if peers A, B, and C are all subscribed to foo, A is connected to B, and B is connected to C, but A is not directly connected to C, A will still receive messages that C published to foo through B. This can be very useful for routing messages in networks with poor NAT traversal or otherwise suboptimal connectivity.\n\nTo see all peers with pubsub enabled, check the output of:\n\n> ipfs pubsub peers\nTo see all the topics you are currently subscribed to, run:\n\n> ipfs pubsub ls\n"
+      },
+      "after": "2f61a2d15dafa8be",
+      "date": 1502991451029
+    },
+    {
+      "type": "edit",
+      "id": "2f61a2d15dafa8be",
+      "item": {
+        "type": "markdown",
+        "id": "2f61a2d15dafa8be",
+        "text": "Some applications include:\n\n- collaborative document editing\n- “dynamic” website content\n- chat applications\n- multiplayer games\n- continuously evolving datasets\n- webservice workers passing around messages. "
+      },
+      "date": 1502991471126
+    },
+    {
+      "type": "edit",
+      "id": "2f61a2d15dafa8be",
+      "item": {
+        "type": "markdown",
+        "id": "2f61a2d15dafa8be",
+        "text": "Some applications include:\n\n- collaborative document editing\n- dynamic website content\n- chat applications\n- multiplayer games\n- continuously evolving datasets\n- webservice workers passing around messages. "
+      },
+      "date": 1502991480848
+    },
+    {
+      "type": "edit",
+      "id": "d2aa109cfb3a896d",
+      "item": {
+        "type": "paragraph",
+        "id": "d2aa109cfb3a896d",
+        "text": "It gives us ways to make IPFS fast for large-scale networks such as datacenters, local area networks, and large p2p applications. In the near future, IPNS records will be pushed over pubsub, allowing lightning fast updates of peers’ IPNS entries. Peers could use pubsub to track the head of a merkle-linked global log."
+      },
+      "date": 1502991488775
+    },
+    {
+      "type": "add",
+      "id": "3bc172fefa6fa32a",
+      "item": {
+        "type": "paragraph",
+        "id": "3bc172fefa6fa32a",
+        "text": "# Getting started with pubsub for go-ipfs"
+      },
+      "after": "d2aa109cfb3a896d",
+      "date": 1502991494631
+    },
+    {
+      "type": "add",
+      "id": "d1eb902b50639660",
+      "item": {
+        "type": "paragraph",
+        "id": "d1eb902b50639660",
+        "text": "Note: There is also a js-ipfs implementation of pubsub."
+      },
+      "after": "3bc172fefa6fa32a",
+      "date": 1502991505399
+    },
+    {
+      "type": "add",
+      "id": "d5db5cad479419ab",
+      "item": {
+        "type": "paragraph",
+        "id": "d5db5cad479419ab",
+        "text": "First, you’ll need to enable the pubsub code. Make sure you’re running go-ipfs 0.4.5 or above. Once you have that version of ipfs installed, start the daemon with:"
+      },
+      "after": "d1eb902b50639660",
+      "date": 1502991510151
+    },
+    {
+      "type": "add",
+      "id": "1d94a149d55fd014",
+      "item": {
+        "type": "paragraph",
+        "id": "1d94a149d55fd014",
+        "text": "\n> ipfs daemon --enable-pubsub-experiment"
+      },
+      "after": "d5db5cad479419ab",
+      "date": 1502991512767
+    },
+    {
+      "type": "edit",
+      "id": "bfe610add627d04d",
+      "item": {
+        "type": "markdown",
+        "id": "bfe610add627d04d",
+        "text": "# Why pubsub?"
+      },
+      "date": 1502991515528
+    },
+    {
+      "type": "edit",
+      "id": "3bc172fefa6fa32a",
+      "item": {
+        "type": "markdown",
+        "id": "3bc172fefa6fa32a",
+        "text": "# Getting started with pubsub for go-ipfs"
+      },
+      "date": 1502991517595
+    },
+    {
+      "type": "add",
+      "id": "295fbaa7c34b0364",
+      "item": {
+        "type": "paragraph",
+        "id": "295fbaa7c34b0364",
+        "text": "This will tell ipfs to create and enable the pubsub service. It also implies that you will only be able to use pubsub with other peers who choose to enable it."
+      },
+      "after": "1d94a149d55fd014",
+      "date": 1502991528424
+    },
+    {
+      "type": "add",
+      "id": "2705901e3baffa6a",
+      "item": {
+        "type": "paragraph",
+        "id": "2705901e3baffa6a",
+        "text": "\nTo subscribe to the topic foo, run:"
+      },
+      "after": "295fbaa7c34b0364",
+      "date": 1502991531711
+    },
+    {
+      "type": "add",
+      "id": "c55f5f5891b4d1ce",
+      "item": {
+        "type": "paragraph",
+        "id": "c55f5f5891b4d1ce",
+        "text": "\n> ipfs pubsub sub foo"
+      },
+      "after": "2705901e3baffa6a",
+      "date": 1502991533591
+    },
+    {
+      "type": "add",
+      "id": "587d7ac97fa72724",
+      "item": {
+        "type": "paragraph",
+        "id": "587d7ac97fa72724",
+        "text": "Now, any messages for the topic foo will print to your console."
+      },
+      "after": "c55f5f5891b4d1ce",
+      "date": 1502991534857
+    },
+    {
+      "type": "add",
+      "id": "3548a4018eea204d",
+      "item": {
+        "type": "paragraph",
+        "id": "3548a4018eea204d",
+        "text": "\nTo publish a message to the topic foo, open up another terminal and run:"
+      },
+      "after": "587d7ac97fa72724",
+      "date": 1502991536256
+    },
+    {
+      "type": "add",
+      "id": "3ab70f21a462b4b4",
+      "item": {
+        "type": "paragraph",
+        "id": "3ab70f21a462b4b4",
+        "text": "\n> ipfs pubsub pub foo \"hello world\""
+      },
+      "after": "3548a4018eea204d",
+      "date": 1502991537543
+    },
+    {
+      "type": "add",
+      "id": "ec8f9ec0816fadca",
+      "item": {
+        "type": "paragraph",
+        "id": "ec8f9ec0816fadca",
+        "text": "You should see “hello world” printed out in the first terminal. You can also run the pub command on any other connected ipfs node and your node will receive the message. "
+      },
+      "after": "3ab70f21a462b4b4",
+      "date": 1502991542184
+    },
+    {
+      "type": "add",
+      "id": "b336be907445809f",
+      "item": {
+        "type": "paragraph",
+        "id": "b336be907445809f",
+        "text": "Messages are routed through connected, subscribed peers. This means that if peers A, B, and C are all subscribed to foo, A is connected to B, and B is connected to C, but A is not directly connected to C, A will still receive messages that C published to foo through B. "
+      },
+      "after": "ec8f9ec0816fadca",
+      "date": 1502991547536
+    },
+    {
+      "type": "add",
+      "id": "c3a1066f39920d49",
+      "item": {
+        "type": "paragraph",
+        "id": "c3a1066f39920d49",
+        "text": "This can be very useful for routing messages in networks with poor NAT traversal or otherwise suboptimal connectivity."
+      },
+      "after": "b336be907445809f",
+      "date": 1502991548961
+    },
+    {
+      "type": "add",
+      "id": "7953ca44c956e216",
+      "item": {
+        "type": "paragraph",
+        "id": "7953ca44c956e216",
+        "text": "To see all peers with pubsub enabled, check the output of:"
+      },
+      "after": "c3a1066f39920d49",
+      "date": 1502991552592
+    },
+    {
+      "type": "add",
+      "id": "d68a74eaef2799d4",
+      "item": {
+        "type": "paragraph",
+        "id": "d68a74eaef2799d4",
+        "text": "\n> ipfs pubsub peers"
+      },
+      "after": "7953ca44c956e216",
+      "date": 1502991554792
+    },
+    {
+      "type": "add",
+      "id": "4e91249af5cb92d9",
+      "item": {
+        "type": "paragraph",
+        "id": "4e91249af5cb92d9",
+        "text": "To see all the topics you are currently subscribed to, run:"
+      },
+      "after": "d68a74eaef2799d4",
+      "date": 1502991556737
+    },
+    {
+      "type": "add",
+      "id": "23634e36465d8fb6",
+      "item": {
+        "type": "paragraph",
+        "id": "23634e36465d8fb6",
+        "text": "\n> ipfs pubsub ls\n"
+      },
+      "after": "4e91249af5cb92d9",
+      "date": 1502991559528
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f96b98a9eed01017"
+      },
+      "id": "f96b98a9eed01017",
+      "type": "add",
+      "after": "23634e36465d8fb6",
+      "date": 1502991560845
+    },
+    {
+      "type": "remove",
+      "id": "23634e36465d8fb6",
+      "date": 1502991564238
+    },
+    {
+      "type": "edit",
+      "id": "f96b98a9eed01017",
+      "item": {
+        "type": "code",
+        "id": "f96b98a9eed01017",
+        "text": "ipfs pubsub ls\n"
+      },
+      "date": 1502991570712
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "92003d9010cfb06f"
+      },
+      "id": "92003d9010cfb06f",
+      "type": "add",
+      "after": "f96b98a9eed01017",
+      "date": 1502991572315
+    },
+    {
+      "type": "move",
+      "order": [
+        "a9870f99f9b0373e",
+        "bfe610add627d04d",
+        "74bd72073bfe4856",
+        "2f61a2d15dafa8be",
+        "d2aa109cfb3a896d",
+        "3bc172fefa6fa32a",
+        "d1eb902b50639660",
+        "d5db5cad479419ab",
+        "1d94a149d55fd014",
+        "295fbaa7c34b0364",
+        "2705901e3baffa6a",
+        "c55f5f5891b4d1ce",
+        "587d7ac97fa72724",
+        "3548a4018eea204d",
+        "3ab70f21a462b4b4",
+        "ec8f9ec0816fadca",
+        "b336be907445809f",
+        "c3a1066f39920d49",
+        "7953ca44c956e216",
+        "d68a74eaef2799d4",
+        "92003d9010cfb06f",
+        "4e91249af5cb92d9",
+        "f96b98a9eed01017"
+      ],
+      "id": "92003d9010cfb06f",
+      "date": 1502991573831
+    },
+    {
+      "type": "remove",
+      "id": "d68a74eaef2799d4",
+      "date": 1502991576366
+    },
+    {
+      "type": "edit",
+      "id": "92003d9010cfb06f",
+      "item": {
+        "type": "code",
+        "id": "92003d9010cfb06f",
+        "text": "ipfs pubsub peers"
+      },
+      "date": 1502991581082
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "de39d4b511361bb9"
+      },
+      "id": "de39d4b511361bb9",
+      "type": "add",
+      "after": "f96b98a9eed01017",
+      "date": 1502991582316
+    },
+    {
+      "type": "move",
+      "order": [
+        "a9870f99f9b0373e",
+        "bfe610add627d04d",
+        "74bd72073bfe4856",
+        "2f61a2d15dafa8be",
+        "d2aa109cfb3a896d",
+        "3bc172fefa6fa32a",
+        "d1eb902b50639660",
+        "d5db5cad479419ab",
+        "1d94a149d55fd014",
+        "295fbaa7c34b0364",
+        "2705901e3baffa6a",
+        "c55f5f5891b4d1ce",
+        "587d7ac97fa72724",
+        "3548a4018eea204d",
+        "3ab70f21a462b4b4",
+        "de39d4b511361bb9",
+        "ec8f9ec0816fadca",
+        "b336be907445809f",
+        "c3a1066f39920d49",
+        "7953ca44c956e216",
+        "92003d9010cfb06f",
+        "4e91249af5cb92d9",
+        "f96b98a9eed01017"
+      ],
+      "id": "de39d4b511361bb9",
+      "date": 1502991584632
+    },
+    {
+      "type": "remove",
+      "id": "3ab70f21a462b4b4",
+      "date": 1502991587743
+    },
+    {
+      "type": "edit",
+      "id": "de39d4b511361bb9",
+      "item": {
+        "type": "code",
+        "id": "de39d4b511361bb9",
+        "text": "ipfs pubsub pub foo \"hello world\""
+      },
+      "date": 1502991591463
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "41e966d71c145c8f"
+      },
+      "id": "41e966d71c145c8f",
+      "type": "add",
+      "after": "f96b98a9eed01017",
+      "date": 1502991594657
+    },
+    {
+      "type": "move",
+      "order": [
+        "a9870f99f9b0373e",
+        "bfe610add627d04d",
+        "74bd72073bfe4856",
+        "2f61a2d15dafa8be",
+        "d2aa109cfb3a896d",
+        "3bc172fefa6fa32a",
+        "d1eb902b50639660",
+        "d5db5cad479419ab",
+        "1d94a149d55fd014",
+        "295fbaa7c34b0364",
+        "2705901e3baffa6a",
+        "c55f5f5891b4d1ce",
+        "41e966d71c145c8f",
+        "587d7ac97fa72724",
+        "3548a4018eea204d",
+        "de39d4b511361bb9",
+        "ec8f9ec0816fadca",
+        "b336be907445809f",
+        "c3a1066f39920d49",
+        "7953ca44c956e216",
+        "92003d9010cfb06f",
+        "4e91249af5cb92d9",
+        "f96b98a9eed01017"
+      ],
+      "id": "41e966d71c145c8f",
+      "date": 1502991596374
+    },
+    {
+      "type": "remove",
+      "id": "c55f5f5891b4d1ce",
+      "date": 1502991598695
+    },
+    {
+      "type": "edit",
+      "id": "41e966d71c145c8f",
+      "item": {
+        "type": "code",
+        "id": "41e966d71c145c8f",
+        "text": "ipfs pubsub sub foo"
+      },
+      "date": 1502991603392
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f518162f00ff0119"
+      },
+      "id": "f518162f00ff0119",
+      "type": "add",
+      "after": "f96b98a9eed01017",
+      "date": 1502991606953
+    },
+    {
+      "type": "move",
+      "order": [
+        "a9870f99f9b0373e",
+        "bfe610add627d04d",
+        "74bd72073bfe4856",
+        "2f61a2d15dafa8be",
+        "d2aa109cfb3a896d",
+        "3bc172fefa6fa32a",
+        "d1eb902b50639660",
+        "d5db5cad479419ab",
+        "1d94a149d55fd014",
+        "f518162f00ff0119",
+        "295fbaa7c34b0364",
+        "2705901e3baffa6a",
+        "41e966d71c145c8f",
+        "587d7ac97fa72724",
+        "3548a4018eea204d",
+        "de39d4b511361bb9",
+        "ec8f9ec0816fadca",
+        "b336be907445809f",
+        "c3a1066f39920d49",
+        "7953ca44c956e216",
+        "92003d9010cfb06f",
+        "4e91249af5cb92d9",
+        "f96b98a9eed01017"
+      ],
+      "id": "f518162f00ff0119",
+      "date": 1502991608964
+    },
+    {
+      "type": "remove",
+      "id": "1d94a149d55fd014",
+      "date": 1502991614062
+    },
+    {
+      "type": "edit",
+      "id": "f518162f00ff0119",
+      "item": {
+        "type": "code",
+        "id": "f518162f00ff0119",
+        "text": "ipfs daemon --enable-pubsub-experiment"
+      },
+      "date": 1502991618393
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "video",
+        "id": "03ea8813e791f3e6",
+        "text": "YOUTUBE -kdx8rJd8rQ\nThis is a tutorial on how to create Distributed Web Applications with CRDT (Conflict-Free Replicated Data Types) and the JavaScript Implementation of IPFS"
+      },
+      "after": "f96b98a9eed01017",
+      "id": "03ea8813e791f3e6",
+      "date": 1502991741301
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "a31e2294361f5d4e",
+        "text": "# References\n\n- js-ipfs - [https://github.com/ipfs/js-ipfs github]\n- Code for the Demo - [https://github.com/ipfs-labs/shared-editing-demo github]"
+      },
+      "after": "03ea8813e791f3e6",
+      "id": "a31e2294361f5d4e",
+      "date": 1502991796171
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3b68316fa7a4ff78"
+      },
+      "id": "3b68316fa7a4ff78",
+      "type": "add",
+      "after": "a31e2294361f5d4e",
+      "date": 1502991804088
+    },
+    {
+      "type": "move",
+      "order": [
+        "a9870f99f9b0373e",
+        "bfe610add627d04d",
+        "74bd72073bfe4856",
+        "2f61a2d15dafa8be",
+        "d2aa109cfb3a896d",
+        "3bc172fefa6fa32a",
+        "d1eb902b50639660",
+        "d5db5cad479419ab",
+        "f518162f00ff0119",
+        "295fbaa7c34b0364",
+        "2705901e3baffa6a",
+        "41e966d71c145c8f",
+        "587d7ac97fa72724",
+        "3548a4018eea204d",
+        "de39d4b511361bb9",
+        "ec8f9ec0816fadca",
+        "b336be907445809f",
+        "c3a1066f39920d49",
+        "7953ca44c956e216",
+        "92003d9010cfb06f",
+        "4e91249af5cb92d9",
+        "f96b98a9eed01017",
+        "3b68316fa7a4ff78",
+        "03ea8813e791f3e6",
+        "a31e2294361f5d4e"
+      ],
+      "id": "3b68316fa7a4ff78",
+      "date": 1502991807318
+    },
+    {
+      "type": "edit",
+      "id": "3b68316fa7a4ff78",
+      "item": {
+        "type": "markdown",
+        "id": "3b68316fa7a4ff78",
+        "text": "# Pubsub in the wild\n\nIn the video and links below yo can see how you might use ipfs pubsub to build a collaborative editor - [https://ipfs.io/blog/25-pubsub/ ipfs.io]"
+      },
+      "date": 1502991878364
+    }
+  ]
+}

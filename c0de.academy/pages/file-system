@@ -1,0 +1,599 @@
+{
+  "title": "File System",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8c79680e8816b966",
+      "text": "A file system is used to control how data is stored and retrieved - [https://en.wikipedia.org/wiki/File_system wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "93f021e865786930",
+      "text": "By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified."
+    },
+    {
+      "type": "reference",
+      "id": "8fd0d3e77b9151b8",
+      "site": "c0de.academy",
+      "slug": "fuse",
+      "title": "FUSE",
+      "text": "Filesystem in Userspace (FUSE) is an operating system mechanism for Unix-like computer operating systems that lets non-privileged users create their own file systems without editing kernel code - [https://en.wikipedia.org/wiki/Filesystem_in_Userspace wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "9c75ad46ddf4f26a",
+      "text": "See \"How to Mount [[EXT4]] Linux File Systems on a Mac with OS X [[Fuse]]\" - [http://osxdaily.com/2014/03/20/mount-ext-linux-file-system-mac/ osxdaily.com]"
+    },
+    {
+      "type": "reference",
+      "id": "a962f17cf63c7f36",
+      "site": "c0de.academy",
+      "slug": "ssh-filesystem",
+      "title": "SSH Filesystem",
+      "text": "This is a filesystem client based on the SSH File Transfer Protocol. "
+    },
+    {
+      "type": "reference",
+      "id": "f8f49fbe93ac8f63",
+      "site": "c0de.academy",
+      "slug": "pachyderm-file-system",
+      "title": "Pachyderm File System",
+      "text": "Pachyderm is a distributed file system and analytics engine built specifically for containerized infrastructures."
+    },
+    {
+      "type": "html",
+      "id": "92659f5a7946c7d1",
+      "text": "<H3>Unix File Systems"
+    },
+    {
+      "type": "paragraph",
+      "id": "53a5c0f87524cff9",
+      "text": "Unix-like operating systems create a virtual file system, which makes all the files on all the devices appear to exist in a single hierarchy. This means, in those systems, there is one root directory, and every file existing on the system is located under it somewhere. Unix-like systems can use a RAM disk or network shared resource as its root directory."
+    },
+    {
+      "type": "html",
+      "id": "d92714c9f0edac2b",
+      "text": "<H3>Mounting a File System"
+    },
+    {
+      "type": "paragraph",
+      "id": "080980b31fb5c272",
+      "text": "Unix-like systems assign a device name to each device, but this is not how the files on that device are accessed. Instead, to gain access to files on another device, the operating system must first be informed where in the directory tree those files should appear. This process is called mounting a file system. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f01196d3f9b475ce",
+      "text": "For example, to access the files on a CD-ROM, one must tell the operating system:"
+    },
+    {
+      "type": "code",
+      "id": "87fc8c2295994f3d",
+      "text": "Take the file system from this CD-ROM and make it appear under such-and-such directory."
+    },
+    {
+      "type": "paragraph",
+      "id": "e8faa84aa85ee701",
+      "text": "The directory given to the operating system is called the mount point – it might, for example, be /media. "
+    },
+    {
+      "type": "paragraph",
+      "id": "7a389ab9807fed72",
+      "text": "The /media directory exists on many Unix systems (as specified in the Filesystem Hierarchy Standard) and is intended specifically for use as a mount point for removable media such as CDs, DVDs, USB drives or floppy disks. It may be empty, or it may contain subdirectories for mounting individual devices. "
+    },
+    {
+      "type": "paragraph",
+      "id": "ef199098492744f4",
+      "text": "Generally, only the administrator (i.e. root user) may authorize the mounting of file systems.\n\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "File System",
+        "story": []
+      },
+      "date": 1433261579746
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8c79680e8816b966"
+      },
+      "id": "8c79680e8816b966",
+      "type": "add",
+      "date": 1433261580905
+    },
+    {
+      "type": "edit",
+      "id": "8c79680e8816b966",
+      "item": {
+        "type": "paragraph",
+        "id": "8c79680e8816b966",
+        "text": "[[SSH Filesystem]]"
+      },
+      "date": 1433261601516
+    },
+    {
+      "type": "add",
+      "id": "8c1716f0b9b7d1c7",
+      "item": {
+        "type": "paragraph",
+        "id": "8c1716f0b9b7d1c7",
+        "text": "This is a filesystem client based on the SSH File Transfer Protocol. Since most SSH servers already support this protocol it is very easy to set up: i.e. on the server side there's nothing to do.  On the client side mounting the filesystem is as easy as logging into the server with ssh.\n\nThe idea of sshfs was taken from the SSHFS filesystem distributed with LUFS, which I found very useful.  There were some limitations of that codebase, so I rewrote it.  Features of this implementation are:\n\n    Based on FUSE (the best userspace filesystem framework for linux ;-)\n    Multithreading: more than one request can be on it's way to the server\n    Allowing large reads (max 64k)\n    Caching directory contents\n"
+      },
+      "after": "8c79680e8816b966",
+      "date": 1433261604892
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8fd0d3e77b9151b8"
+      },
+      "id": "8fd0d3e77b9151b8",
+      "type": "add",
+      "after": "8c1716f0b9b7d1c7",
+      "date": 1433261621285
+    },
+    {
+      "type": "edit",
+      "id": "8fd0d3e77b9151b8",
+      "item": {
+        "type": "reference",
+        "id": "8fd0d3e77b9151b8",
+        "site": "c0de.academy",
+        "slug": "fuse",
+        "title": "FUSE",
+        "text": "Filesystem in Userspace (FUSE) is an operating system mechanism for Unix-like computer operating systems that lets non-privileged users create their own file systems without editing kernel code - [https://en.wikipedia.org/wiki/Filesystem_in_Userspace wikipedia]"
+      },
+      "date": 1433261623414
+    },
+    {
+      "type": "remove",
+      "id": "8c1716f0b9b7d1c7",
+      "date": 1433262560190
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a962f17cf63c7f36"
+      },
+      "id": "a962f17cf63c7f36",
+      "type": "add",
+      "after": "8fd0d3e77b9151b8",
+      "date": 1433262676426
+    },
+    {
+      "type": "edit",
+      "id": "a962f17cf63c7f36",
+      "item": {
+        "type": "reference",
+        "id": "a962f17cf63c7f36",
+        "site": "c0de.academy",
+        "slug": "ssh-filesystem",
+        "title": "SSH Filesystem",
+        "text": "This is a filesystem client based on the SSH File Transfer Protocol. "
+      },
+      "date": 1433262677968
+    },
+    {
+      "type": "edit",
+      "id": "8c79680e8816b966",
+      "item": {
+        "type": "paragraph",
+        "id": "8c79680e8816b966",
+        "text": "A file system is used to control how data is stored and retrieved. Without a file system, information placed in a storage area would be one large body of data with no way to tell where one piece of information stops and the next begins."
+      },
+      "date": 1433262743123
+    },
+    {
+      "type": "add",
+      "id": "93f021e865786930",
+      "item": {
+        "type": "paragraph",
+        "id": "93f021e865786930",
+        "text": "By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified. Taking its name from the way paper-based information systems are named, each group of data is called a \"file\". The structure and logic rules used to manage the groups of information and their names is called a \"file system\"."
+      },
+      "after": "8c79680e8816b966",
+      "date": 1433262761344
+    },
+    {
+      "type": "edit",
+      "id": "8c79680e8816b966",
+      "item": {
+        "type": "paragraph",
+        "id": "8c79680e8816b966",
+        "text": "A file system is used to control how data is stored and retrieved."
+      },
+      "date": 1433262765112
+    },
+    {
+      "type": "edit",
+      "id": "93f021e865786930",
+      "item": {
+        "type": "paragraph",
+        "id": "93f021e865786930",
+        "text": "By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified. "
+      },
+      "date": 1433262772972
+    },
+    {
+      "type": "add",
+      "id": "f38b5ffa9b54a9e5",
+      "item": {
+        "type": "paragraph",
+        "id": "f38b5ffa9b54a9e5",
+        "text": "Taking its name from the way paper-based information systems are named, each group of data is called a \"file\". The structure and logic rules used to manage the groups of information and their names is called a \"file system\"."
+      },
+      "after": "93f021e865786930",
+      "date": 1433262774483
+    },
+    {
+      "type": "remove",
+      "id": "f38b5ffa9b54a9e5",
+      "date": 1433262783350
+    },
+    {
+      "type": "edit",
+      "id": "8c79680e8816b966",
+      "item": {
+        "type": "paragraph",
+        "id": "8c79680e8816b966",
+        "text": "A file system is used to control how data is stored and retrieved - [https://en.wikipedia.org/wiki/File_system wikipedia]"
+      },
+      "date": 1433262798982
+    },
+    {
+      "type": "add",
+      "id": "92659f5a7946c7d1",
+      "item": {
+        "type": "paragraph",
+        "id": "92659f5a7946c7d1",
+        "text": "Unix-like operating systems create a virtual file system, which makes all the files on all the devices appear to exist in a single hierarchy. This means, in those systems, there is one root directory, and every file existing on the system is located under it somewhere. Unix-like systems can use a RAM disk or network shared resource as its root directory.\n\nUnix-like systems assign a device name to each device, but this is not how the files on that device are accessed. Instead, to gain access to files on another device, the operating system must first be informed where in the directory tree those files should appear. This process is called mounting a file system. For example, to access the files on a CD-ROM, one must tell the operating system \"Take the file system from this CD-ROM and make it appear under such-and-such directory\". The directory given to the operating system is called the mount point – it might, for example, be /media. The /media directory exists on many Unix systems (as specified in the Filesystem Hierarchy Standard) and is intended specifically for use as a mount point for removable media such as CDs, DVDs, USB drives or floppy disks. It may be empty, or it may contain subdirectories for mounting individual devices. Generally, only the administrator (i.e. root user) may authorize the mounting of file systems.\n\n"
+      },
+      "after": "93f021e865786930",
+      "date": 1433262914306
+    },
+    {
+      "type": "move",
+      "order": [
+        "8c79680e8816b966",
+        "93f021e865786930",
+        "8fd0d3e77b9151b8",
+        "a962f17cf63c7f36",
+        "92659f5a7946c7d1"
+      ],
+      "id": "92659f5a7946c7d1",
+      "date": 1433262916965
+    },
+    {
+      "type": "edit",
+      "id": "92659f5a7946c7d1",
+      "item": {
+        "type": "paragraph",
+        "id": "92659f5a7946c7d1",
+        "text": "Unix File Systems"
+      },
+      "date": 1433262931334
+    },
+    {
+      "type": "add",
+      "id": "53a5c0f87524cff9",
+      "item": {
+        "type": "paragraph",
+        "id": "53a5c0f87524cff9",
+        "text": "Unix-like operating systems create a virtual file system, which makes all the files on all the devices appear to exist in a single hierarchy. This means, in those systems, there is one root directory, and every file existing on the system is located under it somewhere. Unix-like systems can use a RAM disk or network shared resource as its root directory.\n\nUnix-like systems assign a device name to each device, but this is not how the files on that device are accessed. Instead, to gain access to files on another device, the operating system must first be informed where in the directory tree those files should appear. This process is called mounting a file system. For example, to access the files on a CD-ROM, one must tell the operating system \"Take the file system from this CD-ROM and make it appear under such-and-such directory\". The directory given to the operating system is called the mount point – it might, for example, be /media. The /media directory exists on many Unix systems (as specified in the Filesystem Hierarchy Standard) and is intended specifically for use as a mount point for removable media such as CDs, DVDs, USB drives or floppy disks. It may be empty, or it may contain subdirectories for mounting individual devices. Generally, only the administrator (i.e. root user) may authorize the mounting of file systems.\n\n"
+      },
+      "after": "92659f5a7946c7d1",
+      "date": 1433262932583
+    },
+    {
+      "type": "edit",
+      "id": "92659f5a7946c7d1",
+      "item": {
+        "type": "paragraph",
+        "id": "92659f5a7946c7d1",
+        "text": "<H3>Unix File Systems"
+      },
+      "date": 1433262936988
+    },
+    {
+      "type": "edit",
+      "id": "92659f5a7946c7d1",
+      "item": {
+        "type": "html",
+        "id": "92659f5a7946c7d1",
+        "text": "<H3>Unix File Systems"
+      },
+      "date": 1433262938138
+    },
+    {
+      "type": "edit",
+      "id": "53a5c0f87524cff9",
+      "item": {
+        "type": "paragraph",
+        "id": "53a5c0f87524cff9",
+        "text": "Unix-like operating systems create a virtual file system, which makes all the files on all the devices appear to exist in a single hierarchy. This means, in those systems, there is one root directory, and every file existing on the system is located under it somewhere. Unix-like systems can use a RAM disk or network shared resource as its root directory."
+      },
+      "date": 1433262955618
+    },
+    {
+      "type": "add",
+      "id": "d92714c9f0edac2b",
+      "item": {
+        "type": "paragraph",
+        "id": "d92714c9f0edac2b",
+        "text": "<H3>Mounting a File System"
+      },
+      "after": "53a5c0f87524cff9",
+      "date": 1433262968643
+    },
+    {
+      "type": "edit",
+      "id": "d92714c9f0edac2b",
+      "item": {
+        "type": "html",
+        "id": "d92714c9f0edac2b",
+        "text": "<H3>Mounting a File System"
+      },
+      "date": 1433262969768
+    },
+    {
+      "type": "add",
+      "id": "080980b31fb5c272",
+      "item": {
+        "type": "paragraph",
+        "id": "080980b31fb5c272",
+        "text": "Unix-like systems assign a device name to each device, but this is not how the files on that device are accessed. Instead, to gain access to files on another device, the operating system must first be informed where in the directory tree those files should appear. This process is called mounting a file system. "
+      },
+      "after": "d92714c9f0edac2b",
+      "date": 1433262976988
+    },
+    {
+      "type": "add",
+      "id": "f01196d3f9b475ce",
+      "item": {
+        "type": "paragraph",
+        "id": "f01196d3f9b475ce",
+        "text": "For example, to access the files on a CD-ROM, one must tell the operating system:"
+      },
+      "after": "080980b31fb5c272",
+      "date": 1433262986347
+    },
+    {
+      "type": "add",
+      "id": "bebae330acde979f",
+      "item": {
+        "type": "paragraph",
+        "id": "bebae330acde979f",
+        "text": "\"Take the file system from this CD-ROM and make it appear under such-and-such directory\"."
+      },
+      "after": "f01196d3f9b475ce",
+      "date": 1433262992066
+    },
+    {
+      "type": "add",
+      "id": "e8faa84aa85ee701",
+      "item": {
+        "type": "paragraph",
+        "id": "e8faa84aa85ee701",
+        "text": "The directory given to the operating system is called the mount point – it might, for example, be /media. The /media directory exists on many Unix systems (as specified in the Filesystem Hierarchy Standard) and is intended specifically for use as a mount point for removable media such as CDs, DVDs, USB drives or floppy disks. It may be empty, or it may contain subdirectories for mounting individual devices. "
+      },
+      "after": "bebae330acde979f",
+      "date": 1433263018430
+    },
+    {
+      "type": "add",
+      "id": "ef199098492744f4",
+      "item": {
+        "type": "paragraph",
+        "id": "ef199098492744f4",
+        "text": "Generally, only the administrator (i.e. root user) may authorize the mounting of file systems.\n\n"
+      },
+      "after": "e8faa84aa85ee701",
+      "date": 1433263020794
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "87fc8c2295994f3d"
+      },
+      "id": "87fc8c2295994f3d",
+      "type": "add",
+      "after": "ef199098492744f4",
+      "date": 1433263029612
+    },
+    {
+      "type": "remove",
+      "id": "bebae330acde979f",
+      "date": 1433263030898
+    },
+    {
+      "type": "edit",
+      "id": "87fc8c2295994f3d",
+      "item": {
+        "type": "code",
+        "id": "87fc8c2295994f3d",
+        "text": "Take the file system from this CD-ROM and make it appear under such-and-such directory."
+      },
+      "date": 1433263036772
+    },
+    {
+      "type": "move",
+      "order": [
+        "8c79680e8816b966",
+        "93f021e865786930",
+        "8fd0d3e77b9151b8",
+        "a962f17cf63c7f36",
+        "92659f5a7946c7d1",
+        "53a5c0f87524cff9",
+        "d92714c9f0edac2b",
+        "080980b31fb5c272",
+        "f01196d3f9b475ce",
+        "87fc8c2295994f3d",
+        "e8faa84aa85ee701",
+        "ef199098492744f4"
+      ],
+      "id": "87fc8c2295994f3d",
+      "date": 1433263039039
+    },
+    {
+      "type": "edit",
+      "id": "e8faa84aa85ee701",
+      "item": {
+        "type": "paragraph",
+        "id": "e8faa84aa85ee701",
+        "text": "The directory given to the operating system is called the mount point – it might, for example, be /media. "
+      },
+      "date": 1433263047607
+    },
+    {
+      "type": "add",
+      "id": "7a389ab9807fed72",
+      "item": {
+        "type": "paragraph",
+        "id": "7a389ab9807fed72",
+        "text": "The /media directory exists on many Unix systems (as specified in the Filesystem Hierarchy Standard) and is intended specifically for use as a mount point for removable media such as CDs, DVDs, USB drives or floppy disks. It may be empty, or it may contain subdirectories for mounting individual devices. "
+      },
+      "after": "e8faa84aa85ee701",
+      "date": 1433263047910
+    },
+    {
+      "type": "edit",
+      "id": "93f021e865786930",
+      "item": {
+        "type": "paragraph",
+        "id": "93f021e865786930",
+        "text": "By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified."
+      },
+      "date": 1433263116214
+    },
+    {
+      "type": "add",
+      "id": "9c75ad46ddf4f26a",
+      "item": {
+        "type": "paragraph",
+        "id": "9c75ad46ddf4f26a",
+        "text": "See [http://osxdaily.com/2014/03/20/mount-ext-linux-file-system-mac/ "
+      },
+      "after": "93f021e865786930",
+      "date": 1433263131680
+    },
+    {
+      "type": "edit",
+      "id": "9c75ad46ddf4f26a",
+      "item": {
+        "type": "paragraph",
+        "id": "9c75ad46ddf4f26a",
+        "text": "See \"How to Mount [[EXT4]] Linux File Systems on a Mac with OS X [[Fuse]]\" - [http://osxdaily.com/2014/03/20/mount-ext-linux-file-system-mac/ osxdaily.com]"
+      },
+      "date": 1433263155775
+    },
+    {
+      "type": "move",
+      "order": [
+        "8c79680e8816b966",
+        "93f021e865786930",
+        "8fd0d3e77b9151b8",
+        "9c75ad46ddf4f26a",
+        "a962f17cf63c7f36",
+        "92659f5a7946c7d1",
+        "53a5c0f87524cff9",
+        "d92714c9f0edac2b",
+        "080980b31fb5c272",
+        "f01196d3f9b475ce",
+        "87fc8c2295994f3d",
+        "e8faa84aa85ee701",
+        "7a389ab9807fed72",
+        "ef199098492744f4"
+      ],
+      "id": "9c75ad46ddf4f26a",
+      "date": 1433263158334
+    },
+    {
+      "type": "fork",
+      "site": "c0de.academy",
+      "date": 1434535956565
+    },
+    {
+      "type": "add",
+      "id": "61138f87c42b8100",
+      "item": {
+        "type": "paragraph",
+        "id": "61138f87c42b8100",
+        "text": "[[Pachyderm File System]]"
+      },
+      "after": "9c75ad46ddf4f26a",
+      "site": "c0de.academy",
+      "date": 1434535956560
+    },
+    {
+      "type": "fork",
+      "date": 1434535979517
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f8f49fbe93ac8f63"
+      },
+      "id": "f8f49fbe93ac8f63",
+      "type": "add",
+      "after": "ef199098492744f4",
+      "date": 1434536194841
+    },
+    {
+      "type": "edit",
+      "id": "f8f49fbe93ac8f63",
+      "item": {
+        "type": "reference",
+        "id": "f8f49fbe93ac8f63",
+        "site": "c0de.academy",
+        "slug": "pachyderm-file-system",
+        "title": "Pachyderm File System",
+        "text": "Pachyderm is a distributed file system and analytics engine built specifically for containerized infrastructures. You deploy it with [[Docker]], just like the other applications in your stack. Furthermore, analysis jobs are specified as containers, rather than .jars, letting you perform distributed computation using any tools you want - [https://github.com/pachyderm/pfs/ github]"
+      },
+      "date": 1434536196185
+    },
+    {
+      "type": "edit",
+      "id": "f8f49fbe93ac8f63",
+      "item": {
+        "type": "reference",
+        "id": "f8f49fbe93ac8f63",
+        "site": "c0de.academy",
+        "slug": "pachyderm-file-system",
+        "title": "Pachyderm File System",
+        "text": "Pachyderm is a distributed file system and analytics engine built specifically for containerized infrastructures."
+      },
+      "date": 1434536206737
+    },
+    {
+      "type": "move",
+      "order": [
+        "8c79680e8816b966",
+        "93f021e865786930",
+        "8fd0d3e77b9151b8",
+        "9c75ad46ddf4f26a",
+        "61138f87c42b8100",
+        "a962f17cf63c7f36",
+        "f8f49fbe93ac8f63",
+        "92659f5a7946c7d1",
+        "53a5c0f87524cff9",
+        "d92714c9f0edac2b",
+        "080980b31fb5c272",
+        "f01196d3f9b475ce",
+        "87fc8c2295994f3d",
+        "e8faa84aa85ee701",
+        "7a389ab9807fed72",
+        "ef199098492744f4"
+      ],
+      "id": "f8f49fbe93ac8f63",
+      "date": 1434536236826
+    },
+    {
+      "type": "remove",
+      "id": "61138f87c42b8100",
+      "date": 1434536239809
+    }
+  ]
+}

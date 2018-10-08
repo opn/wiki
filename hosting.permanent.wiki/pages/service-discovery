@@ -1,0 +1,459 @@
+{
+  "title": "Service Discovery",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "170ebed7f6012f32",
+      "text": "Service discovery is one of the most important features of a functioning clustered environment.\nWhen applications are being launched on random ports, on a potentially large group of hosts, your applications need to know how to find the services they need to function.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "95569a543915cf35",
+      "text": "In order for this to occur, the following typically has to happen:\n\n- Your application has to register itself with the discovery system\n- Your application has to deregister itself when it shuts down\n- Something else has to perform those tasks on behalf of your application\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2912ca605b3671b8",
+      "text": "Most of these options are a pain to implement or require changes in your code. With our solution you don't need to change anything if you're already using environment variables for setting application configuration."
+    },
+    {
+      "type": "paragraph",
+      "id": "4d922eb895fa4ffa",
+      "text": "The Containership discovery system is an integration of Quarry, our internal DNS system, a special HaProxy based container (running with a 1 per_host Constraint), Automatically Added Environment Variables, and the application specific _discovery_port_.\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "aa3af140d7b15f00",
+      "text": "Every Application you launch on Containership has a few important settings that allow for zero hassle discovery.\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "9d49efafd8f970dd",
+      "text": "\"id\": \"my-app\",\n\"discovery_port\": 10542"
+    },
+    {
+      "type": "paragraph",
+      "id": "e505e613c8ec896f",
+      "text": "The id of the application is used to reference it by name and the _discovery_port_\nis a static port assigned to the application globally across the cluster."
+    },
+    {
+      "type": "paragraph",
+      "id": "1210aed23a1e3b5d",
+      "text": "Any request made to a follower host on that application's _discovery_port_\nwill access the corresponding containers for that application. This includes containers\nthat could be (and in many cases are) running on different follower hosts.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "0a964c80e74288da",
+      "text": "# Tying it together with Environment Variables\n\nIntegrating service discovery into your application is easy, and does not require any\nlibraries or code changes."
+    },
+    {
+      "type": "paragraph",
+      "id": "34f0c0890f5dad1d",
+      "text": "Let's imagine that somewhere in your 'my-app' code, you need to configure your application to access an API that you already have running called 'my-api'. All you need to do is use an environment variable in your code, that we will reference later when launching 'my-app'.\n\nFor example:"
+    },
+    {
+      "type": "code",
+      "id": "a050f440266d4180",
+      "text": "var apiName = process.ENV.API_NAME"
+    },
+    {
+      "type": "markdown",
+      "id": "73e2d05047fcd4d5",
+      "text": "# Utilizing\n\nWhen you are ready to launch the 'my-app' application to test it, all you need to do is\nset the API_NAME environment variable to the name of the application that you want to access, followed by $cluster-id.containership . In this case it's the 'my-api' application."
+    },
+    {
+      "type": "code",
+      "id": "d0cfdba5547680a1",
+      "text": "\"env_vars\" : { \"API_NAME\": \"my-api.$cluster-id.containership\"}"
+    },
+    {
+      "type": "paragraph",
+      "id": "69bbfa1a8d04a6e3",
+      "text": "Traffic will be automatically load balanced across all of the available 'my-api' containers.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8b55ad40752ce2ae",
+      "text": "# Pro Tip\n\nWhen using the Cloud Ui or Navigator it's even easier as we create environment variables for each application that allow you to reference the discovery_port and address of any application you have running. See Application Linking."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Service Discovery",
+        "story": []
+      },
+      "date": 1497365242440
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "170ebed7f6012f32"
+      },
+      "id": "170ebed7f6012f32",
+      "type": "add",
+      "date": 1497365243587
+    },
+    {
+      "type": "edit",
+      "id": "170ebed7f6012f32",
+      "item": {
+        "type": "paragraph",
+        "id": "170ebed7f6012f32",
+        "text": "Service discovery is one of the most important features of a functioning clustered environment.\nWhen applications are being launched on random ports, on a potentially large group of hosts, your applications need to know how to find the services they need to function.\n\nIn order for this to occur, the following typically has to happen:\n\nYour application has to register itself with the discovery system\nYour application has to deregister itself when it shuts down\nSomething else has to perform those tasks on behalf of your application\nMost of these options are a pain to implement or require changes in your code. With our solution you don't need to change anything if you're already using environment variables for setting application configuration.\n\nThe Containership discovery system is an integration of Quarry, our internal DNS system, a special HaProxy based container (running with a 1 per_host Constraint), Automatically Added Environment Variables, and the application specific _discovery_port_.\n\nEvery Application you launch on Containership has a few important settings that allow for zero hassle discovery.\n\n\"id\": \"my-app\",\n\"discovery_port\": 10542\nThe id of the application is used to reference it by name and the _discovery_port_\nis a static port assigned to the application globally across the cluster.\n\nAny request made to a follower host on that application's _discovery_port_\nwill access the corresponding containers for that application. This includes containers\nthat could be (and in many cases are) running on different follower hosts.\n\nTying it together with Environment Variables\n\nIntegrating service discovery into your application is easy, and does not require any\nlibraries or code changes.\n\nLet's imagine that somewhere in your 'my-app' code, you need to configure your application to access an API that you already have running called 'my-api'. All you need to do is use an environment variable in your code, that we will reference later when launching 'my-app'.\n\nFor example:\n\n        var apiName = process.ENV.API_NAME\nUtilizing\n\nWhen you are ready to launch the 'my-app' application to test it, all you need to do is\nset the API_NAME environment variable to the name of the application that you want to access, followed by $cluster-id.containership . In this case it's the 'my-api' application.\n\n\"env_vars\" : { \"API_NAME\": \"my-api.$cluster-id.containership\"}\nTraffic will be automatically load balanced across all of the available 'my-api' containers.\n\n"
+      },
+      "date": 1497365254787
+    },
+    {
+      "type": "add",
+      "id": "8b55ad40752ce2ae",
+      "item": {
+        "type": "paragraph",
+        "id": "8b55ad40752ce2ae",
+        "text": "# Pro Tip\n\nWhen using the Cloud Ui or Navigator it's even easier as we create environment variables for each application that allow you to reference the discovery_port and address of any application you have running. See Application Linking."
+      },
+      "after": "170ebed7f6012f32",
+      "date": 1497365256537
+    },
+    {
+      "type": "edit",
+      "id": "170ebed7f6012f32",
+      "item": {
+        "type": "paragraph",
+        "id": "170ebed7f6012f32",
+        "text": "Service discovery is one of the most important features of a functioning clustered environment.\nWhen applications are being launched on random ports, on a potentially large group of hosts, your applications need to know how to find the services they need to function.\n\n"
+      },
+      "date": 1497365268568
+    },
+    {
+      "type": "add",
+      "id": "95569a543915cf35",
+      "item": {
+        "type": "paragraph",
+        "id": "95569a543915cf35",
+        "text": "In order for this to occur, the following typically has to happen:\n\n- Your application has to register itself with the discovery system\n- Your application has to deregister itself when it shuts down\n- Something else has to perform those tasks on behalf of your application\n"
+      },
+      "after": "170ebed7f6012f32",
+      "date": 1497365279897
+    },
+    {
+      "type": "add",
+      "id": "2912ca605b3671b8",
+      "item": {
+        "type": "paragraph",
+        "id": "2912ca605b3671b8",
+        "text": "Most of these options are a pain to implement or require changes in your code. With our solution you don't need to change anything if you're already using environment variables for setting application configuration."
+      },
+      "after": "95569a543915cf35",
+      "date": 1497365281735
+    },
+    {
+      "type": "add",
+      "id": "4d922eb895fa4ffa",
+      "item": {
+        "type": "paragraph",
+        "id": "4d922eb895fa4ffa",
+        "text": "The Containership discovery system is an integration of Quarry, our internal DNS system, a special HaProxy based container (running with a 1 per_host Constraint), Automatically Added Environment Variables, and the application specific _discovery_port_.\n\n"
+      },
+      "after": "2912ca605b3671b8",
+      "date": 1497365288377
+    },
+    {
+      "type": "add",
+      "id": "aa3af140d7b15f00",
+      "item": {
+        "type": "paragraph",
+        "id": "aa3af140d7b15f00",
+        "text": "Every Application you launch on Containership has a few important settings that allow for zero hassle discovery.\n\n"
+      },
+      "after": "4d922eb895fa4ffa",
+      "date": 1497365292190
+    },
+    {
+      "type": "add",
+      "id": "9d49efafd8f970dd",
+      "item": {
+        "type": "paragraph",
+        "id": "9d49efafd8f970dd",
+        "text": "\"id\": \"my-app\",\n\"discovery_port\": 10542\n"
+      },
+      "after": "aa3af140d7b15f00",
+      "date": 1497365294128
+    },
+    {
+      "type": "add",
+      "id": "e505e613c8ec896f",
+      "item": {
+        "type": "paragraph",
+        "id": "e505e613c8ec896f",
+        "text": "The id of the application is used to reference it by name and the _discovery_port_\nis a static port assigned to the application globally across the cluster.\n\n"
+      },
+      "after": "9d49efafd8f970dd",
+      "date": 1497365296321
+    },
+    {
+      "type": "add",
+      "id": "1210aed23a1e3b5d",
+      "item": {
+        "type": "paragraph",
+        "id": "1210aed23a1e3b5d",
+        "text": "Any request made to a follower host on that application's _discovery_port_\nwill access the corresponding containers for that application. This includes containers\nthat could be (and in many cases are) running on different follower hosts.\n\n"
+      },
+      "after": "e505e613c8ec896f",
+      "date": 1497365302937
+    },
+    {
+      "type": "add",
+      "id": "0a964c80e74288da",
+      "item": {
+        "type": "paragraph",
+        "id": "0a964c80e74288da",
+        "text": "# Tying it together with Environment Variables\n\nIntegrating service discovery into your application is easy, and does not require any\nlibraries or code changes.\n\nLet's imagine that somewhere in your 'my-app' code, you need to configure your application to access an API that you already have running called 'my-api'. All you need to do is use an environment variable in your code, that we will reference later when launching 'my-app'.\n\nFor example:"
+      },
+      "after": "1210aed23a1e3b5d",
+      "date": 1497365312113
+    },
+    {
+      "type": "edit",
+      "id": "0a964c80e74288da",
+      "item": {
+        "type": "markdown",
+        "id": "0a964c80e74288da",
+        "text": "# Tying it together with Environment Variables\n\nIntegrating service discovery into your application is easy, and does not require any\nlibraries or code changes.\n\nLet's imagine that somewhere in your 'my-app' code, you need to configure your application to access an API that you already have running called 'my-api'. All you need to do is use an environment variable in your code, that we will reference later when launching 'my-app'.\n\nFor example:"
+      },
+      "date": 1497365314120
+    },
+    {
+      "type": "add",
+      "id": "34f0c0890f5dad1d",
+      "item": {
+        "type": "paragraph",
+        "id": "34f0c0890f5dad1d",
+        "text": "\n        var apiName = process.ENV.API_NAME\nUtilizing\n\nWhen you are ready to launch the 'my-app' application to test it, all you need to do is\nset the API_NAME environment variable to the name of the application that you want to access, followed by $cluster-id.containership . In this case it's the 'my-api' application.\n\n\"env_vars\" : { \"API_NAME\": \"my-api.$cluster-id.containership\"}\nTraffic will be automatically load balanced across all of the available 'my-api' containers.\n\n"
+      },
+      "after": "0a964c80e74288da",
+      "date": 1497365315854
+    },
+    {
+      "type": "edit",
+      "id": "8b55ad40752ce2ae",
+      "item": {
+        "type": "markdown",
+        "id": "8b55ad40752ce2ae",
+        "text": "# Pro Tip\n\nWhen using the Cloud Ui or Navigator it's even easier as we create environment variables for each application that allow you to reference the discovery_port and address of any application you have running. See Application Linking."
+      },
+      "date": 1497365323129
+    },
+    {
+      "type": "edit",
+      "id": "95569a543915cf35",
+      "item": {
+        "type": "markdown",
+        "id": "95569a543915cf35",
+        "text": "In order for this to occur, the following typically has to happen:\n\n- Your application has to register itself with the discovery system\n- Your application has to deregister itself when it shuts down\n- Something else has to perform those tasks on behalf of your application\n"
+      },
+      "date": 1497365328635
+    },
+    {
+      "type": "edit",
+      "id": "9d49efafd8f970dd",
+      "item": {
+        "type": "paragraph",
+        "id": "9d49efafd8f970dd",
+        "text": "\"id\": \"my-app\",\n\"discovery_port\": 10542"
+      },
+      "date": 1497365339722
+    },
+    {
+      "type": "edit",
+      "id": "e505e613c8ec896f",
+      "item": {
+        "type": "paragraph",
+        "id": "e505e613c8ec896f",
+        "text": "The id of the application is used to reference it by name and the _discovery_port_\nis a static port assigned to the application globally across the cluster."
+      },
+      "date": 1497365342985
+    },
+    {
+      "type": "edit",
+      "id": "0a964c80e74288da",
+      "item": {
+        "type": "markdown",
+        "id": "0a964c80e74288da",
+        "text": "# Tying it together with Environment Variables\n\nIntegrating service discovery into your application is easy, and does not require any\nlibraries or code changes."
+      },
+      "date": 1497365351819
+    },
+    {
+      "type": "edit",
+      "id": "34f0c0890f5dad1d",
+      "item": {
+        "type": "paragraph",
+        "id": "34f0c0890f5dad1d",
+        "text": "        var apiName = process.ENV.API_NAME\nUtilizing\n\nWhen you are ready to launch the 'my-app' application to test it, all you need to do is\nset the API_NAME environment variable to the name of the application that you want to access, followed by $cluster-id.containership . In this case it's the 'my-api' application.\n\n\"env_vars\" : { \"API_NAME\": \"my-api.$cluster-id.containership\"}\nTraffic will be automatically load balanced across all of the available 'my-api' containers.\n\n"
+      },
+      "date": 1497365358732
+    },
+    {
+      "type": "edit",
+      "id": "34f0c0890f5dad1d",
+      "item": {
+        "type": "paragraph",
+        "id": "34f0c0890f5dad1d",
+        "text": "Let's imagine that somewhere in your 'my-app' code, you need to configure your application to access an API that you already have running called 'my-api'. All you need to do is use an environment variable in your code, that we will reference later when launching 'my-app'.\n\nFor example:"
+      },
+      "date": 1497365366572
+    },
+    {
+      "type": "add",
+      "id": "e1cf596b1c5426ab",
+      "item": {
+        "type": "paragraph",
+        "id": "e1cf596b1c5426ab",
+        "text": "        var apiName = process.ENV.API_NAME\n"
+      },
+      "after": "34f0c0890f5dad1d",
+      "date": 1497365373611
+    },
+    {
+      "type": "add",
+      "id": "73e2d05047fcd4d5",
+      "item": {
+        "type": "paragraph",
+        "id": "73e2d05047fcd4d5",
+        "text": "# Utilizing\n\nWhen you are ready to launch the 'my-app' application to test it, all you need to do is\nset the API_NAME environment variable to the name of the application that you want to access, followed by $cluster-id.containership . In this case it's the 'my-api' application."
+      },
+      "after": "e1cf596b1c5426ab",
+      "date": 1497365377565
+    },
+    {
+      "type": "add",
+      "id": "33c4cd3a44bd6bc4",
+      "item": {
+        "type": "paragraph",
+        "id": "33c4cd3a44bd6bc4",
+        "text": "\"env_vars\" : { \"API_NAME\": \"my-api.$cluster-id.containership\"}\n"
+      },
+      "after": "73e2d05047fcd4d5",
+      "date": 1497365382638
+    },
+    {
+      "type": "add",
+      "id": "69bbfa1a8d04a6e3",
+      "item": {
+        "type": "paragraph",
+        "id": "69bbfa1a8d04a6e3",
+        "text": "Traffic will be automatically load balanced across all of the available 'my-api' containers.\n\n"
+      },
+      "after": "33c4cd3a44bd6bc4",
+      "date": 1497365383333
+    },
+    {
+      "type": "edit",
+      "id": "73e2d05047fcd4d5",
+      "item": {
+        "type": "markdown",
+        "id": "73e2d05047fcd4d5",
+        "text": "# Utilizing\n\nWhen you are ready to launch the 'my-app' application to test it, all you need to do is\nset the API_NAME environment variable to the name of the application that you want to access, followed by $cluster-id.containership . In this case it's the 'my-api' application."
+      },
+      "date": 1497365384451
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a050f440266d4180"
+      },
+      "id": "a050f440266d4180",
+      "type": "add",
+      "after": "8b55ad40752ce2ae",
+      "date": 1497365387441
+    },
+    {
+      "type": "move",
+      "order": [
+        "170ebed7f6012f32",
+        "95569a543915cf35",
+        "2912ca605b3671b8",
+        "4d922eb895fa4ffa",
+        "aa3af140d7b15f00",
+        "9d49efafd8f970dd",
+        "e505e613c8ec896f",
+        "1210aed23a1e3b5d",
+        "0a964c80e74288da",
+        "34f0c0890f5dad1d",
+        "e1cf596b1c5426ab",
+        "a050f440266d4180",
+        "73e2d05047fcd4d5",
+        "33c4cd3a44bd6bc4",
+        "69bbfa1a8d04a6e3",
+        "8b55ad40752ce2ae"
+      ],
+      "id": "a050f440266d4180",
+      "date": 1497365389221
+    },
+    {
+      "type": "remove",
+      "id": "e1cf596b1c5426ab",
+      "date": 1497365392051
+    },
+    {
+      "type": "edit",
+      "id": "a050f440266d4180",
+      "item": {
+        "type": "code",
+        "id": "a050f440266d4180",
+        "text": "var apiName = process.ENV.API_NAME"
+      },
+      "date": 1497365399936
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d0cfdba5547680a1"
+      },
+      "id": "d0cfdba5547680a1",
+      "type": "add",
+      "after": "8b55ad40752ce2ae",
+      "date": 1497365402206
+    },
+    {
+      "type": "move",
+      "order": [
+        "170ebed7f6012f32",
+        "95569a543915cf35",
+        "2912ca605b3671b8",
+        "4d922eb895fa4ffa",
+        "aa3af140d7b15f00",
+        "9d49efafd8f970dd",
+        "e505e613c8ec896f",
+        "1210aed23a1e3b5d",
+        "0a964c80e74288da",
+        "34f0c0890f5dad1d",
+        "a050f440266d4180",
+        "73e2d05047fcd4d5",
+        "33c4cd3a44bd6bc4",
+        "d0cfdba5547680a1",
+        "69bbfa1a8d04a6e3",
+        "8b55ad40752ce2ae"
+      ],
+      "id": "d0cfdba5547680a1",
+      "date": 1497365403976
+    },
+    {
+      "type": "remove",
+      "id": "33c4cd3a44bd6bc4",
+      "date": 1497365407340
+    },
+    {
+      "type": "edit",
+      "id": "d0cfdba5547680a1",
+      "item": {
+        "type": "code",
+        "id": "d0cfdba5547680a1",
+        "text": "\"env_vars\" : { \"API_NAME\": \"my-api.$cluster-id.containership\"}"
+      },
+      "date": 1497365409814
+    }
+  ]
+}

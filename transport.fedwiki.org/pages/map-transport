@@ -1,0 +1,610 @@
+{
+  "title": "Map Transport",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "4dc2f6de4ee8f7e3",
+      "text": "This [[transport]] accepts dropped urls from [[OpenStreetMap]] and [[Google Maps]]. It also allows you to drag geo-links directly from WikiPedia."
+    },
+    {
+      "type": "markdown",
+      "id": "d660946f37bd9f17",
+      "text": "# Transporter"
+    },
+    {
+      "type": "paragraph",
+      "id": "ccc4200ef10cfe47",
+      "text": "Drop a url on here to see the transported map:"
+    },
+    {
+      "type": "transport",
+      "id": "10ea2af363e51a5f",
+      "text": "POST https://rest.livecode.world/map"
+    },
+    {
+      "type": "markdown",
+      "id": "d3d1a78e016bfe61",
+      "text": "# Use"
+    },
+    {
+      "type": "markdown",
+      "id": "e52e46e66a294553",
+      "text": "See the video below for use. Try yourself with the following links: \n\n- Stonehenge on [https://en.wikipedia.org/wiki/Stonehenge wikipedia]\n- [[OpenStreetMap]] - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]\n- [[Google Maps]] - [https://www.google.co.uk/maps/place/Stonehenge/@51.178882,-1.8612339,13z/data=!4m5!3m4!1s0x4873e63b850af611:0x979170e2bcd3d2dd!8m2!3d51.178882!4d-1.826215 google.co.uk]"
+    },
+    {
+      "type": "video",
+      "id": "b6853287820608f3",
+      "text": "VIMEO 242388014\nA description of how to use the new Fedwiki [[map transport]].\n\n"
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\nthat with [[Google Maps]] the coordinate system does not match 100% with [[OpenStreetMap]] and as apparently as there is no such thing as a projection that can map one on to the other there is no way to correct this in software:\n<p>"
+    },
+    {
+      "type": "markdown",
+      "id": "fe96e7eb507d6d38",
+      "text": "- [https://forum.openstreetmap.org/viewtopic.php?id=18831 forum.openstreetmap.org]\n- [https://gis.stackexchange.com/questions/37483/how-to-adjust-the-difference-between-the-coordinate-from-openstreetmap-and-googl gis.stackexchange.com]\n- Issues in China -[https://gis.stackexchange.com/questions/59931/understanding-the-difference-between-coordinates-projection-in-osm-and-google-ma gis.stackexchange.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "d9f45aae0a436d21",
+      "text": "# Code"
+    },
+    {
+      "type": "paragraph",
+      "id": "ea9468c5087b9b67",
+      "text": "The code for this transporter is written in [[Livecode]]. You can view the source here - [https://gist.github.com/opn/8556bbcc80d118db78ca677f1f1d4fc7 gist]",
+      "alias": "8869c0772777be8e"
+    },
+    {
+      "type": "paragraph",
+      "id": "43c4eba991702cd2",
+      "text": "The function geo_ExtractLatlong() uses some simple text parsing to figure out the lat and long co-ordinates from the url dropped - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2#file-script-stack-map-lc-L117-L153 gist]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bbd20bb952d4b261",
+      "text": "The basic logic for converting degrees, minutes, and seconds into decimal versions of [[Latitude]] and [[Longitude]] can be found here:"
+    },
+    {
+      "type": "code",
+      "id": "8869c0772777be8e",
+      "text": "put sDeg + sMin / 60 + sSec / 3600 into decValue\ngeo_SetNegative decValue, nwse\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "593c8129fe079e33",
+      "text": "The command get_SetNegative takes the information provide (north, south, east, west) and negated the decimal value if needed."
+    },
+    {
+      "type": "code",
+      "id": "4b1981619074e5ff",
+      "text": "command geo_SetNegative @decValue, nwse\n if char 1 of nwse is among the items of \"w,s\" then\n  put -1 * decValue into decValue\n end if\nend geo_SetNegative\n"
+    },
+    {
+      "type": "markdown",
+      "id": "5a4d4c50029ad335",
+      "text": "# To Do"
+    },
+    {
+      "type": "markdown",
+      "id": "4df3cbb35ddb8664",
+      "text": "It should be enhanced to:\n\n- [x] Check geolocation with real examples\n- [ ] Look at API - [https://www.mediawiki.org/wiki/Extension:GeoData mediawiki]\n- [ ] Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n- [ ] Integrate GeoHack.js - [https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n",
+      "alias": "1e7deed8de779e92"
+    },
+    {
+      "type": "markdown",
+      "id": "27e0ffd6ff213c5d",
+      "text": "# Exif GPS Standard"
+    },
+    {
+      "type": "paragraph",
+      "id": "e075ccbb3c4c4220",
+      "text": "According to the [[exif]] standard, there are three \"rational\" fields for each, containing degrees, minutes, and seconds. \n"
+    },
+    {
+      "type": "paragraph",
+      "id": "47b8a943fb5fdc08",
+      "text": "exiftool normalizes imporoper decimal degrees into D,M,S while assigning these values, \n   (exiftool -GPSLongitude=\"0.5 90 63.12345\" junk.jpg\" -> GPS Longitude: 2 deg 1' 3.12\" W\") \n   So if you need decimal degrees, you do dd=x0+x1/60.+x2/3600. and could ignore the non-normalization."
+    },
+    {
+      "type": "code",
+      "id": "bea0b21f206f944d",
+      "text": "$d = $deg + (($min/60) + ($sec/3600));\n   \nGPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\nGPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \nGPS Latitude: 57 deg 38' 56.83\" N\nGPS Longitude: 10 deg 24' 26.79\" E\n   \nGPS Longitude: 10.40744\nGPS Position: 57.64911 10.40744"
+    },
+    {
+      "type": "markdown",
+      "id": "854a288f77a19a55",
+      "text": "# See also\n\n- [[Fedwiki Tools]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Map Transport",
+        "story": [
+          {
+            "type": "paragraph",
+            "id": "4dc2f6de4ee8f7e3",
+            "text": "[[OneTab]] converts all of your tabs into a list. When you need to access the tabs again, you can either restore them individually or all at once."
+          },
+          {
+            "type": "markdown",
+            "id": "d660946f37bd9f17",
+            "text": "# Transporter"
+          },
+          {
+            "type": "paragraph",
+            "id": "ccc4200ef10cfe47",
+            "text": "Drop a url on here to see the json sent to the transport:"
+          },
+          {
+            "type": "transport",
+            "id": "10ea2af363e51a5f",
+            "text": "POST https://rest.livecode.world/mediawiki/importpage"
+          },
+          {
+            "type": "markdown",
+            "id": "d3d1a78e016bfe61",
+            "text": "# Use"
+          },
+          {
+            "type": "paragraph",
+            "id": "e52e46e66a294553",
+            "text": "You can use [[OneTab]] to bookmark sites you like. When you regularly remove your open tabs into a OneTab list, and name that list you have a web page that you can share with others."
+          },
+          {
+            "type": "factory",
+            "id": "b6853287820608f3"
+          },
+          {
+            "type": "paragraph",
+            "id": "2cc9d62877d4533a",
+            "text": "Now with this Fedwiki [[transport]] you are able to store and share these lists in Fedwiki."
+          },
+          {
+            "type": "markdown",
+            "id": "d9f45aae0a436d21",
+            "text": "# Code"
+          },
+          {
+            "type": "paragraph",
+            "id": "ea9468c5087b9b67",
+            "text": "The code for this transporter is written in [[Livecode]]. You can view the source here - [https://gist.github.com/opn/c1d1f311b7fabb97a545ab4a38314e62 gist]",
+            "alias": "8869c0772777be8e"
+          },
+          {
+            "type": "markdown",
+            "id": "5a4d4c50029ad335",
+            "text": "# To Do"
+          },
+          {
+            "type": "markdown",
+            "id": "1e7deed8de779e92",
+            "text": "It should be enhanced to:\n* Use [[XPath]]\n* Spit out code into libraries"
+          },
+          {
+            "type": "markdown",
+            "id": "854a288f77a19a55",
+            "text": "# See also\n\n- [[Fedwiki Tools]]"
+          }
+        ]
+      },
+      "date": 1510423881347
+    },
+    {
+      "type": "edit",
+      "id": "4dc2f6de4ee8f7e3",
+      "item": {
+        "type": "paragraph",
+        "id": "4dc2f6de4ee8f7e3",
+        "text": "This [[transport]] accepts dropped urls from [[OpenStreetMap]] and [[Google Maps]]. It also allows you to drag geo-links directly from WikiPedia."
+      },
+      "date": 1510423951694
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://rest.livecode.world/mediawiki/map"
+      },
+      "date": 1510423960807
+    },
+    {
+      "type": "edit",
+      "id": "ccc4200ef10cfe47",
+      "item": {
+        "type": "paragraph",
+        "id": "ccc4200ef10cfe47",
+        "text": "Drop a url on here to see the transported map:"
+      },
+      "date": 1510423981822
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://rest.livecode.world/map"
+      },
+      "date": 1510424015497
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "paragraph",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]"
+      },
+      "date": 1510424424412
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]"
+      },
+      "date": 1510424432336
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: \n\n- [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]"
+      },
+      "date": 1510424441164
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: \n\n- OpenStreetMap]] - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]\n- [[Google maps]]\n -\n [https://www.google.co.uk/maps/place/Stonehenge/@51.178882,-1.8612339,13z/data=!4m5!3m4!1s0x4873e63b850af611:0x979170e2bcd3d2dd!8m2!3d51.178882!4d-1.826215 google.co.uk]"
+      },
+      "date": 1510424547002
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: \n\n- OpenStreetMap]] - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]\n- [[Google maps]] - [https://www.google.co.uk/maps/place/Stonehenge/@51.178882,-1.8612339,13z/data=!4m5!3m4!1s0x4873e63b850af611:0x979170e2bcd3d2dd!8m2!3d51.178882!4d-1.826215 google.co.uk]"
+      },
+      "date": 1510424578810
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: \n\n- [[OpenStreetMap]] - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]\n- [[Google maps]] - [https://www.google.co.uk/maps/place/Stonehenge/@51.178882,-1.8612339,13z/data=!4m5!3m4!1s0x4873e63b850af611:0x979170e2bcd3d2dd!8m2!3d51.178882!4d-1.826215 google.co.uk]"
+      },
+      "date": 1510424585180
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: \n\n- [[OpenStreetMap]] - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]\n- [[Google Maps]] - [https://www.google.co.uk/maps/place/Stonehenge/@51.178882,-1.8612339,13z/data=!4m5!3m4!1s0x4873e63b850af611:0x979170e2bcd3d2dd!8m2!3d51.178882!4d-1.826215 google.co.uk]"
+      },
+      "date": 1510424593211
+    },
+    {
+      "type": "edit",
+      "id": "e52e46e66a294553",
+      "item": {
+        "type": "markdown",
+        "id": "e52e46e66a294553",
+        "text": "See the video below for use. Try yourself with the following links: \n\n- Stonehenge on [https://en.wikipedia.org/wiki/Stonehenge wikipedia]\n- [[OpenStreetMap]] - [https://www.openstreetmap.org/?mlat=51.178844&mlon=-1.826189&zoom=15#map=15/51.1788/-1.8262 openstreetmap.org]\n- [[Google Maps]] - [https://www.google.co.uk/maps/place/Stonehenge/@51.178882,-1.8612339,13z/data=!4m5!3m4!1s0x4873e63b850af611:0x979170e2bcd3d2dd!8m2!3d51.178882!4d-1.826215 google.co.uk]"
+      },
+      "date": 1510424620733
+    },
+    {
+      "type": "edit",
+      "id": "ea9468c5087b9b67",
+      "item": {
+        "type": "paragraph",
+        "id": "ea9468c5087b9b67",
+        "text": "The code for this transporter is written in [[Livecode]]. You can view the source here - [https://gist.github.com/opn/8556bbcc80d118db78ca677f1f1d4fc7 gist]",
+        "alias": "8869c0772777be8e"
+      },
+      "date": 1510424668199
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n\n-  Use the region info in Wikipedia links to set zoom\n"
+      },
+      "date": 1510424763955
+    },
+    {
+      "type": "edit",
+      "id": "b6853287820608f3",
+      "item": {
+        "type": "video",
+        "id": "b6853287820608f3",
+        "text": "VIMEO 242388014\n(double-click to edit caption)\n"
+      },
+      "date": 1510427210400
+    },
+    {
+      "type": "edit",
+      "id": "b6853287820608f3",
+      "item": {
+        "type": "video",
+        "id": "b6853287820608f3",
+        "text": "VIMEO 242388014\nA description of how to use the new Fedwiki [[map transport]].\n\n"
+      },
+      "date": 1510427239431
+    },
+    {
+      "type": "edit",
+      "id": "2cc9d62877d4533a",
+      "item": {
+        "type": "paragraph",
+        "id": "2cc9d62877d4533a",
+        "text": "Note: that with [[Google Maps]] the coordinate system does not match 100%with [[OpenStreetMap]] and as apparently as there is no such thing as a projection that can map one on to the other there is no way to correct this in software:"
+      },
+      "date": 1511180525395
+    },
+    {
+      "type": "add",
+      "id": "fe96e7eb507d6d38",
+      "item": {
+        "type": "paragraph",
+        "id": "fe96e7eb507d6d38",
+        "text": "- [afsd fdsa]"
+      },
+      "after": "2cc9d62877d4533a",
+      "date": 1511180529370
+    },
+    {
+      "type": "edit",
+      "id": "fe96e7eb507d6d38",
+      "item": {
+        "type": "markdown",
+        "id": "fe96e7eb507d6d38",
+        "text": "- [afsd fdsa]"
+      },
+      "date": 1511180532174
+    },
+    {
+      "type": "edit",
+      "id": "2cc9d62877d4533a",
+      "item": {
+        "type": "paragraph",
+        "id": "2cc9d62877d4533a",
+        "text": "Note: that with [[Google Maps]] the coordinate system does not match 100% with [[OpenStreetMap]] and as apparently as there is no such thing as a projection that can map one on to the other there is no way to correct this in software:"
+      },
+      "date": 1511180538609
+    },
+    {
+      "type": "edit",
+      "id": "fe96e7eb507d6d38",
+      "item": {
+        "type": "markdown",
+        "id": "fe96e7eb507d6d38",
+        "text": "- [https://forum.openstreetmap.org/viewtopic.php?id=18831 forum.openstreetmap.org]"
+      },
+      "date": 1511180559562
+    },
+    {
+      "type": "edit",
+      "id": "fe96e7eb507d6d38",
+      "item": {
+        "type": "markdown",
+        "id": "fe96e7eb507d6d38",
+        "text": "- [https://forum.openstreetmap.org/viewtopic.php?id=18831 forum.openstreetmap.org]\n- [https://gis.stackexchange.com/questions/37483/how-to-adjust-the-difference-between-the-coordinate-from-openstreetmap-and-googl gis.stackexchange.com]"
+      },
+      "date": 1511180585211
+    },
+    {
+      "type": "edit",
+      "id": "fe96e7eb507d6d38",
+      "item": {
+        "type": "markdown",
+        "id": "fe96e7eb507d6d38",
+        "text": "- [https://forum.openstreetmap.org/viewtopic.php?id=18831 forum.openstreetmap.org]\n- [https://gis.stackexchange.com/questions/37483/how-to-adjust-the-difference-between-the-coordinate-from-openstreetmap-and-googl gis.stackexchange.com]\n- Issues in China-[https://gis.stackexchange.com/questions/59931/understanding-the-difference-between-coordinates-projection-in-osm-and-google-ma gis.stackexchange.com]"
+      },
+      "date": 1511180630796
+    },
+    {
+      "type": "edit",
+      "id": "fe96e7eb507d6d38",
+      "item": {
+        "type": "markdown",
+        "id": "fe96e7eb507d6d38",
+        "text": "- [https://forum.openstreetmap.org/viewtopic.php?id=18831 forum.openstreetmap.org]\n- [https://gis.stackexchange.com/questions/37483/how-to-adjust-the-difference-between-the-coordinate-from-openstreetmap-and-googl gis.stackexchange.com]\n- Issues in China -[https://gis.stackexchange.com/questions/59931/understanding-the-difference-between-coordinates-projection-in-osm-and-google-ma gis.stackexchange.com]"
+      },
+      "date": 1511180637829
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>"
+      },
+      "after": "b6853287820608f3",
+      "id": "20084356ff8e69ce",
+      "date": 1512312596149
+    },
+    {
+      "type": "remove",
+      "id": "2cc9d62877d4533a",
+      "date": 1512312599689
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\nthat with [[Google Maps]] the coordinate system does not match 100% with [[OpenStreetMap]] and as apparently as there is no such thing as a projection that can map one on to the other there is no way to correct this in software:\n<p>"
+      },
+      "date": 1512312622859
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "43c4eba991702cd2",
+        "text": "The function geo_ExtractLatlong() uses some simple text parsing to figure out the lat and long co-ordinates from the url dropped - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2#file-script-stack-map-lc-L117-L153 gist]"
+      },
+      "after": "ea9468c5087b9b67",
+      "id": "43c4eba991702cd2",
+      "date": 1512312648377
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bbd20bb952d4b261",
+        "text": "The basic logic for converting degrees, minutes, and seconds into decimal versions of [[Latitude]] and [[Longitude]] can be found here:"
+      },
+      "after": "43c4eba991702cd2",
+      "id": "bbd20bb952d4b261",
+      "date": 1512312651328
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "put sDeg + sMin / 60 + sSec / 3600 into decValue\ngeo_SetNegative decValue, nwse\n"
+      },
+      "after": "bbd20bb952d4b261",
+      "id": "8869c0772777be8e",
+      "date": 1512312654082
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "4b1981619074e5ff",
+        "text": "command geo_SetNegative @decValue, nwse\n if char 1 of nwse is among the items of \"w,s\" then\n  put -1 * decValue into decValue\n end if\nend geo_SetNegative\n"
+      },
+      "after": "8869c0772777be8e",
+      "id": "4b1981619074e5ff",
+      "date": 1512312656979
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "593c8129fe079e33",
+        "text": "The command get_SetNegative takes the information provide (north, south, east, west) and negated the decimal value if needed."
+      },
+      "after": "8869c0772777be8e",
+      "id": "593c8129fe079e33",
+      "date": 1512312663801
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "4df3cbb35ddb8664",
+        "text": "It should be enhanced to:\n\n- [x] Check geolocation with real examples\n- [ ] Look at API - [https://www.mediawiki.org/wiki/Extension:GeoData mediawiki]\n- [ ] Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n- [ ] Integrate GeoHack.js - [https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n",
+        "alias": "1e7deed8de779e92"
+      },
+      "after": "4b1981619074e5ff",
+      "id": "4df3cbb35ddb8664",
+      "date": 1512312673099
+    },
+    {
+      "type": "remove",
+      "id": "1e7deed8de779e92",
+      "date": 1512312675884
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "27e0ffd6ff213c5d",
+        "text": "# Exif GPS Standard"
+      },
+      "after": "5a4d4c50029ad335",
+      "id": "27e0ffd6ff213c5d",
+      "date": 1512312688254
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e075ccbb3c4c4220",
+        "text": "According to the [[exif]] standard, there are three \"rational\" fields for each, containing degrees, minutes, and seconds. \n"
+      },
+      "after": "27e0ffd6ff213c5d",
+      "id": "e075ccbb3c4c4220",
+      "date": 1512312692849
+    },
+    {
+      "type": "move",
+      "order": [
+        "4dc2f6de4ee8f7e3",
+        "d660946f37bd9f17",
+        "ccc4200ef10cfe47",
+        "10ea2af363e51a5f",
+        "d3d1a78e016bfe61",
+        "e52e46e66a294553",
+        "b6853287820608f3",
+        "20084356ff8e69ce",
+        "fe96e7eb507d6d38",
+        "d9f45aae0a436d21",
+        "ea9468c5087b9b67",
+        "43c4eba991702cd2",
+        "bbd20bb952d4b261",
+        "8869c0772777be8e",
+        "593c8129fe079e33",
+        "4b1981619074e5ff",
+        "5a4d4c50029ad335",
+        "4df3cbb35ddb8664",
+        "27e0ffd6ff213c5d",
+        "e075ccbb3c4c4220",
+        "854a288f77a19a55"
+      ],
+      "id": "5a4d4c50029ad335",
+      "date": 1512312695323
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "47b8a943fb5fdc08",
+        "text": "exiftool normalizes imporoper decimal degrees into D,M,S while assigning these values, \n   (exiftool -GPSLongitude=\"0.5 90 63.12345\" junk.jpg\" -> GPS Longitude: 2 deg 1' 3.12\" W\") \n   So if you need decimal degrees, you do dd=x0+x1/60.+x2/3600. and could ignore the non-normalization."
+      },
+      "after": "e075ccbb3c4c4220",
+      "id": "47b8a943fb5fdc08",
+      "date": 1512312700504
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "bea0b21f206f944d",
+        "text": "$d = $deg + (($min/60) + ($sec/3600));\n   \nGPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\nGPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \nGPS Latitude: 57 deg 38' 56.83\" N\nGPS Longitude: 10 deg 24' 26.79\" E\n   \nGPS Longitude: 10.40744\nGPS Position: 57.64911 10.40744"
+      },
+      "after": "47b8a943fb5fdc08",
+      "id": "bea0b21f206f944d",
+      "date": 1512312715834
+    }
+  ]
+}

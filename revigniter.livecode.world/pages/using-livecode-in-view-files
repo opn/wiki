@@ -1,0 +1,470 @@
+{
+  "title": "Using LiveCode in View Files",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "ab8f5cdf83cbc581",
+      "text": "The data array in [[gData]] is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. "
+    },
+    {
+      "type": "paragraph",
+      "id": "c483319a9f346eb0",
+      "text": "For example, if you pull data from your database it will typically be in the form of a [[multi-dimensional array]], which you can combine to a list if you like."
+    },
+    {
+      "type": "paragraph",
+      "id": "cf6718207692e726",
+      "text": "Here's a simple example. Add this to your controller:"
+    },
+    {
+      "type": "code",
+      "id": "464a495e8262ed31",
+      "text": "<?rev\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n  put \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n  put \"My Real Title\" into gData[\"title\"]\n  put \"My Real Heading\" into gData[\"heading\"]\n  get rigLoadView(\"blogview\")\nend index"
+    },
+    {
+      "type": "paragraph",
+      "id": "b42d04dc273420ce",
+      "text": "Now open your view file and create a loop:"
+    },
+    {
+      "type": "code",
+      "id": "c4fa7f5af52e0b23",
+      "text": "<html>\n  <head>\n    <title>[[gData[\"title\"] ]]</title>\n  </head>\n  <body>\n    <h1>[[gData[\"heading\"] ]]</h1>\n    <p>\n    <? put \"<ul>\" into tToDo\n      repeat for each item thisItem in gData[\"toDoList\"]\n        put \"<li>\" & thisItem & \"</li>\" after tToDo\n      end repeat\n      put \"</ul>\" after tToDo\n      return tToDo ?>\n    </p>\n  </body>\n</html>"
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\n\nYou'll notice that in the example above we are using a return statement enclosed in <code>&lt;?</code> and <code>?&gt;</code>. \n<p>\nKeep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.<p>"
+    },
+    {
+      "type": "paragraph",
+      "id": "43e6b8363395a64d",
+      "text": "As an example to include LiveCode in view files you typically would use return statements to display text from language files if you have various translations:"
+    },
+    {
+      "type": "code",
+      "id": "741c332a084e47e3",
+      "text": "<html>\n  <head>\n    <title>[[gData[\"title\"] ]]</title>\n  </head>\n  <body>\n    <h1>\n      <? return rigLangLangLine(\"myInternationalHeading\") ?>\n    </h1>\t\n    <p>\n    <? return rigLangLangLine(\"myInternationalBodyText\") ?>\n    </p>\n  </body>\n</html>"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Using LiveCode in View Files",
+        "story": []
+      },
+      "date": 1459810113028
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ab8f5cdf83cbc581",
+        "text": "[[Creating Loops]] / [[Using LiveCode in View Files]]\n\nThe data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. For example, if you pull data from your database it will typically be in the form of a multi-dimensional array, which you can combine to a list if you like.\n\nHere's a simple example. Add this to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n\tput \"My Real Title\" into gData[\"title\"]\n\tput \"My Real Heading\" into gData[\"heading\"]\n\tget rigLoadView(\"blogview\")\nend index\nNow open your view file and create a loop:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t\t<p>\n\t\t\t<? put \"<ul>\" into tToDo\n\t\t\trepeat for each item thisItem in gData[\"toDoList\"]\n\t\t\t\tput \"<li>\" & thisItem & \"</li>\" after tToDo\n\t\t\tend repeat\n\t\t\tput \"</ul>\" after tToDo\n\t\t\treturn tToDo ?>\n\t\t</p>\n\t</body>\n</html>\nNote: You'll notice that in the example above we are using a return statement enclosed in \"<?\" and \"?>\". Keep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.\nAs an example to include LiveCode in view files you typically would use return statements to display text from language files if you have various translations:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1><? return rigLangLangLine(\"myInternationalHeading\") ?></h1>\n\t\t\n\t\t<p><? return rigLangLangLine(\"myInternationalBodyText\") ?></p>\n\n\t</body>\n</html>\n"
+      },
+      "id": "ab8f5cdf83cbc581",
+      "date": 1459810116378
+    },
+    {
+      "type": "edit",
+      "id": "ab8f5cdf83cbc581",
+      "item": {
+        "type": "paragraph",
+        "id": "ab8f5cdf83cbc581",
+        "text": "[[Creating Loops]] / [[Using LiveCode in View Files]]\n\nThe data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. For example, if you pull data from your database it will typically be in the form of a multi-dimensional array, which you can combine to a list if you like.\n\nHere's a simple example. Add this to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n\tput \"My Real Title\" into gData[\"title\"]\n\tput \"My Real Heading\" into gData[\"heading\"]\n\tget rigLoadView(\"blogview\")\nend index\nNow open your view file and create a loop:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t\t<p>\n\t\t\t<? put \"<ul>\" into tToDo\n\t\t\trepeat for each item thisItem in gData[\"toDoList\"]\n\t\t\t\tput \"<li>\" & thisItem & \"</li>\" after tToDo\n\t\t\tend repeat\n\t\t\tput \"</ul>\" after tToDo\n\t\t\treturn tToDo ?>\n\t\t</p>\n\t</body>\n</html>\nNote: You'll notice that in the example above we are using a return statement enclosed in \"<?\" and \"?>\". Keep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.\nAs an example to include LiveCode in view files you typically would use return statements to display text from language files if you have various translations:\n\n"
+      },
+      "date": 1459810141971
+    },
+    {
+      "type": "add",
+      "id": "fc3bd4793d00322f",
+      "item": {
+        "type": "paragraph",
+        "id": "fc3bd4793d00322f",
+        "text": "<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1><? return rigLangLangLine(\"myInternationalHeading\") ?></h1>\n\t\t\n\t\t<p><? return rigLangLangLine(\"myInternationalBodyText\") ?></p>\n\n\t</body>\n</html>"
+      },
+      "after": "ab8f5cdf83cbc581",
+      "date": 1459810143560
+    },
+    {
+      "type": "edit",
+      "id": "ab8f5cdf83cbc581",
+      "item": {
+        "type": "paragraph",
+        "id": "ab8f5cdf83cbc581",
+        "text": "The data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. "
+      },
+      "date": 1459810158498
+    },
+    {
+      "type": "add",
+      "id": "c483319a9f346eb0",
+      "item": {
+        "type": "paragraph",
+        "id": "c483319a9f346eb0",
+        "text": "For example, if you pull data from your database it will typically be in the form of a multi-dimensional array, which you can combine to a list if you like.\n\nHere's a simple example. Add this to your controller:"
+      },
+      "after": "ab8f5cdf83cbc581",
+      "date": 1459810164858
+    },
+    {
+      "type": "add",
+      "id": "c6d601c9bb353b75",
+      "item": {
+        "type": "paragraph",
+        "id": "c6d601c9bb353b75",
+        "text": "<?rev\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n  put \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n  put \"My Real Title\" into gData[\"title\"]\n  put \"My Real Heading\" into gData[\"heading\"]\n  get rigLoadView(\"blogview\")\nend index"
+      },
+      "after": "c483319a9f346eb0",
+      "date": 1459810187356
+    },
+    {
+      "type": "add",
+      "id": "b42d04dc273420ce",
+      "item": {
+        "type": "paragraph",
+        "id": "b42d04dc273420ce",
+        "text": "Now open your view file and create a loop:"
+      },
+      "after": "c6d601c9bb353b75",
+      "date": 1459810190194
+    },
+    {
+      "type": "add",
+      "id": "dfa4a15a1b5f9f20",
+      "item": {
+        "type": "paragraph",
+        "id": "dfa4a15a1b5f9f20",
+        "text": "<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t\t<p>\n\t\t\t<? put \"<ul>\" into tToDo\n\t\t\trepeat for each item thisItem in gData[\"toDoList\"]\n\t\t\t\tput \"<li>\" & thisItem & \"</li>\" after tToDo\n\t\t\tend repeat\n\t\t\tput \"</ul>\" after tToDo\n\t\t\treturn tToDo ?>\n\t\t</p>\n\t</body>\n</html>"
+      },
+      "after": "b42d04dc273420ce",
+      "date": 1459810197932
+    },
+    {
+      "type": "add",
+      "id": "1df114edbc059168",
+      "item": {
+        "type": "paragraph",
+        "id": "1df114edbc059168",
+        "text": "[[Note]]: You'll notice that in the example above we are using a return statement enclosed in \"<?\" and \"?>\". Keep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement."
+      },
+      "after": "dfa4a15a1b5f9f20",
+      "date": 1459810208421
+    },
+    {
+      "type": "add",
+      "id": "43e6b8363395a64d",
+      "item": {
+        "type": "paragraph",
+        "id": "43e6b8363395a64d",
+        "text": "As an example to include LiveCode in view files you typically would use return statements to display text from language files if you have various translations:"
+      },
+      "after": "1df114edbc059168",
+      "date": 1459810211053
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "464a495e8262ed31"
+      },
+      "id": "464a495e8262ed31",
+      "type": "add",
+      "after": "fc3bd4793d00322f",
+      "date": 1459810212684
+    },
+    {
+      "type": "move",
+      "order": [
+        "ab8f5cdf83cbc581",
+        "c483319a9f346eb0",
+        "464a495e8262ed31",
+        "c6d601c9bb353b75",
+        "b42d04dc273420ce",
+        "dfa4a15a1b5f9f20",
+        "1df114edbc059168",
+        "43e6b8363395a64d",
+        "fc3bd4793d00322f"
+      ],
+      "id": "464a495e8262ed31",
+      "date": 1459810217807
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "741c332a084e47e3"
+      },
+      "id": "741c332a084e47e3",
+      "type": "add",
+      "after": "fc3bd4793d00322f",
+      "date": 1459810219554
+    },
+    {
+      "type": "remove",
+      "id": "fc3bd4793d00322f",
+      "date": 1459810225845
+    },
+    {
+      "type": "edit",
+      "id": "741c332a084e47e3",
+      "item": {
+        "type": "code",
+        "id": "741c332a084e47e3",
+        "text": "<html>\n  <head>\n    <title>[[gData[\"title\"] ]]</title>\n  </head>\n  <body>\n    <h1><? return rigLangLangLine(\"myInternationalHeading\") ?></h1>\n\t\t\n    <p><? return rigLangLangLine(\"myInternationalBodyText\") ?></p>\n\n  </body>\n</html>"
+      },
+      "date": 1459810261576
+    },
+    {
+      "type": "edit",
+      "id": "741c332a084e47e3",
+      "item": {
+        "type": "code",
+        "id": "741c332a084e47e3",
+        "text": "<html>\n  <head>\n    <title>[[gData[\"title\"] ]]</title>\n  </head>\n  <body>\n    <h1>\n      <? return rigLangLangLine(\"myInternationalHeading\") ?>\n    </h1>\t\n    <p>\n    <? return rigLangLangLine(\"myInternationalBodyText\") ?>\n    </p>\n  </body>\n</html>"
+      },
+      "date": 1459810301497
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c4fa7f5af52e0b23"
+      },
+      "id": "c4fa7f5af52e0b23",
+      "type": "add",
+      "after": "741c332a084e47e3",
+      "date": 1459810314071
+    },
+    {
+      "type": "move",
+      "order": [
+        "ab8f5cdf83cbc581",
+        "c483319a9f346eb0",
+        "464a495e8262ed31",
+        "c6d601c9bb353b75",
+        "b42d04dc273420ce",
+        "dfa4a15a1b5f9f20",
+        "c4fa7f5af52e0b23",
+        "1df114edbc059168",
+        "43e6b8363395a64d",
+        "741c332a084e47e3"
+      ],
+      "id": "c4fa7f5af52e0b23",
+      "date": 1459810315959
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cb1732167f947207"
+      },
+      "id": "cb1732167f947207",
+      "type": "add",
+      "after": "741c332a084e47e3",
+      "date": 1459810318911
+    },
+    {
+      "type": "move",
+      "order": [
+        "ab8f5cdf83cbc581",
+        "c483319a9f346eb0",
+        "464a495e8262ed31",
+        "c6d601c9bb353b75",
+        "cb1732167f947207",
+        "b42d04dc273420ce",
+        "dfa4a15a1b5f9f20",
+        "c4fa7f5af52e0b23",
+        "1df114edbc059168",
+        "43e6b8363395a64d",
+        "741c332a084e47e3"
+      ],
+      "id": "cb1732167f947207",
+      "date": 1459810324605
+    },
+    {
+      "type": "remove",
+      "id": "c6d601c9bb353b75",
+      "date": 1459810330604
+    },
+    {
+      "type": "edit",
+      "id": "464a495e8262ed31",
+      "item": {
+        "type": "code",
+        "id": "464a495e8262ed31",
+        "text": "<?rev\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n  put \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n  put \"My Real Title\" into gData[\"title\"]\n  put \"My Real Heading\" into gData[\"heading\"]\n  get rigLoadView(\"blogview\")\nend index"
+      },
+      "date": 1459810332410
+    },
+    {
+      "type": "remove",
+      "id": "dfa4a15a1b5f9f20",
+      "date": 1459810340535
+    },
+    {
+      "type": "edit",
+      "id": "c4fa7f5af52e0b23",
+      "item": {
+        "type": "code",
+        "id": "c4fa7f5af52e0b23",
+        "text": "<html>\n  <head>\n    <title>[[gData[\"title\"] ]]</title>\n  </head>\n  <body>\n    <h1>[[gData[\"heading\"] ]]</h1>\n    <p>\n    <? put \"<ul>\" into tToDo\n\t\t\trepeat for each item thisItem in gData[\"toDoList\"]\n      put \"<li>\" & thisItem & \"</li>\" after tToDo\n\t\t\tend repeat\n\t\t\tput \"</ul>\" after tToDo\n\t\t\treturn tToDo ?>\n    </p>\n  </body>\n</html>"
+      },
+      "date": 1459810394204
+    },
+    {
+      "type": "edit",
+      "id": "c4fa7f5af52e0b23",
+      "item": {
+        "type": "code",
+        "id": "c4fa7f5af52e0b23",
+        "text": "<html>\n  <head>\n    <title>[[gData[\"title\"] ]]</title>\n  </head>\n  <body>\n    <h1>[[gData[\"heading\"] ]]</h1>\n    <p>\n    <? put \"<ul>\" into tToDo\n      repeat for each item thisItem in gData[\"toDoList\"]\n        put \"<li>\" & thisItem & \"</li>\" after tToDo\n      end repeat\n      put \"</ul>\" after tToDo\n      return tToDo ?>\n    </p>\n  </body>\n</html>"
+      },
+      "date": 1459810453949
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>"
+      },
+      "after": "1df114edbc059168",
+      "id": "20084356ff8e69ce",
+      "date": 1459810476440
+    },
+    {
+      "type": "remove",
+      "id": "1df114edbc059168",
+      "date": 1459810484507
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nYou'll notice that in the example above we are using a return statement enclosed in \"<?\" and \"?>\". Keep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.<p>"
+      },
+      "date": 1459810489389
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nYou'll notice that in the example above we are using a return statement enclosed in <code>\"<?\" and \"?>\"</code>. \n<p>\nKeep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.<p>"
+      },
+      "date": 1459810536622
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nYou'll notice that in the example above we are using a return statement enclosed in <code><?</code> and <code>?></code>. \n<p>\nKeep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.<p>"
+      },
+      "date": 1459810570191
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e73aa8a9d0add345"
+      },
+      "id": "e73aa8a9d0add345",
+      "type": "add",
+      "after": "741c332a084e47e3",
+      "date": 1459810630022
+    },
+    {
+      "type": "edit",
+      "id": "e73aa8a9d0add345",
+      "item": {
+        "type": "html",
+        "id": "e73aa8a9d0add345",
+        "text": "<code><?</code>"
+      },
+      "date": 1459810633225
+    },
+    {
+      "type": "edit",
+      "id": "e73aa8a9d0add345",
+      "item": {
+        "type": "html",
+        "id": "e73aa8a9d0add345",
+        "text": "<code>&gt;?</code>"
+      },
+      "date": 1459810655905
+    },
+    {
+      "type": "edit",
+      "id": "e73aa8a9d0add345",
+      "item": {
+        "type": "html",
+        "id": "e73aa8a9d0add345",
+        "text": "<code>&it;?</code>"
+      },
+      "date": 1459810661945
+    },
+    {
+      "type": "edit",
+      "id": "e73aa8a9d0add345",
+      "item": {
+        "type": "html",
+        "id": "e73aa8a9d0add345",
+        "text": "<code>&lt;?</code>"
+      },
+      "date": 1459810676553
+    },
+    {
+      "type": "remove",
+      "id": "e73aa8a9d0add345",
+      "date": 1459810682889
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nYou'll notice that in the example above we are using a return statement enclosed in <code>&lt;?</code> and <code>?&gt;</code>. \n<p>\nKeep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.<p>"
+      },
+      "date": 1459810709900
+    },
+    {
+      "type": "remove",
+      "id": "cb1732167f947207",
+      "date": 1459810729899
+    },
+    {
+      "type": "edit",
+      "id": "ab8f5cdf83cbc581",
+      "item": {
+        "type": "paragraph",
+        "id": "ab8f5cdf83cbc581",
+        "text": "The data array in [[gData]] is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. "
+      },
+      "date": 1459859161779
+    },
+    {
+      "type": "edit",
+      "id": "c483319a9f346eb0",
+      "item": {
+        "type": "paragraph",
+        "id": "c483319a9f346eb0",
+        "text": "For example, if you pull data from your database it will typically be in the form of a [[multi-dimensional array]], which you can combine to a list if you like."
+      },
+      "date": 1459859180394
+    },
+    {
+      "type": "add",
+      "id": "cf6718207692e726",
+      "item": {
+        "type": "paragraph",
+        "id": "cf6718207692e726",
+        "text": "Here's a simple example. Add this to your controller:"
+      },
+      "after": "c483319a9f346eb0",
+      "date": 1459859183955
+    }
+  ]
+}

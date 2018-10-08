@@ -1,0 +1,240 @@
+{
+  "title": "POSIX and Unix-like operating systems",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a237e496-9f7e-44d3-85e0-e8eac3887e9c",
+      "text": "In [[POSIX]]-compliant operating systems, symbolic links are created with the <code>symlink</code> system call.  The <code>ln ([[ln (Unix)]])</code> shell command normally uses the <code>link</code> system call, which creates a [[hard link]].  When the <code>ln ''-s''</code> flag is specified, the symlink() system call is used instead, creating a symbolic link. Symlinks were introduced in 4.2BSD Unix ([[Berkeley Software Distribution]]) from U.C. Berkeley ([[Computer Systems Research Group]]) - [https://en.wikipedia.org/wiki/Symbolic_link#POSIX_and_Unix-like_operating_systems wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "d77d707d-5895-4afe-82fe-40fbb0d1d356",
+      "text": "The following command creates a symbolic link at the [[command-line interface]] (shell):"
+    },
+    {
+      "type": "html",
+      "id": "a1f482dc-2edc-48cf-89e8-6e34fb084126",
+      "text": "<pre>"
+    },
+    {
+      "type": "paragraph",
+      "id": "4279662b-ea17-4b34-9e9e-75d4bc5649f7",
+      "text": "ln -s target_path link_path"
+    },
+    {
+      "type": "html",
+      "id": "df937ba7-8cfe-4a2b-84e9-57247030ac01",
+      "text": "</pre>"
+    },
+    {
+      "type": "html",
+      "id": "9c711f81-9b8e-4a6a-a070-96939de20a30",
+      "text": "<tt>target_path</tt> is the relative or absolute path to which the symbolic link should point.  Usually the target will exist, although symbolic links may be created to non-existent targets. <tt>link_path</tt> is the path of the symbolic link."
+    },
+    {
+      "type": "paragraph",
+      "id": "bb28561b-9450-45a2-8403-b1e6bc38beba",
+      "text": "After creating the symbolic link, it may generally be treated as an alias for the target. Any file system management commands (e.g., <code>cp ([[cp (Unix)]])</code>, <code>rm ([[rm (Unix)]])</code>) may be used on the symbolic link.  Commands which read or write file contents will access the contents of the target file. The <code>rm</code> (delete file) command, however, removes the link itself, not the target file."
+    },
+    {
+      "type": "paragraph",
+      "id": "43a44b39-ddf9-4015-b001-5b0518a1e3c0",
+      "text": "The POSIX directory listing application, <code>[[ls]]</code>, denotes symbolic links with an arrow after the name, pointing to the name of the target file (see following example), when the long directory list is requested (<code>-l</code> option). When a directory listing of a symbolic link that points to a directory is requested, only the link itself will be displayed. In order to obtain a listing of the linked directory, the path must include a trailing directory separator character ('/', slash)."
+    },
+    {
+      "type": "paragraph",
+      "id": "8ce94214-7785-4aad-8deb-8421f2ae0395",
+      "text": "Note: In Below Example do not create \"three\" directory before creation of link in /tmp directory."
+    },
+    {
+      "type": "html",
+      "id": "9d71075e-3f46-447d-9e45-9dbb66c06d52",
+      "text": "<source lang=\"console\">"
+    },
+    {
+      "type": "paragraph",
+      "id": "5c54566c-3ba1-45a4-9233-0c50b7e1c09d",
+      "text": "$ mkdir -p /tmp/one/two"
+    },
+    {
+      "type": "paragraph",
+      "id": "a9286152-721d-4876-bb8d-1b6b0d133a98",
+      "text": "$ echo \"test_a\" >/tmp/one/two/a"
+    },
+    {
+      "type": "paragraph",
+      "id": "4bbfb485-68e3-41a0-adda-085efc67f44c",
+      "text": "$ echo \"test_b\" >/tmp/one/two/b"
+    },
+    {
+      "type": "paragraph",
+      "id": "5799bb64-6fa7-493f-9bd5-b3ff60831894",
+      "text": "$ cd /tmp/one/two"
+    },
+    {
+      "type": "paragraph",
+      "id": "1d994fc8-a09d-49b6-93db-7e1d67e45029",
+      "text": "$ ls -l"
+    },
+    {
+      "type": "paragraph",
+      "id": "6efc9b8a-57ac-463f-b003-06c94815cd33",
+      "text": "-rw-r--r-- 1 user group 7 Jan 01 10:01 a"
+    },
+    {
+      "type": "paragraph",
+      "id": "11a91552-a51b-416a-9704-ca08cdb8b790",
+      "text": "-rw-r--r-- 1 user group 7 Jan 01 10:01 b"
+    },
+    {
+      "type": "paragraph",
+      "id": "4b6cdb46-2ae9-464f-96e3-6a66d6a62622",
+      "text": "$ cd /tmp"
+    },
+    {
+      "type": "paragraph",
+      "id": "66164f86-f234-47eb-a970-3d8dc7551238",
+      "text": "$ ln -s /tmp/one/two three"
+    },
+    {
+      "type": "paragraph",
+      "id": "2001a837-475b-4c49-a977-d4ddb71732d6",
+      "text": "$ ls -l three"
+    },
+    {
+      "type": "paragraph",
+      "id": "8a679b08-a0c0-4b10-b517-3656447c412b",
+      "text": "lrwxrwxrwx 1 user group 12 Jul 22 10:02 /tmp/three -> /tmp/one/two"
+    },
+    {
+      "type": "paragraph",
+      "id": "168239a8-7012-4bf7-a395-f99026cb17b0",
+      "text": "$ ls -l three/"
+    },
+    {
+      "type": "paragraph",
+      "id": "e6b0f019-6a53-43af-9eb5-e3724cb7f1f4",
+      "text": "-rw-r--r-- 1 user group 7 Jan 01 10:01 a"
+    },
+    {
+      "type": "paragraph",
+      "id": "ba6103e4-81fb-4adc-bdb2-1829b9d567e3",
+      "text": "-rw-r--r-- 1 user group 7 Jan 01 10:01 b"
+    },
+    {
+      "type": "paragraph",
+      "id": "83cd4c74-9698-4282-9cf7-4fdb87c238e3",
+      "text": "$ cd three"
+    },
+    {
+      "type": "paragraph",
+      "id": "badf3b66-b557-4acc-990f-00feb798442d",
+      "text": "$ ls -l"
+    },
+    {
+      "type": "paragraph",
+      "id": "a01be48f-192b-4219-95dc-d49b47238997",
+      "text": "-rw-r--r-- 1 user group 7 Jan 01 10:01 a"
+    },
+    {
+      "type": "paragraph",
+      "id": "b6cda6d6-8fca-4cf0-8ef8-bef78cc5bb72",
+      "text": "-rw-r--r-- 1 user group 7 Jan 01 10:01 b"
+    },
+    {
+      "type": "paragraph",
+      "id": "686da8e8-0185-458f-b486-8056d237bf8d",
+      "text": "$ cat a"
+    },
+    {
+      "type": "paragraph",
+      "id": "c2eda350-067e-44b4-b09e-42e5aa61701a",
+      "text": "test_a"
+    },
+    {
+      "type": "paragraph",
+      "id": "5b4647a4-ce33-4d92-9dcc-eaaa4c72b2c9",
+      "text": "$ cat /tmp/one/two/a"
+    },
+    {
+      "type": "paragraph",
+      "id": "340c4ef0-c23e-4e8b-b942-9fc7d71db5ca",
+      "text": "test_a"
+    },
+    {
+      "type": "paragraph",
+      "id": "74645b69-ba3a-4c30-8715-eb915daa9e85",
+      "text": "$ echo \"test_c\" >/tmp/one/two/a"
+    },
+    {
+      "type": "paragraph",
+      "id": "75120bf4-36b2-4309-8aa2-75a0c5a6acc8",
+      "text": "$ cat /tmp/one/two/a"
+    },
+    {
+      "type": "paragraph",
+      "id": "5020ce6e-faf7-46c7-be56-b9ddf630b030",
+      "text": "test_c"
+    },
+    {
+      "type": "paragraph",
+      "id": "af1065dd-7e9e-404e-b069-5a9200b80693",
+      "text": "$ cat three/a"
+    },
+    {
+      "type": "paragraph",
+      "id": "8ad833ca-cba8-48e1-994d-7a2635f7a2c3",
+      "text": "test_c"
+    },
+    {
+      "type": "html",
+      "id": "b8b35630-f9fe-4023-b650-7c14743eb06e",
+      "text": "</source>"
+    },
+    {
+      "type": "markdown",
+      "id": "3a7df240-5134-415b-8be4-f6792c2e30cf",
+      "text": "# See also\n* [[Storage of symbolic links]]\n* [[Mac OS aliases]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "story": "",
+        "title": "POSIX and Unix-like operating systems"
+      },
+      "date": 1466523837321,
+      "source": {
+        "pageTitle": "Symbolic link",
+        "pageSlug": "Symbolic_link",
+        "url": "https://en.wikipedia.org/wiki/Symbolic_link#POSIX_and_Unix-like_operating_systems",
+        "date": 1466523837320,
+        "link_dictionary": {
+          "wiki_links": {
+            "Mac OS aliases": {
+              "section_number": 4,
+              "section_level": 3,
+              "dot_number": 2
+            },
+            "Storage of symbolic links": {
+              "section_number": 3,
+              "section_level": 3,
+              "dot_number": 1
+            }
+          },
+          "default": {
+            "transport": "https://livecode.world/mediawiki/importSection"
+          }
+        },
+        "transport": "https://livecode.world/mediawiki/transportAgain",
+        "rev": 726154195,
+        "repo": "https://github.com/LiveCodeWorld/lib_MediaWiki"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1466523840643
+    }
+  ]
+}

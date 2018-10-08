@@ -1,0 +1,2740 @@
+{
+  "title": "Make Plugin Script",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8958df7c5f4335fc",
+      "text": "The make plugin script will create files for a new plugin to handle items of a new type. The files include an about page with an example of the new item type ready to be rendered by the new plugin. [https://gist.github.com/WardCunningham/fced775fcedcee133b32 gist]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5a8920707d8b7563",
+      "text": "See [[Make a New Plugin]] for a slightly higher level description of the plugin construction process."
+    },
+    {
+      "type": "markdown",
+      "id": "fbb1eeb47a5b205a",
+      "text": "# Setup"
+    },
+    {
+      "type": "paragraph",
+      "id": "ff36e1104cbebab0",
+      "text": "A common configuration is to make a FedWiki directory that contains clones of any repos in use during development. Download the gist to this directory.",
+      "alias": "70dc62cdf95eed38"
+    },
+    {
+      "type": "code",
+      "id": "1ee1ab39d27b4a3a",
+      "text": "mkdir ~/FedwikiPlugins\ncd ~/FedwikiPlugins"
+    },
+    {
+      "type": "paragraph",
+      "id": "25922640e7996026",
+      "text": "Download the gist to this directory. Here we use wget to download the [[gist]] to create the mkplugin.sh file, and then change it's permissions to make it executable:"
+    },
+    {
+      "type": "code",
+      "id": "b2e71e821996a88c",
+      "text": "wget http://bit.ly/1T2Paly -O mkplugin.sh\nchmod +x mkplugin.sh"
+    },
+    {
+      "type": "paragraph",
+      "id": "1762d49b2d9c619d",
+      "text": "The script is a command line tool that take one argument."
+    },
+    {
+      "type": "code",
+      "id": "cf12620d03221ecb",
+      "text": "./mkplugin.sh CoolThing"
+    },
+    {
+      "type": "paragraph",
+      "id": "ca190a1d5a57fbbd",
+      "text": "This will create a plugin for items of type coolthing. To view the files the script creates you can use the following command:"
+    },
+    {
+      "type": "html",
+      "id": "ae962679313d3dca",
+      "text": "<h3> Files"
+    },
+    {
+      "type": "code",
+      "id": "e5abbf95d1bca072",
+      "text": "ls -la ~/FedwikiPlugins/wiki-plugin-coolthing"
+    },
+    {
+      "type": "paragraph",
+      "id": "33133b6d2d95a0db",
+      "text": "which should result in an output like the following:"
+    },
+    {
+      "type": "code",
+      "id": "7ff51854eaaaf7d7",
+      "text": "-rw-r--r--   1 ward   44 Dec 13 10:17 .gitignore\n-rw-r--r--   1 ward   26 Dec 13 10:17 .npmignore\n-rw-r--r--   1 ward  170 Dec 13 10:17 ReadMe.md\ndrwxr-xr-x   5 ward  170 Dec 13 10:17 client\n-rw-r--r--   1 ward   86 Dec 13 10:17 factory.json\n-rw-r--r--   1 ward  762 Dec 13 10:17 gruntfile.js\ndrwxr-xr-x   9 ward  306 Dec 13 10:17 node_modules\n-rw-r--r--   1 ward  807 Dec 13 10:17 package.json\ndrwxr-xr-x   3 ward  102 Dec 13 10:17 pages\ndrwxr-xr-x   5 ward  170 Dec 13 10:17 test\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "5128e95fe5cbcba1",
+      "text": "As you can see the script creates a \"pages\" directory. inside this directory the script has already created created for you a basic documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing."
+    },
+    {
+      "type": "paragraph",
+      "id": "9c6e944d8ef3af33",
+      "text": "You can edit the [[json]] for this page using your favourite editor or use:"
+    },
+    {
+      "type": "code",
+      "id": "99bc866b9ea9facc",
+      "text": "nano -w wiki-plugin-coolthing/pages/about-coolthing-plugin"
+    },
+    {
+      "type": "paragraph",
+      "id": "0507e75008432cb3",
+      "text": "Substitute coolthing for the name of the plugin you chose above - just look for the file already created for you and edit that."
+    },
+    {
+      "type": "html",
+      "id": "4705cfffb820574c",
+      "text": "<h3> Commands"
+    },
+    {
+      "type": "paragraph",
+      "id": "68e5f5fe0bdda036",
+      "text": "The script concludes by suggesting commands that will be used in development. "
+    },
+    {
+      "type": "code",
+      "id": "6f69d1b3fb1b2dcc",
+      "text": "Package:    cd wiki-plugin-coolthing/\nInstall:    npm install\nBuild:      grunt build; grunt watch\nPublish:    npm link; (cd ../wiki-node; npm link wiki-plugin-coolthing)\nServer:     (restart once to notice new plugin)\nBrowse:     open localhost:3000/about-coolthing-plugin.html\nDevelop:    vi client/coolthing.coffee\nCommit:     git init; git commit -a -m 'mkplugin'\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "694fad2967ce42b1",
+      "text": "Step through each of these commands, starting with change to the plugin's package directory:"
+    },
+    {
+      "type": "code",
+      "id": "b6487f6bc127f6b2",
+      "text": "cd wiki-plugin-coolthing/"
+    },
+    {
+      "type": "paragraph",
+      "id": "7065f6a8d0d982a4",
+      "text": "Further commands are entered here."
+    },
+    {
+      "type": "paragraph",
+      "id": "a1b13bda696f6c00",
+      "text": "Install the dependents specified in the package.json file. The long list will print as installation proceeds. Optional packages may fail to build."
+    },
+    {
+      "type": "code",
+      "id": "6bc4ad54b3f19910",
+      "text": "npm install"
+    },
+    {
+      "type": "paragraph",
+      "id": "18eb84f693ed3c38",
+      "text": "Build the generated code, compiling coffeescript and bundling requirements with browserify. Watch for subsequent versions and build them too."
+    },
+    {
+      "type": "code",
+      "id": "c8b66ac47b47f1da",
+      "text": "grunt build; grunt watch"
+    },
+    {
+      "type": "paragraph",
+      "id": "12b1e6b76111dc65",
+      "text": "Publish the new plugin locally using [[npm link]]. This links your development plugin to a global space on your system which can then be subscribed to by your wiki application using npm link. One command makes the package available, another adds it to the server's plugins."
+    },
+    {
+      "type": "paragraph",
+      "id": "df8d838736e7d5be",
+      "text": "Start (or restart) the local server. Once the server notices the new plugin it will serve updated versions without further attention."
+    },
+    {
+      "type": "paragraph",
+      "id": "8004c4297a244a54",
+      "text": "Start browsing the generated help page which includes an example of the plugin in use. It just displays text on a gray background."
+    },
+    {
+      "type": "paragraph",
+      "id": "8f017c5e93b4386f",
+      "text": "Edit the generated plugin to do more interesting things. Refresh the browser when the build completes. Try the Chrome inspector's option that disables caching."
+    },
+    {
+      "type": "paragraph",
+      "id": "593e135e79b2d841",
+      "text": "Commit the generated files and your improvements to a local git repository."
+    },
+    {
+      "type": "html",
+      "id": "dc960a75d029b631",
+      "text": "<h3> Publication"
+    },
+    {
+      "type": "paragraph",
+      "id": "7ea6eae91db72af4",
+      "text": "Revise the contact information in the package.json file"
+    },
+    {
+      "type": "paragraph",
+      "id": "7fd2e372a1dfde14",
+      "text": "If you make a GitHub repo by the same name then it is easy to publish your code with two git commands that they will suggest. [https://help.github.com/articles/create-a-repo doc]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ad6bc61bceb93d66",
+      "text": "If you make an npm module by the same name then you can publish your module following their instructions. [https://www.npmjs.org/doc/developers.html doc]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bc40b92906a68c29",
+      "text": "If you npm install from your plugin directory rather than using the npm link mechanism you will be copying exactly the files that others will see when they install from npm."
+    },
+    {
+      "type": "paragraph",
+      "id": "b92bbb0f952ead09",
+      "text": "As a published npm module other federated wiki server operators can offer your plugin by adding one like to their packages.json file."
+    },
+    {
+      "type": "paragraph",
+      "id": "90d4f7d4ff0c3c52",
+      "text": "As a published npm module with continued support you are welcome to request your module be included in the package.json included in the wiki-node module. [https://github.com/fedwiki/wiki-node/blob/master/package.json github]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Make Plugin Script",
+        "story": []
+      },
+      "date": 1387052506787
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8958df7c5f4335fc"
+      },
+      "id": "8958df7c5f4335fc",
+      "type": "add",
+      "date": 1387052508801
+    },
+    {
+      "type": "edit",
+      "id": "8958df7c5f4335fc",
+      "item": {
+        "type": "paragraph",
+        "id": "8958df7c5f4335fc",
+        "text": "The make plugin script will create files for a new plugin to handle items of a new type. The files include documentation with an example of the new type ready to be rendered by the new plugin. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/mkplugin.sh?source=cc github]"
+      },
+      "date": 1387052741557
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cf12620d03221ecb"
+      },
+      "id": "cf12620d03221ecb",
+      "type": "add",
+      "after": "8958df7c5f4335fc",
+      "date": 1387052786289
+    },
+    {
+      "type": "edit",
+      "id": "cf12620d03221ecb",
+      "item": {
+        "type": "code",
+        "id": "cf12620d03221ecb",
+        "text": "./mkplugin.sh CoolThing"
+      },
+      "date": 1387052790824
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca190a1d5a57fbbd"
+      },
+      "id": "ca190a1d5a57fbbd",
+      "type": "add",
+      "after": "cf12620d03221ecb",
+      "date": 1387052808849
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "Create a plugin for items of type coolthing. Create a documentation page, About CoolThing Plugin, that includes an example of a coolthing."
+      },
+      "date": 1387052881258
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "ca190a1d5a57fbbd",
+        "cf12620d03221ecb"
+      ],
+      "id": "ca190a1d5a57fbbd",
+      "date": 1387052887019
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd"
+      ],
+      "id": "ca190a1d5a57fbbd",
+      "date": 1387052892342
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1762d49b2d9c619d",
+        "text": ""
+      },
+      "id": "1762d49b2d9c619d",
+      "type": "add",
+      "after": "8958df7c5f4335fc",
+      "date": 1387052897649
+    },
+    {
+      "type": "edit",
+      "id": "1762d49b2d9c619d",
+      "item": {
+        "type": "paragraph",
+        "id": "1762d49b2d9c619d",
+        "text": "The script is a command line tool that take a command line argument."
+      },
+      "date": 1387052923446
+    },
+    {
+      "type": "edit",
+      "id": "1762d49b2d9c619d",
+      "item": {
+        "type": "paragraph",
+        "id": "1762d49b2d9c619d",
+        "text": "The script is a command line tool that take one argument."
+      },
+      "date": 1387052939710
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5a8920707d8b7563"
+      },
+      "id": "5a8920707d8b7563",
+      "type": "add",
+      "after": "ca190a1d5a57fbbd",
+      "date": 1387678000215
+    },
+    {
+      "type": "edit",
+      "id": "5a8920707d8b7563",
+      "item": {
+        "type": "paragraph",
+        "id": "5a8920707d8b7563",
+        "text": "See [[Make a Plugin]]."
+      },
+      "date": 1387678017601
+    },
+    {
+      "type": "edit",
+      "id": "5a8920707d8b7563",
+      "item": {
+        "type": "paragraph",
+        "id": "5a8920707d8b7563",
+        "text": "See [[Make a New Plugin]] for more manual technique."
+      },
+      "date": 1387678052658
+    },
+    {
+      "type": "edit",
+      "id": "5a8920707d8b7563",
+      "item": {
+        "type": "paragraph",
+        "id": "5a8920707d8b7563",
+        "text": "See [[Make a New Plugin]] for a more manual technique."
+      },
+      "date": 1387766158253
+    },
+    {
+      "type": "edit",
+      "id": "8958df7c5f4335fc",
+      "item": {
+        "type": "paragraph",
+        "id": "8958df7c5f4335fc",
+        "text": "The make plugin script will create files for a new plugin to handle items of a new type. The files include documentation with an example of the new type ready to be rendered by the new plugin."
+      },
+      "date": 1402789268437
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5804cb1aaf173b0b",
+        "text": " "
+      },
+      "id": "5804cb1aaf173b0b",
+      "type": "add",
+      "after": "8958df7c5f4335fc",
+      "date": 1402789268947
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5d32a3f73abb8d05",
+        "text": "[https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/mkplugin.sh?source=cc github]"
+      },
+      "id": "5d32a3f73abb8d05",
+      "type": "add",
+      "after": "5804cb1aaf173b0b",
+      "date": 1402789269421
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "219ecde21dc0f30a",
+        "text": ""
+      },
+      "id": "219ecde21dc0f30a",
+      "type": "add",
+      "after": "5804cb1aaf173b0b",
+      "date": 1402789269427
+    },
+    {
+      "type": "remove",
+      "id": "219ecde21dc0f30a",
+      "date": 1402789279172
+    },
+    {
+      "type": "remove",
+      "id": "5804cb1aaf173b0b",
+      "date": 1402789280268
+    },
+    {
+      "type": "edit",
+      "id": "5d32a3f73abb8d05",
+      "item": {
+        "type": "paragraph",
+        "id": "5d32a3f73abb8d05",
+        "text": "An older version of the script worked with the simple plugins directory we once used. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/mkplugin.sh?source=cc github]"
+      },
+      "date": 1402789326888
+    },
+    {
+      "type": "edit",
+      "id": "8958df7c5f4335fc",
+      "item": {
+        "type": "paragraph",
+        "id": "8958df7c5f4335fc",
+        "text": "The make plugin script will create files for a new plugin to handle items of a new type. The files include documentation with an example of the new type ready to be rendered by the new plugin. [https://gist.github.com/WardCunningham/fced775fcedcee133b32 gist]"
+      },
+      "date": 1402789361684
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "Create a plugin for items of type coolthing. Create a documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing."
+      },
+      "date": 1402789714887
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ae962679313d3dca",
+        "text": ""
+      },
+      "id": "ae962679313d3dca",
+      "type": "add",
+      "after": "5d32a3f73abb8d05",
+      "date": 1402789956912
+    },
+    {
+      "type": "edit",
+      "id": "ae962679313d3dca",
+      "item": {
+        "type": "paragraph",
+        "id": "ae962679313d3dca",
+        "text": "<h3> Files"
+      },
+      "date": 1402789962494
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "70dc62cdf95eed38",
+        "text": ""
+      },
+      "id": "70dc62cdf95eed38",
+      "type": "add",
+      "after": "ae962679313d3dca",
+      "date": 1402789968807
+    },
+    {
+      "type": "edit",
+      "id": "70dc62cdf95eed38",
+      "item": {
+        "type": "paragraph",
+        "id": "70dc62cdf95eed38",
+        "text": "A common configuration is to make a FedWiki directory that contains clones of any repos in use during development. Download the gist to this directory."
+      },
+      "date": 1402790057780
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "This will create a plugin for items of type coolthing. Create a documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing."
+      },
+      "date": 1402790081122
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6f69d1b3fb1b2dcc"
+      },
+      "id": "6f69d1b3fb1b2dcc",
+      "type": "add",
+      "after": "5a8920707d8b7563",
+      "date": 1402790114548
+    },
+    {
+      "type": "edit",
+      "id": "6f69d1b3fb1b2dcc",
+      "item": {
+        "type": "code",
+        "id": "6f69d1b3fb1b2dcc",
+        "text": "Package:    cd wiki-plugin-coolthing/\nInstall:    npm install\nBuild:      grunt build; grunt watch\nPublish:    npm link; (cd ../wiki-node; npm link wiki-plugin-coolthing)\nServer:     (restart once to notice new plugin)\nBrowse:     open localhost:3000/about-coolthing-plugin.html\nDevelop:    vi client/coolthing.coffee\nCommit:     git init; git add .; git commit\n"
+      },
+      "date": 1402790120391
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7ff51854eaaaf7d7"
+      },
+      "id": "7ff51854eaaaf7d7",
+      "type": "add",
+      "after": "6f69d1b3fb1b2dcc",
+      "date": 1402790261088
+    },
+    {
+      "type": "edit",
+      "id": "7ff51854eaaaf7d7",
+      "item": {
+        "type": "code",
+        "id": "7ff51854eaaaf7d7",
+        "text": "-rw-r--r--   44 Jun 14 16:55 .gitignore\n-rw-r--r--   26 Jun 14 16:55 .npmignore\n-rw-r--r--  170 Jun 14 16:55 ReadMe.md\ndrwxr-xr-x  102 Jun 14 16:55 client\n-rw-r--r--   92 Jun 14 16:55 factory.json\n-rw-r--r--  670 Jun 14 16:55 gruntfile.js\n-rw-r--r--  884 Jun 14 16:55 package.json\ndrwxr-xr-x  102 Jun 14 16:55 pages"
+      },
+      "date": 1402790268551
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5d32a3f73abb8d05",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "5a8920707d8b7563",
+        "6f69d1b3fb1b2dcc"
+      ],
+      "id": "7ff51854eaaaf7d7",
+      "date": 1402790282653
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5d32a3f73abb8d05",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "6f69d1b3fb1b2dcc",
+        "5a8920707d8b7563"
+      ],
+      "id": "5a8920707d8b7563",
+      "date": 1402790312582
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4705cfffb820574c",
+        "text": ""
+      },
+      "id": "4705cfffb820574c",
+      "type": "add",
+      "after": "ca190a1d5a57fbbd",
+      "date": 1402790318054
+    },
+    {
+      "type": "edit",
+      "id": "4705cfffb820574c",
+      "item": {
+        "type": "paragraph",
+        "id": "4705cfffb820574c",
+        "text": "<h3> Commands"
+      },
+      "date": 1402790326564
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5d32a3f73abb8d05",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "6f69d1b3fb1b2dcc",
+        "5a8920707d8b7563"
+      ],
+      "id": "4705cfffb820574c",
+      "date": 1402790331262
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "68e5f5fe0bdda036",
+        "text": ""
+      },
+      "id": "68e5f5fe0bdda036",
+      "type": "add",
+      "after": "4705cfffb820574c",
+      "date": 1402790363580
+    },
+    {
+      "type": "edit",
+      "id": "68e5f5fe0bdda036",
+      "item": {
+        "type": "paragraph",
+        "id": "68e5f5fe0bdda036",
+        "text": "The script concludes by suggesting commands that will be used in development. "
+      },
+      "date": 1402790438808
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "694fad2967ce42b1"
+      },
+      "id": "694fad2967ce42b1",
+      "type": "add",
+      "after": "5a8920707d8b7563",
+      "date": 1402790461336
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5d32a3f73abb8d05",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "5a8920707d8b7563"
+      ],
+      "id": "694fad2967ce42b1",
+      "date": 1402790465352
+    },
+    {
+      "type": "edit",
+      "id": "694fad2967ce42b1",
+      "item": {
+        "type": "paragraph",
+        "id": "694fad2967ce42b1",
+        "text": "Change to the plugin's package directory. Further commands are entered here."
+      },
+      "date": 1402790575934
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a1b13bda696f6c00",
+        "text": ""
+      },
+      "id": "a1b13bda696f6c00",
+      "type": "add",
+      "after": "694fad2967ce42b1",
+      "date": 1402790576441
+    },
+    {
+      "type": "edit",
+      "id": "a1b13bda696f6c00",
+      "item": {
+        "type": "paragraph",
+        "id": "a1b13bda696f6c00",
+        "text": "Install the dependents specified in the package.json file. The long list will print as installation proceeds. Optional packages may fail to build. "
+      },
+      "date": 1402790652563
+    },
+    {
+      "type": "edit",
+      "id": "a1b13bda696f6c00",
+      "item": {
+        "type": "paragraph",
+        "id": "a1b13bda696f6c00",
+        "text": "Install the dependents specified in the package.json file. The long list will print as installation proceeds. Optional packages may fail to build."
+      },
+      "date": 1402790658739
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "18eb84f693ed3c38",
+        "text": ""
+      },
+      "id": "18eb84f693ed3c38",
+      "type": "add",
+      "after": "a1b13bda696f6c00",
+      "date": 1402790659246
+    },
+    {
+      "type": "edit",
+      "id": "18eb84f693ed3c38",
+      "item": {
+        "type": "paragraph",
+        "id": "18eb84f693ed3c38",
+        "text": "Build the generated code, compiling coffeescript and bundling requirements with browserify."
+      },
+      "date": 1402790712730
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "12b1e6b76111dc65",
+        "text": ""
+      },
+      "id": "12b1e6b76111dc65",
+      "type": "add",
+      "after": "18eb84f693ed3c38",
+      "date": 1402790713237
+    },
+    {
+      "type": "edit",
+      "id": "12b1e6b76111dc65",
+      "item": {
+        "type": "paragraph",
+        "id": "12b1e6b76111dc65",
+        "text": "Publish the new plugin locally using symbolic links. One command makes the package available, another adds it to the server's plugins."
+      },
+      "date": 1402790836941
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "df8d838736e7d5be",
+        "text": ""
+      },
+      "id": "df8d838736e7d5be",
+      "type": "add",
+      "after": "12b1e6b76111dc65",
+      "date": 1402790837448
+    },
+    {
+      "type": "edit",
+      "id": "df8d838736e7d5be",
+      "item": {
+        "type": "paragraph",
+        "id": "df8d838736e7d5be",
+        "text": "Start (or restart) the local server. Once the server notices the new plugin it will serve updated versions without further attention."
+      },
+      "date": 1402790919132
+    },
+    {
+      "type": "edit",
+      "id": "18eb84f693ed3c38",
+      "item": {
+        "type": "paragraph",
+        "id": "18eb84f693ed3c38",
+        "text": "Build the generated code, compiling coffeescript and bundling requirements with browserify. Watch for subsequent versions and build them too."
+      },
+      "date": 1402790939947
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "5d32a3f73abb8d05",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be"
+      ],
+      "id": "5a8920707d8b7563",
+      "date": 1402790953936
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8004c4297a244a54",
+        "text": ""
+      },
+      "id": "8004c4297a244a54",
+      "type": "add",
+      "after": "df8d838736e7d5be",
+      "date": 1402790984331
+    },
+    {
+      "type": "edit",
+      "id": "8004c4297a244a54",
+      "item": {
+        "type": "paragraph",
+        "id": "8004c4297a244a54",
+        "text": "Start browsing the generated help page which includes an example of the plugin in use. It just displays text in a gray box."
+      },
+      "date": 1402791075054
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7c15af1e0eab7c11",
+        "text": ""
+      },
+      "id": "7c15af1e0eab7c11",
+      "type": "add",
+      "after": "8004c4297a244a54",
+      "date": 1402791075560
+    },
+    {
+      "type": "remove",
+      "id": "7c15af1e0eab7c11",
+      "date": 1402791081512
+    },
+    {
+      "type": "edit",
+      "id": "8004c4297a244a54",
+      "item": {
+        "type": "paragraph",
+        "id": "8004c4297a244a54",
+        "text": "Start browsing the generated help page which includes an example of the plugin in use. It just displays text on a gray background."
+      },
+      "date": 1402791090975
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8f017c5e93b4386f",
+        "text": ""
+      },
+      "id": "8f017c5e93b4386f",
+      "type": "add",
+      "after": "8004c4297a244a54",
+      "date": 1402791100680
+    },
+    {
+      "type": "edit",
+      "id": "8f017c5e93b4386f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f017c5e93b4386f",
+        "text": "Edit the generated plugin to do more interesting things. Refresh the browser when the build completes. Try the Chrome inspector's option that disables caching while it is open."
+      },
+      "date": 1402791213178
+    },
+    {
+      "type": "edit",
+      "id": "8f017c5e93b4386f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f017c5e93b4386f",
+        "text": "Edit the generated plugin to do more interesting things. Refresh the browser when the build completes. Try the Chrome inspector's option that disables caching."
+      },
+      "date": 1402791251795
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "593e135e79b2d841",
+        "text": ""
+      },
+      "id": "593e135e79b2d841",
+      "type": "add",
+      "after": "8f017c5e93b4386f",
+      "date": 1402791261081
+    },
+    {
+      "type": "edit",
+      "id": "593e135e79b2d841",
+      "item": {
+        "type": "paragraph",
+        "id": "593e135e79b2d841",
+        "text": "Commit the generated files and your improvements to a local git repository."
+      },
+      "date": 1402791330201
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "dc960a75d029b631",
+        "text": ""
+      },
+      "id": "dc960a75d029b631",
+      "type": "add",
+      "after": "593e135e79b2d841",
+      "date": 1402791330708
+    },
+    {
+      "type": "edit",
+      "id": "dc960a75d029b631",
+      "item": {
+        "type": "paragraph",
+        "id": "dc960a75d029b631",
+        "text": "<h3> Publication"
+      },
+      "date": 1402791341616
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7ea6eae91db72af4",
+        "text": ""
+      },
+      "id": "7ea6eae91db72af4",
+      "type": "add",
+      "after": "dc960a75d029b631",
+      "date": 1402791342123
+    },
+    {
+      "type": "edit",
+      "id": "7ea6eae91db72af4",
+      "item": {
+        "type": "paragraph",
+        "id": "7ea6eae91db72af4",
+        "text": "If you make a GitHub repo by the same name then it is easy to publish your code with two git commands that they will suggest."
+      },
+      "date": 1402791391565
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ad6bc61bceb93d66",
+        "text": ""
+      },
+      "id": "ad6bc61bceb93d66",
+      "type": "add",
+      "after": "7ea6eae91db72af4",
+      "date": 1402791392071
+    },
+    {
+      "type": "edit",
+      "id": "ad6bc61bceb93d66",
+      "item": {
+        "type": "paragraph",
+        "id": "ad6bc61bceb93d66",
+        "text": "If you make an npm module by the same name then you can publish your module following their instructions. "
+      },
+      "date": 1402791453773
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b92bbb0f952ead09",
+        "text": ""
+      },
+      "id": "b92bbb0f952ead09",
+      "type": "add",
+      "after": "ad6bc61bceb93d66",
+      "date": 1402791454279
+    },
+    {
+      "type": "edit",
+      "id": "b92bbb0f952ead09",
+      "item": {
+        "type": "paragraph",
+        "id": "b92bbb0f952ead09",
+        "text": "As a published npm module other federated wiki server operators can offer your plugin by adding one like to their packages.json file."
+      },
+      "date": 1402791569656
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "90d4f7d4ff0c3c52",
+        "text": ""
+      },
+      "id": "90d4f7d4ff0c3c52",
+      "type": "add",
+      "after": "b92bbb0f952ead09",
+      "date": 1402791570163
+    },
+    {
+      "type": "edit",
+      "id": "90d4f7d4ff0c3c52",
+      "item": {
+        "type": "paragraph",
+        "id": "90d4f7d4ff0c3c52",
+        "text": "As a published npm module with continued support you are welcome to request your module be included in the package.json included in the npm module 'wiki'. [https://github/fedwiki/wiki-node github]"
+      },
+      "date": 1402791677414
+    },
+    {
+      "type": "edit",
+      "id": "90d4f7d4ff0c3c52",
+      "item": {
+        "type": "paragraph",
+        "id": "90d4f7d4ff0c3c52",
+        "text": "As a published npm module with continued support you are welcome to request your module be included in the package.json included in the npm module 'wiki'. [https://github.com/fedwiki/wiki-node/blob/master/package.json github]"
+      },
+      "date": 1402791941304
+    },
+    {
+      "type": "edit",
+      "id": "90d4f7d4ff0c3c52",
+      "item": {
+        "type": "paragraph",
+        "id": "90d4f7d4ff0c3c52",
+        "text": "As a published npm module with continued support you are welcome to request your module be included in the package.json included in the wiki-node module. [https://github.com/fedwiki/wiki-node/blob/master/package.json github]"
+      },
+      "date": 1402791993881
+    },
+    {
+      "type": "edit",
+      "id": "5a8920707d8b7563",
+      "item": {
+        "type": "paragraph",
+        "id": "5a8920707d8b7563",
+        "text": "See [[Make a New Plugin]] for a slightly higher level description of the plugin construction process."
+      },
+      "date": 1402792072941
+    },
+    {
+      "type": "edit",
+      "id": "8958df7c5f4335fc",
+      "item": {
+        "type": "paragraph",
+        "id": "8958df7c5f4335fc",
+        "text": "The make plugin script will create files for a new plugin to handle items of a new type. The files include an about page with an example of the new type ready to be rendered by the new plugin. [https://gist.github.com/WardCunningham/fced775fcedcee133b32 gist]"
+      },
+      "date": 1402792181569
+    },
+    {
+      "type": "edit",
+      "id": "8958df7c5f4335fc",
+      "item": {
+        "type": "paragraph",
+        "id": "8958df7c5f4335fc",
+        "text": "The make plugin script will create files for a new plugin to handle items of a new type. The files include an about page with an example of the new item type ready to be rendered by the new plugin. [https://gist.github.com/WardCunningham/fced775fcedcee133b32 gist]"
+      },
+      "date": 1402792201384
+    },
+    {
+      "type": "edit",
+      "id": "ad6bc61bceb93d66",
+      "item": {
+        "type": "paragraph",
+        "id": "ad6bc61bceb93d66",
+        "text": "If you make an npm module by the same name then you can publish your module following their instructions. [https://www.npmjs.org/doc/developers.html doc]"
+      },
+      "date": 1402864321124
+    },
+    {
+      "type": "edit",
+      "id": "7ea6eae91db72af4",
+      "item": {
+        "type": "paragraph",
+        "id": "7ea6eae91db72af4",
+        "text": "If you make a GitHub repo by the same name then it is easy to publish your code with two git commands that they will suggest. [https://help.github.com/articles/create-a-repo doc]"
+      },
+      "date": 1402864385096
+    },
+    {
+      "type": "edit",
+      "id": "ae962679313d3dca",
+      "item": {
+        "type": "html",
+        "id": "ae962679313d3dca",
+        "text": "<h3> Files"
+      },
+      "date": 1418494867457
+    },
+    {
+      "type": "edit",
+      "id": "4705cfffb820574c",
+      "item": {
+        "type": "html",
+        "id": "4705cfffb820574c",
+        "text": "<h3> Commands"
+      },
+      "date": 1418494871576
+    },
+    {
+      "type": "edit",
+      "id": "dc960a75d029b631",
+      "item": {
+        "type": "html",
+        "id": "dc960a75d029b631",
+        "text": "<h3> Publication"
+      },
+      "date": 1418494876944
+    },
+    {
+      "type": "edit",
+      "id": "7ea6eae91db72af4",
+      "item": {
+        "type": "paragraph",
+        "id": "7ea6eae91db72af4",
+        "text": "Revise the contact information in the project.json file"
+      },
+      "date": 1418494957120
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7fd2e372a1dfde14",
+        "text": "If you make a GitHub repo by the same name then it is easy to publish your code with two git commands that they will suggest. [https://help.github.com/articles/create-a-repo doc]"
+      },
+      "id": "7fd2e372a1dfde14",
+      "type": "add",
+      "after": "7ea6eae91db72af4",
+      "date": 1418494957128
+    },
+    {
+      "type": "edit",
+      "id": "7ea6eae91db72af4",
+      "item": {
+        "type": "paragraph",
+        "id": "7ea6eae91db72af4",
+        "text": "Revise the contact information in the package.json file"
+      },
+      "date": 1418494973230
+    },
+    {
+      "type": "edit",
+      "id": "7ff51854eaaaf7d7",
+      "item": {
+        "type": "code",
+        "id": "7ff51854eaaaf7d7",
+        "text": "-rw-r--r--   1 ward  staff   44 Dec 13 10:17 .gitignore\n-rw-r--r--   1 ward  staff   26 Dec 13 10:17 .npmignore\n-rw-r--r--   1 ward  staff  170 Dec 13 10:17 ReadMe.md\ndrwxr-xr-x   5 ward  staff  170 Dec 13 10:17 client\n-rw-r--r--   1 ward  staff   86 Dec 13 10:17 factory.json\n-rw-r--r--   1 ward  staff  762 Dec 13 10:17 gruntfile.js\ndrwxr-xr-x   9 ward  staff  306 Dec 13 10:17 node_modules\n-rw-r--r--   1 ward  staff  807 Dec 13 10:17 package.json\ndrwxr-xr-x   3 ward  staff  102 Dec 13 10:17 pages\ndrwxr-xr-x   5 ward  staff  170 Dec 13 10:17 test\n"
+      },
+      "date": 1418495089038
+    },
+    {
+      "type": "edit",
+      "id": "7ff51854eaaaf7d7",
+      "item": {
+        "type": "code",
+        "id": "7ff51854eaaaf7d7",
+        "text": "-rw-r--r--   1 ward   44 Dec 13 10:17 .gitignore\n-rw-r--r--   1 ward   26 Dec 13 10:17 .npmignore\n-rw-r--r--   1 ward  170 Dec 13 10:17 ReadMe.md\ndrwxr-xr-x   5 ward  170 Dec 13 10:17 client\n-rw-r--r--   1 ward   86 Dec 13 10:17 factory.json\n-rw-r--r--   1 ward  762 Dec 13 10:17 gruntfile.js\ndrwxr-xr-x   9 ward  306 Dec 13 10:17 node_modules\n-rw-r--r--   1 ward  807 Dec 13 10:17 package.json\ndrwxr-xr-x   3 ward  102 Dec 13 10:17 pages\ndrwxr-xr-x   5 ward  170 Dec 13 10:17 test\n"
+      },
+      "date": 1418495148349
+    },
+    {
+      "type": "edit",
+      "id": "6f69d1b3fb1b2dcc",
+      "item": {
+        "type": "code",
+        "id": "6f69d1b3fb1b2dcc",
+        "text": "Package:    cd wiki-plugin-coolthing/\nInstall:    npm install\nBuild:      grunt build; grunt watch\nPublish:    npm link; (cd ../wiki-node; npm link wiki-plugin-coolthing)\nServer:     (restart once to notice new plugin)\nBrowse:     open localhost:3000/about-coolthing-plugin.html\nDevelop:    vi client/coolthing.coffee\nCommit:     git init; git commit -a -m 'mkplugin'\n"
+      },
+      "date": 1418495202532
+    },
+    {
+      "type": "fork",
+      "site": "plugins.fed.wiki.org",
+      "date": 1438519821411
+    },
+    {
+      "type": "add",
+      "id": "bc40b92906a68c29",
+      "item": {
+        "type": "paragraph",
+        "id": "bc40b92906a68c29",
+        "text": "If you npm install your plugin rather than using the npm link mechanism you will be copying exactly the files that others will see when they install from npm."
+      },
+      "after": "ad6bc61bceb93d66",
+      "site": "plugins.fed.wiki.org",
+      "date": 1438519821408
+    },
+    {
+      "type": "fork",
+      "date": 1438519849647
+    },
+    {
+      "type": "edit",
+      "id": "bc40b92906a68c29",
+      "item": {
+        "type": "paragraph",
+        "id": "bc40b92906a68c29",
+        "text": "If you npm install from your plugin directory rather than using the npm link mechanism you will be copying exactly the files that others will see when they install from npm."
+      },
+      "date": 1438519997233
+    },
+    {
+      "type": "fork",
+      "site": "plugins.fed.wiki.org",
+      "date": 1438527396054
+    },
+    {
+      "type": "remove",
+      "id": "5d32a3f73abb8d05",
+      "date": 1438527479743
+    },
+    {
+      "type": "edit",
+      "id": "70dc62cdf95eed38",
+      "item": {
+        "type": "paragraph",
+        "id": "70dc62cdf95eed38",
+        "text": "The first thing is to make a FedWiki directory that will contain clones of any repos in use during development. "
+      },
+      "date": 1438773485783
+    },
+    {
+      "type": "add",
+      "id": "25922640e7996026",
+      "item": {
+        "type": "paragraph",
+        "id": "25922640e7996026",
+        "text": "Download the gist to this directory."
+      },
+      "after": "70dc62cdf95eed38",
+      "date": 1438773487106
+    },
+    {
+      "type": "edit",
+      "id": "70dc62cdf95eed38",
+      "item": {
+        "type": "paragraph",
+        "id": "70dc62cdf95eed38",
+        "text": "The first thing is to make a FedWiki directory that will contain clones of any repos in use during development. There are many ways to do things, here we describe setting up a directory call \"Fedwiki Plugins\" int eh users home directory:"
+      },
+      "date": 1438773568704
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1ee1ab39d27b4a3a"
+      },
+      "id": "1ee1ab39d27b4a3a",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438773572390
+    },
+    {
+      "type": "edit",
+      "id": "1ee1ab39d27b4a3a",
+      "item": {
+        "type": "code",
+        "id": "1ee1ab39d27b4a3a",
+        "text": "mkdir ~/Desktop/FedwikiPlugins\ncd ~/Desktop/FedwikiPlugins"
+      },
+      "date": 1438773660626
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "1ee1ab39d27b4a3a",
+      "date": 1438773678394
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b2e71e821996a88c"
+      },
+      "id": "b2e71e821996a88c",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438774512922
+    },
+    {
+      "type": "edit",
+      "id": "b2e71e821996a88c",
+      "item": {
+        "type": "code",
+        "id": "b2e71e821996a88c",
+        "text": "wget http://bit.ly/1T2Paly -O mkplugin.sh"
+      },
+      "date": 1438774515655
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "b2e71e821996a88c",
+      "date": 1438774523936
+    },
+    {
+      "type": "edit",
+      "id": "25922640e7996026",
+      "item": {
+        "type": "paragraph",
+        "id": "25922640e7996026",
+        "text": "Download the gist to this directory. Here we use wget to download the [[gist]] to create the mkplugin.sh file, and then change it's permissions to make it executable:"
+      },
+      "date": 1438774597172
+    },
+    {
+      "type": "edit",
+      "id": "b2e71e821996a88c",
+      "item": {
+        "type": "code",
+        "id": "b2e71e821996a88c",
+        "text": "wget http://bit.ly/1T2Paly -O mkplugin.sh\nchmod +x mkplugin.sh"
+      },
+      "date": 1438774625572
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "This will create a plugin for items of type coolthing. The script will also create for you a documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing. You can edit the json for this page using your favourite editor or use:"
+      },
+      "date": 1438774771341
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "99bc866b9ea9facc"
+      },
+      "id": "99bc866b9ea9facc",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438774775530
+    },
+    {
+      "type": "edit",
+      "id": "99bc866b9ea9facc",
+      "item": {
+        "type": "code",
+        "id": "99bc866b9ea9facc",
+        "text": "nano -w wiki-plugin-virus/pages/"
+      },
+      "date": 1438774788034
+    },
+    {
+      "type": "edit",
+      "id": "99bc866b9ea9facc",
+      "item": {
+        "type": "code",
+        "id": "99bc866b9ea9facc",
+        "text": "nano -w wiki-plugin-virus/pages/about-coolthing-plugin"
+      },
+      "date": 1438774826916
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "99bc866b9ea9facc",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "99bc866b9ea9facc",
+      "date": 1438774843102
+    },
+    {
+      "type": "add",
+      "id": "0507e75008432cb3",
+      "item": {
+        "type": "paragraph",
+        "id": "0507e75008432cb3",
+        "text": "Substitute coolthing for the name of the plugin you chose above - just look for the file already created for you and edit that."
+      },
+      "after": "ca190a1d5a57fbbd",
+      "date": 1438774996578
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "This will create a plugin for items of type coolthing. The script will also create for you a documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing. "
+      },
+      "date": 1438775004983
+    },
+    {
+      "type": "add",
+      "id": "9c6e944d8ef3af33",
+      "item": {
+        "type": "paragraph",
+        "id": "9c6e944d8ef3af33",
+        "text": "You can edit the json for this page using your favourite editor or use:"
+      },
+      "after": "ca190a1d5a57fbbd",
+      "date": 1438775005958
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "99bc866b9ea9facc",
+      "date": 1438775011269
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e5abbf95d1bca072"
+      },
+      "id": "e5abbf95d1bca072",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438775088198
+    },
+    {
+      "type": "edit",
+      "id": "e5abbf95d1bca072",
+      "item": {
+        "type": "code",
+        "id": "e5abbf95d1bca072",
+        "text": "ls -la ~/Desktop/FedwikiPlugins/wiki-plugin-virus"
+      },
+      "date": 1438775092038
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "e5abbf95d1bca072",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "e5abbf95d1bca072",
+      "date": 1438775097911
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "e5abbf95d1bca072",
+      "date": 1438775122968
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "This will create a plugin for items of type coolthing. "
+      },
+      "date": 1438775129314
+    },
+    {
+      "type": "add",
+      "id": "5128e95fe5cbcba1",
+      "item": {
+        "type": "paragraph",
+        "id": "5128e95fe5cbcba1",
+        "text": "The script will also create for you a documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing. "
+      },
+      "after": "ca190a1d5a57fbbd",
+      "date": 1438775131205
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "7ff51854eaaaf7d7",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "5128e95fe5cbcba1",
+      "date": 1438775136230
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "This will create a plugin for items of type coolthing. To view the files the script creates you can use the following command: "
+      },
+      "date": 1438775165556
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "7ff51854eaaaf7d7",
+        "e5abbf95d1bca072",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "7ff51854eaaaf7d7",
+      "date": 1438775173186
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "e5abbf95d1bca072",
+      "date": 1438775175485
+    },
+    {
+      "type": "edit",
+      "id": "ca190a1d5a57fbbd",
+      "item": {
+        "type": "paragraph",
+        "id": "ca190a1d5a57fbbd",
+        "text": "This will create a plugin for items of type coolthing. To view the files the script creates you can use the following command:"
+      },
+      "date": 1438775181189
+    },
+    {
+      "type": "add",
+      "id": "33133b6d2d95a0db",
+      "item": {
+        "type": "paragraph",
+        "id": "33133b6d2d95a0db",
+        "text": "which should result in an output like the following:"
+      },
+      "after": "ca190a1d5a57fbbd",
+      "date": 1438775194538
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "33133b6d2d95a0db",
+      "date": 1438775195792
+    },
+    {
+      "type": "edit",
+      "id": "5128e95fe5cbcba1",
+      "item": {
+        "type": "paragraph",
+        "id": "5128e95fe5cbcba1",
+        "text": "As you can see the script creates a \"pages\" directory. inside this directory the script has already created created for you a basic documentation page, [[About CoolThing Plugin]], that includes an example of a coolthing."
+      },
+      "date": 1438775307697
+    },
+    {
+      "type": "edit",
+      "id": "9c6e944d8ef3af33",
+      "item": {
+        "type": "paragraph",
+        "id": "9c6e944d8ef3af33",
+        "text": "You can edit the [[json]] for this page using your favourite editor or use:"
+      },
+      "date": 1438775315037
+    },
+    {
+      "type": "edit",
+      "id": "e5abbf95d1bca072",
+      "item": {
+        "type": "code",
+        "id": "e5abbf95d1bca072",
+        "text": "ls -la ~/Desktop/FedwikiPlugins/wiki-plugin-coolthing"
+      },
+      "date": 1438775338308
+    },
+    {
+      "type": "edit",
+      "id": "99bc866b9ea9facc",
+      "item": {
+        "type": "code",
+        "id": "99bc866b9ea9facc",
+        "text": "nano -w wiki-plugin-coolthing/pages/about-coolthing-plugin"
+      },
+      "date": 1438775356609
+    },
+    {
+      "type": "edit",
+      "id": "694fad2967ce42b1",
+      "item": {
+        "type": "paragraph",
+        "id": "694fad2967ce42b1",
+        "text": "Change to the plugin's package directory:"
+      },
+      "date": 1438775401414
+    },
+    {
+      "type": "add",
+      "id": "7065f6a8d0d982a4",
+      "item": {
+        "type": "paragraph",
+        "id": "7065f6a8d0d982a4",
+        "text": "Further commands are entered here."
+      },
+      "after": "694fad2967ce42b1",
+      "date": 1438775402482
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b6487f6bc127f6b2"
+      },
+      "id": "b6487f6bc127f6b2",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438775404969
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "7065f6a8d0d982a4",
+        "b6487f6bc127f6b2",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "b6487f6bc127f6b2",
+      "date": 1438775410534
+    },
+    {
+      "type": "edit",
+      "id": "b6487f6bc127f6b2",
+      "item": {
+        "type": "code",
+        "id": "b6487f6bc127f6b2",
+        "text": "cd ~/Desktop/FedwikiPlugins/wiki-plugin-coolthing"
+      },
+      "date": 1438775429896
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "b6487f6bc127f6b2",
+      "date": 1438775433914
+    },
+    {
+      "type": "edit",
+      "id": "694fad2967ce42b1",
+      "item": {
+        "type": "paragraph",
+        "id": "694fad2967ce42b1",
+        "text": "Step through each of these commands, starting with change to the plugin's package directory:"
+      },
+      "date": 1438775502043
+    },
+    {
+      "type": "edit",
+      "id": "b6487f6bc127f6b2",
+      "item": {
+        "type": "code",
+        "id": "b6487f6bc127f6b2",
+        "text": "cd wiki-plugin-coolthing/"
+      },
+      "date": 1438775511632
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6bc4ad54b3f19910"
+      },
+      "id": "6bc4ad54b3f19910",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438775713570
+    },
+    {
+      "type": "edit",
+      "id": "6bc4ad54b3f19910",
+      "item": {
+        "type": "code",
+        "id": "6bc4ad54b3f19910",
+        "text": "npm install"
+      },
+      "date": 1438775716357
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "6bc4ad54b3f19910",
+      "date": 1438775726796
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8b66ac47b47f1da"
+      },
+      "id": "c8b66ac47b47f1da",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438775745081
+    },
+    {
+      "type": "edit",
+      "id": "c8b66ac47b47f1da",
+      "item": {
+        "type": "code",
+        "id": "c8b66ac47b47f1da",
+        "text": "grunt build; grunt watch"
+      },
+      "date": 1438775747910
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "c8b66ac47b47f1da",
+      "date": 1438775753947
+    },
+    {
+      "type": "add",
+      "id": "b56ecb77a9b1720f",
+      "item": {
+        "type": "paragraph",
+        "id": "b56ecb77a9b1720f",
+        "text": "Then cd to the folder of your local server. It is a good idea to have a second install of development server you can make changes to, but here we give an example of adding the plugin to the default local install on an OSX machine:"
+      },
+      "after": "12b1e6b76111dc65",
+      "date": 1438776364463
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b385dd6ad242f6fc"
+      },
+      "id": "b385dd6ad242f6fc",
+      "type": "add",
+      "after": "90d4f7d4ff0c3c52",
+      "date": 1438776383416
+    },
+    {
+      "type": "add",
+      "id": "617d27c366e8503b",
+      "item": {
+        "type": "paragraph",
+        "id": "617d27c366e8503b",
+        "text": "cd /usr/local/lib/node_modules/wiki"
+      },
+      "after": "b56ecb77a9b1720f",
+      "date": 1438776385109
+    },
+    {
+      "type": "edit",
+      "id": "b385dd6ad242f6fc",
+      "item": {
+        "type": "code",
+        "id": "b385dd6ad242f6fc",
+        "text": "cd /usr/local/lib/node_modules/wiki"
+      },
+      "date": 1438776386467
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "ae962679313d3dca",
+        "70dc62cdf95eed38",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "b385dd6ad242f6fc",
+      "date": 1438776392571
+    },
+    {
+      "type": "edit",
+      "id": "b385dd6ad242f6fc",
+      "item": {
+        "type": "code",
+        "id": "b385dd6ad242f6fc",
+        "text": "cd /usr/local/lib/node_modules/wiki\nnpm link"
+      },
+      "date": 1438776405066
+    },
+    {
+      "type": "edit",
+      "id": "617d27c366e8503b",
+      "item": {
+        "type": "paragraph",
+        "id": "617d27c366e8503b",
+        "text": "\"npm link\" basicall copies / remembers the [[sym link]] you are about to create"
+      },
+      "date": 1438776456445
+    },
+    {
+      "type": "edit",
+      "id": "617d27c366e8503b",
+      "item": {
+        "type": "paragraph",
+        "id": "617d27c366e8503b",
+        "text": "\"npm link\" basicall copies / remembers the [[symlink]] you are about to create"
+      },
+      "date": 1438776469737
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ff36e1104cbebab0",
+        "text": "A common configuration is to make a FedWiki directory that contains clones of any repos in use during development. Download the gist to this directory.",
+        "alias": "70dc62cdf95eed38"
+      },
+      "after": "ae962679313d3dca",
+      "id": "ff36e1104cbebab0",
+      "date": 1461493582784
+    },
+    {
+      "type": "remove",
+      "id": "70dc62cdf95eed38",
+      "date": 1461493585711
+    },
+    {
+      "type": "add",
+      "id": "fbb1eeb47a5b205a",
+      "item": {
+        "type": "paragraph",
+        "id": "fbb1eeb47a5b205a",
+        "text": "# Setup"
+      },
+      "after": "5a8920707d8b7563",
+      "date": 1461493643309
+    },
+    {
+      "type": "edit",
+      "id": "fbb1eeb47a5b205a",
+      "item": {
+        "type": "markdown",
+        "id": "fbb1eeb47a5b205a",
+        "text": "# Setup"
+      },
+      "date": 1461493644914
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "ae962679313d3dca",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "70dc62cdf95eed38",
+      "date": 1461493646419
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "1ee1ab39d27b4a3a",
+        "ae962679313d3dca",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "1ee1ab39d27b4a3a",
+      "date": 1461493648521
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "ae962679313d3dca",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "25922640e7996026",
+      "date": 1461493650875
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "ae962679313d3dca",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "b2e71e821996a88c",
+      "date": 1461493653374
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "ae962679313d3dca",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "1762d49b2d9c619d",
+      "date": 1461493655850
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ae962679313d3dca",
+        "ca190a1d5a57fbbd",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "cf12620d03221ecb",
+      "date": 1461493658108
+    },
+    {
+      "type": "move",
+      "order": [
+        "8958df7c5f4335fc",
+        "5a8920707d8b7563",
+        "fbb1eeb47a5b205a",
+        "ff36e1104cbebab0",
+        "1ee1ab39d27b4a3a",
+        "25922640e7996026",
+        "b2e71e821996a88c",
+        "1762d49b2d9c619d",
+        "cf12620d03221ecb",
+        "ca190a1d5a57fbbd",
+        "ae962679313d3dca",
+        "e5abbf95d1bca072",
+        "33133b6d2d95a0db",
+        "7ff51854eaaaf7d7",
+        "5128e95fe5cbcba1",
+        "9c6e944d8ef3af33",
+        "99bc866b9ea9facc",
+        "0507e75008432cb3",
+        "4705cfffb820574c",
+        "68e5f5fe0bdda036",
+        "6f69d1b3fb1b2dcc",
+        "694fad2967ce42b1",
+        "b6487f6bc127f6b2",
+        "7065f6a8d0d982a4",
+        "a1b13bda696f6c00",
+        "6bc4ad54b3f19910",
+        "18eb84f693ed3c38",
+        "c8b66ac47b47f1da",
+        "12b1e6b76111dc65",
+        "b56ecb77a9b1720f",
+        "b385dd6ad242f6fc",
+        "617d27c366e8503b",
+        "df8d838736e7d5be",
+        "8004c4297a244a54",
+        "8f017c5e93b4386f",
+        "593e135e79b2d841",
+        "dc960a75d029b631",
+        "7ea6eae91db72af4",
+        "7fd2e372a1dfde14",
+        "ad6bc61bceb93d66",
+        "bc40b92906a68c29",
+        "b92bbb0f952ead09",
+        "90d4f7d4ff0c3c52"
+      ],
+      "id": "ca190a1d5a57fbbd",
+      "date": 1461493679548
+    },
+    {
+      "type": "edit",
+      "id": "12b1e6b76111dc65",
+      "item": {
+        "type": "paragraph",
+        "id": "12b1e6b76111dc65",
+        "text": "Publish the new plugin locally using [[npm link]]. This links your development plugin to a global space on your system which can then be subscribed to by your wiki application using npm link. One command makes the package available, another adds it to the server's plugins."
+      },
+      "date": 1461494118198
+    },
+    {
+      "type": "remove",
+      "id": "b56ecb77a9b1720f",
+      "date": 1461495420213
+    },
+    {
+      "type": "remove",
+      "id": "b385dd6ad242f6fc",
+      "date": 1461495423540
+    },
+    {
+      "type": "remove",
+      "id": "617d27c366e8503b",
+      "date": 1461495431797
+    },
+    {
+      "type": "edit",
+      "id": "e5abbf95d1bca072",
+      "item": {
+        "type": "code",
+        "id": "e5abbf95d1bca072",
+        "text": "ls -la ~/FedwikiPlugins/wiki-plugin-coolthing"
+      },
+      "date": 1461495461572
+    },
+    {
+      "type": "edit",
+      "id": "1ee1ab39d27b4a3a",
+      "item": {
+        "type": "code",
+        "id": "1ee1ab39d27b4a3a",
+        "text": "mkdir ~/FedwikiPlugins\ncd ~/FedwikiPlugins"
+      },
+      "date": 1461495474645
+    },
+    {
+      "type": "edit",
+      "id": "e3e51df348f8b66c",
+      "item": {
+        "type": "code",
+        "id": "e3e51df348f8b66c",
+        "text": "cd ~/projects/wiki # go to your local wiki project\nnpm link ../node-redis     # link your dependency"
+      },
+      "date": 1461495544774
+    },
+    {
+      "type": "edit",
+      "id": "e3e51df348f8b66c",
+      "item": {
+        "type": "code",
+        "id": "e3e51df348f8b66c",
+        "text": "cd ~/FedwikiPlugins/wiki # go to your local wiki project\nnpm link ../node-redis     # link your dependency"
+      },
+      "date": 1461495565820
+    },
+    {
+      "type": "edit",
+      "id": "e3e51df348f8b66c",
+      "item": {
+        "type": "code",
+        "id": "e3e51df348f8b66c",
+        "text": "# go to your local wiki project\ncd ~/FedwikiPlugins/wiki\n\n# link your dependency\nnpm link ../wiki-plugin-coolthing"
+      },
+      "date": 1461495601546
+    }
+  ]
+}

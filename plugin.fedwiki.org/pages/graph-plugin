@@ -1,0 +1,943 @@
+{
+  "title": "Graph Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b00bf41290073751",
+      "text": "here we describe the results of creating a new plugin to render interactive graphs in Fedwiki. First et's [[Make a New Plugin]]. "
+    },
+    {
+      "type": "code",
+      "id": "b31ff74b8f363db1",
+      "text": "https://github.com/ViralAcademy/wiki-plugin-svg/tree/master\n\n emit = ($item, item) ->\n  \n\nbind = ($item, item) ->\n  $item.dblclick -> wiki.textEditor $item, item\n\nwindow.plugins.svg = {emit, bind} if window?\nmodule.exports = {expand} if module?\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "0633e1c046c8dc6a",
+      "text": "We want to try a few approaches:"
+    },
+    {
+      "type": "markdown",
+      "id": "21b44f74af8b025b",
+      "text": "* [[About Graph Plugin]]\n* [[SVG Plugin]]\n* [[Cytoscape Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "efa7290cc863f4b7",
+      "text": "in the end we may seek to combine these approaches back into a single [[Graph Plugin]]."
+    },
+    {
+      "type": "html",
+      "id": "be4e12d8e22c0d74",
+      "text": "Here is a graph:"
+    },
+    {
+      "type": "html",
+      "id": "5b1f30c704b69c7d",
+      "text": "<img src=\"https://cdn.rawgit.com/mountainstorm/jquery.graphviz.svg/master/demo.svg\" width=420>"
+    },
+    {
+      "type": "reference",
+      "id": "7f6737cf452de018",
+      "site": "localhost:3030",
+      "slug": "testing-graph-plugin",
+      "title": "Testing Graph Plugin",
+      "text": "[[About Graph Plugin]]"
+    },
+    {
+      "type": "reference",
+      "id": "b16e5feb31fead0d",
+      "site": "future.fedwiki.org",
+      "slug": "svg-in-img-tag",
+      "title": "SVG in IMG Tag",
+      "text": "We've made progress manipulating svg with jquery, particularly getting it to parse svg from javascript strings."
+    },
+    {
+      "type": "reference",
+      "id": "0db3a27460c68c80",
+      "site": "future.fedwiki.org",
+      "slug": "svg-image-map",
+      "title": "SVG Image Map",
+      "text": "There is currenlty no short term solution for interactive Fedwiki maps. Both standard [[HTML Image maps]] and [[SVG]] fails to work."
+    },
+    {
+      "type": "reference",
+      "id": "7f1c84562abc8631",
+      "site": "future.fedwiki.org",
+      "slug": "html-sanitization",
+      "title": "HTML Sanitization",
+      "text": "The [[HTML Sanitization]] that the [[About HTML Plugin]] performs removes the markup required to provide [[Internal Fedwiki Links]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "5391e32648a855f1",
+      "text": "A simple svg:"
+    },
+    {
+      "type": "code",
+      "id": "4d7036bb39c40fd0",
+      "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\">\n  <path d=\"M30,1h40l29,29v40l-29,29h-40l-29-29v-40z\" stroke=\"#000\" fill=\"none\"/> \n  <path d=\"M31,3h38l28,28v38l-28,28h-38l-28-28v-38z\" fill=\"#a23\"/> \n  <text x=\"50\" y=\"68\" font-size=\"48\" fill=\"#FFF\" text-anchor=\"middle\"><![CDATA[410]]></text>\n</svg>"
+    },
+    {
+      "caption": "Uploaded image",
+      "id": "c92e60e5b60d6316",
+      "text": "Example SVG with a simple link.",
+      "type": "image",
+      "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KCiAgICA8YSB4bGluazpocmVmPSIvc3ZnL2luZGV4Lmh0bWwiIHRhcmdldD0iX3RvcCI+CiAgICAgICAgPHJlY3QgeD0iMTAiIHk9IjIwIiB3aWR0aD0iNzUiIGhlaWdodD0iMzAiIHN0eWxlPSJzdHJva2U6ICMzMzMzNjY7IGZpbGw6ICM2NjY2Y2MiLz4KICAgIDwvYT4KCjwvc3ZnPgo="
+    },
+    {
+      "type": "html",
+      "id": "93c60b937afdd8b1",
+      "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/map.svg\">"
+    },
+    {
+      "type": "reference",
+      "id": "bb30ca3911e26471",
+      "site": "future.fedwiki.org",
+      "slug": "huge-svg-image-maps",
+      "title": "Huge SVG Image Maps",
+      "text": "This is an interesting bug, that maybe could be put to good use :)"
+    },
+    {
+      "type": "reference",
+      "id": "d1fafbb3fc3079de",
+      "site": "future.fedwiki.org",
+      "slug": "svg-image-map",
+      "title": "SVG Image Map",
+      "text": "There is currenlty no short term solution for interactive Fedwiki maps. Both standard [[HTML Image maps]] and [[SVG]] fails to work."
+    },
+    {
+      "type": "html",
+      "id": "788fc6515570abbd",
+      "text": "<svg width=\"100\" height=\"100\">\n  <circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"green\" stroke-width=\"4\" fill=\"yellow\" />\n</svg>\n"
+    },
+    {
+      "type": "code",
+      "id": "e3f38b6a89586694",
+      "text": "<svg width=\"100\" height=\"100\">\n  <circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"green\" stroke-width=\"4\" fill=\"yellow\" />\n</svg>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f57c6f4b556dee9",
+      "text": "Can be found here - [https://dl.dropboxusercontent.com/u/373931789/link01.svg dropboxusercontent]"
+    },
+    {
+      "type": "code",
+      "id": "35d5e09ca631782c",
+      "text": "<svg width=\"5cm\" height=\"3cm\" viewBox=\"0 0 5 3\" version=\"1.1\"\n     xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n  <desc>Example link01 - a link on an ellipse\n  </desc>\n  <rect x=\".01\" y=\".01\" width=\"4.98\" height=\"2.98\" \n        fill=\"none\" stroke=\"blue\"  stroke-width=\".03\"/>\n  <a xlink:href=\"http://www.w3.org\">\n    <ellipse cx=\"2.5\" cy=\"1.5\" rx=\"2\" ry=\"1\"\n             fill=\"red\" />\n  </a>\n</svg>"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Graph Plugin",
+        "story": []
+      },
+      "date": 1461428704465
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "be4e12d8e22c0d74"
+      },
+      "id": "be4e12d8e22c0d74",
+      "type": "add",
+      "date": 1461428705703
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "86eefdd8cb772eb6"
+      },
+      "id": "86eefdd8cb772eb6",
+      "type": "add",
+      "after": "be4e12d8e22c0d74",
+      "date": 1461428706895
+    },
+    {
+      "type": "edit",
+      "id": "be4e12d8e22c0d74",
+      "item": {
+        "type": "html",
+        "id": "be4e12d8e22c0d74",
+        "text": "Here is a graph:"
+      },
+      "date": 1461428798439
+    },
+    {
+      "type": "remove",
+      "id": "86eefdd8cb772eb6",
+      "date": 1461428803317
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5b1f30c704b69c7d"
+      },
+      "id": "5b1f30c704b69c7d",
+      "type": "add",
+      "after": "be4e12d8e22c0d74",
+      "date": 1461428806406
+    },
+    {
+      "type": "edit",
+      "id": "5b1f30c704b69c7d",
+      "item": {
+        "type": "html",
+        "id": "5b1f30c704b69c7d",
+        "text": "<img src=\"https://cdn.rawgit.com/mountainstorm/jquery.graphviz.svg/master/demo.svg\">"
+      },
+      "date": 1461428817629
+    },
+    {
+      "type": "edit",
+      "id": "5b1f30c704b69c7d",
+      "item": {
+        "type": "html",
+        "id": "5b1f30c704b69c7d",
+        "text": "<img src=\"https://cdn.rawgit.com/mountainstorm/jquery.graphviz.svg/master/demo.svg\" width=420>"
+      },
+      "date": 1461428834519
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "22132b51681a5522"
+      },
+      "id": "22132b51681a5522",
+      "type": "add",
+      "after": "5b1f30c704b69c7d",
+      "date": 1461429457813
+    },
+    {
+      "type": "edit",
+      "id": "22132b51681a5522",
+      "item": {
+        "type": "paragraph",
+        "id": "22132b51681a5522",
+        "text": "[[About Graph Plugin]]"
+      },
+      "date": 1461429468994
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7f6737cf452de018"
+      },
+      "id": "7f6737cf452de018",
+      "type": "add",
+      "after": "22132b51681a5522",
+      "date": 1461429665229
+    },
+    {
+      "type": "edit",
+      "id": "7f6737cf452de018",
+      "item": {
+        "type": "reference",
+        "id": "7f6737cf452de018",
+        "site": "localhost:3030",
+        "slug": "testing-graph-plugin",
+        "title": "Testing Graph Plugin",
+        "text": "[[About Graph Plugin]]"
+      },
+      "date": 1461429667342
+    },
+    {
+      "type": "move",
+      "order": [
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "22132b51681a5522"
+      ],
+      "id": "22132b51681a5522",
+      "date": 1461429674090
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e7b407b2e37d80a1"
+      },
+      "id": "e7b407b2e37d80a1",
+      "type": "add",
+      "after": "22132b51681a5522",
+      "date": 1461430487621
+    },
+    {
+      "type": "edit",
+      "id": "e7b407b2e37d80a1",
+      "item": {
+        "type": "transport",
+        "id": "e7b407b2e37d80a1",
+        "text": "POST https://livecode.world/test"
+      },
+      "date": 1461430508041
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3030",
+      "date": 1461432791321
+    },
+    {
+      "type": "fork",
+      "date": 1461435311319
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5391e32648a855f1"
+      },
+      "id": "5391e32648a855f1",
+      "type": "add",
+      "after": "e7b407b2e37d80a1",
+      "date": 1461435312307
+    },
+    {
+      "type": "edit",
+      "id": "5391e32648a855f1",
+      "item": {
+        "type": "paragraph",
+        "id": "5391e32648a855f1",
+        "text": "A simple svg:"
+      },
+      "date": 1461435319691
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4d7036bb39c40fd0"
+      },
+      "id": "4d7036bb39c40fd0",
+      "type": "add",
+      "after": "5391e32648a855f1",
+      "date": 1461435321344
+    },
+    {
+      "type": "edit",
+      "id": "4d7036bb39c40fd0",
+      "item": {
+        "type": "code",
+        "id": "4d7036bb39c40fd0",
+        "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\">\n  <path d=\"M30,1h40l29,29v40l-29,29h-40l-29-29v-40z\" stroke=\"#000\" fill=\"none\"/> \n  <path d=\"M31,3h38l28,28v38l-28,28h-38l-28-28v-38z\" fill=\"#a23\"/> \n  <text x=\"50\" y=\"68\" font-size=\"48\" fill=\"#FFF\" text-anchor=\"middle\"><![CDATA[410]]></text>\n</svg>"
+      },
+      "date": 1461435324227
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "37b5aac35264d3e2"
+      },
+      "id": "37b5aac35264d3e2",
+      "type": "add",
+      "after": "4d7036bb39c40fd0",
+      "date": 1461435327436
+    },
+    {
+      "type": "edit",
+      "id": "37b5aac35264d3e2",
+      "item": {
+        "type": "html",
+        "id": "37b5aac35264d3e2",
+        "text": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\">\n  <path d=\"M30,1h40l29,29v40l-29,29h-40l-29-29v-40z\" stroke=\"#000\" fill=\"none\"/> \n  <path d=\"M31,3h38l28,28v38l-28,28h-38l-28-28v-38z\" fill=\"#a23\"/> \n  <text x=\"50\" y=\"68\" font-size=\"48\" fill=\"#FFF\" text-anchor=\"middle\"><![CDATA[410]]></text>\n</svg>"
+      },
+      "date": 1461435331187
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bb30ca3911e26471"
+      },
+      "id": "bb30ca3911e26471",
+      "type": "add",
+      "after": "37b5aac35264d3e2",
+      "date": 1461435482724
+    },
+    {
+      "type": "edit",
+      "id": "bb30ca3911e26471",
+      "item": {
+        "type": "reference",
+        "id": "bb30ca3911e26471",
+        "site": "future.fedwiki.org",
+        "slug": "huge-svg-image-maps",
+        "title": "Huge SVG Image Maps",
+        "text": "This is an interesting bug, that maybe could be put to good use :)"
+      },
+      "date": 1461435484621
+    },
+    {
+      "type": "add",
+      "item": {
+        "caption": "Uploaded image",
+        "id": "c92e60e5b60d6316",
+        "text": "Example SVG with a simple link.",
+        "type": "image",
+        "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KCiAgICA8YSB4bGluazpocmVmPSIvc3ZnL2luZGV4Lmh0bWwiIHRhcmdldD0iX3RvcCI+CiAgICAgICAgPHJlY3QgeD0iMTAiIHk9IjIwIiB3aWR0aD0iNzUiIGhlaWdodD0iMzAiIHN0eWxlPSJzdHJva2U6ICMzMzMzNjY7IGZpbGw6ICM2NjY2Y2MiLz4KICAgIDwvYT4KCjwvc3ZnPgo="
+      },
+      "after": "37b5aac35264d3e2",
+      "id": "c92e60e5b60d6316",
+      "date": 1461435712900
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d1fafbb3fc3079de"
+      },
+      "id": "d1fafbb3fc3079de",
+      "type": "add",
+      "after": "bb30ca3911e26471",
+      "date": 1461436164281
+    },
+    {
+      "type": "edit",
+      "id": "d1fafbb3fc3079de",
+      "item": {
+        "type": "reference",
+        "id": "d1fafbb3fc3079de",
+        "site": "future.fedwiki.org",
+        "slug": "svg-image-map",
+        "title": "SVG Image Map",
+        "text": "There is currenlty no short term solution for interactive Fedwiki maps. Both standard [[HTML Image maps]] and [[SVG]] fails to work."
+      },
+      "date": 1461436166674
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "788fc6515570abbd"
+      },
+      "id": "788fc6515570abbd",
+      "type": "add",
+      "after": "d1fafbb3fc3079de",
+      "date": 1461436272257
+    },
+    {
+      "type": "edit",
+      "id": "788fc6515570abbd",
+      "item": {
+        "type": "html",
+        "id": "788fc6515570abbd",
+        "text": "<svg width=\"100\" height=\"100\">\n  <circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"green\" stroke-width=\"4\" fill=\"yellow\" />\n</svg>\n"
+      },
+      "date": 1461436277946
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ae1f9721a5c0ec0e"
+      },
+      "id": "ae1f9721a5c0ec0e",
+      "type": "add",
+      "after": "788fc6515570abbd",
+      "date": 1461436292201
+    },
+    {
+      "type": "remove",
+      "id": "ae1f9721a5c0ec0e",
+      "date": 1461436307616
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e3f38b6a89586694"
+      },
+      "id": "e3f38b6a89586694",
+      "type": "add",
+      "after": "788fc6515570abbd",
+      "date": 1461436319888
+    },
+    {
+      "type": "edit",
+      "id": "e3f38b6a89586694",
+      "item": {
+        "type": "code",
+        "id": "e3f38b6a89586694",
+        "text": "<svg width=\"100\" height=\"100\">\n  <circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"green\" stroke-width=\"4\" fill=\"yellow\" />\n</svg>\n"
+      },
+      "date": 1461436323332
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "35d5e09ca631782c"
+      },
+      "id": "35d5e09ca631782c",
+      "type": "add",
+      "after": "e3f38b6a89586694",
+      "date": 1461436486426
+    },
+    {
+      "type": "edit",
+      "id": "35d5e09ca631782c",
+      "item": {
+        "type": "code",
+        "id": "35d5e09ca631782c",
+        "text": "<svg width=\"5cm\" height=\"3cm\" viewBox=\"0 0 5 3\" version=\"1.1\"\n     xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n  <desc>Example link01 - a link on an ellipse\n  </desc>\n  <rect x=\".01\" y=\".01\" width=\"4.98\" height=\"2.98\" \n        fill=\"none\" stroke=\"blue\"  stroke-width=\".03\"/>\n  <a xlink:href=\"http://www.w3.org\">\n    <ellipse cx=\"2.5\" cy=\"1.5\" rx=\"2\" ry=\"1\"\n             fill=\"red\" />\n  </a>\n</svg>"
+      },
+      "date": 1461436491476
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1f57c6f4b556dee9"
+      },
+      "id": "1f57c6f4b556dee9",
+      "type": "add",
+      "after": "35d5e09ca631782c",
+      "date": 1461436518916
+    },
+    {
+      "type": "move",
+      "order": [
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "22132b51681a5522",
+        "e7b407b2e37d80a1",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "37b5aac35264d3e2",
+        "c92e60e5b60d6316",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "1f57c6f4b556dee9",
+      "date": 1461436520344
+    },
+    {
+      "type": "edit",
+      "id": "1f57c6f4b556dee9",
+      "item": {
+        "type": "paragraph",
+        "id": "1f57c6f4b556dee9",
+        "text": "Can be found here - [https://dl.dropboxusercontent.com/u/373931789/link01.svg dropboxusercontent]"
+      },
+      "date": 1461436531590
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "93c60b937afdd8b1",
+        "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/map.svg\">"
+      },
+      "after": "c92e60e5b60d6316",
+      "id": "93c60b937afdd8b1",
+      "date": 1461436770486
+    },
+    {
+      "type": "remove",
+      "id": "37b5aac35264d3e2",
+      "date": 1461489191057
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7f1c84562abc8631"
+      },
+      "id": "7f1c84562abc8631",
+      "type": "add",
+      "after": "35d5e09ca631782c",
+      "date": 1461490359680
+    },
+    {
+      "type": "move",
+      "order": [
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "22132b51681a5522",
+        "7f1c84562abc8631",
+        "e7b407b2e37d80a1",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "7f1c84562abc8631",
+      "date": 1461490367945
+    },
+    {
+      "type": "edit",
+      "id": "7f1c84562abc8631",
+      "item": {
+        "type": "reference",
+        "id": "7f1c84562abc8631",
+        "site": "future.fedwiki.org",
+        "slug": "html-sanitization",
+        "title": "HTML Sanitization",
+        "text": "The [[HTML Sanitization]] that the [[About HTML Plugin]] performs removes the markup required to provide [[Internal Fedwiki Links]]."
+      },
+      "date": 1461490371278
+    },
+    {
+      "type": "remove",
+      "id": "e7b407b2e37d80a1",
+      "date": 1461490374467
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "b16e5feb31fead0d"
+      },
+      "after": "7f1c84562abc8631",
+      "id": "b16e5feb31fead0d",
+      "date": 1461490397060
+    },
+    {
+      "type": "edit",
+      "id": "b16e5feb31fead0d",
+      "item": {
+        "type": "reference",
+        "id": "b16e5feb31fead0d",
+        "site": "future.fedwiki.org",
+        "slug": "svg-in-img-tag",
+        "title": "SVG in IMG Tag",
+        "text": "We've made progress manipulating svg with jquery, particularly getting it to parse svg from javascript strings."
+      },
+      "date": 1461490400385
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "0db3a27460c68c80"
+      },
+      "after": "7f6737cf452de018",
+      "id": "0db3a27460c68c80",
+      "date": 1461490408566
+    },
+    {
+      "type": "edit",
+      "id": "0db3a27460c68c80",
+      "item": {
+        "type": "reference",
+        "id": "0db3a27460c68c80",
+        "site": "future.fedwiki.org",
+        "slug": "svg-image-map",
+        "title": "SVG Image Map",
+        "text": "There is currenlty no short term solution for interactive Fedwiki maps. Both standard [[HTML Image maps]] and [[SVG]] fails to work."
+      },
+      "date": 1461490411014
+    },
+    {
+      "type": "move",
+      "order": [
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "22132b51681a5522",
+        "7f6737cf452de018",
+        "0db3a27460c68c80",
+        "7f1c84562abc8631",
+        "b16e5feb31fead0d",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "22132b51681a5522",
+      "date": 1461490434129
+    },
+    {
+      "type": "remove",
+      "id": "22132b51681a5522",
+      "date": 1461490443719
+    },
+    {
+      "type": "move",
+      "order": [
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "b16e5feb31fead0d",
+        "0db3a27460c68c80",
+        "7f1c84562abc8631",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "b16e5feb31fead0d",
+      "date": 1461490448091
+    },
+    {
+      "type": "edit",
+      "id": "be4e12d8e22c0d74",
+      "item": {
+        "type": "html",
+        "id": "be4e12d8e22c0d74",
+        "text": "Here is a graph:\nLet's make a new plugin:"
+      },
+      "date": 1461491766531
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "b00bf41290073751"
+      },
+      "after": "be4e12d8e22c0d74",
+      "id": "b00bf41290073751",
+      "date": 1461491796420
+    },
+    {
+      "type": "move",
+      "order": [
+        "b00bf41290073751",
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "b16e5feb31fead0d",
+        "0db3a27460c68c80",
+        "7f1c84562abc8631",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "be4e12d8e22c0d74",
+      "date": 1461491798945
+    },
+    {
+      "type": "edit",
+      "id": "be4e12d8e22c0d74",
+      "item": {
+        "type": "html",
+        "id": "be4e12d8e22c0d74",
+        "text": "Here is a graph:"
+      },
+      "date": 1461491805914
+    },
+    {
+      "type": "edit",
+      "id": "b00bf41290073751",
+      "item": {
+        "type": "paragraph",
+        "id": "b00bf41290073751",
+        "text": "here we describe the results of creating a new plugin to render interactive graphs in Fedwiki. First et's [[Make a New Plugin]]"
+      },
+      "date": 1461491864880
+    },
+    {
+      "type": "edit",
+      "id": "b00bf41290073751",
+      "item": {
+        "type": "paragraph",
+        "id": "b00bf41290073751",
+        "text": "here we describe the results of creating a new plugin to render interactive graphs in Fedwiki. First et's [[Make a New Plugin]]. We want to try a few approaches:"
+      },
+      "date": 1461491965090
+    },
+    {
+      "type": "add",
+      "id": "21b44f74af8b025b",
+      "item": {
+        "type": "paragraph",
+        "id": "21b44f74af8b025b",
+        "text": "* [[About Graph Plugin]]"
+      },
+      "after": "b00bf41290073751",
+      "date": 1461491980102
+    },
+    {
+      "type": "edit",
+      "id": "21b44f74af8b025b",
+      "item": {
+        "type": "markdown",
+        "id": "21b44f74af8b025b",
+        "text": "* [[About Graph Plugin]]"
+      },
+      "date": 1461491983068
+    },
+    {
+      "type": "edit",
+      "id": "21b44f74af8b025b",
+      "item": {
+        "type": "markdown",
+        "id": "21b44f74af8b025b",
+        "text": "* [[About Graph Plugin]]\n* [[SVG Plugin]]\n* [[Cytoscape Plugin]]"
+      },
+      "date": 1461492012458
+    },
+    {
+      "type": "edit",
+      "id": "b00bf41290073751",
+      "item": {
+        "type": "paragraph",
+        "id": "b00bf41290073751",
+        "text": "here we describe the results of creating a new plugin to render interactive graphs in Fedwiki. First et's [[Make a New Plugin]]. "
+      },
+      "date": 1461492019921
+    },
+    {
+      "type": "add",
+      "id": "0633e1c046c8dc6a",
+      "item": {
+        "type": "paragraph",
+        "id": "0633e1c046c8dc6a",
+        "text": "We want to try a few approaches:"
+      },
+      "after": "b00bf41290073751",
+      "date": 1461492022121
+    },
+    {
+      "type": "add",
+      "id": "efa7290cc863f4b7",
+      "item": {
+        "type": "paragraph",
+        "id": "efa7290cc863f4b7",
+        "text": "in the end we may seek to combine these approaches back into a single [[Graph Plugin]]."
+      },
+      "after": "0633e1c046c8dc6a",
+      "date": 1461492043114
+    },
+    {
+      "type": "move",
+      "order": [
+        "b00bf41290073751",
+        "0633e1c046c8dc6a",
+        "21b44f74af8b025b",
+        "efa7290cc863f4b7",
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "b16e5feb31fead0d",
+        "0db3a27460c68c80",
+        "7f1c84562abc8631",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "efa7290cc863f4b7",
+      "date": 1461492048434
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b31ff74b8f363db1"
+      },
+      "id": "b31ff74b8f363db1",
+      "type": "add",
+      "after": "35d5e09ca631782c",
+      "date": 1461522620334
+    },
+    {
+      "type": "move",
+      "order": [
+        "b00bf41290073751",
+        "0633e1c046c8dc6a",
+        "21b44f74af8b025b",
+        "efa7290cc863f4b7",
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "b16e5feb31fead0d",
+        "b31ff74b8f363db1",
+        "0db3a27460c68c80",
+        "7f1c84562abc8631",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "b31ff74b8f363db1",
+      "date": 1461522635332
+    },
+    {
+      "type": "move",
+      "order": [
+        "b00bf41290073751",
+        "b31ff74b8f363db1",
+        "0633e1c046c8dc6a",
+        "21b44f74af8b025b",
+        "efa7290cc863f4b7",
+        "be4e12d8e22c0d74",
+        "5b1f30c704b69c7d",
+        "7f6737cf452de018",
+        "b16e5feb31fead0d",
+        "0db3a27460c68c80",
+        "7f1c84562abc8631",
+        "5391e32648a855f1",
+        "4d7036bb39c40fd0",
+        "c92e60e5b60d6316",
+        "93c60b937afdd8b1",
+        "bb30ca3911e26471",
+        "d1fafbb3fc3079de",
+        "788fc6515570abbd",
+        "e3f38b6a89586694",
+        "1f57c6f4b556dee9",
+        "35d5e09ca631782c"
+      ],
+      "id": "b31ff74b8f363db1",
+      "date": 1461522637854
+    },
+    {
+      "type": "edit",
+      "id": "b31ff74b8f363db1",
+      "item": {
+        "type": "code",
+        "id": "b31ff74b8f363db1",
+        "text": " emit = ($item, item) ->\n  \n\nbind = ($item, item) ->\n  $item.dblclick -> wiki.textEditor $item, item\n\nwindow.plugins.svg = {emit, bind} if window?\nmodule.exports = {expand} if module?\n"
+      },
+      "date": 1461522646386
+    },
+    {
+      "type": "edit",
+      "id": "b31ff74b8f363db1",
+      "item": {
+        "type": "code",
+        "id": "b31ff74b8f363db1",
+        "text": "https://github.com/ViralAcademy/wiki-plugin-svg/tree/master\n\n emit = ($item, item) ->\n  \n\nbind = ($item, item) ->\n  $item.dblclick -> wiki.textEditor $item, item\n\nwindow.plugins.svg = {emit, bind} if window?\nmodule.exports = {expand} if module?\n"
+      },
+      "date": 1461522692634
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1468596121244
+    }
+  ]
+}

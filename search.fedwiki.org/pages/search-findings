@@ -1,0 +1,710 @@
+{
+  "title": "Search Findings",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "ff74e8a31ca67d8d",
+      "text": "Search records new activity found with each scrape of the visible federation. In addition to the web application, these records are available as downloadable files, a trancludable roster and a search api."
+    },
+    {
+      "type": "markdown",
+      "id": "02ce66374eb1958b",
+      "text": "# Download"
+    },
+    {
+      "type": "paragraph",
+      "id": "34bdce1eb70038d9",
+      "text": "We offer a download of our search findings in flat text files suitable for further analysis. [http://search.fed.wiki.org:3030/sites.tgz download tgz]"
+    },
+    {
+      "type": "paragraph",
+      "id": "e0e9d21a8dc421c7",
+      "text": "The files suffixed .txt correspond to the various search properties. These are recorded for each page and rolled up into whole site and whole federation summary files."
+    },
+    {
+      "type": "paragraph",
+      "id": "fd8a576998df1841",
+      "text": "The download is prepared with a single tar command."
+    },
+    {
+      "type": "code",
+      "id": "fa3989ef7244d4d7",
+      "text": "tar czf public/sites.tgz sites *.txt",
+      "alias": "8f7fdff4c524ac07"
+    },
+    {
+      "type": "paragraph",
+      "id": "baa3576f54a32bf2",
+      "text": "The download can be retrieved and expanded with curl."
+    },
+    {
+      "type": "code",
+      "id": "8f7fdff4c524ac07",
+      "text": "curl http://search.fed.wiki.org:3030/sites.tgz | \\\n  tar xzf -"
+    },
+    {
+      "type": "markdown",
+      "id": "4476fa485e5bf4ec",
+      "text": "# Roster"
+    },
+    {
+      "type": "paragraph",
+      "id": "cbc19786c44c0612",
+      "text": "The search application appears as a wiki site serving one page containing the current findings roster. Not all wiki features work for the search site."
+    },
+    {
+      "type": "reference",
+      "id": "6135de790833050f",
+      "site": "search.fed.wiki.org:3030",
+      "slug": "recent-activity",
+      "title": "Recent Activity",
+      "text": "Here we report sites we find with recently edited pages."
+    },
+    {
+      "type": "paragraph",
+      "id": "f4041a5af64b2844",
+      "text": "You can incorporate this roster in pages you visit often using the Roster plugin with the ROSTER markup. "
+    },
+    {
+      "type": "code",
+      "id": "582903af82dd2a96",
+      "text": "ROSTER search.fed.wiki.org:3030/recent-activity"
+    },
+    {
+      "type": "markdown",
+      "id": "5d1924b8cf5a627e",
+      "text": "# API"
+    },
+    {
+      "type": "paragraph",
+      "id": "dd1acf8be7515537",
+      "text": "The search application will respond to api queries via POST to the /match endpoint."
+    },
+    {
+      "type": "paragraph",
+      "id": "5f4f60bc7485eb31",
+      "text": "Use jQuery to post a search request. [http://api.jquery.com/jquery.post/ jquery]"
+    },
+    {
+      "type": "code",
+      "id": "3c3a32e9a56bfa6a",
+      "text": "var request = {\n  find: 'words',\n  match: 'and',\n  query: 'hello world'\n}\n\nvar url = 'http://search.fed.wiki.org:3030/match'\n\n$.post(url, request, success, 'json')\n\nfunction success (data) {\n  console.log(data.params)\n  console.log(data.result)\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "2d2d29fc0f5443c4",
+      "text": "The result will be an object with keys of site domain names and values of arrays of page slugs."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Search Findings",
+        "story": []
+      },
+      "date": 1439358824168
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ff74e8a31ca67d8d"
+      },
+      "id": "ff74e8a31ca67d8d",
+      "type": "add",
+      "date": 1439358833050
+    },
+    {
+      "type": "edit",
+      "id": "ff74e8a31ca67d8d",
+      "item": {
+        "type": "paragraph",
+        "id": "ff74e8a31ca67d8d",
+        "text": "Search reports new activity found with each scrape of the visible federation. Active sites are listed in a Roster categorized by when activity was noticed."
+      },
+      "date": 1439358989761
+    },
+    {
+      "type": "add",
+      "id": "cbc19786c44c0612",
+      "item": {
+        "type": "paragraph",
+        "id": "cbc19786c44c0612",
+        "text": "The search application appears as a wiki site serving one page containing the current findings roster. Not all wiki features work for the search site."
+      },
+      "after": "ff74e8a31ca67d8d",
+      "date": 1439359182665
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "6135de790833050f",
+        "site": "search.fed.wiki.org:3030",
+        "slug": "recent-activity",
+        "title": "Recent Activity",
+        "text": "Here we report sites we find with recently edited pages. You can incorporate this roster in pages you visit often using the Roster plugin with the ROSTER markup. "
+      },
+      "after": "cbc19786c44c0612",
+      "id": "6135de790833050f",
+      "date": 1439359241083
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "582903af82dd2a96",
+        "text": "ROSTER search.fed.wiki.org:3030/recent-activity"
+      },
+      "after": "6135de790833050f",
+      "id": "582903af82dd2a96",
+      "date": 1439359244859
+    },
+    {
+      "type": "edit",
+      "id": "6135de790833050f",
+      "item": {
+        "type": "reference",
+        "id": "6135de790833050f",
+        "site": "search.fed.wiki.org:3030",
+        "slug": "recent-activity",
+        "title": "Recent Activity",
+        "text": "Here we report sites we find with recently edited pages."
+      },
+      "date": 1439359266284
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f4041a5af64b2844"
+      },
+      "id": "f4041a5af64b2844",
+      "type": "add",
+      "after": "582903af82dd2a96",
+      "date": 1439359269686
+    },
+    {
+      "type": "edit",
+      "id": "f4041a5af64b2844",
+      "item": {
+        "type": "paragraph",
+        "id": "f4041a5af64b2844",
+        "text": "You can incorporate this roster in pages you visit often using the Roster plugin with the ROSTER markup. "
+      },
+      "date": 1439359275953
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "582903af82dd2a96"
+      ],
+      "id": "f4041a5af64b2844",
+      "date": 1439359278868
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "4476fa485e5bf4ec",
+        "text": "# Roster"
+      },
+      "after": "ff74e8a31ca67d8d",
+      "id": "4476fa485e5bf4ec",
+      "date": 1439360188712
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "5d1924b8cf5a627e",
+        "text": "# API"
+      },
+      "after": "582903af82dd2a96",
+      "id": "5d1924b8cf5a627e",
+      "date": 1439360195876
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "02ce66374eb1958b",
+        "text": "# Download"
+      },
+      "after": "ff74e8a31ca67d8d",
+      "id": "02ce66374eb1958b",
+      "date": 1439360201147
+    },
+    {
+      "type": "add",
+      "id": "34bdce1eb70038d9",
+      "item": {
+        "type": "paragraph",
+        "id": "34bdce1eb70038d9",
+        "text": "We offer a download of our search findings in flat text files suitable for further analysis. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "after": "ff74e8a31ca67d8d",
+      "date": 1439360612015
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "02ce66374eb1958b",
+        "34bdce1eb70038d9",
+        "4476fa485e5bf4ec",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "582903af82dd2a96",
+        "5d1924b8cf5a627e"
+      ],
+      "id": "34bdce1eb70038d9",
+      "date": 1439360618184
+    },
+    {
+      "type": "edit",
+      "id": "34bdce1eb70038d9",
+      "item": {
+        "type": "paragraph",
+        "id": "34bdce1eb70038d9",
+        "text": "We offer a download of our search findings in flat text files suitable for further analysis. [http://search.fed.wiki.org:3030/sites.tgz download tgz]"
+      },
+      "date": 1439360635433
+    },
+    {
+      "type": "add",
+      "id": "e0e9d21a8dc421c7",
+      "item": {
+        "type": "paragraph",
+        "id": "e0e9d21a8dc421c7",
+        "text": "The files, suffixed .txt, correspond to the various search terms. These are recorded for each page and rolled up into whole site and whole federation summary files."
+      },
+      "after": "34bdce1eb70038d9",
+      "date": 1439360968878
+    },
+    {
+      "type": "add",
+      "id": "fd8a576998df1841",
+      "item": {
+        "type": "paragraph",
+        "id": "fd8a576998df1841",
+        "text": "The download is prepared with a single tar command."
+      },
+      "after": "e0e9d21a8dc421c7",
+      "date": 1439361057247
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "8f7fdff4c524ac07",
+        "text": "tar czf public/sites.tgz sites *.txt"
+      },
+      "after": "fd8a576998df1841",
+      "id": "8f7fdff4c524ac07",
+      "date": 1439361063787
+    },
+    {
+      "type": "add",
+      "id": "baa3576f54a32bf2",
+      "item": {
+        "type": "paragraph",
+        "id": "baa3576f54a32bf2",
+        "text": "The download can be retrieved and expanded with curl."
+      },
+      "after": "fd8a576998df1841",
+      "date": 1439361143563
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "02ce66374eb1958b",
+        "34bdce1eb70038d9",
+        "e0e9d21a8dc421c7",
+        "fd8a576998df1841",
+        "8f7fdff4c524ac07",
+        "baa3576f54a32bf2",
+        "4476fa485e5bf4ec",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "582903af82dd2a96",
+        "5d1924b8cf5a627e"
+      ],
+      "id": "baa3576f54a32bf2",
+      "date": 1439361147723
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "fa3989ef7244d4d7",
+        "text": "tar czf public/sites.tgz sites *.txt",
+        "alias": "8f7fdff4c524ac07"
+      },
+      "after": "baa3576f54a32bf2",
+      "id": "fa3989ef7244d4d7",
+      "date": 1439361185881
+    },
+    {
+      "type": "edit",
+      "id": "8f7fdff4c524ac07",
+      "item": {
+        "type": "code",
+        "id": "8f7fdff4c524ac07",
+        "text": "curl http://search.fed.wiki.org:3030/sites.tgz | tar xzf -"
+      },
+      "date": 1439361247979
+    },
+    {
+      "type": "edit",
+      "id": "8f7fdff4c524ac07",
+      "item": {
+        "type": "code",
+        "id": "8f7fdff4c524ac07",
+        "text": "curl http://search.fed.wiki.org:3030/sites.tgz | \\\n  tar xzf -"
+      },
+      "date": 1439361260146
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dd1acf8be7515537"
+      },
+      "id": "dd1acf8be7515537",
+      "type": "add",
+      "after": "5d1924b8cf5a627e",
+      "date": 1439361696522
+    },
+    {
+      "type": "edit",
+      "id": "dd1acf8be7515537",
+      "item": {
+        "type": "paragraph",
+        "id": "dd1acf8be7515537",
+        "text": "The search application will respond to api queries via POST to search.fed.wiki.org:3030/match"
+      },
+      "date": 1439361775965
+    },
+    {
+      "type": "edit",
+      "id": "dd1acf8be7515537",
+      "item": {
+        "type": "paragraph",
+        "id": "dd1acf8be7515537",
+        "text": "The search application will respond to api queries via POST to search.fed.wiki.org:3030/match."
+      },
+      "date": 1439361808721
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "3c3a32e9a56bfa6a",
+        "text": "var request = {\n  find: 'words',\n  match: 'and',\n  query: 'hello world'\n}\n\nvar url = 'http://search.fed.wiki.org:3030/match'\n\n$.post(url, request, success, 'json')\n\nfunction success (data) {\n  console.log(data.params)\n  console.log(data.result)\n}"
+      },
+      "after": "dd1acf8be7515537",
+      "id": "3c3a32e9a56bfa6a",
+      "date": 1439362644872
+    },
+    {
+      "type": "add",
+      "id": "e3472d39444bb038",
+      "item": {
+        "type": "paragraph",
+        "id": "e3472d39444bb038",
+        "text": "Use jQuery to post a search request."
+      },
+      "after": "dd1acf8be7515537",
+      "date": 1439362736910
+    },
+    {
+      "type": "edit",
+      "id": "dd1acf8be7515537",
+      "item": {
+        "type": "paragraph",
+        "id": "dd1acf8be7515537",
+        "text": "The search application will respond to api queries via POST to the /match endpoint."
+      },
+      "date": 1439362770486
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2d2d29fc0f5443c4"
+      },
+      "id": "2d2d29fc0f5443c4",
+      "type": "add",
+      "after": "3c3a32e9a56bfa6a",
+      "date": 1439362781815
+    },
+    {
+      "type": "edit",
+      "id": "2d2d29fc0f5443c4",
+      "item": {
+        "type": "paragraph",
+        "id": "2d2d29fc0f5443c4",
+        "text": "The result will be an object with keys of site domain names and values of arrays of page slugs."
+      },
+      "date": 1439362851501
+    },
+    {
+      "type": "edit",
+      "id": "e3472d39444bb038",
+      "item": {
+        "type": "paragraph",
+        "id": "e3472d39444bb038",
+        "text": "Use jQuery to post a search request. [http://api.jquery.com/jquery.post/ jquery]"
+      },
+      "date": 1439362957169
+    },
+    {
+      "type": "edit",
+      "id": "e0e9d21a8dc421c7",
+      "item": {
+        "type": "paragraph",
+        "id": "e0e9d21a8dc421c7",
+        "text": "The files suffixed .txt correspond to the various search terms. These are recorded for each page and rolled up into whole site and whole federation summary files."
+      },
+      "date": 1439363416395
+    },
+    {
+      "type": "edit",
+      "id": "e0e9d21a8dc421c7",
+      "item": {
+        "type": "paragraph",
+        "id": "e0e9d21a8dc421c7",
+        "text": "The files suffixed .txt correspond to the various search properties. These are recorded for each page and rolled up into whole site and whole federation summary files."
+      },
+      "date": 1439363467374
+    },
+    {
+      "type": "remove",
+      "id": "e3472d39444bb038",
+      "date": 1439363508959
+    },
+    {
+      "type": "edit",
+      "id": "dd1acf8be7515537",
+      "item": {
+        "type": "paragraph",
+        "id": "dd1acf8be7515537",
+        "text": "The search application will respond to api queries via POST to the /match endpoint. Use jQuery to post a search request. [http://api.jquery.com/jquery.post/ jquery]"
+      },
+      "date": 1439363511617
+    },
+    {
+      "type": "edit",
+      "id": "dd1acf8be7515537",
+      "item": {
+        "type": "paragraph",
+        "id": "dd1acf8be7515537",
+        "text": "The search application will respond to api queries via POST to the /match endpoint."
+      },
+      "date": 1439363524936
+    },
+    {
+      "type": "add",
+      "id": "5f4f60bc7485eb31",
+      "item": {
+        "type": "paragraph",
+        "id": "5f4f60bc7485eb31",
+        "text": "Use jQuery to post a search request. [http://api.jquery.com/jquery.post/ jquery]"
+      },
+      "after": "dd1acf8be7515537",
+      "date": 1439363526296
+    },
+    {
+      "type": "edit",
+      "id": "ff74e8a31ca67d8d",
+      "item": {
+        "type": "paragraph",
+        "id": "ff74e8a31ca67d8d",
+        "text": "Search records new activity found with each scrape of the visible federation. These records are available as downloadable files, trancludable roster and a query api."
+      },
+      "date": 1439363849963
+    },
+    {
+      "type": "edit",
+      "id": "ff74e8a31ca67d8d",
+      "item": {
+        "type": "paragraph",
+        "id": "ff74e8a31ca67d8d",
+        "text": "Search records new activity found with each scrape of the visible federation. These records are available as downloadable files, a trancludable roster and a query api."
+      },
+      "date": 1439363860506
+    },
+    {
+      "type": "edit",
+      "id": "ff74e8a31ca67d8d",
+      "item": {
+        "type": "paragraph",
+        "id": "ff74e8a31ca67d8d",
+        "text": "Search records new activity found with each scrape of the visible federation. These records are available as downloadable files, a trancludable roster and a search api endpoint."
+      },
+      "date": 1439363901644
+    },
+    {
+      "type": "edit",
+      "id": "ff74e8a31ca67d8d",
+      "item": {
+        "type": "paragraph",
+        "id": "ff74e8a31ca67d8d",
+        "text": "Search records new activity found with each scrape of the visible federation. These records are available as downloadable files, a trancludable roster and a search api."
+      },
+      "date": 1439363907923
+    },
+    {
+      "type": "edit",
+      "id": "ff74e8a31ca67d8d",
+      "item": {
+        "type": "paragraph",
+        "id": "ff74e8a31ca67d8d",
+        "text": "Search records new activity found with each scrape of the visible federation. In addition to the web application, these records are available as downloadable files, a trancludable roster and a search api."
+      },
+      "date": 1439363946829
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "02ce66374eb1958b",
+        "34bdce1eb70038d9",
+        "e0e9d21a8dc421c7",
+        "fd8a576998df1841",
+        "fa3989ef7244d4d7",
+        "8f7fdff4c524ac07",
+        "baa3576f54a32bf2",
+        "4476fa485e5bf4ec",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "582903af82dd2a96",
+        "5d1924b8cf5a627e",
+        "dd1acf8be7515537",
+        "5f4f60bc7485eb31",
+        "3c3a32e9a56bfa6a",
+        "2d2d29fc0f5443c4"
+      ],
+      "id": "fa3989ef7244d4d7",
+      "date": 1439363990890
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "02ce66374eb1958b",
+        "34bdce1eb70038d9",
+        "e0e9d21a8dc421c7",
+        "fd8a576998df1841",
+        "fa3989ef7244d4d7",
+        "baa3576f54a32bf2",
+        "8f7fdff4c524ac07",
+        "4476fa485e5bf4ec",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "582903af82dd2a96",
+        "5d1924b8cf5a627e",
+        "dd1acf8be7515537",
+        "5f4f60bc7485eb31",
+        "3c3a32e9a56bfa6a",
+        "2d2d29fc0f5443c4"
+      ],
+      "id": "8f7fdff4c524ac07",
+      "date": 1439363994216
+    },
+    {
+      "type": "fork",
+      "site": "search.fed.wiki.org",
+      "date": 1449084754964
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7683d7c32c311cb4"
+      },
+      "id": "7683d7c32c311cb4",
+      "type": "add",
+      "after": "2d2d29fc0f5443c4",
+      "date": 1449085002891
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "02ce66374eb1958b",
+        "34bdce1eb70038d9",
+        "e0e9d21a8dc421c7",
+        "fd8a576998df1841",
+        "fa3989ef7244d4d7",
+        "baa3576f54a32bf2",
+        "8f7fdff4c524ac07",
+        "4476fa485e5bf4ec",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "7683d7c32c311cb4",
+        "582903af82dd2a96",
+        "5d1924b8cf5a627e",
+        "dd1acf8be7515537",
+        "5f4f60bc7485eb31",
+        "3c3a32e9a56bfa6a",
+        "2d2d29fc0f5443c4"
+      ],
+      "id": "7683d7c32c311cb4",
+      "date": 1449085006083
+    },
+    {
+      "type": "move",
+      "order": [
+        "ff74e8a31ca67d8d",
+        "02ce66374eb1958b",
+        "34bdce1eb70038d9",
+        "e0e9d21a8dc421c7",
+        "fd8a576998df1841",
+        "fa3989ef7244d4d7",
+        "baa3576f54a32bf2",
+        "8f7fdff4c524ac07",
+        "4476fa485e5bf4ec",
+        "cbc19786c44c0612",
+        "6135de790833050f",
+        "f4041a5af64b2844",
+        "582903af82dd2a96",
+        "7683d7c32c311cb4",
+        "5d1924b8cf5a627e",
+        "dd1acf8be7515537",
+        "5f4f60bc7485eb31",
+        "3c3a32e9a56bfa6a",
+        "2d2d29fc0f5443c4"
+      ],
+      "id": "582903af82dd2a96",
+      "date": 1449085009012
+    },
+    {
+      "type": "edit",
+      "id": "7683d7c32c311cb4",
+      "item": {
+        "type": "roster",
+        "id": "7683d7c32c311cb4",
+        "text": "ROSTER search.fed.wiki.org:3030/recent-activity"
+      },
+      "date": 1449085019450
+    },
+    {
+      "type": "remove",
+      "id": "7683d7c32c311cb4",
+      "date": 1449085073384
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1503060061322
+    }
+  ]
+}

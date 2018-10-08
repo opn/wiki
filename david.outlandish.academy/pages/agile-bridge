@@ -1,0 +1,892 @@
+{
+  "title": "Agile Bridge",
+  "story": [
+    {
+      "type": "html",
+      "text": "I'm writing this on a [[Wiki Wiki Web]] because I hate writing papers and articles. Papers and articles can't be changed, and I keep changing my mind, which is sometimes easier to change than hair-colour. -- [[Cohan Carlos]]",
+      "id": "2e1a422c53864436385d467fe2a578cc"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>An Agile Bridge for Testing</b>, by [[Cohan Carlos]]",
+      "id": "56a476010382faf2ba706374875813a7"
+    },
+    {
+      "type": "html",
+      "text": "<b>Introduction</b>",
+      "id": "f236b5775521486fca416bc065aa4766"
+    },
+    {
+      "type": "html",
+      "text": "\nI'd like to tell you about a solution we found to a small problem related to [[Agile Process]] teams. And hopefully, someone else will try it out and tell me about what we did wrong and what we did right, and whether we ought to have done it at all or done it very differently.",
+      "id": "c91ddace36c14ed8e1a9a27c7c950be0"
+    },
+    {
+      "type": "html",
+      "text": "\nThe problem was as follows. There was a separate Test Team working with developers who were comparatively agile. Besides, the nature of the product made programmatic tests a bit ineffective, so most of the testing had to be done at the GUI layer. How were the developers going to make optimal use of the test team while at the same time remaining at least a little agile?",
+      "id": "a7d017b933933654cab9ebc58d730ac8"
+    },
+    {
+      "type": "html",
+      "text": "\nOne of the really nice things about [[Extreme Programming]] is that it is not essential for developers to produce truckloads of documentation or conduct smoke signal rallies to tell each other about their work. It is just not needed when people do [[Pair Programming]]. Besides, documenting work is not that effective as a means of communication.",
+      "id": "5e7df044fefb3ef72c089ef268f8fb50"
+    },
+    {
+      "type": "html",
+      "text": "\nNow, bring in an island floating on the high seas with a blindfolded supporting team upon it. How do we coordinate what we do? 'A ship will be sent to your port at 11 am the coming Monday bearing parcels of paper for your enlightenment. Please be so good as to initial every sheet and return them to us the week after. Ship us the parcels containing the documentation for your test cases the week after we get your initials. We shall initial every sheet of your documentation of your test cases as a sign of our approval and return them yet another week later,' does not seem to be an acceptable answer from the point of view of agility, though it may work for a traditional process.",
+      "id": "b5bb2480a1e783ef5c2768a0ec2c3761"
+    },
+    {
+      "type": "html",
+      "text": "\nWe have found in small experiments that we could dispense with all the documentation if we borrowed a few ideas from lean production and from existing [[Extreme Programming]] tricks of the trade.",
+      "id": "457e02b376b8047d2ba31b92bc0d47b6"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Piers of the Bridge</b>",
+      "id": "1f7377e3142414532430dab3286bb660"
+    },
+    {
+      "type": "html",
+      "text": "\nWe used [[Developer Stories]] to coordinate the two teams.",
+      "id": "585aeb9bdd5120bc4a5bc834670a61b2"
+    },
+    {
+      "type": "html",
+      "text": "\nA [[Developer Story]] is like a [[User Story]], but written by developers describing any small functionality they put into the program. It's just three or four lines flagging a change. Like, if the developer adds a button.  The button does nothing. When you click it, a null pointer exception occurs. H(sh)e writes a story on the button and gives it to the tester who immediately gets the build and tests the button.",
+      "id": "e8c1f731cc888b90ab7ae535bed41c1f"
+    },
+    {
+      "type": "html",
+      "text": "\nThe button is what we call a [[Feature Let]]. It's a piece of a feature that's not yet been completed.",
+      "id": "bd46c57976e8c21419fa05bc45ccfd60"
+    },
+    {
+      "type": "html",
+      "text": "\nYou see, this way, the code gets tested immediately. The way it is usually done, it gets tested weeks later, when the barge with the release makes a stop at the testers' island. Since it is tested immediately, in fact as fast as the developers can integrate and build it, they get feedback immediately. Otherwise, they end up grimly facing onslaughts of bugs way too late to be able to do much about them, and feeling rightly upset about the whole deal.",
+      "id": "e0d2b15e953ade5ac2812d44bf04f7c9"
+    },
+    {
+      "type": "html",
+      "text": "\nNow one other thing we did was measure ourselves by [[Turnaround Time]]. This is the time it takes for a defect that has entered the code to be discovered. Everyone tries real hard to minimize this. We want to find the defects fast! No-one has a problem with that because it does not suggest the developer has been sloppy, unlike some other popular measures we use.",
+      "id": "1f9b089332e20b209841a2c418c2668b"
+    },
+    {
+      "type": "html",
+      "text": "\nThis works well for agile teams because",
+      "id": "84604e9ca93733a63be5337680b93022"
+    },
+    {
+      "type": "html",
+      "text": " [[Continuous Integration]] is fully exploited.",
+      "id": "399fb4b15ed0cd3233d8a9f7293e9f89"
+    },
+    {
+      "type": "html",
+      "text": " Feedback is timely.",
+      "id": "01231eca5260464e61fe4beca8b5cf17"
+    },
+    {
+      "type": "html",
+      "text": " Elaborate documentation is not required.",
+      "id": "2795e7d956241f602fa48030a6f99bc6"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Bridges Everywhere</b>",
+      "id": "3c7d02aadb58634efe5864b614279d02"
+    },
+    {
+      "type": "html",
+      "text": "\nThis is one little experiment, but it suffices to show where bridges are needed. Look around. Separate test teams exist in places you would least expect to find them.",
+      "id": "3adc3a62209c972ca862bfb75601a21c"
+    },
+    {
+      "type": "html",
+      "text": "\nFor instance, documentation teams. There are sometimes separate documentation and translation teams performing a rather specialised task with their own set of sometimes expensive tools, and they will expect smoke signal sessions too.",
+      "id": "1dedb47f543db8a59380f146940c303e"
+    },
+    {
+      "type": "html",
+      "text": "\nIf you peer closely at the XP customer, you will see a human with \"test team\" written all over his/her face.  The customer's test team has to run the acceptance tests!",
+      "id": "18a627b598278774dcc0acfcb8ca0bd5"
+    },
+    {
+      "type": "html",
+      "text": "\nThen, in some firms, management needs a bridge. [[Test Driven Management]] has been proposed as a way of bridging this gap. I know too little about it to tell you more.",
+      "id": "a9e348a5e65d7b6db34f4afbad5a0964"
+    },
+    {
+      "type": "html",
+      "text": "<i>Your management test could be - the turnaround time should drop from X to Y by the end of this iteration/project. To read more about [[Test Driven Management]], check [http://www.sdmagazine.com/documents/s=7839/sdm0303a/sdm0303a.htm?temp=TaZO8N4STw www.sdmagazine.com]</i>",
+      "id": "f1dbec9ffd511c9801d05a47eeb52be2"
+    },
+    {
+      "type": "html",
+      "text": "-- [[Somik Raha]]",
+      "id": "8e1477b74b9108bae215a807ebd7e1fa"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Two Principles</b>",
+      "id": "bf03d7f66b97c96bd33d809570f7fce8"
+    },
+    {
+      "type": "html",
+      "text": "\nIn fact, it seems likely that agile processes could work in any environment provided the bridging system makes use of two simple principles.",
+      "id": "52769c1b9a0ebd19b0ced67c2d95bc04"
+    },
+    {
+      "type": "html",
+      "text": " It coordinates between the islands using a demand-driven system instead of a schedule-driven system.",
+      "id": "fab628123383f904b9c5f2214ff731ec"
+    },
+    {
+      "type": "html",
+      "text": " It provides for work to be requested in the smallest chunks possible.",
+      "id": "b6ea3544c8832a26bb0be333b22fb936"
+    },
+    {
+      "type": "html",
+      "text": "\nThese principles are observed by the agile testing process described above.",
+      "id": "f75a19c7db3069d564739bc9b27d256f"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Lean Production</b>",
+      "id": "96235f588851b268da62119c6c77a3d7"
+    },
+    {
+      "type": "html",
+      "text": "\n[[Agile Bridge]]s borrow many concepts from Japanese [[Lean Production]] which is philosophically very close to XP.",
+      "id": "7b85294431ebfaefd8ba4a5de0e469ec"
+    },
+    {
+      "type": "html",
+      "text": "\nThe three concepts of [[Lean Production]] are [[Just In Time]], Kanban and Kaizen, and each is valuable in [[Agile Bridge]]s.",
+      "id": "4826705340e4b9d8b266cf374a32fc99"
+    },
+    {
+      "type": "html",
+      "text": "\nIn this [[Agile Bridge]],",
+      "id": "06742017ba4c5e30319d0bc246e95f1f"
+    },
+    {
+      "type": "html",
+      "text": " [[Feature Let]]s allow for the establishment of a demand-driven [[Just In Time]] system,",
+      "id": "8515e1d55e12db6dc13aad4176cc3985"
+    },
+    {
+      "type": "html",
+      "text": " [[Developer Stories]] serve as Kanban (the [[Visual Record]]), and",
+      "id": "99a9cb341ccef16319a0470c2c6b6768"
+    },
+    {
+      "type": "html",
+      "text": " [[Turnaround Time]] acts like [[Buffer Inventory]], which is a quantity that Kaizen attempts to reduce.",
+      "id": "7324827a09cc3fe9ffc84d12afbe988b"
+    },
+    {
+      "type": "html",
+      "text": "<i>Lean Software Development is an interesting area - leading to [[Evolutionary Design]]. Tom and Mary Poppendieck have been working in this area - check their book at [http://www.poppendieck.com/ld.htm www.poppendieck.com]. They have studied the Japanese manufacturing industry and brought in useful ideas</i>",
+      "id": "446477615c6876ed203b567a99247e6a"
+    },
+    {
+      "type": "html",
+      "text": "-- [[Somik Raha]]",
+      "id": "8e1477b74b9108bae215a807ebd7e1fa"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "\nYou won't believe this!  Take a look at what I found!!",
+      "id": "45adb6b31d39e3b6159f5cbd889f5a3d"
+    },
+    {
+      "type": "html",
+      "text": "\n[[Just In Time Programming]]",
+      "id": "247b9e89a9a2fa1d2ce6fea94deb5313"
+    },
+    {
+      "type": "html",
+      "text": "\nOk.. that was an interruption.. let's get back to the article or paper or novel or whatever. Where was I?  Whew! This tool IS cool.",
+      "id": "aec5eb6f81bd36cc55a202118bfb8d4e"
+    },
+    {
+      "type": "html",
+      "text": "<b>Conjecture</b>",
+      "id": "a7191ae9a95505d55e23f8f785db18e6"
+    },
+    {
+      "type": "html",
+      "text": "\nWell, I think the [[Two Principles]] are reflected in the three [[Lean Production]] concepts mentioned above.  [[Just In Time]] and Kanban lean to the first principle, that on doing things in a demand-driven fashion.  Kaizen is about minimizing the size of the requests (the tightness of the controls in the pull-system) - actually, Kaizen is more than that, but that is one of the things improved - which is the second principle.",
+      "id": "d3aeb4ef5102433348ab1ebffd2c40df"
+    },
+    {
+      "type": "html",
+      "text": "\nWhy is a [[Pull System]] so critical?",
+      "id": "3fa5c1e4d3dc15d457836839f3c76dff"
+    },
+    {
+      "type": "html",
+      "text": "\nI don't know. All I know is, [[Traditional Testing]] tends to be schedule-driven, like normal batch-driven [[Manufacturing Processe]]s that [[Japanese Lean Production]] departed from.",
+      "id": "174734bf8d1d25e98c69da7694635bdf"
+    },
+    {
+      "type": "html",
+      "text": "\nOkay [[Wiki Gnome]]s, I know this format ain't really [[Wiki Wiki]], but this is a thought dump. Shall refactor over the next few days.",
+      "id": "b1e9e15e82f727cd4518ed305925cc06"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Pair Programming</b>",
+      "id": "648accd911ee0287067ab98a11dbf505"
+    },
+    {
+      "type": "html",
+      "text": "\n[[Pair Programming]] took place in a very interesting way that we did not anticipate. Developers often began to work with one tester for prolonged periods of time, invite them to design discussions and for week-end \"let's catch up\" runs.",
+      "id": "3ea231281fee71a16fcc759e2d4f4217"
+    },
+    {
+      "type": "html",
+      "text": "\nOne reason for this could be that a lot of the information exchanged between the tester and developer is exchanged verbally during regular meetings and the stories serve more as flags marking newly prospected territory than as maps to consult. Thus, context becomes important, and context is better preserved in a dialog than in isolated messages.",
+      "id": "5e2aad177673b63455957ea073f6b248"
+    },
+    {
+      "type": "html",
+      "text": "\nBut that does not explain why developers started asking testers to join them on weekends when they were trying to catch up. I would think that the tester had begun to shoulder some of the responsibility for ad hoc testing that would have been performed by the developer, (who was not doing any test-first design).",
+      "id": "0704b5e572f9a95670f795b39dbbbd2d"
+    },
+    {
+      "type": "html",
+      "text": "(Ok, before someone get's mad about our not doing TDD, let me say I wish we could, but honestly, that product was quite difficult to test without special tools that only the separate test team had).",
+      "id": "01e9a1f64455eeed937adebee7e9126e"
+    },
+    {
+      "type": "html",
+      "text": "\nThis would also seem to reveal another use of featurelets. Since they are extremely small pieces of functionality, the cycle of feedback becomes tight enough perhaps to allow developers to rely on the test team more than they usually do.",
+      "id": "8b513e86fe8f152bf0f647eb48b8f2a4"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Facts about the Experiment</b>",
+      "id": "32324ac7845cb49317a3028656492329"
+    },
+    {
+      "type": "html",
+      "text": "\nThe experiment was conducted with a group of four testers and about six developers. However, we were finally only able to observe progress on one project with two developers and one tester. The reason was that the other developers never managed to get down to integrating continuously.",
+      "id": "8ab58258c9ca45fc5ca615ff94ca7299"
+    },
+    {
+      "type": "html",
+      "text": "\nWe are still working on collecting data and metrics and hope to compare the performance of the project with others in terms of defect rates. If others who read this want to try this out and supply us with data points, we welcome volunteers. :)",
+      "id": "f273f498d3d6d982487ab4f95974bb84"
+    },
+    {
+      "type": "html",
+      "text": "\nRelated Links:",
+      "id": "21bc07db6706589e49bcab8b06f2d44a"
+    },
+    {
+      "type": "html",
+      "text": "\nIf the readers have links that I would be interested in embedding in this article, please leave them here for me to pick up. Feel free to <i>comment anywhere</i> using [[Two Single Quotes]] so I can spot the comment easily.",
+      "id": "330f8be4e05f800694acb7668b8f8280"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "<b>Acknowledgements</b>",
+      "id": "7447fbf55d82df787ef8e7aaa91a66fe"
+    },
+    {
+      "type": "html",
+      "text": "\nThanks to all the developers and testers who volunteered, and to those who allowed us to try this out.",
+      "id": "626e4197cf81d009fe8cff42e9e25324"
+    },
+    {
+      "type": "html",
+      "text": "\nThey are:",
+      "id": "2d98e225dd22ff8be972e521ff480a27"
+    },
+    {
+      "type": "html",
+      "text": " Balaji",
+      "id": "f08cbd295a5c96397f8ef0da4df41a0d"
+    },
+    {
+      "type": "html",
+      "text": " Ronald",
+      "id": "449c422704552d736470c50ad03f95c2"
+    },
+    {
+      "type": "html",
+      "text": " Jan",
+      "id": "6e8154faf05027779248cb158e7b267d"
+    },
+    {
+      "type": "html",
+      "text": " Jeff",
+      "id": "a58819a34034a4f906e4dd8796daa11e"
+    },
+    {
+      "type": "html",
+      "text": " Jim",
+      "id": "97ee454e234c4a3164e25aa045be68c4"
+    },
+    {
+      "type": "html",
+      "text": " Sandi",
+      "id": "4402b54750f927fc34b34fd874beba66"
+    },
+    {
+      "type": "html",
+      "text": " Kimi",
+      "id": "6d5b1c7fa6bcf7d9b799fa6bf7ad4514"
+    },
+    {
+      "type": "html",
+      "text": " [[Bill Krebs]]",
+      "id": "cfe2a43729b3dddd8ca6ffed5705c5d6"
+    },
+    {
+      "type": "html",
+      "text": " [[Laurie Williams]]",
+      "id": "509f6b85a58bc3b18a15f82689a3fc76"
+    },
+    {
+      "type": "html",
+      "text": " [[Boby George]]",
+      "id": "13f2be94ac5c646993e3a50b40f7c687"
+    },
+    {
+      "type": "html",
+      "text": "\nThanks to the [[Wiki Gnome]] who refactored the pages to eliminate a [[Wiki Name Plural Problem]] here :).",
+      "id": "9aceae49da48dacc2b19fd3195abe22e"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "See also [[Developer Story]], [[Turnaround Time]], [[Feature Let]], [[Two Principles]]",
+      "id": "900848e433e33db863e3e12771cde32b"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+    },
+    {
+      "type": "html",
+      "text": "[[Category Agile Methodology]]",
+      "id": "16bddb138d4f510a52b21f36f144d7f1"
+    },
+    {
+      "type": "html",
+      "text": "See original on  [http://c2.com/cgi/wiki?AgileBridge c2.com]",
+      "id": "86e53b20a5b2ff9f15dc9fc931fc2914"
+    }
+  ],
+  "journal": [
+    {
+      "date": 1105431035000,
+      "id": "da7aa0ea2b82b0e585711f9eae71bc27",
+      "type": "create",
+      "item": {
+        "title": "Agile Bridge",
+        "story": [
+          {
+            "type": "html",
+            "text": "I'm writing this on a [[Wiki Wiki Web]] because I hate writing papers and articles. Papers and articles can't be changed, and I keep changing my mind, which is sometimes easier to change than hair-colour. -- [[Cohan Carlos]]",
+            "id": "2e1a422c53864436385d467fe2a578cc"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>An Agile Bridge for Testing</b>, by [[Cohan Carlos]]",
+            "id": "56a476010382faf2ba706374875813a7"
+          },
+          {
+            "type": "html",
+            "text": "<b>Introduction</b>",
+            "id": "f236b5775521486fca416bc065aa4766"
+          },
+          {
+            "type": "html",
+            "text": "\nI'd like to tell you about a solution we found to a small problem related to [[Agile Process]] teams. And hopefully, someone else will try it out and tell me about what we did wrong and what we did right, and whether we ought to have done it at all or done it very differently.",
+            "id": "c91ddace36c14ed8e1a9a27c7c950be0"
+          },
+          {
+            "type": "html",
+            "text": "\nThe problem was as follows. There was a separate Test Team working with developers who were comparatively agile. Besides, the nature of the product made programmatic tests a bit ineffective, so most of the testing had to be done at the GUI layer. How were the developers going to make optimal use of the test team while at the same time remaining at least a little agile?",
+            "id": "a7d017b933933654cab9ebc58d730ac8"
+          },
+          {
+            "type": "html",
+            "text": "\nOne of the really nice things about [[Extreme Programming]] is that it is not essential for developers to produce truckloads of documentation or conduct smoke signal rallies to tell each other about their work. It is just not needed when people do [[Pair Programming]]. Besides, documenting work is not that effective as a means of communication.",
+            "id": "5e7df044fefb3ef72c089ef268f8fb50"
+          },
+          {
+            "type": "html",
+            "text": "\nNow, bring in an island floating on the high seas with a blindfolded supporting team upon it. How do we coordinate what we do? 'A ship will be sent to your port at 11 am the coming Monday bearing parcels of paper for your enlightenment. Please be so good as to initial every sheet and return them to us the week after. Ship us the parcels containing the documentation for your test cases the week after we get your initials. We shall initial every sheet of your documentation of your test cases as a sign of our approval and return them yet another week later,' does not seem to be an acceptable answer from the point of view of agility, though it may work for a traditional process.",
+            "id": "b5bb2480a1e783ef5c2768a0ec2c3761"
+          },
+          {
+            "type": "html",
+            "text": "\nWe have found in small experiments that we could dispense with all the documentation if we borrowed a few ideas from lean production and from existing [[Extreme Programming]] tricks of the trade.",
+            "id": "457e02b376b8047d2ba31b92bc0d47b6"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Piers of the Bridge</b>",
+            "id": "1f7377e3142414532430dab3286bb660"
+          },
+          {
+            "type": "html",
+            "text": "\nWe used [[Developer Stories]] to coordinate the two teams.",
+            "id": "585aeb9bdd5120bc4a5bc834670a61b2"
+          },
+          {
+            "type": "html",
+            "text": "\nA [[Developer Story]] is like a [[User Story]], but written by developers describing any small functionality they put into the program. It's just three or four lines flagging a change. Like, if the developer adds a button.  The button does nothing. When you click it, a null pointer exception occurs. H(sh)e writes a story on the button and gives it to the tester who immediately gets the build and tests the button.",
+            "id": "e8c1f731cc888b90ab7ae535bed41c1f"
+          },
+          {
+            "type": "html",
+            "text": "\nThe button is what we call a [[Feature Let]]. It's a piece of a feature that's not yet been completed.",
+            "id": "bd46c57976e8c21419fa05bc45ccfd60"
+          },
+          {
+            "type": "html",
+            "text": "\nYou see, this way, the code gets tested immediately. The way it is usually done, it gets tested weeks later, when the barge with the release makes a stop at the testers' island. Since it is tested immediately, in fact as fast as the developers can integrate and build it, they get feedback immediately. Otherwise, they end up grimly facing onslaughts of bugs way too late to be able to do much about them, and feeling rightly upset about the whole deal.",
+            "id": "e0d2b15e953ade5ac2812d44bf04f7c9"
+          },
+          {
+            "type": "html",
+            "text": "\nNow one other thing we did was measure ourselves by [[Turnaround Time]]. This is the time it takes for a defect that has entered the code to be discovered. Everyone tries real hard to minimize this. We want to find the defects fast! No-one has a problem with that because it does not suggest the developer has been sloppy, unlike some other popular measures we use.",
+            "id": "1f9b089332e20b209841a2c418c2668b"
+          },
+          {
+            "type": "html",
+            "text": "\nThis works well for agile teams because",
+            "id": "84604e9ca93733a63be5337680b93022"
+          },
+          {
+            "type": "html",
+            "text": " [[Continuous Integration]] is fully exploited.",
+            "id": "399fb4b15ed0cd3233d8a9f7293e9f89"
+          },
+          {
+            "type": "html",
+            "text": " Feedback is timely.",
+            "id": "01231eca5260464e61fe4beca8b5cf17"
+          },
+          {
+            "type": "html",
+            "text": " Elaborate documentation is not required.",
+            "id": "2795e7d956241f602fa48030a6f99bc6"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Bridges Everywhere</b>",
+            "id": "3c7d02aadb58634efe5864b614279d02"
+          },
+          {
+            "type": "html",
+            "text": "\nThis is one little experiment, but it suffices to show where bridges are needed. Look around. Separate test teams exist in places you would least expect to find them.",
+            "id": "3adc3a62209c972ca862bfb75601a21c"
+          },
+          {
+            "type": "html",
+            "text": "\nFor instance, documentation teams. There are sometimes separate documentation and translation teams performing a rather specialised task with their own set of sometimes expensive tools, and they will expect smoke signal sessions too.",
+            "id": "1dedb47f543db8a59380f146940c303e"
+          },
+          {
+            "type": "html",
+            "text": "\nIf you peer closely at the XP customer, you will see a human with \"test team\" written all over his/her face.  The customer's test team has to run the acceptance tests!",
+            "id": "18a627b598278774dcc0acfcb8ca0bd5"
+          },
+          {
+            "type": "html",
+            "text": "\nThen, in some firms, management needs a bridge. [[Test Driven Management]] has been proposed as a way of bridging this gap. I know too little about it to tell you more.",
+            "id": "a9e348a5e65d7b6db34f4afbad5a0964"
+          },
+          {
+            "type": "html",
+            "text": "<i>Your management test could be - the turnaround time should drop from X to Y by the end of this iteration/project. To read more about [[Test Driven Management]], check [http://www.sdmagazine.com/documents/s=7839/sdm0303a/sdm0303a.htm?temp=TaZO8N4STw www.sdmagazine.com]</i>",
+            "id": "f1dbec9ffd511c9801d05a47eeb52be2"
+          },
+          {
+            "type": "html",
+            "text": "-- [[Somik Raha]]",
+            "id": "8e1477b74b9108bae215a807ebd7e1fa"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Two Principles</b>",
+            "id": "bf03d7f66b97c96bd33d809570f7fce8"
+          },
+          {
+            "type": "html",
+            "text": "\nIn fact, it seems likely that agile processes could work in any environment provided the bridging system makes use of two simple principles.",
+            "id": "52769c1b9a0ebd19b0ced67c2d95bc04"
+          },
+          {
+            "type": "html",
+            "text": " It coordinates between the islands using a demand-driven system instead of a schedule-driven system.",
+            "id": "fab628123383f904b9c5f2214ff731ec"
+          },
+          {
+            "type": "html",
+            "text": " It provides for work to be requested in the smallest chunks possible.",
+            "id": "b6ea3544c8832a26bb0be333b22fb936"
+          },
+          {
+            "type": "html",
+            "text": "\nThese principles are observed by the agile testing process described above.",
+            "id": "f75a19c7db3069d564739bc9b27d256f"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Lean Production</b>",
+            "id": "96235f588851b268da62119c6c77a3d7"
+          },
+          {
+            "type": "html",
+            "text": "\n[[Agile Bridge]]s borrow many concepts from Japanese [[Lean Production]] which is philosophically very close to XP.",
+            "id": "7b85294431ebfaefd8ba4a5de0e469ec"
+          },
+          {
+            "type": "html",
+            "text": "\nThe three concepts of [[Lean Production]] are [[Just In Time]], Kanban and Kaizen, and each is valuable in [[Agile Bridge]]s.",
+            "id": "4826705340e4b9d8b266cf374a32fc99"
+          },
+          {
+            "type": "html",
+            "text": "\nIn this [[Agile Bridge]],",
+            "id": "06742017ba4c5e30319d0bc246e95f1f"
+          },
+          {
+            "type": "html",
+            "text": " [[Feature Let]]s allow for the establishment of a demand-driven [[Just In Time]] system,",
+            "id": "8515e1d55e12db6dc13aad4176cc3985"
+          },
+          {
+            "type": "html",
+            "text": " [[Developer Stories]] serve as Kanban (the [[Visual Record]]), and",
+            "id": "99a9cb341ccef16319a0470c2c6b6768"
+          },
+          {
+            "type": "html",
+            "text": " [[Turnaround Time]] acts like [[Buffer Inventory]], which is a quantity that Kaizen attempts to reduce.",
+            "id": "7324827a09cc3fe9ffc84d12afbe988b"
+          },
+          {
+            "type": "html",
+            "text": "<i>Lean Software Development is an interesting area - leading to [[Evolutionary Design]]. Tom and Mary Poppendieck have been working in this area - check their book at [http://www.poppendieck.com/ld.htm www.poppendieck.com]. They have studied the Japanese manufacturing industry and brought in useful ideas</i>",
+            "id": "446477615c6876ed203b567a99247e6a"
+          },
+          {
+            "type": "html",
+            "text": "-- [[Somik Raha]]",
+            "id": "8e1477b74b9108bae215a807ebd7e1fa"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "\nYou won't believe this!  Take a look at what I found!!",
+            "id": "45adb6b31d39e3b6159f5cbd889f5a3d"
+          },
+          {
+            "type": "html",
+            "text": "\n[[Just In Time Programming]]",
+            "id": "247b9e89a9a2fa1d2ce6fea94deb5313"
+          },
+          {
+            "type": "html",
+            "text": "\nOk.. that was an interruption.. let's get back to the article or paper or novel or whatever. Where was I?  Whew! This tool IS cool.",
+            "id": "aec5eb6f81bd36cc55a202118bfb8d4e"
+          },
+          {
+            "type": "html",
+            "text": "<b>Conjecture</b>",
+            "id": "a7191ae9a95505d55e23f8f785db18e6"
+          },
+          {
+            "type": "html",
+            "text": "\nWell, I think the [[Two Principles]] are reflected in the three [[Lean Production]] concepts mentioned above.  [[Just In Time]] and Kanban lean to the first principle, that on doing things in a demand-driven fashion.  Kaizen is about minimizing the size of the requests (the tightness of the controls in the pull-system) - actually, Kaizen is more than that, but that is one of the things improved - which is the second principle.",
+            "id": "d3aeb4ef5102433348ab1ebffd2c40df"
+          },
+          {
+            "type": "html",
+            "text": "\nWhy is a [[Pull System]] so critical?",
+            "id": "3fa5c1e4d3dc15d457836839f3c76dff"
+          },
+          {
+            "type": "html",
+            "text": "\nI don't know. All I know is, [[Traditional Testing]] tends to be schedule-driven, like normal batch-driven [[Manufacturing Processe]]s that [[Japanese Lean Production]] departed from.",
+            "id": "174734bf8d1d25e98c69da7694635bdf"
+          },
+          {
+            "type": "html",
+            "text": "\nOkay [[Wiki Gnome]]s, I know this format ain't really [[Wiki Wiki]], but this is a thought dump. Shall refactor over the next few days.",
+            "id": "b1e9e15e82f727cd4518ed305925cc06"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Pair Programming</b>",
+            "id": "648accd911ee0287067ab98a11dbf505"
+          },
+          {
+            "type": "html",
+            "text": "\n[[Pair Programming]] took place in a very interesting way that we did not anticipate. Developers often began to work with one tester for prolonged periods of time, invite them to design discussions and for week-end \"let's catch up\" runs.",
+            "id": "3ea231281fee71a16fcc759e2d4f4217"
+          },
+          {
+            "type": "html",
+            "text": "\nOne reason for this could be that a lot of the information exchanged between the tester and developer is exchanged verbally during regular meetings and the stories serve more as flags marking newly prospected territory than as maps to consult. Thus, context becomes important, and context is better preserved in a dialog than in isolated messages.",
+            "id": "5e2aad177673b63455957ea073f6b248"
+          },
+          {
+            "type": "html",
+            "text": "\nBut that does not explain why developers started asking testers to join them on weekends when they were trying to catch up. I would think that the tester had begun to shoulder some of the responsibility for ad hoc testing that would have been performed by the developer, (who was not doing any test-first design).",
+            "id": "0704b5e572f9a95670f795b39dbbbd2d"
+          },
+          {
+            "type": "html",
+            "text": "(Ok, before someone get's mad about our not doing TDD, let me say I wish we could, but honestly, that product was quite difficult to test without special tools that only the separate test team had).",
+            "id": "01e9a1f64455eeed937adebee7e9126e"
+          },
+          {
+            "type": "html",
+            "text": "\nThis would also seem to reveal another use of featurelets. Since they are extremely small pieces of functionality, the cycle of feedback becomes tight enough perhaps to allow developers to rely on the test team more than they usually do.",
+            "id": "8b513e86fe8f152bf0f647eb48b8f2a4"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Facts about the Experiment</b>",
+            "id": "32324ac7845cb49317a3028656492329"
+          },
+          {
+            "type": "html",
+            "text": "\nThe experiment was conducted with a group of four testers and about six developers. However, we were finally only able to observe progress on one project with two developers and one tester. The reason was that the other developers never managed to get down to integrating continuously.",
+            "id": "8ab58258c9ca45fc5ca615ff94ca7299"
+          },
+          {
+            "type": "html",
+            "text": "\nWe are still working on collecting data and metrics and hope to compare the performance of the project with others in terms of defect rates. If others who read this want to try this out and supply us with data points, we welcome volunteers. :)",
+            "id": "f273f498d3d6d982487ab4f95974bb84"
+          },
+          {
+            "type": "html",
+            "text": "\nRelated Links:",
+            "id": "21bc07db6706589e49bcab8b06f2d44a"
+          },
+          {
+            "type": "html",
+            "text": "\nIf the readers have links that I would be interested in embedding in this article, please leave them here for me to pick up. Feel free to <i>comment anywhere</i> using [[Two Single Quotes]] so I can spot the comment easily.",
+            "id": "330f8be4e05f800694acb7668b8f8280"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "<b>Acknowledgements</b>",
+            "id": "7447fbf55d82df787ef8e7aaa91a66fe"
+          },
+          {
+            "type": "html",
+            "text": "\nThanks to all the developers and testers who volunteered, and to those who allowed us to try this out.",
+            "id": "626e4197cf81d009fe8cff42e9e25324"
+          },
+          {
+            "type": "html",
+            "text": "\nThey are:",
+            "id": "2d98e225dd22ff8be972e521ff480a27"
+          },
+          {
+            "type": "html",
+            "text": " Balaji",
+            "id": "f08cbd295a5c96397f8ef0da4df41a0d"
+          },
+          {
+            "type": "html",
+            "text": " Ronald",
+            "id": "449c422704552d736470c50ad03f95c2"
+          },
+          {
+            "type": "html",
+            "text": " Jan",
+            "id": "6e8154faf05027779248cb158e7b267d"
+          },
+          {
+            "type": "html",
+            "text": " Jeff",
+            "id": "a58819a34034a4f906e4dd8796daa11e"
+          },
+          {
+            "type": "html",
+            "text": " Jim",
+            "id": "97ee454e234c4a3164e25aa045be68c4"
+          },
+          {
+            "type": "html",
+            "text": " Sandi",
+            "id": "4402b54750f927fc34b34fd874beba66"
+          },
+          {
+            "type": "html",
+            "text": " Kimi",
+            "id": "6d5b1c7fa6bcf7d9b799fa6bf7ad4514"
+          },
+          {
+            "type": "html",
+            "text": " [[Bill Krebs]]",
+            "id": "cfe2a43729b3dddd8ca6ffed5705c5d6"
+          },
+          {
+            "type": "html",
+            "text": " [[Laurie Williams]]",
+            "id": "509f6b85a58bc3b18a15f82689a3fc76"
+          },
+          {
+            "type": "html",
+            "text": " [[Boby George]]",
+            "id": "13f2be94ac5c646993e3a50b40f7c687"
+          },
+          {
+            "type": "html",
+            "text": "\nThanks to the [[Wiki Gnome]] who refactored the pages to eliminate a [[Wiki Name Plural Problem]] here :).",
+            "id": "9aceae49da48dacc2b19fd3195abe22e"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "See also [[Developer Story]], [[Turnaround Time]], [[Feature Let]], [[Two Principles]]",
+            "id": "900848e433e33db863e3e12771cde32b"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "d9c5c2437f592b3ba794455a4ef0c9ef"
+          },
+          {
+            "type": "html",
+            "text": "[[Category Agile Methodology]]",
+            "id": "16bddb138d4f510a52b21f36f144d7f1"
+          },
+          {
+            "type": "html",
+            "text": "See original on  [http://c2.com/cgi/wiki?AgileBridge c2.com]",
+            "id": "86e53b20a5b2ff9f15dc9fc931fc2914"
+          }
+        ]
+      }
+    },
+    {
+      "type": "fork",
+      "site": "agile.sfw.c2.com",
+      "date": 1498578708510
+    }
+  ]
+}

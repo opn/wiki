@@ -1,0 +1,1853 @@
+{
+  "title": "reveal.js",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8d4257aacfe22552",
+      "text": "A framework for easily creating beautiful presentations using HTML."
+    },
+    {
+      "type": "paragraph",
+      "id": "b87196eede509fc0",
+      "text": "reveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a [[Reveal.js JavaScript API]]. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere."
+    },
+    {
+      "type": "paragraph",
+      "id": "683cc48954b22125",
+      "text": "[[Reveal.js in Fedwiki]]"
+    },
+    {
+      "type": "markdown",
+      "id": "d6a7a91ab891b21d",
+      "text": "# More reading:"
+    },
+    {
+      "type": "reference",
+      "id": "bee673a3235b842a",
+      "site": "c0de.academy",
+      "slug": "presentations-with-pandoc",
+      "title": "Presentations with Pandoc",
+      "text": "Here we look how we can author a  [[reveal.js]] presentation using [[pandoc]]"
+    },
+    {
+      "type": "reference",
+      "id": "667b6ceb267136ef",
+      "site": "c0de.academy",
+      "slug": "revealjs-multiplexing",
+      "title": "Reveal.js Multiplexing",
+      "text": "The multiplex plugin allows your audience to view the slides of the [[reveal.js]] presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time."
+    },
+    {
+      "type": "reference",
+      "id": "0e77fcc521a1c9e2",
+      "site": "c0de.academy",
+      "slug": "revealjs-javascript-api",
+      "title": "Reveal.js JavaScript API",
+      "text": "The Reveal object exposes a JavaScript API for controlling navigation and reading state:"
+    },
+    {
+      "type": "markdown",
+      "id": "fcacce1e482bbad9",
+      "text": "* [https://github.com/hakimel/reveal.js#installation Installation]\n* [https://github.com/hakimel/reveal.js/releases Changelog]\n* [https://github.com/hakimel/reveal.js/wiki/Example-Presentations Examples]\n* [https://github.com/hakimel/reveal.js/wiki/Browser-Support Browser Support]\n* [https://github.com/hakimel/reveal.js/wiki/Plugins,-Tools-and-Hardware Plugins]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "76850f57339610f2",
+      "text": "# Online Editor"
+    },
+    {
+      "type": "paragraph",
+      "id": "f38be49fe66de9ef",
+      "text": "Presentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at [http://slides.com slides.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "7615359a12593e44",
+      "text": "# Markup"
+    },
+    {
+      "type": "paragraph",
+      "id": "1afb48051ab3f2b8",
+      "text": "Here's a barebones example of a fully working reveal.js presentation:"
+    },
+    {
+      "type": "code",
+      "id": "ab83d03d0ae8bc31",
+      "text": "<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>"
+    },
+    {
+      "type": "html",
+      "id": "f10845f013f6beca",
+      "text": "The presentation markup hierarchy needs to be <code>.reveal > .slides > section</code> where the section represents one slide and can be repeated indefinitely. "
+    },
+    {
+      "type": "paragraph",
+      "id": "d2576dac7cc04dc5",
+      "text": "If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:"
+    },
+    {
+      "type": "code",
+      "id": "cc86abe2549ce055",
+      "text": "<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>"
+    },
+    {
+      "type": "markdown",
+      "id": "7627b717d0589842",
+      "text": "# Markdown"
+    },
+    {
+      "type": "paragraph",
+      "id": "06972f7ac1f1988c",
+      "text": "It's possible to write your slides using [[Markdown]]. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below."
+    },
+    {
+      "type": "code",
+      "id": "81da3264991ee65b",
+      "text": "<section data-markdown>\n    <script type=\"text/template\">\n        ## Page title\n\n        A paragraph with some text and a [link](http://hakim.se).\n    </script>\n</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "785c63e723aa76e4",
+      "text": "This is based on data-markdown from Paul Irish modified to use marked to support GitHub Flavored Markdown. Sensitive to indentation (avoid mixing tabs and spaces) and line breaks (avoid consecutive breaks)."
+    },
+    {
+      "type": "markdown",
+      "id": "384749bcb7a4f712",
+      "text": "# External Markdown"
+    },
+    {
+      "type": "paragraph",
+      "id": "ffad99d3cf4ad3c7",
+      "text": "You can write your content as a separate file and have reveal.js load it at runtime. Note the separator arguments which determine how slides are delimited in the external file. The data-charset attribute is optional and specifies which charset to use when loading the external file."
+    },
+    {
+      "type": "code",
+      "id": "f16c0454f15e48ac",
+      "text": "<section data-markdown=\"example.md\"  \n         data-separator=\"^\\n\\n\\n\"  \n         data-separator-vertical=\"^\\n\\n\"  \n         data-separator-notes=\"^Note:\"  \n         data-charset=\"iso-8859-15\">\n</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "18411f4cc2510da4",
+      "text": "When used locally, this feature requires that reveal.js runs from a local web server."
+    },
+    {
+      "type": "markdown",
+      "id": "7fb019b07c814192",
+      "text": "# Element Attributes"
+    },
+    {
+      "type": "paragraph",
+      "id": "7680d030e11d01e9",
+      "text": "Special syntax (in html comment) is available for adding attributes to Markdown elements. This is useful for fragments, amongst other things."
+    },
+    {
+      "type": "code",
+      "id": "96d82d8ae75803a8",
+      "text": "<section data-markdown>\n    <script type=\"text/template\">\n        - Item 1 <!-- .element: class=\"fragment\" data-fragment-index=\"2\" -->\n        - Item 2 <!-- .element: class=\"fragment\" data-fragment-index=\"1\" -->\n    </script>\n</section>\nSlide Attributes"
+    },
+    {
+      "type": "paragraph",
+      "id": "06b146a991d20c2d",
+      "text": "Special syntax (in html comment) is available for adding attributes to the slide <section> elements generated by your Markdown."
+    },
+    {
+      "type": "code",
+      "id": "dec351f0b09afca7",
+      "text": "<section data-markdown>\n    <script type=\"text/template\">\n    <!-- .slide: data-background=\"#ff0000\" -->\n        Markdown content\n    </script>\n</section>"
+    },
+    {
+      "type": "markdown",
+      "id": "8fa31a662c43a8a6",
+      "text": "# Full setup"
+    },
+    {
+      "type": "paragraph",
+      "id": "5b4af7a70dce64c5",
+      "text": "Some [[reveal.js]] features, like external Markdown and speaker notes, require that presentations run from a local web server. "
+    },
+    {
+      "type": "markdown",
+      "id": "64dabc2bcf420474",
+      "text": "The following instructions will set up such a server as well as all of the development tasks needed to make edits to the reveal.js source code.\n* Install Node.js\n* Install Grunt"
+    },
+    {
+      "type": "paragraph",
+      "id": "d290ddf92878cee2",
+      "text": "Clone the reveal.js repository:"
+    },
+    {
+      "type": "code",
+      "id": "6d1786ee23ddde23",
+      "text": "git clone https://github.com/hakimel/reveal.js.git"
+    },
+    {
+      "type": "paragraph",
+      "id": "35690b1b1e07fd6b",
+      "text": "Navigate to the reveal.js folder:"
+    },
+    {
+      "type": "code",
+      "id": "d7f6ba752755f1fa",
+      "text": "cd reveal.js"
+    },
+    {
+      "type": "paragraph",
+      "id": "3f692a7149592425",
+      "text": "Install dependencies:\n"
+    },
+    {
+      "type": "code",
+      "id": "e101f6b13796702f",
+      "text": "npm install"
+    },
+    {
+      "type": "paragraph",
+      "id": "4149dfd2bb422cad",
+      "text": "Serve the presentation and monitor source files for changes:\n"
+    },
+    {
+      "type": "code",
+      "id": "368936e995defd9c",
+      "text": "grunt serve"
+    },
+    {
+      "type": "paragraph",
+      "id": "f1dfceef8a754bd4",
+      "text": "Open http://localhost:8000 to view your presentation. You can change the port by using grunt serve --port 8001.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "344f4be1e9c34947",
+      "text": "# Folder Structure"
+    },
+    {
+      "type": "markdown",
+      "id": "1c408d7251cc84e3",
+      "text": "* __css/__ Core styles without which the project does not function\n* __js/__ Like above but for JavaScript\n* __plugin/__ Components that have been developed as extensions to reveal.js\n* __lib/__ All other third party assets (JavaScript, CSS, fonts)"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "reveal.js",
+        "story": []
+      },
+      "date": 1459374297437
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8d4257aacfe22552"
+      },
+      "id": "8d4257aacfe22552",
+      "type": "add",
+      "date": 1459374299481
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dec351f0b09afca7"
+      },
+      "id": "dec351f0b09afca7",
+      "type": "add",
+      "after": "8d4257aacfe22552",
+      "date": 1459374335377
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo.\n\nreveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere.\n\nMore reading:\n\nInstallation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\nOnline Editor\n\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com.\n\nInstructions\n\nMarkup\n\nHere's a barebones example of a fully working reveal.js presentation:\n\n<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>\nThe presentation markup hierarchy needs to be .reveal > .slides > section where the section represents one slide and can be repeated indefinitely. If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:\n\n<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>\nMarkdown\n\nIt's possible to write your slides using Markdown. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below.\n\nThis is based on data-markdown from Paul Irish modified to use marked to support GitHub Flavored Markdown. Sensitive to indentation (avoid mixing tabs and spaces) and line breaks (avoid consecutive breaks).\n\n<section data-markdown>\n    <script type=\"text/template\">\n        ## Page title\n\n        A paragraph with some text and a [link](http://hakim.se).\n    </script>\n</section>\nExternal Markdown\n\nYou can write your content as a separate file and have reveal.js load it at runtime. Note the separator arguments which determine how slides are delimited in the external file. The data-charset attribute is optional and specifies which charset to use when loading the external file.\n\nWhen used locally, this feature requires that reveal.js runs from a local web server.\n\n<section data-markdown=\"example.md\"  \n         data-separator=\"^\\n\\n\\n\"  \n         data-separator-vertical=\"^\\n\\n\"  \n         data-separator-notes=\"^Note:\"  \n         data-charset=\"iso-8859-15\">\n</section>\nElement Attributes\n\nSpecial syntax (in html comment) is available for adding attributes to Markdown elements. This is useful for fragments, amongst other things.\n\n<section data-markdown>\n    <script type=\"text/template\">\n        - Item 1 <!-- .element: class=\"fragment\" data-fragment-index=\"2\" -->\n        - Item 2 <!-- .element: class=\"fragment\" data-fragment-index=\"1\" -->\n    </script>\n</section>\nSlide Attributes\n\nSpecial syntax (in html comment) is available for adding attributes to the slide <section> elements generated by your Markdown."
+      },
+      "date": 1459374342746
+    },
+    {
+      "type": "edit",
+      "id": "dec351f0b09afca7",
+      "item": {
+        "type": "code",
+        "id": "dec351f0b09afca7",
+        "text": "<section data-markdown>\n    <script type=\"text/template\">\n    <!-- .slide: data-background=\"#ff0000\" -->\n        Markdown content\n    </script>\n</section>"
+      },
+      "date": 1459374344633
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo.\n\nreveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere.\n\nMore reading:\n\nInstallation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\nOnline Editor\n\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com.\n\nInstructions\n\nMarkup\n\nHere's a barebones example of a fully working reveal.js presentation:\n\n<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>\nThe presentation markup hierarchy needs to be .reveal > .slides > section where the section represents one slide and can be repeated indefinitely. If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:\n\n<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>\nMarkdown\n\nIt's possible to write your slides using Markdown. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below.\n\nThis is based on data-markdown from Paul Irish modified to use marked to support GitHub Flavored Markdown. Sensitive to indentation (avoid mixing tabs and spaces) and line breaks (avoid consecutive breaks).\n\n<section data-markdown>\n    <script type=\"text/template\">\n        ## Page title\n\n        A paragraph with some text and a [link](http://hakim.se).\n    </script>\n</section>\nExternal Markdown\n\nYou can write your content as a separate file and have reveal.js load it at runtime. Note the separator arguments which determine how slides are delimited in the external file. The data-charset attribute is optional and specifies which charset to use when loading the external file.\n\nWhen used locally, this feature requires that reveal.js runs from a local web server.\n\n<section data-markdown=\"example.md\"  \n         data-separator=\"^\\n\\n\\n\"  \n         data-separator-vertical=\"^\\n\\n\"  \n         data-separator-notes=\"^Note:\"  \n         data-charset=\"iso-8859-15\">\n</section>\nElement Attributes\n\nSpecial syntax (in html comment) is available for adding attributes to Markdown elements. This is useful for fragments, amongst other things."
+      },
+      "date": 1459374357064
+    },
+    {
+      "type": "add",
+      "id": "06b146a991d20c2d",
+      "item": {
+        "type": "paragraph",
+        "id": "06b146a991d20c2d",
+        "text": "Special syntax (in html comment) is available for adding attributes to the slide <section> elements generated by your Markdown."
+      },
+      "after": "8d4257aacfe22552",
+      "date": 1459374365796
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "96d82d8ae75803a8"
+      },
+      "id": "96d82d8ae75803a8",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459374368652
+    },
+    {
+      "type": "edit",
+      "id": "96d82d8ae75803a8",
+      "item": {
+        "type": "code",
+        "id": "96d82d8ae75803a8",
+        "text": "<section data-markdown>\n    <script type=\"text/template\">\n        - Item 1 <!-- .element: class=\"fragment\" data-fragment-index=\"2\" -->\n        - Item 2 <!-- .element: class=\"fragment\" data-fragment-index=\"1\" -->\n    </script>\n</section>\nSlide Attributes"
+      },
+      "date": 1459374371671
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "96d82d8ae75803a8",
+      "date": 1459374374132
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo.\n\nreveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere.\n\nMore reading:\n\nInstallation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\nOnline Editor\n\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com.\n\nInstructions\n\nMarkup\n\nHere's a barebones example of a fully working reveal.js presentation:\n\n<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>\nThe presentation markup hierarchy needs to be .reveal > .slides > section where the section represents one slide and can be repeated indefinitely. If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:\n\n<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>\nMarkdown\n\nIt's possible to write your slides using Markdown. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below.\n\nThis is based on data-markdown from Paul Irish modified to use marked to support GitHub Flavored Markdown. Sensitive to indentation (avoid mixing tabs and spaces) and line breaks (avoid consecutive breaks).\n\n<section data-markdown>\n    <script type=\"text/template\">\n        ## Page title\n\n        A paragraph with some text and a [link](http://hakim.se).\n    </script>\n</section>\nExternal Markdown\n\nYou can write your content as a separate file and have reveal.js load it at runtime. Note the separator arguments which determine how slides are delimited in the external file. The data-charset attribute is optional and specifies which charset to use when loading the external file.\n\nWhen used locally, this feature requires that reveal.js runs from a local web server."
+      },
+      "date": 1459374388814
+    },
+    {
+      "type": "add",
+      "id": "7fb019b07c814192",
+      "item": {
+        "type": "paragraph",
+        "id": "7fb019b07c814192",
+        "text": "# Element Attributes"
+      },
+      "after": "8d4257aacfe22552",
+      "date": 1459374393396
+    },
+    {
+      "type": "add",
+      "id": "7680d030e11d01e9",
+      "item": {
+        "type": "paragraph",
+        "id": "7680d030e11d01e9",
+        "text": "Special syntax (in html comment) is available for adding attributes to Markdown elements. This is useful for fragments, amongst other things."
+      },
+      "after": "7fb019b07c814192",
+      "date": 1459374396628
+    },
+    {
+      "type": "edit",
+      "id": "7fb019b07c814192",
+      "item": {
+        "type": "markdown",
+        "id": "7fb019b07c814192",
+        "text": "# Element Attributes"
+      },
+      "date": 1459374397655
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f16c0454f15e48ac"
+      },
+      "id": "f16c0454f15e48ac",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459374400368
+    },
+    {
+      "type": "edit",
+      "id": "f16c0454f15e48ac",
+      "item": {
+        "type": "code",
+        "id": "f16c0454f15e48ac",
+        "text": "<section data-markdown=\"example.md\"  \n         data-separator=\"^\\n\\n\\n\"  \n         data-separator-vertical=\"^\\n\\n\"  \n         data-separator-notes=\"^Note:\"  \n         data-charset=\"iso-8859-15\">\n</section>"
+      },
+      "date": 1459374407598
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "f16c0454f15e48ac",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "f16c0454f15e48ac",
+      "date": 1459374411836
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo.\n\nreveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere.\n\nMore reading:\n\nInstallation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\nOnline Editor\n\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com.\n\nInstructions\n\nMarkup\n\nHere's a barebones example of a fully working reveal.js presentation:\n\n<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>\nThe presentation markup hierarchy needs to be .reveal > .slides > section where the section represents one slide and can be repeated indefinitely. If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:\n\n<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>\nMarkdown\n\nIt's possible to write your slides using Markdown. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below.\n\nThis is based on data-markdown from Paul Irish modified to use marked to support GitHub Flavored Markdown. Sensitive to indentation (avoid mixing tabs and spaces) and line breaks (avoid consecutive breaks).\n\n<section data-markdown>\n    <script type=\"text/template\">\n        ## Page title\n\n        A paragraph with some text and a [link](http://hakim.se).\n    </script>\n</section>\n"
+      },
+      "date": 1459374468815
+    },
+    {
+      "type": "add",
+      "id": "384749bcb7a4f712",
+      "item": {
+        "type": "paragraph",
+        "id": "384749bcb7a4f712",
+        "text": "# External Markdown"
+      },
+      "after": "8d4257aacfe22552",
+      "date": 1459374473739
+    },
+    {
+      "type": "add",
+      "id": "ffad99d3cf4ad3c7",
+      "item": {
+        "type": "paragraph",
+        "id": "ffad99d3cf4ad3c7",
+        "text": "You can write your content as a separate file and have reveal.js load it at runtime. Note the separator arguments which determine how slides are delimited in the external file. The data-charset attribute is optional and specifies which charset to use when loading the external file."
+      },
+      "after": "384749bcb7a4f712",
+      "date": 1459374477747
+    },
+    {
+      "type": "add",
+      "id": "18411f4cc2510da4",
+      "item": {
+        "type": "paragraph",
+        "id": "18411f4cc2510da4",
+        "text": "When used locally, this feature requires that reveal.js runs from a local web server."
+      },
+      "after": "ffad99d3cf4ad3c7",
+      "date": 1459374483333
+    },
+    {
+      "type": "edit",
+      "id": "384749bcb7a4f712",
+      "item": {
+        "type": "markdown",
+        "id": "384749bcb7a4f712",
+        "text": "# External Markdown"
+      },
+      "date": 1459374485139
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "f16c0454f15e48ac",
+      "date": 1459374509991
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo.\n\nreveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere.\n\nMore reading:\n\nInstallation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\nOnline Editor\n\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com.\n\nInstructions\n\nMarkup\n\nHere's a barebones example of a fully working reveal.js presentation:\n\n<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>\nThe presentation markup hierarchy needs to be .reveal > .slides > section where the section represents one slide and can be repeated indefinitely. If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:\n\n<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>"
+      },
+      "date": 1459374525950
+    },
+    {
+      "type": "add",
+      "id": "7627b717d0589842",
+      "item": {
+        "type": "paragraph",
+        "id": "7627b717d0589842",
+        "text": "# Markdown"
+      },
+      "after": "8d4257aacfe22552",
+      "date": 1459374534956
+    },
+    {
+      "type": "add",
+      "id": "06972f7ac1f1988c",
+      "item": {
+        "type": "paragraph",
+        "id": "06972f7ac1f1988c",
+        "text": "It's possible to write your slides using Markdown. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below."
+      },
+      "after": "7627b717d0589842",
+      "date": 1459374543723
+    },
+    {
+      "type": "add",
+      "id": "785c63e723aa76e4",
+      "item": {
+        "type": "paragraph",
+        "id": "785c63e723aa76e4",
+        "text": "This is based on data-markdown from Paul Irish modified to use marked to support GitHub Flavored Markdown. Sensitive to indentation (avoid mixing tabs and spaces) and line breaks (avoid consecutive breaks)."
+      },
+      "after": "06972f7ac1f1988c",
+      "date": 1459374554565
+    },
+    {
+      "type": "edit",
+      "id": "7627b717d0589842",
+      "item": {
+        "type": "markdown",
+        "id": "7627b717d0589842",
+        "text": "# Markdown"
+      },
+      "date": 1459374555997
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "81da3264991ee65b"
+      },
+      "id": "81da3264991ee65b",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459374559876
+    },
+    {
+      "type": "edit",
+      "id": "81da3264991ee65b",
+      "item": {
+        "type": "code",
+        "id": "81da3264991ee65b",
+        "text": "<section data-markdown>\n    <script type=\"text/template\">\n        ## Page title\n\n        A paragraph with some text and a [link](http://hakim.se).\n    </script>\n</section>"
+      },
+      "date": 1459374566286
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "81da3264991ee65b",
+      "date": 1459374572332
+    },
+    {
+      "type": "edit",
+      "id": "06972f7ac1f1988c",
+      "item": {
+        "type": "paragraph",
+        "id": "06972f7ac1f1988c",
+        "text": "It's possible to write your slides using [[Markdown]]. To enable Markdown, add the data-markdown attribute to your <section> elements and wrap the contents in a <script type=\"text/template\"> like the example below."
+      },
+      "date": 1459374634076
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo.\n\nreveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere.\n\nMore reading:\n\nInstallation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\nOnline Editor\n\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com.\n\nInstructions\n\n"
+      },
+      "date": 1459374658917
+    },
+    {
+      "type": "add",
+      "id": "7615359a12593e44",
+      "item": {
+        "type": "paragraph",
+        "id": "7615359a12593e44",
+        "text": "# Markup"
+      },
+      "after": "8d4257aacfe22552",
+      "date": 1459374663820
+    },
+    {
+      "type": "add",
+      "id": "1afb48051ab3f2b8",
+      "item": {
+        "type": "paragraph",
+        "id": "1afb48051ab3f2b8",
+        "text": "Here's a barebones example of a fully working reveal.js presentation:"
+      },
+      "after": "7615359a12593e44",
+      "date": 1459374667539
+    },
+    {
+      "type": "add",
+      "id": "3d7cb1723ebe5347",
+      "item": {
+        "type": "paragraph",
+        "id": "3d7cb1723ebe5347",
+        "text": "\nThe presentation markup hierarchy needs to be .reveal > .slides > section where the section represents one slide and can be repeated indefinitely. If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:\n\n<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>"
+      },
+      "after": "1afb48051ab3f2b8",
+      "date": 1459374676291
+    },
+    {
+      "type": "edit",
+      "id": "7615359a12593e44",
+      "item": {
+        "type": "markdown",
+        "id": "7615359a12593e44",
+        "text": "# Markup"
+      },
+      "date": 1459374692846
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ab83d03d0ae8bc31"
+      },
+      "id": "ab83d03d0ae8bc31",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459374698741
+    },
+    {
+      "type": "edit",
+      "id": "ab83d03d0ae8bc31",
+      "item": {
+        "type": "code",
+        "id": "ab83d03d0ae8bc31",
+        "text": "<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"css/reveal.css\">\n        <link rel=\"stylesheet\" href=\"css/theme/white.css\">\n    </head>\n    <body>\n        <div class=\"reveal\">\n            <div class=\"slides\">\n                <section>Slide 1</section>\n                <section>Slide 2</section>\n            </div>\n        </div>\n        <script src=\"js/reveal.js\"></script>\n        <script>\n            Reveal.initialize();\n        </script>\n    </body>\n</html>"
+      },
+      "date": 1459374705247
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "3d7cb1723ebe5347",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "ab83d03d0ae8bc31",
+      "date": 1459374710509
+    },
+    {
+      "type": "edit",
+      "id": "3d7cb1723ebe5347",
+      "item": {
+        "type": "paragraph",
+        "id": "3d7cb1723ebe5347",
+        "text": "The presentation markup hierarchy needs to be <code>.reveal > .slides > section</code> where the section represents one slide and can be repeated indefinitely. "
+      },
+      "date": 1459374792627
+    },
+    {
+      "type": "add",
+      "id": "d2576dac7cc04dc5",
+      "item": {
+        "type": "paragraph",
+        "id": "d2576dac7cc04dc5",
+        "text": "If you place multiple section elements inside of another section they will be shown as vertical slides. The first of the vertical slides is the \"root\" of the others (at the top), and will be included in the horizontal sequence. For example:"
+      },
+      "after": "3d7cb1723ebe5347",
+      "date": 1459374794723
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc86abe2549ce055"
+      },
+      "id": "cc86abe2549ce055",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459374805291
+    },
+    {
+      "type": "edit",
+      "id": "cc86abe2549ce055",
+      "item": {
+        "type": "code",
+        "id": "cc86abe2549ce055",
+        "text": "<div class=\"reveal\">\n    <div class=\"slides\">\n        <section>Single Horizontal Slide</section>\n        <section>\n            <section>Vertical Slide 1</section>\n            <section>Vertical Slide 2</section>\n        </section>\n    </div>\n</div>"
+      },
+      "date": 1459374808203
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "3d7cb1723ebe5347",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "cc86abe2549ce055",
+      "date": 1459374816641
+    },
+    {
+      "type": "edit",
+      "id": "3d7cb1723ebe5347",
+      "item": {
+        "type": "markdown",
+        "id": "3d7cb1723ebe5347",
+        "text": "The presentation markup hierarchy needs to be <code>.reveal > .slides > section</code> where the section represents one slide and can be repeated indefinitely. "
+      },
+      "date": 1459374823790
+    },
+    {
+      "type": "remove",
+      "id": "3d7cb1723ebe5347",
+      "date": 1459374834299
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f10845f013f6beca"
+      },
+      "id": "f10845f013f6beca",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459374841475
+    },
+    {
+      "type": "edit",
+      "id": "f10845f013f6beca",
+      "item": {
+        "type": "html",
+        "id": "f10845f013f6beca",
+        "text": "The presentation markup hierarchy needs to be <code>.reveal > .slides > section</code> where the section represents one slide and can be repeated indefinitely. "
+      },
+      "date": 1459374845235
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7"
+      ],
+      "id": "f10845f013f6beca",
+      "date": 1459374854912
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML. Check out the live demo."
+      },
+      "date": 1459374894875
+    },
+    {
+      "type": "add",
+      "id": "b87196eede509fc0",
+      "item": {
+        "type": "paragraph",
+        "id": "b87196eede509fc0",
+        "text": "reveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a JavaScript API. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere."
+      },
+      "after": "8d4257aacfe22552",
+      "date": 1459374900876
+    },
+    {
+      "type": "add",
+      "id": "d6a7a91ab891b21d",
+      "item": {
+        "type": "paragraph",
+        "id": "d6a7a91ab891b21d",
+        "text": "# More reading:"
+      },
+      "after": "b87196eede509fc0",
+      "date": 1459374926827
+    },
+    {
+      "type": "add",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "paragraph",
+        "id": "fcacce1e482bbad9",
+        "text": "Installation: Step-by-step instructions for getting reveal.js running on your computer.\nChangelog: Up-to-date version history.\nExamples: Presentations created with reveal.js, add your own!\nBrowser Support: Explanation of browser support and fallbacks.\nPlugins: A list of plugins that can be used to extend reveal.js.\n"
+      },
+      "after": "d6a7a91ab891b21d",
+      "date": 1459374937443
+    },
+    {
+      "type": "add",
+      "id": "76850f57339610f2",
+      "item": {
+        "type": "paragraph",
+        "id": "76850f57339610f2",
+        "text": "# Online Editor"
+      },
+      "after": "fcacce1e482bbad9",
+      "date": 1459374945043
+    },
+    {
+      "type": "add",
+      "id": "f38be49fe66de9ef",
+      "item": {
+        "type": "paragraph",
+        "id": "f38be49fe66de9ef",
+        "text": "\nPresentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at http://slides.com."
+      },
+      "after": "76850f57339610f2",
+      "date": 1459374945917
+    },
+    {
+      "type": "edit",
+      "id": "76850f57339610f2",
+      "item": {
+        "type": "markdown",
+        "id": "76850f57339610f2",
+        "text": "# Online Editor"
+      },
+      "date": 1459374946865
+    },
+    {
+      "type": "edit",
+      "id": "d6a7a91ab891b21d",
+      "item": {
+        "type": "markdown",
+        "id": "d6a7a91ab891b21d",
+        "text": "# More reading:"
+      },
+      "date": 1459374947819
+    },
+    {
+      "type": "edit",
+      "id": "f38be49fe66de9ef",
+      "item": {
+        "type": "paragraph",
+        "id": "f38be49fe66de9ef",
+        "text": "Presentations are written using HTML or Markdown but there's also an online editor for those of you who prefer a graphical interface. Give it a try at [http://slides.com slides.com]"
+      },
+      "date": 1459374975125
+    },
+    {
+      "type": "edit",
+      "id": "8d4257aacfe22552",
+      "item": {
+        "type": "paragraph",
+        "id": "8d4257aacfe22552",
+        "text": "A framework for easily creating beautiful presentations using HTML."
+      },
+      "date": 1459377833163
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "paragraph",
+        "id": "fcacce1e482bbad9",
+        "text": "* Installation\n* Changelog\n* Examples\n* Browser Support\n* Plugins\n"
+      },
+      "date": 1459377883528
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "markdown",
+        "id": "fcacce1e482bbad9",
+        "text": "* Installation\n* Changelog\n* Examples\n* Browser Support\n* Plugins\n"
+      },
+      "date": 1459377885459
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5510cacbc4b2f8a3"
+      },
+      "id": "5510cacbc4b2f8a3",
+      "type": "add",
+      "after": "dec351f0b09afca7",
+      "date": 1459377892496
+    },
+    {
+      "type": "edit",
+      "id": "5510cacbc4b2f8a3",
+      "item": {
+        "type": "paragraph",
+        "id": "5510cacbc4b2f8a3",
+        "text": "[[Reveal.js Multiplexing]]\n\nThe multiplex plugin allows your audience to view the slides of the presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time. See a demo at http://revealjs-51546.onmodulus.net/.\n\nThe multiplex plugin needs the following 3 things to operate:\n\nMaster presentation that has control\nClient presentations that follow the master\nSocket.io server to broadcast events from the master to the clients\nMore details:\n\nMaster presentation\n\nServed from a static file server accessible (preferably) only to the presenter. This need only be on your (the presenter's) computer. (It's safer to run the master presentation from your own computer, so if the venue's Internet goes down it doesn't stop the show.) An example would be to execute the following commands in the directory of your master presentation:\n\nnpm install node-static\nstatic\nIf you want to use the speaker notes plugin with your master presentation then make sure you have the speaker notes plugin configured correctly along with the configuration shown below, then execute node plugin/notes-server in the directory of your master presentation. The configuration below will cause it to connect to the socket.io server as a master, as well as launch your speaker-notes/static-file server.\n\nYou can then access your master presentation at http://localhost:1947\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n\n        // and if you want speaker notes\n        { src: 'plugin/notes-server/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\nClient presentation\n\nServed from a publicly accessible static file server. Examples include: GitHub Pages, Amazon S3, Dreamhost, Akamai, etc. The more reliable, the better. Your audience can then access the client presentation via http://example.com/path/to/presentation/client/index.html, with the configuration below causing them to connect to the socket.io server as clients.\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\nSocket.io server\n\nServer that receives the slideChanged events from the master presentation and broadcasts them out to the connected client presentations. This needs to be publicly accessible. You can run your own socket.io server with the commands:\n\nnpm install\nnode plugin/multiplex\nOr you use the socket.io server at http://revealjs-51546.onmodulus.net/.\n\nYou'll need to generate a unique secret and token pair for your master and client presentations. To do so, visit http://example.com/token, where http://example.com is the location of your socket.io server. Or if you're going to use the socket.io server at http://revealjs-51546.onmodulus.net/, visit http://revealjs-51546.onmodulus.net/token.\n\nYou are very welcome to point your presentations at the Socket.io server running at http://revealjs-51546.onmodulus.net/, but availability and stability are not guaranteed. For anything mission critical I recommend you run your own server. It is simple to deploy to nodejitsu, heroku, your own environment, etc.\n\nsocket.io server as file static server\n\nThe socket.io server can play the role of static file server for your client presentation, as in the example at http://revealjs-51546.onmodulus.net/. (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match.)\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\nIt can also play the role of static file server for your master presentation and client presentations at the same time (as long as you don't want to use speaker notes). (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match. Navigate through the slides on the second, and the first will update to match.) This is probably not desirable, because you don't want your audience to mess with your slides while you're presenting. ;)\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});"
+      },
+      "date": 1459377922022
+    },
+    {
+      "type": "remove",
+      "id": "5510cacbc4b2f8a3",
+      "date": 1459377928640
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "8fa31a662c43a8a6"
+      },
+      "after": "dec351f0b09afca7",
+      "id": "8fa31a662c43a8a6",
+      "date": 1459377934441
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "markdown",
+        "id": "fcacce1e482bbad9",
+        "text": "* [https://github.com/hakimel/reveal.js#installation Installation]\n* Changelog\n* Examples\n* Browser Support\n* Plugins\n"
+      },
+      "date": 1459378590706
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "markdown",
+        "id": "fcacce1e482bbad9",
+        "text": "* [https://github.com/hakimel/reveal.js#installation Installation]\n* [https://github.com/hakimel/reveal.js/releases Changelog]\n* Examples\n* Browser Support\n* Plugins\n"
+      },
+      "date": 1459378614352
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "markdown",
+        "id": "fcacce1e482bbad9",
+        "text": "* [https://github.com/hakimel/reveal.js#installation Installation]\n* [https://github.com/hakimel/reveal.js/releases Changelog]\n* [https://github.com/hakimel/reveal.js/wiki/Example-Presentations Examples]\n* Browser Support\n* Plugins\n"
+      },
+      "date": 1459378627210
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "markdown",
+        "id": "fcacce1e482bbad9",
+        "text": "* [https://github.com/hakimel/reveal.js#installation Installation]\n* [https://github.com/hakimel/reveal.js/releases Changelog]\n* [https://github.com/hakimel/reveal.js/wiki/Example-Presentations Examples]\n* [https://github.com/hakimel/reveal.js/wiki/Browser-Support Browser Support]\n* Plugins\n"
+      },
+      "date": 1459378646337
+    },
+    {
+      "type": "edit",
+      "id": "fcacce1e482bbad9",
+      "item": {
+        "type": "markdown",
+        "id": "fcacce1e482bbad9",
+        "text": "* [https://github.com/hakimel/reveal.js#installation Installation]\n* [https://github.com/hakimel/reveal.js/releases Changelog]\n* [https://github.com/hakimel/reveal.js/wiki/Example-Presentations Examples]\n* [https://github.com/hakimel/reveal.js/wiki/Browser-Support Browser Support]\n* [https://github.com/hakimel/reveal.js/wiki/Plugins,-Tools-and-Hardware Plugins]\n"
+      },
+      "date": 1459378664378
+    },
+    {
+      "type": "edit",
+      "id": "8fa31a662c43a8a6",
+      "item": {
+        "type": "paragraph",
+        "id": "8fa31a662c43a8a6",
+        "text": "# Full setup"
+      },
+      "date": 1459398758069
+    },
+    {
+      "type": "edit",
+      "id": "8fa31a662c43a8a6",
+      "item": {
+        "type": "markdown",
+        "id": "8fa31a662c43a8a6",
+        "text": "# Full setup"
+      },
+      "date": 1459398759406
+    },
+    {
+      "type": "add",
+      "id": "5b4af7a70dce64c5",
+      "item": {
+        "type": "paragraph",
+        "id": "5b4af7a70dce64c5",
+        "text": "Some [[reveal.js]] features, like external Markdown and speaker notes, require that presentations run from a local web server. "
+      },
+      "after": "8fa31a662c43a8a6",
+      "date": 1459398776467
+    },
+    {
+      "type": "add",
+      "id": "64dabc2bcf420474",
+      "item": {
+        "type": "paragraph",
+        "id": "64dabc2bcf420474",
+        "text": "The following instructions will set up such a server as well as all of the development tasks needed to make edits to the reveal.js source code.\n* Install Node.js\n* Install Grunt\n* Clone the reveal.js repository"
+      },
+      "after": "5b4af7a70dce64c5",
+      "date": 1459398801139
+    },
+    {
+      "type": "edit",
+      "id": "64dabc2bcf420474",
+      "item": {
+        "type": "markdown",
+        "id": "64dabc2bcf420474",
+        "text": "The following instructions will set up such a server as well as all of the development tasks needed to make edits to the reveal.js source code.\n* Install Node.js\n* Install Grunt\n* Clone the reveal.js repository"
+      },
+      "date": 1459398803292
+    },
+    {
+      "type": "add",
+      "id": "d290ddf92878cee2",
+      "item": {
+        "type": "paragraph",
+        "id": "d290ddf92878cee2",
+        "text": "Navigate to the reveal.js folder:"
+      },
+      "after": "64dabc2bcf420474",
+      "date": 1459398840011
+    },
+    {
+      "type": "add",
+      "id": "cb25f227ea71ccad",
+      "item": {
+        "type": "paragraph",
+        "id": "cb25f227ea71ccad",
+        "text": "cd reveal.js"
+      },
+      "after": "d290ddf92878cee2",
+      "date": 1459398845627
+    },
+    {
+      "type": "add",
+      "id": "3f692a7149592425",
+      "item": {
+        "type": "paragraph",
+        "id": "3f692a7149592425",
+        "text": "Install dependencies:\n"
+      },
+      "after": "cb25f227ea71ccad",
+      "date": 1459398854915
+    },
+    {
+      "type": "add",
+      "id": "8038d51079c9b64e",
+      "item": {
+        "type": "paragraph",
+        "id": "8038d51079c9b64e",
+        "text": "npm install\n"
+      },
+      "after": "3f692a7149592425",
+      "date": 1459398857851
+    },
+    {
+      "type": "add",
+      "id": "4149dfd2bb422cad",
+      "item": {
+        "type": "paragraph",
+        "id": "4149dfd2bb422cad",
+        "text": "Serve the presentation and monitor source files for changes:\n"
+      },
+      "after": "8038d51079c9b64e",
+      "date": 1459398864947
+    },
+    {
+      "type": "add",
+      "id": "5eda986258348e9d",
+      "item": {
+        "type": "paragraph",
+        "id": "5eda986258348e9d",
+        "text": "grunt serve\n"
+      },
+      "after": "4149dfd2bb422cad",
+      "date": 1459398867691
+    },
+    {
+      "type": "add",
+      "id": "f1dfceef8a754bd4",
+      "item": {
+        "type": "paragraph",
+        "id": "f1dfceef8a754bd4",
+        "text": "Open http://localhost:8000 to view your presentation. You can change the port by using grunt serve --port 8001.\n\n"
+      },
+      "after": "5eda986258348e9d",
+      "date": 1459398881139
+    },
+    {
+      "type": "add",
+      "id": "344f4be1e9c34947",
+      "item": {
+        "type": "paragraph",
+        "id": "344f4be1e9c34947",
+        "text": "# Folder Structure"
+      },
+      "after": "f1dfceef8a754bd4",
+      "date": 1459398885795
+    },
+    {
+      "type": "add",
+      "id": "1c408d7251cc84e3",
+      "item": {
+        "type": "paragraph",
+        "id": "1c408d7251cc84e3",
+        "text": "* css/ Core styles without which the project does not function\n* js/ Like above but for JavaScript\n* plugin/ Components that have been developed as extensions to reveal.js\n* lib/ All other third party assets (JavaScript, CSS, fonts)"
+      },
+      "after": "344f4be1e9c34947",
+      "date": 1459398916525
+    },
+    {
+      "type": "edit",
+      "id": "1c408d7251cc84e3",
+      "item": {
+        "type": "markdown",
+        "id": "1c408d7251cc84e3",
+        "text": "* css/ Core styles without which the project does not function\n* js/ Like above but for JavaScript\n* plugin/ Components that have been developed as extensions to reveal.js\n* lib/ All other third party assets (JavaScript, CSS, fonts)"
+      },
+      "date": 1459398917623
+    },
+    {
+      "type": "edit",
+      "id": "344f4be1e9c34947",
+      "item": {
+        "type": "markdown",
+        "id": "344f4be1e9c34947",
+        "text": "# Folder Structure"
+      },
+      "date": 1459398919048
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6d1786ee23ddde23"
+      },
+      "id": "6d1786ee23ddde23",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459398922476
+    },
+    {
+      "type": "edit",
+      "id": "6d1786ee23ddde23",
+      "item": {
+        "type": "code",
+        "id": "6d1786ee23ddde23",
+        "text": "git clone https://github.com/hakimel/reveal.js.git"
+      },
+      "date": 1459398925815
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "6d1786ee23ddde23",
+        "d290ddf92878cee2",
+        "cb25f227ea71ccad",
+        "3f692a7149592425",
+        "8038d51079c9b64e",
+        "4149dfd2bb422cad",
+        "5eda986258348e9d",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "6d1786ee23ddde23",
+      "date": 1459398930788
+    },
+    {
+      "type": "edit",
+      "id": "64dabc2bcf420474",
+      "item": {
+        "type": "markdown",
+        "id": "64dabc2bcf420474",
+        "text": "The following instructions will set up such a server as well as all of the development tasks needed to make edits to the reveal.js source code.\n* Install Node.js\n* Install Grunt"
+      },
+      "date": 1459398950188
+    },
+    {
+      "type": "edit",
+      "id": "d290ddf92878cee2",
+      "item": {
+        "type": "paragraph",
+        "id": "d290ddf92878cee2",
+        "text": "Clone the reveal.js repository:"
+      },
+      "date": 1459398960651
+    },
+    {
+      "type": "add",
+      "id": "35690b1b1e07fd6b",
+      "item": {
+        "type": "paragraph",
+        "id": "35690b1b1e07fd6b",
+        "text": "Navigate to the reveal.js folder:"
+      },
+      "after": "d290ddf92878cee2",
+      "date": 1459398961677
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "cb25f227ea71ccad",
+        "3f692a7149592425",
+        "8038d51079c9b64e",
+        "4149dfd2bb422cad",
+        "5eda986258348e9d",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "d290ddf92878cee2",
+      "date": 1459398963492
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d7f6ba752755f1fa"
+      },
+      "id": "d7f6ba752755f1fa",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459398967457
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "cb25f227ea71ccad",
+        "3f692a7149592425",
+        "8038d51079c9b64e",
+        "4149dfd2bb422cad",
+        "5eda986258348e9d",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "d7f6ba752755f1fa",
+      "date": 1459398970330
+    },
+    {
+      "type": "remove",
+      "id": "cb25f227ea71ccad",
+      "date": 1459398973676
+    },
+    {
+      "type": "edit",
+      "id": "d7f6ba752755f1fa",
+      "item": {
+        "type": "code",
+        "id": "d7f6ba752755f1fa",
+        "text": "cd reveal.js"
+      },
+      "date": 1459398976053
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e101f6b13796702f"
+      },
+      "id": "e101f6b13796702f",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459398977745
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "3f692a7149592425",
+        "e101f6b13796702f",
+        "8038d51079c9b64e",
+        "4149dfd2bb422cad",
+        "5eda986258348e9d",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "e101f6b13796702f",
+      "date": 1459398980468
+    },
+    {
+      "type": "remove",
+      "id": "8038d51079c9b64e",
+      "date": 1459398983812
+    },
+    {
+      "type": "edit",
+      "id": "e101f6b13796702f",
+      "item": {
+        "type": "code",
+        "id": "e101f6b13796702f",
+        "text": "npm install"
+      },
+      "date": 1459398987324
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "368936e995defd9c"
+      },
+      "id": "368936e995defd9c",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459398989487
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "3f692a7149592425",
+        "e101f6b13796702f",
+        "4149dfd2bb422cad",
+        "368936e995defd9c",
+        "5eda986258348e9d",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "368936e995defd9c",
+      "date": 1459398991404
+    },
+    {
+      "type": "remove",
+      "id": "5eda986258348e9d",
+      "date": 1459398994491
+    },
+    {
+      "type": "edit",
+      "id": "368936e995defd9c",
+      "item": {
+        "type": "code",
+        "id": "368936e995defd9c",
+        "text": "grunt serve"
+      },
+      "date": 1459398997477
+    },
+    {
+      "type": "edit",
+      "id": "1c408d7251cc84e3",
+      "item": {
+        "type": "markdown",
+        "id": "1c408d7251cc84e3",
+        "text": "* __css/__ Core styles without which the project does not function\n* js/ Like above but for JavaScript\n* plugin/ Components that have been developed as extensions to reveal.js\n* lib/ All other third party assets (JavaScript, CSS, fonts)"
+      },
+      "date": 1459399029645
+    },
+    {
+      "type": "edit",
+      "id": "1c408d7251cc84e3",
+      "item": {
+        "type": "markdown",
+        "id": "1c408d7251cc84e3",
+        "text": "* __css/__ Core styles without which the project does not function\n* __js/__ Like above but for JavaScript\n* __plugin/__ Components that have been developed as extensions to reveal.js\n* __lib/__ All other third party assets (JavaScript, CSS, fonts)"
+      },
+      "date": 1459399053815
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "667b6ceb267136ef"
+      },
+      "id": "667b6ceb267136ef",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459402009552
+    },
+    {
+      "type": "edit",
+      "id": "667b6ceb267136ef",
+      "item": {
+        "type": "reference",
+        "id": "667b6ceb267136ef",
+        "site": "c0de.academy",
+        "slug": "revealjs-multiplexing",
+        "title": "Reveal.js Multiplexing",
+        "text": "The multiplex plugin allows your audience to view the slides of the [[reveal.js]] presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time."
+      },
+      "date": 1459402011879
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "fcacce1e482bbad9",
+        "667b6ceb267136ef",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "3f692a7149592425",
+        "e101f6b13796702f",
+        "4149dfd2bb422cad",
+        "368936e995defd9c",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "667b6ceb267136ef",
+      "date": 1459402066214
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "667b6ceb267136ef",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "3f692a7149592425",
+        "e101f6b13796702f",
+        "4149dfd2bb422cad",
+        "368936e995defd9c",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "667b6ceb267136ef",
+      "date": 1459402085263
+    },
+    {
+      "type": "edit",
+      "id": "b87196eede509fc0",
+      "item": {
+        "type": "paragraph",
+        "id": "b87196eede509fc0",
+        "text": "reveal.js comes with a broad range of features including nested slides, Markdown contents, PDF export, speaker notes and a [[Reveal.js JavaScript API]]. It's best viewed in a modern browser but fallbacks are available to make sure your presentation can still be viewed elsewhere."
+      },
+      "date": 1459402189227
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0e77fcc521a1c9e2"
+      },
+      "id": "0e77fcc521a1c9e2",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459402290291
+    },
+    {
+      "type": "edit",
+      "id": "0e77fcc521a1c9e2",
+      "item": {
+        "type": "reference",
+        "id": "0e77fcc521a1c9e2",
+        "site": "c0de.academy",
+        "slug": "revealjs-javascript-api",
+        "title": "Reveal.js JavaScript API",
+        "text": "The Reveal object exposes a JavaScript API for controlling navigation and reading state:"
+      },
+      "date": 1459402292024
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "667b6ceb267136ef",
+        "0e77fcc521a1c9e2",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "3f692a7149592425",
+        "e101f6b13796702f",
+        "4149dfd2bb422cad",
+        "368936e995defd9c",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "0e77fcc521a1c9e2",
+      "date": 1459402306491
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bee673a3235b842a"
+      },
+      "id": "bee673a3235b842a",
+      "type": "add",
+      "after": "1c408d7251cc84e3",
+      "date": 1459433290125
+    },
+    {
+      "type": "edit",
+      "id": "bee673a3235b842a",
+      "item": {
+        "type": "reference",
+        "id": "bee673a3235b842a",
+        "site": "c0de.academy",
+        "slug": "presentations-with-pandoc",
+        "title": "Presentations with Pandoc",
+        "text": "Here we look how we can author a  [[reveal.js]] presentation using [[pandoc]]"
+      },
+      "date": 1459433292277
+    },
+    {
+      "type": "move",
+      "order": [
+        "8d4257aacfe22552",
+        "b87196eede509fc0",
+        "d6a7a91ab891b21d",
+        "bee673a3235b842a",
+        "667b6ceb267136ef",
+        "0e77fcc521a1c9e2",
+        "fcacce1e482bbad9",
+        "76850f57339610f2",
+        "f38be49fe66de9ef",
+        "7615359a12593e44",
+        "1afb48051ab3f2b8",
+        "ab83d03d0ae8bc31",
+        "f10845f013f6beca",
+        "d2576dac7cc04dc5",
+        "cc86abe2549ce055",
+        "7627b717d0589842",
+        "06972f7ac1f1988c",
+        "81da3264991ee65b",
+        "785c63e723aa76e4",
+        "384749bcb7a4f712",
+        "ffad99d3cf4ad3c7",
+        "f16c0454f15e48ac",
+        "18411f4cc2510da4",
+        "7fb019b07c814192",
+        "7680d030e11d01e9",
+        "96d82d8ae75803a8",
+        "06b146a991d20c2d",
+        "dec351f0b09afca7",
+        "8fa31a662c43a8a6",
+        "5b4af7a70dce64c5",
+        "64dabc2bcf420474",
+        "d290ddf92878cee2",
+        "6d1786ee23ddde23",
+        "35690b1b1e07fd6b",
+        "d7f6ba752755f1fa",
+        "3f692a7149592425",
+        "e101f6b13796702f",
+        "4149dfd2bb422cad",
+        "368936e995defd9c",
+        "f1dfceef8a754bd4",
+        "344f4be1e9c34947",
+        "1c408d7251cc84e3"
+      ],
+      "id": "bee673a3235b842a",
+      "date": 1459433301996
+    },
+    {
+      "type": "add",
+      "id": "683cc48954b22125",
+      "item": {
+        "type": "paragraph",
+        "id": "683cc48954b22125",
+        "text": "[[Reveal.js in Fedwiki]]"
+      },
+      "after": "b87196eede509fc0",
+      "date": 1459433443764
+    },
+    {
+      "type": "fork",
+      "site": "c0de.academy",
+      "date": 1459963568623
+    }
+  ]
+}

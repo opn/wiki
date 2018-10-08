@@ -1,0 +1,909 @@
+{
+  "title": "youtube-dl",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b0b49c8686834997",
+      "text": "youtube-dl is a command-line program to download videos from YouTube.com and a few more sites. It requires the Python interpreter, version 2.6, 2.7, or 3.2+, and it is not platform specific - [https://github.com/rg3/youtube-dl/blob/master/README.md#description gitbub]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ab34d7a74e71611f",
+      "text": "It should work on your Unix box, on Windows or on Mac OS X. It is released to the public domain, which means you can modify it, redistribute it or use it however you like."
+    },
+    {
+      "type": "code",
+      "id": "d2874111a05a7a51",
+      "text": "youtube-dl [OPTIONS] URL [URL...]"
+    },
+    {
+      "type": "paragraph",
+      "id": "21c66be69da223eb",
+      "text": "OS X users can install youtube-dl with [[Homebrew]]:"
+    },
+    {
+      "type": "code",
+      "id": "81b39f6197def118",
+      "text": "brew install youtube-dl"
+    },
+    {
+      "type": "markdown",
+      "id": "c0cfdcca04f5d06d",
+      "text": "# Downloading mp4"
+    },
+    {
+      "type": "paragraph",
+      "id": "c2aaf9b82ce6d95a",
+      "text": "By default the current version youtube-dl will download the highest quality audio and the highest quality video streams available and then join these streams into a compatible container - [https://askubuntu.com/questions/806258/requested-formats-are-incompatible-for-merge askubuntu.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "1389187179b3565a",
+      "text": "Current choices of container are [[mkv]], [[mp4]], [[ogg]], [[webm]], flv, [[avi]] is also supported through the --recode-video option."
+    },
+    {
+      "type": "paragraph",
+      "id": "6c64e07eb48828b2",
+      "text": "If these 'best' streams are codecs that do not sit well in an mp4 container, for example, youtube-dl will pack them into an [[mkv]] container and issue the warning that you have seen. "
+    },
+    {
+      "type": "paragraph",
+      "id": "bad7431804701b33",
+      "text": "Mind you [[vlc]], [[SMPlayer]] and friends will play back the resulting mkv file with no issues on a well configured Ubuntu system."
+    },
+    {
+      "type": "paragraph",
+      "id": "992b2cff17ac6e89",
+      "text": "If however you are really keen to get the best quality video and the best quality video audio but only in an mp4 container (thus bypassing the mkv warning and subsequent Matrosk container output from youtube-dl) you can use something like the following:"
+    },
+    {
+      "type": "code",
+      "id": "dbab2c1bc1843856",
+      "text": "youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' URL"
+    },
+    {
+      "type": "paragraph",
+      "id": "8c0435c84173d320",
+      "text": "Obviously substituting the 'URL' value for the address of the youtube video you wish to download. Such a relatively complex command line can be placed permanently in the configuration file:"
+    },
+    {
+      "type": "code",
+      "id": "21728d288c068fec",
+      "text": "~/.config/youtube-dl/config "
+    },
+    {
+      "type": "paragraph",
+      "id": "f5f4cd88cf08542e",
+      "text": "as follows:"
+    },
+    {
+      "type": "code",
+      "id": "36c310ac732aa8c5",
+      "text": "-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]'"
+    },
+    {
+      "type": "paragraph",
+      "id": "e71dcf8c9f7d9cb3",
+      "text": "This way it is now the default for youtube-dl and does not need to be given on the command line each time."
+    },
+    {
+      "type": "markdown",
+      "id": "ec4f156ba218717a",
+      "text": "# Format selection"
+    },
+    {
+      "type": "paragraph",
+      "id": "9c451705ab522e2f",
+      "text": "By default youtube-dl tries to download the best available quality. I that is not what you want the general syntax for format selection is --format FORMAT or shorter -f FORMAT where FORMAT is a an expression that describes format or formats you would like to download."
+    },
+    {
+      "type": "paragraph",
+      "id": "dcccbf57724c37d3",
+      "text": "You can use a file extension (currently 3gp, aac, flv, m4a, mp3, mp4, ogg, wav, webm are supported) to download the best quality format of a particular file extension served as a single file, e.g. -f webm will download the best quality format with the webm extension served as a single file."
+    },
+    {
+      "type": "paragraph",
+      "id": "d8ab7e1f8326e4a6",
+      "text": "You can also use special names to select particular edge case formats:"
+    },
+    {
+      "type": "markdown",
+      "id": "dacab2d3030e7dc4",
+      "text": "- best\n- worst\n- bestvideo\n- worstvideo\n- bestaudio\n- worstaudio"
+    },
+    {
+      "type": "paragraph",
+      "id": "333414517c269862",
+      "text": "[[DASH]] video if it exists will often be the best quality available."
+    },
+    {
+      "type": "markdown",
+      "id": "6d025f5d86806fae",
+      "text": "# Format selection examples"
+    },
+    {
+      "type": "paragraph",
+      "id": "873c12851d72f302",
+      "text": "Note that on Windows you may need to use double quotes instead of single - [dasf github]"
+    },
+    {
+      "type": "code",
+      "id": "0e7904be839201aa",
+      "text": "# Download best mp4 format available or any other best if no mp4 available\n$ youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'\n\n# Download best format available but not better that 480p\n$ youtube-dl -f 'bestvideo[height<=480]+bestaudio/best[height<=480]'\n\n# Download best video only format but no bigger than 50 MB\n$ youtube-dl -f 'best[filesize<50M]'\n\n# Download best format available via direct link over HTTP/HTTPS protocol\n$ youtube-dl -f '(bestvideo+bestaudio/best)[protocol^=http]'\n\n# Download the best video format and the best audio format without merging them\n$ youtube-dl -f 'bestvideo,bestaudio' -o '%(title)s.f%(format_id)s.%(ext)s'"
+    },
+    {
+      "type": "paragraph",
+      "id": "7e15595ff85b16de",
+      "text": "Note that in the last example, an output template is recommended as bestvideo and bestaudio may have the same file name."
+    },
+    {
+      "type": "reference",
+      "id": "7957d274dc9b24f6",
+      "site": "video.livecode.world",
+      "slug": "animated-gif",
+      "title": "Animated Gif",
+      "text": "Animated Gifs are not just a popular medium but hey also work nicely with [[Federated Wiki]]."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "youtube-dl",
+        "story": []
+      },
+      "date": 1510061138755
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b0b49c8686834997"
+      },
+      "id": "b0b49c8686834997",
+      "type": "add",
+      "date": 1510061140151
+    },
+    {
+      "type": "edit",
+      "id": "b0b49c8686834997",
+      "item": {
+        "type": "paragraph",
+        "id": "b0b49c8686834997",
+        "text": "youtube-dl is a command-line program to download videos from YouTube.com and a few more sites. It requires the Python interpreter, version 2.6, 2.7, or 3.2+, and it is not platform specific. It should work on your Unix box, on Windows or on Mac OS X. It is released to the public domain, which means you can modify it, redistribute it or use it however you like."
+      },
+      "date": 1510061165645
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d2874111a05a7a51"
+      },
+      "id": "d2874111a05a7a51",
+      "type": "add",
+      "after": "b0b49c8686834997",
+      "date": 1510061170468
+    },
+    {
+      "type": "edit",
+      "id": "d2874111a05a7a51",
+      "item": {
+        "type": "code",
+        "id": "d2874111a05a7a51",
+        "text": "youtube-dl [OPTIONS] URL [URL...]"
+      },
+      "date": 1510061173892
+    },
+    {
+      "type": "edit",
+      "id": "b0b49c8686834997",
+      "item": {
+        "type": "paragraph",
+        "id": "b0b49c8686834997",
+        "text": "youtube-dl is a command-line program to download videos from YouTube.com and a few more sites. It requires the Python interpreter, version 2.6, 2.7, or 3.2+, and it is not platform specific. "
+      },
+      "date": 1510061190062
+    },
+    {
+      "type": "add",
+      "id": "ab34d7a74e71611f",
+      "item": {
+        "type": "paragraph",
+        "id": "ab34d7a74e71611f",
+        "text": "It should work on your Unix box, on Windows or on Mac OS X. It is released to the public domain, which means you can modify it, redistribute it or use it however you like."
+      },
+      "after": "b0b49c8686834997",
+      "date": 1510061191909
+    },
+    {
+      "type": "edit",
+      "id": "b0b49c8686834997",
+      "item": {
+        "type": "paragraph",
+        "id": "b0b49c8686834997",
+        "text": "youtube-dl is a command-line program to download videos from YouTube.com and a few more sites. It requires the Python interpreter, version 2.6, 2.7, or 3.2+, and it is not platform specific - [https://github.com/rg3/youtube-dl/blob/master/README.md#description gitbub]"
+      },
+      "date": 1510061215655
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "21c66be69da223eb"
+      },
+      "id": "21c66be69da223eb",
+      "type": "add",
+      "after": "d2874111a05a7a51",
+      "date": 1510061270204
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "81b39f6197def118"
+      },
+      "id": "81b39f6197def118",
+      "type": "add",
+      "after": "21c66be69da223eb",
+      "date": 1510061280951
+    },
+    {
+      "type": "edit",
+      "id": "21c66be69da223eb",
+      "item": {
+        "type": "paragraph",
+        "id": "21c66be69da223eb",
+        "text": "OS X users can install youtube-dl with [[Homebrew]]:"
+      },
+      "date": 1510061282245
+    },
+    {
+      "type": "edit",
+      "id": "81b39f6197def118",
+      "item": {
+        "type": "code",
+        "id": "81b39f6197def118",
+        "text": "brew install youtube-dl"
+      },
+      "date": 1510061283854
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c0cfdcca04f5d06d"
+      },
+      "id": "c0cfdcca04f5d06d",
+      "type": "add",
+      "after": "81b39f6197def118",
+      "date": 1510061384115
+    },
+    {
+      "type": "edit",
+      "id": "c0cfdcca04f5d06d",
+      "item": {
+        "type": "markdown",
+        "id": "c0cfdcca04f5d06d",
+        "text": "# Downloading mp4"
+      },
+      "date": 1510061403669
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c2aaf9b82ce6d95a"
+      },
+      "id": "c2aaf9b82ce6d95a",
+      "type": "add",
+      "after": "c0cfdcca04f5d06d",
+      "date": 1510061404681
+    },
+    {
+      "type": "edit",
+      "id": "c2aaf9b82ce6d95a",
+      "item": {
+        "type": "paragraph",
+        "id": "c2aaf9b82ce6d95a",
+        "text": "By default the current version youtube-dl will download the highest quality audio and the highest quality video streams available and then join these streams into a compatible container. "
+      },
+      "date": 1510061420127
+    },
+    {
+      "type": "add",
+      "id": "1389187179b3565a",
+      "item": {
+        "type": "paragraph",
+        "id": "1389187179b3565a",
+        "text": "Current choices of container are mkv, mp4, ogg, webm, flv. (I note that avi is also supported through the --recode-video option.)"
+      },
+      "after": "c2aaf9b82ce6d95a",
+      "date": 1510061426840
+    },
+    {
+      "type": "add",
+      "id": "6c64e07eb48828b2",
+      "item": {
+        "type": "paragraph",
+        "id": "6c64e07eb48828b2",
+        "text": "If these 'best' streams are codecs that do not sit well in an mp4 container, for example, youtube-dl will pack them into an mkv container and issue the warning that you have seen. "
+      },
+      "after": "1389187179b3565a",
+      "date": 1510061440344
+    },
+    {
+      "type": "add",
+      "id": "bad7431804701b33",
+      "item": {
+        "type": "paragraph",
+        "id": "bad7431804701b33",
+        "text": "Mind you [[vlc]], [[SMPlayer]] and friends will play back the resulting mkv file with no issues on a well configured Ubuntu system...\n\nIf however you are really keen to get the best quality video and the best quality video audio but only in an mp4 container (thus bypassing the mkv warning and subsequent Matrosk container output from youtube-dl) you can use something like the following:\n\nyoutube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' URL\nObviously substituting the 'URL' value for the address of the youtube video you wish to download. Such a relatively complex command line can be placed permanently in the configuration file ~/.config/youtube-dl/config as follows:\n\n-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]'\nThis way it is now the default for youtube-dl and does not need to be given on the command line each time. Many, many variations of this command line are possible..."
+      },
+      "after": "6c64e07eb48828b2",
+      "date": 1510061457323
+    },
+    {
+      "type": "edit",
+      "id": "1389187179b3565a",
+      "item": {
+        "type": "paragraph",
+        "id": "1389187179b3565a",
+        "text": "Current choices of container are [[mkv]], [[mp4]], [[ogg]], [[webm]], flv, [[avi]] is also supported through the --recode-video option."
+      },
+      "date": 1510061518641
+    },
+    {
+      "type": "edit",
+      "id": "6c64e07eb48828b2",
+      "item": {
+        "type": "paragraph",
+        "id": "6c64e07eb48828b2",
+        "text": "If these 'best' streams are codecs that do not sit well in an mp4 container, for example, youtube-dl will pack them into an [[mkv]] container and issue the warning that you have seen. "
+      },
+      "date": 1510061524534
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dbab2c1bc1843856"
+      },
+      "id": "dbab2c1bc1843856",
+      "type": "add",
+      "after": "bad7431804701b33",
+      "date": 1510061536758
+    },
+    {
+      "type": "edit",
+      "id": "bad7431804701b33",
+      "item": {
+        "type": "paragraph",
+        "id": "bad7431804701b33",
+        "text": "Mind you [[vlc]], [[SMPlayer]] and friends will play back the resulting mkv file with no issues on a well configured Ubuntu system..."
+      },
+      "date": 1510061547912
+    },
+    {
+      "type": "add",
+      "id": "992b2cff17ac6e89",
+      "item": {
+        "type": "paragraph",
+        "id": "992b2cff17ac6e89",
+        "text": "If however you are really keen to get the best quality video and the best quality video audio but only in an mp4 container (thus bypassing the mkv warning and subsequent Matrosk container output from youtube-dl) you can use something like the following:"
+      },
+      "after": "bad7431804701b33",
+      "date": 1510061551609
+    },
+    {
+      "type": "add",
+      "id": "8c0435c84173d320",
+      "item": {
+        "type": "paragraph",
+        "id": "8c0435c84173d320",
+        "text": "Obviously substituting the 'URL' value for the address of the youtube video you wish to download. Such a relatively complex command line can be placed permanently in the configuration file:"
+      },
+      "after": "992b2cff17ac6e89",
+      "date": 1510061564082
+    },
+    {
+      "type": "add",
+      "id": "39a0baf42c10adb6",
+      "item": {
+        "type": "paragraph",
+        "id": "39a0baf42c10adb6",
+        "text": "~/.config/youtube-dl/config "
+      },
+      "after": "8c0435c84173d320",
+      "date": 1510061571274
+    },
+    {
+      "type": "add",
+      "id": "f5f4cd88cf08542e",
+      "item": {
+        "type": "paragraph",
+        "id": "f5f4cd88cf08542e",
+        "text": "as follows:"
+      },
+      "after": "39a0baf42c10adb6",
+      "date": 1510061573130
+    },
+    {
+      "type": "add",
+      "id": "71a32fb5c3b722d4",
+      "item": {
+        "type": "paragraph",
+        "id": "71a32fb5c3b722d4",
+        "text": "\n-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]'"
+      },
+      "after": "f5f4cd88cf08542e",
+      "date": 1510061575890
+    },
+    {
+      "type": "add",
+      "id": "e71dcf8c9f7d9cb3",
+      "item": {
+        "type": "paragraph",
+        "id": "e71dcf8c9f7d9cb3",
+        "text": "This way it is now the default for youtube-dl and does not need to be given on the command line each time. Many, many variations of this command line are possible..."
+      },
+      "after": "71a32fb5c3b722d4",
+      "date": 1510061578154
+    },
+    {
+      "type": "move",
+      "order": [
+        "b0b49c8686834997",
+        "ab34d7a74e71611f",
+        "d2874111a05a7a51",
+        "21c66be69da223eb",
+        "81b39f6197def118",
+        "c0cfdcca04f5d06d",
+        "c2aaf9b82ce6d95a",
+        "1389187179b3565a",
+        "6c64e07eb48828b2",
+        "bad7431804701b33",
+        "992b2cff17ac6e89",
+        "dbab2c1bc1843856",
+        "8c0435c84173d320",
+        "39a0baf42c10adb6",
+        "f5f4cd88cf08542e",
+        "71a32fb5c3b722d4",
+        "e71dcf8c9f7d9cb3"
+      ],
+      "id": "dbab2c1bc1843856",
+      "date": 1510061584468
+    },
+    {
+      "type": "edit",
+      "id": "dbab2c1bc1843856",
+      "item": {
+        "type": "code",
+        "id": "dbab2c1bc1843856",
+        "text": "youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' URL"
+      },
+      "date": 1510061589715
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "21728d288c068fec"
+      },
+      "id": "21728d288c068fec",
+      "type": "add",
+      "after": "e71dcf8c9f7d9cb3",
+      "date": 1510061618592
+    },
+    {
+      "type": "move",
+      "order": [
+        "b0b49c8686834997",
+        "ab34d7a74e71611f",
+        "d2874111a05a7a51",
+        "21c66be69da223eb",
+        "81b39f6197def118",
+        "c0cfdcca04f5d06d",
+        "c2aaf9b82ce6d95a",
+        "1389187179b3565a",
+        "6c64e07eb48828b2",
+        "bad7431804701b33",
+        "992b2cff17ac6e89",
+        "dbab2c1bc1843856",
+        "8c0435c84173d320",
+        "39a0baf42c10adb6",
+        "21728d288c068fec",
+        "f5f4cd88cf08542e",
+        "71a32fb5c3b722d4",
+        "e71dcf8c9f7d9cb3"
+      ],
+      "id": "21728d288c068fec",
+      "date": 1510061620549
+    },
+    {
+      "type": "remove",
+      "id": "39a0baf42c10adb6",
+      "date": 1510061623820
+    },
+    {
+      "type": "edit",
+      "id": "21728d288c068fec",
+      "item": {
+        "type": "code",
+        "id": "21728d288c068fec",
+        "text": "~/.config/youtube-dl/config "
+      },
+      "date": 1510061626286
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "36c310ac732aa8c5"
+      },
+      "id": "36c310ac732aa8c5",
+      "type": "add",
+      "after": "e71dcf8c9f7d9cb3",
+      "date": 1510061627891
+    },
+    {
+      "type": "move",
+      "order": [
+        "b0b49c8686834997",
+        "ab34d7a74e71611f",
+        "d2874111a05a7a51",
+        "21c66be69da223eb",
+        "81b39f6197def118",
+        "c0cfdcca04f5d06d",
+        "c2aaf9b82ce6d95a",
+        "1389187179b3565a",
+        "6c64e07eb48828b2",
+        "bad7431804701b33",
+        "992b2cff17ac6e89",
+        "dbab2c1bc1843856",
+        "8c0435c84173d320",
+        "21728d288c068fec",
+        "f5f4cd88cf08542e",
+        "71a32fb5c3b722d4",
+        "36c310ac732aa8c5",
+        "e71dcf8c9f7d9cb3"
+      ],
+      "id": "36c310ac732aa8c5",
+      "date": 1510061629286
+    },
+    {
+      "type": "remove",
+      "id": "71a32fb5c3b722d4",
+      "date": 1510061631869
+    },
+    {
+      "type": "edit",
+      "id": "36c310ac732aa8c5",
+      "item": {
+        "type": "code",
+        "id": "36c310ac732aa8c5",
+        "text": "-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]'"
+      },
+      "date": 1510061633702
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7957d274dc9b24f6"
+      },
+      "id": "7957d274dc9b24f6",
+      "type": "add",
+      "after": "e71dcf8c9f7d9cb3",
+      "date": 1510061639714
+    },
+    {
+      "type": "edit",
+      "id": "7957d274dc9b24f6",
+      "item": {
+        "type": "reference",
+        "id": "7957d274dc9b24f6",
+        "site": "video.livecode.world",
+        "slug": "animated-gif",
+        "title": "Animated Gif",
+        "text": "Animated Gifs are not just a popular medium but hey also work nicely with [[Federated Wiki]]."
+      },
+      "date": 1510061642338
+    },
+    {
+      "type": "edit",
+      "id": "bad7431804701b33",
+      "item": {
+        "type": "paragraph",
+        "id": "bad7431804701b33",
+        "text": "Mind you [[vlc]], [[SMPlayer]] and friends will play back the resulting mkv file with no issues on a well configured Ubuntu system."
+      },
+      "date": 1510061684222
+    },
+    {
+      "type": "edit",
+      "id": "c2aaf9b82ce6d95a",
+      "item": {
+        "type": "paragraph",
+        "id": "c2aaf9b82ce6d95a",
+        "text": "By default the current version youtube-dl will download the highest quality audio and the highest quality video streams available and then join these streams into a compatible container - [https://askubuntu.com/questions/806258/requested-formats-are-incompatible-for-merge askubuntu.com]"
+      },
+      "date": 1510061693177
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6d025f5d86806fae"
+      },
+      "id": "6d025f5d86806fae",
+      "type": "add",
+      "after": "7957d274dc9b24f6",
+      "date": 1510061767708
+    },
+    {
+      "type": "move",
+      "order": [
+        "b0b49c8686834997",
+        "ab34d7a74e71611f",
+        "d2874111a05a7a51",
+        "21c66be69da223eb",
+        "81b39f6197def118",
+        "c0cfdcca04f5d06d",
+        "c2aaf9b82ce6d95a",
+        "1389187179b3565a",
+        "6c64e07eb48828b2",
+        "bad7431804701b33",
+        "992b2cff17ac6e89",
+        "dbab2c1bc1843856",
+        "8c0435c84173d320",
+        "21728d288c068fec",
+        "f5f4cd88cf08542e",
+        "36c310ac732aa8c5",
+        "e71dcf8c9f7d9cb3",
+        "6d025f5d86806fae",
+        "7957d274dc9b24f6"
+      ],
+      "id": "6d025f5d86806fae",
+      "date": 1510061769334
+    },
+    {
+      "type": "edit",
+      "id": "6d025f5d86806fae",
+      "item": {
+        "type": "paragraph",
+        "id": "6d025f5d86806fae",
+        "text": "# Format selection examples"
+      },
+      "date": 1510061781827
+    },
+    {
+      "type": "add",
+      "id": "873c12851d72f302",
+      "item": {
+        "type": "paragraph",
+        "id": "873c12851d72f302",
+        "text": "Note that on Windows you may need to use double quotes instead of single - [dasf github]"
+      },
+      "after": "6d025f5d86806fae",
+      "date": 1510061797619
+    },
+    {
+      "type": "add",
+      "id": "108d7861e8db9b2d",
+      "item": {
+        "type": "paragraph",
+        "id": "108d7861e8db9b2d",
+        "text": "\n# Download best mp4 format available or any other best if no mp4 available\n$ youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'\n\n# Download best format available but not better that 480p\n$ youtube-dl -f 'bestvideo[height<=480]+bestaudio/best[height<=480]'\n\n# Download best video only format but no bigger than 50 MB\n$ youtube-dl -f 'best[filesize<50M]'\n\n# Download best format available via direct link over HTTP/HTTPS protocol\n$ youtube-dl -f '(bestvideo+bestaudio/best)[protocol^=http]'\n\n# Download the best video format and the best audio format without merging them\n$ youtube-dl -f 'bestvideo,bestaudio' -o '%(title)s.f%(format_id)s.%(ext)s'"
+      },
+      "after": "873c12851d72f302",
+      "date": 1510061804876
+    },
+    {
+      "type": "edit",
+      "id": "6d025f5d86806fae",
+      "item": {
+        "type": "markdown",
+        "id": "6d025f5d86806fae",
+        "text": "# Format selection examples"
+      },
+      "date": 1510061806480
+    },
+    {
+      "type": "add",
+      "id": "7e15595ff85b16de",
+      "item": {
+        "type": "paragraph",
+        "id": "7e15595ff85b16de",
+        "text": "Note that in the last example, an output template is recommended as bestvideo and bestaudio may have the same file name."
+      },
+      "after": "108d7861e8db9b2d",
+      "date": 1510061807339
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0e7904be839201aa"
+      },
+      "id": "0e7904be839201aa",
+      "type": "add",
+      "after": "7957d274dc9b24f6",
+      "date": 1510061809541
+    },
+    {
+      "type": "move",
+      "order": [
+        "b0b49c8686834997",
+        "ab34d7a74e71611f",
+        "d2874111a05a7a51",
+        "21c66be69da223eb",
+        "81b39f6197def118",
+        "c0cfdcca04f5d06d",
+        "c2aaf9b82ce6d95a",
+        "1389187179b3565a",
+        "6c64e07eb48828b2",
+        "bad7431804701b33",
+        "992b2cff17ac6e89",
+        "dbab2c1bc1843856",
+        "8c0435c84173d320",
+        "21728d288c068fec",
+        "f5f4cd88cf08542e",
+        "36c310ac732aa8c5",
+        "e71dcf8c9f7d9cb3",
+        "6d025f5d86806fae",
+        "873c12851d72f302",
+        "0e7904be839201aa",
+        "108d7861e8db9b2d",
+        "7e15595ff85b16de",
+        "7957d274dc9b24f6"
+      ],
+      "id": "0e7904be839201aa",
+      "date": 1510061811263
+    },
+    {
+      "type": "remove",
+      "id": "108d7861e8db9b2d",
+      "date": 1510061814114
+    },
+    {
+      "type": "edit",
+      "id": "0e7904be839201aa",
+      "item": {
+        "type": "code",
+        "id": "0e7904be839201aa",
+        "text": "# Download best mp4 format available or any other best if no mp4 available\n$ youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'\n\n# Download best format available but not better that 480p\n$ youtube-dl -f 'bestvideo[height<=480]+bestaudio/best[height<=480]'\n\n# Download best video only format but no bigger than 50 MB\n$ youtube-dl -f 'best[filesize<50M]'\n\n# Download best format available via direct link over HTTP/HTTPS protocol\n$ youtube-dl -f '(bestvideo+bestaudio/best)[protocol^=http]'\n\n# Download the best video format and the best audio format without merging them\n$ youtube-dl -f 'bestvideo,bestaudio' -o '%(title)s.f%(format_id)s.%(ext)s'"
+      },
+      "date": 1510061815748
+    },
+    {
+      "type": "edit",
+      "id": "e71dcf8c9f7d9cb3",
+      "item": {
+        "type": "paragraph",
+        "id": "e71dcf8c9f7d9cb3",
+        "text": "This way it is now the default for youtube-dl and does not need to be given on the command line each time."
+      },
+      "date": 1510061881648
+    },
+    {
+      "type": "add",
+      "id": "ec4f156ba218717a",
+      "item": {
+        "type": "paragraph",
+        "id": "ec4f156ba218717a",
+        "text": "# Format selection"
+      },
+      "after": "e71dcf8c9f7d9cb3",
+      "date": 1510061893889
+    },
+    {
+      "type": "add",
+      "id": "9c451705ab522e2f",
+      "item": {
+        "type": "paragraph",
+        "id": "9c451705ab522e2f",
+        "text": "By default youtube-dl tries to download the best available quality. I that is not what you want the general syntax for format selection is --format FORMAT or shorter -f FORMAT where FORMAT is a an expression that describes format or formats you would like to download."
+      },
+      "after": "ec4f156ba218717a",
+      "date": 1510061945038
+    },
+    {
+      "type": "edit",
+      "id": "ec4f156ba218717a",
+      "item": {
+        "type": "markdown",
+        "id": "ec4f156ba218717a",
+        "text": "# Format selection"
+      },
+      "date": 1510061946346
+    },
+    {
+      "type": "add",
+      "id": "dcccbf57724c37d3",
+      "item": {
+        "type": "paragraph",
+        "id": "dcccbf57724c37d3",
+        "text": "You can use a file extension (currently 3gp, aac, flv, m4a, mp3, mp4, ogg, wav, webm are supported) to download the best quality format of a particular file extension served as a single file, e.g. -f webm will download the best quality format with the webm extension served as a single file."
+      },
+      "after": "9c451705ab522e2f",
+      "date": 1510061981383
+    },
+    {
+      "type": "add",
+      "id": "d8ab7e1f8326e4a6",
+      "item": {
+        "type": "paragraph",
+        "id": "d8ab7e1f8326e4a6",
+        "text": "You can also use special names to select particular edge case formats:"
+      },
+      "after": "dcccbf57724c37d3",
+      "date": 1510061994529
+    },
+    {
+      "type": "add",
+      "id": "dacab2d3030e7dc4",
+      "item": {
+        "type": "paragraph",
+        "id": "dacab2d3030e7dc4",
+        "text": "- best\n- worst\n- bestvideo\n- worstvideo\n- bestaudio\n- worstaudio"
+      },
+      "after": "d8ab7e1f8326e4a6",
+      "date": 1510062047805
+    },
+    {
+      "type": "edit",
+      "id": "dacab2d3030e7dc4",
+      "item": {
+        "type": "markdown",
+        "id": "dacab2d3030e7dc4",
+        "text": "- best\n- worst\n- bestvideo\n- worstvideo\n- bestaudio\n- worstaudio"
+      },
+      "date": 1510062049206
+    },
+    {
+      "type": "add",
+      "id": "333414517c269862",
+      "item": {
+        "type": "paragraph",
+        "id": "333414517c269862",
+        "text": "DASH video if it exists will often be the best quality available."
+      },
+      "after": "dcccbf57724c37d3",
+      "date": 1510062086824
+    },
+    {
+      "type": "move",
+      "order": [
+        "b0b49c8686834997",
+        "ab34d7a74e71611f",
+        "d2874111a05a7a51",
+        "21c66be69da223eb",
+        "81b39f6197def118",
+        "c0cfdcca04f5d06d",
+        "c2aaf9b82ce6d95a",
+        "1389187179b3565a",
+        "6c64e07eb48828b2",
+        "bad7431804701b33",
+        "992b2cff17ac6e89",
+        "dbab2c1bc1843856",
+        "8c0435c84173d320",
+        "21728d288c068fec",
+        "f5f4cd88cf08542e",
+        "36c310ac732aa8c5",
+        "e71dcf8c9f7d9cb3",
+        "ec4f156ba218717a",
+        "9c451705ab522e2f",
+        "dcccbf57724c37d3",
+        "d8ab7e1f8326e4a6",
+        "dacab2d3030e7dc4",
+        "333414517c269862",
+        "6d025f5d86806fae",
+        "873c12851d72f302",
+        "0e7904be839201aa",
+        "7e15595ff85b16de",
+        "7957d274dc9b24f6"
+      ],
+      "id": "333414517c269862",
+      "date": 1510062089067
+    },
+    {
+      "type": "edit",
+      "id": "333414517c269862",
+      "item": {
+        "type": "paragraph",
+        "id": "333414517c269862",
+        "text": "[[DASH]] video if it exists will often be the best quality available."
+      },
+      "date": 1510062112105
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+  "title": "Output Library",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a2024236aa2bfb6c",
+      "text": "The Output Library is a small library with one main function: To send the finalized web page to the requesting browser. It is also responsible for caching your web pages, if you use that feature."
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\n\nthis library is initialized automatically by the system so there is no need to do it manually.<p>"
+    },
+    {
+      "type": "paragraph",
+      "id": "7da0f169bf9ee184",
+      "text": "Under normal circumstances you won't even notice the Output library since it works transparently without your intervention. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f88458674b666adb",
+      "text": "For example, when you use the Loader library to load a view file, it's automatically passed to the Output library, which will be called automatically by revIgniter at the end of system execution. "
+    },
+    {
+      "type": "paragraph",
+      "id": "fa0513980c832474",
+      "text": "It is possible, however, for you to manually intervene with the output if you need to, using either of the two following handlers:"
+    },
+    {
+      "type": "reference",
+      "id": "14cdc7bf3ed2dd64",
+      "site": "revigniter.livecode.world",
+      "slug": "rigsetoutput",
+      "title": "rigSetOutput",
+      "text": "The rigSetOutput command permits you to manually set the final output string. "
+    },
+    {
+      "type": "reference",
+      "id": "a02433fe93593469",
+      "site": "revigniter.livecode.world",
+      "slug": "riggetoutput",
+      "title": "rigGetOutput",
+      "text": "The rigGetOutput function permits you to manually retrieve any output that has been sent for storage in the output library. "
+    },
+    {
+      "type": "reference",
+      "id": "ef0141beb4fb0aee",
+      "site": "revigniter.livecode.world",
+      "slug": "rigsetheader",
+      "title": "rigSetHeader",
+      "text": "The rigSetHeader command permits you to manually set server headers, which the output library will send for you when outputting the final rendered display. "
+    },
+    {
+      "type": "reference",
+      "id": "4eb926e761d6cf93",
+      "site": "revigniter.livecode.world",
+      "slug": "rigenableprofiler",
+      "title": "rigEnableProfiler",
+      "text": "The rigEnableProfiler command permits you to enable/disable the Profiler, which will display benchmark and other data at the bottom of your pages for debugging and optimization purposes."
+    },
+    {
+      "type": "reference",
+      "id": "cd981d78ae54788d",
+      "site": "revigniter.livecode.world",
+      "slug": "rigoutputcache",
+      "title": "rigOutputCache",
+      "text": "The revIgniter [[output library]] also controls caching. For more information, please see the [[Caching]] documentation."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Output Library",
+        "story": []
+      },
+      "date": 1459808410591
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a2024236aa2bfb6c"
+      },
+      "id": "a2024236aa2bfb6c",
+      "type": "add",
+      "date": 1459808412079
+    },
+    {
+      "type": "edit",
+      "id": "a2024236aa2bfb6c",
+      "item": {
+        "type": "paragraph",
+        "id": "a2024236aa2bfb6c",
+        "text": "The Output Library is a small library with one main function: To send the finalized web page to the requesting browser. It is also responsible for caching your web pages, if you use that feature."
+      },
+      "date": 1459808427035
+    },
+    {
+      "type": "add",
+      "id": "6ca064bb4f5196d3",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca064bb4f5196d3",
+        "text": "[[Note]]: This library is initialized automatically by the system so there is no need to do it manually.\nUnder normal circumstances you won't even notice the Output library since it works transparently without your intervention. For example, when you use the Loader library to load a view file, it's automatically passed to the Output library, which will be called automatically by revIgniter at the end of system execution. It is possible, however, for you to manually intervene with the output if you need to, using either of the two following handlers:"
+      },
+      "after": "a2024236aa2bfb6c",
+      "date": 1459808439708
+    },
+    {
+      "type": "add",
+      "id": "4678078167ffe3da",
+      "item": {
+        "type": "paragraph",
+        "id": "4678078167ffe3da",
+        "text": "[[rigSetOutput]]\n\nPermits you to manually set the final output string. Usage example:\n\nrigSetOutput tData\nImportant: If you do set your output manually, it must be the last thing done in the function you call it from. For example, if you build a page in one of your controller functions, don't set the output until the end.\n\n[[rigGetOutput()]]\n\nPermits you to manually retrieve any output that has been sent for storage in the output library. Usage example:\n\nput rigGetOutput() into tString\nNote that data will only be retrievable from this function if it has been previously sent to the output library by one of the revIgniter handlers like rigLoadView().\n\n"
+      },
+      "after": "6ca064bb4f5196d3",
+      "date": 1459808473149
+    },
+    {
+      "type": "add",
+      "id": "7318fb5624a6712f",
+      "item": {
+        "type": "paragraph",
+        "id": "7318fb5624a6712f",
+        "text": "[[rigSetHeader]]\n\nPermits you to manually set server headers, which the output library will send for you when outputting the final rendered display. If you don't want to overwrite the most recent header of the same type set the second (optional) parameter to FALSE. Example:\n\nrigSetHeader \"HTTP/1.0 200 OK\"\nrigSetHeader \"HTTP/1.1 200 OK\"\nrigSetHeader \"Cache-Control: no-store, no-cache, must-revalidate\"\nrigSetHeader \"Cache-Control: post-check=0, pre-check=0\"\nrigSetHeader \"Pragma: no-cache\"\nrigSetStatusHeader code, \"text\"\n\nPermits you to manually set a server status header. Example:\n\nrigSetStatusHeader 401\n# Sets the header as:  Unauthorized\nSee here for a full list of headers.\n\n"
+      },
+      "after": "4678078167ffe3da",
+      "date": 1459808496085
+    },
+    {
+      "type": "add",
+      "id": "9eacca5a3986c057",
+      "item": {
+        "type": "paragraph",
+        "id": "9eacca5a3986c057",
+        "text": "[[rigEnableProfiler]]\n\nPermits you to enable/disable the Profiler, which will display benchmark and other data at the bottom of your pages for debugging and optimization purposes.\n\nTo enable the profiler place the following handler anywhere within your Controller handlers:\n\nrigEnableProfiler TRUE\nWhen enabled a report will be generated and inserted at the bottom of your pages.\n\nTo disable the profiler you will use:\n\nrigEnableProfiler FALSE\nrigOutputCache\n\nThe revIgniter output library also controls caching. For more information, please see the caching documentation."
+      },
+      "after": "7318fb5624a6712f",
+      "date": 1459808500206
+    },
+    {
+      "type": "remove",
+      "id": "4678078167ffe3da",
+      "date": 1459808511022
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "a02433fe93593469"
+      },
+      "after": "6ca064bb4f5196d3",
+      "id": "a02433fe93593469",
+      "date": 1459808517444
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "14cdc7bf3ed2dd64"
+      },
+      "after": "6ca064bb4f5196d3",
+      "id": "14cdc7bf3ed2dd64",
+      "date": 1459808674562
+    },
+    {
+      "type": "edit",
+      "id": "14cdc7bf3ed2dd64",
+      "item": {
+        "type": "reference",
+        "id": "14cdc7bf3ed2dd64",
+        "site": "revigniter.livecode.world",
+        "slug": "rigsetoutput",
+        "title": "rigSetOutput",
+        "text": "The rigSetOutput command permits you to manually set the final output string. "
+      },
+      "date": 1459808676375
+    },
+    {
+      "type": "edit",
+      "id": "a02433fe93593469",
+      "item": {
+        "type": "reference",
+        "id": "a02433fe93593469",
+        "site": "revigniter.livecode.world",
+        "slug": "riggetoutput",
+        "title": "rigGetOutput",
+        "text": "The rigGetOutput function permits you to manually retrieve any output that has been sent for storage in the output library. "
+      },
+      "date": 1459808678503
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "ef0141beb4fb0aee"
+      },
+      "after": "a02433fe93593469",
+      "id": "ef0141beb4fb0aee",
+      "date": 1459808685624
+    },
+    {
+      "type": "remove",
+      "id": "7318fb5624a6712f",
+      "date": 1459808695078
+    },
+    {
+      "type": "edit",
+      "id": "ef0141beb4fb0aee",
+      "item": {
+        "type": "reference",
+        "id": "ef0141beb4fb0aee",
+        "site": "revigniter.livecode.world",
+        "slug": "rigsetheader",
+        "title": "rigSetHeader",
+        "text": "The rigSetHeader command permits you to manually set server headers, which the output library will send for you when outputting the final rendered display. "
+      },
+      "date": 1459808828460
+    },
+    {
+      "type": "remove",
+      "id": "9eacca5a3986c057",
+      "date": 1459808844676
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4eb926e761d6cf93"
+      },
+      "id": "4eb926e761d6cf93",
+      "type": "add",
+      "after": "ef0141beb4fb0aee",
+      "date": 1459808906048
+    },
+    {
+      "type": "edit",
+      "id": "4eb926e761d6cf93",
+      "item": {
+        "type": "reference",
+        "id": "4eb926e761d6cf93",
+        "site": "revigniter.livecode.world",
+        "slug": "rigenableprofiler",
+        "title": "rigEnableProfiler",
+        "text": "The rigEnableProfiler command permits you to enable/disable the Profiler, which will display benchmark and other data at the bottom of your pages for debugging and optimization purposes."
+      },
+      "date": 1459808907872
+    },
+    {
+      "type": "edit",
+      "id": "6ca064bb4f5196d3",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca064bb4f5196d3",
+        "text": "This library is initialized automatically by the system so there is no need to do it manually."
+      },
+      "date": 1459808928408
+    },
+    {
+      "type": "add",
+      "id": "7da0f169bf9ee184",
+      "item": {
+        "type": "paragraph",
+        "id": "7da0f169bf9ee184",
+        "text": "Under normal circumstances you won't even notice the Output library since it works transparently without your intervention. For example, when you use the Loader library to load a view file, it's automatically passed to the Output library, which will be called automatically by revIgniter at the end of system execution. It is possible, however, for you to manually intervene with the output if you need to, using either of the two following handlers:"
+      },
+      "after": "6ca064bb4f5196d3",
+      "date": 1459808932060
+    },
+    {
+      "type": "edit",
+      "id": "6ca064bb4f5196d3",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca064bb4f5196d3",
+        "text": "Note: this library is initialized automatically by the system so there is no need to do it manually."
+      },
+      "date": 1459808937105
+    },
+    {
+      "type": "edit",
+      "id": "7da0f169bf9ee184",
+      "item": {
+        "type": "paragraph",
+        "id": "7da0f169bf9ee184",
+        "text": "Under normal circumstances you won't even notice the Output library since it works transparently without your intervention. "
+      },
+      "date": 1459808945568
+    },
+    {
+      "type": "add",
+      "id": "f88458674b666adb",
+      "item": {
+        "type": "paragraph",
+        "id": "f88458674b666adb",
+        "text": "For example, when you use the Loader library to load a view file, it's automatically passed to the Output library, which will be called automatically by revIgniter at the end of system execution. "
+      },
+      "after": "7da0f169bf9ee184",
+      "date": 1459808951144
+    },
+    {
+      "type": "add",
+      "id": "fa0513980c832474",
+      "item": {
+        "type": "paragraph",
+        "id": "fa0513980c832474",
+        "text": "It is possible, however, for you to manually intervene with the output if you need to, using either of the two following handlers:"
+      },
+      "after": "f88458674b666adb",
+      "date": 1459808952266
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cd981d78ae54788d"
+      },
+      "id": "cd981d78ae54788d",
+      "type": "add",
+      "after": "4eb926e761d6cf93",
+      "date": 1459809069434
+    },
+    {
+      "type": "edit",
+      "id": "cd981d78ae54788d",
+      "item": {
+        "type": "reference",
+        "id": "cd981d78ae54788d",
+        "site": "revigniter.livecode.world",
+        "slug": "rigoutputcache",
+        "title": "rigOutputCache",
+        "text": "The revIgniter [[output library]] also controls caching. For more information, please see the [[Caching]] documentation."
+      },
+      "date": 1459809071982
+    },
+    {
+      "type": "edit",
+      "id": "6ca064bb4f5196d3",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca064bb4f5196d3",
+        "text": "[[Note]]: this library is initialized automatically by the system so there is no need to do it manually."
+      },
+      "date": 1459809094798
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>"
+      },
+      "after": "6ca064bb4f5196d3",
+      "id": "20084356ff8e69ce",
+      "date": 1459809101699
+    },
+    {
+      "type": "remove",
+      "id": "6ca064bb4f5196d3",
+      "date": 1459809107253
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nthis library is initialized automatically by the system so there is no need to do it manually.<p>"
+      },
+      "date": 1459809112287
+    }
+  ]
+}

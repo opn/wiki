@@ -1,0 +1,1264 @@
+{
+  "title": "Assets Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "36908c0028dd03cf",
+      "text": "We want a plugin that can show a subdirectory of assets, offer links to those assets, and add more on drop."
+    },
+    {
+      "type": "paragraph",
+      "id": "30ad30bed1954af7",
+      "text": "Here are assets at the top level."
+    },
+    {
+      "type": "assets",
+      "id": "b8e61b22fd2cd7f6",
+      "text": "    "
+    },
+    {
+      "type": "paragraph",
+      "id": "68631e876abea919",
+      "text": "Here are assets in the soviet subdirectory."
+    },
+    {
+      "type": "assets",
+      "id": "57cbbcb30e75e9ee",
+      "text": "soviet"
+    },
+    {
+      "type": "paragraph",
+      "id": "5a4f6337dc32618f",
+      "text": "We filter out directories and dot files from lists. Thanks Paul for some help here. I was using async v1.5 code and v2.6 docs. Never a good idea."
+    },
+    {
+      "type": "paragraph",
+      "id": "4dd73fada76975e0",
+      "text": "We upload files as multi-part forms. I found better example code much closer to what I wanted to write.\n Example has progress bar which I have added.\n [https://coligo.io/building-ajax-file-uploader-with-node/ post]"
+    },
+    {
+      "type": "paragraph",
+      "id": "0c34c7dc9b956220",
+      "text": "The server checks that the user is logged in before uploading. Upload errors are reported in the progress bar. "
+    },
+    {
+      "type": "paragraph",
+      "id": "b0e5b8fe0f943630",
+      "text": "The client checks that the page is not remote before even offering to upload. This way one is surely seeing the files that the upload will join."
+    },
+    {
+      "type": "paragraph",
+      "id": "3c3f3f979e0654b5",
+      "text": "Would like to sort items by age with \"since\" logic."
+    },
+    {
+      "type": "paragraph",
+      "id": "9fa4c3a745ee26bf",
+      "text": "Would like to add a delete button maybe on hover."
+    },
+    {
+      "type": "paragraph",
+      "id": "95a06283cec0a7fb",
+      "text": "Issue: fork should refresh the list with files from the new site. It doesn't. An doing so is not simple."
+    },
+    {
+      "type": "markdown",
+      "id": "26984e37fd0dbc12",
+      "text": "# Semantics"
+    },
+    {
+      "type": "paragraph",
+      "id": "b2fe22f970740a1b",
+      "text": "Now with the most obvious behaviors coded if not debugged we think ahead to how this plugin should operate in wiki's sharing environment."
+    },
+    {
+      "type": "pagefold",
+      "id": "9fb8865a3b502c9d",
+      "text": "implemented"
+    },
+    {
+      "type": "paragraph",
+      "id": "5899a6c1895b2e1b",
+      "text": "A configured Assets plugin provides two-way access to a subdirectory on a server. Exactly which subdirectory and exactly which server are yet to be defined."
+    },
+    {
+      "type": "paragraph",
+      "id": "9dac6ce6a247acb9",
+      "text": "For now we are selecting subdirectory based on markup. We could factor in page slug or item id to provide additional isolation should that prove desirable."
+    },
+    {
+      "type": "paragraph",
+      "id": "6f90d959fbb94da2",
+      "text": "Reads should certainly go to the site hosting the page with the Assets plugin. This would change should one fork a page with such a plugin. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f78cf71a64efd659",
+      "text": "Writes are by upload button which is only visible for pages served from the origin. "
+    },
+    {
+      "type": "pagefold",
+      "id": "fbfed5f7cf2f293a",
+      "text": "considering"
+    },
+    {
+      "type": "paragraph",
+      "id": "129e74771ae9488f",
+      "text": "We could expect the fork to copy the visible files along with the page json but we might find a lazy approach more appropriate for large assets."
+    },
+    {
+      "type": "paragraph",
+      "id": "ce66f6afae8be46d",
+      "text": "Writes go to the origin as is always our practice. This will remain true even if one drops files onto an Assets plugin from a remote page. We could insist that the remote page be forked as a consequence of the drop to guarantee that the file remains visible to the owner."
+    },
+    {
+      "type": "paragraph",
+      "id": "f68a113a55e48e18",
+      "text": "Lists of assets could be merged for all sites within a context following some priority much like our collaborative links: origin first, then by sites forked from the journal."
+    },
+    {
+      "type": "paragraph",
+      "id": "cbc1e668494a3eba",
+      "text": "Lists of assets could be merged for all sites within the neighborhood. This is how Recent Changes views pages at least in the default configuration of the Activity plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "ab6a4537118778b9",
+      "text": "Merged lists should identify by flag where it found the assets it offers. We have many examples of dealing with twins already. The presentation should suggest the sharing semantic we choose. Some click sequence could be the signal that we want to acquire an asset. Plugmatic suggests how this might work by bringing up a list of alternatives."
+    },
+    {
+      "type": "markdown",
+      "id": "d704f6638ab236cf",
+      "text": "# References"
+    },
+    {
+      "type": "paragraph",
+      "id": "9679b62bf567d81d",
+      "text": "Sending multi-part forms with jQuery. [https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax stack overflow]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a768c8594f1b10ec",
+      "text": "Node.js middleware for `multipart/form-data`. [https://github.com/expressjs/multer github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "90f1f8a2e7af3506",
+      "text": "A simple example of using Express and Multer, with or without Dropzone. [https://github.com/sigurdga/express-multer-dropzone-example github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "fec4a4c18a3554b1",
+      "text": "Dangerous use of express body-parser. [https://fosterelli.co/dangerous-use-of-express-body-parser post]"
+    },
+    {
+      "type": "paragraph",
+      "id": "96a93ca7698a5b06",
+      "text": "Uppy uploader integrates with any framework, fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras, etc. [https://uppy.io/ site]"
+    },
+    {
+      "type": "plugmatic",
+      "id": "40e00ac9bacfad68",
+      "text": "wiki-plugin-assets"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Assets Plugin",
+        "story": []
+      },
+      "date": 1515348734730
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "36908c0028dd03cf"
+      },
+      "id": "36908c0028dd03cf",
+      "type": "add",
+      "date": 1515348739672
+    },
+    {
+      "type": "edit",
+      "id": "36908c0028dd03cf",
+      "item": {
+        "type": "paragraph",
+        "id": "36908c0028dd03cf",
+        "text": "We want a plugin that can show a subdirectory of assets, offer links to those assets, and add more by drag and drop."
+      },
+      "date": 1515348818093
+    },
+    {
+      "type": "edit",
+      "id": "36908c0028dd03cf",
+      "item": {
+        "type": "paragraph",
+        "id": "36908c0028dd03cf",
+        "text": "We want a plugin that can show a subdirectory of assets, offer links to those assets, and add more on drop."
+      },
+      "date": 1515348827699
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b8e61b22fd2cd7f6"
+      },
+      "id": "b8e61b22fd2cd7f6",
+      "type": "add",
+      "after": "36908c0028dd03cf",
+      "date": 1515348833064
+    },
+    {
+      "type": "edit",
+      "id": "b8e61b22fd2cd7f6",
+      "item": {
+        "type": "assets",
+        "id": "b8e61b22fd2cd7f6",
+        "text": " "
+      },
+      "date": 1515348887879
+    },
+    {
+      "type": "edit",
+      "id": "b8e61b22fd2cd7f6",
+      "item": {
+        "type": "assets",
+        "id": "b8e61b22fd2cd7f6",
+        "text": "assets"
+      },
+      "date": 1515348919065
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "40e00ac9bacfad68"
+      },
+      "id": "40e00ac9bacfad68",
+      "type": "add",
+      "after": "b8e61b22fd2cd7f6",
+      "date": 1515353101583
+    },
+    {
+      "type": "edit",
+      "id": "40e00ac9bacfad68",
+      "item": {
+        "type": "plugmatic",
+        "id": "40e00ac9bacfad68",
+        "text": "wiki-plugin-assets"
+      },
+      "date": 1515353121273
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57cbbcb30e75e9ee"
+      },
+      "id": "57cbbcb30e75e9ee",
+      "type": "add",
+      "after": "40e00ac9bacfad68",
+      "date": 1515354947978
+    },
+    {
+      "type": "edit",
+      "id": "57cbbcb30e75e9ee",
+      "item": {
+        "type": "assets",
+        "id": "57cbbcb30e75e9ee",
+        "text": "soviet"
+      },
+      "date": 1515354954478
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "b8e61b22fd2cd7f6",
+        "57cbbcb30e75e9ee",
+        "40e00ac9bacfad68"
+      ],
+      "id": "57cbbcb30e75e9ee",
+      "date": 1515354958279
+    },
+    {
+      "type": "edit",
+      "id": "b8e61b22fd2cd7f6",
+      "item": {
+        "type": "assets",
+        "id": "b8e61b22fd2cd7f6",
+        "text": " "
+      },
+      "date": 1515355469278
+    },
+    {
+      "type": "edit",
+      "id": "57cbbcb30e75e9ee",
+      "item": {
+        "type": "assets",
+        "id": "57cbbcb30e75e9ee",
+        "text": "soviet/foo"
+      },
+      "date": 1515355690855
+    },
+    {
+      "type": "edit",
+      "id": "57cbbcb30e75e9ee",
+      "item": {
+        "type": "assets",
+        "id": "57cbbcb30e75e9ee",
+        "text": "soviet/bar"
+      },
+      "date": 1515356309698
+    },
+    {
+      "type": "edit",
+      "id": "57cbbcb30e75e9ee",
+      "item": {
+        "type": "assets",
+        "id": "57cbbcb30e75e9ee",
+        "text": "soviet/foo"
+      },
+      "date": 1515356316489
+    },
+    {
+      "type": "edit",
+      "id": "b8e61b22fd2cd7f6",
+      "item": {
+        "type": "assets",
+        "id": "b8e61b22fd2cd7f6",
+        "text": "  "
+      },
+      "date": 1515358231838
+    },
+    {
+      "type": "edit",
+      "id": "57cbbcb30e75e9ee",
+      "item": {
+        "type": "assets",
+        "id": "57cbbcb30e75e9ee",
+        "text": "soviet"
+      },
+      "date": 1515361031039
+    },
+    {
+      "type": "edit",
+      "id": "b8e61b22fd2cd7f6",
+      "item": {
+        "type": "assets",
+        "id": "b8e61b22fd2cd7f6",
+        "text": "   "
+      },
+      "date": 1515361888111
+    },
+    {
+      "type": "add",
+      "id": "30ad30bed1954af7",
+      "item": {
+        "type": "paragraph",
+        "id": "30ad30bed1954af7",
+        "text": "Here are assets at the top level."
+      },
+      "after": "36908c0028dd03cf",
+      "date": 1515361905579
+    },
+    {
+      "type": "add",
+      "id": "68631e876abea919",
+      "item": {
+        "type": "paragraph",
+        "id": "68631e876abea919",
+        "text": "Here are assets in the soviet subdirectory."
+      },
+      "after": "30ad30bed1954af7",
+      "date": 1515361937402
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "40e00ac9bacfad68"
+      ],
+      "id": "68631e876abea919",
+      "date": 1515361941229
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5a4f6337dc32618f"
+      },
+      "id": "5a4f6337dc32618f",
+      "type": "add",
+      "after": "40e00ac9bacfad68",
+      "date": 1515361970609
+    },
+    {
+      "type": "edit",
+      "id": "5a4f6337dc32618f",
+      "item": {
+        "type": "paragraph",
+        "id": "5a4f6337dc32618f",
+        "text": "We should filter out directories and dot files from each list of assets. I'm struggling with this in node async. "
+      },
+      "date": 1515362035854
+    },
+    {
+      "type": "edit",
+      "id": "5a4f6337dc32618f",
+      "item": {
+        "type": "paragraph",
+        "id": "5a4f6337dc32618f",
+        "text": "We should filter out directories and dot files from each list of assets. I'm struggling with this in node async. [https://github.com/WardCunningham/wiki-plugin-assets/commit/1f39b94d828d8766db6dd71bef4bb521f3bbf01b github]"
+      },
+      "date": 1515362055734
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "40e00ac9bacfad68"
+      ],
+      "id": "5a4f6337dc32618f",
+      "date": 1515362059159
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9679b62bf567d81d"
+      },
+      "id": "9679b62bf567d81d",
+      "type": "add",
+      "after": "40e00ac9bacfad68",
+      "date": 1515368696051
+    },
+    {
+      "type": "edit",
+      "id": "9679b62bf567d81d",
+      "item": {
+        "type": "paragraph",
+        "id": "9679b62bf567d81d",
+        "text": "Sending multi-part forms with jQuery."
+      },
+      "date": 1515368722174
+    },
+    {
+      "type": "edit",
+      "id": "9679b62bf567d81d",
+      "item": {
+        "type": "paragraph",
+        "id": "9679b62bf567d81d",
+        "text": "Sending multi-part forms with jQuery. [https://stackoverflow.com/questions/5392344/sending-multipart-formdata-with-jquery-ajax stack overflow]"
+      },
+      "date": 1515368755052
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d704f6638ab236cf"
+      },
+      "id": "d704f6638ab236cf",
+      "type": "add",
+      "after": "9679b62bf567d81d",
+      "date": 1515368758714
+    },
+    {
+      "type": "edit",
+      "id": "d704f6638ab236cf",
+      "item": {
+        "type": "markdown",
+        "id": "d704f6638ab236cf",
+        "text": "# References"
+      },
+      "date": 1515368767644
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "40e00ac9bacfad68",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d"
+      ],
+      "id": "d704f6638ab236cf",
+      "date": 1515368770400
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "40e00ac9bacfad68"
+      ],
+      "id": "40e00ac9bacfad68",
+      "date": 1515368787139
+    },
+    {
+      "type": "add",
+      "id": "a768c8594f1b10ec",
+      "item": {
+        "type": "paragraph",
+        "id": "a768c8594f1b10ec",
+        "text": "Node.js middleware for handling `multipart/form-data`."
+      },
+      "after": "9679b62bf567d81d",
+      "date": 1515368821395
+    },
+    {
+      "type": "edit",
+      "id": "a768c8594f1b10ec",
+      "item": {
+        "type": "paragraph",
+        "id": "a768c8594f1b10ec",
+        "text": "Node.js middleware for `multipart/form-data`. [https://github.com/expressjs/multer github]"
+      },
+      "date": 1515368854242
+    },
+    {
+      "type": "add",
+      "id": "90f1f8a2e7af3506",
+      "item": {
+        "type": "paragraph",
+        "id": "90f1f8a2e7af3506",
+        "text": "A simple example of using Express and Multer, with or without Dropzone."
+      },
+      "after": "a768c8594f1b10ec",
+      "date": 1515368971427
+    },
+    {
+      "type": "edit",
+      "id": "90f1f8a2e7af3506",
+      "item": {
+        "type": "paragraph",
+        "id": "90f1f8a2e7af3506",
+        "text": "A simple example of using Express and Multer, with or without Dropzone. [https://github.com/sigurdga/express-multer-dropzone-example github]"
+      },
+      "date": 1515368986752
+    },
+    {
+      "type": "add",
+      "id": "fec4a4c18a3554b1",
+      "item": {
+        "type": "paragraph",
+        "id": "fec4a4c18a3554b1",
+        "text": "Dangerous use of express body-parser,"
+      },
+      "after": "90f1f8a2e7af3506",
+      "date": 1515370025855
+    },
+    {
+      "type": "edit",
+      "id": "fec4a4c18a3554b1",
+      "item": {
+        "type": "paragraph",
+        "id": "fec4a4c18a3554b1",
+        "text": "Dangerous use of express body-parser. [https://fosterelli.co/dangerous-use-of-express-body-parser post]"
+      },
+      "date": 1515370041412
+    },
+    {
+      "type": "add",
+      "id": "4dd73fada76975e0",
+      "item": {
+        "type": "paragraph",
+        "id": "4dd73fada76975e0",
+        "text": "We should upload files, possibly as multi-part forms. I'm struggling with this in html and jquery and maybe node too. "
+      },
+      "after": "5a4f6337dc32618f",
+      "date": 1515384861403
+    },
+    {
+      "type": "edit",
+      "id": "4dd73fada76975e0",
+      "item": {
+        "type": "paragraph",
+        "id": "4dd73fada76975e0",
+        "text": "We should upload files, possibly as multi-part forms. I'm struggling with this in html and jquery and maybe node too. [https://github.com/WardCunningham/wiki-plugin-assets/commit/1dc043d9155b6f1697364c3d0e93b9782815484e github]"
+      },
+      "date": 1515384989468
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "26984e37fd0dbc12"
+      },
+      "id": "26984e37fd0dbc12",
+      "type": "add",
+      "after": "40e00ac9bacfad68",
+      "date": 1515422566967
+    },
+    {
+      "type": "edit",
+      "id": "26984e37fd0dbc12",
+      "item": {
+        "type": "paragraph",
+        "id": "26984e37fd0dbc12",
+        "text": "# Semantics"
+      },
+      "date": 1515422644933
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "4dd73fada76975e0",
+        "26984e37fd0dbc12",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "a768c8594f1b10ec",
+        "90f1f8a2e7af3506",
+        "fec4a4c18a3554b1",
+        "40e00ac9bacfad68"
+      ],
+      "id": "26984e37fd0dbc12",
+      "date": 1515422649218
+    },
+    {
+      "type": "add",
+      "id": "b2fe22f970740a1b",
+      "item": {
+        "type": "paragraph",
+        "id": "b2fe22f970740a1b",
+        "text": "Now with the most obvious behaviors coded if not debugged we think ahead to how this plugin should operate in wiki's sharing environment."
+      },
+      "after": "26984e37fd0dbc12",
+      "date": 1515422762617
+    },
+    {
+      "type": "edit",
+      "id": "26984e37fd0dbc12",
+      "item": {
+        "type": "markdown",
+        "id": "26984e37fd0dbc12",
+        "text": "# Semantics"
+      },
+      "date": 1515422765577
+    },
+    {
+      "type": "add",
+      "id": "ce66f6afae8be46d",
+      "item": {
+        "type": "paragraph",
+        "id": "ce66f6afae8be46d",
+        "text": "Writes go to the origin as is always our practice. This will remain true even if one drops files onto an Assets plugin from a remote page. We could insist that the remote page be forked as a consequence of the drop to guarantee that the file remains visible to the owner. "
+      },
+      "after": "b2fe22f970740a1b",
+      "date": 1515423443549
+    },
+    {
+      "type": "add",
+      "id": "5899a6c1895b2e1b",
+      "item": {
+        "type": "paragraph",
+        "id": "5899a6c1895b2e1b",
+        "text": "A configured Assets plugin provides two-way access to a subdirectory on a server. Exactly which subdirectory and exactly which server are yet to be defined."
+      },
+      "after": "b2fe22f970740a1b",
+      "date": 1515424269581
+    },
+    {
+      "type": "add",
+      "id": "9dac6ce6a247acb9",
+      "item": {
+        "type": "paragraph",
+        "id": "9dac6ce6a247acb9",
+        "text": "For now we are selecting subdirectory based on markup. We could factor in page slug or item id to provide additional isolation should that prove desirable."
+      },
+      "after": "5899a6c1895b2e1b",
+      "date": 1515424393329
+    },
+    {
+      "type": "edit",
+      "id": "ce66f6afae8be46d",
+      "item": {
+        "type": "paragraph",
+        "id": "ce66f6afae8be46d",
+        "text": "Writes go to the origin as is always our practice. This will remain true even if one drops files onto an Assets plugin from a remote page. We could insist that the remote page be forked as a consequence of the drop to guarantee that the file remains visible to the owner."
+      },
+      "date": 1515424441926
+    },
+    {
+      "type": "add",
+      "id": "6f90d959fbb94da2",
+      "item": {
+        "type": "paragraph",
+        "id": "6f90d959fbb94da2",
+        "text": "Reads should certainly go to the site hosting the Assets plugin. This would change should one fork a page with such a plugin. We could expect the fork to copy the visible files along with the page json but we might find a lazy approach more appropriate for large assets."
+      },
+      "after": "ce66f6afae8be46d",
+      "date": 1515424933111
+    },
+    {
+      "type": "add",
+      "id": "f68a113a55e48e18",
+      "item": {
+        "type": "paragraph",
+        "id": "f68a113a55e48e18",
+        "text": "Lists of assets could be merged for all sites within a context following some priority much like our collaborative links: origin first, then by fork in the journal in reverse order."
+      },
+      "after": "6f90d959fbb94da2",
+      "date": 1515425208120
+    },
+    {
+      "type": "edit",
+      "id": "f68a113a55e48e18",
+      "item": {
+        "type": "paragraph",
+        "id": "f68a113a55e48e18",
+        "text": "Lists of assets could be merged for all sites within a context following some priority much like our collaborative links: origin first, then by forked sites from the journal."
+      },
+      "date": 1515425245997
+    },
+    {
+      "type": "edit",
+      "id": "f68a113a55e48e18",
+      "item": {
+        "type": "paragraph",
+        "id": "f68a113a55e48e18",
+        "text": "Lists of assets could be merged for all sites within a context following some priority much like our collaborative links: origin first, then by sites forked from the journal."
+      },
+      "date": 1515425282859
+    },
+    {
+      "type": "add",
+      "id": "cbc1e668494a3eba",
+      "item": {
+        "type": "paragraph",
+        "id": "cbc1e668494a3eba",
+        "text": "Lists of assets could be merged for all sites within the neighborhood. This is how Recent Changes views pages at least in the default configuration of the Activity plugin."
+      },
+      "after": "f68a113a55e48e18",
+      "date": 1515425527396
+    },
+    {
+      "type": "add",
+      "id": "ab6a4537118778b9",
+      "item": {
+        "type": "paragraph",
+        "id": "ab6a4537118778b9",
+        "text": "Merged lists should identify by flag where it found the assets it offers. We have many examples of dealing with twins already. The presentation should suggest the sharing semantic we choose. Some click sequence could be the signal that we want to acquire an asset. Plugmatic suggests how this might work by bringing up a list of alternatives."
+      },
+      "after": "cbc1e668494a3eba",
+      "date": 1515426522669
+    },
+    {
+      "type": "edit",
+      "id": "ab6a4537118778b9",
+      "item": {
+        "type": "paragraph",
+        "id": "ab6a4537118778b9",
+        "text": "Merged lists should identify by flag where it found the assets it offers. We have many examples of dealing with twins already."
+      },
+      "date": 1515426571180
+    },
+    {
+      "type": "add",
+      "id": "c2f5722bb48ece5a",
+      "item": {
+        "type": "paragraph",
+        "id": "c2f5722bb48ece5a",
+        "text": "The presentation should suggest the sharing semantic we choose. Some click sequence could be the signal that we want to acquire an asset. Plugmatic suggests how this might work by bringing up a list of alternatives."
+      },
+      "after": "ab6a4537118778b9",
+      "date": 1515426575738
+    },
+    {
+      "type": "remove",
+      "id": "c2f5722bb48ece5a",
+      "date": 1515426580861
+    },
+    {
+      "type": "edit",
+      "id": "ab6a4537118778b9",
+      "item": {
+        "type": "paragraph",
+        "id": "ab6a4537118778b9",
+        "text": "Merged lists should identify by flag where it found the assets it offers. We have many examples of dealing with twins already. The presentation should suggest the sharing semantic we choose. Some click sequence could be the signal that we want to acquire an asset. Plugmatic suggests how this might work by bringing up a list of alternatives."
+      },
+      "date": 1515426583403
+    },
+    {
+      "type": "edit",
+      "id": "b8e61b22fd2cd7f6",
+      "item": {
+        "type": "assets",
+        "id": "b8e61b22fd2cd7f6",
+        "text": "    "
+      },
+      "date": 1515603799687
+    },
+    {
+      "type": "edit",
+      "id": "5a4f6337dc32618f",
+      "item": {
+        "type": "paragraph",
+        "id": "5a4f6337dc32618f",
+        "text": "We filter out directories and dot files from lists. Thanks Paul for some help here. I was using async v1.5 code and v2.6 docs. Never a good idea."
+      },
+      "date": 1515772370288
+    },
+    {
+      "type": "edit",
+      "id": "4dd73fada76975e0",
+      "item": {
+        "type": "paragraph",
+        "id": "4dd73fada76975e0",
+        "text": "We upload files as multi-part forms. I'm struggling with this in html and jquery and maybe node too. [https://github.com/WardCunningham/wiki-plugin-assets/commit/1dc043d9155b6f1697364c3d0e93b9782815484e github]"
+      },
+      "date": 1515772408387
+    },
+    {
+      "type": "edit",
+      "id": "4dd73fada76975e0",
+      "item": {
+        "type": "paragraph",
+        "id": "4dd73fada76975e0",
+        "text": "We upload files as multi-part forms. I found better example code much closer to what I wanted to write. [https://coligo.io/building-ajax-file-uploader-with-node/ post]"
+      },
+      "date": 1515772473059
+    },
+    {
+      "type": "edit",
+      "id": "4dd73fada76975e0",
+      "item": {
+        "type": "paragraph",
+        "id": "4dd73fada76975e0",
+        "text": "We upload files as multi-part forms. I found better example code much closer to what I wanted to write.\n Example has progress bar which I will add soon.\n [https://coligo.io/building-ajax-file-uploader-with-node/ post]"
+      },
+      "date": 1515772541761
+    },
+    {
+      "type": "add",
+      "id": "3c3f3f979e0654b5",
+      "item": {
+        "type": "paragraph",
+        "id": "3c3f3f979e0654b5",
+        "text": "Would like to sort items by age with \"since\" logic."
+      },
+      "after": "4dd73fada76975e0",
+      "date": 1515772723613
+    },
+    {
+      "type": "add",
+      "id": "9fa4c3a745ee26bf",
+      "item": {
+        "type": "paragraph",
+        "id": "9fa4c3a745ee26bf",
+        "text": "Would like to add a delete button maybe on hover."
+      },
+      "after": "3c3f3f979e0654b5",
+      "date": 1515772795161
+    },
+    {
+      "type": "add",
+      "id": "0c34c7dc9b956220",
+      "item": {
+        "type": "paragraph",
+        "id": "0c34c7dc9b956220",
+        "text": "Need to check login."
+      },
+      "after": "4dd73fada76975e0",
+      "date": 1515772917782
+    },
+    {
+      "type": "add",
+      "id": "a316728ca5503dfe",
+      "item": {
+        "type": "paragraph",
+        "id": "a316728ca5503dfe",
+        "text": "Neet to report errors."
+      },
+      "after": "0c34c7dc9b956220",
+      "date": 1515773010666
+    },
+    {
+      "type": "edit",
+      "id": "0c34c7dc9b956220",
+      "item": {
+        "type": "paragraph",
+        "id": "0c34c7dc9b956220",
+        "text": "The server checks that the user is logged in before uploading. Upload errors are reported in the progress bar. "
+      },
+      "date": 1515865646941
+    },
+    {
+      "type": "add",
+      "id": "b0e5b8fe0f943630",
+      "item": {
+        "type": "paragraph",
+        "id": "b0e5b8fe0f943630",
+        "text": "The client checks that the page is not remote before even offering to upload. This way one is surely seeing the files that the upload will join."
+      },
+      "after": "0c34c7dc9b956220",
+      "date": 1515865770435
+    },
+    {
+      "type": "edit",
+      "id": "4dd73fada76975e0",
+      "item": {
+        "type": "paragraph",
+        "id": "4dd73fada76975e0",
+        "text": "We upload files as multi-part forms. I found better example code much closer to what I wanted to write.\n Example has progress bar which I have added.\n [https://coligo.io/building-ajax-file-uploader-with-node/ post]"
+      },
+      "date": 1515865783433
+    },
+    {
+      "type": "remove",
+      "id": "a316728ca5503dfe",
+      "date": 1515865793159
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3000",
+      "date": 1515866426215
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org"
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9fb8865a3b502c9d"
+      },
+      "id": "9fb8865a3b502c9d",
+      "type": "add",
+      "after": "40e00ac9bacfad68",
+      "date": 1515873873971
+    },
+    {
+      "type": "edit",
+      "id": "9fb8865a3b502c9d",
+      "item": {
+        "type": "pagefold",
+        "id": "9fb8865a3b502c9d",
+        "text": "done"
+      },
+      "date": 1515873878469
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "4dd73fada76975e0",
+        "0c34c7dc9b956220",
+        "b0e5b8fe0f943630",
+        "3c3f3f979e0654b5",
+        "9fa4c3a745ee26bf",
+        "26984e37fd0dbc12",
+        "b2fe22f970740a1b",
+        "9fb8865a3b502c9d",
+        "5899a6c1895b2e1b",
+        "9dac6ce6a247acb9",
+        "ce66f6afae8be46d",
+        "6f90d959fbb94da2",
+        "f68a113a55e48e18",
+        "cbc1e668494a3eba",
+        "ab6a4537118778b9",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "a768c8594f1b10ec",
+        "90f1f8a2e7af3506",
+        "fec4a4c18a3554b1",
+        "40e00ac9bacfad68"
+      ],
+      "id": "9fb8865a3b502c9d",
+      "date": 1515873887102
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fbfed5f7cf2f293a"
+      },
+      "id": "fbfed5f7cf2f293a",
+      "type": "add",
+      "after": "40e00ac9bacfad68",
+      "date": 1515873938432
+    },
+    {
+      "type": "edit",
+      "id": "fbfed5f7cf2f293a",
+      "item": {
+        "type": "pagefold",
+        "id": "fbfed5f7cf2f293a",
+        "text": "considering"
+      },
+      "date": 1515873945842
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "4dd73fada76975e0",
+        "0c34c7dc9b956220",
+        "b0e5b8fe0f943630",
+        "3c3f3f979e0654b5",
+        "9fa4c3a745ee26bf",
+        "26984e37fd0dbc12",
+        "b2fe22f970740a1b",
+        "9fb8865a3b502c9d",
+        "5899a6c1895b2e1b",
+        "9dac6ce6a247acb9",
+        "ce66f6afae8be46d",
+        "6f90d959fbb94da2",
+        "fbfed5f7cf2f293a",
+        "f68a113a55e48e18",
+        "cbc1e668494a3eba",
+        "ab6a4537118778b9",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "a768c8594f1b10ec",
+        "90f1f8a2e7af3506",
+        "fec4a4c18a3554b1",
+        "40e00ac9bacfad68"
+      ],
+      "id": "fbfed5f7cf2f293a",
+      "date": 1515873983029
+    },
+    {
+      "type": "edit",
+      "id": "9fb8865a3b502c9d",
+      "item": {
+        "type": "pagefold",
+        "id": "9fb8865a3b502c9d",
+        "text": "implemented"
+      },
+      "date": 1515874000040
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "4dd73fada76975e0",
+        "0c34c7dc9b956220",
+        "b0e5b8fe0f943630",
+        "3c3f3f979e0654b5",
+        "9fa4c3a745ee26bf",
+        "26984e37fd0dbc12",
+        "b2fe22f970740a1b",
+        "9fb8865a3b502c9d",
+        "5899a6c1895b2e1b",
+        "9dac6ce6a247acb9",
+        "6f90d959fbb94da2",
+        "fbfed5f7cf2f293a",
+        "ce66f6afae8be46d",
+        "f68a113a55e48e18",
+        "cbc1e668494a3eba",
+        "ab6a4537118778b9",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "a768c8594f1b10ec",
+        "90f1f8a2e7af3506",
+        "fec4a4c18a3554b1",
+        "40e00ac9bacfad68"
+      ],
+      "id": "ce66f6afae8be46d",
+      "date": 1515874056198
+    },
+    {
+      "type": "edit",
+      "id": "6f90d959fbb94da2",
+      "item": {
+        "type": "paragraph",
+        "id": "6f90d959fbb94da2",
+        "text": "Reads should certainly go to the site hosting the Assets plugin. This would change should one fork a page with such a plugin. "
+      },
+      "date": 1515874083015
+    },
+    {
+      "type": "add",
+      "id": "129e74771ae9488f",
+      "item": {
+        "type": "paragraph",
+        "id": "129e74771ae9488f",
+        "text": "We could expect the fork to copy the visible files along with the page json but we might find a lazy approach more appropriate for large assets."
+      },
+      "after": "6f90d959fbb94da2",
+      "date": 1515874091573
+    },
+    {
+      "type": "edit",
+      "id": "6f90d959fbb94da2",
+      "item": {
+        "type": "paragraph",
+        "id": "6f90d959fbb94da2",
+        "text": "Reads should certainly go to the site hosting the page with the Assets plugin. This would change should one fork a page with such a plugin. "
+      },
+      "date": 1515874124085
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "4dd73fada76975e0",
+        "0c34c7dc9b956220",
+        "b0e5b8fe0f943630",
+        "3c3f3f979e0654b5",
+        "9fa4c3a745ee26bf",
+        "26984e37fd0dbc12",
+        "b2fe22f970740a1b",
+        "9fb8865a3b502c9d",
+        "5899a6c1895b2e1b",
+        "9dac6ce6a247acb9",
+        "6f90d959fbb94da2",
+        "fbfed5f7cf2f293a",
+        "ce66f6afae8be46d",
+        "129e74771ae9488f",
+        "f68a113a55e48e18",
+        "cbc1e668494a3eba",
+        "ab6a4537118778b9",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "a768c8594f1b10ec",
+        "90f1f8a2e7af3506",
+        "fec4a4c18a3554b1",
+        "40e00ac9bacfad68"
+      ],
+      "id": "129e74771ae9488f",
+      "date": 1515874133160
+    },
+    {
+      "type": "move",
+      "order": [
+        "36908c0028dd03cf",
+        "30ad30bed1954af7",
+        "b8e61b22fd2cd7f6",
+        "68631e876abea919",
+        "57cbbcb30e75e9ee",
+        "5a4f6337dc32618f",
+        "4dd73fada76975e0",
+        "0c34c7dc9b956220",
+        "b0e5b8fe0f943630",
+        "3c3f3f979e0654b5",
+        "9fa4c3a745ee26bf",
+        "26984e37fd0dbc12",
+        "b2fe22f970740a1b",
+        "9fb8865a3b502c9d",
+        "5899a6c1895b2e1b",
+        "9dac6ce6a247acb9",
+        "6f90d959fbb94da2",
+        "fbfed5f7cf2f293a",
+        "129e74771ae9488f",
+        "ce66f6afae8be46d",
+        "f68a113a55e48e18",
+        "cbc1e668494a3eba",
+        "ab6a4537118778b9",
+        "d704f6638ab236cf",
+        "9679b62bf567d81d",
+        "a768c8594f1b10ec",
+        "90f1f8a2e7af3506",
+        "fec4a4c18a3554b1",
+        "40e00ac9bacfad68"
+      ],
+      "id": "129e74771ae9488f",
+      "date": 1515874149373
+    },
+    {
+      "type": "add",
+      "id": "f78cf71a64efd659",
+      "item": {
+        "type": "paragraph",
+        "id": "f78cf71a64efd659",
+        "text": "Writes are by upload button which is only visible for pages served from the origin. "
+      },
+      "after": "6f90d959fbb94da2",
+      "date": 1515874241738
+    },
+    {
+      "type": "add",
+      "id": "95a06283cec0a7fb",
+      "item": {
+        "type": "paragraph",
+        "id": "95a06283cec0a7fb",
+        "text": "Issue: fork should refresh the list with files from the new site. It doesn't. An doing so is not simple."
+      },
+      "after": "9fa4c3a745ee26bf",
+      "date": 1515874817859
+    },
+    {
+      "type": "add",
+      "id": "96a93ca7698a5b06",
+      "item": {
+        "type": "paragraph",
+        "id": "96a93ca7698a5b06",
+        "text": "Uppy file uploader integrates with any framework, fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras, etc."
+      },
+      "after": "fec4a4c18a3554b1",
+      "date": 1515984437280
+    },
+    {
+      "type": "edit",
+      "id": "96a93ca7698a5b06",
+      "item": {
+        "type": "paragraph",
+        "id": "96a93ca7698a5b06",
+        "text": "Uppy file uploader integrates with any framework, fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras, etc. [https://uppy.io/ site]"
+      },
+      "date": 1515984465693
+    },
+    {
+      "type": "edit",
+      "id": "96a93ca7698a5b06",
+      "item": {
+        "type": "paragraph",
+        "id": "96a93ca7698a5b06",
+        "text": "Uppy uploader integrates with any framework, fetches files from local disk, Google Drive, Dropbox, Instagram, remote URLs, cameras, etc. [https://uppy.io/ site]"
+      },
+      "date": 1515984477270
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3000",
+      "date": 1515984542401
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1516015327026
+    }
+  ]
+}

@@ -1,0 +1,3204 @@
+{
+  "title": "Regex examples",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "text": "A [[regular expression]], [[regex]] or regexp is a sequence of characters that define a search pattern. Usually this pattern is then used by string searching algorithms for \"find\" or \"find and replace\" operations on strings, or for input validation. - [https://en.wikipedia.org/wiki/Regular_expression wikipedia]"
+    },
+    {
+      "type": "markdown",
+      "id": "27e9932111e6d5ce",
+      "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual - [http://www.pcre.org pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n\n",
+      "alias": "82805bc569c198e7"
+    },
+    {
+      "type": "markdown",
+      "id": "1cf4de0c88914d4a",
+      "text": "# Issues\n"
+    },
+    {
+      "text": "<blockquote><b style='color:red'>Issue: </b>\n\nI don't seem to be able to pipe regular expressions any more - [https://stackoverflow.com/questions/869809/combine-regexp  stackoverflow]\n<p>\nThis may be related to Livecode bug where matchchunk returns empty instead of true or false and does nothing.",
+      "id": "20084356ff8e69ce",
+      "type": "html"
+    },
+    {
+      "type": "markdown",
+      "id": "7b9d95e1dbadcab1",
+      "text": "# Examples\n"
+    },
+    {
+      "type": "markdown",
+      "id": "e5e58907d58c6982",
+      "text": "The following code snippets were extracted from handlers in various libraries. They need testing and organising for quality:\n"
+    },
+    {
+      "type": "markdown",
+      "id": "5da0fc7693caf755",
+      "text": "# Regex chunks"
+    },
+    {
+      "type": "code",
+      "id": "fd76ee1e38ae6e52",
+      "text": "put \"([^<]*)\" into notOpeningBracket\nput \"([^>]*)\" into notClosingBracket\nput \"([^\" & quote & \"'\" & \"]*)\" into notQuote\nput \"(?Uim)\" into ungreedyMultiReg\nput \"['\" & quote & \"]\" into anyQuote\nput \"\\s+\" into someSpace\nput \"<\\s*/\\s*\" & tagName & \"\\s*>\" into closingTagReg"
+    },
+    {
+      "type": "markdown",
+      "id": "2e6789ba75fa316d",
+      "text": "# Tags",
+      "alias": "e29c5cb4af56c394"
+    },
+    {
+      "type": "code",
+      "id": "fe49dd6ba6aa64c7",
+      "text": "get \"(<\\s*\" & tagName & \"\\s[^>]*>)\"",
+      "alias": "3458bbbe74963a12"
+    },
+    {
+      "type": "markdown",
+      "id": "fbaaee240da75edb",
+      "text": "Some more...\n"
+    },
+    {
+      "type": "code",
+      "id": "36b12251559f5b00",
+      "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\"\n\n-- everything between two XML tags\n<primaryAddress>[\\s\\S]*?<\\/primaryAddress>",
+      "alias": "6886900a9bb3f644"
+    },
+    {
+      "type": "markdown",
+      "id": "c59b01d0012924c3",
+      "text": "- http://regexlib.com/REDetails.aspx?regexp_id=2762\n- http://regexlib.com/REDetails.aspx?regexp_id=2301"
+    },
+    {
+      "type": "markdown",
+      "id": "654a5bfb83021113",
+      "text": "# Quoted\n"
+    },
+    {
+      "type": "code",
+      "id": "e95c43cd24c76c09",
+      "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n\n-- regular expression for any quoted text\nput kwote (\"([^\"]|\\n)*\") into sReg\n\n-- double quoted strings on multiple lines\n\"([^\"]|\\n)*\""
+    },
+    {
+      "type": "markdown",
+      "id": "b2861870a6f78ebb",
+      "text": "# HTML\n"
+    },
+    {
+      "type": "code",
+      "id": "996208324304a267",
+      "text": "-- html_ConstructColouredText\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- html_RevToColourSpan\nget \"(?miU)(<font color=').*(</font>)\"\n\n-- html_RevToBoldSpan\nget \"(?miU)(<b>).*(</b>)\""
+    },
+    {
+      "type": "markdown",
+      "id": "8dc2281f66209d7a",
+      "text": "# HTML Tags and Comments\n"
+    },
+    {
+      "type": "markdown",
+      "id": "37b058eba7f0b56a",
+      "text": "Matches any HTML tag with any parameters and HTML Comments - [http://regexlib.com/REDetails.aspx?regexp_id=1898 regexlib.com]\n"
+    },
+    {
+      "type": "code",
+      "id": "12a0027206a13312",
+      "text": "<!*[^<>]*>"
+    },
+    {
+      "type": "markdown",
+      "id": "9f7a3e510c626661",
+      "text": "# Find HTML Link Tags\n\nThis pattern matches link tags in html and returns the contents of the href attribute and the text of the link - [http://regexlib.com/REDetails.aspx?regexp_id=1592 regexlib.com]\n\n\n"
+    },
+    {
+      "type": "code",
+      "id": "615f1c3c9f0d6fe7",
+      "text": "-- regExp\n\n^<a[^>]*(http://[^\"]*)[^>]*>([ 0-9a-zA-Z]+)</a>$"
+    },
+    {
+      "type": "code",
+      "id": "0d69a09459125751",
+      "text": "-- Matches\n\n<a href=\"http://www.google.com\">Google</a>"
+    },
+    {
+      "type": "markdown",
+      "id": "632634ff38f6e2b2",
+      "text": "# html_ExtractAllLinks\n"
+    },
+    {
+      "type": "code",
+      "id": "7b7856f0b2dbf833",
+      "text": "get \"href[\\s]*=[\\s]*'([^\\n']*)'\"\nreplace \"'\" with quote in it"
+    },
+    {
+      "type": "markdown",
+      "id": "7303989200662c6a",
+      "text": "# html_ExtractLinkNumArray\n"
+    },
+    {
+      "type": "markdown",
+      "id": "33a3387c0a3cdc87",
+      "text": "Requires each link on a new line\n   The regular expressions do not require that - and if you use XML handlers we get one big single line\n   So could make more robust by deleting at end of each repeat\n"
+    },
+    {
+      "type": "code",
+      "id": "7e242eb342f06978",
+      "text": "<li><a href=\"Tower\" title=\"Victoria Tower\">Victoria Tower</a></li>\n<li><a href=\"Aden\" title=\"Big Ben Aden\">Big Ben Aden</a></li>\n"
+    },
+    {
+      "type": "code",
+      "id": "f03212f3db5bc0bb",
+      "text": "-- U is for non-greedy\nget \"(?miU)(<span style='color:).*(</span>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\""
+    },
+    {
+      "type": "markdown",
+      "id": "4af27721a6c5eeb8",
+      "text": "# mediawiki_SetTemplateOffsets\n"
+    },
+    {
+      "type": "code",
+      "id": "8748322fe49ab775",
+      "text": "put \"[^\\}]+\" into untilCurlyBracket\nget \"(\\{\\{\" & tName & untilCurlyBracket & \"\\}\\})\"\nput \"(?m)\" before someReg -- multiline search"
+    },
+    {
+      "type": "markdown",
+      "id": "d9d48e4892ef1733",
+      "text": "# html_ParamDeconstuct\n"
+    },
+    {
+      "type": "markdown",
+      "id": "9405fb67febeefde",
+      "text": "Replace lineFeed with empty in inputTag -- seems necessary - [http://regexlib.com/REDetails.aspx?regexp_id=1195 regexlib.com]\n"
+    },
+    {
+      "type": "code",
+      "id": "a96e402cd6d1496a",
+      "text": "Pattern:  \\s(type|name|value)=(?:(\\w+)|(?:\"(.*?)\")|(?:\\'(.*)\\'))\nAuthor: \tCarey Bishop\nMatching Text: \t&lt;input type=&quot;text&quot; value='somevalue' name=fred&gt;\nNon-Matching Text:\tAny attributes that aren't &quot;type&quot;, &quot;name&quot;, or &quot;value&quot;\n"
+    },
+    {
+      "type": "markdown",
+      "id": "ac1a24dfae96d7cf",
+      "text": "Returns the three most important attributes from an HTML &lt;input&gt; tag: 'type', 'name' and 'value'. \n    Supports attribute values that are double- or single-quoted or unquoted. \n"
+    },
+    {
+      "type": "markdown",
+      "id": "19dcf1d86700621a",
+      "text": "    Returns four references, the first being the name of the attribute, and the other three being the value,\n    of which only one will be populated based on the way the value was quoted.\n"
+    },
+    {
+      "type": "code",
+      "id": "2e700d39b4d581a4",
+      "text": "get \"\\s(type|name|value)=(?:(\\w+)|(?:\" & quote & \"(.*?)\" & quote & \")|(?:\\'(.*)\\'))\"\n"
+    },
+    {
+      "type": "markdown",
+      "id": "bc871c036beec09b",
+      "text": "# Script processing\n"
+    },
+    {
+      "type": "markdown",
+      "id": "c802c239bf10e70a",
+      "text": "- script_SetPrivateHandlerOffsets\n- script_SetHandlerOffsets\n- script_MatchEnd\n"
+    },
+    {
+      "type": "code",
+      "id": "b042e1687d656e64",
+      "text": "get \"(?mi)^\\s*(\" & oWrd & \" +\" & hName & \")\\W\"\nget \"(?mi)^(private +\" & oWrd & \" +\" & hName & \")\\W\"\nget \"(?mi)^\\s*(\" & \"end\" & \" +\" & hName & \")\\W\"\n"
+    },
+    {
+      "type": "markdown",
+      "id": "3aa8ee90d19289a6",
+      "text": "# Wiki\n"
+    },
+    {
+      "type": "code",
+      "id": "3b07bdbda01faace",
+      "text": "private command _SetImageTagOffsets\n   put \"(\\[\\[Image:.+\\]\\])\" into someReg\n   put matchchunk (...) into someBoolean\n   return someBoolean\nend _SetImageTagOffsets\n\nprivate command _SetFileTagOffsets\n   put \"(\\[\\[File:.+\\]\\])\" into someReg\n   put matchchunk (...) into someBoolean\n   return someBoolean\nend _SetFileTagOffsets\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "668f77b0cec42611",
+      "text": "# fedwikipedia_CleanInternalLinks"
+    },
+    {
+      "type": "code",
+      "id": "2f7dc57fb7dd4c5d",
+      "text": "-- strips out image files as well (carefull)\n-- some starting text [[Machtergreifung|came to power]] something [[Real Link|well a second one]] at end\n-- Berlin was devastated by [[Bombing of Berlin in World War II|bombing raids]], fires and street battles during \n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "2df24ab780e83c18",
+      "text": "get \"\\[\\[([^\\]]+)\\|([^\\]]+)\\]\\]\" into someReg\nput \"(?m)\" before it\n\n"
+    },
+    {
+      "type": "code",
+      "id": "dbe623931ded3133",
+      "text": "-- fedwikipedia_CleanSeeAlso\n\nput \"[^\\}]+\" into untilCurly\nget \"\\{\\{See also\\|(\" & untilCurly & \")\\}\\}\"\nput \"(?m)\" before it\n"
+    },
+    {
+      "type": "markdown",
+      "id": "288121635757d15b",
+      "text": "# Other"
+    },
+    {
+      "type": "code",
+      "id": "ea81fc24c20f4947",
+      "text": " -- put \"(?Umi)\\W*(graph\\W\\[.*\\];)\" into someReg -- does not work for multiline's\n   -- put \"(?Umi)\\W(graph\\W*\\[.*)\" into someReg\n   put \"(?Uim)\\W*(graph\\W*\\[\" into someReg\n   put CR & \".*\" after someReg\n   put \"\\];)\" after someReg"
+    },
+    {
+      "type": "markdown",
+      "id": "c4ef920ea5d9b4cb",
+      "text": "# General handlers"
+    },
+    {
+      "type": "code",
+      "id": "86d7b2f332587800",
+      "text": "private command _StripReg @wikiText, sReg\n local rStart, rEnd\n repeat\n  get matchchunk (wText, sReg, rStart, rEnd)\n  if rStart is not a number then\n   exit repeat -- regExp bug???\n  end if\n  if it is true then\n   put char rStart to rEnd of wText into sTest\n   delete char rStart to rEnd of wText\n  else\n   exit repeat\n  end if\n end repeat\nend _StripReg"
+    },
+    {
+      "type": "markdown",
+      "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "text": "# See also\n\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "31d6ae95b0bdaff3",
+      "text": "- [[Regular expression]]\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Regex examples",
+        "story": []
+      },
+      "date": 1536157872320
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "text": "A [[regular expression]], regex or regexp (sometimes called a rational expression) is, in theoretical computer science and formal language theory, a sequence of characters that define a search pattern. Usually this pattern is then used by string searching algorithms for \"find\" or \"find and replace\" operations on strings, or for input validation. - [https://en.wikipedia.org/wiki/Regular_expression wikipedia]"
+      },
+      "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "date": 1536157898971
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "text": "# See also"
+      },
+      "after": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "date": 1536157901538
+    },
+    {
+      "type": "edit",
+      "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "item": {
+        "type": "paragraph",
+        "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "text": "A [[regular expression]], [[regex]] or regexp (sometimes called a rational expression) is, in theoretical computer science and formal language theory, a sequence of characters that define a search pattern. Usually this pattern is then used by string searching algorithms for \"find\" or \"find and replace\" operations on strings, or for input validation. - [https://en.wikipedia.org/wiki/Regular_expression wikipedia]"
+      },
+      "date": 1536157908351
+    },
+    {
+      "type": "edit",
+      "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "item": {
+        "type": "markdown",
+        "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "text": "# See also\n\n- [[Regular expression]]"
+      },
+      "date": 1536157945469
+    },
+    {
+      "type": "edit",
+      "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "item": {
+        "type": "markdown",
+        "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "text": "# See also\n\n- [[Regular expression]]\n- [[Regular expression]]"
+      },
+      "date": 1536157959657
+    },
+    {
+      "type": "edit",
+      "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "item": {
+        "type": "markdown",
+        "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "text": "# See also\n\n- [[Regular expression]]\n"
+      },
+      "date": 1536157983762
+    },
+    {
+      "type": "edit",
+      "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "item": {
+        "type": "markdown",
+        "id": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "text": "# See also\n\n\n"
+      },
+      "date": 1536157996702
+    },
+    {
+      "type": "add",
+      "id": "31d6ae95b0bdaff3",
+      "item": {
+        "type": "markdown",
+        "id": "31d6ae95b0bdaff3",
+        "text": "- [[Regular expression]]\n"
+      },
+      "after": "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+      "date": 1536157997418
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "654a5bfb83021113"
+      },
+      "id": "654a5bfb83021113",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536158017675
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "654a5bfb83021113",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "654a5bfb83021113",
+      "date": 1536158019011
+    },
+    {
+      "type": "edit",
+      "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "item": {
+        "type": "paragraph",
+        "id": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "text": "A [[regular expression]], [[regex]] or regexp is a sequence of characters that define a search pattern. Usually this pattern is then used by string searching algorithms for \"find\" or \"find and replace\" operations on strings, or for input validation. - [https://en.wikipedia.org/wiki/Regular_expression wikipedia]"
+      },
+      "date": 1536158059715
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ea81fc24c20f4947"
+      },
+      "id": "ea81fc24c20f4947",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536158065459
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "654a5bfb83021113",
+        "ea81fc24c20f4947",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "ea81fc24c20f4947",
+      "date": 1536158066740
+    },
+    {
+      "type": "edit",
+      "id": "654a5bfb83021113",
+      "item": {
+        "type": "markdown",
+        "id": "654a5bfb83021113",
+        "text": "# Quoted\n"
+      },
+      "date": 1536158151952
+    },
+    {
+      "type": "add",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "factory",
+        "id": "e95c43cd24c76c09",
+        "text": "put \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\" into someReg\nget matchchunk (someText, someReg, startChar, endChar)\n "
+      },
+      "after": "654a5bfb83021113",
+      "date": 1536158176802
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n "
+      },
+      "date": 1536158211275
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)"
+      },
+      "date": 1536158217002
+    },
+    {
+      "type": "edit",
+      "id": "ea81fc24c20f4947",
+      "item": {
+        "type": "code",
+        "id": "ea81fc24c20f4947",
+        "text": " -- put \"(?Umi)\\W*(graph\\W\\[.*\\];)\" into someReg -- does not work for multiline's\n   -- put \"(?Umi)\\W(graph\\W*\\[.*)\" into someReg\n   put \"(?Uim)\\W*(graph\\W*\\[\" into someReg\n   put CR & \".*\" after someReg\n   put \"\\];)\" after someReg"
+      },
+      "date": 1536158280374
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "632634ff38f6e2b2"
+      },
+      "id": "632634ff38f6e2b2",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536158285886
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "632634ff38f6e2b2",
+        "ea81fc24c20f4947",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "632634ff38f6e2b2",
+      "date": 1536158287895
+    },
+    {
+      "type": "edit",
+      "id": "632634ff38f6e2b2",
+      "item": {
+        "type": "markdown",
+        "id": "632634ff38f6e2b2",
+        "text": "# Other"
+      },
+      "date": 1536158292117
+    },
+    {
+      "type": "edit",
+      "id": "632634ff38f6e2b2",
+      "item": {
+        "type": "markdown",
+        "id": "632634ff38f6e2b2",
+        "text": "# html_ExtractLinkNumArray\n"
+      },
+      "date": 1536158344789
+    },
+    {
+      "type": "add",
+      "id": "4af27721a6c5eeb8",
+      "item": {
+        "type": "markdown",
+        "id": "4af27721a6c5eeb8",
+        "text": "# Other"
+      },
+      "after": "632634ff38f6e2b2",
+      "date": 1536158346221
+    },
+    {
+      "type": "add",
+      "id": "33a3387c0a3cdc87",
+      "item": {
+        "type": "markdown",
+        "id": "33a3387c0a3cdc87",
+        "text": "Requires each link on a new line\n   The regular expressions do not require that - and if you use XML handlers we get one big single line\n   So could make more robust by deleting at end of each repeat\n   \n   <li><a href=\"/wiki/Victoria_Tower\" title=\"Victoria Tower\">Victoria Tower</a></li>\n   <li><a href=\"/wiki/Big_Ben_Aden\" title=\"Big Ben Aden\">Big Ben Aden</a></li>\n   \n   -- U is for non-greedy\n   put \"(?miU)(<span style='color:).*(</span>)\" into someReg\n   put \"(?Uim)(<\\s*\" & tagName & someEnding & \")\" into openingReg"
+      },
+      "after": "632634ff38f6e2b2",
+      "date": 1536158358198
+    },
+    {
+      "type": "edit",
+      "id": "33a3387c0a3cdc87",
+      "item": {
+        "type": "markdown",
+        "id": "33a3387c0a3cdc87",
+        "text": "Requires each link on a new line\n   The regular expressions do not require that - and if you use XML handlers we get one big single line\n   So could make more robust by deleting at end of each repeat\n   \n   \n"
+      },
+      "date": 1536158403959
+    },
+    {
+      "type": "add",
+      "id": "7e242eb342f06978",
+      "item": {
+        "type": "markdown",
+        "id": "7e242eb342f06978",
+        "text": "<li><a href=\"/wiki/Victoria_Tower\" title=\"Victoria Tower\">Victoria Tower</a></li>\n   <li><a href=\"/wiki/Big_Ben_Aden\" title=\"Big Ben Aden\">Big Ben Aden</a></li>\n"
+      },
+      "after": "33a3387c0a3cdc87",
+      "date": 1536158407392
+    },
+    {
+      "type": "add",
+      "id": "f03212f3db5bc0bb",
+      "item": {
+        "type": "factory",
+        "id": "f03212f3db5bc0bb",
+        "text": "-- U is for non-greedy\n   put \"(?miU)(<span style='color:).*(</span>)\" into someReg\n   put \"(?Uim)(<\\s*\" & tagName & someEnding & \")\" into openingReg"
+      },
+      "after": "7e242eb342f06978",
+      "date": 1536158413032
+    },
+    {
+      "type": "edit",
+      "id": "7e242eb342f06978",
+      "item": {
+        "type": "code",
+        "id": "7e242eb342f06978",
+        "text": "<li><a href=\"Tower\" title=\"Victoria Tower\">Victoria Tower</a></li>\n<li><a href=\"Aden\" title=\"Big Ben Aden\">Big Ben Aden</a></li>\n"
+      },
+      "date": 1536158469832
+    },
+    {
+      "type": "edit",
+      "id": "f03212f3db5bc0bb",
+      "item": {
+        "type": "code",
+        "id": "f03212f3db5bc0bb",
+        "text": "-- U is for non-greedy\nput \"(?miU)(<span style='color:).*(</span>)\" into someReg\nput \"(?Uim)(<\\s*\" & tagName & someEnding & \")\" into openingReg"
+      },
+      "date": 1536158496792
+    },
+    {
+      "type": "edit",
+      "id": "f03212f3db5bc0bb",
+      "item": {
+        "type": "code",
+        "id": "f03212f3db5bc0bb",
+        "text": "-- U is for non-greedy\nget \"(?miU)(<span style='color:).*(</span>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\""
+      },
+      "date": 1536158514497
+    },
+    {
+      "type": "edit",
+      "id": "4af27721a6c5eeb8",
+      "item": {
+        "type": "markdown",
+        "id": "4af27721a6c5eeb8",
+        "text": "# mediawiki_SetTemplateOffsets\n"
+      },
+      "date": 1536158563940
+    },
+    {
+      "type": "add",
+      "id": "239b94474eae1f68",
+      "item": {
+        "type": "markdown",
+        "id": "239b94474eae1f68",
+        "text": "# Other"
+      },
+      "after": "4af27721a6c5eeb8",
+      "date": 1536158565556
+    },
+    {
+      "type": "add",
+      "id": "8748322fe49ab775",
+      "item": {
+        "type": "factory",
+        "id": "8748322fe49ab775",
+        "text": "put \"[^\\}]+\" into untilCurlyBracket\nget \"(\\{\\{\" & templateName & untilCurlyBracket & \"\\}\\})\"\nput \"(?m)\" before someReg -- multiline search"
+      },
+      "after": "4af27721a6c5eeb8",
+      "date": 1536158597990
+    },
+    {
+      "type": "edit",
+      "id": "8748322fe49ab775",
+      "item": {
+        "type": "code",
+        "id": "8748322fe49ab775",
+        "text": "put \"[^\\}]+\" into untilCurlyBracket\nget \"(\\{\\{\" & tName & untilCurlyBracket & \"\\}\\})\"\nput \"(?m)\" before someReg -- multiline search"
+      },
+      "date": 1536158611227
+    },
+    {
+      "type": "edit",
+      "id": "239b94474eae1f68",
+      "item": {
+        "type": "markdown",
+        "id": "239b94474eae1f68",
+        "text": "# fsad\n"
+      },
+      "date": 1536158641204
+    },
+    {
+      "type": "add",
+      "id": "c98372cfc25f7815",
+      "item": {
+        "type": "markdown",
+        "id": "c98372cfc25f7815",
+        "text": "   put \"(?mi)^\\s*(\" & onWord & \" +\" & handlerName & \")\\W\" after regExp\n\n"
+      },
+      "after": "239b94474eae1f68",
+      "date": 1536158644077
+    },
+    {
+      "type": "add",
+      "id": "c802c239bf10e70a",
+      "item": {
+        "type": "markdown",
+        "id": "c802c239bf10e70a",
+        "text": "# Other"
+      },
+      "after": "c98372cfc25f7815",
+      "date": 1536158647218
+    },
+    {
+      "type": "edit",
+      "id": "239b94474eae1f68",
+      "item": {
+        "type": "markdown",
+        "id": "239b94474eae1f68",
+        "text": "# script_SetHandlerOffsets\n"
+      },
+      "date": 1536158652116
+    },
+    {
+      "type": "edit",
+      "id": "c98372cfc25f7815",
+      "item": {
+        "type": "markdown",
+        "id": "c98372cfc25f7815",
+        "text": "get \"(?mi)^\\s*(\" & onWord & \" +\" & hName & \")\\W\"\n"
+      },
+      "date": 1536158665974
+    },
+    {
+      "type": "edit",
+      "id": "c802c239bf10e70a",
+      "item": {
+        "type": "markdown",
+        "id": "c802c239bf10e70a",
+        "text": "# asdf\n"
+      },
+      "date": 1536158700472
+    },
+    {
+      "type": "add",
+      "id": "b042e1687d656e64",
+      "item": {
+        "type": "markdown",
+        "id": "b042e1687d656e64",
+        "text": "   put \"(?mi)^(private +\" & onWord & \" +\" & handlerName & \")\\W\" into regExp\n\n"
+      },
+      "after": "c802c239bf10e70a",
+      "date": 1536158703607
+    },
+    {
+      "type": "add",
+      "id": "3aa8ee90d19289a6",
+      "item": {
+        "type": "markdown",
+        "id": "3aa8ee90d19289a6",
+        "text": "# Other"
+      },
+      "after": "b042e1687d656e64",
+      "date": 1536158706455
+    },
+    {
+      "type": "edit",
+      "id": "c802c239bf10e70a",
+      "item": {
+        "type": "markdown",
+        "id": "c802c239bf10e70a",
+        "text": "# script_SetPrivateHandlerOffsets\n"
+      },
+      "date": 1536158711727
+    },
+    {
+      "type": "edit",
+      "id": "b042e1687d656e64",
+      "item": {
+        "type": "markdown",
+        "id": "b042e1687d656e64",
+        "text": "get \"(?mi)^(private +\" & oWord & \" +\" & hName & \")\\W\"\n\n"
+      },
+      "date": 1536158734855
+    },
+    {
+      "type": "edit",
+      "id": "b042e1687d656e64",
+      "item": {
+        "type": "code",
+        "id": "b042e1687d656e64",
+        "text": "get \"(?mi)^(private +\" & oWrd & \" +\" & hName & \")\\W\"\n\n"
+      },
+      "date": 1536158763761
+    },
+    {
+      "type": "edit",
+      "id": "c98372cfc25f7815",
+      "item": {
+        "type": "code",
+        "id": "c98372cfc25f7815",
+        "text": "get \"(?mi)^\\s*(\" & oWrd & \" +\" & hName & \")\\W\"\n"
+      },
+      "date": 1536158770728
+    },
+    {
+      "type": "edit",
+      "id": "b042e1687d656e64",
+      "item": {
+        "type": "code",
+        "id": "b042e1687d656e64",
+        "text": "get \"(?mi)^(private +\" & oWrd & \" +\" & hName & \")\\W\"\nget \"(?mi)^\\s*(\" & \"end\" & \" +\" & hName & \")\\W\"\n\n\n"
+      },
+      "date": 1536158811714
+    },
+    {
+      "type": "remove",
+      "id": "c98372cfc25f7815",
+      "date": 1536158815976
+    },
+    {
+      "type": "edit",
+      "id": "b042e1687d656e64",
+      "item": {
+        "type": "code",
+        "id": "b042e1687d656e64",
+        "text": "get \"(?mi)^\\s*(\" & oWrd & \" +\" & hName & \")\\W\"\nget \"(?mi)^(private +\" & oWrd & \" +\" & hName & \")\\W\"\nget \"(?mi)^\\s*(\" & \"end\" & \" +\" & hName & \")\\W\"\n"
+      },
+      "date": 1536158827790
+    },
+    {
+      "type": "edit",
+      "id": "239b94474eae1f68",
+      "item": {
+        "type": "markdown",
+        "id": "239b94474eae1f68",
+        "text": "# Script processing\n"
+      },
+      "date": 1536158838834
+    },
+    {
+      "type": "edit",
+      "id": "c802c239bf10e70a",
+      "item": {
+        "type": "markdown",
+        "id": "c802c239bf10e70a",
+        "text": "- script_SetPrivateHandlerOffsets\n- script_SetHandlerOffsets\n"
+      },
+      "date": 1536158853780
+    },
+    {
+      "type": "edit",
+      "id": "c802c239bf10e70a",
+      "item": {
+        "type": "markdown",
+        "id": "c802c239bf10e70a",
+        "text": "- script_SetPrivateHandlerOffsets\n- script_SetHandlerOffsets\n- script_MatchEnd\n"
+      },
+      "date": 1536158867060
+    },
+    {
+      "type": "edit",
+      "id": "239b94474eae1f68",
+      "item": {
+        "type": "markdown",
+        "id": "239b94474eae1f68",
+        "text": "# XML processing\n"
+      },
+      "date": 1536158893861
+    },
+    {
+      "type": "add",
+      "id": "e29c5cb4af56c394",
+      "item": {
+        "type": "markdown",
+        "id": "e29c5cb4af56c394",
+        "text": "# Script processing\n"
+      },
+      "after": "239b94474eae1f68",
+      "date": 1536158895325
+    },
+    {
+      "type": "add",
+      "id": "0c3c11cd8df3dbcb",
+      "item": {
+        "type": "markdown",
+        "id": "0c3c11cd8df3dbcb",
+        "text": "xml_TagOffsets"
+      },
+      "after": "239b94474eae1f68",
+      "date": 1536158901056
+    },
+    {
+      "type": "edit",
+      "id": "0c3c11cd8df3dbcb",
+      "item": {
+        "type": "markdown",
+        "id": "0c3c11cd8df3dbcb",
+        "text": "- xml_TagOffsets"
+      },
+      "date": 1536158904756
+    },
+    {
+      "type": "edit",
+      "id": "0c3c11cd8df3dbcb",
+      "item": {
+        "type": "markdown",
+        "id": "0c3c11cd8df3dbcb",
+        "text": "- xml_TagOffsets\n"
+      },
+      "date": 1536158915325
+    },
+    {
+      "type": "add",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "factory",
+        "id": "6886900a9bb3f644",
+        "text": " put \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\" into someEnding\n   put \"(?Uim)(<\\s*\" & tagName & someEnding & \")\" into openingReg\n  "
+      },
+      "after": "0c3c11cd8df3dbcb",
+      "date": 1536158917071
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n  "
+      },
+      "date": 1536158936775
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\""
+      },
+      "date": 1536158970928
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n--openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\""
+      },
+      "date": 1536159000288
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\""
+      },
+      "date": 1536159004642
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\""
+      },
+      "date": 1536159039681
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\""
+      },
+      "date": 1536159125516
+    },
+    {
+      "type": "edit",
+      "id": "e29c5cb4af56c394",
+      "item": {
+        "type": "markdown",
+        "id": "e29c5cb4af56c394",
+        "text": "# HTML Form\n"
+      },
+      "date": 1536159197672
+    },
+    {
+      "type": "add",
+      "id": "51eb4527ab319f3b",
+      "item": {
+        "type": "markdown",
+        "id": "51eb4527ab319f3b",
+        "text": "    put \"(<\\s*\" & tagName & \"\\s[^>]*>)\" into someReg\n\n"
+      },
+      "after": "e29c5cb4af56c394",
+      "date": 1536159199385
+    },
+    {
+      "type": "add",
+      "id": "d9d48e4892ef1733",
+      "item": {
+        "type": "markdown",
+        "id": "d9d48e4892ef1733",
+        "text": "# Script processing\n"
+      },
+      "after": "51eb4527ab319f3b",
+      "date": 1536159202182
+    },
+    {
+      "type": "edit",
+      "id": "51eb4527ab319f3b",
+      "item": {
+        "type": "factory",
+        "id": "51eb4527ab319f3b",
+        "text": "get \"(<\\s*\" & tagName & \"\\s[^>]*>)\"\n\n"
+      },
+      "date": 1536159210458
+    },
+    {
+      "type": "edit",
+      "id": "3aa8ee90d19289a6",
+      "item": {
+        "type": "markdown",
+        "id": "3aa8ee90d19289a6",
+        "text": "# fsda\n"
+      },
+      "date": 1536159253217
+    },
+    {
+      "type": "add",
+      "id": "3b07bdbda01faace",
+      "item": {
+        "type": "markdown",
+        "id": "3b07bdbda01faace",
+        "text": "private command _SetImageTagOffsets wikiText, @tagStart, @tagEnd\n   put \"(\\[\\[Image:.+\\]\\])\" into someReg -- let's be greedy\n   put matchchunk (wikiText, someReg, tagStart, tagEnd) into someBoolean\n   return someBoolean\nend _SetImageTagOffsets\n\nprivate command _SetFileTagOffsets wikiText, @tagStart, @tagEnd\n   put \"(\\[\\[File:.+\\]\\])\" into someReg -- let's be greedy\n   put matchchunk (wikiText, someReg, tagStart, tagEnd) into someBoolean\n   return someBoolean\nend _SetFileTagOffsets\n\n"
+      },
+      "after": "3aa8ee90d19289a6",
+      "date": 1536159255012
+    },
+    {
+      "type": "add",
+      "id": "668f77b0cec42611",
+      "item": {
+        "type": "factory",
+        "id": "668f77b0cec42611",
+        "text": "# Other"
+      },
+      "after": "3b07bdbda01faace",
+      "date": 1536159261060
+    },
+    {
+      "type": "edit",
+      "id": "3aa8ee90d19289a6",
+      "item": {
+        "type": "markdown",
+        "id": "3aa8ee90d19289a6",
+        "text": "# Wiki\n"
+      },
+      "date": 1536159292339
+    },
+    {
+      "type": "edit",
+      "id": "3b07bdbda01faace",
+      "item": {
+        "type": "code",
+        "id": "3b07bdbda01faace",
+        "text": "private command _SetImageTagOffsets\n   put \"(\\[\\[Image:.+\\]\\])\" into someReg\n   put matchchunk (wikiText, someReg, tagStart, tagEnd) into someBoolean\n   return someBoolean\nend _SetImageTagOffsets\n\nprivate command _SetFileTagOffsets wikiText, @tagStart, @tagEnd\n   put \"(\\[\\[File:.+\\]\\])\" into someReg -- let's be greedy\n   put matchchunk (wikiText, someReg, tagStart, tagEnd) into someBoolean\n   return someBoolean\nend _SetFileTagOffsets\n\n"
+      },
+      "date": 1536159316788
+    },
+    {
+      "type": "edit",
+      "id": "3b07bdbda01faace",
+      "item": {
+        "type": "code",
+        "id": "3b07bdbda01faace",
+        "text": "private command _SetImageTagOffsets\n   put \"(\\[\\[Image:.+\\]\\])\" into someReg\n   put matchchunk ...\n   return someBoolean\nend _SetImageTagOffsets\n\nprivate command _SetFileTagOffsets wikiText, @tagStart, @tagEnd\n   put \"(\\[\\[File:.+\\]\\])\" into someReg -- let's be greedy\n   put matchchunk (wikiText, someReg, tagStart, tagEnd) into someBoolean\n   return someBoolean\nend _SetFileTagOffsets\n\n"
+      },
+      "date": 1536159330548
+    },
+    {
+      "type": "edit",
+      "id": "3b07bdbda01faace",
+      "item": {
+        "type": "code",
+        "id": "3b07bdbda01faace",
+        "text": "private command _SetImageTagOffsets\n   put \"(\\[\\[Image:.+\\]\\])\" into someReg\n   put matchchunk ...\n   return someBoolean\nend _SetImageTagOffsets\n\nprivate command _SetFileTagOffsets\n   put \"(\\[\\[File:.+\\]\\])\" into someReg\n   put matchchunk (...) into someBoolean\n   return someBoolean\nend _SetFileTagOffsets\n\n"
+      },
+      "date": 1536159360669
+    },
+    {
+      "type": "edit",
+      "id": "3b07bdbda01faace",
+      "item": {
+        "type": "code",
+        "id": "3b07bdbda01faace",
+        "text": "private command _SetImageTagOffsets\n   put \"(\\[\\[Image:.+\\]\\])\" into someReg\n   put matchchunk (...) into someBoolean\n   return someBoolean\nend _SetImageTagOffsets\n\nprivate command _SetFileTagOffsets\n   put \"(\\[\\[File:.+\\]\\])\" into someReg\n   put matchchunk (...) into someBoolean\n   return someBoolean\nend _SetFileTagOffsets\n\n"
+      },
+      "date": 1536159370478
+    },
+    {
+      "type": "edit",
+      "id": "33a3387c0a3cdc87",
+      "item": {
+        "type": "markdown",
+        "id": "33a3387c0a3cdc87",
+        "text": "Requires each link on a new line\n   The regular expressions do not require that - and if you use XML handlers we get one big single line\n   So could make more robust by deleting at end of each repeat\n"
+      },
+      "date": 1536159437105
+    },
+    {
+      "type": "add",
+      "id": "fd76ee1e38ae6e52",
+      "item": {
+        "type": "factory",
+        "id": "fd76ee1e38ae6e52",
+        "text": "   put \"a\" into tagName\n   --\n   put \"([^>]*)\" into notClosingBracket\n   put \"([^<]*)\" into notOpeningBracket\n   put \"([^\" & quote & \"'\" & \"]*)\" into notQuote\n   put \"(?Uim)\" into ungreedyMultiReg\n   put \"['\" & quote & \"]\" into anyQuote\n   put \"\\s+\" into someSpace\n   put \"<\\s*/\\s*\" & tagName & \"\\s*>\" into closingTagReg\n   \n   \n"
+      },
+      "after": "33a3387c0a3cdc87",
+      "date": 1536159439216
+    },
+    {
+      "type": "edit",
+      "id": "fd76ee1e38ae6e52",
+      "item": {
+        "type": "code",
+        "id": "fd76ee1e38ae6e52",
+        "text": "put \"a\" into tagName\n--\nput \"([^>]*)\" into notClosingBracket\nput \"([^<]*)\" into notOpeningBracket\nput \"([^\" & quote & \"'\" & \"]*)\" into notQuote\nput \"(?Uim)\" into ungreedyMultiReg\nput \"['\" & quote & \"]\" into anyQuote\nput \"\\s+\" into someSpace\nput \"<\\s*/\\s*\" & tagName & \"\\s*>\" into closingTagReg\n   \n   \n"
+      },
+      "date": 1536159471552
+    },
+    {
+      "type": "edit",
+      "id": "fd76ee1e38ae6e52",
+      "item": {
+        "type": "code",
+        "id": "fd76ee1e38ae6e52",
+        "text": "put \"a\" into tagName\n--\nput \"([^>]*)\" into notClosingBracket\nput \"([^<]*)\" into notOpeningBracket\nput \"([^\" & quote & \"'\" & \"]*)\" into notQuote\nput \"(?Uim)\" into ungreedyMultiReg\nput \"['\" & quote & \"]\" into anyQuote\nput \"\\s+\" into someSpace\nput \"<\\s*/\\s*\" & tagName & \"\\s*>\" into closingTagReg"
+      },
+      "date": 1536159480958
+    },
+    {
+      "type": "edit",
+      "id": "632634ff38f6e2b2",
+      "item": {
+        "type": "markdown",
+        "id": "632634ff38f6e2b2",
+        "text": "# fads\n\nput \"href[\\s]*=[\\s]*'([^\\n']*)'\" into someReg\n    replace \"'\" with quote in someReg -- for now to make regExp readable\n"
+      },
+      "date": 1536159521082
+    },
+    {
+      "type": "add",
+      "id": "7303989200662c6a",
+      "item": {
+        "type": "markdown",
+        "id": "7303989200662c6a",
+        "text": "# html_ExtractLinkNumArray\n"
+      },
+      "after": "632634ff38f6e2b2",
+      "date": 1536159524975
+    },
+    {
+      "type": "edit",
+      "id": "632634ff38f6e2b2",
+      "item": {
+        "type": "markdown",
+        "id": "632634ff38f6e2b2",
+        "text": "# html_ExtractAllLinks\n\n\n"
+      },
+      "date": 1536159530618
+    },
+    {
+      "type": "add",
+      "id": "7b7856f0b2dbf833",
+      "item": {
+        "type": "factory",
+        "id": "7b7856f0b2dbf833",
+        "text": "put \"href[\\s]*=[\\s]*'([^\\n']*)'\" into someReg\n    replace \"'\" with quote in someReg -- for now to make regExp readable\n"
+      },
+      "after": "632634ff38f6e2b2",
+      "date": 1536159532390
+    },
+    {
+      "type": "edit",
+      "id": "7b7856f0b2dbf833",
+      "item": {
+        "type": "code",
+        "id": "7b7856f0b2dbf833",
+        "text": "get \"href[\\s]*=[\\s]*'([^\\n']*)'\"\nreplace \"'\" with quote in it"
+      },
+      "date": 1536159551456
+    },
+    {
+      "type": "edit",
+      "id": "632634ff38f6e2b2",
+      "item": {
+        "type": "markdown",
+        "id": "632634ff38f6e2b2",
+        "text": "# html_ExtractAllLinks\n"
+      },
+      "date": 1536159601907
+    },
+    {
+      "type": "add",
+      "id": "b2861870a6f78ebb",
+      "item": {
+        "type": "markdown",
+        "id": "b2861870a6f78ebb",
+        "text": "# safd\n"
+      },
+      "after": "632634ff38f6e2b2",
+      "date": 1536159605974
+    },
+    {
+      "type": "add",
+      "id": "918e6cd5121ce8eb",
+      "item": {
+        "type": "factory",
+        "id": "918e6cd5121ce8eb",
+        "text": "   put \"<font color=\" & quote & \"([^\\>]+)\" & quote & \">\"  into someReg\n\n"
+      },
+      "after": "b2861870a6f78ebb",
+      "date": 1536159608012
+    },
+    {
+      "type": "edit",
+      "id": "918e6cd5121ce8eb",
+      "item": {
+        "type": "bytebeat",
+        "id": "918e6cd5121ce8eb",
+        "text": "get \"<font color=\" & quote & \"([^\\>]+)\" & quote & \">\"\n"
+      },
+      "date": 1536159616091
+    },
+    {
+      "type": "edit",
+      "id": "918e6cd5121ce8eb",
+      "item": {
+        "type": "bytebeat",
+        "id": "918e6cd5121ce8eb",
+        "text": "get \"<font color=\" & quote & \"([^\\>]+)\" & quote & \">\""
+      },
+      "date": 1536159625122
+    },
+    {
+      "type": "edit",
+      "id": "b2861870a6f78ebb",
+      "item": {
+        "type": "markdown",
+        "id": "b2861870a6f78ebb",
+        "text": "# html_ConstructColouredText\n"
+      },
+      "date": 1536159629459
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "918e6cd5121ce8eb",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "51eb4527ab319f3b",
+        "d9d48e4892ef1733",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "ea81fc24c20f4947",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "632634ff38f6e2b2",
+      "date": 1536159636069
+    },
+    {
+      "type": "remove",
+      "id": "918e6cd5121ce8eb",
+      "date": 1536159643547
+    },
+    {
+      "type": "add",
+      "id": "996208324304a267",
+      "item": {
+        "type": "factory",
+        "id": "996208324304a267",
+        "text": "get \"<font color=\" & quote & \"([^\\>]+)\" & quote & \">\""
+      },
+      "after": "b2861870a6f78ebb",
+      "date": 1536159647935
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "get \"<font color=\" &quote& \"([^\\>]+)\" & quote & \">\""
+      },
+      "date": 1536159662444
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "get \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\""
+      },
+      "date": 1536159667284
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "-- dafs\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- dfsa\n get \"(?miU)(<font color=').*(</font>)\"\n"
+      },
+      "date": 1536159724480
+    },
+    {
+      "type": "edit",
+      "id": "b2861870a6f78ebb",
+      "item": {
+        "type": "markdown",
+        "id": "b2861870a6f78ebb",
+        "text": "# HTML\n"
+      },
+      "date": 1536159730269
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "-- html_ConstructColouredText\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- dfsa\n get \"(?miU)(<font color=').*(</font>)\"\n"
+      },
+      "date": 1536159734652
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "-- html_ConstructColouredText\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- html_RevToColourSpan\n get \"(?miU)(<font color=').*(</font>)\"\n"
+      },
+      "date": 1536159740893
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "-- html_ConstructColouredText\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- html_RevToColourSpan\nget \"(?miU)(<font color=').*(</font>)\"\n\n-- html_RevToBoldSpan\nget \"(?miU)(<b>).*(</b>)\"\n"
+      },
+      "date": 1536159779575
+    },
+    {
+      "type": "edit",
+      "id": "d9d48e4892ef1733",
+      "item": {
+        "type": "markdown",
+        "id": "d9d48e4892ef1733",
+        "text": "command html_ParamDeconstuct someTag, @someKey, @someValue\n    -- replace lineFeed with empty in inputTag -- seems neessary\n    /*\n    -- from http://regexlib.com/REDetails.aspx?regexp_id=1195\n    \n    Pattern:  \\s(type|name|value)=(?:(\\w+)|(?:\"(.*?)\")|(?:\\'(.*)\\'))\n    Author: \tCarey Bishop\n    Matching Text: \t&lt;input type=&quot;text&quot; value='somevalue' name=fred&gt;\n    Non-Matching Text:\tAny attributes that aren't &quot;type&quot;, &quot;name&quot;, or &quot;value&quot;\n    \n    Description\n    Returns the three most important attributes from an HTML &lt;input&gt; tag: 'type', 'name' and 'value'. \n    Supports attribute values that are double- or single-quoted or unquoted. \n    Returns four references, the first being the name of the attribute, and the other three being the value,\n    of which only one will be populated based on the way the value was quoted.\n    */\n    \n    put \"\\s(type|name|value)=(?:(\\w+)|(?:\" & quote & \"(.*?)\" & quote & \")|(?:\\'(.*)\\'))\" into someReg\n\n"
+      },
+      "date": 1536159837620
+    },
+    {
+      "type": "add",
+      "id": "bc871c036beec09b",
+      "item": {
+        "type": "markdown",
+        "id": "bc871c036beec09b",
+        "text": "# Script processing\n"
+      },
+      "after": "d9d48e4892ef1733",
+      "date": 1536159839817
+    },
+    {
+      "type": "edit",
+      "id": "d9d48e4892ef1733",
+      "item": {
+        "type": "markdown",
+        "id": "d9d48e4892ef1733",
+        "text": "# html_ParamDeconstuct\n"
+      },
+      "date": 1536159855314
+    },
+    {
+      "type": "add",
+      "id": "9405fb67febeefde",
+      "item": {
+        "type": "markdown",
+        "id": "9405fb67febeefde",
+        "text": "Replace lineFeed with empty in inputTag -- seems necessary.\n"
+      },
+      "after": "d9d48e4892ef1733",
+      "date": 1536159888514
+    },
+    {
+      "type": "add",
+      "id": "07bcf7cf536fbfc0",
+      "item": {
+        "type": "markdown",
+        "id": "07bcf7cf536fbfc0",
+        "text": "From http://regexlib.com/REDetails.aspx?regexp_id=1195\n"
+      },
+      "after": "9405fb67febeefde",
+      "date": 1536159923917
+    },
+    {
+      "type": "add",
+      "id": "a96e402cd6d1496a",
+      "item": {
+        "type": "markdown",
+        "id": "a96e402cd6d1496a",
+        "text": "Pattern:  \\s(type|name|value)=(?:(\\w+)|(?:\"(.*?)\")|(?:\\'(.*)\\'))\n    Author: \tCarey Bishop\n    Matching Text: \t&lt;input type=&quot;text&quot; value='somevalue' name=fred&gt;\n    Non-Matching Text:\tAny attributes that aren't &quot;type&quot;, &quot;name&quot;, or &quot;value&quot;\n"
+      },
+      "after": "07bcf7cf536fbfc0",
+      "date": 1536159926406
+    },
+    {
+      "type": "add",
+      "id": "ac1a24dfae96d7cf",
+      "item": {
+        "type": "markdown",
+        "id": "ac1a24dfae96d7cf",
+        "text": "Returns the three most important attributes from an HTML &lt;input&gt; tag: 'type', 'name' and 'value'. \n    Supports attribute values that are double- or single-quoted or unquoted. \n    Returns four references, the first being the name of the attribute, and the other three being the value,\n    of which only one will be populated based on the way the value was quoted.\n    */\n    \n    put \"\\s(type|name|value)=(?:(\\w+)|(?:\" & quote & \"(.*?)\" & quote & \")|(?:\\'(.*)\\'))\" into someReg\n\n"
+      },
+      "after": "a96e402cd6d1496a",
+      "date": 1536159931460
+    },
+    {
+      "type": "edit",
+      "id": "a96e402cd6d1496a",
+      "item": {
+        "type": "code",
+        "id": "a96e402cd6d1496a",
+        "text": "Pattern:  \\s(type|name|value)=(?:(\\w+)|(?:\"(.*?)\")|(?:\\'(.*)\\'))\nAuthor: \tCarey Bishop\n    Matching Text: \t&lt;input type=&quot;text&quot; value='somevalue' name=fred&gt;\n    Non-Matching Text:\tAny attributes that aren't &quot;type&quot;, &quot;name&quot;, or &quot;value&quot;\n"
+      },
+      "date": 1536159938511
+    },
+    {
+      "type": "edit",
+      "id": "a96e402cd6d1496a",
+      "item": {
+        "type": "code",
+        "id": "a96e402cd6d1496a",
+        "text": "Pattern:  \\s(type|name|value)=(?:(\\w+)|(?:\"(.*?)\")|(?:\\'(.*)\\'))\nAuthor: \tCarey Bishop\nMatching Text: \t&lt;input type=&quot;text&quot; value='somevalue' name=fred&gt;\nNon-Matching Text:\tAny attributes that aren't &quot;type&quot;, &quot;name&quot;, or &quot;value&quot;\n"
+      },
+      "date": 1536159949972
+    },
+    {
+      "type": "remove",
+      "id": "07bcf7cf536fbfc0",
+      "date": 1536159966849
+    },
+    {
+      "type": "edit",
+      "id": "9405fb67febeefde",
+      "item": {
+        "type": "markdown",
+        "id": "9405fb67febeefde",
+        "text": "Replace lineFeed with empty in inputTag -- seems necessary. From [http://regexlib.com/REDetails.aspx?regexp_id=1195 regexlib.com]\n"
+      },
+      "date": 1536159979121
+    },
+    {
+      "type": "edit",
+      "id": "9405fb67febeefde",
+      "item": {
+        "type": "markdown",
+        "id": "9405fb67febeefde",
+        "text": "Replace lineFeed with empty in inputTag -- seems necessary - [http://regexlib.com/REDetails.aspx?regexp_id=1195 regexlib.com]\n"
+      },
+      "date": 1536159984787
+    },
+    {
+      "type": "edit",
+      "id": "ac1a24dfae96d7cf",
+      "item": {
+        "type": "markdown",
+        "id": "ac1a24dfae96d7cf",
+        "text": "Returns the three most important attributes from an HTML &lt;input&gt; tag: 'type', 'name' and 'value'. \n    Supports attribute values that are double- or single-quoted or unquoted. \n"
+      },
+      "date": 1536159992058
+    },
+    {
+      "type": "add",
+      "id": "19dcf1d86700621a",
+      "item": {
+        "type": "markdown",
+        "id": "19dcf1d86700621a",
+        "text": "    Returns four references, the first being the name of the attribute, and the other three being the value,\n    of which only one will be populated based on the way the value was quoted.\n"
+      },
+      "after": "ac1a24dfae96d7cf",
+      "date": 1536159997539
+    },
+    {
+      "type": "add",
+      "id": "247eab0b088e6a80",
+      "item": {
+        "type": "factory",
+        "id": "247eab0b088e6a80",
+        "text": "get \"\\s(type|name|value)=(?:(\\w+)|(?:\" & quote & \"(.*?)\" & quote & \")|(?:\\'(.*)\\'))\"\n"
+      },
+      "after": "19dcf1d86700621a",
+      "date": 1536160008284
+    },
+    {
+      "type": "edit",
+      "id": "668f77b0cec42611",
+      "item": {
+        "type": "markdown",
+        "id": "668f77b0cec42611",
+        "text": "# afsd\n"
+      },
+      "date": 1536160081382
+    },
+    {
+      "type": "add",
+      "id": "9e6fd4f4bbd8b09c",
+      "item": {
+        "type": "markdown",
+        "id": "9e6fd4f4bbd8b09c",
+        "text": "command fedwikipedia_CleanInternalLinks @wikiSectionLine\n   -- strips out image files as well (carefull)\n   -- some starting text [[Machtergreifung|came to power]] something [[Real Link|well a second one]] at end\n   -- Berlin was devastated by [[Bombing of Berlin in World War II|bombing raids]], fires and street battles during \n   -- put script_GetCommentAboveMe() into wikiSectionLine\n   \n   put \"\\[\\[([^\\]]+)\\|([^\\]]+)\\]\\]\" into someReg\n   put \"(?m)\" before someReg -- multiline search\n\n"
+      },
+      "after": "668f77b0cec42611",
+      "date": 1536160082774
+    },
+    {
+      "type": "add",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "markdown",
+        "id": "dbe623931ded3133",
+        "text": "# Other"
+      },
+      "after": "9e6fd4f4bbd8b09c",
+      "date": 1536160085733
+    },
+    {
+      "type": "edit",
+      "id": "9e6fd4f4bbd8b09c",
+      "item": {
+        "type": "markdown",
+        "id": "9e6fd4f4bbd8b09c",
+        "text": "   -- strips out image files as well (carefull)\n   -- some starting text [[Machtergreifung|came to power]] something [[Real Link|well a second one]] at end\n   -- Berlin was devastated by [[Bombing of Berlin in World War II|bombing raids]], fires and street battles during \n\n"
+      },
+      "date": 1536160103759
+    },
+    {
+      "type": "add",
+      "id": "2df24ab780e83c18",
+      "item": {
+        "type": "markdown",
+        "id": "2df24ab780e83c18",
+        "text": "get \"\\[\\[([^\\]]+)\\|([^\\]]+)\\]\\]\" into someReg\nput \"(?m)\" before it\n\n"
+      },
+      "after": "9e6fd4f4bbd8b09c",
+      "date": 1536160123085
+    },
+    {
+      "type": "edit",
+      "id": "668f77b0cec42611",
+      "item": {
+        "type": "markdown",
+        "id": "668f77b0cec42611",
+        "text": "# fedwikipedia_CleanInternalLinks"
+      },
+      "date": 1536160140566
+    },
+    {
+      "type": "edit",
+      "id": "9e6fd4f4bbd8b09c",
+      "item": {
+        "type": "factory",
+        "id": "9e6fd4f4bbd8b09c",
+        "text": "-- strips out image files as well (carefull)\n-- some starting text [[Machtergreifung|came to power]] something [[Real Link|well a second one]] at end\n-- Berlin was devastated by [[Bombing of Berlin in World War II|bombing raids]], fires and street battles during \n\n"
+      },
+      "date": 1536160165081
+    },
+    {
+      "type": "edit",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "markdown",
+        "id": "dbe623931ded3133",
+        "text": "  put \"[^\\}]+\" into untilCurlyBracket\n   put \"\\{\\{See also\\|(\" & untilCurlyBracket & \")\\}\\}\" into someReg\n   put \"(?m)\" before someReg -- multiline search\n\n"
+      },
+      "date": 1536160196371
+    },
+    {
+      "type": "add",
+      "id": "288121635757d15b",
+      "item": {
+        "type": "markdown",
+        "id": "288121635757d15b",
+        "text": "# Other"
+      },
+      "after": "dbe623931ded3133",
+      "date": 1536160197711
+    },
+    {
+      "type": "edit",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "factory",
+        "id": "dbe623931ded3133",
+        "text": "put \"[^\\}]+\" into untilCurlyBracket\nput \"\\{\\{See also\\|(\" & untilCurlyBracket & \")\\}\\}\" into someReg\nput \"(?m)\" before someReg -- multiline search\n\n"
+      },
+      "date": 1536160205923
+    },
+    {
+      "type": "edit",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "code",
+        "id": "dbe623931ded3133",
+        "text": "put \"[^\\}]+\" into untilCurly\nput \"\\{\\{See also\\|(\" & untilCurly & \")\\}\\}\" into someReg\nput \"(?m)\" before someReg -- multiline search\n\n"
+      },
+      "date": 1536160223377
+    },
+    {
+      "type": "edit",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "code",
+        "id": "dbe623931ded3133",
+        "text": "put \"[^\\}]+\" into untilCurly\nget \"\\{\\{See also\\|(\" & untilCurly & \")\\}\\}\"\nput \"(?m)\" before it\n"
+      },
+      "date": 1536160239186
+    },
+    {
+      "type": "edit",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "code",
+        "id": "dbe623931ded3133",
+        "text": "-- fedwikipedia_CleanSeeAlso\nput \"[^\\}]+\" into untilCurly\nget \"\\{\\{See also\\|(\" & untilCurly & \")\\}\\}\"\nput \"(?m)\" before it\n"
+      },
+      "date": 1536160250131
+    },
+    {
+      "type": "edit",
+      "id": "dbe623931ded3133",
+      "item": {
+        "type": "code",
+        "id": "dbe623931ded3133",
+        "text": "-- fedwikipedia_CleanSeeAlso\n\nput \"[^\\}]+\" into untilCurly\nget \"\\{\\{See also\\|(\" & untilCurly & \")\\}\\}\"\nput \"(?m)\" before it\n"
+      },
+      "date": 1536160255850
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "86d7b2f332587800"
+      },
+      "id": "86d7b2f332587800",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536160287928
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "51eb4527ab319f3b",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "247eab0b088e6a80",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "9e6fd4f4bbd8b09c",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "86d7b2f332587800",
+      "date": 1536160292474
+    },
+    {
+      "type": "edit",
+      "id": "86d7b2f332587800",
+      "item": {
+        "type": "code",
+        "id": "86d7b2f332587800",
+        "text": "private command _StripReg @wikiText, someReg\n   local refStart, refEnd\n   repeat\n      get matchchunk (wikiText, someReg, refStart, refEnd)\n      if refStart is not a number then\n         exit repeat -- regExp bug???\n      end if\n      if it is true then\n         put char refStart to refEnd of wikiText into someTest\n         delete char refStart to refEnd of wikiText\n      else\n         exit repeat\n      end if\n   end repeat\nend _StripReg"
+      },
+      "date": 1536160297141
+    },
+    {
+      "type": "edit",
+      "id": "86d7b2f332587800",
+      "item": {
+        "type": "code",
+        "id": "86d7b2f332587800",
+        "text": "private command _StripReg @wikiText, someReg\n local refStart, refEnd\n repeat\n  get matchchunk (wikiText, someReg, refStart, refEnd)\n  if refStart is not a number then\n   exit repeat -- regExp bug???\n  end if\n  if it is true then\n   put char refStart to refEnd of wikiText into someTest\n   delete char refStart to refEnd of wikiText\n  else\n   exit repeat\n  end if\n end repeat\nend _StripReg"
+      },
+      "date": 1536160343989
+    },
+    {
+      "type": "edit",
+      "id": "86d7b2f332587800",
+      "item": {
+        "type": "code",
+        "id": "86d7b2f332587800",
+        "text": "private command _StripReg @wikiText, sReg\n local rStart, rEnd\n repeat\n  get matchchunk (wText, sReg, rStart, rEnd)\n  if rStart is not a number then\n   exit repeat -- regExp bug???\n  end if\n  if it is true then\n   put char rStart to rEnd of wText into sTest\n   delete char rStart to rEnd of wText\n  else\n   exit repeat\n  end if\n end repeat\nend _StripReg"
+      },
+      "date": 1536160400672
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c4ef920ea5d9b4cb"
+      },
+      "id": "c4ef920ea5d9b4cb",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536160409487
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "51eb4527ab319f3b",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "247eab0b088e6a80",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "9e6fd4f4bbd8b09c",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "c4ef920ea5d9b4cb",
+      "date": 1536160411647
+    },
+    {
+      "type": "edit",
+      "id": "c4ef920ea5d9b4cb",
+      "item": {
+        "type": "markdown",
+        "id": "c4ef920ea5d9b4cb",
+        "text": "# General handlers"
+      },
+      "date": 1536160426568
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\"\n\n-- fdsa\n<primaryAddress>[\\s\\S]*?<\\/primaryAddress>"
+      },
+      "date": 1536160602588
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\"\n\n-- everything between two XML tags\n<primaryAddress>[\\s\\S]*?<\\/primaryAddress>"
+      },
+      "date": 1536160629206
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n\n-- regular expression\n/\\v\"([^\"]|\\n)*\""
+      },
+      "date": 1536160686809
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n\n-- regular expression for any quoted text\nput kwote (\"([^\"]|\\n)*\") into sReg"
+      },
+      "date": 1536161007803
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "82805bc569c198e7",
+        "text": "- https://www.regextranslator.com/\n- http://rick.measham.id.au/paste/explain.pl"
+      },
+      "after": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "id": "82805bc569c198e7",
+      "date": 1536161066992
+    },
+    {
+      "type": "edit",
+      "id": "01e8af240ecb473f",
+      "item": {
+        "type": "markdown",
+        "id": "01e8af240ecb473f",
+        "text": "- https://www.regextranslator.com/\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161093154
+    },
+    {
+      "type": "edit",
+      "id": "01e8af240ecb473f",
+      "item": {
+        "type": "markdown",
+        "id": "01e8af240ecb473f",
+        "text": "- https://www.regextranslator.com/\n-  Tester - [https://www.regextester.com/96749 regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161130379
+    },
+    {
+      "type": "edit",
+      "id": "01e8af240ecb473f",
+      "item": {
+        "type": "markdown",
+        "id": "01e8af240ecb473f",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n-  Tester - [https://www.regextester.com/96749 regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161149476
+    },
+    {
+      "type": "edit",
+      "id": "01e8af240ecb473f",
+      "item": {
+        "type": "markdown",
+        "id": "01e8af240ecb473f",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions at - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual at - [http://www.pcre.org/man.txt pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161241130
+    },
+    {
+      "type": "edit",
+      "id": "01e8af240ecb473f",
+      "item": {
+        "type": "markdown",
+        "id": "01e8af240ecb473f",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions at - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual - [http://www.pcre.org/man.txt pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161256340
+    },
+    {
+      "type": "edit",
+      "id": "01e8af240ecb473f",
+      "item": {
+        "type": "markdown",
+        "id": "01e8af240ecb473f",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual - [http://www.pcre.org/man.txt pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161261699
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "27e9932111e6d5ce",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual - [http://www.pcre.org/man.txt pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n",
+        "alias": "82805bc569c198e7"
+      },
+      "after": "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+      "id": "27e9932111e6d5ce",
+      "date": 1536161343465
+    },
+    {
+      "type": "remove",
+      "id": "82805bc569c198e7",
+      "date": 1536161346285
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2f7dc57fb7dd4c5d"
+      },
+      "id": "2f7dc57fb7dd4c5d",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536161351805
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "51eb4527ab319f3b",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "247eab0b088e6a80",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "9e6fd4f4bbd8b09c",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "2f7dc57fb7dd4c5d",
+      "date": 1536161357426
+    },
+    {
+      "type": "remove",
+      "id": "9e6fd4f4bbd8b09c",
+      "date": 1536161361029
+    },
+    {
+      "type": "edit",
+      "id": "2f7dc57fb7dd4c5d",
+      "item": {
+        "type": "code",
+        "id": "2f7dc57fb7dd4c5d",
+        "text": "-- strips out image files as well (carefull)\n-- some starting text [[Machtergreifung|came to power]] something [[Real Link|well a second one]] at end\n-- Berlin was devastated by [[Bombing of Berlin in World War II|bombing raids]], fires and street battles during \n\n"
+      },
+      "date": 1536161364298
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "833096ec437a195e"
+      },
+      "id": "833096ec437a195e",
+      "type": "add",
+      "after": "31d6ae95b0bdaff3",
+      "date": 1536161367333
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "51eb4527ab319f3b",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "833096ec437a195e",
+        "247eab0b088e6a80",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "833096ec437a195e",
+      "date": 1536161374665
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "3458bbbe74963a12"
+      },
+      "after": "e29c5cb4af56c394",
+      "id": "3458bbbe74963a12",
+      "date": 1536161390328
+    },
+    {
+      "type": "remove",
+      "id": "51eb4527ab319f3b",
+      "date": 1536161393678
+    },
+    {
+      "type": "edit",
+      "id": "3458bbbe74963a12",
+      "item": {
+        "type": "code",
+        "id": "3458bbbe74963a12",
+        "text": "get \"(<\\s*\" & tagName & \"\\s[^>]*>)\""
+      },
+      "date": 1536161398207
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "2e700d39b4d581a4"
+      },
+      "after": "19dcf1d86700621a",
+      "id": "2e700d39b4d581a4",
+      "date": 1536161405622
+    },
+    {
+      "type": "remove",
+      "id": "833096ec437a195e",
+      "date": 1536161408758
+    },
+    {
+      "type": "remove",
+      "id": "247eab0b088e6a80",
+      "date": 1536161411912
+    },
+    {
+      "type": "edit",
+      "id": "2e700d39b4d581a4",
+      "item": {
+        "type": "code",
+        "id": "2e700d39b4d581a4",
+        "text": "get \"\\s(type|name|value)=(?:(\\w+)|(?:\" & quote & \"(.*?)\" & quote & \")|(?:\\'(.*)\\'))\"\n"
+      },
+      "date": 1536161414152
+    },
+    {
+      "type": "edit",
+      "id": "27e9932111e6d5ce",
+      "item": {
+        "type": "markdown",
+        "id": "27e9932111e6d5ce",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual - [http://www.pcre.org/man.txt pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n\n",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536161999163
+    },
+    {
+      "type": "add",
+      "id": "1cf4de0c88914d4a",
+      "item": {
+        "type": "markdown",
+        "id": "1cf4de0c88914d4a",
+        "text": "The following code snippets were extracted from handlers in various libraries. They need testing and organising for quality:"
+      },
+      "after": "27e9932111e6d5ce",
+      "date": 1536162054250
+    },
+    {
+      "type": "edit",
+      "id": "e29c5cb4af56c394",
+      "item": {
+        "type": "markdown",
+        "id": "e29c5cb4af56c394",
+        "text": "# Tags"
+      },
+      "date": 1536162111373
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "-- html_ConstructColouredText\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- html_RevToColourSpan\nget \"(?miU)(<font color=').*(</font>)\"\n\n-- html_RevToBoldSpan\nget \"(?miU)(<b>).*(</b>)\"\n\n-- \n^<a[^>]*(http://[^\"]*)[^>]*>([ 0-9a-zA-Z]+)</a>$\n"
+      },
+      "date": 1536162427814
+    },
+    {
+      "type": "add",
+      "id": "9f7a3e510c626661",
+      "item": {
+        "type": "markdown",
+        "id": "9f7a3e510c626661",
+        "text": "Find Link Tags [sdfa dsfa]"
+      },
+      "after": "b2861870a6f78ebb",
+      "date": 1536162444018
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "9f7a3e510c626661",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "3458bbbe74963a12",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "9f7a3e510c626661",
+      "date": 1536162446066
+    },
+    {
+      "type": "edit",
+      "id": "9f7a3e510c626661",
+      "item": {
+        "type": "markdown",
+        "id": "9f7a3e510c626661",
+        "text": "Find Link Tags - [http://regexlib.com/REDetails.aspx?regexp_id=1592 regexlib.com]"
+      },
+      "date": 1536162463786
+    },
+    {
+      "type": "edit",
+      "id": "996208324304a267",
+      "item": {
+        "type": "code",
+        "id": "996208324304a267",
+        "text": "-- html_ConstructColouredText\nget \"<font color=\" &quote& \"([^\\>]+)\" &quote& \">\"\n\n-- html_RevToColourSpan\nget \"(?miU)(<font color=').*(</font>)\"\n\n-- html_RevToBoldSpan\nget \"(?miU)(<b>).*(</b>)\""
+      },
+      "date": 1536162475402
+    },
+    {
+      "type": "edit",
+      "id": "9f7a3e510c626661",
+      "item": {
+        "type": "markdown",
+        "id": "9f7a3e510c626661",
+        "text": "Find Link Tags - [http://regexlib.com/REDetails.aspx?regexp_id=1592 regexlib.com]\n"
+      },
+      "date": 1536162478009
+    },
+    {
+      "type": "add",
+      "id": "615f1c3c9f0d6fe7",
+      "item": {
+        "type": "factory",
+        "id": "615f1c3c9f0d6fe7",
+        "text": "^<a[^>]*(http://[^\"]*)[^>]*>([ 0-9a-zA-Z]+)</a>$"
+      },
+      "after": "9f7a3e510c626661",
+      "date": 1536162480730
+    },
+    {
+      "type": "edit",
+      "id": "9f7a3e510c626661",
+      "item": {
+        "type": "markdown",
+        "id": "9f7a3e510c626661",
+        "text": "This pattern matches link tags in html and returns the contents of the href attribute and the text of the link.\nMatches\t\nFind Link Tags - [http://regexlib.com/REDetails.aspx?regexp_id=1592 regexlib.com]\n"
+      },
+      "date": 1536162512155
+    },
+    {
+      "type": "add",
+      "id": "0d69a09459125751",
+      "item": {
+        "type": "factory",
+        "id": "0d69a09459125751",
+        "text": "<a href=\"http://www.google.com\">Google</a>"
+      },
+      "after": "9f7a3e510c626661",
+      "date": 1536162514764
+    },
+    {
+      "type": "edit",
+      "id": "9f7a3e510c626661",
+      "item": {
+        "type": "markdown",
+        "id": "9f7a3e510c626661",
+        "text": "# Find HTML Link Tags\n\nThis pattern matches link tags in html and returns the contents of the href attribute and the text of the link - [http://regexlib.com/REDetails.aspx?regexp_id=1592 regexlib.com]\n"
+      },
+      "date": 1536162542651
+    },
+    {
+      "type": "edit",
+      "id": "0d69a09459125751",
+      "item": {
+        "type": "code",
+        "id": "0d69a09459125751",
+        "text": "-- Matches\n<a href=\"http://www.google.com\">Google</a>"
+      },
+      "date": 1536162550835
+    },
+    {
+      "type": "edit",
+      "id": "615f1c3c9f0d6fe7",
+      "item": {
+        "type": "code",
+        "id": "615f1c3c9f0d6fe7",
+        "text": "-- regExp\n\n^<a[^>]*(http://[^\"]*)[^>]*>([ 0-9a-zA-Z]+)</a>$"
+      },
+      "date": 1536162562259
+    },
+    {
+      "type": "edit",
+      "id": "0d69a09459125751",
+      "item": {
+        "type": "code",
+        "id": "0d69a09459125751",
+        "text": "-- Matches\n\n<a href=\"http://www.google.com\">Google</a>"
+      },
+      "date": 1536162564370
+    },
+    {
+      "type": "edit",
+      "id": "9f7a3e510c626661",
+      "item": {
+        "type": "markdown",
+        "id": "9f7a3e510c626661",
+        "text": "# Find HTML Link Tags\n\nThis pattern matches link tags in html and returns the contents of the href attribute and the text of the link - [http://regexlib.com/REDetails.aspx?regexp_id=1592 regexlib.com]\n\n\n"
+      },
+      "date": 1536162598742
+    },
+    {
+      "type": "add",
+      "id": "8dc2281f66209d7a",
+      "item": {
+        "type": "markdown",
+        "id": "8dc2281f66209d7a",
+        "text": "Mathes any HTML tag with any parameters and HTML Comments. Very useful to clean HTML of a text.\n"
+      },
+      "after": "9f7a3e510c626661",
+      "date": 1536162606053
+    },
+    {
+      "type": "add",
+      "id": "bf7750caf2203443",
+      "item": {
+        "type": "factory",
+        "id": "bf7750caf2203443",
+        "text": "<!*[^<>]*>"
+      },
+      "after": "8dc2281f66209d7a",
+      "date": 1536162610454
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "9f7a3e510c626661",
+        "bf7750caf2203443",
+        "0d69a09459125751",
+        "615f1c3c9f0d6fe7",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "3458bbbe74963a12",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "8dc2281f66209d7a",
+      "date": 1536162616890
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "bf7750caf2203443",
+        "9f7a3e510c626661",
+        "0d69a09459125751",
+        "615f1c3c9f0d6fe7",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "3458bbbe74963a12",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "bf7750caf2203443",
+      "date": 1536162619827
+    },
+    {
+      "type": "edit",
+      "id": "8dc2281f66209d7a",
+      "item": {
+        "type": "markdown",
+        "id": "8dc2281f66209d7a",
+        "text": "Matches any HTML tag with any parameters and HTML Comments. Very useful to clean HTML of a text.\n"
+      },
+      "date": 1536162634122
+    },
+    {
+      "type": "edit",
+      "id": "8dc2281f66209d7a",
+      "item": {
+        "type": "markdown",
+        "id": "8dc2281f66209d7a",
+        "text": "# HTML Tags and Comments\n"
+      },
+      "date": 1536162638733
+    },
+    {
+      "type": "add",
+      "id": "37b058eba7f0b56a",
+      "item": {
+        "type": "markdown",
+        "id": "37b058eba7f0b56a",
+        "text": "Matches any HTML tag with any parameters and HTML Comments. Very useful to clean HTML of a text.\n"
+      },
+      "after": "8dc2281f66209d7a",
+      "date": 1536162639827
+    },
+    {
+      "type": "edit",
+      "id": "37b058eba7f0b56a",
+      "item": {
+        "type": "markdown",
+        "id": "37b058eba7f0b56a",
+        "text": "Matches any HTML tag with any parameters and HTML Comments. Very useful to clean HTML of a text - [http://regexlib.com/REDetails.aspx?regexp_id=1898 regexlib.com]\n"
+      },
+      "date": 1536162659404
+    },
+    {
+      "type": "edit",
+      "id": "37b058eba7f0b56a",
+      "item": {
+        "type": "markdown",
+        "id": "37b058eba7f0b56a",
+        "text": "Matches any HTML tag with any parameters and HTML Comments - [http://regexlib.com/REDetails.aspx?regexp_id=1898 regexlib.com]\n"
+      },
+      "date": 1536162675757
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "37b058eba7f0b56a",
+        "bf7750caf2203443",
+        "9f7a3e510c626661",
+        "615f1c3c9f0d6fe7",
+        "0d69a09459125751",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "fd76ee1e38ae6e52",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "3458bbbe74963a12",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "615f1c3c9f0d6fe7",
+      "date": 1536162686729
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "fd76ee1e38ae6e52",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "37b058eba7f0b56a",
+        "bf7750caf2203443",
+        "9f7a3e510c626661",
+        "615f1c3c9f0d6fe7",
+        "0d69a09459125751",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "239b94474eae1f68",
+        "0c3c11cd8df3dbcb",
+        "6886900a9bb3f644",
+        "e29c5cb4af56c394",
+        "3458bbbe74963a12",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "fd76ee1e38ae6e52",
+      "date": 1536162712793
+    },
+    {
+      "type": "edit",
+      "id": "1cf4de0c88914d4a",
+      "item": {
+        "type": "markdown",
+        "id": "1cf4de0c88914d4a",
+        "text": "The following code snippets were extracted from handlers in various libraries. They need testing and organising for quality:\n"
+      },
+      "date": 1536162718274
+    },
+    {
+      "type": "add",
+      "id": "5da0fc7693caf755",
+      "item": {
+        "type": "markdown",
+        "id": "5da0fc7693caf755",
+        "text": "# Regex chunks"
+      },
+      "after": "1cf4de0c88914d4a",
+      "date": 1536162754462
+    },
+    {
+      "type": "edit",
+      "id": "fd76ee1e38ae6e52",
+      "item": {
+        "type": "code",
+        "id": "fd76ee1e38ae6e52",
+        "text": "put \"([^<]*)\" into notOpeningBracket\nput \"([^>]*)\" into notClosingBracket\nput \"([^\" & quote & \"'\" & \"]*)\" into notQuote\nput \"(?Uim)\" into ungreedyMultiReg\nput \"['\" & quote & \"]\" into anyQuote\nput \"\\s+\" into someSpace\nput \"<\\s*/\\s*\" & tagName & \"\\s*>\" into closingTagReg"
+      },
+      "date": 1536162771959
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "ef2c80416b8d3b45",
+        "text": "# XML processing\n",
+        "alias": "239b94474eae1f68"
+      },
+      "after": "fd76ee1e38ae6e52",
+      "id": "ef2c80416b8d3b45",
+      "date": 1536162795478
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "d770faaf165d3ca3",
+        "text": "- xml_TagOffsets\n",
+        "alias": "0c3c11cd8df3dbcb"
+      },
+      "after": "239b94474eae1f68",
+      "id": "d770faaf165d3ca3",
+      "date": 1536162799690
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "36b12251559f5b00",
+        "text": "get \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\"\n\n-- everything between two XML tags\n<primaryAddress>[\\s\\S]*?<\\/primaryAddress>",
+        "alias": "6886900a9bb3f644"
+      },
+      "after": "0c3c11cd8df3dbcb",
+      "id": "36b12251559f5b00",
+      "date": 1536162846864
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "fe49dd6ba6aa64c7",
+        "text": "get \"(<\\s*\" & tagName & \"\\s[^>]*>)\"",
+        "alias": "3458bbbe74963a12"
+      },
+      "after": "239b94474eae1f68",
+      "id": "fe49dd6ba6aa64c7",
+      "date": 1536162863739
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "2e6789ba75fa316d",
+        "text": "# Tags",
+        "alias": "e29c5cb4af56c394"
+      },
+      "after": "239b94474eae1f68",
+      "id": "2e6789ba75fa316d",
+      "date": 1536162867051
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "12a0027206a13312"
+      },
+      "after": "37b058eba7f0b56a",
+      "id": "12a0027206a13312",
+      "date": 1536162881314
+    },
+    {
+      "type": "remove",
+      "id": "bf7750caf2203443",
+      "date": 1536162884581
+    },
+    {
+      "type": "edit",
+      "id": "12a0027206a13312",
+      "item": {
+        "type": "code",
+        "id": "12a0027206a13312",
+        "text": "<!*[^<>]*>"
+      },
+      "date": 1536162886593
+    },
+    {
+      "type": "edit",
+      "id": "e29c5cb4af56c394",
+      "item": {
+        "type": "markdown",
+        "id": "e29c5cb4af56c394",
+        "text": "# XML Tags"
+      },
+      "date": 1536162903307
+    },
+    {
+      "type": "remove",
+      "id": "239b94474eae1f68",
+      "date": 1536162904779
+    },
+    {
+      "type": "remove",
+      "id": "0c3c11cd8df3dbcb",
+      "date": 1536162913254
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "-- xml_TagOffsets\n\nget \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\n\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\n\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\"\n\n-- everything between two XML tags\n\n<primaryAddress>[\\s\\S]*?<\\/primaryAddress>"
+      },
+      "date": 1536162930328
+    },
+    {
+      "type": "remove",
+      "id": "239b94474eae1f68",
+      "date": 1536162942871
+    },
+    {
+      "type": "remove",
+      "id": "0c3c11cd8df3dbcb",
+      "date": 1536162944656
+    },
+    {
+      "type": "remove",
+      "id": "6886900a9bb3f644",
+      "date": 1536162946734
+    },
+    {
+      "type": "remove",
+      "id": "3458bbbe74963a12",
+      "date": 1536162948950
+    },
+    {
+      "type": "remove",
+      "id": "e29c5cb4af56c394",
+      "date": 1536162950623
+    },
+    {
+      "type": "edit",
+      "id": "e29c5cb4af56c394",
+      "item": {
+        "type": "markdown",
+        "id": "e29c5cb4af56c394",
+        "text": "# XML Tags\n\nHere we look at processing simple xml / html tags:"
+      },
+      "date": 1536162984014
+    },
+    {
+      "type": "edit",
+      "id": "6886900a9bb3f644",
+      "item": {
+        "type": "code",
+        "id": "6886900a9bb3f644",
+        "text": "-- basic\n\nget \"(<\\s*\" & tagName & \"\\s[^>]*>)\"\n\n-- xml_TagOffsets\n\nget \"(\" & \">\" & \"|\" & \"\\s+.*>\" & \")\"\n\n-- openingReg\n\nget \"(?im)(<\\s*\" & tagName & \"\\s+[^>]*\\s*>)\"\nget \"(?Uim)(<\\s*\" & tagName & someEnding & \")\"\n\n-- closingReg\n\nget \"(?Uim)(<\\s*/\" & tagName & \"\\s*>)\"\n\n-- everything between two XML tags\n\n<primaryAddress>[\\s\\S]*?<\\/primaryAddress>"
+      },
+      "date": 1536163003080
+    },
+    {
+      "type": "edit",
+      "id": "e29c5cb4af56c394",
+      "item": {
+        "type": "markdown",
+        "id": "e29c5cb4af56c394",
+        "text": "# XML Tags\n\nHere we look at processing simple xml / html tags:\n"
+      },
+      "date": 1536163008520
+    },
+    {
+      "type": "add",
+      "id": "fbaaee240da75edb",
+      "item": {
+        "type": "markdown",
+        "id": "fbaaee240da75edb",
+        "text": "asdf"
+      },
+      "after": "e29c5cb4af56c394",
+      "date": 1536163009879
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "5da0fc7693caf755",
+        "fd76ee1e38ae6e52",
+        "2e6789ba75fa316d",
+        "fe49dd6ba6aa64c7",
+        "fbaaee240da75edb",
+        "36b12251559f5b00",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "37b058eba7f0b56a",
+        "12a0027206a13312",
+        "9f7a3e510c626661",
+        "615f1c3c9f0d6fe7",
+        "0d69a09459125751",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "fbaaee240da75edb",
+      "date": 1536163011966
+    },
+    {
+      "type": "edit",
+      "id": "fbaaee240da75edb",
+      "item": {
+        "type": "markdown",
+        "id": "fbaaee240da75edb",
+        "text": "asdf\n"
+      },
+      "date": 1536164165678
+    },
+    {
+      "type": "add",
+      "id": "c59b01d0012924c3",
+      "item": {
+        "type": "markdown",
+        "id": "c59b01d0012924c3",
+        "text": "- http://regexlib.com/REDetails.aspx?regexp_id=2762"
+      },
+      "after": "fbaaee240da75edb",
+      "date": 1536164169237
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "5da0fc7693caf755",
+        "fd76ee1e38ae6e52",
+        "2e6789ba75fa316d",
+        "fe49dd6ba6aa64c7",
+        "fbaaee240da75edb",
+        "36b12251559f5b00",
+        "c59b01d0012924c3",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "37b058eba7f0b56a",
+        "12a0027206a13312",
+        "9f7a3e510c626661",
+        "615f1c3c9f0d6fe7",
+        "0d69a09459125751",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "c59b01d0012924c3",
+      "date": 1536164171480
+    },
+    {
+      "type": "edit",
+      "id": "c59b01d0012924c3",
+      "item": {
+        "type": "markdown",
+        "id": "c59b01d0012924c3",
+        "text": "- http://regexlib.com/REDetails.aspx?regexp_id=2762\n- http://regexlib.com/REDetails.aspx?regexp_id=2301"
+      },
+      "date": 1536164227567
+    },
+    {
+      "type": "edit",
+      "id": "27e9932111e6d5ce",
+      "item": {
+        "type": "markdown",
+        "id": "27e9932111e6d5ce",
+        "text": "- Translator - [https://www.regextranslator.com/ regextranslator.com]\n- Test expressions - [http://www.regextester.com/pregsyntax.html regextester.com]\n- Cheat sheet - [https://www.rexegg.com/regex-quickstart.html rexegg.com]\n- PCRE manual - [http://www.pcre.org pcre.org] \n- Library - [http://www.regexlib.com/Search.aspx?k=xml%20tag regexlib.com]\n\n",
+        "alias": "82805bc569c198e7"
+      },
+      "date": 1536164280697
+    },
+    {
+      "type": "edit",
+      "id": "1cf4de0c88914d4a",
+      "item": {
+        "type": "markdown",
+        "id": "1cf4de0c88914d4a",
+        "text": "# Issues\n"
+      },
+      "date": 1536164450589
+    },
+    {
+      "type": "add",
+      "id": "d0e6c13a45d1c263",
+      "item": {
+        "type": "markdown",
+        "id": "d0e6c13a45d1c263",
+        "text": "I don't seem to be able to pipe regular expressions any more:\n"
+      },
+      "after": "1cf4de0c88914d4a",
+      "date": 1536164466045
+    },
+    {
+      "type": "add",
+      "id": "7b9d95e1dbadcab1",
+      "item": {
+        "type": "markdown",
+        "id": "7b9d95e1dbadcab1",
+        "text": "# Examples\n"
+      },
+      "after": "d0e6c13a45d1c263",
+      "date": 1536164473164
+    },
+    {
+      "type": "add",
+      "id": "e5e58907d58c6982",
+      "item": {
+        "type": "markdown",
+        "id": "e5e58907d58c6982",
+        "text": "The following code snippets were extracted from handlers in various libraries. They need testing and organising for quality:\n"
+      },
+      "after": "7b9d95e1dbadcab1",
+      "date": 1536164474099
+    },
+    {
+      "type": "edit",
+      "id": "d0e6c13a45d1c263",
+      "item": {
+        "type": "markdown",
+        "id": "d0e6c13a45d1c263",
+        "text": "I don't seem to be able to pipe regular expressions any more - [https://stackoverflow.com/questions/869809/combine-regexp  stackoverflow]\n"
+      },
+      "date": 1536164496077
+    },
+    {
+      "type": "add",
+      "id": "4c7f6def47d843b3",
+      "item": {
+        "type": "markdown",
+        "id": "4c7f6def47d843b3",
+        "text": "This may be related to Livecode bug where matchchunk returns empty instead of true or false and does nothing.\n"
+      },
+      "after": "d0e6c13a45d1c263",
+      "date": 1536164533118
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "<blockquote><b style='color:red'>Issue: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "after": "d0e6c13a45d1c263",
+      "id": "20084356ff8e69ce",
+      "date": 1536164583127
+    },
+    {
+      "type": "remove",
+      "id": "4c7f6def47d843b3",
+      "date": 1536164586285
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "text": "<blockquote><b style='color:red'>Issue: </b>\n\nThis may be related to Livecode bug where matchchunk returns empty instead of true or false and does nothing.\n<p>",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "date": 1536164590880
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "text": "<blockquote><b style='color:red'>Issue: </b>\n\nI don't seem to be able to pipe regular expressions any more - [https://stackoverflow.com/questions/869809/combine-regexp  stackoverflow]\n<p>",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "date": 1536164612808
+    },
+    {
+      "type": "edit",
+      "id": "d0e6c13a45d1c263",
+      "item": {
+        "type": "markdown",
+        "id": "d0e6c13a45d1c263",
+        "text": "This may be related to Livecode bug where matchchunk returns empty instead of true or false and does nothing."
+      },
+      "date": 1536164617367
+    },
+    {
+      "type": "move",
+      "order": [
+        "5c7eadcf-c8b7-4b23-b37e-b3780c24168e",
+        "27e9932111e6d5ce",
+        "1cf4de0c88914d4a",
+        "20084356ff8e69ce",
+        "d0e6c13a45d1c263",
+        "7b9d95e1dbadcab1",
+        "e5e58907d58c6982",
+        "5da0fc7693caf755",
+        "fd76ee1e38ae6e52",
+        "2e6789ba75fa316d",
+        "fe49dd6ba6aa64c7",
+        "fbaaee240da75edb",
+        "36b12251559f5b00",
+        "c59b01d0012924c3",
+        "654a5bfb83021113",
+        "e95c43cd24c76c09",
+        "b2861870a6f78ebb",
+        "996208324304a267",
+        "8dc2281f66209d7a",
+        "37b058eba7f0b56a",
+        "12a0027206a13312",
+        "9f7a3e510c626661",
+        "615f1c3c9f0d6fe7",
+        "0d69a09459125751",
+        "632634ff38f6e2b2",
+        "7b7856f0b2dbf833",
+        "7303989200662c6a",
+        "33a3387c0a3cdc87",
+        "7e242eb342f06978",
+        "f03212f3db5bc0bb",
+        "4af27721a6c5eeb8",
+        "8748322fe49ab775",
+        "d9d48e4892ef1733",
+        "9405fb67febeefde",
+        "a96e402cd6d1496a",
+        "ac1a24dfae96d7cf",
+        "19dcf1d86700621a",
+        "2e700d39b4d581a4",
+        "bc871c036beec09b",
+        "c802c239bf10e70a",
+        "b042e1687d656e64",
+        "3aa8ee90d19289a6",
+        "3b07bdbda01faace",
+        "668f77b0cec42611",
+        "2f7dc57fb7dd4c5d",
+        "2df24ab780e83c18",
+        "dbe623931ded3133",
+        "288121635757d15b",
+        "ea81fc24c20f4947",
+        "c4ef920ea5d9b4cb",
+        "86d7b2f332587800",
+        "c9e69bf8-20c1-40ec-8d4d-ae03f179be7e",
+        "31d6ae95b0bdaff3"
+      ],
+      "id": "d0e6c13a45d1c263",
+      "date": 1536164622602
+    },
+    {
+      "type": "remove",
+      "id": "d0e6c13a45d1c263",
+      "date": 1536164629503
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "text": "<blockquote><b style='color:red'>Issue: </b>\n\nI don't seem to be able to pipe regular expressions any more - [https://stackoverflow.com/questions/869809/combine-regexp  stackoverflow]\n<p>\nThis may be related to Livecode bug where matchchunk returns empty instead of true or false and does nothing.",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "date": 1536164638368
+    },
+    {
+      "type": "edit",
+      "id": "fbaaee240da75edb",
+      "item": {
+        "type": "markdown",
+        "id": "fbaaee240da75edb",
+        "text": "Some more...\n"
+      },
+      "date": 1536217358072
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n\n-- regular expression for any quoted text\nput kwote (\"([^\"]|\\n)*\") into sReg\n\n-- \n\"\\zs(.*|\\n*)\\ze\"\n"
+      },
+      "date": 1536217598407
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n\n-- regular expression for any quoted text\nput kwote (\"([^\"]|\\n)*\") into sReg\n\n-- \n\"([^\"]|\\n)*\""
+      },
+      "date": 1536217645546
+    },
+    {
+      "type": "edit",
+      "id": "e95c43cd24c76c09",
+      "item": {
+        "type": "code",
+        "id": "e95c43cd24c76c09",
+        "text": "get \"(\" & quote & \"[^\" & quote & \"]*\" & quote & \")\"\nget matchchunk (sText, it, sChar, eChar)\n\n-- regular expression for any quoted text\nput kwote (\"([^\"]|\\n)*\") into sReg\n\n-- double quoted strings on multiple lines\n\"([^\"]|\\n)*\""
+      },
+      "date": 1536217682578
+    }
+  ]
+}

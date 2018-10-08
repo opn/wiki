@@ -1,0 +1,1289 @@
+{
+  "title": "Fedwiki Theme Folder",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "efb742fccbf05e8b",
+      "text": "You can set the [[CSS]] (or indeed any file such as an image file) that you want to wiki to serve), by adding a [[Fedwiki Theme Folder]] to the status folder of the site."
+    },
+    {
+      "type": "paragraph",
+      "id": "fe2f588bc65db833",
+      "text": "The folder structure for your wiki site looks like this:"
+    },
+    {
+      "type": "code",
+      "id": "9e8aeb9b098da179",
+      "text": "example.com/\n  pages/\n    ... lots of json files for the sites content\n  status/\n    favicon.png\n    persona.identity\n    sitemap.json\n    sitempa.xml\n    theme/\n      style.css"
+    },
+    {
+      "type": "paragraph",
+      "id": "c260be5bb0238c58",
+      "text": "This is a convenient place (for now), to place files that are relevant to the particular domain of the wiki."
+    },
+    {
+      "type": "paragraph",
+      "id": "149e4e7210ef4d27",
+      "text": "Files are then served up by the node server with a url of the form:"
+    },
+    {
+      "type": "code",
+      "id": "000165f02cea679e",
+      "text": "http://example.com/status/theme/style.css"
+    },
+    {
+      "type": "markdown",
+      "id": "df349d29637aa8d7",
+      "text": "# Serving assets"
+    },
+    {
+      "type": "markdown",
+      "id": "2d1ee70b0aa79dde",
+      "text": "You can use this theme folder to serve [[Dreamfactory Wiki Assets]]:\n\n- [http://david.outlandish.academy/theme/david.jpg david.jpg ]",
+      "alias": "420394f2bbe6f80d"
+    },
+    {
+      "type": "markdown",
+      "id": "03a1e341f6f1f325",
+      "text": "# DreamFactory asset redirect\n\nAt the moment the [[DreamFactory Nginx Config]] is not rewriting the url's for assets to be compatible with the reference node server."
+    },
+    {
+      "type": "paragraph",
+      "id": "55200d034e1e55f9",
+      "text": "It is also not setting the mime-type: - [http://david.icotopia.io/status/theme/5764924522141690527.jpg jpeg example]"
+    },
+    {
+      "type": "paragraph",
+      "id": "45ee44daea830efc",
+      "text": "The url for is instead (note the /status/ bit):"
+    },
+    {
+      "type": "code",
+      "id": "a18bb166654b9301",
+      "text": "http://david.icotopia.io/status/theme/image.jpg "
+    },
+    {
+      "type": "paragraph",
+      "id": "f03157b647f50fe5",
+      "text": "when it should be:"
+    },
+    {
+      "type": "code",
+      "id": "0a21572afbc5547c",
+      "text": "http://david.icotopia.io/theme/image.jpg "
+    },
+    {
+      "type": "paragraph",
+      "id": "b45633ae823270d1",
+      "text": "Ideally these are both replaced by:"
+    },
+    {
+      "type": "code",
+      "id": "a680c1929686d9b4",
+      "text": "http://david.icotopia.io/assets/image.jpg\n\nSo we can use standard subfolders:\n\nassets/\n js/\n img/\n css/\n\nOr nested subfolders named after page-slugs:\n\nSo we can use standard subfolders:\n\nassets/\n page-slug/\n  js/\n  img/\n  css/"
+    },
+    {
+      "type": "markdown",
+      "id": "56b44a513c698ca6",
+      "text": "# Subfolders don't work"
+    },
+    {
+      "type": "markdown",
+      "id": "5f60ba4c5ed15c8b",
+      "text": "Subfolders don't seem to work with the Node wiki server:\n\n- [http://david.outlandish.academy/theme/david-bovill/david.jpg http://david.outlandish.academy/theme/david-bovill/david.jpg]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a436154376b43b52",
+      "text": "It would be handy to be able to server images or other files from within a folder named the same as a page slug it is associated with. "
+    },
+    {
+      "type": "paragraph",
+      "id": "a2c233dc5933be75",
+      "text": "This would avoid name clashes and help index / organise the files according to the wiki page. Effectively the wiki json becomes metadata for the files in this folder."
+    },
+    {
+      "type": "markdown",
+      "id": "9e813f3c68c19052",
+      "text": "# IPFS Filename Hash\n\nIf we rename each file in the flat theme folder according to it's IPFS hashed name - then we both avoid name clashes (globally) and provide a way for scripts to locate the image from our [[Fedwiki IPFS Gateway]]."
+    },
+    {
+      "type": "markdown",
+      "id": "f4eac3609eda3583",
+      "text": "# See also\n\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "230898bb70bca221",
+      "text": "- [[Config Notes]]\n- [[Configuring Wiki-Security-Passportjs]]\n- [[Archive File Naming Convention]]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "e39e0432872fc1d0",
+      "text": "- [[JSON Schema]]\n- [[config.json]]\n- [[Where Pages Live]]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "0b1d4c15b4d5e222",
+      "text": "- [[Fedwiki Server]]\n- [[Fedwiki Server Requirements]]\n- [[Anatomy of a Server]]\n- [[Fedwiki server routes]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Fedwiki Theme Folder",
+        "story": []
+      },
+      "date": 1502357608134
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "efb742fccbf05e8b",
+        "text": "You can set the [[CSS]] for individual wiki sites in a farm by adding a [[Fedwiki Theme Folder]] to the status folder of the site."
+      },
+      "id": "efb742fccbf05e8b",
+      "date": 1502357613844
+    },
+    {
+      "type": "edit",
+      "id": "efb742fccbf05e8b",
+      "item": {
+        "type": "paragraph",
+        "id": "efb742fccbf05e8b",
+        "text": "You can set the [[CSS]] (or indeed any file such as an image file) that you want to wiki to serve), by adding a [[Fedwiki Theme Folder]] to the status folder of the site."
+      },
+      "date": 1502357673971
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fe2f588bc65db833",
+        "text": "The folder structure for your wiki site looks like this:"
+      },
+      "after": "efb742fccbf05e8b",
+      "id": "fe2f588bc65db833",
+      "date": 1502357677307
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9e8aeb9b098da179",
+        "text": "example.com/\n  pages/\n    ... lots of json files for the sites content\n  status/\n    favicon.png\n    persona.identity\n    sitemap.json\n    sitempa.xml\n    theme/\n      style.css"
+      },
+      "after": "fe2f588bc65db833",
+      "id": "9e8aeb9b098da179",
+      "date": 1502357679714
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c260be5bb0238c58"
+      },
+      "id": "c260be5bb0238c58",
+      "type": "add",
+      "after": "9e8aeb9b098da179",
+      "date": 1502357696251
+    },
+    {
+      "type": "edit",
+      "id": "c260be5bb0238c58",
+      "item": {
+        "type": "paragraph",
+        "id": "c260be5bb0238c58",
+        "text": "This is a convenient place (for now), to place files that are relevant to the particular domain of the wiki."
+      },
+      "date": 1502357735133
+    },
+    {
+      "type": "add",
+      "id": "5f60ba4c5ed15c8b",
+      "item": {
+        "type": "paragraph",
+        "id": "5f60ba4c5ed15c8b",
+        "text": "Subfolders works as well:"
+      },
+      "after": "c260be5bb0238c58",
+      "date": 1502357742324
+    },
+    {
+      "type": "edit",
+      "id": "5f60ba4c5ed15c8b",
+      "item": {
+        "type": "paragraph",
+        "id": "5f60ba4c5ed15c8b",
+        "text": "Subfolders don't seem to work with the Node wiki server - [http://david.outlandish.academy/theme/david-bovill/david.jpg david-bovill/david.jpg ]"
+      },
+      "date": 1502358226118
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "56b44a513c698ca6"
+      },
+      "id": "56b44a513c698ca6",
+      "type": "add",
+      "after": "5f60ba4c5ed15c8b",
+      "date": 1502358228222
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b"
+      ],
+      "id": "56b44a513c698ca6",
+      "date": 1502358229564
+    },
+    {
+      "type": "edit",
+      "id": "56b44a513c698ca6",
+      "item": {
+        "type": "markdown",
+        "id": "56b44a513c698ca6",
+        "text": "# Subfolders"
+      },
+      "date": 1502358237149
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a436154376b43b52"
+      },
+      "id": "a436154376b43b52",
+      "type": "add",
+      "after": "5f60ba4c5ed15c8b",
+      "date": 1502358239462
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "56b44a513c698ca6",
+        "a436154376b43b52",
+        "5f60ba4c5ed15c8b"
+      ],
+      "id": "a436154376b43b52",
+      "date": 1502358240662
+    },
+    {
+      "type": "edit",
+      "id": "a436154376b43b52",
+      "item": {
+        "type": "paragraph",
+        "id": "a436154376b43b52",
+        "text": "It would be handy to be able to server images or other files from within a folder named the same as a page slug it is associated with. "
+      },
+      "date": 1502358313695
+    },
+    {
+      "type": "add",
+      "id": "a2c233dc5933be75",
+      "item": {
+        "type": "paragraph",
+        "id": "a2c233dc5933be75",
+        "text": "This would avoid name clashes and help index / organise the files according to the wiki page. Effectively the wiki json becomes metadata for the files in this folder."
+      },
+      "after": "a436154376b43b52",
+      "date": 1502358336487
+    },
+    {
+      "type": "edit",
+      "id": "5f60ba4c5ed15c8b",
+      "item": {
+        "type": "paragraph",
+        "id": "5f60ba4c5ed15c8b",
+        "text": "Subfolders don't seem to work with the Node wiki server:- [http://david.outlandish.academy/theme/david-bovill/david.jpg david-bovill/david.jpg ]"
+      },
+      "date": 1502358368632
+    },
+    {
+      "type": "edit",
+      "id": "5f60ba4c5ed15c8b",
+      "item": {
+        "type": "markdown",
+        "id": "5f60ba4c5ed15c8b",
+        "text": "Subfolders don't seem to work with the Node wiki server:- [http://david.outlandish.academy/theme/david-bovill/david.jpg david-bovill/david.jpg ]"
+      },
+      "date": 1502358369817
+    },
+    {
+      "type": "edit",
+      "id": "5f60ba4c5ed15c8b",
+      "item": {
+        "type": "markdown",
+        "id": "5f60ba4c5ed15c8b",
+        "text": "Subfolders don't seem to work with the Node wiki server:\n\n- [http://david.outlandish.academy/theme/david-bovill/david.jpg david-bovill/david.jpg ]"
+      },
+      "date": 1502358375511
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "420394f2bbe6f80d"
+      },
+      "id": "420394f2bbe6f80d",
+      "type": "add",
+      "after": "5f60ba4c5ed15c8b",
+      "date": 1502358377245
+    },
+    {
+      "type": "edit",
+      "id": "420394f2bbe6f80d",
+      "item": {
+        "type": "paragraph",
+        "id": "420394f2bbe6f80d",
+        "text": "while they do work in the theme folder:- [http://david.outlandish.academy/theme/david.jpg david.jpg ]"
+      },
+      "date": 1502358402104
+    },
+    {
+      "type": "edit",
+      "id": "420394f2bbe6f80d",
+      "item": {
+        "type": "markdown",
+        "id": "420394f2bbe6f80d",
+        "text": "while they do work in the theme folder:- [http://david.outlandish.academy/theme/david.jpg david.jpg ]"
+      },
+      "date": 1502358409569
+    },
+    {
+      "type": "edit",
+      "id": "420394f2bbe6f80d",
+      "item": {
+        "type": "markdown",
+        "id": "420394f2bbe6f80d",
+        "text": "while they do work in the theme folder:\n\n- [http://david.outlandish.academy/theme/david.jpg david.jpg ]"
+      },
+      "date": 1502358413201
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9e813f3c68c19052"
+      },
+      "id": "9e813f3c68c19052",
+      "type": "add",
+      "after": "420394f2bbe6f80d",
+      "date": 1502358416417
+    },
+    {
+      "type": "edit",
+      "id": "9e813f3c68c19052",
+      "item": {
+        "type": "markdown",
+        "id": "9e813f3c68c19052",
+        "text": "# IPFS Filename Hash\n\nIf we rename each file in the flat theme folder according to it's IPFS hashed name - then we both avoid name clashes (globally) and provide a way for scripts to locate the image from our [[Fedwiki IPFS Gateway]]."
+      },
+      "date": 1502358544642
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "000165f02cea679e",
+        "text": "example.com/status/theme/style.css"
+      },
+      "after": "c260be5bb0238c58",
+      "id": "000165f02cea679e",
+      "date": 1502524226390
+    },
+    {
+      "type": "add",
+      "id": "149e4e7210ef4d27",
+      "item": {
+        "type": "paragraph",
+        "id": "149e4e7210ef4d27",
+        "text": "Files are then served up by the node server with a url of the form:"
+      },
+      "after": "c260be5bb0238c58",
+      "date": 1502524257397
+    },
+    {
+      "type": "edit",
+      "id": "000165f02cea679e",
+      "item": {
+        "type": "code",
+        "id": "000165f02cea679e",
+        "text": "http://example.com/status/theme/style.css"
+      },
+      "date": 1502524272526
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9bce333a42390c80"
+      },
+      "id": "9bce333a42390c80",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502524309142
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "9bce333a42390c80",
+        "56b44a513c698ca6",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "5f60ba4c5ed15c8b",
+        "420394f2bbe6f80d",
+        "9e813f3c68c19052"
+      ],
+      "id": "9bce333a42390c80",
+      "date": 1502524311013
+    },
+    {
+      "type": "edit",
+      "id": "9bce333a42390c80",
+      "item": {
+        "type": "audio",
+        "id": "9bce333a42390c80",
+        "text": "http://david.icotopia.io/status/theme/file_3.ogg\nYou can use this to link to audio files like this ogg."
+      },
+      "date": 1502524339432
+    },
+    {
+      "type": "edit",
+      "id": "9bce333a42390c80",
+      "item": {
+        "type": "audio",
+        "id": "9bce333a42390c80",
+        "text": "http://david.icotopia.io/status/theme/file_3.ogg\nYou can use this to link to audio files like this ogg - [http://david.icotopia.io/status/theme/file_3.ogg file_3.ogg ]"
+      },
+      "date": 1502524378409
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "df349d29637aa8d7"
+      },
+      "id": "df349d29637aa8d7",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502524387139
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "9bce333a42390c80",
+        "56b44a513c698ca6",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "5f60ba4c5ed15c8b",
+        "420394f2bbe6f80d",
+        "9e813f3c68c19052"
+      ],
+      "id": "df349d29637aa8d7",
+      "date": 1502524389307
+    },
+    {
+      "type": "edit",
+      "id": "df349d29637aa8d7",
+      "item": {
+        "type": "paragraph",
+        "id": "df349d29637aa8d7",
+        "text": "# Serving assets"
+      },
+      "date": 1502524396672
+    },
+    {
+      "type": "edit",
+      "id": "df349d29637aa8d7",
+      "item": {
+        "type": "markdown",
+        "id": "df349d29637aa8d7",
+        "text": "# Serving assets"
+      },
+      "date": 1502524397656
+    },
+    {
+      "type": "edit",
+      "id": "56b44a513c698ca6",
+      "item": {
+        "type": "markdown",
+        "id": "56b44a513c698ca6",
+        "text": "# Subfolders don't work"
+      },
+      "date": 1502524406824
+    },
+    {
+      "type": "fork",
+      "date": 1502526012765
+    },
+    {
+      "type": "remove",
+      "id": "420394f2bbe6f80d",
+      "date": 1502526031643
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "2d1ee70b0aa79dde",
+        "text": "You can use this theme folder to serve assets:\n\n- [http://david.outlandish.academy/theme/david.jpg david.jpg ]",
+        "alias": "420394f2bbe6f80d"
+      },
+      "after": "df349d29637aa8d7",
+      "id": "2d1ee70b0aa79dde",
+      "date": 1502526031645
+    },
+    {
+      "type": "remove",
+      "id": "420394f2bbe6f80d",
+      "date": 1502526043363
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "38d6599416ed7723"
+      },
+      "id": "38d6599416ed7723",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526057502
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "38d6599416ed7723",
+        "56b44a513c698ca6",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "5f60ba4c5ed15c8b",
+        "9e813f3c68c19052"
+      ],
+      "id": "38d6599416ed7723",
+      "date": 1502526060099
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fca821613feba51f"
+      },
+      "id": "fca821613feba51f",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526061994
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "38d6599416ed7723",
+        "fca821613feba51f",
+        "56b44a513c698ca6",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "5f60ba4c5ed15c8b",
+        "9e813f3c68c19052"
+      ],
+      "id": "fca821613feba51f",
+      "date": 1502526064138
+    },
+    {
+      "type": "edit",
+      "id": "38d6599416ed7723",
+      "item": {
+        "type": "paragraph",
+        "id": "38d6599416ed7723",
+        "text": "You can also use it to serve images for instance:"
+      },
+      "date": 1502526080461
+    },
+    {
+      "type": "edit",
+      "id": "fca821613feba51f",
+      "item": {
+        "type": "html",
+        "id": "fca821613feba51f",
+        "text": "safd"
+      },
+      "date": 1502526086654
+    },
+    {
+      "type": "remove",
+      "id": "38d6599416ed7723",
+      "date": 1502526090804
+    },
+    {
+      "type": "edit",
+      "id": "fca821613feba51f",
+      "item": {
+        "type": "html",
+        "id": "fca821613feba51f",
+        "text": "You can also use it to serve images for instance:\n<p>\n<img src=\"afsd\" width=100%\">"
+      },
+      "date": 1502526122967
+    },
+    {
+      "type": "edit",
+      "id": "fca821613feba51f",
+      "item": {
+        "type": "html",
+        "id": "fca821613feba51f",
+        "text": "You can also use it to serve images for instance:\n<p>\n<img src=\"http://david.outlandish.academy/theme/david.jpg\" width=100%\">"
+      },
+      "date": 1502526145943
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "5f60ba4c5ed15c8b",
+      "date": 1502526249717
+    },
+    {
+      "type": "edit",
+      "id": "5f60ba4c5ed15c8b",
+      "item": {
+        "type": "markdown",
+        "id": "5f60ba4c5ed15c8b",
+        "text": "Subfolders don't seem to work with the Node wiki server:\n\n- [http://david.outlandish.academy/theme/david-bovill/david.jpg http://david.outlandish.academy/theme/david-bovill/david.jpg]"
+      },
+      "date": 1502526328721
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "03a1e341f6f1f325"
+      },
+      "id": "03a1e341f6f1f325",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526504444
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "03a1e341f6f1f325",
+      "date": 1502526506856
+    },
+    {
+      "type": "edit",
+      "id": "03a1e341f6f1f325",
+      "item": {
+        "type": "markdown",
+        "id": "03a1e341f6f1f325",
+        "text": "# DreamFactory asset redirect\n\nAt the moment the [[DreamFactory Nginx Configuration]] is not rewriting the url's for assets to be compatible with the reference node server."
+      },
+      "date": 1502526596637
+    },
+    {
+      "type": "edit",
+      "id": "03a1e341f6f1f325",
+      "item": {
+        "type": "markdown",
+        "id": "03a1e341f6f1f325",
+        "text": "# DreamFactory asset redirect\n\nAt the moment the [[DreamFactory Nginx Config]] is not rewriting the url's for assets to be compatible with the reference node server."
+      },
+      "date": 1502526650654
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "55200d034e1e55f9"
+      },
+      "id": "55200d034e1e55f9",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526729592
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "55200d034e1e55f9",
+      "date": 1502526733698
+    },
+    {
+      "type": "edit",
+      "id": "55200d034e1e55f9",
+      "item": {
+        "type": "paragraph",
+        "id": "55200d034e1e55f9",
+        "text": "It is also not setting the mime-type: - [http://david.icotopia.io/status/theme/5764924522141690527.jpg jpeg example]"
+      },
+      "date": 1502526786450
+    },
+    {
+      "type": "add",
+      "id": "45ee44daea830efc",
+      "item": {
+        "type": "paragraph",
+        "id": "45ee44daea830efc",
+        "text": "the url for is instead:"
+      },
+      "after": "55200d034e1e55f9",
+      "date": 1502526796410
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a18bb166654b9301"
+      },
+      "id": "a18bb166654b9301",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526798695
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "45ee44daea830efc",
+        "a18bb166654b9301",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "a18bb166654b9301",
+      "date": 1502526802549
+    },
+    {
+      "type": "edit",
+      "id": "45ee44daea830efc",
+      "item": {
+        "type": "paragraph",
+        "id": "45ee44daea830efc",
+        "text": "The url for is instead:"
+      },
+      "date": 1502526808346
+    },
+    {
+      "type": "edit",
+      "id": "a18bb166654b9301",
+      "item": {
+        "type": "code",
+        "id": "a18bb166654b9301",
+        "text": "http://david.icotopia.io/status/theme/image.jpg "
+      },
+      "date": 1502526821179
+    },
+    {
+      "type": "edit",
+      "id": "45ee44daea830efc",
+      "item": {
+        "type": "paragraph",
+        "id": "45ee44daea830efc",
+        "text": "The url for is instead (note the /status/ bit):"
+      },
+      "date": 1502526843297
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0a21572afbc5547c"
+      },
+      "id": "0a21572afbc5547c",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526854046
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "45ee44daea830efc",
+        "a18bb166654b9301",
+        "0a21572afbc5547c",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "0a21572afbc5547c",
+      "date": 1502526855988
+    },
+    {
+      "type": "add",
+      "id": "f03157b647f50fe5",
+      "item": {
+        "type": "paragraph",
+        "id": "f03157b647f50fe5",
+        "text": "when it should be:"
+      },
+      "after": "45ee44daea830efc",
+      "date": 1502526863971
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "45ee44daea830efc",
+        "a18bb166654b9301",
+        "f03157b647f50fe5",
+        "0a21572afbc5547c",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "f03157b647f50fe5",
+      "date": 1502526866168
+    },
+    {
+      "type": "edit",
+      "id": "0a21572afbc5547c",
+      "item": {
+        "type": "code",
+        "id": "0a21572afbc5547c",
+        "text": "http://david.icotopia.io/theme/image.jpg "
+      },
+      "date": 1502526886347
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a680c1929686d9b4"
+      },
+      "id": "a680c1929686d9b4",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502526888654
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "45ee44daea830efc",
+        "a18bb166654b9301",
+        "f03157b647f50fe5",
+        "0a21572afbc5547c",
+        "a680c1929686d9b4",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "a680c1929686d9b4",
+      "date": 1502526891620
+    },
+    {
+      "type": "add",
+      "id": "b45633ae823270d1",
+      "item": {
+        "type": "paragraph",
+        "id": "b45633ae823270d1",
+        "text": "ideally these are both replaced by:"
+      },
+      "after": "f03157b647f50fe5",
+      "date": 1502526909035
+    },
+    {
+      "type": "edit",
+      "id": "b45633ae823270d1",
+      "item": {
+        "type": "paragraph",
+        "id": "b45633ae823270d1",
+        "text": "Ideally these are both replaced by:"
+      },
+      "date": 1502526912226
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "45ee44daea830efc",
+        "a18bb166654b9301",
+        "f03157b647f50fe5",
+        "0a21572afbc5547c",
+        "b45633ae823270d1",
+        "a680c1929686d9b4",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "b45633ae823270d1",
+      "date": 1502526914265
+    },
+    {
+      "type": "edit",
+      "id": "a680c1929686d9b4",
+      "item": {
+        "type": "code",
+        "id": "a680c1929686d9b4",
+        "text": "http://david.icotopia.io/assets/image.jpg\n\nSo we can use standard subfolders:\n\nassets/\n js/\n img/\n css/\n\nOr nested subfolders named after page-slugs:\n\nSo we can use standard subfolders:\n\nassets/\n page-slug/\n  js/\n  img/\n  css/"
+      },
+      "date": 1502527033304
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "37ec403738012528"
+      },
+      "id": "37ec403738012528",
+      "type": "add",
+      "after": "9e813f3c68c19052",
+      "date": 1502539765604
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb742fccbf05e8b",
+        "fe2f588bc65db833",
+        "9e8aeb9b098da179",
+        "c260be5bb0238c58",
+        "149e4e7210ef4d27",
+        "000165f02cea679e",
+        "df349d29637aa8d7",
+        "2d1ee70b0aa79dde",
+        "9bce333a42390c80",
+        "fca821613feba51f",
+        "37ec403738012528",
+        "03a1e341f6f1f325",
+        "55200d034e1e55f9",
+        "45ee44daea830efc",
+        "a18bb166654b9301",
+        "f03157b647f50fe5",
+        "0a21572afbc5547c",
+        "b45633ae823270d1",
+        "a680c1929686d9b4",
+        "56b44a513c698ca6",
+        "5f60ba4c5ed15c8b",
+        "a436154376b43b52",
+        "a2c233dc5933be75",
+        "9e813f3c68c19052"
+      ],
+      "id": "37ec403738012528",
+      "date": 1502539769355
+    },
+    {
+      "type": "edit",
+      "id": "37ec403738012528",
+      "item": {
+        "type": "html",
+        "id": "37ec403738012528",
+        "text": "asdf\nhttp://pics.permanent.wiki/test.jpg"
+      },
+      "date": 1502539778014
+    },
+    {
+      "type": "edit",
+      "id": "37ec403738012528",
+      "item": {
+        "type": "html",
+        "id": "37ec403738012528",
+        "text": "Even without mime-tytpe being served - [http://pics.permanent.wiki/test.jpg http://pics.permanent.wiki/test.jpg]\n<p>\n<img src=\"http://pics.permanent.wiki/test.jpg\" width=100%\">\n"
+      },
+      "date": 1502539831544
+    },
+    {
+      "type": "edit",
+      "id": "2d1ee70b0aa79dde",
+      "item": {
+        "type": "markdown",
+        "id": "2d1ee70b0aa79dde",
+        "text": "You can use this theme folder to serve [[DreamWiki Assets]]:\n\n- [http://david.outlandish.academy/theme/david.jpg david.jpg ]",
+        "alias": "420394f2bbe6f80d"
+      },
+      "date": 1502542977990
+    },
+    {
+      "type": "edit",
+      "id": "2d1ee70b0aa79dde",
+      "item": {
+        "type": "markdown",
+        "id": "2d1ee70b0aa79dde",
+        "text": "You can use this theme folder to serve [[Dreamfactory Wiki Assets]]:\n\n- [http://david.outlandish.academy/theme/david.jpg david.jpg ]",
+        "alias": "420394f2bbe6f80d"
+      },
+      "date": 1502542997364
+    },
+    {
+      "type": "remove",
+      "id": "9bce333a42390c80",
+      "date": 1502543017200
+    },
+    {
+      "type": "remove",
+      "id": "fca821613feba51f",
+      "date": 1502543021293
+    },
+    {
+      "type": "remove",
+      "id": "37ec403738012528",
+      "date": 1502543025154
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki"
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "f4eac3609eda3583",
+        "text": "# See also\n\n* [[Configuring Wiki-Security-Passportjs]]"
+      },
+      "after": "9e813f3c68c19052",
+      "id": "f4eac3609eda3583",
+      "date": 1520439174852
+    },
+    {
+      "type": "edit",
+      "id": "f4eac3609eda3583",
+      "item": {
+        "type": "markdown",
+        "id": "f4eac3609eda3583",
+        "text": "# See also\n\n- [[Config Notes]]\n- [[Configuring Wiki-Security-Passportjs]]"
+      },
+      "date": 1520439197676
+    },
+    {
+      "type": "edit",
+      "id": "f4eac3609eda3583",
+      "item": {
+        "type": "markdown",
+        "id": "f4eac3609eda3583",
+        "text": "# See also\n\n- [[Config Notes]]\n- [[Configuring Wiki-Security-Passportjs]]\n- [[Archive File Naming Convention]]\n"
+      },
+      "date": 1520439206300
+    },
+    {
+      "type": "add",
+      "id": "e39e0432872fc1d0",
+      "item": {
+        "type": "markdown",
+        "id": "e39e0432872fc1d0",
+        "text": "- [[JSON Schema]]"
+      },
+      "after": "f4eac3609eda3583",
+      "date": 1520439221775
+    },
+    {
+      "type": "edit",
+      "id": "e39e0432872fc1d0",
+      "item": {
+        "type": "markdown",
+        "id": "e39e0432872fc1d0",
+        "text": "- [[JSON Schema]]\n- [[Where Pages Live]]"
+      },
+      "date": 1520439246001
+    },
+    {
+      "type": "edit",
+      "id": "e39e0432872fc1d0",
+      "item": {
+        "type": "markdown",
+        "id": "e39e0432872fc1d0",
+        "text": "- [[JSON Schema]]\n- [[config.json]]\n- [[Where Pages Live]]"
+      },
+      "date": 1520439284281
+    },
+    {
+      "type": "edit",
+      "id": "e39e0432872fc1d0",
+      "item": {
+        "type": "markdown",
+        "id": "e39e0432872fc1d0",
+        "text": "- [[JSON Schema]]\n- [[config.json]]\n- [[Where Pages Live]]\n"
+      },
+      "date": 1520439318533
+    },
+    {
+      "type": "add",
+      "id": "0b1d4c15b4d5e222",
+      "item": {
+        "type": "markdown",
+        "id": "0b1d4c15b4d5e222",
+        "text": "- [[Fedwiki Server]]"
+      },
+      "after": "e39e0432872fc1d0",
+      "date": 1520439324042
+    },
+    {
+      "type": "edit",
+      "id": "0b1d4c15b4d5e222",
+      "item": {
+        "type": "markdown",
+        "id": "0b1d4c15b4d5e222",
+        "text": "- [[Fedwiki Server]]\n- [[Fedwiki Server Requirements]]"
+      },
+      "date": 1520439343747
+    },
+    {
+      "type": "edit",
+      "id": "0b1d4c15b4d5e222",
+      "item": {
+        "type": "markdown",
+        "id": "0b1d4c15b4d5e222",
+        "text": "- [[Fedwiki Server]]\n- [[Fedwiki Server Requirements]]\n- [[Anatomy of a Server]]\n- [[Fedwiki server routes]]"
+      },
+      "date": 1520439406213
+    },
+    {
+      "type": "edit",
+      "id": "f4eac3609eda3583",
+      "item": {
+        "type": "markdown",
+        "id": "f4eac3609eda3583",
+        "text": "# See also\n\n\n"
+      },
+      "date": 1520439841250
+    },
+    {
+      "type": "add",
+      "id": "230898bb70bca221",
+      "item": {
+        "type": "markdown",
+        "id": "230898bb70bca221",
+        "text": "- [[Config Notes]]\n- [[Configuring Wiki-Security-Passportjs]]\n- [[Archive File Naming Convention]]\n"
+      },
+      "after": "f4eac3609eda3583",
+      "date": 1520439842301
+    }
+  ]
+}

@@ -1,0 +1,1485 @@
+{
+  "title": "Edit Item JSON",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e9606f5017ef4568",
+      "text": "We consider how we might offer plugins the option of structured user editing of item json in place of unstructured editing of the item's text field."
+    },
+    {
+      "type": "paragraph",
+      "id": "0b5abb2ddcccfc00",
+      "text": "We imagine a text-like editing experience similar to programming editors with field completion and auto indenting. We could optionally add grammatical restrictions to ensure that the editing result meets the plugin's expectation."
+    },
+    {
+      "type": "markdown",
+      "id": "b1c6f0dbc25c62cc",
+      "text": "# Grammar"
+    },
+    {
+      "type": "paragraph",
+      "id": "137f8e61eff9e426",
+      "text": "A plugin can specify a grammar when invoking the json editor. The grammar is expressed in a variant of PEG with some lexical enhancements."
+    },
+    {
+      "type": "paragraph",
+      "id": "ea6670df4d1b35c9",
+      "text": "Rules for string, number, and boolean."
+    },
+    {
+      "type": "paragraph",
+      "id": "9dc9eeeffc0f5622",
+      "text": "Tokens for square and curly brackets, comma and colon."
+    },
+    {
+      "type": "paragraph",
+      "id": "648d170e40320304",
+      "text": "Words match literal strings unless defined otherwise."
+    },
+    {
+      "type": "paragraph",
+      "id": "f162fdc77cb2d636",
+      "text": "The grammar would appear on the plugin's about page."
+    },
+    {
+      "type": "markdown",
+      "id": "0b2f0944a4df0f9e",
+      "text": "# Edit"
+    },
+    {
+      "type": "paragraph",
+      "id": "31a9e2ca60074a1a",
+      "text": "The json tree would be represented as text with some additional formatting preserved from the serialized form. "
+    },
+    {
+      "type": "paragraph",
+      "id": "376de18adf8b5b95",
+      "text": "Newlines and indentation will optionally substitute for json punctuation. Likewise, quotes will be omitted while editing single words."
+    },
+    {
+      "type": "paragraph",
+      "id": "a132b4d166ef999d",
+      "text": "Arrow keys will move the selection within the tree which will be cast with a tinted background except for the selection. Keystrokes will add to the current selection. Enter will add and select a new element after the selection."
+    },
+    {
+      "type": "paragraph",
+      "id": "d31f2302339dfbb2",
+      "text": "Editing will be restricted to elements allowed by the optional grammar. When selection bumps into grammatical restrictions prompts for allowed forms will appear."
+    },
+    {
+      "type": "paragraph",
+      "id": "fdff3eda02b19450",
+      "text": "Grammar rules will be annotated with their about page item id so that should that page be open the rule bearing on the selection can be highlighted."
+    },
+    {
+      "type": "markdown",
+      "id": "794eb667570a0cc9",
+      "text": "# Example"
+    },
+    {
+      "type": "paragraph",
+      "id": "e0a2e2e68d60ef67",
+      "text": "Imagine an orbital simulation where dots representing masses are animated from an initial condition specified in json markup."
+    },
+    {
+      "type": "paragraph",
+      "id": "9ab525a964fea16c",
+      "text": "We have several choices for expressing vectors."
+    },
+    {
+      "type": "code",
+      "id": "313b24e7ecec4357",
+      "text": "vec = {x: number, y: number}"
+    },
+    {
+      "type": "code",
+      "id": "a5f4760776cc358d",
+      "text": "vec = [ number, number ]"
+    },
+    {
+      "type": "paragraph",
+      "id": "7385d36687c99652",
+      "text": "An object has mass, position, velocity and acceleration."
+    },
+    {
+      "type": "code",
+      "id": "9f19da0a065e2c95",
+      "text": "obj = {\n  mass: number\n  (position|velocity|acceleration): vec\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "18a550b7b7bdaecc",
+      "text": "An orbital simulation then is just an array of objects."
+    },
+    {
+      "type": "code",
+      "id": "0d08ac258f7a9f14",
+      "text": "sim = [ obj ]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3c19a5c2272235e0",
+      "text": "This grammar would guide and validate this markup for an earth-moon simulation."
+    },
+    {
+      "type": "code",
+      "id": "c52dd72a8f3dc66d",
+      "text": "earth:\n  mass: 100000\n  position: [0,0]\nmoon:\n  position: [0,100]\n  velocity: [100,0]"
+    },
+    {
+      "type": "markdown",
+      "id": "43a33b486bff6711",
+      "text": "# Precedent"
+    },
+    {
+      "type": "paragraph",
+      "id": "7df08d7ce6f8c3d1",
+      "text": "Paul Graham suggests optional parentheses for lisp. Python and YAML provide variations."
+    },
+    {
+      "type": "paragraph",
+      "id": "61cbecbcf699f6da",
+      "text": "Chris Crawford suggests generating prompts while parsing. [http://www.erasmatazz.com/library/the-journal-of-computer/jcgd-volume-6/how-to-build-an-inverse.html post]"
+    },
+    {
+      "type": "paragraph",
+      "id": "63384519ad20cf66",
+      "text": "Wiki's own schema has been usefully described in PEG style grammatical rules. An interesting test case would be to edit whole pages as text within the constraints and affordances this grammar provides. See [[Json Schema]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ea92cf60df660104",
+      "text": "There is something called json-schema that uses json to describe json. This requires introduction of $ref nodes and \"define\": clauses to resues schema elements. [http://spacetelescope.github.io/understanding-json-schema/structuring.html page]"
+    },
+    {
+      "type": "markdown",
+      "id": "c6fedbbe293aadf2",
+      "text": "# Experiment"
+    },
+    {
+      "type": "paragraph",
+      "id": "13211315d373e3d1",
+      "text": "We will test this idea by writing a [http://pegjs.org/online peg.js] grammar for the orbital simulation example which is divided into two sections, one derived from the sim, the other from lexical conventions of json including those we intend to relax."
+    },
+    {
+      "type": "code",
+      "id": "0cf17e46fa986a61",
+      "text": "// SIM\n\nsim = sql obj* sqr\n\nobj = cul\n  ( 'mass' col number com\n  / ('position'\n    /'velocity'\n    /'acceleration'\n    ) col vec\n  )*\ncur\n\nvec = sql number com number sqr\n\n\n// JSON\n\nsql = '[' _\n\t/ ind\nsqr = ']' _\ncul = '{' _\n\t/ & key\ncur = '}' _\n\ncol = ':' _\ncom = ',' _\n\t/ '\\n'\n\nkey = word col\n\nword = [a-z]+ _\nnumber = [0-9]+ _\n\nind = '  '\n_ = ' '?"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Edit Item JSON",
+        "story": []
+      },
+      "date": 1450191482660
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e9606f5017ef4568"
+      },
+      "id": "e9606f5017ef4568",
+      "type": "add",
+      "date": 1450191503809
+    },
+    {
+      "type": "edit",
+      "id": "e9606f5017ef4568",
+      "item": {
+        "type": "paragraph",
+        "id": "e9606f5017ef4568",
+        "text": "We consider how we might offer plugins the option of structured user editing of item json in place of unstructured editing of the item's text field."
+      },
+      "date": 1450191779343
+    },
+    {
+      "type": "add",
+      "id": "0b5abb2ddcccfc00",
+      "item": {
+        "type": "paragraph",
+        "id": "0b5abb2ddcccfc00",
+        "text": "We imagine a text-like editing experience similar to programming editors with field completion and auto indenting. "
+      },
+      "after": "e9606f5017ef4568",
+      "date": 1450191973964
+    },
+    {
+      "type": "edit",
+      "id": "0b5abb2ddcccfc00",
+      "item": {
+        "type": "paragraph",
+        "id": "0b5abb2ddcccfc00",
+        "text": "We imagine a text-like editing experience similar to programming editors with field completion and auto indenting. We could optionally add grammatical restrictions to ensure that the editing result meets the plugin's expectation."
+      },
+      "date": 1450192200328
+    },
+    {
+      "type": "add",
+      "id": "0b2f0944a4df0f9e",
+      "item": {
+        "type": "paragraph",
+        "id": "0b2f0944a4df0f9e",
+        "text": "# Editing"
+      },
+      "after": "0b5abb2ddcccfc00",
+      "date": 1450192324077
+    },
+    {
+      "type": "add",
+      "id": "31a9e2ca60074a1a",
+      "item": {
+        "type": "paragraph",
+        "id": "31a9e2ca60074a1a",
+        "text": "The json tree would be represented as text with some additional formatting preserved from the serialized form. "
+      },
+      "after": "0b2f0944a4df0f9e",
+      "date": 1450192572396
+    },
+    {
+      "type": "edit",
+      "id": "31a9e2ca60074a1a",
+      "item": {
+        "type": "paragraph",
+        "id": "31a9e2ca60074a1a",
+        "text": "The json tree would be represented as text with some additional formatting preserved from the serialized form. While editing newlines and indentation will substitute for some json punctuation. Likewise, quotes will be omitted while editing single words."
+      },
+      "date": 1450192782830
+    },
+    {
+      "type": "edit",
+      "id": "31a9e2ca60074a1a",
+      "item": {
+        "type": "paragraph",
+        "id": "31a9e2ca60074a1a",
+        "text": "The json tree would be represented as text with some additional formatting preserved from the serialized form. "
+      },
+      "date": 1450192796124
+    },
+    {
+      "type": "add",
+      "id": "376de18adf8b5b95",
+      "item": {
+        "type": "paragraph",
+        "id": "376de18adf8b5b95",
+        "text": "While editing newlines and indentation will substitute for some json punctuation. Likewise, quotes will be omitted while editing single words."
+      },
+      "after": "31a9e2ca60074a1a",
+      "date": 1450192799357
+    },
+    {
+      "type": "edit",
+      "id": "376de18adf8b5b95",
+      "item": {
+        "type": "paragraph",
+        "id": "376de18adf8b5b95",
+        "text": "Newlines and indentation will substitute for some json punctuation. Likewise, quotes will be omitted while editing single words."
+      },
+      "date": 1450192818697
+    },
+    {
+      "type": "edit",
+      "id": "376de18adf8b5b95",
+      "item": {
+        "type": "paragraph",
+        "id": "376de18adf8b5b95",
+        "text": "Newlines and indentation will optionally substitute for json punctuation. Likewise, quotes will be omitted while editing single words."
+      },
+      "date": 1450192841428
+    },
+    {
+      "type": "add",
+      "id": "a132b4d166ef999d",
+      "item": {
+        "type": "paragraph",
+        "id": "a132b4d166ef999d",
+        "text": "Arrow keys will move the selection within the tree which will be cast with a tinted background except for the selection."
+      },
+      "after": "376de18adf8b5b95",
+      "date": 1450193145868
+    },
+    {
+      "type": "edit",
+      "id": "a132b4d166ef999d",
+      "item": {
+        "type": "paragraph",
+        "id": "a132b4d166ef999d",
+        "text": "Arrow keys will move the selection within the tree which will be cast with a tinted background except for the selection. Keystrokes will add to the current selection. Enter will add and select a new element after the selection."
+      },
+      "date": 1450193286278
+    },
+    {
+      "type": "add",
+      "id": "d31f2302339dfbb2",
+      "item": {
+        "type": "paragraph",
+        "id": "d31f2302339dfbb2",
+        "text": "# Prompt"
+      },
+      "after": "a132b4d166ef999d",
+      "date": 1450193421333
+    },
+    {
+      "type": "edit",
+      "id": "0b2f0944a4df0f9e",
+      "item": {
+        "type": "paragraph",
+        "id": "0b2f0944a4df0f9e",
+        "text": "# Edit"
+      },
+      "date": 1450193431173
+    },
+    {
+      "type": "edit",
+      "id": "d31f2302339dfbb2",
+      "item": {
+        "type": "paragraph",
+        "id": "d31f2302339dfbb2",
+        "text": "Editing will be restricted to elements allowed by the optional grammar. When selection bumps into grammatical restrictions prompts for allowed forms will appear."
+      },
+      "date": 1450193759134
+    },
+    {
+      "type": "edit",
+      "id": "0b2f0944a4df0f9e",
+      "item": {
+        "type": "markdown",
+        "id": "0b2f0944a4df0f9e",
+        "text": "# Edit"
+      },
+      "date": 1450193781945
+    },
+    {
+      "type": "add",
+      "id": "b1c6f0dbc25c62cc",
+      "item": {
+        "type": "paragraph",
+        "id": "b1c6f0dbc25c62cc",
+        "text": "# Grammar"
+      },
+      "after": "d31f2302339dfbb2",
+      "date": 1450193816760
+    },
+    {
+      "type": "add",
+      "id": "137f8e61eff9e426",
+      "item": {
+        "type": "paragraph",
+        "id": "137f8e61eff9e426",
+        "text": "A plugin can specify a grammar when invoking the json editor. The grammar is expressed in a variant of PEG."
+      },
+      "after": "b1c6f0dbc25c62cc",
+      "date": 1450193972776
+    },
+    {
+      "type": "add",
+      "id": "ea6670df4d1b35c9",
+      "item": {
+        "type": "paragraph",
+        "id": "ea6670df4d1b35c9",
+        "text": "Rules for string, number, and boolean."
+      },
+      "after": "137f8e61eff9e426",
+      "date": 1450194146750
+    },
+    {
+      "type": "add",
+      "id": "9dc9eeeffc0f5622",
+      "item": {
+        "type": "paragraph",
+        "id": "9dc9eeeffc0f5622",
+        "text": "Tokens for square and curly brackets."
+      },
+      "after": "ea6670df4d1b35c9",
+      "date": 1450194227881
+    },
+    {
+      "type": "add",
+      "id": "648d170e40320304",
+      "item": {
+        "type": "paragraph",
+        "id": "648d170e40320304",
+        "text": "Undefined words match literal strings."
+      },
+      "after": "9dc9eeeffc0f5622",
+      "date": 1450194339279
+    },
+    {
+      "type": "edit",
+      "id": "b1c6f0dbc25c62cc",
+      "item": {
+        "type": "markdown",
+        "id": "b1c6f0dbc25c62cc",
+        "text": "# Grammar"
+      },
+      "date": 1450194342122
+    },
+    {
+      "type": "edit",
+      "id": "137f8e61eff9e426",
+      "item": {
+        "type": "paragraph",
+        "id": "137f8e61eff9e426",
+        "text": "A plugin can specify a grammar when invoking the json editor. The grammar is expressed in a variant of PEG with some lexical enhancements."
+      },
+      "date": 1450194401723
+    },
+    {
+      "type": "add",
+      "id": "e0a2e2e68d60ef67",
+      "item": {
+        "type": "paragraph",
+        "id": "e0a2e2e68d60ef67",
+        "text": "Imagine an orbital simulation where dots representing masses are animated from an initial condition specified in json markup."
+      },
+      "after": "648d170e40320304",
+      "date": 1450194529194
+    },
+    {
+      "type": "add",
+      "id": "9ab525a964fea16c",
+      "item": {
+        "type": "paragraph",
+        "id": "9ab525a964fea16c",
+        "text": "A two dimensional vector could be described several different ways."
+      },
+      "after": "e0a2e2e68d60ef67",
+      "date": 1450194587025
+    },
+    {
+      "type": "edit",
+      "id": "9ab525a964fea16c",
+      "item": {
+        "type": "paragraph",
+        "id": "9ab525a964fea16c",
+        "text": "We choose how vectors will be expressed."
+      },
+      "date": 1450194653446
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "313b24e7ecec4357"
+      },
+      "id": "313b24e7ecec4357",
+      "type": "add",
+      "after": "9ab525a964fea16c",
+      "date": 1450194656110
+    },
+    {
+      "type": "edit",
+      "id": "313b24e7ecec4357",
+      "item": {
+        "type": "code",
+        "id": "313b24e7ecec4357",
+        "text": "vec = {x: number, y: number}"
+      },
+      "date": 1450194684606
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a5f4760776cc358d"
+      },
+      "id": "a5f4760776cc358d",
+      "type": "add",
+      "after": "313b24e7ecec4357",
+      "date": 1450194699808
+    },
+    {
+      "type": "edit",
+      "id": "a5f4760776cc358d",
+      "item": {
+        "type": "code",
+        "id": "a5f4760776cc358d",
+        "text": "vec = [ number, number ]"
+      },
+      "date": 1450194715833
+    },
+    {
+      "type": "edit",
+      "id": "9ab525a964fea16c",
+      "item": {
+        "type": "paragraph",
+        "id": "9ab525a964fea16c",
+        "text": "We have several choices for expressing vectors."
+      },
+      "date": 1450194764162
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7385d36687c99652"
+      },
+      "id": "7385d36687c99652",
+      "type": "add",
+      "after": "a5f4760776cc358d",
+      "date": 1450194779015
+    },
+    {
+      "type": "edit",
+      "id": "7385d36687c99652",
+      "item": {
+        "type": "paragraph",
+        "id": "7385d36687c99652",
+        "text": "An object has mass, position, velocity and acceleration."
+      },
+      "date": 1450194840150
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7d9be61e0ca51b7f"
+      },
+      "id": "7d9be61e0ca51b7f",
+      "type": "add",
+      "after": "7385d36687c99652",
+      "date": 1450195670532
+    },
+    {
+      "type": "edit",
+      "id": "7d9be61e0ca51b7f",
+      "item": {
+        "type": "paragraph",
+        "id": "7d9be61e0ca51b7f",
+        "text": "obj = {"
+      },
+      "date": 1450195800254
+    },
+    {
+      "type": "remove",
+      "id": "7d9be61e0ca51b7f",
+      "date": 1450195815822
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9f19da0a065e2c95"
+      },
+      "id": "9f19da0a065e2c95",
+      "type": "add",
+      "after": "7385d36687c99652",
+      "date": 1450195817958
+    },
+    {
+      "type": "edit",
+      "id": "9f19da0a065e2c95",
+      "item": {
+        "type": "code",
+        "id": "9f19da0a065e2c95",
+        "text": "obj = {\n  mass: number\n  (position|velocity|acceleration): vec\n}"
+      },
+      "date": 1450195941090
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "18a550b7b7bdaecc"
+      },
+      "id": "18a550b7b7bdaecc",
+      "type": "add",
+      "after": "9f19da0a065e2c95",
+      "date": 1450195963492
+    },
+    {
+      "type": "edit",
+      "id": "18a550b7b7bdaecc",
+      "item": {
+        "type": "paragraph",
+        "id": "18a550b7b7bdaecc",
+        "text": "The complete grammar would begin with the root."
+      },
+      "date": 1450196070734
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0d08ac258f7a9f14"
+      },
+      "id": "0d08ac258f7a9f14",
+      "type": "add",
+      "after": "6283fc7028d804a9",
+      "date": 1450196076682
+    },
+    {
+      "type": "edit",
+      "id": "0d08ac258f7a9f14",
+      "item": {
+        "type": "code",
+        "id": "0d08ac258f7a9f14",
+        "text": "sim = [ obj ]"
+      },
+      "date": 1450196118585
+    },
+    {
+      "type": "edit",
+      "id": "18a550b7b7bdaecc",
+      "item": {
+        "type": "paragraph",
+        "id": "18a550b7b7bdaecc",
+        "text": "An orbital simulation then is just an array of objects."
+      },
+      "date": 1450196192947
+    },
+    {
+      "type": "add",
+      "id": "0d331bcd8bc0dff4",
+      "item": {
+        "type": "paragraph",
+        "id": "0d331bcd8bc0dff4",
+        "text": "Rules for comma, colon."
+      },
+      "after": "648d170e40320304",
+      "date": 1450196283318
+    },
+    {
+      "type": "remove",
+      "id": "0d331bcd8bc0dff4",
+      "date": 1450196308004
+    },
+    {
+      "type": "edit",
+      "id": "9dc9eeeffc0f5622",
+      "item": {
+        "type": "paragraph",
+        "id": "9dc9eeeffc0f5622",
+        "text": "Tokens for square and curly brackets, comma and colon."
+      },
+      "date": 1450196361674
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3c19a5c2272235e0"
+      },
+      "id": "3c19a5c2272235e0",
+      "type": "add",
+      "after": "0d08ac258f7a9f14",
+      "date": 1450196415698
+    },
+    {
+      "type": "edit",
+      "id": "3c19a5c2272235e0",
+      "item": {
+        "type": "paragraph",
+        "id": "3c19a5c2272235e0",
+        "text": "Valid markup for an earth-moon simulation."
+      },
+      "date": 1450196533057
+    },
+    {
+      "type": "edit",
+      "id": "3c19a5c2272235e0",
+      "item": {
+        "type": "paragraph",
+        "id": "3c19a5c2272235e0",
+        "text": "This grammar would guide and validate this markup for an earth-moon simulation."
+      },
+      "date": 1450196562895
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c52dd72a8f3dc66d"
+      },
+      "id": "c52dd72a8f3dc66d",
+      "type": "add",
+      "after": "3c19a5c2272235e0",
+      "date": 1450196565139
+    },
+    {
+      "type": "edit",
+      "id": "c52dd72a8f3dc66d",
+      "item": {
+        "type": "code",
+        "id": "c52dd72a8f3dc66d",
+        "text": "earth:\n  mass: 100000\n  position: [0,0]\nmoon:\n  position: [0,100]\n  velocity: [100,0]"
+      },
+      "date": 1450196709149
+    },
+    {
+      "type": "add",
+      "id": "794eb667570a0cc9",
+      "item": {
+        "type": "paragraph",
+        "id": "794eb667570a0cc9",
+        "text": "# Example"
+      },
+      "after": "648d170e40320304",
+      "date": 1450196798097
+    },
+    {
+      "type": "edit",
+      "id": "794eb667570a0cc9",
+      "item": {
+        "type": "markdown",
+        "id": "794eb667570a0cc9",
+        "text": "# Example"
+      },
+      "date": 1450196801454
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "43a33b486bff6711"
+      },
+      "id": "43a33b486bff6711",
+      "type": "add",
+      "after": "c52dd72a8f3dc66d",
+      "date": 1450196859340
+    },
+    {
+      "type": "edit",
+      "id": "43a33b486bff6711",
+      "item": {
+        "type": "paragraph",
+        "id": "43a33b486bff6711",
+        "text": "# Precedent "
+      },
+      "date": 1450196881654
+    },
+    {
+      "type": "edit",
+      "id": "43a33b486bff6711",
+      "item": {
+        "type": "paragraph",
+        "id": "43a33b486bff6711",
+        "text": "# Precedent"
+      },
+      "date": 1450196886251
+    },
+    {
+      "type": "add",
+      "id": "7df08d7ce6f8c3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7df08d7ce6f8c3d1",
+        "text": "Paul Graham has suggested making nesting punctuation optional where indentation carries the same meaning. Python and YAML provide variations."
+      },
+      "after": "43a33b486bff6711",
+      "date": 1450197036684
+    },
+    {
+      "type": "edit",
+      "id": "43a33b486bff6711",
+      "item": {
+        "type": "markdown",
+        "id": "43a33b486bff6711",
+        "text": "# Precedent"
+      },
+      "date": 1450197050982
+    },
+    {
+      "type": "add",
+      "id": "61cbecbcf699f6da",
+      "item": {
+        "type": "paragraph",
+        "id": "61cbecbcf699f6da",
+        "text": "Chris Crawford suggests generating prompts while parsing. [http://www.erasmatazz.com/library/the-journal-of-computer/jcgd-volume-6/how-to-build-an-inverse.html post]"
+      },
+      "after": "7df08d7ce6f8c3d1",
+      "date": 1450197359426
+    },
+    {
+      "type": "edit",
+      "id": "7df08d7ce6f8c3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7df08d7ce6f8c3d1",
+        "text": "Paul Graham suggests optional punctuation where indentation carries the same meaning. Python and YAML provide variations."
+      },
+      "date": 1450197405874
+    },
+    {
+      "type": "edit",
+      "id": "7df08d7ce6f8c3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7df08d7ce6f8c3d1",
+        "text": "Paul Graham suggests optional parenthese where indentation carries the same meaning. Python and YAML provide variations."
+      },
+      "date": 1450197425880
+    },
+    {
+      "type": "edit",
+      "id": "7df08d7ce6f8c3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7df08d7ce6f8c3d1",
+        "text": "Paul Graham suggests optional parentheses where indentation carries the same meaning. Python and YAML provide variations."
+      },
+      "date": 1450197445159
+    },
+    {
+      "type": "edit",
+      "id": "7df08d7ce6f8c3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7df08d7ce6f8c3d1",
+        "text": "Paul Graham suggests optional parentheses where indentation implies nesting. Python and YAML provide variations."
+      },
+      "date": 1450197465126
+    },
+    {
+      "type": "edit",
+      "id": "7df08d7ce6f8c3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7df08d7ce6f8c3d1",
+        "text": "Paul Graham suggests optional parentheses for lisp. Python and YAML provide variations."
+      },
+      "date": 1450197488293
+    },
+    {
+      "type": "add",
+      "id": "4a467e6befc4ebee",
+      "item": {
+        "type": "paragraph",
+        "id": "4a467e6befc4ebee",
+        "text": "# About"
+      },
+      "after": "61cbecbcf699f6da",
+      "date": 1450198409061
+    },
+    {
+      "type": "add",
+      "id": "4139742d2765388f",
+      "item": {
+        "type": "paragraph",
+        "id": "4139742d2765388f",
+        "text": "# About"
+      },
+      "after": "18a550b7b7bdaecc",
+      "date": 1450198496338
+    },
+    {
+      "type": "remove",
+      "id": "4139742d2765388f",
+      "date": 1450198516380
+    },
+    {
+      "type": "move",
+      "order": [
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "4a467e6befc4ebee",
+        "61cbecbcf699f6da",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc"
+      ],
+      "id": "61cbecbcf699f6da",
+      "date": 1450198613784
+    },
+    {
+      "type": "move",
+      "order": [
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "4a467e6befc4ebee",
+        "61cbecbcf699f6da",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14"
+      ],
+      "id": "0d08ac258f7a9f14",
+      "date": 1450200727745
+    },
+    {
+      "type": "move",
+      "order": [
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "4a467e6befc4ebee",
+        "61cbecbcf699f6da",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0"
+      ],
+      "id": "3c19a5c2272235e0",
+      "date": 1450200738930
+    },
+    {
+      "type": "move",
+      "order": [
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "4a467e6befc4ebee",
+        "61cbecbcf699f6da",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d"
+      ],
+      "id": "c52dd72a8f3dc66d",
+      "date": 1450200750375
+    },
+    {
+      "type": "move",
+      "order": [
+        "7df08d7ce6f8c3d1",
+        "4a467e6befc4ebee",
+        "61cbecbcf699f6da",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711"
+      ],
+      "id": "43a33b486bff6711",
+      "date": 1450200761546
+    },
+    {
+      "type": "move",
+      "order": [
+        "4a467e6befc4ebee",
+        "61cbecbcf699f6da",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1"
+      ],
+      "id": "7df08d7ce6f8c3d1",
+      "date": 1450200769981
+    },
+    {
+      "type": "move",
+      "order": [
+        "4a467e6befc4ebee",
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "61cbecbcf699f6da",
+      "date": 1450200780602
+    },
+    {
+      "type": "move",
+      "order": [
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "4a467e6befc4ebee",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "4a467e6befc4ebee",
+      "date": 1450200803982
+    },
+    {
+      "type": "remove",
+      "id": "4a467e6befc4ebee",
+      "date": 1450200837154
+    },
+    {
+      "type": "move",
+      "order": [
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "b1c6f0dbc25c62cc",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "b1c6f0dbc25c62cc",
+      "date": 1450200921723
+    },
+    {
+      "type": "move",
+      "order": [
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "137f8e61eff9e426",
+      "date": 1450200926800
+    },
+    {
+      "type": "move",
+      "order": [
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "ea6670df4d1b35c9",
+      "date": 1450200931229
+    },
+    {
+      "type": "move",
+      "order": [
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "648d170e40320304",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "9dc9eeeffc0f5622",
+      "date": 1450200934961
+    },
+    {
+      "type": "move",
+      "order": [
+        "e9606f5017ef4568",
+        "0b5abb2ddcccfc00",
+        "b1c6f0dbc25c62cc",
+        "137f8e61eff9e426",
+        "ea6670df4d1b35c9",
+        "9dc9eeeffc0f5622",
+        "648d170e40320304",
+        "0b2f0944a4df0f9e",
+        "31a9e2ca60074a1a",
+        "376de18adf8b5b95",
+        "a132b4d166ef999d",
+        "d31f2302339dfbb2",
+        "794eb667570a0cc9",
+        "e0a2e2e68d60ef67",
+        "9ab525a964fea16c",
+        "313b24e7ecec4357",
+        "a5f4760776cc358d",
+        "7385d36687c99652",
+        "9f19da0a065e2c95",
+        "18a550b7b7bdaecc",
+        "0d08ac258f7a9f14",
+        "3c19a5c2272235e0",
+        "c52dd72a8f3dc66d",
+        "43a33b486bff6711",
+        "7df08d7ce6f8c3d1",
+        "61cbecbcf699f6da"
+      ],
+      "id": "648d170e40320304",
+      "date": 1450200938952
+    },
+    {
+      "type": "edit",
+      "id": "648d170e40320304",
+      "item": {
+        "type": "paragraph",
+        "id": "648d170e40320304",
+        "text": "Words match literal strings unless defined otherwise."
+      },
+      "date": 1450200965978
+    },
+    {
+      "type": "add",
+      "id": "f162fdc77cb2d636",
+      "item": {
+        "type": "paragraph",
+        "id": "f162fdc77cb2d636",
+        "text": "The grammar would appear on the plugin's about page."
+      },
+      "after": "648d170e40320304",
+      "date": 1450201041105
+    },
+    {
+      "type": "add",
+      "id": "fdff3eda02b19450",
+      "item": {
+        "type": "paragraph",
+        "id": "fdff3eda02b19450",
+        "text": "Grammar rules will be annotated with their about page item id so that should that page be open the rule bearing on the selection can be highlighted."
+      },
+      "after": "d31f2302339dfbb2",
+      "date": 1450201151467
+    },
+    {
+      "type": "add",
+      "id": "63384519ad20cf66",
+      "item": {
+        "type": "paragraph",
+        "id": "63384519ad20cf66",
+        "text": "Wiki's own schema has been usefully described in PEG style grammatical rules, admittedly unchecked. See [[Json Schema]]"
+      },
+      "after": "61cbecbcf699f6da",
+      "date": 1450203401840
+    },
+    {
+      "type": "edit",
+      "id": "63384519ad20cf66",
+      "item": {
+        "type": "paragraph",
+        "id": "63384519ad20cf66",
+        "text": "Wiki's own schema has been usefully described in PEG style grammatical rules. An interesting test case would be to edit whole pages based on this grammar. See [[Json Schema]]"
+      },
+      "date": 1450203536284
+    },
+    {
+      "type": "edit",
+      "id": "63384519ad20cf66",
+      "item": {
+        "type": "paragraph",
+        "id": "63384519ad20cf66",
+        "text": "Wiki's own schema has been usefully described in PEG style grammatical rules. An interesting test case would be to edit whole pages as text within the constraints and affordances this grammar provides. See [[Json Schema]]"
+      },
+      "date": 1450203605330
+    },
+    {
+      "type": "add",
+      "id": "ea92cf60df660104",
+      "item": {
+        "type": "paragraph",
+        "id": "ea92cf60df660104",
+        "text": "There is something called json-schema that uses json to describe json. This requires introduction of $ref nodes to define and use schema elements. [http://spacetelescope.github.io/understanding-json-schema/structuring.html page]"
+      },
+      "after": "63384519ad20cf66",
+      "date": 1450210682219
+    },
+    {
+      "type": "edit",
+      "id": "ea92cf60df660104",
+      "item": {
+        "type": "paragraph",
+        "id": "ea92cf60df660104",
+        "text": "There is something called json-schema that uses json to describe json. This requires introduction of $ref nodes and \"define\": clauses to resues schema elements. [http://spacetelescope.github.io/understanding-json-schema/structuring.html page]"
+      },
+      "date": 1450210741526
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c6fedbbe293aadf2"
+      },
+      "id": "c6fedbbe293aadf2",
+      "type": "add",
+      "after": "ea92cf60df660104",
+      "date": 1450285659161
+    },
+    {
+      "type": "edit",
+      "id": "c6fedbbe293aadf2",
+      "item": {
+        "type": "paragraph",
+        "id": "c6fedbbe293aadf2",
+        "text": "# Experiment"
+      },
+      "date": 1450285669370
+    },
+    {
+      "type": "add",
+      "id": "13211315d373e3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "13211315d373e3d1",
+        "text": "Will test this idea by writing a peg.js grammar for the orbital simulation example which is divided into two sections, one derived from the sim, the other from lexical conventions of json including those we intend to relax."
+      },
+      "after": "c6fedbbe293aadf2",
+      "date": 1450285763884
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0cf17e46fa986a61"
+      },
+      "id": "0cf17e46fa986a61",
+      "type": "add",
+      "after": "13211315d373e3d1",
+      "date": 1450285765912
+    },
+    {
+      "type": "edit",
+      "id": "0cf17e46fa986a61",
+      "item": {
+        "type": "code",
+        "id": "0cf17e46fa986a61",
+        "text": "// SIM\n\nsim = sql obj* sqr\n\nobj = cul\n  ( 'mass' col number com\n  / ('position'\n  \t/'velocity'\n    /'acceleration'\n    ) col vec\n  )*\ncur\n\nvec = sql number com number sqr\n\n\n// JSON\n\nsql = '[' _\n\t/ ind\nsqr = ']' _\ncul = '{' _\n\t/ & key\ncur = '}' _\n\ncol = ':' _\ncom = ',' _\n\t/ '\\n'\n\nkey = word col\n\nword = [a-z]+ _\nnumber = [0-9]+ _\n\nind = '  '\n_ = ' '?"
+      },
+      "date": 1450285770541
+    },
+    {
+      "type": "edit",
+      "id": "c6fedbbe293aadf2",
+      "item": {
+        "type": "markdown",
+        "id": "c6fedbbe293aadf2",
+        "text": "# Experiment"
+      },
+      "date": 1450285792470
+    },
+    {
+      "type": "edit",
+      "id": "13211315d373e3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "13211315d373e3d1",
+        "text": "We will test this idea by writing a peg.js grammar for the orbital simulation example which is divided into two sections, one derived from the sim, the other from lexical conventions of json including those we intend to relax."
+      },
+      "date": 1450285880363
+    },
+    {
+      "type": "edit",
+      "id": "13211315d373e3d1",
+      "item": {
+        "type": "paragraph",
+        "id": "13211315d373e3d1",
+        "text": "We will test this idea by writing a [http://pegjs.org/online peg.js] grammar for the orbital simulation example which is divided into two sections, one derived from the sim, the other from lexical conventions of json including those we intend to relax."
+      },
+      "date": 1450285901589
+    },
+    {
+      "type": "edit",
+      "id": "0cf17e46fa986a61",
+      "item": {
+        "type": "code",
+        "id": "0cf17e46fa986a61",
+        "text": "// SIM\n\nsim = sql obj* sqr\n\nobj = cul\n  ( 'mass' col number com\n  / ('position'\n    /'velocity'\n    /'acceleration'\n    ) col vec\n  )*\ncur\n\nvec = sql number com number sqr\n\n\n// JSON\n\nsql = '[' _\n\t/ ind\nsqr = ']' _\ncul = '{' _\n\t/ & key\ncur = '}' _\n\ncol = ':' _\ncom = ',' _\n\t/ '\\n'\n\nkey = word col\n\nword = [a-z]+ _\nnumber = [0-9]+ _\n\nind = '  '\n_ = ' '?"
+      },
+      "date": 1450285983754
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1450362830169
+    }
+  ]
+}

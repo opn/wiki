@@ -1,0 +1,1195 @@
+{
+  "title": "dns-sd",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "762005d9e80e9de9",
+      "text": "dns-sd is a commandline tool to manipulate [[Bonjour]] ([[Zeroconf]]) services. You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html developer.apple.com]"
+    },
+    {
+      "type": "html",
+      "id": "75bc828c11559be9",
+      "text": "<H3>Registering a local service"
+    },
+    {
+      "type": "paragraph",
+      "id": "18842812b2d3acc5",
+      "text": "To register a local service you can use the -R flag. Therefore to advertise a web page being served by an HTTP server on port 80 on the local machine use:"
+    },
+    {
+      "type": "code",
+      "id": "073256db716c9a8a",
+      "text": "dns-sd -R \"My Test\" _http._tcp . 80 path=/path-to-page.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "8670d1966cea85b6",
+      "text": "To find the advertised web pages on the local network (the same list that Safari shows), use:"
+    },
+    {
+      "type": "code",
+      "id": "4d33f0d03b0e971c",
+      "text": "dns-sd -B _http._tcp"
+    },
+    {
+      "type": "paragraph",
+      "id": "4a456e0e9cd7e1c3",
+      "text": "While that command is running, in another window, try the dns-sd -R example given above to advertise a web page, and you should see the \"Add\" event reported to the dns-sd -B window. Now press Ctrl-C in the dns-sd -R window and you should see the \"Remove\" event reported to the dns-sd -B window."
+    },
+    {
+      "type": "reference",
+      "id": "e95876a4278b84e2",
+      "site": "osx.c0de.academy",
+      "slug": "local-fedwiki-farm",
+      "title": "Local Fedwiki Farm",
+      "text": "Serving a local [[Fedwiki Farm]] on OSX involves teh following steps:"
+    },
+    {
+      "type": "html",
+      "id": "b4b551744e9701d5",
+      "text": "<H3>Registering remote services"
+    },
+    {
+      "type": "paragraph",
+      "id": "db7f905a1f450a0b",
+      "text": "To manually register a remote service using the -P parameter - [http://stackoverflow.com/questions/8153979/dns-sd-how-to-manually-register-a-remote-service stackoverflow]"
+    },
+    {
+      "type": "code",
+      "id": "562dce8708eac991",
+      "text": "dns-sd -P <Name> <Type> <Domain> <Port> <Host> <IP> [<TXT>...]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3ecd3c81e3f33732",
+      "text": "In the example below, the www.apple.com web page is advertised as a service called \"apple\", running on a target host called apple.local, which resolves to 17.149.160.49."
+    },
+    {
+      "type": "code",
+      "id": "bd1a875e7d15d102",
+      "text": "dns-sd -P apple _http._tcp \"\" 80 apple.local 17.149.160.49"
+    },
+    {
+      "type": "paragraph",
+      "id": "f2a054588043d55f",
+      "text": "The Bonjour menu in the Safari web browser will now show \"apple\".  The same IP address can be reached by entering apple.local in the web browser.  In either case, the request will be resolved to the IP address and browser will show contents associated with www.apple.com."
+    },
+    {
+      "type": "paragraph",
+      "id": "0b8ccc2662c52e83",
+      "text": "If the service you're proxy registering already has a unicast DNS hostname something like this will work:"
+    },
+    {
+      "type": "code",
+      "id": "633b9647339ff5ee",
+      "text": "dns-sd -P Google _http._tcp local 80 google.com google.com path=/\nRegistering Service Google._http._tcp.local host google.com port 80 TXT path=/\n 4:23:00.928  Got a reply for service Google._http._tcp.local.: Name now registered and active\n^C"
+    },
+    {
+      "type": "paragraph",
+      "id": "e234bc7e318389ab",
+      "text": "If it doesn't have a hostname a unique name should be used for the host:"
+    },
+    {
+      "type": "code",
+      "id": "a16800e0d3b0a8ec",
+      "text": "$ dns-sd -P Google _http._tcp local 80 google.local 74.125.237.144 path=/\nRegistering Service Google._http._tcp.local host google.local port 80 TXT path=/\n 4:16:48.208  Got a reply for record google.local: Name now registered and active\n 4:16:48.208  Got a reply for service Google._http._tcp.local.: Name now registered and active\n^C"
+    },
+    {
+      "type": "html",
+      "id": "35acf7bcec288926",
+      "text": "<H3>Finding ssh shares"
+    },
+    {
+      "type": "paragraph",
+      "id": "fadf5ef519f849e7",
+      "text": "To view all of the ssh shares on Bonjour-enabled computers, try this in the Terminal:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "6faf9b289642e402",
+      "text": "dns-sd -B _ssh._tcp .\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "1a967581ed53bfff",
+      "text": "You should receive a list of workstations that are broadcasting ssh services via Bonjour. Don't forget that you need to replace the spaces with hyphens and add a .local prefix when trying to connect. For example, to ssh to Macintosh HD found this way, you need to use ssh Macintosh-HD.local - [http://hints.macworld.com/article.php?story=20051026183044858 hints.macworld.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "dns-sd",
+        "story": []
+      },
+      "date": 1436719790833
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "762005d9e80e9de9"
+      },
+      "id": "762005d9e80e9de9",
+      "type": "add",
+      "date": 1436719792123
+    },
+    {
+      "type": "edit",
+      "id": "762005d9e80e9de9",
+      "item": {
+        "type": "paragraph",
+        "id": "762005d9e80e9de9",
+        "text": "dns-sd is a commandline tool to manipulate Bonjour ([[Zeroconf]])) services. You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html"
+      },
+      "date": 1436719861571
+    },
+    {
+      "type": "edit",
+      "id": "762005d9e80e9de9",
+      "item": {
+        "type": "paragraph",
+        "id": "762005d9e80e9de9",
+        "text": "dns-sd is a commandline tool to manipulate Bonjour ([[Zeroconf]]) services. You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html"
+      },
+      "date": 1436719869525
+    },
+    {
+      "type": "edit",
+      "id": "762005d9e80e9de9",
+      "item": {
+        "type": "paragraph",
+        "id": "762005d9e80e9de9",
+        "text": "dns-sd is a commandline tool to manipulate [[Bonjour]] ([[Zeroconf]]) services. You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html"
+      },
+      "date": 1436719878809
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6faf9b289642e402",
+        "text": "dns-sd -B _ssh._tcp .\n\n"
+      },
+      "after": "762005d9e80e9de9",
+      "id": "6faf9b289642e402",
+      "date": 1436719890859
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fadf5ef519f849e7",
+        "text": "For example, to view all of the ssh shares on Bonjour-enabled computers, try this in the Terminal:\n\n"
+      },
+      "after": "762005d9e80e9de9",
+      "id": "fadf5ef519f849e7",
+      "date": 1436719913358
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1a967581ed53bfff",
+        "text": "You should receive a list of workstations that are broadcasting ssh services via Bonjour. Don't forget that you need to replace the spaces with hyphens and add a .local prefix when trying to connect. For example, to ssh to Macintosh HD found this way, you need to use ssh Macintosh-HD.local - [http://hints.macworld.com/article.php?story=20051026183044858 hints.macworld.com]"
+      },
+      "after": "6faf9b289642e402",
+      "id": "1a967581ed53bfff",
+      "date": 1436719929219
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b4b551744e9701d5",
+        "text": "See also [[dns-sd]]: how to manually register a remote service - [http://stackoverflow.com/questions/8153979/dns-sd-how-to-manually-register-a-remote-service stackoverflow]"
+      },
+      "after": "1a967581ed53bfff",
+      "id": "b4b551744e9701d5",
+      "date": 1436719939495
+    },
+    {
+      "type": "edit",
+      "id": "b4b551744e9701d5",
+      "item": {
+        "type": "paragraph",
+        "id": "b4b551744e9701d5",
+        "text": "See also [[dns-sd]]: how to manually register a remote service using the -P parameter - [http://stackoverflow.com/questions/8153979/dns-sd-how-to-manually-register-a-remote-service stackoverflow]"
+      },
+      "date": 1436719962085
+    },
+    {
+      "type": "edit",
+      "id": "762005d9e80e9de9",
+      "item": {
+        "type": "paragraph",
+        "id": "762005d9e80e9de9",
+        "text": "dns-sd is a commandline tool to manipulate [[Bonjour]] ([[Zeroconf]]) services. "
+      },
+      "date": 1436719984608
+    },
+    {
+      "type": "add",
+      "id": "14b12b101daff92e",
+      "item": {
+        "type": "paragraph",
+        "id": "14b12b101daff92e",
+        "text": "You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html"
+      },
+      "after": "762005d9e80e9de9",
+      "date": 1436719986034
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "95640da553b96faf",
+        "text": "Bonjour the [[dns-sd]] tool can be used to proxy register a service:"
+      },
+      "after": "b4b551744e9701d5",
+      "id": "95640da553b96faf",
+      "date": 1436720030987
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "633b9647339ff5ee",
+        "text": "dns-sd -P Google _http._tcp local 80 google.com google.com path=/\nRegistering Service Google._http._tcp.local host google.com port 80 TXT path=/\n 4:23:00.928  Got a reply for service Google._http._tcp.local.: Name now registered and active\n^C"
+      },
+      "after": "95640da553b96faf",
+      "id": "633b9647339ff5ee",
+      "date": 1436720035589
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "562dce8708eac991",
+        "text": "dns-sd -P <Name> <Type> <Domain> <Port> <Host> <IP> [<TXT>...]"
+      },
+      "after": "b4b551744e9701d5",
+      "id": "562dce8708eac991",
+      "date": 1436720060060
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0b8ccc2662c52e83",
+        "text": "If the service you're proxy registering already has a unicast DNS hostname something like this will work:"
+      },
+      "after": "562dce8708eac991",
+      "id": "0b8ccc2662c52e83",
+      "date": 1436720068893
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e234bc7e318389ab",
+        "text": "If it doesn't have a hostname a unique name should be used for the host:"
+      },
+      "after": "633b9647339ff5ee",
+      "id": "e234bc7e318389ab",
+      "date": 1436720077941
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "a16800e0d3b0a8ec",
+        "text": "$ dns-sd -P Google _http._tcp local 80 google.local 74.125.237.144 path=/\nRegistering Service Google._http._tcp.local host google.local port 80 TXT path=/\n 4:16:48.208  Got a reply for record google.local: Name now registered and active\n 4:16:48.208  Got a reply for service Google._http._tcp.local.: Name now registered and active\n^C"
+      },
+      "after": "e234bc7e318389ab",
+      "id": "a16800e0d3b0a8ec",
+      "date": 1436720080678
+    },
+    {
+      "type": "remove",
+      "id": "95640da553b96faf",
+      "date": 1436720121723
+    },
+    {
+      "type": "edit",
+      "id": "14b12b101daff92e",
+      "item": {
+        "type": "paragraph",
+        "id": "14b12b101daff92e",
+        "text": "You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html developer.apple.com]"
+      },
+      "date": 1436720140901
+    },
+    {
+      "type": "remove",
+      "id": "14b12b101daff92e",
+      "date": 1436720148668
+    },
+    {
+      "type": "edit",
+      "id": "762005d9e80e9de9",
+      "item": {
+        "type": "paragraph",
+        "id": "762005d9e80e9de9",
+        "text": "dns-sd is a commandline tool to manipulate [[Bonjour]] ([[Zeroconf]]) services. You can find the [[Manpage]] online here - [https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/dns-sd.1.html developer.apple.com]"
+      },
+      "date": 1436720151882
+    },
+    {
+      "type": "edit",
+      "id": "b4b551744e9701d5",
+      "item": {
+        "type": "paragraph",
+        "id": "b4b551744e9701d5",
+        "text": "<H3>Remote Services"
+      },
+      "date": 1436720435031
+    },
+    {
+      "type": "edit",
+      "id": "b4b551744e9701d5",
+      "item": {
+        "type": "html",
+        "id": "b4b551744e9701d5",
+        "text": "<H3>Remote Services"
+      },
+      "date": 1436720436358
+    },
+    {
+      "type": "add",
+      "id": "db7f905a1f450a0b",
+      "item": {
+        "type": "paragraph",
+        "id": "db7f905a1f450a0b",
+        "text": "See also [[dns-sd]]: how to manually register a remote service using the -P parameter - [http://stackoverflow.com/questions/8153979/dns-sd-how-to-manually-register-a-remote-service stackoverflow]"
+      },
+      "after": "b4b551744e9701d5",
+      "date": 1436720437445
+    },
+    {
+      "type": "edit",
+      "id": "b4b551744e9701d5",
+      "item": {
+        "type": "html",
+        "id": "b4b551744e9701d5",
+        "text": "<H3>Registering Remote Services"
+      },
+      "date": 1436720442837
+    },
+    {
+      "type": "edit",
+      "id": "db7f905a1f450a0b",
+      "item": {
+        "type": "paragraph",
+        "id": "db7f905a1f450a0b",
+        "text": "To manually register a remote service using the -P parameter - [http://stackoverflow.com/questions/8153979/dns-sd-how-to-manually-register-a-remote-service stackoverflow]"
+      },
+      "date": 1436720451984
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "75bc828c11559be9"
+      },
+      "id": "75bc828c11559be9",
+      "type": "add",
+      "after": "a16800e0d3b0a8ec",
+      "date": 1436720462654
+    },
+    {
+      "type": "edit",
+      "id": "75bc828c11559be9",
+      "item": {
+        "type": "paragraph",
+        "id": "75bc828c11559be9",
+        "text": "<H3>Registering Remote Services"
+      },
+      "date": 1436720465884
+    },
+    {
+      "type": "add",
+      "id": "18842812b2d3acc5",
+      "item": {
+        "type": "paragraph",
+        "id": "18842812b2d3acc5",
+        "text": "To register a local service you can use the -R flag."
+      },
+      "after": "75bc828c11559be9",
+      "date": 1436720490223
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff",
+        "75bc828c11559be9",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "18842812b2d3acc5"
+      ],
+      "id": "75bc828c11559be9",
+      "date": 1436720494872
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec"
+      ],
+      "id": "18842812b2d3acc5",
+      "date": 1436720499802
+    },
+    {
+      "type": "edit",
+      "id": "75bc828c11559be9",
+      "item": {
+        "type": "html",
+        "id": "75bc828c11559be9",
+        "text": "<H3>Registering Remote Services"
+      },
+      "date": 1436720501374
+    },
+    {
+      "type": "edit",
+      "id": "18842812b2d3acc5",
+      "item": {
+        "type": "paragraph",
+        "id": "18842812b2d3acc5",
+        "text": "To register a local service you can use the -R flag. Therefore to advertise a web page being served by an HTTP server on port 80 on the local machine use:"
+      },
+      "date": 1436720584646
+    },
+    {
+      "type": "add",
+      "id": "8670d1966cea85b6",
+      "item": {
+        "type": "paragraph",
+        "id": "8670d1966cea85b6",
+        "text": "To find the advertised web pages on the local network (the same list that Safari shows), use:\n\n           dns-sd -B _http._tcp\n\n     While that command is running, in another window, try the dns-sd -R example given above to advertise a\n     web page, and you should see the \"Add\" event reported to the dns-sd -B window. Now press Ctrl-C in the\n     dns-sd -R window and you should see the \"Remove\" event reported to the dns-sd -B window.\n\n     In the example below, the www.apple.com web page is advertised as a service called \"apple\", running on\n     a target host called apple.local, which resolves to 17.149.160.49.\n\n           dns-sd -P apple _http._tcp \"\" 80 apple.local 17.149.160.49\n\n     The Bonjour menu in the Safari web browser will now show \"apple\".  The same IP address can be reached\n     by entering apple.local in the web browser.  In either case, the request will be resolved to the IP\n     address and browser will show contents associated with www.apple.com."
+      },
+      "after": "18842812b2d3acc5",
+      "date": 1436720590041
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "073256db716c9a8a"
+      },
+      "id": "073256db716c9a8a",
+      "type": "add",
+      "after": "a16800e0d3b0a8ec",
+      "date": 1436720593217
+    },
+    {
+      "type": "edit",
+      "id": "073256db716c9a8a",
+      "item": {
+        "type": "code",
+        "id": "073256db716c9a8a",
+        "text": "dns-sd -R \"My Test\" _http._tcp . 80 path=/path-to-page.html"
+      },
+      "date": 1436720602065
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec"
+      ],
+      "id": "073256db716c9a8a",
+      "date": 1436720608137
+    },
+    {
+      "type": "edit",
+      "id": "8670d1966cea85b6",
+      "item": {
+        "type": "paragraph",
+        "id": "8670d1966cea85b6",
+        "text": "To find the advertised web pages on the local network (the same list that Safari shows), use:"
+      },
+      "date": 1436720622124
+    },
+    {
+      "type": "add",
+      "id": "4a456e0e9cd7e1c3",
+      "item": {
+        "type": "paragraph",
+        "id": "4a456e0e9cd7e1c3",
+        "text": "While that command is running, in another window, try the dns-sd -R example given above to advertise a\n     web page, and you should see the \"Add\" event reported to the dns-sd -B window. Now press Ctrl-C in the\n     dns-sd -R window and you should see the \"Remove\" event reported to the dns-sd -B window.\n\n     In the example below, the www.apple.com web page is advertised as a service called \"apple\", running on\n     a target host called apple.local, which resolves to 17.149.160.49.\n\n           dns-sd -P apple _http._tcp \"\" 80 apple.local 17.149.160.49\n\n     The Bonjour menu in the Safari web browser will now show \"apple\".  The same IP address can be reached\n     by entering apple.local in the web browser.  In either case, the request will be resolved to the IP\n     address and browser will show contents associated with www.apple.com."
+      },
+      "after": "8670d1966cea85b6",
+      "date": 1436720626548
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4d33f0d03b0e971c"
+      },
+      "id": "4d33f0d03b0e971c",
+      "type": "add",
+      "after": "a16800e0d3b0a8ec",
+      "date": 1436720628809
+    },
+    {
+      "type": "edit",
+      "id": "4d33f0d03b0e971c",
+      "item": {
+        "type": "code",
+        "id": "4d33f0d03b0e971c",
+        "text": "dns-sd -B _http._tcp"
+      },
+      "date": 1436720638388
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec"
+      ],
+      "id": "4d33f0d03b0e971c",
+      "date": 1436720644713
+    },
+    {
+      "type": "edit",
+      "id": "75bc828c11559be9",
+      "item": {
+        "type": "html",
+        "id": "75bc828c11559be9",
+        "text": "<H3>Registering A Local Service"
+      },
+      "date": 1436720669921
+    },
+    {
+      "type": "edit",
+      "id": "75bc828c11559be9",
+      "item": {
+        "type": "html",
+        "id": "75bc828c11559be9",
+        "text": "<H3>Registering a local service"
+      },
+      "date": 1436720680074
+    },
+    {
+      "type": "edit",
+      "id": "b4b551744e9701d5",
+      "item": {
+        "type": "html",
+        "id": "b4b551744e9701d5",
+        "text": "<H3>Registering remote services"
+      },
+      "date": 1436720690367
+    },
+    {
+      "type": "edit",
+      "id": "4a456e0e9cd7e1c3",
+      "item": {
+        "type": "paragraph",
+        "id": "4a456e0e9cd7e1c3",
+        "text": "While that command is running, in another window, try the dns-sd -R example given above to advertise a web page, and you should see the \"Add\" event reported to the dns-sd -B window. Now press Ctrl-C in the dns-sd -R window and you should see the \"Remove\" event reported to the dns-sd -B window."
+      },
+      "date": 1436720728317
+    },
+    {
+      "type": "add",
+      "id": "3ecd3c81e3f33732",
+      "item": {
+        "type": "paragraph",
+        "id": "3ecd3c81e3f33732",
+        "text": "In the example below, the www.apple.com web page is advertised as a service called \"apple\", running on a target host called apple.local, which resolves to 17.149.160.49."
+      },
+      "after": "4a456e0e9cd7e1c3",
+      "date": 1436720747630
+    },
+    {
+      "type": "add",
+      "id": "f2a054588043d55f",
+      "item": {
+        "type": "paragraph",
+        "id": "f2a054588043d55f",
+        "text": "The Bonjour menu in the Safari web browser will now show \"apple\".  The same IP address can be reached by entering apple.local in the web browser.  In either case, the request will be resolved to the IP address and browser will show contents associated with www.apple.com."
+      },
+      "after": "3ecd3c81e3f33732",
+      "date": 1436720765896
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bd1a875e7d15d102"
+      },
+      "id": "bd1a875e7d15d102",
+      "type": "add",
+      "after": "a16800e0d3b0a8ec",
+      "date": 1436720768890
+    },
+    {
+      "type": "edit",
+      "id": "bd1a875e7d15d102",
+      "item": {
+        "type": "code",
+        "id": "bd1a875e7d15d102",
+        "text": "dns-sd -P apple _http._tcp \"\" 80 apple.local 17.149.160.49"
+      },
+      "date": 1436720783234
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec"
+      ],
+      "id": "bd1a875e7d15d102",
+      "date": 1436720793240
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "1a967581ed53bfff"
+      ],
+      "id": "1a967581ed53bfff",
+      "date": 1436720822830
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "6faf9b289642e402",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "fadf5ef519f849e7",
+        "1a967581ed53bfff"
+      ],
+      "id": "fadf5ef519f849e7",
+      "date": 1436720845428
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "35acf7bcec288926"
+      },
+      "id": "35acf7bcec288926",
+      "type": "add",
+      "after": "1a967581ed53bfff",
+      "date": 1436720848913
+    },
+    {
+      "type": "edit",
+      "id": "35acf7bcec288926",
+      "item": {
+        "type": "html",
+        "id": "35acf7bcec288926",
+        "text": "<H3>Finding ssh shares"
+      },
+      "date": 1436720868220
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "6faf9b289642e402",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "1a967581ed53bfff"
+      ],
+      "id": "35acf7bcec288926",
+      "date": 1436720870944
+    },
+    {
+      "type": "edit",
+      "id": "fadf5ef519f849e7",
+      "item": {
+        "type": "paragraph",
+        "id": "fadf5ef519f849e7",
+        "text": "To view all of the ssh shares on Bonjour-enabled computers, try this in the Terminal:\n\n"
+      },
+      "date": 1436720875201
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "6faf9b289642e402",
+      "date": 1436720885728
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "3ecd3c81e3f33732",
+      "date": 1436720923665
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "f2a054588043d55f",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "bd1a875e7d15d102",
+      "date": 1436720934473
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "f2a054588043d55f",
+      "date": 1436720948397
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "04505f09da9d3c88"
+      },
+      "id": "04505f09da9d3c88",
+      "type": "add",
+      "after": "1a967581ed53bfff",
+      "date": 1436723063370
+    },
+    {
+      "type": "edit",
+      "id": "04505f09da9d3c88",
+      "item": {
+        "type": "code",
+        "id": "04505f09da9d3c88",
+        "text": "http://google.local.:3000/view/welcome-visitors"
+      },
+      "date": 1436723072856
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6b49d92863dcaa72"
+      },
+      "id": "6b49d92863dcaa72",
+      "type": "add",
+      "after": "04505f09da9d3c88",
+      "date": 1436723088526
+    },
+    {
+      "type": "edit",
+      "id": "6b49d92863dcaa72",
+      "item": {
+        "type": "code",
+        "id": "6b49d92863dcaa72",
+        "text": "dns-sd -P Fedwiki _http._tcp local 3000 google.local david.local path=/"
+      },
+      "date": 1436723091350
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "6b49d92863dcaa72",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff",
+        "04505f09da9d3c88"
+      ],
+      "id": "6b49d92863dcaa72",
+      "date": 1436723107152
+    },
+    {
+      "type": "add",
+      "id": "443b3d37470cb288",
+      "item": {
+        "type": "paragraph",
+        "id": "443b3d37470cb288",
+        "text": "The following command registers a locally running Fedwiki site (being served on the default 3000 port):"
+      },
+      "after": "4a456e0e9cd7e1c3",
+      "date": 1436723171095
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "443b3d37470cb288",
+        "6b49d92863dcaa72",
+        "04505f09da9d3c88",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "04505f09da9d3c88",
+      "date": 1436723189451
+    },
+    {
+      "type": "add",
+      "id": "88c99a06836374ee",
+      "item": {
+        "type": "paragraph",
+        "id": "88c99a06836374ee",
+        "text": "in a way in which it can be reached by:"
+      },
+      "after": "443b3d37470cb288",
+      "date": 1436723195279
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "443b3d37470cb288",
+        "6b49d92863dcaa72",
+        "88c99a06836374ee",
+        "04505f09da9d3c88",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "88c99a06836374ee",
+      "date": 1436723196740
+    },
+    {
+      "type": "edit",
+      "id": "88c99a06836374ee",
+      "item": {
+        "type": "paragraph",
+        "id": "88c99a06836374ee",
+        "text": "in a way in which it can be reached using a local browser by:"
+      },
+      "date": 1436723211933
+    },
+    {
+      "type": "add",
+      "id": "b28fe9cc3b096ee0",
+      "item": {
+        "type": "paragraph",
+        "id": "b28fe9cc3b096ee0",
+        "text": "[[Using"
+      },
+      "after": "88c99a06836374ee",
+      "date": 1436741842758
+    },
+    {
+      "type": "edit",
+      "id": "b28fe9cc3b096ee0",
+      "item": {
+        "type": "paragraph",
+        "id": "b28fe9cc3b096ee0",
+        "text": "[[Local Fedwiki Farm]]"
+      },
+      "date": 1436741943361
+    },
+    {
+      "type": "remove",
+      "id": "443b3d37470cb288",
+      "date": 1436742254064
+    },
+    {
+      "type": "remove",
+      "id": "6b49d92863dcaa72",
+      "date": 1436742258731
+    },
+    {
+      "type": "remove",
+      "id": "88c99a06836374ee",
+      "date": 1436742269998
+    },
+    {
+      "type": "remove",
+      "id": "04505f09da9d3c88",
+      "date": 1436742274240
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e95876a4278b84e2"
+      },
+      "id": "e95876a4278b84e2",
+      "type": "add",
+      "after": "1a967581ed53bfff",
+      "date": 1436742283526
+    },
+    {
+      "type": "move",
+      "order": [
+        "762005d9e80e9de9",
+        "75bc828c11559be9",
+        "18842812b2d3acc5",
+        "073256db716c9a8a",
+        "8670d1966cea85b6",
+        "4d33f0d03b0e971c",
+        "4a456e0e9cd7e1c3",
+        "e95876a4278b84e2",
+        "b28fe9cc3b096ee0",
+        "b4b551744e9701d5",
+        "db7f905a1f450a0b",
+        "562dce8708eac991",
+        "3ecd3c81e3f33732",
+        "bd1a875e7d15d102",
+        "f2a054588043d55f",
+        "0b8ccc2662c52e83",
+        "633b9647339ff5ee",
+        "e234bc7e318389ab",
+        "a16800e0d3b0a8ec",
+        "35acf7bcec288926",
+        "fadf5ef519f849e7",
+        "6faf9b289642e402",
+        "1a967581ed53bfff"
+      ],
+      "id": "e95876a4278b84e2",
+      "date": 1436742288936
+    },
+    {
+      "type": "remove",
+      "id": "b28fe9cc3b096ee0",
+      "date": 1436742292539
+    },
+    {
+      "type": "edit",
+      "id": "e95876a4278b84e2",
+      "item": {
+        "type": "reference",
+        "id": "e95876a4278b84e2",
+        "site": "osx.c0de.academy",
+        "slug": "local-fedwiki-farm",
+        "title": "Local Fedwiki Farm",
+        "text": "Serving a local [[Fedwiki Farm]] on OSX involves teh following steps:"
+      },
+      "date": 1436742294564
+    }
+  ]
+}

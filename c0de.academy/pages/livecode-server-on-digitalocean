@@ -1,0 +1,972 @@
+{
+  "title": "Livecode Server on DigitalOcean",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "2e7caae0a337f971",
+      "text": "The following instructions from Mike Bonner describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+    },
+    {
+      "type": "html",
+      "id": "6a1a2bfee0e9a4a1",
+      "text": "<H3>Running on a droplet"
+    },
+    {
+      "type": "paragraph",
+      "id": "f96399dbe94e4fa3",
+      "text": "I chose lamp 14.04 (ubuntu 64bit) so that I didn't have to mess with setting up apache and all by hand. After droplet creation, I logged into the console with the browser based vnc and used wget to grab the 64bit version of lc server 7.0.4"
+    },
+    {
+      "type": "paragraph",
+      "id": "a776a3a1c32966c9",
+      "text": "then.."
+    },
+    {
+      "type": "code",
+      "id": "ebb29571895c9fa3",
+      "text": "apt-get install unzip"
+    },
+    {
+      "type": "paragraph",
+      "id": "6939935d05f59439",
+      "text": "so that I could unzip the file"
+    },
+    {
+      "type": "code",
+      "id": "746ddac0574eb9fc",
+      "text": "unzip <lc server filename>"
+    },
+    {
+      "type": "paragraph",
+      "id": "d9b3f44e75d531c9",
+      "text": "to expand the contents."
+    },
+    {
+      "type": "code",
+      "id": "dae3b4b89c6fab6c",
+      "text": "chmod 755 livecode-community-server"
+    },
+    {
+      "type": "paragraph",
+      "id": "23fe187bd8d2a366",
+      "text": "to make it executable\n\nthen:"
+    },
+    {
+      "type": "code",
+      "id": "3441aa8657e51872",
+      "text": "mv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin"
+    },
+    {
+      "type": "paragraph",
+      "id": "e12ee689c3f1d1f7",
+      "text": "to move the files to the correct location (I could hvae unzipped them there)\n\nThen:\n"
+    },
+    {
+      "type": "code",
+      "id": "fa601878749c5299",
+      "text": "a2enmod actions\na2enmod cgi"
+    },
+    {
+      "type": "paragraph",
+      "id": "f0fa10715a1e5264",
+      "text": "to enabled the actions and cgi mods"
+    },
+    {
+      "type": "paragraph",
+      "id": "42c4ad334d392f1c",
+      "text": "Then the following:"
+    },
+    {
+      "type": "code",
+      "id": "f26101e8b81979cd",
+      "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "2e26cd98f99a461a",
+      "text": "in the editor I added the 2 required lines as follows right before the end\n</virtualhost> line:"
+    },
+    {
+      "type": "code",
+      "id": "88508d28cc094cf7",
+      "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+    },
+    {
+      "type": "paragraph",
+      "id": "4971e917609a9524",
+      "text": "I did NOT uncomment the line that says to include the serve-cgi-bin.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "ee75a8199f83e252",
+      "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it)\n\nthen:"
+    },
+    {
+      "type": "code",
+      "id": "1cf7ef0fad9daaae",
+      "text": "service apache2 restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "19027abbf5967092",
+      "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file:"
+    },
+    {
+      "type": "code",
+      "id": "524362d8c3600a96",
+      "text": "/var/www/html/test.lc"
+    },
+    {
+      "type": "paragraph",
+      "id": "404c24756271353e",
+      "text": "and put in it:"
+    },
+    {
+      "type": "code",
+      "id": "f605ce180587bf40",
+      "text": "<?lc\nput random(542545)\n?>"
+    },
+    {
+      "type": "paragraph",
+      "id": "85d942358419e270",
+      "text": "Then I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Livecode Server on DigitalOcean",
+        "story": []
+      },
+      "date": 1433705633237
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2e7caae0a337f971"
+      },
+      "id": "2e7caae0a337f971",
+      "type": "add",
+      "date": 1433705634601
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions from fads describe how to get Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1433705688921
+    },
+    {
+      "type": "add",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": " running on a droplet.\nI chose lamp 14.04 (ubuntu) so that I didn't have to mess with setting up\napache and all by hand.\nAfter droplet creation, I logged into the console with the browser based\nvnc and used wget to grab the 64bit version of lc server 7.0.4\nthen..\napt-get install unzip\nso that I could unzip the file\n\nunzip <lc server filename>\nto expand the contents.\n\nchmod 755 livecode-community-server\nto make it executable\n\nthen\nmv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin\nto move the files to the correct location (I could hvae unzipped them there)\n\nThen..\na2enmod actions\na2enmod cgi\nto enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "2e7caae0a337f971",
+      "date": 1433705691057
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions from fads describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1433705698496
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions from Mike Bonner describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1433705726775
+    },
+    {
+      "type": "fork",
+      "site": "livecode.viral.academy"
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "<H3>Running on a droplet"
+      },
+      "date": 1433706693959
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "html",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "<H3>Running on a droplet"
+      },
+      "date": 1433706695452
+    },
+    {
+      "type": "add",
+      "id": "f96399dbe94e4fa3",
+      "item": {
+        "type": "paragraph",
+        "id": "f96399dbe94e4fa3",
+        "text": "I chose lamp 14.04 (ubuntu) so that I didn't have to mess with setting up apache and all by hand. After droplet creation, I logged into the console with the browser based vnc and used wget to grab the 64bit version of lc server 7.0.4"
+      },
+      "after": "6a1a2bfee0e9a4a1",
+      "date": 1433706726783
+    },
+    {
+      "type": "add",
+      "id": "a776a3a1c32966c9",
+      "item": {
+        "type": "paragraph",
+        "id": "a776a3a1c32966c9",
+        "text": "then.."
+      },
+      "after": "f96399dbe94e4fa3",
+      "date": 1433706736455
+    },
+    {
+      "type": "add",
+      "id": "6939935d05f59439",
+      "item": {
+        "type": "paragraph",
+        "id": "6939935d05f59439",
+        "text": "so that I could unzip the file\n\nunzip <lc server filename>\nto expand the contents.\n\nchmod 755 livecode-community-server\nto make it executable\n\nthen\nmv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin\nto move the files to the correct location (I could hvae unzipped them there)\n\nThen..\na2enmod actions\na2enmod cgi\nto enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "a776a3a1c32966c9",
+      "date": 1433706737867
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ebb29571895c9fa3"
+      },
+      "id": "ebb29571895c9fa3",
+      "type": "add",
+      "after": "6939935d05f59439",
+      "date": 1433706741105
+    },
+    {
+      "type": "edit",
+      "id": "ebb29571895c9fa3",
+      "item": {
+        "type": "code",
+        "id": "ebb29571895c9fa3",
+        "text": "apt-get install unzip"
+      },
+      "date": 1433706745466
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439"
+      ],
+      "id": "ebb29571895c9fa3",
+      "date": 1433706751838
+    },
+    {
+      "type": "edit",
+      "id": "6939935d05f59439",
+      "item": {
+        "type": "paragraph",
+        "id": "6939935d05f59439",
+        "text": "so that I could unzip the file"
+      },
+      "date": 1433706782593
+    },
+    {
+      "type": "add",
+      "id": "d9b3f44e75d531c9",
+      "item": {
+        "type": "paragraph",
+        "id": "d9b3f44e75d531c9",
+        "text": "to expand the contents.\n\nchmod 755 livecode-community-server\nto make it executable\n\nthen\nmv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin\nto move the files to the correct location (I could hvae unzipped them there)\n\nThen..\na2enmod actions\na2enmod cgi\nto enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "6939935d05f59439",
+      "date": 1433706788852
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "746ddac0574eb9fc"
+      },
+      "id": "746ddac0574eb9fc",
+      "type": "add",
+      "after": "d9b3f44e75d531c9",
+      "date": 1433706792767
+    },
+    {
+      "type": "edit",
+      "id": "746ddac0574eb9fc",
+      "item": {
+        "type": "code",
+        "id": "746ddac0574eb9fc",
+        "text": "unzip <lc server filename>"
+      },
+      "date": 1433706796917
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9"
+      ],
+      "id": "746ddac0574eb9fc",
+      "date": 1433706802438
+    },
+    {
+      "type": "edit",
+      "id": "d9b3f44e75d531c9",
+      "item": {
+        "type": "paragraph",
+        "id": "d9b3f44e75d531c9",
+        "text": "to expand the contents."
+      },
+      "date": 1433706810593
+    },
+    {
+      "type": "add",
+      "id": "23fe187bd8d2a366",
+      "item": {
+        "type": "paragraph",
+        "id": "23fe187bd8d2a366",
+        "text": "to make it executable\n\nthen\nmv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin\nto move the files to the correct location (I could hvae unzipped them there)\n\nThen..\na2enmod actions\na2enmod cgi\nto enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "d9b3f44e75d531c9",
+      "date": 1433706811956
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dae3b4b89c6fab6c"
+      },
+      "id": "dae3b4b89c6fab6c",
+      "type": "add",
+      "after": "23fe187bd8d2a366",
+      "date": 1433706815061
+    },
+    {
+      "type": "edit",
+      "id": "dae3b4b89c6fab6c",
+      "item": {
+        "type": "code",
+        "id": "dae3b4b89c6fab6c",
+        "text": "chmod 755 livecode-community-server"
+      },
+      "date": 1433706817613
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366"
+      ],
+      "id": "dae3b4b89c6fab6c",
+      "date": 1433706823130
+    },
+    {
+      "type": "edit",
+      "id": "23fe187bd8d2a366",
+      "item": {
+        "type": "paragraph",
+        "id": "23fe187bd8d2a366",
+        "text": "to make it executable\n\nthen:"
+      },
+      "date": 1433706860106
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3441aa8657e51872"
+      },
+      "id": "3441aa8657e51872",
+      "type": "add",
+      "after": "e12ee689c3f1d1f7",
+      "date": 1433706863497
+    },
+    {
+      "type": "add",
+      "id": "e12ee689c3f1d1f7",
+      "item": {
+        "type": "paragraph",
+        "id": "e12ee689c3f1d1f7",
+        "text": "to move the files to the correct location (I could hvae unzipped them there)\n\nThen..\na2enmod actions\na2enmod cgi\nto enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "23fe187bd8d2a366",
+      "date": 1433706864749
+    },
+    {
+      "type": "edit",
+      "id": "3441aa8657e51872",
+      "item": {
+        "type": "code",
+        "id": "3441aa8657e51872",
+        "text": "mv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin"
+      },
+      "date": 1433706866830
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7"
+      ],
+      "id": "3441aa8657e51872",
+      "date": 1433706871933
+    },
+    {
+      "type": "edit",
+      "id": "e12ee689c3f1d1f7",
+      "item": {
+        "type": "paragraph",
+        "id": "e12ee689c3f1d1f7",
+        "text": "to move the files to the correct location (I could hvae unzipped them there)\n\nThen:\n"
+      },
+      "date": 1433706887531
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fa601878749c5299"
+      },
+      "id": "fa601878749c5299",
+      "type": "add",
+      "after": "f0fa10715a1e5264",
+      "date": 1433706891952
+    },
+    {
+      "type": "add",
+      "id": "f0fa10715a1e5264",
+      "item": {
+        "type": "paragraph",
+        "id": "f0fa10715a1e5264",
+        "text": "to enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "e12ee689c3f1d1f7",
+      "date": 1433706893324
+    },
+    {
+      "type": "edit",
+      "id": "fa601878749c5299",
+      "item": {
+        "type": "code",
+        "id": "fa601878749c5299",
+        "text": "a2enmod actions\na2enmod cgi"
+      },
+      "date": 1433706895886
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7",
+        "fa601878749c5299",
+        "f0fa10715a1e5264"
+      ],
+      "id": "fa601878749c5299",
+      "date": 1433706899972
+    },
+    {
+      "type": "edit",
+      "id": "f0fa10715a1e5264",
+      "item": {
+        "type": "paragraph",
+        "id": "f0fa10715a1e5264",
+        "text": "to enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it"
+      },
+      "date": 1433706917637
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f605ce180587bf40"
+      },
+      "id": "f605ce180587bf40",
+      "type": "add",
+      "after": "85d942358419e270",
+      "date": 1433706922489
+    },
+    {
+      "type": "add",
+      "id": "85d942358419e270",
+      "item": {
+        "type": "paragraph",
+        "id": "85d942358419e270",
+        "text": "Then I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "f0fa10715a1e5264",
+      "date": 1433706924515
+    },
+    {
+      "type": "edit",
+      "id": "f605ce180587bf40",
+      "item": {
+        "type": "code",
+        "id": "f605ce180587bf40",
+        "text": "<?lc\nput random(542545)\n?>"
+      },
+      "date": 1433706926249
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7",
+        "fa601878749c5299",
+        "f0fa10715a1e5264",
+        "f605ce180587bf40",
+        "85d942358419e270"
+      ],
+      "id": "f605ce180587bf40",
+      "date": 1433706930701
+    },
+    {
+      "type": "edit",
+      "id": "f0fa10715a1e5264",
+      "item": {
+        "type": "paragraph",
+        "id": "f0fa10715a1e5264",
+        "text": "to enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen:"
+      },
+      "date": 1433707039696
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1cf7ef0fad9daaae"
+      },
+      "id": "1cf7ef0fad9daaae",
+      "type": "add",
+      "after": "85d942358419e270",
+      "date": 1433707042454
+    },
+    {
+      "type": "add",
+      "id": "19027abbf5967092",
+      "item": {
+        "type": "paragraph",
+        "id": "19027abbf5967092",
+        "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc and put in it"
+      },
+      "after": "f0fa10715a1e5264",
+      "date": 1433707043983
+    },
+    {
+      "type": "edit",
+      "id": "1cf7ef0fad9daaae",
+      "item": {
+        "type": "code",
+        "id": "1cf7ef0fad9daaae",
+        "text": "service apache2 restart"
+      },
+      "date": 1433707048393
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7",
+        "fa601878749c5299",
+        "f0fa10715a1e5264",
+        "1cf7ef0fad9daaae",
+        "19027abbf5967092",
+        "f605ce180587bf40",
+        "85d942358419e270"
+      ],
+      "id": "1cf7ef0fad9daaae",
+      "date": 1433707051559
+    },
+    {
+      "type": "edit",
+      "id": "f96399dbe94e4fa3",
+      "item": {
+        "type": "paragraph",
+        "id": "f96399dbe94e4fa3",
+        "text": "I chose lamp 14.04 (ubuntu 64bit) so that I didn't have to mess with setting up apache and all by hand. After droplet creation, I logged into the console with the browser based vnc and used wget to grab the 64bit version of lc server 7.0.4"
+      },
+      "date": 1433707087032
+    },
+    {
+      "type": "edit",
+      "id": "19027abbf5967092",
+      "item": {
+        "type": "paragraph",
+        "id": "19027abbf5967092",
+        "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file:"
+      },
+      "date": 1433710721978
+    },
+    {
+      "type": "add",
+      "id": "9df7e7e4ac2d2f88",
+      "item": {
+        "type": "paragraph",
+        "id": "9df7e7e4ac2d2f88",
+        "text": "/var/www/html/test.lc"
+      },
+      "after": "19027abbf5967092",
+      "date": 1433710726562
+    },
+    {
+      "type": "add",
+      "id": "404c24756271353e",
+      "item": {
+        "type": "paragraph",
+        "id": "404c24756271353e",
+        "text": "and put in it:"
+      },
+      "after": "9df7e7e4ac2d2f88",
+      "date": 1433710736647
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ccc0fb738f808edc"
+      },
+      "id": "ccc0fb738f808edc",
+      "type": "add",
+      "after": "85d942358419e270",
+      "date": 1433710741734
+    },
+    {
+      "type": "remove",
+      "id": "ccc0fb738f808edc",
+      "date": 1433710746365
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "524362d8c3600a96"
+      },
+      "id": "524362d8c3600a96",
+      "type": "add",
+      "after": "85d942358419e270",
+      "date": 1433710750118
+    },
+    {
+      "type": "edit",
+      "id": "524362d8c3600a96",
+      "item": {
+        "type": "code",
+        "id": "524362d8c3600a96",
+        "text": "/var/www/html/test.lc"
+      },
+      "date": 1433710752749
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7",
+        "fa601878749c5299",
+        "f0fa10715a1e5264",
+        "1cf7ef0fad9daaae",
+        "19027abbf5967092",
+        "9df7e7e4ac2d2f88",
+        "524362d8c3600a96",
+        "404c24756271353e",
+        "f605ce180587bf40",
+        "85d942358419e270"
+      ],
+      "id": "524362d8c3600a96",
+      "date": 1433710756037
+    },
+    {
+      "type": "remove",
+      "id": "9df7e7e4ac2d2f88",
+      "date": 1433710758615
+    },
+    {
+      "type": "edit",
+      "id": "f0fa10715a1e5264",
+      "item": {
+        "type": "paragraph",
+        "id": "f0fa10715a1e5264",
+        "text": "to enabled the actions and cgi mods"
+      },
+      "date": 1433710919606
+    },
+    {
+      "type": "add",
+      "id": "42c4ad334d392f1c",
+      "item": {
+        "type": "paragraph",
+        "id": "42c4ad334d392f1c",
+        "text": "Then the following:"
+      },
+      "after": "f0fa10715a1e5264",
+      "date": 1433710925330
+    },
+    {
+      "type": "add",
+      "id": "a999a6aa623fd286",
+      "item": {
+        "type": "paragraph",
+        "id": "a999a6aa623fd286",
+        "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+      },
+      "after": "42c4ad334d392f1c",
+      "date": 1433710932099
+    },
+    {
+      "type": "add",
+      "id": "2e26cd98f99a461a",
+      "item": {
+        "type": "paragraph",
+        "id": "2e26cd98f99a461a",
+        "text": "in the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen:"
+      },
+      "after": "a999a6aa623fd286",
+      "date": 1433710936093
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f26101e8b81979cd"
+      },
+      "id": "f26101e8b81979cd",
+      "type": "add",
+      "after": "85d942358419e270",
+      "date": 1433710939283
+    },
+    {
+      "type": "edit",
+      "id": "f26101e8b81979cd",
+      "item": {
+        "type": "code",
+        "id": "f26101e8b81979cd",
+        "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+      },
+      "date": 1433710949064
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7",
+        "fa601878749c5299",
+        "f0fa10715a1e5264",
+        "42c4ad334d392f1c",
+        "a999a6aa623fd286",
+        "f26101e8b81979cd",
+        "2e26cd98f99a461a",
+        "1cf7ef0fad9daaae",
+        "19027abbf5967092",
+        "524362d8c3600a96",
+        "404c24756271353e",
+        "f605ce180587bf40",
+        "85d942358419e270"
+      ],
+      "id": "f26101e8b81979cd",
+      "date": 1433710955921
+    },
+    {
+      "type": "remove",
+      "id": "a999a6aa623fd286",
+      "date": 1433710960582
+    },
+    {
+      "type": "edit",
+      "id": "2e26cd98f99a461a",
+      "item": {
+        "type": "paragraph",
+        "id": "2e26cd98f99a461a",
+        "text": "in the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf"
+      },
+      "date": 1433710969263
+    },
+    {
+      "type": "add",
+      "id": "ee75a8199f83e252",
+      "item": {
+        "type": "paragraph",
+        "id": "ee75a8199f83e252",
+        "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it)\n\nthen:"
+      },
+      "after": "2e26cd98f99a461a",
+      "date": 1433710981133
+    },
+    {
+      "type": "edit",
+      "id": "2e26cd98f99a461a",
+      "item": {
+        "type": "paragraph",
+        "id": "2e26cd98f99a461a",
+        "text": "in the editor I added the 2 required lines as follows right before the end\n</virtualhost> line:"
+      },
+      "date": 1433711048763
+    },
+    {
+      "type": "add",
+      "id": "b72a287d20b26ae6",
+      "item": {
+        "type": "paragraph",
+        "id": "b72a287d20b26ae6",
+        "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+      },
+      "after": "2e26cd98f99a461a",
+      "date": 1433711062593
+    },
+    {
+      "type": "add",
+      "id": "4971e917609a9524",
+      "item": {
+        "type": "paragraph",
+        "id": "4971e917609a9524",
+        "text": "I did NOT uncomment the line that says to include the serve-cgi-bin.conf"
+      },
+      "after": "b72a287d20b26ae6",
+      "date": 1433711064916
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "88508d28cc094cf7"
+      },
+      "id": "88508d28cc094cf7",
+      "type": "add",
+      "after": "85d942358419e270",
+      "date": 1433722964974
+    },
+    {
+      "type": "edit",
+      "id": "88508d28cc094cf7",
+      "item": {
+        "type": "code",
+        "id": "88508d28cc094cf7",
+        "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+      },
+      "date": 1433722968204
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "f96399dbe94e4fa3",
+        "a776a3a1c32966c9",
+        "ebb29571895c9fa3",
+        "6939935d05f59439",
+        "746ddac0574eb9fc",
+        "d9b3f44e75d531c9",
+        "dae3b4b89c6fab6c",
+        "23fe187bd8d2a366",
+        "3441aa8657e51872",
+        "e12ee689c3f1d1f7",
+        "fa601878749c5299",
+        "f0fa10715a1e5264",
+        "42c4ad334d392f1c",
+        "f26101e8b81979cd",
+        "2e26cd98f99a461a",
+        "b72a287d20b26ae6",
+        "88508d28cc094cf7",
+        "4971e917609a9524",
+        "ee75a8199f83e252",
+        "1cf7ef0fad9daaae",
+        "19027abbf5967092",
+        "524362d8c3600a96",
+        "404c24756271353e",
+        "f605ce180587bf40",
+        "85d942358419e270"
+      ],
+      "id": "88508d28cc094cf7",
+      "date": 1433722977587
+    },
+    {
+      "type": "remove",
+      "id": "b72a287d20b26ae6",
+      "date": 1433722981802
+    }
+  ]
+}

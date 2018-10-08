@@ -1,0 +1,968 @@
+{
+  "title": "Constructing Explanations",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "9dcc7d0d5c79a0e5",
+      "text": "We seek explanation for what a system does and why. [[Microservices]] complicate this aspiration when mixed technologies have been assembled over years by evolving teams for changing business purpose."
+    },
+    {
+      "type": "paragraph",
+      "id": "14f132cf0110f85b",
+      "text": "Parnas and Clement recognized that systems weren't rationally designed but suggested one \"fake it\" for documentation clarity. [http://web.engr.oregonstate.edu/~digd/courses/cs361_W15/docs/IEEE86_Parnas_Clement.pdf pdf]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ebdda5de2aee9f57",
+      "text": "Zane Bitter argues that even this is going too far. Change; complexity; uncertainty: these things are the stuff of life itself. Tire of them and you are tired of living. [http://www.zerobanana.com/essays/rational-design/ post]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a0de93aa04a5e947",
+      "text": "We've built an explainer that relishes the excruciating details present in today's systems while still telling stories that are compact and relevant enough for action."
+    },
+    {
+      "type": "markdown",
+      "id": "5be43a7e8eb90fd1",
+      "text": "# Facts"
+    },
+    {
+      "type": "paragraph",
+      "id": "4acadb099bf7da44",
+      "text": "Observation. We favor direct measurement of running systems for this provides truths that are automatically current. Microservices enable instrumentation of running software and collecting these measurements over networking infrastructure."
+    },
+    {
+      "type": "paragraph",
+      "id": "c7983117b879a853",
+      "text": "Construction. Computerized launch and maintenance creates additional metadata about what a system is and does. A self-healing system must observe itself  so as to know when to intervene. This too can be usefully shared."
+    },
+    {
+      "type": "paragraph",
+      "id": "5eb6fee864ec05ae",
+      "text": "Intention. The work of programming has authors reasoning about the future behavior of their work. This is captured in code, notes, catalogs and documentation. "
+    },
+    {
+      "type": "paragraph",
+      "id": "50294c4c4b101f44",
+      "text": "Reflection. As we become familiar with the true behavior of a system we can condense its complexity into a smaller network of properties judged relevant because they are essential and possibly tenuous."
+    },
+    {
+      "type": "markdown",
+      "id": "de41354ce1aef168",
+      "text": "# Scenarios"
+    },
+    {
+      "type": "paragraph",
+      "id": "954942c53eca2439",
+      "text": "We seek to know a system so that we can adjust some aspect of it. We might ask some question like, How does information get from here to there? Or, What step is misbehaving and who should be called about it?"
+    },
+    {
+      "type": "paragraph",
+      "id": "02172c3e0e87cc4f",
+      "text": "Such questions fall into categories in line with properties like method, performance, reliability and ownership. We'll call the consequent form of a particular question and answer a scenario."
+    },
+    {
+      "type": "paragraph",
+      "id": "8eb86b1f4aaaf6ca",
+      "text": "A rational design, even one faked after the fact, falls short of answering these questions because the questions themselves must be anticipated. It is not enough to recognize scenarios, for without specifics no answer is forthcoming."
+    },
+    {
+      "type": "paragraph",
+      "id": "bd3c28dc354b5c60",
+      "text": "When the systems are widely known and the caring audience large, a good search engine is amazingly effective at finding a good answer among sites like wikipedia or stack overflow. Yes, someone has had this particular question before and they have written about it."
+    },
+    {
+      "type": "paragraph",
+      "id": "7d36d3750a2106f0",
+      "text": "A microservice explainer we desire has neither rationality or community at its service. It must select and assemble facts given only vague queries and present these in comprehensible form either including an answer or guiding the next question."
+    },
+    {
+      "type": "paragraph",
+      "id": "33458a7f1999b172",
+      "text": "The explainer itself must be simpler than what it explains if it is to be a trusted source of information. We expect that each scenario can be encoding into one or more query templates with relevant rendering of resulting details."
+    },
+    {
+      "type": "markdown",
+      "id": "cff0e234428799f3",
+      "text": "# Realization"
+    },
+    {
+      "type": "paragraph",
+      "id": "05f2cd75a9abb3cc",
+      "text": "We have built such an explainer and are now getting encouraging results."
+    },
+    {
+      "type": "paragraph",
+      "id": "22e69d4eeafb9fbd",
+      "text": "We use the data warehouse method of extract-transform-load to assemble deployed observations with intention and construction details into a graph database. [https://neo4j.com/developer/guide-import-csv/ neo4j]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3e57b8f14ee5e114",
+      "text": "We query the graph by navigating a landscape of scenarios finding the nearest next query to makes use of accumulated facts chosen from previous results."
+    },
+    {
+      "type": "paragraph",
+      "id": "9a6cab867dd965dc",
+      "text": "Each query result set is presented in tabular form, with column values hyperlinked when their choice would advance to a recognized next query."
+    },
+    {
+      "type": "paragraph",
+      "id": "d74e58dba7482fcb",
+      "text": "Where query results describe a network, with columns such as \"source\" and \"sink\", we generate a vector sketch of this network with clickable nodes and arcs leading to obvious next queries, often drilling into details."
+    },
+    {
+      "type": "markdown",
+      "id": "5487f886dab1cdf1",
+      "text": "# Practice"
+    },
+    {
+      "type": "paragraph",
+      "id": "6d34949a99308055",
+      "text": "We've found our success depends on reasonably clean data and relatively consistent terminology over organizational spans where this is not guaranteed. Within the graph database we can ask which data sources lineup and even better, what doesn't lineup where it should."
+    },
+    {
+      "type": "paragraph",
+      "id": "0293d975a3ea4ba5",
+      "text": "We've found we can raise the model's level of abstraction by querying for idiomatically arranged nodes and adding summarizing relations between them. For example we might say A streams to B if a kafka topic is produced by A and consumed by B."
+    },
+    {
+      "type": "paragraph",
+      "id": "641e8bd84a2ca0d9",
+      "text": "We've found we can introduce and manage more abstract concepts still. For example, consider a subsystem defined as a collection of cooperating services. We need not encode for subsystems important properties such as connectivity or ownership since these can be queried from their members."
+    },
+    {
+      "type": "paragraph",
+      "id": "70797eb3dd3d0dfa",
+      "text": "We can now draw a map where subsystems are shown to stream between each other and both nodes and edges parameterize more detailed queries. With this we have addressed one scenario, how information gets from here to there. "
+    },
+    {
+      "type": "paragraph",
+      "id": "8a30e1e83c6920e6",
+      "text": "We expect many varied scenarios will guide the same construction method and thus provide sound and current explanations of modern systems."
+    },
+    {
+      "type": "pagefold",
+      "id": "a5c475fefd1482b5",
+      "text": "."
+    },
+    {
+      "type": "paragraph",
+      "id": "08bcdfcf5b3fab9d",
+      "text": "These notes have been prepared in anticipation of a keynote at the Explore DDD conference, 2017. [http://exploreddd.com/ site]"
+    },
+    {
+      "type": "markdown",
+      "id": "0da2d30879014c65",
+      "text": "# See also\n\n- [[Microservices]]\n- [[Serverless Microservices]]\n- [[Microservices Visualized]]\n- [[Ontology v. Stigmergy]]\n- [[Constructing Explanations]]\n- [[Fallacies of Distributed Computing]]\n- Microservices not a free lunch - [http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html highscalability.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Constructing Explanations",
+        "story": []
+      },
+      "date": 1500223540190
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9dcc7d0d5c79a0e5"
+      },
+      "id": "9dcc7d0d5c79a0e5",
+      "type": "add",
+      "date": 1500223570630
+    },
+    {
+      "type": "edit",
+      "id": "9dcc7d0d5c79a0e5",
+      "item": {
+        "type": "paragraph",
+        "id": "9dcc7d0d5c79a0e5",
+        "text": "We seek explanation for what a system does and why. Microservices complicate this aspiration when mixed technologies have been assembled over years by evolving teams for changing business purpose."
+      },
+      "date": 1500224127999
+    },
+    {
+      "type": "add",
+      "id": "14f132cf0110f85b",
+      "item": {
+        "type": "paragraph",
+        "id": "14f132cf0110f85b",
+        "text": "Parnas and Clement recognized that systems weren't rationally designed but suggested one \"fake it\" for documentation clarity. [http://web.engr.oregonstate.edu/~digd/courses/cs361_W15/docs/IEEE86_Parnas_Clement.pdf pdf]"
+      },
+      "after": "9dcc7d0d5c79a0e5",
+      "date": 1500224893448
+    },
+    {
+      "type": "add",
+      "id": "ebdda5de2aee9f57",
+      "item": {
+        "type": "paragraph",
+        "id": "ebdda5de2aee9f57",
+        "text": "Zane Bitter argues that even this is going too far in The Myth of Rational Design."
+      },
+      "after": "14f132cf0110f85b",
+      "date": 1500225392274
+    },
+    {
+      "type": "edit",
+      "id": "ebdda5de2aee9f57",
+      "item": {
+        "type": "paragraph",
+        "id": "ebdda5de2aee9f57",
+        "text": "Zane Bitter argues that even this is going too far in The Myth of Rational Design. Change; complexity; uncertainty: these things are the stuff of life itself. Tire of them and you are tired of living."
+      },
+      "date": 1500225416615
+    },
+    {
+      "type": "edit",
+      "id": "ebdda5de2aee9f57",
+      "item": {
+        "type": "paragraph",
+        "id": "ebdda5de2aee9f57",
+        "text": "In The Myth of Rational Design Zane Bitter argues that even this is going too far. Change; complexity; uncertainty: these things are the stuff of life itself. Tire of them and you are tired of living."
+      },
+      "date": 1500225466172
+    },
+    {
+      "type": "edit",
+      "id": "ebdda5de2aee9f57",
+      "item": {
+        "type": "paragraph",
+        "id": "ebdda5de2aee9f57",
+        "text": "The Myth of Rational Design by Zane Bitter argues that even this is going too far. Change; complexity; uncertainty: these things are the stuff of life itself. Tire of them and you are tired of living."
+      },
+      "date": 1500225485768
+    },
+    {
+      "type": "edit",
+      "id": "ebdda5de2aee9f57",
+      "item": {
+        "type": "paragraph",
+        "id": "ebdda5de2aee9f57",
+        "text": "The Myth of Rational Design by Zane Bitter argues that even this is going too far. Change; complexity; uncertainty: these things are the stuff of life itself. Tire of them and you are tired of living. [http://www.zerobanana.com/essays/rational-design/ post]"
+      },
+      "date": 1500225507674
+    },
+    {
+      "type": "edit",
+      "id": "ebdda5de2aee9f57",
+      "item": {
+        "type": "paragraph",
+        "id": "ebdda5de2aee9f57",
+        "text": "Zane Bitter argues that even this is going too far. Change; complexity; uncertainty: these things are the stuff of life itself. Tire of them and you are tired of living. [http://www.zerobanana.com/essays/rational-design/ post]"
+      },
+      "date": 1500225524477
+    },
+    {
+      "type": "add",
+      "id": "8fe2abb4de53e05e",
+      "item": {
+        "type": "paragraph",
+        "id": "8fe2abb4de53e05e",
+        "text": "# Measurement"
+      },
+      "after": "ebdda5de2aee9f57",
+      "date": 1500225638656
+    },
+    {
+      "type": "add",
+      "id": "4acadb099bf7da44",
+      "item": {
+        "type": "paragraph",
+        "id": "4acadb099bf7da44",
+        "text": "We favor direct measurement of running systems for this provides truths that are automatically current. Microservices enable instrumentation of running software and collecting these measurements over networking infrastructure."
+      },
+      "after": "8fe2abb4de53e05e",
+      "date": 1500225958416
+    },
+    {
+      "type": "edit",
+      "id": "4acadb099bf7da44",
+      "item": {
+        "type": "paragraph",
+        "id": "4acadb099bf7da44",
+        "text": "Observation. We favor direct measurement of running systems for this provides truths that are automatically current. Microservices enable instrumentation of running software and collecting these measurements over networking infrastructure."
+      },
+      "date": 1500225996703
+    },
+    {
+      "type": "remove",
+      "id": "8fe2abb4de53e05e",
+      "date": 1500226000781
+    },
+    {
+      "type": "add",
+      "id": "5be43a7e8eb90fd1",
+      "item": {
+        "type": "paragraph",
+        "id": "5be43a7e8eb90fd1",
+        "text": "# Facts"
+      },
+      "after": "ebdda5de2aee9f57",
+      "date": 1500226024350
+    },
+    {
+      "type": "add",
+      "id": "c7983117b879a853",
+      "item": {
+        "type": "paragraph",
+        "id": "c7983117b879a853",
+        "text": "Construction. Computerized launch and maintenance creates additional metadata about what a system is and does. A self-healing system must observe itself  so as to know when to intervene. This too can be usefully shared."
+      },
+      "after": "4acadb099bf7da44",
+      "date": 1500226827713
+    },
+    {
+      "type": "add",
+      "id": "5eb6fee864ec05ae",
+      "item": {
+        "type": "paragraph",
+        "id": "5eb6fee864ec05ae",
+        "text": "Intention. The work of programming has authors reasoning about the future behavior of their work. This is captured in code, notes, catalogs and documentation. "
+      },
+      "after": "c7983117b879a853",
+      "date": 1500227125859
+    },
+    {
+      "type": "add",
+      "id": "50294c4c4b101f44",
+      "item": {
+        "type": "paragraph",
+        "id": "50294c4c4b101f44",
+        "text": "Reflection. As we become familiar with the true behavior of a system we can condense its complexity into a smaller network of properties judged relevant because they are essential and possibly tenuous."
+      },
+      "after": "5eb6fee864ec05ae",
+      "date": 1500227522377
+    },
+    {
+      "type": "edit",
+      "id": "5be43a7e8eb90fd1",
+      "item": {
+        "type": "markdown",
+        "id": "5be43a7e8eb90fd1",
+        "text": "# Facts"
+      },
+      "date": 1500227528851
+    },
+    {
+      "type": "add",
+      "id": "de41354ce1aef168",
+      "item": {
+        "type": "paragraph",
+        "id": "de41354ce1aef168",
+        "text": "# Scenarios"
+      },
+      "after": "50294c4c4b101f44",
+      "date": 1500227675766
+    },
+    {
+      "type": "add",
+      "id": "954942c53eca2439",
+      "item": {
+        "type": "paragraph",
+        "id": "954942c53eca2439",
+        "text": "We seek to know a system so that we can improve some aspect of it. We might ask some question like, How does information get from here to there? Or, What step is misbehaving and who should be called about it?"
+      },
+      "after": "de41354ce1aef168",
+      "date": 1500228196840
+    },
+    {
+      "type": "edit",
+      "id": "de41354ce1aef168",
+      "item": {
+        "type": "markdown",
+        "id": "de41354ce1aef168",
+        "text": "# Scenarios"
+      },
+      "date": 1500228229362
+    },
+    {
+      "type": "edit",
+      "id": "954942c53eca2439",
+      "item": {
+        "type": "paragraph",
+        "id": "954942c53eca2439",
+        "text": "We seek to know a system so that we can adjust some aspect of it. We might ask some question like, How does information get from here to there? Or, What step is misbehaving and who should be called about it?"
+      },
+      "date": 1500228308308
+    },
+    {
+      "type": "add",
+      "id": "8eb86b1f4aaaf6ca",
+      "item": {
+        "type": "paragraph",
+        "id": "8eb86b1f4aaaf6ca",
+        "text": "A rational design, even one faked after the fact, falls short of answering these questions because the questions themselves must be anticipated."
+      },
+      "after": "954942c53eca2439",
+      "date": 1500228738447
+    },
+    {
+      "type": "add",
+      "id": "bd3c28dc354b5c60",
+      "item": {
+        "type": "paragraph",
+        "id": "bd3c28dc354b5c60",
+        "text": "When the systems are widely known and the caring audience large, a good search engine is amazingly effective at finding a good answer among sites like wikipedia or stack overflow. Yes, someone has had this question before and they have written about it."
+      },
+      "after": "8eb86b1f4aaaf6ca",
+      "date": 1500228975489
+    },
+    {
+      "type": "add",
+      "id": "7d36d3750a2106f0",
+      "item": {
+        "type": "paragraph",
+        "id": "7d36d3750a2106f0",
+        "text": "A microservice explainer has neither rationality or community at its service. It must select and assemble facts given only vague queries and present these in comprehensible form either including an answer or guiding the next question."
+      },
+      "after": "bd3c28dc354b5c60",
+      "date": 1500229505437
+    },
+    {
+      "type": "add",
+      "id": "33458a7f1999b172",
+      "item": {
+        "type": "paragraph",
+        "id": "33458a7f1999b172",
+        "text": "The explainer itself must be simpler than what it explains if it is to be a trusted source of information. We expect that by encoding query templates within a browsable "
+      },
+      "after": "7d36d3750a2106f0",
+      "date": 1500229715461
+    },
+    {
+      "type": "add",
+      "id": "02172c3e0e87cc4f",
+      "item": {
+        "type": "paragraph",
+        "id": "02172c3e0e87cc4f",
+        "text": "Such questions fall into categories in line with properties like method, performance, reliability and ownership. We'll call the consequent form of a question and answer a scenario."
+      },
+      "after": "954942c53eca2439",
+      "date": 1500230028037
+    },
+    {
+      "type": "edit",
+      "id": "02172c3e0e87cc4f",
+      "item": {
+        "type": "paragraph",
+        "id": "02172c3e0e87cc4f",
+        "text": "Such questions fall into categories in line with properties like method, performance, reliability and ownership. We'll call the consequent form of a particular question and answer a scenario."
+      },
+      "date": 1500230111043
+    },
+    {
+      "type": "edit",
+      "id": "8eb86b1f4aaaf6ca",
+      "item": {
+        "type": "paragraph",
+        "id": "8eb86b1f4aaaf6ca",
+        "text": "A rational design, even one faked after the fact, falls short of answering these questions because the questions themselves must be anticipated. It is not enough to recognize scenarios, the specifics of every detail must be present."
+      },
+      "date": 1500230210794
+    },
+    {
+      "type": "edit",
+      "id": "8eb86b1f4aaaf6ca",
+      "item": {
+        "type": "paragraph",
+        "id": "8eb86b1f4aaaf6ca",
+        "text": "A rational design, even one faked after the fact, falls short of answering these questions because the questions themselves must be anticipated. It is not enough to recognize scenarios, for without specifics no answer is forthcoming."
+      },
+      "date": 1500230253766
+    },
+    {
+      "type": "edit",
+      "id": "bd3c28dc354b5c60",
+      "item": {
+        "type": "paragraph",
+        "id": "bd3c28dc354b5c60",
+        "text": "When the systems are widely known and the caring audience large, a good search engine is amazingly effective at finding a good answer among sites like wikipedia or stack overflow. Yes, someone has had this particular question before and they have written about it."
+      },
+      "date": 1500230276881
+    },
+    {
+      "type": "edit",
+      "id": "7d36d3750a2106f0",
+      "item": {
+        "type": "paragraph",
+        "id": "7d36d3750a2106f0",
+        "text": "A microservice explainer we desire has neither rationality or community at its service. It must select and assemble facts given only vague queries and present these in comprehensible form either including an answer or guiding the next question."
+      },
+      "date": 1500230295638
+    },
+    {
+      "type": "edit",
+      "id": "33458a7f1999b172",
+      "item": {
+        "type": "paragraph",
+        "id": "33458a7f1999b172",
+        "text": "The explainer itself must be simpler than what it explains if it is to be a trusted source of information. We expect that each scenario can be encoding into one or more query templates with scenario relevant rendering of specific results."
+      },
+      "date": 1500231600235
+    },
+    {
+      "type": "edit",
+      "id": "33458a7f1999b172",
+      "item": {
+        "type": "paragraph",
+        "id": "33458a7f1999b172",
+        "text": "The explainer itself must be simpler than what it explains if it is to be a trusted source of information. We expect that each scenario can be encoding into one or more query templates with scenario relevant rendering of resulting details."
+      },
+      "date": 1500231733625
+    },
+    {
+      "type": "edit",
+      "id": "33458a7f1999b172",
+      "item": {
+        "type": "paragraph",
+        "id": "33458a7f1999b172",
+        "text": "The explainer itself must be simpler than what it explains if it is to be a trusted source of information. We expect that each scenario can be encoding into one or more query templates with relevant rendering of resulting details."
+      },
+      "date": 1500231751747
+    },
+    {
+      "type": "add",
+      "id": "cff0e234428799f3",
+      "item": {
+        "type": "paragraph",
+        "id": "cff0e234428799f3",
+        "text": "# Realization"
+      },
+      "after": "33458a7f1999b172",
+      "date": 1500231794687
+    },
+    {
+      "type": "add",
+      "id": "05f2cd75a9abb3cc",
+      "item": {
+        "type": "paragraph",
+        "id": "05f2cd75a9abb3cc",
+        "text": "We have built such an explainer and are now getting encouraging results."
+      },
+      "after": "cff0e234428799f3",
+      "date": 1500231835744
+    },
+    {
+      "type": "add",
+      "id": "22e69d4eeafb9fbd",
+      "item": {
+        "type": "paragraph",
+        "id": "22e69d4eeafb9fbd",
+        "text": "We use the data warehouse method of extract-transform-load to assemble deployed observations with intention and construction details into a graph database."
+      },
+      "after": "05f2cd75a9abb3cc",
+      "date": 1500232049966
+    },
+    {
+      "type": "add",
+      "id": "3e57b8f14ee5e114",
+      "item": {
+        "type": "paragraph",
+        "id": "3e57b8f14ee5e114",
+        "text": "We query the graph by navigating a landscape of scenarios finding the nearest next query to makes use of accumulated facts chosen from previous results."
+      },
+      "after": "22e69d4eeafb9fbd",
+      "date": 1500232253440
+    },
+    {
+      "type": "add",
+      "id": "9a6cab867dd965dc",
+      "item": {
+        "type": "paragraph",
+        "id": "9a6cab867dd965dc",
+        "text": "Each query result set is presented in tabular form, with column values hyperlinked when their choice would advance to a recognized next query."
+      },
+      "after": "3e57b8f14ee5e114",
+      "date": 1500232422899
+    },
+    {
+      "type": "add",
+      "id": "d74e58dba7482fcb",
+      "item": {
+        "type": "paragraph",
+        "id": "d74e58dba7482fcb",
+        "text": "Where query results describe a network, with columns such as from and to, we generate a vector sketch of this network with clickable nodes and arcs."
+      },
+      "after": "9a6cab867dd965dc",
+      "date": 1500232579967
+    },
+    {
+      "type": "edit",
+      "id": "d74e58dba7482fcb",
+      "item": {
+        "type": "paragraph",
+        "id": "d74e58dba7482fcb",
+        "text": "Where query results describe a network, with columns such as \"source\" and \"sink\", we generate a vector sketch of this network with clickable nodes and arcs leading to obvious next queries, often drilling into details."
+      },
+      "date": 1500232687113
+    },
+    {
+      "type": "edit",
+      "id": "cff0e234428799f3",
+      "item": {
+        "type": "markdown",
+        "id": "cff0e234428799f3",
+        "text": "# Realization"
+      },
+      "date": 1500232727732
+    },
+    {
+      "type": "add",
+      "id": "a0de93aa04a5e947",
+      "item": {
+        "type": "paragraph",
+        "id": "a0de93aa04a5e947",
+        "text": "We've built an explainer that relishes the excruciating details present in today's systems while still telling stories that are compact and relevant enough for action."
+      },
+      "after": "ebdda5de2aee9f57",
+      "date": 1500233338646
+    },
+    {
+      "type": "add",
+      "id": "5487f886dab1cdf1",
+      "item": {
+        "type": "paragraph",
+        "id": "5487f886dab1cdf1",
+        "text": "# Practice"
+      },
+      "after": "d74e58dba7482fcb",
+      "date": 1500246637292
+    },
+    {
+      "type": "add",
+      "id": "6d34949a99308055",
+      "item": {
+        "type": "paragraph",
+        "id": "6d34949a99308055",
+        "text": "We've found our success depends on reasonably clean data and relatively consistent terminology over organizational spans where this is not guaranteed. Within the graph database we can ask which data sources lineup and even better, what doesn't lineup where it should."
+      },
+      "after": "5487f886dab1cdf1",
+      "date": 1500246898019
+    },
+    {
+      "type": "add",
+      "id": "0293d975a3ea4ba5",
+      "item": {
+        "type": "paragraph",
+        "id": "0293d975a3ea4ba5",
+        "text": "We've found we can raise the model's level of abstraction by querying for idiomatically arranged nodes and adding summarizing relations between them. For example we might say A streams to B if a kafka topic is produced by A and consumed by B."
+      },
+      "after": "6d34949a99308055",
+      "date": 1500247228940
+    },
+    {
+      "type": "add",
+      "id": "641e8bd84a2ca0d9",
+      "item": {
+        "type": "paragraph",
+        "id": "641e8bd84a2ca0d9",
+        "text": "We've found we can introduce and manage more abstract concepts still. For example, consider a subsystem defined as a collection of cooperating services. We need not encode for subsystems important properties of such as connectivity or ownership since these can be queried from their members."
+      },
+      "after": "0293d975a3ea4ba5",
+      "date": 1500247867828
+    },
+    {
+      "type": "add",
+      "id": "70797eb3dd3d0dfa",
+      "item": {
+        "type": "paragraph",
+        "id": "70797eb3dd3d0dfa",
+        "text": "We can now draw a map where subsystems are shown to stream between each other and both nodes and edges lead to more detailed queries."
+      },
+      "after": "641e8bd84a2ca0d9",
+      "date": 1500248076691
+    },
+    {
+      "type": "edit",
+      "id": "5487f886dab1cdf1",
+      "item": {
+        "type": "markdown",
+        "id": "5487f886dab1cdf1",
+        "text": "# Practice"
+      },
+      "date": 1500248080461
+    },
+    {
+      "type": "edit",
+      "id": "70797eb3dd3d0dfa",
+      "item": {
+        "type": "paragraph",
+        "id": "70797eb3dd3d0dfa",
+        "text": "We can now draw a map where subsystems are shown to stream between each other and both nodes and edges parameterize more detailed queries. "
+      },
+      "date": 1500266429302
+    },
+    {
+      "type": "add",
+      "id": "b9df45e2cf7d3671",
+      "item": {
+        "type": "paragraph",
+        "id": "b9df45e2cf7d3671",
+        "text": "With this we have addressed one scenario, how information gets from here to there. We expect many more to yield to the same construction method and thus provide sound explanations of modern systems."
+      },
+      "after": "70797eb3dd3d0dfa",
+      "date": 1500266430946
+    },
+    {
+      "type": "remove",
+      "id": "b9df45e2cf7d3671",
+      "date": 1500266448932
+    },
+    {
+      "type": "edit",
+      "id": "70797eb3dd3d0dfa",
+      "item": {
+        "type": "paragraph",
+        "id": "70797eb3dd3d0dfa",
+        "text": "We can now draw a map where subsystems are shown to stream between each other and both nodes and edges parameterize more detailed queries. With this we have addressed one scenario, how information gets from here to there. "
+      },
+      "date": 1500266454683
+    },
+    {
+      "type": "add",
+      "id": "8a30e1e83c6920e6",
+      "item": {
+        "type": "paragraph",
+        "id": "8a30e1e83c6920e6",
+        "text": "We expect many more to yield to the same construction method and thus provide sound explanations of modern systems."
+      },
+      "after": "70797eb3dd3d0dfa",
+      "date": 1500266456025
+    },
+    {
+      "type": "edit",
+      "id": "8a30e1e83c6920e6",
+      "item": {
+        "type": "paragraph",
+        "id": "8a30e1e83c6920e6",
+        "text": "We expect many varied scenarios will guide the same construction method and thus provide sound and current explanations of modern systems."
+      },
+      "date": 1500266509729
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a5c475fefd1482b5"
+      },
+      "id": "a5c475fefd1482b5",
+      "type": "add",
+      "after": "8a30e1e83c6920e6",
+      "date": 1500383200716
+    },
+    {
+      "type": "edit",
+      "id": "a5c475fefd1482b5",
+      "item": {
+        "type": "pagefold",
+        "id": "a5c475fefd1482b5",
+        "text": "."
+      },
+      "date": 1500383205277
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "811147729128bb1f"
+      },
+      "id": "811147729128bb1f",
+      "type": "add",
+      "after": "a5c475fefd1482b5",
+      "date": 1500383208099
+    },
+    {
+      "type": "edit",
+      "id": "811147729128bb1f",
+      "item": {
+        "type": "paragraph",
+        "id": "811147729128bb1f",
+        "text": "See [[Ontology v. Stigmergy]] for where this work and federated wiki meet."
+      },
+      "date": 1500383240638
+    },
+    {
+      "type": "add",
+      "id": "2e5ab39ef8ecd7a2",
+      "item": {
+        "type": "paragraph",
+        "id": "2e5ab39ef8ecd7a2",
+        "text": "See [[Microservices Visualized]] for a lighthearted but still seriously challenging visual system."
+      },
+      "after": "811147729128bb1f",
+      "date": 1500384291156
+    },
+    {
+      "type": "move",
+      "order": [
+        "9dcc7d0d5c79a0e5",
+        "14f132cf0110f85b",
+        "ebdda5de2aee9f57",
+        "a0de93aa04a5e947",
+        "5be43a7e8eb90fd1",
+        "4acadb099bf7da44",
+        "c7983117b879a853",
+        "5eb6fee864ec05ae",
+        "50294c4c4b101f44",
+        "de41354ce1aef168",
+        "954942c53eca2439",
+        "02172c3e0e87cc4f",
+        "8eb86b1f4aaaf6ca",
+        "bd3c28dc354b5c60",
+        "7d36d3750a2106f0",
+        "33458a7f1999b172",
+        "cff0e234428799f3",
+        "05f2cd75a9abb3cc",
+        "22e69d4eeafb9fbd",
+        "3e57b8f14ee5e114",
+        "9a6cab867dd965dc",
+        "d74e58dba7482fcb",
+        "5487f886dab1cdf1",
+        "6d34949a99308055",
+        "0293d975a3ea4ba5",
+        "641e8bd84a2ca0d9",
+        "70797eb3dd3d0dfa",
+        "8a30e1e83c6920e6",
+        "a5c475fefd1482b5",
+        "2e5ab39ef8ecd7a2",
+        "811147729128bb1f"
+      ],
+      "id": "2e5ab39ef8ecd7a2",
+      "date": 1500384294531
+    },
+    {
+      "type": "edit",
+      "id": "22e69d4eeafb9fbd",
+      "item": {
+        "type": "paragraph",
+        "id": "22e69d4eeafb9fbd",
+        "text": "We use the data warehouse method of extract-transform-load to assemble deployed observations with intention and construction details into a graph database. [https://neo4j.com/developer/guide-import-csv/ neo4j]"
+      },
+      "date": 1500571757893
+    },
+    {
+      "type": "add",
+      "id": "08bcdfcf5b3fab9d",
+      "item": {
+        "type": "paragraph",
+        "id": "08bcdfcf5b3fab9d",
+        "text": "These notes have been prepared in anticipation of a keynote at the "
+      },
+      "after": "2e5ab39ef8ecd7a2",
+      "date": 1500572154120
+    },
+    {
+      "type": "edit",
+      "id": "08bcdfcf5b3fab9d",
+      "item": {
+        "type": "paragraph",
+        "id": "08bcdfcf5b3fab9d",
+        "text": "These notes have been prepared in anticipation of a keynote at the Explore DDD conference, 2017, Denver. [http://exploreddd.com/ site]"
+      },
+      "date": 1500572234182
+    },
+    {
+      "type": "edit",
+      "id": "08bcdfcf5b3fab9d",
+      "item": {
+        "type": "paragraph",
+        "id": "08bcdfcf5b3fab9d",
+        "text": "These notes have been prepared in anticipation of a keynote at the Explore DDD conference, 2017. [http://exploreddd.com/ site]"
+      },
+      "date": 1500572245255
+    },
+    {
+      "type": "move",
+      "order": [
+        "9dcc7d0d5c79a0e5",
+        "14f132cf0110f85b",
+        "ebdda5de2aee9f57",
+        "a0de93aa04a5e947",
+        "5be43a7e8eb90fd1",
+        "4acadb099bf7da44",
+        "c7983117b879a853",
+        "5eb6fee864ec05ae",
+        "50294c4c4b101f44",
+        "de41354ce1aef168",
+        "954942c53eca2439",
+        "02172c3e0e87cc4f",
+        "8eb86b1f4aaaf6ca",
+        "bd3c28dc354b5c60",
+        "7d36d3750a2106f0",
+        "33458a7f1999b172",
+        "cff0e234428799f3",
+        "05f2cd75a9abb3cc",
+        "22e69d4eeafb9fbd",
+        "3e57b8f14ee5e114",
+        "9a6cab867dd965dc",
+        "d74e58dba7482fcb",
+        "5487f886dab1cdf1",
+        "6d34949a99308055",
+        "0293d975a3ea4ba5",
+        "641e8bd84a2ca0d9",
+        "70797eb3dd3d0dfa",
+        "8a30e1e83c6920e6",
+        "a5c475fefd1482b5",
+        "08bcdfcf5b3fab9d",
+        "2e5ab39ef8ecd7a2",
+        "811147729128bb1f"
+      ],
+      "id": "08bcdfcf5b3fab9d",
+      "date": 1500572250159
+    },
+    {
+      "type": "edit",
+      "id": "641e8bd84a2ca0d9",
+      "item": {
+        "type": "paragraph",
+        "id": "641e8bd84a2ca0d9",
+        "text": "We've found we can introduce and manage more abstract concepts still. For example, consider a subsystem defined as a collection of cooperating services. We need not encode for subsystems important properties such as connectivity or ownership since these can be queried from their members."
+      },
+      "date": 1500573791415
+    },
+    {
+      "type": "fork",
+      "site": "ward.bay.wiki.org",
+      "date": 1501835783543
+    },
+    {
+      "type": "edit",
+      "id": "9dcc7d0d5c79a0e5",
+      "item": {
+        "type": "paragraph",
+        "id": "9dcc7d0d5c79a0e5",
+        "text": "We seek explanation for what a system does and why. [[Microservices]] complicate this aspiration when mixed technologies have been assembled over years by evolving teams for changing business purpose."
+      },
+      "date": 1501835810098
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "0da2d30879014c65",
+        "text": "# See also\n\n- [[Microservices]]\n- [[Serverless Microservices]]\n- [[Microservices Visualized]]\n- [[Ontology v. Stigmergy]]\n- [[Constructing Explanations]]\n- [[Fallacies of Distributed Computing]]\n- Microservices not a free lunch - [http://highscalability.com/blog/2014/4/8/microservices-not-a-free-lunch.html highscalability.com]"
+      },
+      "after": "2e5ab39ef8ecd7a2",
+      "id": "0da2d30879014c65",
+      "date": 1501835935887
+    },
+    {
+      "type": "remove",
+      "id": "2e5ab39ef8ecd7a2",
+      "date": 1501835940940
+    },
+    {
+      "type": "remove",
+      "id": "811147729128bb1f",
+      "date": 1501835949173
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1501836400563
+    }
+  ]
+}

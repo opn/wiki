@@ -1,0 +1,296 @@
+{
+  "title": "IPFS Pinning",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "23c1f81ff7d70d51",
+      "text": "Pinning is a very important concept in [[ipfs]]. ipfs semantics try to make it feel like every single object is local, there is no \"retrieve this file for me from a remote server\", just ipfs cat or ipfs get which act the same way no matter where the actual object is located. While this is nice, sometimes you want to be able to control what you keep around. "
+    },
+    {
+      "type": "paragraph",
+      "id": "520e902984c48b19",
+      "text": "Pinning is the mechanism that allows you to tell ipfs to always keep a given object local. ipfs has a fairly aggressive caching mechanism that will keep an object local for a short time after you perform any ipfs operation on it, but these objects may get garbage collected fairly regularly. To prevent that garbage collection simply pin the hash you care about. Objects added through ipfs add are pinned recursively by default - [https://github.com/ipfs/examples/tree/master/examples/pinning github]"
+    },
+    {
+      "type": "code",
+      "id": "53974d27c188994f",
+      "text": "echo \"ipfs rocks\" > foo\nipfs add foo\nipfs pin ls --type=all\nipfs pin rm <foo hash>\nipfs pin rm -r <foo hash>\nipfs pin ls --type=all"
+    },
+    {
+      "type": "paragraph",
+      "id": "7e0416cbf8c4abf5",
+      "text": "As you may have noticed, the first ipfs pin rm command didnt work, it should have warned you that the given hash was \"pinned recursively\". "
+    },
+    {
+      "type": "paragraph",
+      "id": "b077e4a7840426c6",
+      "text": "There are three types of pins in the ipfs world; direct pins, which pin just a single block, and no others in relation to it. recursive pins, which pin a given block and all of its children, and indirect pins, which are the result of a given blocks parent being pinned recursively."
+    },
+    {
+      "type": "paragraph",
+      "id": "f53f6950ce34337d",
+      "text": "A pinned object cannot be garbage collected, if you dont believe me try this:"
+    },
+    {
+      "type": "code",
+      "id": "b23528b7a958ec17",
+      "text": "ipfs add foo\nipfs repo gc\nipfs cat <foo hash>"
+    },
+    {
+      "type": "paragraph",
+      "id": "8e0a9e2164f5c4f1",
+      "text": "But if foo were to somehow become unpinned..."
+    },
+    {
+      "type": "code",
+      "id": "a05abaad6bb4c6ec",
+      "text": "ipfs pin rm -r <foo hash>\nipfs repo gc\nipfs cat <foo hash>"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "IPFS Pinning",
+        "story": []
+      },
+      "date": 1502973437244
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "23c1f81ff7d70d51"
+      },
+      "id": "23c1f81ff7d70d51",
+      "type": "add",
+      "date": 1502973438794
+    },
+    {
+      "type": "edit",
+      "id": "23c1f81ff7d70d51",
+      "item": {
+        "type": "paragraph",
+        "id": "23c1f81ff7d70d51",
+        "text": "Pinning is a very important concept in ipfs. ipfs semantics try to make it feel like every single object is local, there is no \"retrieve this file for me from a remote server\", just ipfs cat or ipfs get which act the same way no matter where the actual object is located. While this is nice, sometimes you want to be able to control what you keep around. "
+      },
+      "date": 1502973506019
+    },
+    {
+      "type": "add",
+      "id": "520e902984c48b19",
+      "item": {
+        "type": "paragraph",
+        "id": "520e902984c48b19",
+        "text": "Pinning is the mechanism that allows you to tell ipfs to always keep a given object local. ipfs has a fairly aggressive caching mechanism that will keep an object local for a short time after you perform any ipfs operation on it, but these objects may get garbage collected fairly regularly. To prevent that garbage collection simply pin the hash you care about. Objects added through ipfs add are pinned recursively by default."
+      },
+      "after": "23c1f81ff7d70d51",
+      "date": 1502973510731
+    },
+    {
+      "type": "add",
+      "id": "cf6046f2d601888b",
+      "item": {
+        "type": "paragraph",
+        "id": "cf6046f2d601888b",
+        "text": "\necho \"ipfs rocks\" > foo\nipfs add foo\nipfs pin ls --type=all\nipfs pin rm <foo hash>\nipfs pin rm -r <foo hash>\nipfs pin ls --type=all"
+      },
+      "after": "520e902984c48b19",
+      "date": 1502973514051
+    },
+    {
+      "type": "add",
+      "id": "7e0416cbf8c4abf5",
+      "item": {
+        "type": "paragraph",
+        "id": "7e0416cbf8c4abf5",
+        "text": "As you may have noticed, the first ipfs pin rm command didnt work, it should have warned you that the given hash was \"pinned recursively\". "
+      },
+      "after": "cf6046f2d601888b",
+      "date": 1502973518251
+    },
+    {
+      "type": "add",
+      "id": "b077e4a7840426c6",
+      "item": {
+        "type": "paragraph",
+        "id": "b077e4a7840426c6",
+        "text": "There are three types of pins in the ipfs world; direct pins, which pin just a single block, and no others in relation to it. recursive pins, which pin a given block and all of its children, and indirect pins, which are the result of a given blocks parent being pinned recursively."
+      },
+      "after": "7e0416cbf8c4abf5",
+      "date": 1502973520027
+    },
+    {
+      "type": "add",
+      "id": "f53f6950ce34337d",
+      "item": {
+        "type": "paragraph",
+        "id": "f53f6950ce34337d",
+        "text": "A pinned object cannot be garbage collected, if you dont believe me try this:"
+      },
+      "after": "b077e4a7840426c6",
+      "date": 1502973523907
+    },
+    {
+      "type": "add",
+      "id": "3d87b88a2633a9cc",
+      "item": {
+        "type": "paragraph",
+        "id": "3d87b88a2633a9cc",
+        "text": "\nipfs add foo\nipfs repo gc\nipfs cat <foo hash>"
+      },
+      "after": "f53f6950ce34337d",
+      "date": 1502973527882
+    },
+    {
+      "type": "add",
+      "id": "8e0a9e2164f5c4f1",
+      "item": {
+        "type": "paragraph",
+        "id": "8e0a9e2164f5c4f1",
+        "text": "But if foo were to somehow become unpinned..."
+      },
+      "after": "3d87b88a2633a9cc",
+      "date": 1502973530041
+    },
+    {
+      "type": "add",
+      "id": "175b2d078e3bb363",
+      "item": {
+        "type": "paragraph",
+        "id": "175b2d078e3bb363",
+        "text": "\nipfs pin rm -r <foo hash>\nipfs repo gc\nipfs cat <foo hash>"
+      },
+      "after": "8e0a9e2164f5c4f1",
+      "date": 1502973531041
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "53974d27c188994f"
+      },
+      "id": "53974d27c188994f",
+      "type": "add",
+      "after": "175b2d078e3bb363",
+      "date": 1502973532257
+    },
+    {
+      "type": "move",
+      "order": [
+        "23c1f81ff7d70d51",
+        "520e902984c48b19",
+        "cf6046f2d601888b",
+        "53974d27c188994f",
+        "7e0416cbf8c4abf5",
+        "b077e4a7840426c6",
+        "f53f6950ce34337d",
+        "3d87b88a2633a9cc",
+        "8e0a9e2164f5c4f1",
+        "175b2d078e3bb363"
+      ],
+      "id": "53974d27c188994f",
+      "date": 1502973534495
+    },
+    {
+      "type": "remove",
+      "id": "cf6046f2d601888b",
+      "date": 1502973537786
+    },
+    {
+      "type": "edit",
+      "id": "53974d27c188994f",
+      "item": {
+        "type": "code",
+        "id": "53974d27c188994f",
+        "text": "echo \"ipfs rocks\" > foo\nipfs add foo\nipfs pin ls --type=all\nipfs pin rm <foo hash>\nipfs pin rm -r <foo hash>\nipfs pin ls --type=all"
+      },
+      "date": 1502973539739
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b23528b7a958ec17"
+      },
+      "id": "b23528b7a958ec17",
+      "type": "add",
+      "after": "175b2d078e3bb363",
+      "date": 1502973543424
+    },
+    {
+      "type": "move",
+      "order": [
+        "23c1f81ff7d70d51",
+        "520e902984c48b19",
+        "53974d27c188994f",
+        "7e0416cbf8c4abf5",
+        "b077e4a7840426c6",
+        "f53f6950ce34337d",
+        "3d87b88a2633a9cc",
+        "b23528b7a958ec17",
+        "8e0a9e2164f5c4f1",
+        "175b2d078e3bb363"
+      ],
+      "id": "b23528b7a958ec17",
+      "date": 1502973548483
+    },
+    {
+      "type": "remove",
+      "id": "3d87b88a2633a9cc",
+      "date": 1502973551497
+    },
+    {
+      "type": "edit",
+      "id": "b23528b7a958ec17",
+      "item": {
+        "type": "code",
+        "id": "b23528b7a958ec17",
+        "text": "ipfs add foo\nipfs repo gc\nipfs cat <foo hash>"
+      },
+      "date": 1502973554043
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a05abaad6bb4c6ec"
+      },
+      "id": "a05abaad6bb4c6ec",
+      "type": "add",
+      "after": "175b2d078e3bb363",
+      "date": 1502973556149
+    },
+    {
+      "type": "remove",
+      "id": "175b2d078e3bb363",
+      "date": 1502973560001
+    },
+    {
+      "type": "edit",
+      "id": "a05abaad6bb4c6ec",
+      "item": {
+        "type": "code",
+        "id": "a05abaad6bb4c6ec",
+        "text": "ipfs pin rm -r <foo hash>\nipfs repo gc\nipfs cat <foo hash>"
+      },
+      "date": 1502973562203
+    },
+    {
+      "type": "edit",
+      "id": "520e902984c48b19",
+      "item": {
+        "type": "paragraph",
+        "id": "520e902984c48b19",
+        "text": "Pinning is the mechanism that allows you to tell ipfs to always keep a given object local. ipfs has a fairly aggressive caching mechanism that will keep an object local for a short time after you perform any ipfs operation on it, but these objects may get garbage collected fairly regularly. To prevent that garbage collection simply pin the hash you care about. Objects added through ipfs add are pinned recursively by default - [https://github.com/ipfs/examples/tree/master/examples/pinning github]"
+      },
+      "date": 1502973594347
+    },
+    {
+      "type": "edit",
+      "id": "23c1f81ff7d70d51",
+      "item": {
+        "type": "paragraph",
+        "id": "23c1f81ff7d70d51",
+        "text": "Pinning is a very important concept in [[ipfs]]. ipfs semantics try to make it feel like every single object is local, there is no \"retrieve this file for me from a remote server\", just ipfs cat or ipfs get which act the same way no matter where the actual object is located. While this is nice, sometimes you want to be able to control what you keep around. "
+      },
+      "date": 1502990695701
+    }
+  ]
+}

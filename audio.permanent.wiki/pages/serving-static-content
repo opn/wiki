@@ -1,0 +1,1150 @@
+{
+  "title": "Serving Static Content",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8bfa3bf5adcafa42",
+      "text": "The Fedwiki node server is able to serve static content from the themes folder. This folder is used for creating [[Fedwiki Themes]] using [[Custom CSS]], but can equally be used to serve any binary file - for instance images video, and audio files."
+    },
+    {
+      "type": "code",
+      "id": "9e8aeb9b098da179",
+      "text": "example.com/\n  pages/\n    ... lots of json files for the sites content\n  status/\n    favicon.png\n    persona.identity\n    sitemap.json\n    sitemap.xml\n    theme/\n      style.css\n      test_image.jpg\n      test_audio.mp3"
+    },
+    {
+      "type": "markdown",
+      "id": "0ebe30ba3e015aca",
+      "text": "# Batch Script Hack"
+    },
+    {
+      "type": "paragraph",
+      "id": "f277cad489661c0c",
+      "text": "Batch scripts can convert static content into federated wiki compatible json and serve it with apache."
+    },
+    {
+      "type": "code",
+      "id": "f9e69974f525bee1",
+      "text": "Question: Can .htaccess perform the one redirect making all html superflous?\n\nQuestion: is this just a redirection with the problem that the url in the browser changes, or have I done something wrong?"
+    },
+    {
+      "type": "html",
+      "id": "c1693ea77977f814",
+      "text": "<h3> Apache"
+    },
+    {
+      "type": "paragraph",
+      "id": "fd73dd40f5b3186d",
+      "text": "We'll springboard our site off of the javascript at fed.wiki.org. This simplifies our work but makes that site the [[Origin Server]] which has minor liabilities that are easily reversed at any time."
+    },
+    {
+      "type": "paragraph",
+      "id": "e5223c96dcaf6524",
+      "text": "Configure apache to serve a virtual domain from the pages directory."
+    },
+    {
+      "type": "paragraph",
+      "id": "4be79bd9ede89b95",
+      "text": "Add an index.html to redirect to a url that will load federated wiki's client.js and point to welcome-vistiors.json."
+    },
+    {
+      "type": "code",
+      "id": "1c7ae8cea5b895be",
+      "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n<html>\n<head>\n<meta http-equiv=\"REFRESH\" content=\"0;url=http://fed.wiki.org/wiki.c2.com/welcome-visitors\">\n</head>\n</html>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "7b9ad4d59b4f6fe7",
+      "text": "Add a .htaccess file that allows CORS access to your content. Include a 404 document that will be similarly allowed but eventually ignored."
+    },
+    {
+      "type": "code",
+      "id": "4a60692ad0b44e69",
+      "text": "Header add Access-Control-Allow-Origin \"*\"\nErrorDocument 404 /findpage.json"
+    },
+    {
+      "type": "paragraph",
+      "id": "fd17c33891f75587",
+      "text": "Add a favicon.png, curl it from some convenient farm. Try [http://sandbox.fed.wiki.org/random.png random.png] at sandbox. Refresh until you get one you like."
+    },
+    {
+      "type": "code",
+      "id": "08e943947b5189d4",
+      "text": "curl http://sandbox.fed.wiki.org/favicon.png \n       >favicon.png"
+    },
+    {
+      "type": "html",
+      "id": "0825fcacd34d47d6",
+      "text": "<h3> Batch Scripts"
+    },
+    {
+      "type": "paragraph",
+      "id": "0d943ce02390ba3e",
+      "text": "We find it convenient to write script functions to generate useful story items from script datatypes. Add to this a function to emit a page with both story and journal, where the journal has a create action."
+    },
+    {
+      "type": "paragraph",
+      "id": "5654c62af735bc57",
+      "text": "Batch scripts can use a version of create that includes the completed story. This admits that the page has been created in one atomic action."
+    },
+    {
+      "type": "paragraph",
+      "id": "ca930bb30541034a",
+      "text": "Items should have unique random ids. Incremental handling of moves depends on unique ids. Data can be lost when ids within a single page aren't unique."
+    },
+    {
+      "type": "paragraph",
+      "id": "3f87db3fbe7b2f40",
+      "text": "Online tools can check generated json should federated wiki find fault. Escape double-quotes, newlines and backslashes within strings. Use comma as a separator, not a terminator between json elements. Write exotic characters in UTF-8."
+    },
+    {
+      "type": "html",
+      "id": "373543a6f725d75c",
+      "text": "Consider generating content as a revision of the previous release. Save the released json in an <b>archive</b> directory. Read this, replace the story and add a subsequent create action leaving one or more previous creates in place. Write to <b>pages</b> replacing previous work in progress."
+    },
+    {
+      "type": "paragraph",
+      "id": "8798649d51e9a305",
+      "text": "Run batch scripts from cron or other appropriate triggers. Consider updating only pages where inputs have changed. "
+    },
+    {
+      "type": "html",
+      "id": "23fabcba9ae7b666",
+      "text": "<h3> Considerations"
+    },
+    {
+      "type": "paragraph",
+      "id": "247f298ff3344de1",
+      "text": "The products of [[Local Editing]] will be, as always, associated with the origin, not the static site."
+    },
+    {
+      "type": "paragraph",
+      "id": "816b38c48bc6adf8",
+      "text": "The origin will get to 404 every page browsed this way. It could track browsing from the server side, or, by delivering an unconventional client side."
+    },
+    {
+      "type": "paragraph",
+      "id": "4161bf01c0a7f791",
+      "text": "The origin will endure a 404 for every page browsed this way. Should fed.wiki.org become popular as a springboard it would face performance issues. Client code could check the neighborhood sitemaps to short-circuit requests destine to 404."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "id": "ff038f4dbc758400",
+      "item": {
+        "title": "Serving Static Content"
+      },
+      "date": 1346552341536
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8bfa3bf5adcafa42"
+      },
+      "id": "8bfa3bf5adcafa42",
+      "type": "add",
+      "date": 1346552352840
+    },
+    {
+      "type": "edit",
+      "id": "8bfa3bf5adcafa42",
+      "item": {
+        "type": "paragraph",
+        "id": "8bfa3bf5adcafa42",
+        "text": "Batch scripts can convert static content into federated wiki compatible json and serve it with apache."
+      },
+      "date": 1346552432164
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c1693ea77977f814",
+        "text": ""
+      },
+      "id": "c1693ea77977f814",
+      "type": "add",
+      "after": "8bfa3bf5adcafa42",
+      "date": 1346552432669
+    },
+    {
+      "type": "edit",
+      "id": "c1693ea77977f814",
+      "item": {
+        "type": "paragraph",
+        "id": "c1693ea77977f814",
+        "text": "<h3> Apache"
+      },
+      "date": 1346552494945
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e5223c96dcaf6524",
+        "text": ""
+      },
+      "id": "e5223c96dcaf6524",
+      "type": "add",
+      "after": "c1693ea77977f814",
+      "date": 1346552495451
+    },
+    {
+      "type": "edit",
+      "id": "e5223c96dcaf6524",
+      "item": {
+        "type": "paragraph",
+        "id": "e5223c96dcaf6524",
+        "text": "Configure apache to serve a virtual domain from the pages directory."
+      },
+      "date": 1346552584190
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4be79bd9ede89b95",
+        "text": ""
+      },
+      "id": "4be79bd9ede89b95",
+      "type": "add",
+      "after": "e5223c96dcaf6524",
+      "date": 1346552584694
+    },
+    {
+      "type": "edit",
+      "id": "4be79bd9ede89b95",
+      "item": {
+        "type": "paragraph",
+        "id": "4be79bd9ede89b95",
+        "text": "Add an index.html to redirect to a url that will load federated wiki's client.js and point to welcome-vistiors.json."
+      },
+      "date": 1346552706291
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7b9ad4d59b4f6fe7",
+        "text": ""
+      },
+      "id": "7b9ad4d59b4f6fe7",
+      "type": "add",
+      "after": "4be79bd9ede89b95",
+      "date": 1346552706795
+    },
+    {
+      "type": "edit",
+      "id": "7b9ad4d59b4f6fe7",
+      "item": {
+        "type": "paragraph",
+        "id": "7b9ad4d59b4f6fe7",
+        "text": "Add a .htaccess file that allows CORS access to your content."
+      },
+      "date": 1346552772221
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "fd17c33891f75587",
+        "text": ""
+      },
+      "id": "fd17c33891f75587",
+      "type": "add",
+      "after": "7b9ad4d59b4f6fe7",
+      "date": 1346552772727
+    },
+    {
+      "type": "edit",
+      "id": "fd17c33891f75587",
+      "item": {
+        "type": "paragraph",
+        "id": "fd17c33891f75587",
+        "text": "Add a favicon.png, curl it from some convenient farm."
+      },
+      "date": 1346552859077
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4884e935f997a924",
+        "text": ""
+      },
+      "id": "4884e935f997a924",
+      "type": "add",
+      "after": "fd17c33891f75587",
+      "date": 1346552859584
+    },
+    {
+      "type": "remove",
+      "id": "4884e935f997a924",
+      "date": 1346552887188
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4a60692ad0b44e69"
+      },
+      "id": "4a60692ad0b44e69",
+      "type": "add",
+      "after": "fd17c33891f75587",
+      "date": 1346552920182
+    },
+    {
+      "type": "edit",
+      "id": "4a60692ad0b44e69",
+      "item": {
+        "type": "code",
+        "id": "4a60692ad0b44e69",
+        "text": "Header add Access-Control-Allow-Origin \"*\""
+      },
+      "date": 1346552924501
+    },
+    {
+      "type": "move",
+      "order": [
+        "8bfa3bf5adcafa42",
+        "c1693ea77977f814",
+        "e5223c96dcaf6524",
+        "4be79bd9ede89b95",
+        "7b9ad4d59b4f6fe7",
+        "4a60692ad0b44e69",
+        "fd17c33891f75587"
+      ],
+      "id": "4a60692ad0b44e69",
+      "date": 1346552930563
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1c7ae8cea5b895be"
+      },
+      "id": "1c7ae8cea5b895be",
+      "type": "add",
+      "after": "fd17c33891f75587",
+      "date": 1346552971282
+    },
+    {
+      "type": "edit",
+      "id": "1c7ae8cea5b895be",
+      "item": {
+        "type": "code",
+        "id": "1c7ae8cea5b895be",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n<html>\n<head>\n<meta\nhttp-equiv=\"REFRESH\" content=\"0;url=http://fed.wiki.org/wiki.c2.com/welcome-visitors\">\n</head>\n</html>\n"
+      },
+      "date": 1346552981834
+    },
+    {
+      "type": "move",
+      "order": [
+        "8bfa3bf5adcafa42",
+        "c1693ea77977f814",
+        "e5223c96dcaf6524",
+        "4be79bd9ede89b95",
+        "1c7ae8cea5b895be",
+        "7b9ad4d59b4f6fe7",
+        "4a60692ad0b44e69",
+        "fd17c33891f75587"
+      ],
+      "id": "1c7ae8cea5b895be",
+      "date": 1346553457515
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fd17c33891f75587",
+        "text": "Add a favicon.png, curl it from some convenient farm. Try [http://sandbox.fed.wiki.org/random.png random.png] at sandbox. Refresh until you get one you like."
+      },
+      "after": "4a60692ad0b44e69",
+      "id": "fd17c33891f75587",
+      "date": 1346553776415
+    },
+    {
+      "type": "remove",
+      "id": "fd17c33891f75587",
+      "date": 1346553780491
+    },
+    {
+      "type": "remove",
+      "id": "fd17c33891f75587",
+      "date": 1346553796955
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fd17c33891f75587",
+        "text": "Add a favicon.png, curl it from some convenient farm. Try [http://sandbox.fed.wiki.org/random.png random.png] at sandbox. Refresh until you get one you like."
+      },
+      "after": "4a60692ad0b44e69",
+      "id": "fd17c33891f75587",
+      "date": 1346553801685
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "08e943947b5189d4"
+      },
+      "id": "08e943947b5189d4",
+      "type": "add",
+      "after": "fd17c33891f75587",
+      "date": 1346553972371
+    },
+    {
+      "type": "edit",
+      "id": "08e943947b5189d4",
+      "item": {
+        "type": "code",
+        "id": "08e943947b5189d4",
+        "text": "curl http://sandbox.fed.wiki.org/favicon.png \n       >favicon.png"
+      },
+      "date": 1346554040593
+    },
+    {
+      "type": "edit",
+      "id": "08e943947b5189d4",
+      "item": {
+        "type": "code",
+        "id": "08e943947b5189d4",
+        "text": "curl http://sandbox.fed.wiki.org/favicon.png \n                                                    >favicon.png"
+      },
+      "date": 1346554056960
+    },
+    {
+      "type": "edit",
+      "id": "08e943947b5189d4",
+      "item": {
+        "type": "code",
+        "id": "08e943947b5189d4",
+        "text": "curl http://sandbox.fed.wiki.org/favicon.png \n                        >favicon.png"
+      },
+      "date": 1346554065019
+    },
+    {
+      "type": "edit",
+      "id": "08e943947b5189d4",
+      "item": {
+        "type": "code",
+        "id": "08e943947b5189d4",
+        "text": "curl http://sandbox.fed.wiki.org/favicon.png \n       >favicon.png"
+      },
+      "date": 1346554078055
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bedd6b4d1950684b"
+      },
+      "id": "bedd6b4d1950684b",
+      "type": "add",
+      "after": "08e943947b5189d4",
+      "date": 1346556281550
+    },
+    {
+      "type": "edit",
+      "id": "bedd6b4d1950684b",
+      "item": {
+        "type": "paragraph",
+        "id": "bedd6b4d1950684b",
+        "text": "<h3> Batch Scripts"
+      },
+      "date": 1346556306553
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0d943ce02390ba3e",
+        "text": ""
+      },
+      "id": "0d943ce02390ba3e",
+      "type": "add",
+      "after": "bedd6b4d1950684b",
+      "date": 1346556307064
+    },
+    {
+      "type": "edit",
+      "id": "0d943ce02390ba3e",
+      "item": {
+        "type": "paragraph",
+        "id": "0d943ce02390ba3e",
+        "text": "We find it convenient to write script functions to generate useful story items from script datatypes. Add to this a function to emit a page with both story and journal, where the journal has a create action."
+      },
+      "date": 1346556621830
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5654c62af735bc57",
+        "text": ""
+      },
+      "id": "5654c62af735bc57",
+      "type": "add",
+      "after": "0d943ce02390ba3e",
+      "date": 1346556622336
+    },
+    {
+      "type": "edit",
+      "id": "5654c62af735bc57",
+      "item": {
+        "type": "paragraph",
+        "id": "5654c62af735bc57",
+        "text": "Batch scripts can use a version of create that includes the completed story. This admits that the page has been created in one atomic action."
+      },
+      "date": 1346556728300
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ca930bb30541034a",
+        "text": ""
+      },
+      "id": "ca930bb30541034a",
+      "type": "add",
+      "after": "5654c62af735bc57",
+      "date": 1346556728806
+    },
+    {
+      "type": "edit",
+      "id": "ca930bb30541034a",
+      "item": {
+        "type": "paragraph",
+        "id": "ca930bb30541034a",
+        "text": "Items should have unique random ids. Incremental handling of moves depends on unique ids. Data can be lost when ids within a single page aren't unique."
+      },
+      "date": 1346556863382
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3ae0ca7317769795",
+        "text": ""
+      },
+      "id": "3ae0ca7317769795",
+      "type": "add",
+      "after": "ca930bb30541034a",
+      "date": 1346556863888
+    },
+    {
+      "type": "remove",
+      "id": "3ae0ca7317769795",
+      "date": 1346556865269
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3f87db3fbe7b2f40",
+        "text": ""
+      },
+      "id": "3f87db3fbe7b2f40",
+      "type": "add",
+      "after": "ca930bb30541034a",
+      "date": 1346556909643
+    },
+    {
+      "type": "edit",
+      "id": "3f87db3fbe7b2f40",
+      "item": {
+        "type": "paragraph",
+        "id": "3f87db3fbe7b2f40",
+        "text": "L"
+      },
+      "date": 1346556940227
+    },
+    {
+      "type": "edit",
+      "id": "3f87db3fbe7b2f40",
+      "item": {
+        "type": "paragraph",
+        "id": "3f87db3fbe7b2f40",
+        "text": "Online tools can check generated json should federated wiki find fault. Escape double-quotes, newlines and backslashes within strings. Use comma as a separator, not a terminator between json elements. Write exotic characters in UTF-8."
+      },
+      "date": 1346557135894
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "373543a6f725d75c",
+        "text": ""
+      },
+      "id": "373543a6f725d75c",
+      "type": "add",
+      "after": "3f87db3fbe7b2f40",
+      "date": 1346557251490
+    },
+    {
+      "type": "edit",
+      "id": "373543a6f725d75c",
+      "item": {
+        "type": "paragraph",
+        "id": "373543a6f725d75c",
+        "text": "Consider generating content as a revision of the previous release. Save the released json in an <b>archive</b> directory. Read this, replace the story and add a subsequent create action leaving one or more previous creates in place. "
+      },
+      "date": 1346557461596
+    },
+    {
+      "type": "edit",
+      "id": "373543a6f725d75c",
+      "item": {
+        "type": "paragraph",
+        "id": "373543a6f725d75c",
+        "text": "Consider generating content as a revision of the previous release. Save the released json in an <b>archive</b> directory. Read this, replace the story and add a subsequent create action leaving one or more previous creates in place. Write to <b>pages</b> replacing previous work in progress."
+      },
+      "date": 1346557519516
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8798649d51e9a305"
+      },
+      "id": "8798649d51e9a305",
+      "type": "add",
+      "after": "373543a6f725d75c",
+      "date": 1346557581487
+    },
+    {
+      "type": "edit",
+      "id": "8798649d51e9a305",
+      "item": {
+        "type": "paragraph",
+        "id": "8798649d51e9a305",
+        "text": "Run batch scripts from cron or other appropriate triggers. "
+      },
+      "date": 1346557701373
+    },
+    {
+      "type": "edit",
+      "id": "8798649d51e9a305",
+      "item": {
+        "type": "paragraph",
+        "id": "8798649d51e9a305",
+        "text": "Run batch scripts from cron or other appropriate triggers. Consider updating only pages where inputs have changed. "
+      },
+      "date": 1346557745820
+    },
+    {
+      "type": "edit",
+      "id": "bedd6b4d1950684b",
+      "item": {
+        "type": "paragraph",
+        "id": "bedd6b4d1950684b",
+        "text": "Question: Can .htaccess perform the one redirect making all html superflous?"
+      },
+      "date": 1346593038819
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0825fcacd34d47d6",
+        "text": "<h3> Batch Scripts"
+      },
+      "id": "0825fcacd34d47d6",
+      "type": "add",
+      "after": "bedd6b4d1950684b",
+      "date": 1346593039325
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "fd73dd40f5b3186d",
+        "text": ""
+      },
+      "id": "fd73dd40f5b3186d",
+      "type": "add",
+      "after": "c1693ea77977f814",
+      "date": 1346610470024
+    },
+    {
+      "type": "edit",
+      "id": "fd73dd40f5b3186d",
+      "item": {
+        "type": "paragraph",
+        "id": "fd73dd40f5b3186d",
+        "text": "We'll springboard our site off of the javascript at fed.wiki.org. This simplifies our work but makes that site the [[Origin]] which has minor liabilities that are easily reversed at any time."
+      },
+      "date": 1346610722717
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "23fabcba9ae7b666",
+        "text": "<h3> Considerations"
+      },
+      "after": "8798649d51e9a305",
+      "id": "23fabcba9ae7b666",
+      "date": 1346681830110
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "afede39c5b17ea31",
+        "text": "Apache should return CORS permissible 404 pages if wiki's present search mechanisms are to work. Or an XHR exception should be treated as a 404 by wiki."
+      },
+      "after": "23fabcba9ae7b666",
+      "id": "afede39c5b17ea31",
+      "date": 1346681834291
+    },
+    {
+      "type": "edit",
+      "id": "fd73dd40f5b3186d",
+      "item": {
+        "type": "paragraph",
+        "id": "fd73dd40f5b3186d",
+        "text": "We'll springboard our site off of the javascript at fed.wiki.org. This simplifies our work but makes that site the [[Origin Server]] which has minor liabilities that are easily reversed at any time."
+      },
+      "date": 1346681989769
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "816b38c48bc6adf8",
+        "text": ""
+      },
+      "id": "816b38c48bc6adf8",
+      "type": "add",
+      "after": "afede39c5b17ea31",
+      "date": 1346682095127
+    },
+    {
+      "type": "edit",
+      "id": "816b38c48bc6adf8",
+      "item": {
+        "type": "paragraph",
+        "id": "816b38c48bc6adf8",
+        "text": "The origin will get to 404 every page browsed this way. It could track browsing from the server side, or, by delivering an unconventional client side."
+      },
+      "date": 1346682355963
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4161bf01c0a7f791",
+        "text": ""
+      },
+      "id": "4161bf01c0a7f791",
+      "type": "add",
+      "after": "816b38c48bc6adf8",
+      "date": 1346682356469
+    },
+    {
+      "type": "edit",
+      "id": "4161bf01c0a7f791",
+      "item": {
+        "type": "paragraph",
+        "id": "4161bf01c0a7f791",
+        "text": "The origin will endure a 404 for every page browsed this way. Should fed.wiki.org become popular as a springboard it would face performance issues. Client code could check the neighborhood sitemaps to short-circuit requests destine to 404."
+      },
+      "date": 1346682541934
+    },
+    {
+      "type": "edit",
+      "id": "4a60692ad0b44e69",
+      "item": {
+        "type": "code",
+        "id": "4a60692ad0b44e69",
+        "text": "Header add Access-Control-Allow-Origin \"*\"\nErrorDocument 404 /findpage.json"
+      },
+      "date": 1346686803436
+    },
+    {
+      "type": "edit",
+      "id": "7b9ad4d59b4f6fe7",
+      "item": {
+        "type": "paragraph",
+        "id": "7b9ad4d59b4f6fe7",
+        "text": "Add a .htaccess file that allows CORS access to your content. Include a 404 document that will be similarly allowed."
+      },
+      "date": 1346686879829
+    },
+    {
+      "type": "edit",
+      "id": "7b9ad4d59b4f6fe7",
+      "item": {
+        "type": "paragraph",
+        "id": "7b9ad4d59b4f6fe7",
+        "text": "Add a .htaccess file that allows CORS access to your content. Include a 404 document that will be similarly allowed but eventually ignored."
+      },
+      "date": 1346686944188
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1e3b97d6275abbd0",
+        "text": ""
+      },
+      "id": "1e3b97d6275abbd0",
+      "type": "add",
+      "after": "afede39c5b17ea31",
+      "date": 1346687013284
+    },
+    {
+      "type": "remove",
+      "id": "1e3b97d6275abbd0",
+      "date": 1346687052109
+    },
+    {
+      "type": "remove",
+      "id": "afede39c5b17ea31",
+      "date": 1346687097698
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "247f298ff3344de1",
+        "text": ""
+      },
+      "id": "247f298ff3344de1",
+      "type": "add",
+      "after": "23fabcba9ae7b666",
+      "date": 1346687268680
+    },
+    {
+      "type": "edit",
+      "id": "247f298ff3344de1",
+      "item": {
+        "type": "paragraph",
+        "id": "247f298ff3344de1",
+        "text": "The products of [[Local Editing]] will be, as always, associated with the origin, not the static site."
+      },
+      "date": 1346687402991
+    },
+    {
+      "type": "edit",
+      "id": "c1693ea77977f814",
+      "item": {
+        "type": "html",
+        "id": "c1693ea77977f814",
+        "text": "<h3> Apache"
+      },
+      "date": 1420345794314
+    },
+    {
+      "type": "edit",
+      "id": "0825fcacd34d47d6",
+      "item": {
+        "type": "html",
+        "id": "0825fcacd34d47d6",
+        "text": "<h3> Batch Scripts"
+      },
+      "date": 1420345799260
+    },
+    {
+      "type": "edit",
+      "id": "23fabcba9ae7b666",
+      "item": {
+        "type": "html",
+        "id": "23fabcba9ae7b666",
+        "text": "<h3> Considerations"
+      },
+      "date": 1420345802308
+    },
+    {
+      "type": "edit",
+      "id": "373543a6f725d75c",
+      "item": {
+        "type": "html",
+        "id": "373543a6f725d75c",
+        "text": "Consider generating content as a revision of the previous release. Save the released json in an <b>archive</b> directory. Read this, replace the story and add a subsequent create action leaving one or more previous creates in place. Write to <b>pages</b> replacing previous work in progress."
+      },
+      "date": 1420513545203
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1435491757937
+    },
+    {
+      "type": "fork",
+      "site": "fedwiki.org"
+    },
+    {
+      "type": "edit",
+      "id": "1c7ae8cea5b895be",
+      "item": {
+        "type": "code",
+        "id": "1c7ae8cea5b895be",
+        "text": "<!DOCTYPE HTML PUBLIC\n\"-//W3C//DTD HTML 4.0 Transitional//EN\">\n<html>\n<head>\n<meta http-equiv=\"REFRESH\"\ncontent=\"0;url=http://fed.wiki.org/\n    wiki.c2.com/welcome-visitors\">\n</head>\n</html>\n"
+      },
+      "date": 1435500538067
+    },
+    {
+      "type": "edit",
+      "id": "1c7ae8cea5b895be",
+      "item": {
+        "type": "code",
+        "id": "1c7ae8cea5b895be",
+        "text": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n<html>\n<head>\n<meta http-equiv=\"REFRESH\" content=\"0;url=http://fed.wiki.org/wiki.c2.com/welcome-visitors\">\n</head>\n</html>\n"
+      },
+      "date": 1435500572903
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "042a3610f2bff039"
+      },
+      "id": "042a3610f2bff039",
+      "type": "add",
+      "after": "4161bf01c0a7f791",
+      "date": 1435500976656
+    },
+    {
+      "type": "move",
+      "order": [
+        "8bfa3bf5adcafa42",
+        "c1693ea77977f814",
+        "fd73dd40f5b3186d",
+        "e5223c96dcaf6524",
+        "4be79bd9ede89b95",
+        "1c7ae8cea5b895be",
+        "7b9ad4d59b4f6fe7",
+        "4a60692ad0b44e69",
+        "fd17c33891f75587",
+        "08e943947b5189d4",
+        "bedd6b4d1950684b",
+        "042a3610f2bff039",
+        "0825fcacd34d47d6",
+        "0d943ce02390ba3e",
+        "5654c62af735bc57",
+        "ca930bb30541034a",
+        "3f87db3fbe7b2f40",
+        "373543a6f725d75c",
+        "8798649d51e9a305",
+        "23fabcba9ae7b666",
+        "247f298ff3344de1",
+        "816b38c48bc6adf8",
+        "4161bf01c0a7f791"
+      ],
+      "id": "042a3610f2bff039",
+      "date": 1435500983740
+    },
+    {
+      "type": "remove",
+      "id": "bedd6b4d1950684b",
+      "date": 1435500988311
+    },
+    {
+      "type": "edit",
+      "id": "042a3610f2bff039",
+      "item": {
+        "type": "paragraph",
+        "id": "042a3610f2bff039",
+        "text": "Question: Can .htaccess perform the one redirect making all html superflous?"
+      },
+      "date": 1435500994809
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f9e69974f525bee1"
+      },
+      "id": "f9e69974f525bee1",
+      "type": "add",
+      "after": "4161bf01c0a7f791",
+      "date": 1435501001425
+    },
+    {
+      "type": "move",
+      "order": [
+        "8bfa3bf5adcafa42",
+        "c1693ea77977f814",
+        "fd73dd40f5b3186d",
+        "e5223c96dcaf6524",
+        "4be79bd9ede89b95",
+        "1c7ae8cea5b895be",
+        "7b9ad4d59b4f6fe7",
+        "4a60692ad0b44e69",
+        "fd17c33891f75587",
+        "08e943947b5189d4",
+        "042a3610f2bff039",
+        "f9e69974f525bee1",
+        "0825fcacd34d47d6",
+        "0d943ce02390ba3e",
+        "5654c62af735bc57",
+        "ca930bb30541034a",
+        "3f87db3fbe7b2f40",
+        "373543a6f725d75c",
+        "8798649d51e9a305",
+        "23fabcba9ae7b666",
+        "247f298ff3344de1",
+        "816b38c48bc6adf8",
+        "4161bf01c0a7f791"
+      ],
+      "id": "f9e69974f525bee1",
+      "date": 1435501007573
+    },
+    {
+      "type": "edit",
+      "id": "f9e69974f525bee1",
+      "item": {
+        "type": "code",
+        "id": "f9e69974f525bee1",
+        "text": "Question: Can .htaccess perform the one redirect making all html superflous?"
+      },
+      "date": 1435501012067
+    },
+    {
+      "type": "remove",
+      "id": "042a3610f2bff039",
+      "date": 1435501022111
+    },
+    {
+      "type": "move",
+      "order": [
+        "8bfa3bf5adcafa42",
+        "c1693ea77977f814",
+        "fd73dd40f5b3186d",
+        "f9e69974f525bee1",
+        "e5223c96dcaf6524",
+        "4be79bd9ede89b95",
+        "1c7ae8cea5b895be",
+        "7b9ad4d59b4f6fe7",
+        "4a60692ad0b44e69",
+        "fd17c33891f75587",
+        "08e943947b5189d4",
+        "0825fcacd34d47d6",
+        "0d943ce02390ba3e",
+        "5654c62af735bc57",
+        "ca930bb30541034a",
+        "3f87db3fbe7b2f40",
+        "373543a6f725d75c",
+        "8798649d51e9a305",
+        "23fabcba9ae7b666",
+        "247f298ff3344de1",
+        "816b38c48bc6adf8",
+        "4161bf01c0a7f791"
+      ],
+      "id": "f9e69974f525bee1",
+      "date": 1435501043817
+    },
+    {
+      "type": "move",
+      "order": [
+        "8bfa3bf5adcafa42",
+        "f9e69974f525bee1",
+        "c1693ea77977f814",
+        "fd73dd40f5b3186d",
+        "e5223c96dcaf6524",
+        "4be79bd9ede89b95",
+        "1c7ae8cea5b895be",
+        "7b9ad4d59b4f6fe7",
+        "4a60692ad0b44e69",
+        "fd17c33891f75587",
+        "08e943947b5189d4",
+        "0825fcacd34d47d6",
+        "0d943ce02390ba3e",
+        "5654c62af735bc57",
+        "ca930bb30541034a",
+        "3f87db3fbe7b2f40",
+        "373543a6f725d75c",
+        "8798649d51e9a305",
+        "23fabcba9ae7b666",
+        "247f298ff3344de1",
+        "816b38c48bc6adf8",
+        "4161bf01c0a7f791"
+      ],
+      "id": "f9e69974f525bee1",
+      "date": 1435501058445
+    },
+    {
+      "type": "edit",
+      "id": "f9e69974f525bee1",
+      "item": {
+        "type": "code",
+        "id": "f9e69974f525bee1",
+        "text": "Question: Can .htaccess perform the one redirect making all html superflous?\n\nQuestion: is this just a redirection with the problem that the url in the browser changes, or have I done something wrong?"
+      },
+      "date": 1435501113773
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1489237887277
+    },
+    {
+      "type": "edit",
+      "id": "8bfa3bf5adcafa42",
+      "item": {
+        "type": "paragraph",
+        "id": "8bfa3bf5adcafa42",
+        "text": "The Fedwiki node server is able to serve static content from the thmes folder."
+      },
+      "date": 1489237949805
+    },
+    {
+      "type": "add",
+      "id": "0ebe30ba3e015aca",
+      "item": {
+        "type": "paragraph",
+        "id": "0ebe30ba3e015aca",
+        "text": "# Batch Script Hack"
+      },
+      "after": "8bfa3bf5adcafa42",
+      "date": 1489237960277
+    },
+    {
+      "type": "edit",
+      "id": "0ebe30ba3e015aca",
+      "item": {
+        "type": "markdown",
+        "id": "0ebe30ba3e015aca",
+        "text": "# Batch Script Hack"
+      },
+      "date": 1489237962958
+    },
+    {
+      "type": "add",
+      "id": "f277cad489661c0c",
+      "item": {
+        "type": "paragraph",
+        "id": "f277cad489661c0c",
+        "text": "Batch scripts can convert static content into federated wiki compatible json and serve it with apache."
+      },
+      "after": "0ebe30ba3e015aca",
+      "date": 1489237965646
+    },
+    {
+      "type": "edit",
+      "id": "8bfa3bf5adcafa42",
+      "item": {
+        "type": "paragraph",
+        "id": "8bfa3bf5adcafa42",
+        "text": "The Fedwiki node server is able to serve static content from the themes folder. This folder is used for creating [[Fedwiki Themes]] using [[Custom CSS]], but can equally be used to serve any binary file - for instance images vide, and audio files."
+      },
+      "date": 1489238204634
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9e8aeb9b098da179",
+        "text": "example.com/\n  pages/\n    ... lots of json files for the sites content\n  status/\n    favicon.png\n    persona.identity\n    sitemap.json\n    sitempa.xml\n    theme/\n      style.css"
+      },
+      "after": "8bfa3bf5adcafa42",
+      "id": "9e8aeb9b098da179",
+      "date": 1489267081380
+    },
+    {
+      "type": "edit",
+      "id": "9e8aeb9b098da179",
+      "item": {
+        "type": "code",
+        "id": "9e8aeb9b098da179",
+        "text": "example.com/\n  pages/\n    ... lots of json files for the sites content\n  status/\n    favicon.png\n    persona.identity\n    sitemap.json\n    sitemap.xml\n    theme/\n      style.css\n      test_image.jpg\n      test_audio.mp3"
+      },
+      "date": 1489267128826
+    },
+    {
+      "type": "fork",
+      "site": "hacks.fedwiki.org",
+      "date": 1497796578606
+    },
+    {
+      "type": "edit",
+      "id": "8bfa3bf5adcafa42",
+      "item": {
+        "type": "paragraph",
+        "id": "8bfa3bf5adcafa42",
+        "text": "The Fedwiki node server is able to serve static content from the themes folder. This folder is used for creating [[Fedwiki Themes]] using [[Custom CSS]], but can equally be used to serve any binary file - for instance images video, and audio files."
+      },
+      "date": 1497796593535
+    }
+  ]
+}

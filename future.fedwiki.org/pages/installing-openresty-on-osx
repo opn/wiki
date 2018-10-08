@@ -1,0 +1,1005 @@
+{
+  "title": "Installing OpenResty on OSX",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "61504785c98ac1bc",
+      "text": "Here are my notes on installing OpenResty locally on OSX. I'm following the instructions over at [https://openresty.org/en/installation.html openresty.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "808a77de01986b1a",
+      "text": "You need to install [[OpenResty]] with LUA support (see below) then follow the rest of the Getting Started tutorial over at [https://openresty.org/en/getting-started.html openresty.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bbee5011fc1bd5c1",
+      "text": "It compiles without problem or complaint/ First download the tarball, and cd into the downloads folder, where you should see the configure and makefiles."
+    },
+    {
+      "type": "paragraph",
+      "id": "3472f15f84cbf56a",
+      "text": "Then all you have to do is copy and execute  the following commands in the terminal:"
+    },
+    {
+      "type": "code",
+      "id": "04dd72ce27750f15",
+      "text": "./configure --with-cc-opt=\"-I/usr/local/opt/openssl/include/ -I/usr/local/opt/pcre/include/\" --with-ld-opt=\"-L/usr/local/opt/openssl/lib/ -L/usr/local/opt/pcre/lib/\" -j8"
+    },
+    {
+      "type": "paragraph",
+      "id": "4db2bf76eba3506c",
+      "text": "Then type:"
+    },
+    {
+      "type": "code",
+      "id": "366db3b8198ef50b",
+      "text": "make\nmake install"
+    },
+    {
+      "type": "paragraph",
+      "id": "250434451303ea0b",
+      "text": "These worked without complaint for me on OSX without the need for sudo."
+    },
+    {
+      "type": "reference",
+      "id": "915329a54403bdae",
+      "site": "future.fedwiki.org",
+      "slug": "install-nginx-with-lua-support",
+      "title": "Install Nginx with LUA Support",
+      "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. "
+    },
+    {
+      "type": "markdown",
+      "id": "2c29e63b7a95826a",
+      "text": "# Configure and start OpenResty"
+    },
+    {
+      "type": "paragraph",
+      "id": "0c0381d88ec45043",
+      "text": "Then follow the rest of the tutorial over at [https://openresty.org/en/getting-started.html openresty.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "c47bfc6a604dc8aa",
+      "text": "# Next"
+    },
+    {
+      "type": "paragraph",
+      "id": "7e882eea78f92790",
+      "text": "Following nginx installation with lua support you get the following helpful advise from homebrew-nginx :"
+    },
+    {
+      "type": "code",
+      "id": "818a556d10edaa51",
+      "text": "Docroot is: /usr/local/var/www\n\nThe default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that\nnginx can run without sudo.\n\nnginx will load all files in /usr/local/etc/nginx/servers/.\n\n..."
+    },
+    {
+      "type": "paragraph",
+      "id": "df531eefaf47774b",
+      "text": "So let's do that and follow the tips below:"
+    },
+    {
+      "type": "code",
+      "id": "1931f05f9b2e0047",
+      "text": "sudo chown root:wheel /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\nsudo chmod u+s /usr/local/Cellar/nginx-full/1.8.1/bin/nginx"
+    },
+    {
+      "type": "paragraph",
+      "id": "39fd13d752d4f885",
+      "text": "Reload config:"
+    },
+    {
+      "type": "code",
+      "id": "381036726262d752",
+      "text": "nginx -s reload"
+    },
+    {
+      "type": "paragraph",
+      "id": "6071eb0dca8d1e45",
+      "text": "Reopen Logfile:"
+    },
+    {
+      "type": "code",
+      "id": "2e1406f00cf85cb6",
+      "text": "nginx -s reopen"
+    },
+    {
+      "type": "paragraph",
+      "id": "509a70525a1ce372",
+      "text": "Stop process:"
+    },
+    {
+      "type": "code",
+      "id": "c6fe496ca5819672",
+      "text": "nginx -s stop\nWaiting on exit process"
+    },
+    {
+      "type": "code",
+      "id": "6fb0e2f3b8a118d3",
+      "text": "nginx -s quit"
+    },
+    {
+      "type": "paragraph",
+      "id": "8a7eb835b9a6a956",
+      "text": "To have launchd start homebrew/nginx/nginx-full now and restart at login:"
+    },
+    {
+      "type": "code",
+      "id": "70c0a975c1bce1b1",
+      "text": "brew services start homebrew/nginx/nginx-full\n==> Tapping homebrew/services\nCloning into '/usr/local/Library/Taps/homebrew/homebrew-services'...\nremote: Counting objects: 7, done.\nremote: Compressing objects: 100% (6/6), done.\nremote: Total 7 (delta 0), reused 6 (delta 0), pack-reused 0\nUnpacking objects: 100% (7/7), done.\nChecking connectivity... done.\nTapped 0 formulae (32 files, 46K)\n==> Successfully started `nginx-full` (label: homebrew.mxcl.nginx-full)"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Installing OpenResty on OSX",
+        "story": []
+      },
+      "date": 1461406779230
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "61504785c98ac1bc"
+      },
+      "id": "61504785c98ac1bc",
+      "type": "add",
+      "date": 1461406780388
+    },
+    {
+      "type": "edit",
+      "id": "61504785c98ac1bc",
+      "item": {
+        "type": "paragraph",
+        "id": "61504785c98ac1bc",
+        "text": "Here are my notes on installing OpenResty locally on OSX."
+      },
+      "date": 1461406796384
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "04dd72ce27750f15"
+      },
+      "id": "04dd72ce27750f15",
+      "type": "add",
+      "after": "df9e6dda6df23fe5",
+      "date": 1461406801639
+    },
+    {
+      "type": "edit",
+      "id": "04dd72ce27750f15",
+      "item": {
+        "type": "code",
+        "id": "04dd72ce27750f15",
+        "text": "./configure --with-cc-opt=\"-I/usr/local/opt/openssl/include/ -I/usr/local/opt/pcre/include/\" --with-ld-opt=\"-L/usr/local/opt/openssl/lib/ -L/usr/local/opt/pcre/lib/\" -j8"
+      },
+      "date": 1461406835520
+    },
+    {
+      "type": "edit",
+      "id": "61504785c98ac1bc",
+      "item": {
+        "type": "paragraph",
+        "id": "61504785c98ac1bc",
+        "text": "Here are my notes on installing OpenResty locally on OSX. I'm following the instructions over at [https://openresty.org/en/installation.html openresty.org]"
+      },
+      "date": 1461406894234
+    },
+    {
+      "type": "add",
+      "id": "bbee5011fc1bd5c1",
+      "item": {
+        "type": "paragraph",
+        "id": "bbee5011fc1bd5c1",
+        "text": "It compiles without problem or complaint/ First download the tarball, and cd into the downloads folder, where you should see the .configure file."
+      },
+      "after": "61504785c98ac1bc",
+      "date": 1461407059505
+    },
+    {
+      "type": "edit",
+      "id": "bbee5011fc1bd5c1",
+      "item": {
+        "type": "paragraph",
+        "id": "bbee5011fc1bd5c1",
+        "text": "It compiles without problem or complaint/ First download the tarball, and cd into the downloads folder, where you should see the configure and makefiles."
+      },
+      "date": 1461407097756
+    },
+    {
+      "type": "add",
+      "id": "3472f15f84cbf56a",
+      "item": {
+        "type": "paragraph",
+        "id": "3472f15f84cbf56a",
+        "text": "Then all you have to do is copy and execute  the following commands in the terminal:"
+      },
+      "after": "bbee5011fc1bd5c1",
+      "date": 1461407143897
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4db2bf76eba3506c"
+      },
+      "id": "4db2bf76eba3506c",
+      "type": "add",
+      "after": "04dd72ce27750f15",
+      "date": 1461407145769
+    },
+    {
+      "type": "edit",
+      "id": "4db2bf76eba3506c",
+      "item": {
+        "type": "paragraph",
+        "id": "4db2bf76eba3506c",
+        "text": "Then type:"
+      },
+      "date": 1461407438904
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "366db3b8198ef50b"
+      },
+      "id": "366db3b8198ef50b",
+      "type": "add",
+      "after": "4db2bf76eba3506c",
+      "date": 1461407439851
+    },
+    {
+      "type": "edit",
+      "id": "366db3b8198ef50b",
+      "item": {
+        "type": "code",
+        "id": "366db3b8198ef50b",
+        "text": "make\nmake install"
+      },
+      "date": 1461407448108
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "250434451303ea0b"
+      },
+      "id": "250434451303ea0b",
+      "type": "add",
+      "after": "366db3b8198ef50b",
+      "date": 1461407449468
+    },
+    {
+      "type": "edit",
+      "id": "250434451303ea0b",
+      "item": {
+        "type": "paragraph",
+        "id": "250434451303ea0b",
+        "text": "These worked without complaint for me on OSX without the need for sudo."
+      },
+      "date": 1461407482515
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2c29e63b7a95826a"
+      },
+      "id": "2c29e63b7a95826a",
+      "type": "add",
+      "after": "3472f15f84cbf56a",
+      "date": 1461410399421
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "702331294cbf886f"
+      },
+      "id": "702331294cbf886f",
+      "type": "add",
+      "after": "2c29e63b7a95826a",
+      "date": 1461410401585
+    },
+    {
+      "type": "edit",
+      "id": "702331294cbf886f",
+      "item": {
+        "type": "paragraph",
+        "id": "702331294cbf886f",
+        "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. To do that it is best to use [[nginx-full]]."
+      },
+      "date": 1461410488346
+    },
+    {
+      "type": "add",
+      "id": "f8600e0453246a49",
+      "item": {
+        "type": "paragraph",
+        "id": "f8600e0453246a49",
+        "text": "Here you can see the full commandline history of my progress installing nginx with lua support on OSX - ["
+      },
+      "after": "702331294cbf886f",
+      "date": 1461410555495
+    },
+    {
+      "type": "add",
+      "id": "c47bfc6a604dc8aa",
+      "item": {
+        "type": "paragraph",
+        "id": "c47bfc6a604dc8aa",
+        "text": "# Next"
+      },
+      "after": "f8600e0453246a49",
+      "date": 1461410564450
+    },
+    {
+      "type": "edit",
+      "id": "c47bfc6a604dc8aa",
+      "item": {
+        "type": "markdown",
+        "id": "c47bfc6a604dc8aa",
+        "text": "# Next"
+      },
+      "date": 1461410565854
+    },
+    {
+      "type": "add",
+      "id": "7e882eea78f92790",
+      "item": {
+        "type": "paragraph",
+        "id": "7e882eea78f92790",
+        "text": "Docroot is: /usr/local/var/www\n\nThe default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that\nnginx can run without sudo.\n\nnginx will load all files in /usr/local/etc/nginx/servers/.\n\n- Tips -\nRun port 80:\n $ sudo chown root:wheel /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\n $ sudo chmod u+s /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\nReload config:\n $ nginx -s reload\nReopen Logfile:\n $ nginx -s reopen\nStop process:\n $ nginx -s stop\nWaiting on exit process\n $ nginx -s quit\n\nTo have launchd start homebrew/nginx/nginx-full now and restart at login:\n  brew services start homebrew/nginx/nginx-full\nOr, if you don't want/need a background service you can just run:\n  nginx"
+      },
+      "after": "c47bfc6a604dc8aa",
+      "date": 1461410567949
+    },
+    {
+      "type": "edit",
+      "id": "f8600e0453246a49",
+      "item": {
+        "type": "paragraph",
+        "id": "f8600e0453246a49",
+        "text": "Here you can see the full commandline history of my progress installing nginx with lua support on OSX - [https://gist.github.com/opn/280754d59d258305731e5fdcc1d2a15d gist]"
+      },
+      "date": 1461410590750
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "bbee5011fc1bd5c1",
+        "3472f15f84cbf56a",
+        "2c29e63b7a95826a",
+        "702331294cbf886f",
+        "f8600e0453246a49",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790"
+      ],
+      "id": "61504785c98ac1bc",
+      "date": 1461410661115
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "3472f15f84cbf56a",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "bbee5011fc1bd5c1",
+        "2c29e63b7a95826a",
+        "702331294cbf886f",
+        "f8600e0453246a49",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790"
+      ],
+      "id": "3472f15f84cbf56a",
+      "date": 1461410675249
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "bbee5011fc1bd5c1",
+        "3472f15f84cbf56a",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "2c29e63b7a95826a",
+        "702331294cbf886f",
+        "f8600e0453246a49",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790"
+      ],
+      "id": "bbee5011fc1bd5c1",
+      "date": 1461410685083
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "bbee5011fc1bd5c1",
+        "3472f15f84cbf56a",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "702331294cbf886f",
+        "2c29e63b7a95826a",
+        "f8600e0453246a49",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790"
+      ],
+      "id": "702331294cbf886f",
+      "date": 1461410697354
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "bbee5011fc1bd5c1",
+        "3472f15f84cbf56a",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "702331294cbf886f",
+        "f8600e0453246a49",
+        "2c29e63b7a95826a",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790"
+      ],
+      "id": "f8600e0453246a49",
+      "date": 1461410703093
+    },
+    {
+      "type": "add",
+      "id": "0b44dad66a81b778",
+      "item": {
+        "type": "paragraph",
+        "id": "0b44dad66a81b778",
+        "text": "# Install Nginx with LUA Support"
+      },
+      "after": "250434451303ea0b",
+      "date": 1461410719113
+    },
+    {
+      "type": "edit",
+      "id": "0b44dad66a81b778",
+      "item": {
+        "type": "markdown",
+        "id": "0b44dad66a81b778",
+        "text": "# Install Nginx with LUA Support"
+      },
+      "date": 1461410720170
+    },
+    {
+      "type": "edit",
+      "id": "2c29e63b7a95826a",
+      "item": {
+        "type": "paragraph",
+        "id": "2c29e63b7a95826a",
+        "text": "# Configure and start OpenResty"
+      },
+      "date": 1461410757451
+    },
+    {
+      "type": "edit",
+      "id": "2c29e63b7a95826a",
+      "item": {
+        "type": "markdown",
+        "id": "2c29e63b7a95826a",
+        "text": "# Configure and start OpenResty"
+      },
+      "date": 1461410758433
+    },
+    {
+      "type": "add",
+      "id": "0c0381d88ec45043",
+      "item": {
+        "type": "paragraph",
+        "id": "0c0381d88ec45043",
+        "text": "Then follow the rest of the tutorial over at [https://openresty.org/en/getting-started.html openresty.org]"
+      },
+      "after": "f8600e0453246a49",
+      "date": 1461410790644
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "bbee5011fc1bd5c1",
+        "3472f15f84cbf56a",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "0b44dad66a81b778",
+        "702331294cbf886f",
+        "f8600e0453246a49",
+        "2c29e63b7a95826a",
+        "0c0381d88ec45043",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790"
+      ],
+      "id": "0c0381d88ec45043",
+      "date": 1461410793079
+    },
+    {
+      "type": "edit",
+      "id": "7e882eea78f92790",
+      "item": {
+        "type": "paragraph",
+        "id": "7e882eea78f92790",
+        "text": "Following nginx installation with lua support you get the follwoing helpful advide:"
+      },
+      "date": 1461410845470
+    },
+    {
+      "type": "add",
+      "id": "4b320cb2e27d4e2d",
+      "item": {
+        "type": "paragraph",
+        "id": "4b320cb2e27d4e2d",
+        "text": "Docroot is: /usr/local/var/www\n\nThe default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that\nnginx can run without sudo.\n\nnginx will load all files in /usr/local/etc/nginx/servers/.\n\n- Tips -\nRun port 80:\n $ sudo chown root:wheel /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\n $ sudo chmod u+s /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\nReload config:\n $ nginx -s reload\nReopen Logfile:\n $ nginx -s reopen\nStop process:\n $ nginx -s stop\nWaiting on exit process\n $ nginx -s quit\n\nTo have launchd start homebrew/nginx/nginx-full now and restart at login:\n  brew services start homebrew/nginx/nginx-full\nOr, if you don't want/need a background service you can just run:\n  nginx"
+      },
+      "after": "7e882eea78f92790",
+      "date": 1461410855477
+    },
+    {
+      "type": "edit",
+      "id": "702331294cbf886f",
+      "item": {
+        "type": "paragraph",
+        "id": "702331294cbf886f",
+        "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. To do that it is best to use the homebrew-nginx  tap - [https://github.com/Homebrew/homebrew-nginx github]"
+      },
+      "date": 1461410924587
+    },
+    {
+      "type": "edit",
+      "id": "702331294cbf886f",
+      "item": {
+        "type": "paragraph",
+        "id": "702331294cbf886f",
+        "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. "
+      },
+      "date": 1461410938803
+    },
+    {
+      "type": "add",
+      "id": "28f59414a979dedb",
+      "item": {
+        "type": "paragraph",
+        "id": "28f59414a979dedb",
+        "text": "To do that it is best to use the homebrew-nginx  tap - [https://github.com/Homebrew/homebrew-nginx github]"
+      },
+      "after": "702331294cbf886f",
+      "date": 1461410939148
+    },
+    {
+      "type": "edit",
+      "id": "7e882eea78f92790",
+      "item": {
+        "type": "paragraph",
+        "id": "7e882eea78f92790",
+        "text": "Following nginx installation with lua support you get the following helpful advise from homebrew-nginx :"
+      },
+      "date": 1461410968573
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "818a556d10edaa51"
+      },
+      "id": "818a556d10edaa51",
+      "type": "add",
+      "after": "4b320cb2e27d4e2d",
+      "date": 1461410979419
+    },
+    {
+      "type": "edit",
+      "id": "818a556d10edaa51",
+      "item": {
+        "type": "code",
+        "id": "818a556d10edaa51",
+        "text": "Docroot is: /usr/local/var/www\n\nThe default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that\nnginx can run without sudo.\n\nnginx will load all files in /usr/local/etc/nginx/servers/.\n\n- Tips -\nRun port 80:\n $ sudo chown root:wheel /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\n $ sudo chmod u+s /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\nReload config:\n $ nginx -s reload\nReopen Logfile:\n $ nginx -s reopen\nStop process:\n $ nginx -s stop\nWaiting on exit process\n $ nginx -s quit\n\nTo have launchd start homebrew/nginx/nginx-full now and restart at login:\n  brew services start homebrew/nginx/nginx-full\nOr, if you don't want/need a background service you can just run:\n  nginx"
+      },
+      "date": 1461410982732
+    },
+    {
+      "type": "move",
+      "order": [
+        "61504785c98ac1bc",
+        "bbee5011fc1bd5c1",
+        "3472f15f84cbf56a",
+        "04dd72ce27750f15",
+        "4db2bf76eba3506c",
+        "366db3b8198ef50b",
+        "250434451303ea0b",
+        "0b44dad66a81b778",
+        "702331294cbf886f",
+        "28f59414a979dedb",
+        "f8600e0453246a49",
+        "2c29e63b7a95826a",
+        "0c0381d88ec45043",
+        "c47bfc6a604dc8aa",
+        "7e882eea78f92790",
+        "818a556d10edaa51",
+        "4b320cb2e27d4e2d"
+      ],
+      "id": "818a556d10edaa51",
+      "date": 1461410986102
+    },
+    {
+      "type": "remove",
+      "id": "4b320cb2e27d4e2d",
+      "date": 1461410991829
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "df531eefaf47774b"
+      },
+      "id": "df531eefaf47774b",
+      "type": "add",
+      "after": "818a556d10edaa51",
+      "date": 1461411032474
+    },
+    {
+      "type": "edit",
+      "id": "df531eefaf47774b",
+      "item": {
+        "type": "paragraph",
+        "id": "df531eefaf47774b",
+        "text": "So let's do that:"
+      },
+      "date": 1461411041197
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1931f05f9b2e0047"
+      },
+      "id": "1931f05f9b2e0047",
+      "type": "add",
+      "after": "df531eefaf47774b",
+      "date": 1461411063012
+    },
+    {
+      "type": "edit",
+      "id": "1931f05f9b2e0047",
+      "item": {
+        "type": "code",
+        "id": "1931f05f9b2e0047",
+        "text": "sudo chown root:wheel /usr/local/Cellar/nginx-full/1.8.1/bin/nginx\nsudo chmod u+s /usr/local/Cellar/nginx-full/1.8.1/bin/nginx"
+      },
+      "date": 1461411093945
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "39fd13d752d4f885"
+      },
+      "id": "39fd13d752d4f885",
+      "type": "add",
+      "after": "1931f05f9b2e0047",
+      "date": 1461411101000
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "381036726262d752"
+      },
+      "id": "381036726262d752",
+      "type": "add",
+      "after": "39fd13d752d4f885",
+      "date": 1461411103477
+    },
+    {
+      "type": "edit",
+      "id": "381036726262d752",
+      "item": {
+        "type": "code",
+        "id": "381036726262d752",
+        "text": "nginx -s reload\nReopen Logfile:\n $ nginx -s reopen\nStop process:\n $ nginx -s stop\nWaiting on exit process\n $ nginx -s quit\n\nTo have launchd start homebrew/nginx/nginx-full now and restart at login:\n  brew services start homebrew/nginx/nginx-full"
+      },
+      "date": 1461411119196
+    },
+    {
+      "type": "edit",
+      "id": "39fd13d752d4f885",
+      "item": {
+        "type": "paragraph",
+        "id": "39fd13d752d4f885",
+        "text": "Reload config:"
+      },
+      "date": 1461411122632
+    },
+    {
+      "type": "edit",
+      "id": "381036726262d752",
+      "item": {
+        "type": "code",
+        "id": "381036726262d752",
+        "text": "nginx -s reload"
+      },
+      "date": 1461411130042
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6071eb0dca8d1e45"
+      },
+      "id": "6071eb0dca8d1e45",
+      "type": "add",
+      "after": "381036726262d752",
+      "date": 1461411131574
+    },
+    {
+      "type": "edit",
+      "id": "6071eb0dca8d1e45",
+      "item": {
+        "type": "paragraph",
+        "id": "6071eb0dca8d1e45",
+        "text": "Reopen Logfile:\n $ nginx -s reopen\nStop process:"
+      },
+      "date": 1461411136043
+    },
+    {
+      "type": "edit",
+      "id": "6071eb0dca8d1e45",
+      "item": {
+        "type": "paragraph",
+        "id": "6071eb0dca8d1e45",
+        "text": "Reopen Logfile:"
+      },
+      "date": 1461411166588
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2e1406f00cf85cb6"
+      },
+      "id": "2e1406f00cf85cb6",
+      "type": "add",
+      "after": "6071eb0dca8d1e45",
+      "date": 1461411168221
+    },
+    {
+      "type": "edit",
+      "id": "2e1406f00cf85cb6",
+      "item": {
+        "type": "code",
+        "id": "2e1406f00cf85cb6",
+        "text": "nginx -s reopen"
+      },
+      "date": 1461411182998
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "509a70525a1ce372"
+      },
+      "id": "509a70525a1ce372",
+      "type": "add",
+      "after": "2e1406f00cf85cb6",
+      "date": 1461411185613
+    },
+    {
+      "type": "edit",
+      "id": "509a70525a1ce372",
+      "item": {
+        "type": "paragraph",
+        "id": "509a70525a1ce372",
+        "text": "Stop process:"
+      },
+      "date": 1461411194743
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c6fe496ca5819672"
+      },
+      "id": "c6fe496ca5819672",
+      "type": "add",
+      "after": "509a70525a1ce372",
+      "date": 1461411196863
+    },
+    {
+      "type": "edit",
+      "id": "c6fe496ca5819672",
+      "item": {
+        "type": "code",
+        "id": "c6fe496ca5819672",
+        "text": "nginx -s stop\nWaiting on exit process"
+      },
+      "date": 1461411216120
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca535b458ac06046"
+      },
+      "id": "ca535b458ac06046",
+      "type": "add",
+      "after": "c6fe496ca5819672",
+      "date": 1461411218022
+    },
+    {
+      "type": "edit",
+      "id": "ca535b458ac06046",
+      "item": {
+        "type": "paragraph",
+        "id": "ca535b458ac06046",
+        "text": "nginx -s quit"
+      },
+      "date": 1461411227871
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6fb0e2f3b8a118d3"
+      },
+      "id": "6fb0e2f3b8a118d3",
+      "type": "add",
+      "after": "ca535b458ac06046",
+      "date": 1461411229235
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8a7eb835b9a6a956"
+      },
+      "id": "8a7eb835b9a6a956",
+      "type": "add",
+      "after": "6fb0e2f3b8a118d3",
+      "date": 1461411235402
+    },
+    {
+      "type": "edit",
+      "id": "8a7eb835b9a6a956",
+      "item": {
+        "type": "paragraph",
+        "id": "8a7eb835b9a6a956",
+        "text": "To have launchd start homebrew/nginx/nginx-full now and restart at login:"
+      },
+      "date": 1461411241736
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "70c0a975c1bce1b1"
+      },
+      "id": "70c0a975c1bce1b1",
+      "type": "add",
+      "after": "8a7eb835b9a6a956",
+      "date": 1461411244216
+    },
+    {
+      "type": "edit",
+      "id": "70c0a975c1bce1b1",
+      "item": {
+        "type": "code",
+        "id": "70c0a975c1bce1b1",
+        "text": "brew services start homebrew/nginx/nginx-full"
+      },
+      "date": 1461411248785
+    },
+    {
+      "type": "remove",
+      "id": "ca535b458ac06046",
+      "date": 1461411252719
+    },
+    {
+      "type": "edit",
+      "id": "6fb0e2f3b8a118d3",
+      "item": {
+        "type": "code",
+        "id": "6fb0e2f3b8a118d3",
+        "text": "nginx -s quit"
+      },
+      "date": 1461411254561
+    },
+    {
+      "type": "edit",
+      "id": "818a556d10edaa51",
+      "item": {
+        "type": "code",
+        "id": "818a556d10edaa51",
+        "text": "Docroot is: /usr/local/var/www\n\nThe default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that\nnginx can run without sudo.\n\nnginx will load all files in /usr/local/etc/nginx/servers/.\n\n..."
+      },
+      "date": 1461411279046
+    },
+    {
+      "type": "edit",
+      "id": "df531eefaf47774b",
+      "item": {
+        "type": "paragraph",
+        "id": "df531eefaf47774b",
+        "text": "So let's do that and follow the tips below:"
+      },
+      "date": 1461411291690
+    },
+    {
+      "type": "edit",
+      "id": "70c0a975c1bce1b1",
+      "item": {
+        "type": "code",
+        "id": "70c0a975c1bce1b1",
+        "text": "brew services start homebrew/nginx/nginx-full\n==> Tapping homebrew/services\nCloning into '/usr/local/Library/Taps/homebrew/homebrew-services'...\nremote: Counting objects: 7, done.\nremote: Compressing objects: 100% (6/6), done.\nremote: Total 7 (delta 0), reused 6 (delta 0), pack-reused 0\nUnpacking objects: 100% (7/7), done.\nChecking connectivity... done.\nTapped 0 formulae (32 files, 46K)\n==> Successfully started `nginx-full` (label: homebrew.mxcl.nginx-full)"
+      },
+      "date": 1461411445938
+    },
+    {
+      "type": "add",
+      "id": "808a77de01986b1a",
+      "item": {
+        "type": "paragraph",
+        "id": "808a77de01986b1a",
+        "text": "You need to install [[OpenResty]] with LUA support (see below) then follow the rest of the Getting Started tutorial over at [https://openresty.org/en/getting-started.html openresty.org]"
+      },
+      "after": "61504785c98ac1bc",
+      "date": 1461411891998
+    },
+    {
+      "type": "edit",
+      "id": "0b44dad66a81b778",
+      "item": {
+        "type": "markdown",
+        "id": "0b44dad66a81b778",
+        "text": "# [[Install Nginx with LUA Support]]"
+      },
+      "date": 1461421811150
+    },
+    {
+      "type": "remove",
+      "id": "702331294cbf886f",
+      "date": 1461421822699
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "915329a54403bdae"
+      },
+      "after": "250434451303ea0b",
+      "id": "915329a54403bdae",
+      "date": 1461421825679
+    },
+    {
+      "type": "edit",
+      "id": "915329a54403bdae",
+      "item": {
+        "type": "reference",
+        "id": "915329a54403bdae",
+        "site": "future.fedwiki.org",
+        "slug": "install-nginx-with-lua-support",
+        "title": "Install Nginx with LUA Support",
+        "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. "
+      },
+      "date": 1461421831541
+    },
+    {
+      "type": "remove",
+      "id": "28f59414a979dedb",
+      "date": 1461421834687
+    },
+    {
+      "type": "remove",
+      "id": "f8600e0453246a49",
+      "date": 1461421841611
+    },
+    {
+      "type": "remove",
+      "id": "0b44dad66a81b778",
+      "date": 1461421851899
+    }
+  ]
+}

@@ -1,0 +1,671 @@
+{
+  "title": "Map Transport",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "728921eae995ab44",
+      "text": "This [[Transport]] creates a fedwiki [[ghost page]] from a geo-located image. It uses [[exiv2]] on the server to extract the GPSInfo in the [[Exif]] headers of the image."
+    },
+    {
+      "type": "video",
+      "id": "b62b1f053be0d5dd",
+      "text": "VIMEO 171953543\nDescription of the first version of the [[map-transport]] for geo-encoded images, and Wikipedia map references."
+    },
+    {
+      "type": "paragraph",
+      "id": "aa55c73a9ad4b99a",
+      "text": "Simply drag and drop a map page url or the url of a geocoded image onto the transporter:"
+    },
+    {
+      "type": "transport",
+      "id": "10ea2af363e51a5f",
+      "text": "POST https://rest.livecode.world/map"
+    },
+    {
+      "type": "markdown",
+      "id": "9546dbda40035b5a",
+      "text": "# About"
+    },
+    {
+      "type": "paragraph",
+      "id": "f9842d5b2be9e775",
+      "text": "With this transporter we also look to experiment and integrate it with how the [[About Map Plugin]] works."
+    },
+    {
+      "type": "paragraph",
+      "id": "98abdc2802ef3c4a",
+      "text": "In [[Maps and Places]] we explore how we may interact with maps in the federation."
+    },
+    {
+      "type": "paragraph",
+      "id": "993211224b73bdfd",
+      "text": "Below is the code that converts the Degrees, Minutes, Seconds info into decimal values."
+    },
+    {
+      "type": "markdown",
+      "id": "d9f45aae0a436d21",
+      "text": "# Code"
+    },
+    {
+      "type": "paragraph",
+      "id": "63441a71f110b50c",
+      "text": "You can find the latest version of the code here - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2 gist]"
+    },
+    {
+      "type": "paragraph",
+      "id": "43c4eba991702cd2",
+      "text": "The function geo_ExtractLatlong() uses some simple text parsing to figure out the lat and long co-ordinates from the url dropped - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2#file-script-stack-map-lc-L117-L153 gist]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bbd20bb952d4b261",
+      "text": "The basic logic for converting degrees, minutes, and seconds into decimal versions of [[Latitude]] and [[Longitude]] can be found here:"
+    },
+    {
+      "type": "code",
+      "id": "8869c0772777be8e",
+      "text": "put sDeg + sMin / 60 + sSec / 3600 into decValue\ngeo_SetNegative decValue, nwse\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "593c8129fe079e33",
+      "text": "The command get_SetNegative takes the information provide (north, south, east, west) and negated the decimal value if needed."
+    },
+    {
+      "type": "code",
+      "id": "4b1981619074e5ff",
+      "text": "command geo_SetNegative @decValue, nwse\n if char 1 of nwse is among the items of \"w,s\" then\n  put -1 * decValue into decValue\n end if\nend geo_SetNegative\n"
+    },
+    {
+      "type": "markdown",
+      "id": "5a4d4c50029ad335",
+      "text": "# To Do"
+    },
+    {
+      "type": "markdown",
+      "id": "1e7deed8de779e92",
+      "text": "It should be enhanced to:\n\n- [x] Check geolocation with real examples\n- [ ] Look at API - [https://www.mediawiki.org/wiki/Extension:GeoData mediawiki]\n- [ ] Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n- [ ] Integrate GeoHack.js - [https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "27e0ffd6ff213c5d",
+      "text": "# Exif GPS Standard"
+    },
+    {
+      "type": "paragraph",
+      "id": "e075ccbb3c4c4220",
+      "text": "According to the [[exif]] standard, there are three \"rational\" fields for each, containing degrees, minutes, and seconds. \n"
+    },
+    {
+      "type": "paragraph",
+      "id": "47b8a943fb5fdc08",
+      "text": "exiftool normalizes imporoper decimal degrees into D,M,S while assigning these values, \n   (exiftool -GPSLongitude=\"0.5 90 63.12345\" junk.jpg\" -> GPS Longitude: 2 deg 1' 3.12\" W\") \n   So if you need decimal degrees, you do dd=x0+x1/60.+x2/3600. and could ignore the non-normalization."
+    },
+    {
+      "type": "code",
+      "id": "bea0b21f206f944d",
+      "text": "$d = $deg + (($min/60) + ($sec/3600));\n   \nGPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\nGPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \nGPS Latitude: 57 deg 38' 56.83\" N\nGPS Longitude: 10 deg 24' 26.79\" E\n   \nGPS Longitude: 10.40744\nGPS Position: 57.64911 10.40744"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Map Transport",
+        "story": []
+      },
+      "date": 1466686133973
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] creates a fedwiki [[ghost page]] from a geo-located image. It uses [[exiv2]] on the server to extract the GPSInfo in the [[Exif]] headers of the image."
+      },
+      "id": "728921eae995ab44",
+      "date": 1466686140118
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "aa55c73a9ad4b99a",
+        "text": "Simply drag and drop a video page url from this site onto the transporter:"
+      },
+      "after": "728921eae995ab44",
+      "id": "aa55c73a9ad4b99a",
+      "date": 1466686142523
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://livecode.world/mediawiki/importpage"
+      },
+      "after": "aa55c73a9ad4b99a",
+      "id": "10ea2af363e51a5f",
+      "date": 1466686144989
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "9546dbda40035b5a",
+        "text": "# About"
+      },
+      "after": "10ea2af363e51a5f",
+      "id": "9546dbda40035b5a",
+      "date": 1466686148067
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f9842d5b2be9e775",
+        "text": "This plugin is an experimental web page scraper coded in [[LiveCode]]. The web service does the following things:"
+      },
+      "after": "9546dbda40035b5a",
+      "id": "f9842d5b2be9e775",
+      "date": 1466686150862
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "334c2012ca8b4ccb",
+        "text": "* Fetches the HTML of the video page\n* Runs this through html-[[tidy]] using [[shell()]] to create a valid [[xml]]/[[xhtml]] document\n* Painfully steps through the xhtml to find the relevant sections\n• Constructs the [[wiki page json]]"
+      },
+      "after": "f9842d5b2be9e775",
+      "id": "334c2012ca8b4ccb",
+      "date": 1466686153491
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "993211224b73bdfd",
+        "text": "Below is the code that conversts the Degrees, Minutes, Seconds info into decimal values."
+      },
+      "after": "334c2012ca8b4ccb",
+      "id": "993211224b73bdfd",
+      "date": 1466686156771
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "d9f45aae0a436d21",
+        "text": "# Code"
+      },
+      "after": "993211224b73bdfd",
+      "id": "d9f45aae0a436d21",
+      "date": 1466686161774
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "function exif_GpsToDegrees gpsInfo\n   switch\n      case word 1 of gpsInfo ends with \"deg\"\n         -- 2deg 55' 54.240\n         -- 2deg 55' 17.040\"\n         replace \"deg\" with empty in gpsInfo\n         put word 1 of gpsInfo into someDegrees\n         put word 2 of gpsInfo into someMinutes\n         if char -1 of someMinutes = \"'\" then delete char -1 of someMinutes\n         put word 3 of gpsInfo into someSeconds\n         if char -2 to -1 of someSeconds = \"''\" then delete char -2 to -1 of someSeconds\n         break\n      default\n         -- imageMagick exif results \n         -- 2/1, 55/1, 5424/100\n         -- 10/1 24/1 2679/100 => 10 deg 24' 26.79\" E => 10.40744\n         \n         put item 1 of gpsInfo into degreeInfo\n         put item 2 of gpsInfo into minuteInfo\n         put item 3 of gpsInfo into secondInfo\n         \n         set the itemdelimiter to slash\n         put item 1 of degreeInfo / item 2 of degreeInfo into someDegrees\n         put item 1 of minuteInfo / item 2 of minuteInfo into someMinutes\n         put item 1 of secondInfo / item 2 of secondInfo into someSeconds\n   end switch\n   \n   put someDegrees + someMinutes / 60 + someSeconds / 3600 into decValue\n   return decValue\nend exif_GpsToDegrees"
+      },
+      "after": "d9f45aae0a436d21",
+      "id": "8869c0772777be8e",
+      "date": 1466686164277
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "5a4d4c50029ad335",
+        "text": "# To Do"
+      },
+      "after": "8869c0772777be8e",
+      "id": "5a4d4c50029ad335",
+      "date": 1466686168733
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Check geolocation with real examples\n"
+      },
+      "after": "5a4d4c50029ad335",
+      "id": "1e7deed8de779e92",
+      "date": 1466686173784
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "27e0ffd6ff213c5d",
+        "text": "# Exif GPS Standard"
+      },
+      "after": "1e7deed8de779e92",
+      "id": "27e0ffd6ff213c5d",
+      "date": 1466686177031
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e075ccbb3c4c4220",
+        "text": "According to the [[exif]] standard, there are three \"rational\" fields for each, containing degrees, minutes, and seconds. \n"
+      },
+      "after": "27e0ffd6ff213c5d",
+      "id": "e075ccbb3c4c4220",
+      "date": 1466686180464
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "47b8a943fb5fdc08",
+        "text": "exiftool normalizes imporoper decimal degrees into D,M,S while assigning these values, \n   (exiftool -GPSLongitude=\"0.5 90 63.12345\" junk.jpg\" -> GPS Longitude: 2 deg 1' 3.12\" W\") \n   So if you need decimal degrees, you do dd=x0+x1/60.+x2/3600. and could ignore the non-normalization."
+      },
+      "after": "e075ccbb3c4c4220",
+      "id": "47b8a943fb5fdc08",
+      "date": 1466686183674
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "bea0b21f206f944d",
+        "text": "$d = $deg + (($min/60) + ($sec/3600));\n   \nGPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\nGPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \nGPS Latitude: 57 deg 38' 56.83\" N\nGPS Longitude: 10 deg 24' 26.79\" E\n   \nGPS Longitude: 10.40744\nGPS Position: 57.64911 10.40744"
+      },
+      "after": "47b8a943fb5fdc08",
+      "id": "bea0b21f206f944d",
+      "date": 1466686190098
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Check geolocation with real examples\n* Integrate GeoHack.js\n"
+      },
+      "date": 1466686231427
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Check geolocation with real examples\n* Integrate GeoHack.js - https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n"
+      },
+      "date": 1466686264168
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Check geolocation with real examples\n* Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n* Integrate GeoHack.js - ]https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n"
+      },
+      "date": 1466686349892
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Check geolocation with real examples\n* Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n* Integrate GeoHack.js - [https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n"
+      },
+      "date": 1466686355731
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n\n- [ ] Check geolocation with real examples\n- [ ] Look at API - [https://www.mediawiki.org/wiki/Extension:GeoData mediawiki]\n- [ ] Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n- [ ] Integrate GeoHack.js - [https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n"
+      },
+      "date": 1466686569303
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n\n- [x] Check geolocation with real examples\n- [ ] Look at API - [https://www.mediawiki.org/wiki/Extension:GeoData mediawiki]\n- [ ] Check GeoHack - [https://www.mediawiki.org/wiki/GeoHack mediawiki.org]\n- [ ] Integrate GeoHack.js - [https://it.wikipedia.org/w/index.php?title=MediaWiki:GeoHack.js&oldid=77284551 it.wikipedia.org]\n"
+      },
+      "date": 1466686571792
+    },
+    {
+      "type": "edit",
+      "id": "993211224b73bdfd",
+      "item": {
+        "type": "paragraph",
+        "id": "993211224b73bdfd",
+        "text": "Below is the code that conversts the Degrees, Minutes, Seconds info into decimal values.]"
+      },
+      "date": 1466695798795
+    },
+    {
+      "type": "add",
+      "id": "63441a71f110b50c",
+      "item": {
+        "type": "paragraph",
+        "id": "63441a71f110b50c",
+        "text": "You can find the latest version of the code here - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2 gist]"
+      },
+      "after": "993211224b73bdfd",
+      "date": 1466695809491
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "993211224b73bdfd",
+        "d9f45aae0a436d21",
+        "63441a71f110b50c",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "27e0ffd6ff213c5d",
+        "e075ccbb3c4c4220",
+        "47b8a943fb5fdc08",
+        "bea0b21f206f944d"
+      ],
+      "id": "63441a71f110b50c",
+      "date": 1466695811556
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b62b1f053be0d5dd"
+      },
+      "id": "b62b1f053be0d5dd",
+      "type": "add",
+      "after": "bea0b21f206f944d",
+      "date": 1466695823983
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "b62b1f053be0d5dd",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "993211224b73bdfd",
+        "d9f45aae0a436d21",
+        "63441a71f110b50c",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "27e0ffd6ff213c5d",
+        "e075ccbb3c4c4220",
+        "47b8a943fb5fdc08",
+        "bea0b21f206f944d"
+      ],
+      "id": "b62b1f053be0d5dd",
+      "date": 1466695831156
+    },
+    {
+      "type": "edit",
+      "id": "b62b1f053be0d5dd",
+      "item": {
+        "type": "video",
+        "id": "b62b1f053be0d5dd",
+        "text": "VIMEO 171953543\n(double-click to edit caption)\n"
+      },
+      "date": 1466695852506
+    },
+    {
+      "type": "edit",
+      "id": "b62b1f053be0d5dd",
+      "item": {
+        "type": "video",
+        "id": "b62b1f053be0d5dd",
+        "text": "VIMEO 171953543\nDescription of the first version of the [[map-transport]] for geo-encoded images, and Wikipedia map references."
+      },
+      "date": 1466695882136
+    },
+    {
+      "type": "add",
+      "id": "43c4eba991702cd2",
+      "item": {
+        "type": "paragraph",
+        "id": "43c4eba991702cd2",
+        "text": "The geo_ExtractLatlong function uses some simple tet parsing to figure out the lat and long co-ordinates from teh url dropped - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2#file-script-stack-map-lc-L117-L153 gist]"
+      },
+      "after": "63441a71f110b50c",
+      "date": 1466696003575
+    },
+    {
+      "type": "edit",
+      "id": "43c4eba991702cd2",
+      "item": {
+        "type": "paragraph",
+        "id": "43c4eba991702cd2",
+        "text": "The function geo_ExtractLatlong() uses some simple text parsing to figure out the lat and long co-ordinates from the url dropped - [https://gist.github.com/opn/fab1b1e6c325e8af5104b120993bc0e2#file-script-stack-map-lc-L117-L153 gist]"
+      },
+      "date": 1466696028976
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "function geo_DmsToDecimal someDegrees, someMinutes, someSeconds, nwse\n   put someDegrees + someMinutes / 60 + someSeconds / 3600 into decValue\n   geo_SetNegative decValue, nwse\n   return decValue\nend geo_DmsToDecimal"
+      },
+      "date": 1466696055701
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "put someDegrees + someMinutes / 60 + someSeconds / 3600 into decValue\ngeo_SetNegative decValue, nwse\n"
+      },
+      "date": 1466696093670
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "put sDeg + sMin / 60 + sSec / 3600 into decValue\ngeo_SetNegative decValue, nwse\n"
+      },
+      "date": 1466696117982
+    },
+    {
+      "type": "add",
+      "id": "bbd20bb952d4b261",
+      "item": {
+        "type": "paragraph",
+        "id": "bbd20bb952d4b261",
+        "text": "The basic logic for converting degrees, minutes, and seconds into decimal versions of [[Latitude]] and [[Longitude]] can be found here:"
+      },
+      "after": "43c4eba991702cd2",
+      "date": 1466696195637
+    },
+    {
+      "type": "add",
+      "id": "593c8129fe079e33",
+      "item": {
+        "type": "paragraph",
+        "id": "593c8129fe079e33",
+        "text": "The command get_SetNegative takes the information provide (north, south, east, west) and negated the decimal value if needed."
+      },
+      "after": "bbd20bb952d4b261",
+      "date": 1466696255823
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "b62b1f053be0d5dd",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "993211224b73bdfd",
+        "d9f45aae0a436d21",
+        "63441a71f110b50c",
+        "43c4eba991702cd2",
+        "bbd20bb952d4b261",
+        "8869c0772777be8e",
+        "593c8129fe079e33",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "27e0ffd6ff213c5d",
+        "e075ccbb3c4c4220",
+        "47b8a943fb5fdc08",
+        "bea0b21f206f944d"
+      ],
+      "id": "593c8129fe079e33",
+      "date": 1466696259268
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4b1981619074e5ff"
+      },
+      "id": "4b1981619074e5ff",
+      "type": "add",
+      "after": "bea0b21f206f944d",
+      "date": 1466696260637
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "b62b1f053be0d5dd",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "993211224b73bdfd",
+        "d9f45aae0a436d21",
+        "63441a71f110b50c",
+        "43c4eba991702cd2",
+        "bbd20bb952d4b261",
+        "8869c0772777be8e",
+        "593c8129fe079e33",
+        "4b1981619074e5ff",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "27e0ffd6ff213c5d",
+        "e075ccbb3c4c4220",
+        "47b8a943fb5fdc08",
+        "bea0b21f206f944d"
+      ],
+      "id": "4b1981619074e5ff",
+      "date": 1466696262204
+    },
+    {
+      "type": "edit",
+      "id": "4b1981619074e5ff",
+      "item": {
+        "type": "code",
+        "id": "4b1981619074e5ff",
+        "text": "command geo_SetNegative @decValue, nwse\n   if char 1 of nwse is among the items of \"w,s\" then\n      put -1 * decValue into decValue\n   end if\nend geo_SetNegative\n"
+      },
+      "date": 1466696265320
+    },
+    {
+      "type": "edit",
+      "id": "4b1981619074e5ff",
+      "item": {
+        "type": "code",
+        "id": "4b1981619074e5ff",
+        "text": "command geo_SetNegative @decValue, nwse\n if char 1 of nwse is among the items of \"w,s\" then\n  put -1 * decValue into decValue\n end if\nend geo_SetNegative\n"
+      },
+      "date": 1466696279892
+    },
+    {
+      "type": "remove",
+      "id": "334c2012ca8b4ccb",
+      "date": 1466881103701
+    },
+    {
+      "type": "edit",
+      "id": "993211224b73bdfd",
+      "item": {
+        "type": "paragraph",
+        "id": "993211224b73bdfd",
+        "text": "Below is the code that converts the Degrees, Minutes, Seconds info into decimal values."
+      },
+      "date": 1466881123759
+    },
+    {
+      "type": "edit",
+      "id": "f9842d5b2be9e775",
+      "item": {
+        "type": "paragraph",
+        "id": "f9842d5b2be9e775",
+        "text": "With this transporter we also look to experiment and integrate it with how the [[About Map Plugin]] works."
+      },
+      "date": 1466881173233
+    },
+    {
+      "type": "add",
+      "id": "98abdc2802ef3c4a",
+      "item": {
+        "type": "paragraph",
+        "id": "98abdc2802ef3c4a",
+        "text": "In [[Maps and Places]] we explore how we may interact with maps in the federation."
+      },
+      "after": "f9842d5b2be9e775",
+      "date": 1466881212924
+    },
+    {
+      "type": "fork",
+      "site": "plugin.fedwiki.org",
+      "date": 1500131169316
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://rest.livecode.world/mediawiki/map"
+      },
+      "date": 1500575000474
+    },
+    {
+      "type": "edit",
+      "id": "aa55c73a9ad4b99a",
+      "item": {
+        "type": "paragraph",
+        "id": "aa55c73a9ad4b99a",
+        "text": "Simply drag and drop a map page url or the url of a geocoded image onto the transporter:"
+      },
+      "date": 1500575027546
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://rest.livecode.world/map"
+      },
+      "date": 1500575053860
+    }
+  ]
+}

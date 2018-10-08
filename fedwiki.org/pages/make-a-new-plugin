@@ -1,0 +1,1804 @@
+{
+  "title": "Make a New Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "9442703addd92f54",
+      "text": "We'll take notes as we make a new plugin. We've made a few so this represents the best approach so far."
+    },
+    {
+      "type": "paragraph",
+      "id": "93e63ff0dc7a857e",
+      "text": "We'd like to make a date calculator that captures a sequence of dates and makes them available as named quantities."
+    },
+    {
+      "type": "html",
+      "id": "6bf91e95b8f94de5",
+      "text": "<h3> Get Started"
+    },
+    {
+      "type": "html",
+      "id": "02ff867d81648bab",
+      "text": "<b>Make up a name</b> for the plugin. Names will become complicated someday. Now they are simple. We'll call ours Calendar. We check that this is not abusing the term. [http://dictionary.reference.com/browse/calendar dictionary]"
+    },
+    {
+      "type": "html",
+      "id": "ec44b60dbac16ed4",
+      "text": "<b>Create an item</b> of this type. Create a new page. Add a simple item, like Factory. Then text edit the page's json to change the new item's type to 'calendar'. See that the page shows an error."
+    },
+    {
+      "type": "paragraph",
+      "id": "67e0c2006e87157c",
+      "text": "Tip: remember to change the item in the journal too."
+    },
+    {
+      "type": "html",
+      "id": "a5e7b17e8c8d301f",
+      "text": "<b>Create a plugin</b>. Copy a simple example like PageFold plugin to get started. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in 'client/plugins/calendar/calendar.coffee' changing every 'pagefold' to 'calendar'. "
+    },
+    {
+      "type": "paragraph",
+      "id": "56fb71e5de91f70f",
+      "text": "Tip: remember to change the name in the assignment that publishes the plugin. Otherwise it won't be found."
+    },
+    {
+      "type": "paragraph",
+      "id": "ac90f9ebc2ca41dc",
+      "text": "Tip: our text formatting convention is to indent by two spaces using spaces, not tabs."
+    },
+    {
+      "type": "html",
+      "id": "e6375e89e695bf40",
+      "text": "<b>Build the javascript</b>. For simple plugins the coffee compiler will do the job. When you have test cases you will use builder.pl to recompile everything."
+    },
+    {
+      "type": "paragraph",
+      "id": "b58e6e1028a7ae30",
+      "text": "Tip: the command 'coffee -wc plugins/' will compile plugin source each time one is changed. Watch it to look for compile errors."
+    },
+    {
+      "type": "html",
+      "id": "1a38589266394548",
+      "text": "<b>Experiment.</b> Change emit to use different html. Add functions to parse parameters out of image.text and substitute them into the html different ways."
+    },
+    {
+      "type": "paragraph",
+      "id": "cf52ef840a5e4675",
+      "text": "Tip: place your utility functions above the emit and bind functions."
+    },
+    {
+      "type": "paragraph",
+      "id": "12fc5f32cd79b3e8",
+      "text": "Tip: use your browser's debugging tools to examine when your plugin is loaded and where its html ends up in the page."
+    },
+    {
+      "type": "paragraph",
+      "id": "9615c9ddd59bfd15",
+      "text": "Tip: use wiki.textEditor to provide a user-editable text field to your item."
+    },
+    {
+      "type": "paragraph",
+      "id": "068cb5f343e2ab03",
+      "text": "Tip: report errors by emitting p.error tags."
+    },
+    {
+      "type": "paragraph",
+      "id": "12fc5f32cd79b3e8",
+      "text": "Tip: use your browser's debugging tools to examine when your plugin is loaded and where its html ends up in the page."
+    },
+    {
+      "type": "paragraph",
+      "id": "75b92f0449dde075",
+      "text": ""
+    },
+    {
+      "type": "paragraph",
+      "id": "2e4f8d3f3bf8e1e3",
+      "text": ""
+    },
+    {
+      "type": "html",
+      "id": "61a494684abce731",
+      "text": "<h3> Keep Building"
+    },
+    {
+      "type": "html",
+      "id": "98ead6d8c3a6b20b",
+      "text": "<b>Factor Logic</b> from emit/bind functions and expose them as a node.js style module. We copy the Report plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "3888ea132a89c4f3",
+      "text": "Tip: use conditions to export the right functions the right way at the right time."
+    },
+    {
+      "type": "html",
+      "id": "2a3511b1bdb8a5bf",
+      "text": "<b>Write Tests</b> that passes in the simplest way copying from 'plugins/report/test.coffee'"
+    },
+    {
+      "type": "paragraph",
+      "id": "5ab7c819ebaa7c87",
+      "text": "Tip: use 'perl builder.pl' to make 'testrunner.html' each time you save the plugin or its tests."
+    },
+    {
+      "type": "paragraph",
+      "id": "54aed14834fb1419",
+      "text": "Tip: Make a link to run your tests: [http:/runtests.html tests]"
+    },
+    {
+      "type": "html",
+      "id": "d0e65a2ce089a403",
+      "text": "<b>Work Examples</b> using other plugins for input or output or event sources and sinks."
+    },
+    {
+      "type": "paragraph",
+      "id": "f46e92da9e6b1e57",
+      "text": "Tip: Study the input and output protocols of other plugins, especially recently created ones. There is not yet a standard but there are emerging practices."
+    },
+    {
+      "type": "paragraph",
+      "id": "118c8ee938d533aa",
+      "text": "Tip: Look to emerging practices in Node.js for models of distributed computation. We do."
+    },
+    {
+      "type": "html",
+      "id": "f3f008528e2e620d",
+      "text": "<h3> Build Server-Side"
+    },
+    {
+      "type": "html",
+      "id": "303356126d20776a",
+      "text": "<b>Open Connections</b> using WebSocket servers (server.coffee) that are launched when the Express server launches. These are built as their own npm applications with their own package.json files."
+    },
+    {
+      "type": "paragraph",
+      "id": "ec20e3f089fd6c64",
+      "text": "Tip: Program the client plugin to look to remote servers for connections."
+    },
+    {
+      "type": "code",
+      "id": "910ef7f4d539ea33",
+      "text": "$page = $item.parents('.page:first')\nhost = $page.data('site') or location.host\nsocket = new WebSocket(\"ws://#{host}/plugin/...\")\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "96b65bf5b2076b42",
+      "text": "Tip: Show connection status in the emitted dom. Find a way to be useful even when connections are not available."
+    },
+    {
+      "type": "paragraph",
+      "id": "4d11d052fe112faa",
+      "text": "Tip: Test the code that interprets data moving back and forth. Share all but the code that touches the dom."
+    },
+    {
+      "type": "html",
+      "id": "3e83e4391984218d",
+      "text": "<h3> Finish Up"
+    },
+    {
+      "type": "paragraph",
+      "id": "550a0fef1f59360b",
+      "text": "Menu."
+    },
+    {
+      "type": "paragraph",
+      "id": "01c6e7339e7809f9",
+      "text": "Documentation."
+    },
+    {
+      "type": "paragraph",
+      "id": "f9781a09458647e4",
+      "text": "GitHub repo."
+    },
+    {
+      "type": "paragraph",
+      "id": "ef6728584b0f7c27",
+      "text": "[[Choose Plugins]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Make a New Plugin"
+      },
+      "date": 1359505717156
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9442703addd92f54"
+      },
+      "id": "9442703addd92f54",
+      "type": "add",
+      "date": 1359505720210
+    },
+    {
+      "type": "edit",
+      "id": "9442703addd92f54",
+      "item": {
+        "type": "paragraph",
+        "id": "9442703addd92f54",
+        "text": "We'll take notes as we make a new plugin. We've made a few so this represents the best approach so far."
+      },
+      "date": 1359505771908
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "93e63ff0dc7a857e",
+        "text": ""
+      },
+      "id": "93e63ff0dc7a857e",
+      "type": "add",
+      "after": "9442703addd92f54",
+      "date": 1359505772414
+    },
+    {
+      "type": "edit",
+      "id": "93e63ff0dc7a857e",
+      "item": {
+        "type": "paragraph",
+        "id": "93e63ff0dc7a857e",
+        "text": "We'd like to make a date calculator that captures a sequence of dates and makes them available as named quantities."
+      },
+      "date": 1359505831626
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3291ea873821f1c2",
+        "text": ""
+      },
+      "id": "3291ea873821f1c2",
+      "type": "add",
+      "after": "93e63ff0dc7a857e",
+      "date": 1359505832131
+    },
+    {
+      "type": "edit",
+      "id": "3291ea873821f1c2",
+      "item": {
+        "type": "paragraph",
+        "id": "3291ea873821f1c2",
+        "text": "We'll model our work on the Method plugin. See [[About Method Plugin]]."
+      },
+      "date": 1359505854898
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "02ff867d81648bab"
+      },
+      "id": "02ff867d81648bab",
+      "type": "add",
+      "after": "3291ea873821f1c2",
+      "date": 1359505894727
+    },
+    {
+      "type": "edit",
+      "id": "02ff867d81648bab",
+      "item": {
+        "type": "paragraph",
+        "id": "02ff867d81648bab",
+        "text": "Make up a name for the plugin. Names will become complicated someday. Now they are simple. We'll call ours Calendar. We check that this is not abusing the term. "
+      },
+      "date": 1359505954327
+    },
+    {
+      "type": "edit",
+      "id": "02ff867d81648bab",
+      "item": {
+        "type": "paragraph",
+        "id": "02ff867d81648bab",
+        "text": "Make up a name for the plugin. Names will become complicated someday. Now they are simple. We'll call ours Calendar. We check that this is not abusing the term [http://dictionary.reference.com/browse/calendar dictionary]. "
+      },
+      "date": 1359522800317
+    },
+    {
+      "type": "edit",
+      "id": "02ff867d81648bab",
+      "item": {
+        "type": "paragraph",
+        "id": "02ff867d81648bab",
+        "text": "Make up a name for the plugin. Names will become complicated someday. Now they are simple. We'll call ours Calendar. We check that this is not abusing the term. [http://dictionary.reference.com/browse/calendar dictionary]"
+      },
+      "date": 1359522812184
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ec44b60dbac16ed4"
+      },
+      "id": "ec44b60dbac16ed4",
+      "type": "add",
+      "after": "02ff867d81648bab",
+      "date": 1359522853619
+    },
+    {
+      "type": "edit",
+      "id": "ec44b60dbac16ed4",
+      "item": {
+        "type": "paragraph",
+        "id": "ec44b60dbac16ed4",
+        "text": "Create an item of this type. Add a Factory to a page. Then edit the json to change the type of that item. Show that this throws an error when displayed."
+      },
+      "date": 1359522996162
+    },
+    {
+      "type": "edit",
+      "id": "ec44b60dbac16ed4",
+      "item": {
+        "type": "paragraph",
+        "id": "ec44b60dbac16ed4",
+        "text": "Create an item of this type. Add a Method to a page. Then edit the json to change the item's type to 'calendar'. The page will show as an error."
+      },
+      "date": 1359523355606
+    },
+    {
+      "type": "edit",
+      "id": "ec44b60dbac16ed4",
+      "item": {
+        "type": "paragraph",
+        "id": "ec44b60dbac16ed4",
+        "text": "Create an item of this type. Create a new page. Add a simple item, like Factory. Then text edit the page's json to change the new item's type to 'calendar'. See that the page shows an error."
+      },
+      "date": 1359523552384
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": ""
+      },
+      "id": "a5e7b17e8c8d301f",
+      "type": "add",
+      "after": "ec44b60dbac16ed4",
+      "date": 1359523838788
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create client/plugins/calendar/calendar.coffee changing every 'pagefold' to 'calendar'."
+      },
+      "date": 1359524045574
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create plugins/calendar/calendar.coffee changing every 'pagefold' to 'calendar'."
+      },
+      "date": 1359524062710
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create calendar/calendar.coffee changing every 'pagefold' to 'calendar'."
+      },
+      "date": 1359524070021
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create <i>calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'."
+      },
+      "date": 1359524091063
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create <i>calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee source]"
+      },
+      "date": 1359524255184
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create <i>calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee sample]"
+      },
+      "date": 1359524267400
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. We create <i>calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github]"
+      },
+      "date": 1359524275184
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We create <i>calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359524294456
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We create <i>client/plugins/calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359524332590
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in<i>client/plugins/calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359524375803
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "Create a simple plugin. Copy a simple example like PageFold plugin. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in <i>client/plugins/calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359524383189
+    },
+    {
+      "type": "edit",
+      "id": "02ff867d81648bab",
+      "item": {
+        "type": "paragraph",
+        "id": "02ff867d81648bab",
+        "text": "<b>Make up a name</b> for the plugin. Names will become complicated someday. Now they are simple. We'll call ours Calendar. We check that this is not abusing the term. [http://dictionary.reference.com/browse/calendar dictionary]"
+      },
+      "date": 1359524401132
+    },
+    {
+      "type": "edit",
+      "id": "ec44b60dbac16ed4",
+      "item": {
+        "type": "paragraph",
+        "id": "ec44b60dbac16ed4",
+        "text": "<b>Create an item</b> of this type. Create a new page. Add a simple item, like Factory. Then text edit the page's json to change the new item's type to 'calendar'. See that the page shows an error."
+      },
+      "date": 1359524412394
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "<b>Create a plugin</b>. Copy a simple example like PageFold plugin. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in <i>client/plugins/calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359524432402
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "<b>Create a plugin</b>. Copy a simple example like PageFold plugin to get started. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in <i>client/plugins/calendar/calendar.coffee</i> changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359524458817
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "67e0c2006e87157c",
+        "text": ""
+      },
+      "id": "67e0c2006e87157c",
+      "type": "add",
+      "after": "ec44b60dbac16ed4",
+      "date": 1359525466561
+    },
+    {
+      "type": "edit",
+      "id": "67e0c2006e87157c",
+      "item": {
+        "type": "paragraph",
+        "id": "67e0c2006e87157c",
+        "text": "Tip: remember to change the item in the journal too."
+      },
+      "date": 1359525494458
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "56fb71e5de91f70f",
+        "text": ""
+      },
+      "id": "56fb71e5de91f70f",
+      "type": "add",
+      "after": "a5e7b17e8c8d301f",
+      "date": 1359525500321
+    },
+    {
+      "type": "edit",
+      "id": "56fb71e5de91f70f",
+      "item": {
+        "type": "paragraph",
+        "id": "56fb71e5de91f70f",
+        "text": "Tip: remember to change the name in the assignment that publishes the plugin. Otherwise it won't be found."
+      },
+      "date": 1359525623334
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e6375e89e695bf40"
+      },
+      "id": "e6375e89e695bf40",
+      "type": "add",
+      "after": "56fb71e5de91f70f",
+      "date": 1359525791987
+    },
+    {
+      "type": "edit",
+      "id": "e6375e89e695bf40",
+      "item": {
+        "type": "paragraph",
+        "id": "e6375e89e695bf40",
+        "text": "<b>Build the javascript</b>. For simple plugins the coffee compiler will do the job. When you have test cases you will use builder.pl to recompile everything."
+      },
+      "date": 1359526062671
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1a38589266394548",
+        "text": ""
+      },
+      "id": "1a38589266394548",
+      "type": "add",
+      "after": "e6375e89e695bf40",
+      "date": 1359526063176
+    },
+    {
+      "type": "edit",
+      "id": "1a38589266394548",
+      "item": {
+        "type": "paragraph",
+        "id": "1a38589266394548",
+        "text": "<b>Experiment.</b> Change the emit to use different html. Add functions to parse parameters out of image.text and substitute them into the html different ways. Place your utility functions above the emit and bind functions."
+      },
+      "date": 1359526229099
+    },
+    {
+      "type": "edit",
+      "id": "1a38589266394548",
+      "item": {
+        "type": "paragraph",
+        "id": "1a38589266394548",
+        "text": "<b>Experiment.</b> Change the emit to use different html. Add functions to parse parameters out of image.text and substitute them into the html different ways."
+      },
+      "date": 1359526242685
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "cf52ef840a5e4675",
+        "text": "lace your utility functions above the emit and bind functions."
+      },
+      "id": "cf52ef840a5e4675",
+      "type": "add",
+      "after": "1a38589266394548",
+      "date": 1359526243190
+    },
+    {
+      "type": "edit",
+      "id": "cf52ef840a5e4675",
+      "item": {
+        "type": "paragraph",
+        "id": "cf52ef840a5e4675",
+        "text": "Tip: place your utility functions above the emit and bind functions."
+      },
+      "date": 1359526253617
+    },
+    {
+      "type": "edit",
+      "id": "1a38589266394548",
+      "item": {
+        "type": "paragraph",
+        "id": "1a38589266394548",
+        "text": "<b>Experiment.</b> Change emit to use different html. Add functions to parse parameters out of image.text and substitute them into the html different ways."
+      },
+      "date": 1359526273282
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "12fc5f32cd79b3e8",
+        "text": ""
+      },
+      "id": "12fc5f32cd79b3e8",
+      "type": "add",
+      "after": "cf52ef840a5e4675",
+      "date": 1359526394640
+    },
+    {
+      "type": "edit",
+      "id": "12fc5f32cd79b3e8",
+      "item": {
+        "type": "paragraph",
+        "id": "12fc5f32cd79b3e8",
+        "text": "Tip: use your browser's debugging tools to examine when your plugin is loaded and where its html ends up in the page."
+      },
+      "date": 1359526496651
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b58e6e1028a7ae30",
+        "text": ""
+      },
+      "id": "b58e6e1028a7ae30",
+      "type": "add",
+      "after": "e6375e89e695bf40",
+      "date": 1359526535506
+    },
+    {
+      "type": "edit",
+      "id": "b58e6e1028a7ae30",
+      "item": {
+        "type": "paragraph",
+        "id": "b58e6e1028a7ae30",
+        "text": "Tip: the command 'coffee -wc plugins/' will compile plugin source each time one is changed. Watch it to look for compile errors."
+      },
+      "date": 1359526638935
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e7b17e8c8d301f",
+        "text": "<b>Create a plugin</b>. Copy a simple example like PageFold plugin to get started. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in 'client/plugins/calendar/calendar.coffee' changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1359526663645
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "6bf91e95b8f94de5",
+        "text": ""
+      },
+      "id": "6bf91e95b8f94de5",
+      "type": "add",
+      "after": "3291ea873821f1c2",
+      "date": 1359526727275
+    },
+    {
+      "type": "edit",
+      "id": "6bf91e95b8f94de5",
+      "item": {
+        "type": "paragraph",
+        "id": "6bf91e95b8f94de5",
+        "text": "<h3> Starting"
+      },
+      "date": 1359526734987
+    },
+    {
+      "type": "edit",
+      "id": "6bf91e95b8f94de5",
+      "item": {
+        "type": "paragraph",
+        "id": "6bf91e95b8f94de5",
+        "text": "<h3> Get Started"
+      },
+      "date": 1359526818769
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e343f8674307b846",
+        "text": ""
+      },
+      "id": "e343f8674307b846",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1359526841392
+    },
+    {
+      "type": "remove",
+      "id": "e343f8674307b846",
+      "date": 1359527001019
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "61a494684abce731",
+        "text": ""
+      },
+      "id": "61a494684abce731",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1359527091105
+    },
+    {
+      "type": "edit",
+      "id": "61a494684abce731",
+      "item": {
+        "type": "paragraph",
+        "id": "61a494684abce731",
+        "text": "<b3> Copy Success"
+      },
+      "date": 1359527102961
+    },
+    {
+      "type": "edit",
+      "id": "61a494684abce731",
+      "item": {
+        "type": "paragraph",
+        "id": "61a494684abce731",
+        "text": "<h3> Copy Success"
+      },
+      "date": 1359527109417
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "fe01dc294f6f01d5",
+        "text": ""
+      },
+      "id": "fe01dc294f6f01d5",
+      "type": "add",
+      "after": "61a494684abce731",
+      "date": 1359527122872
+    },
+    {
+      "type": "remove",
+      "id": "fe01dc294f6f01d5",
+      "date": 1359527150501
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ff445b13284d0115",
+        "text": ""
+      },
+      "id": "ff445b13284d0115",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1359527157597
+    },
+    {
+      "type": "remove",
+      "id": "ff445b13284d0115",
+      "date": 1359527158912
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": ""
+      },
+      "id": "98ead6d8c3a6b20b",
+      "type": "add",
+      "after": "61a494684abce731",
+      "date": 1359527173095
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": "Copy <b>Method</b> plugin for examples of evaluating expressions stored in item.text."
+      },
+      "date": 1359527237126
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "6b98346c2af23afc",
+        "text": ""
+      },
+      "id": "6b98346c2af23afc",
+      "type": "add",
+      "after": "98ead6d8c3a6b20b",
+      "date": 1359527237633
+    },
+    {
+      "type": "remove",
+      "id": "6b98346c2af23afc",
+      "date": 1359527244871
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": "Copy <b>Method</b> plugin for code that evaluates expressions stored in item.text."
+      },
+      "date": 1359527263075
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": "<b>Method</b> plugin for code that evaluates expressions stored in item.text."
+      },
+      "date": 1359527293211
+    },
+    {
+      "type": "move",
+      "order": [
+        "9442703addd92f54",
+        "93e63ff0dc7a857e",
+        "6bf91e95b8f94de5",
+        "3291ea873821f1c2",
+        "02ff867d81648bab",
+        "ec44b60dbac16ed4",
+        "67e0c2006e87157c",
+        "a5e7b17e8c8d301f",
+        "56fb71e5de91f70f",
+        "e6375e89e695bf40",
+        "b58e6e1028a7ae30",
+        "1a38589266394548",
+        "cf52ef840a5e4675",
+        "12fc5f32cd79b3e8",
+        "61a494684abce731",
+        "98ead6d8c3a6b20b"
+      ],
+      "id": "3291ea873821f1c2",
+      "date": 1359527310453
+    },
+    {
+      "type": "remove",
+      "id": "3291ea873821f1c2",
+      "date": 1359527325105
+    },
+    {
+      "type": "move",
+      "order": [
+        "9442703addd92f54",
+        "6bf91e95b8f94de5",
+        "93e63ff0dc7a857e",
+        "02ff867d81648bab",
+        "ec44b60dbac16ed4",
+        "67e0c2006e87157c",
+        "a5e7b17e8c8d301f",
+        "56fb71e5de91f70f",
+        "e6375e89e695bf40",
+        "b58e6e1028a7ae30",
+        "1a38589266394548",
+        "cf52ef840a5e4675",
+        "12fc5f32cd79b3e8",
+        "61a494684abce731",
+        "98ead6d8c3a6b20b"
+      ],
+      "id": "93e63ff0dc7a857e",
+      "date": 1359527330598
+    },
+    {
+      "type": "move",
+      "order": [
+        "9442703addd92f54",
+        "93e63ff0dc7a857e",
+        "6bf91e95b8f94de5",
+        "02ff867d81648bab",
+        "ec44b60dbac16ed4",
+        "67e0c2006e87157c",
+        "a5e7b17e8c8d301f",
+        "56fb71e5de91f70f",
+        "e6375e89e695bf40",
+        "b58e6e1028a7ae30",
+        "1a38589266394548",
+        "cf52ef840a5e4675",
+        "12fc5f32cd79b3e8",
+        "61a494684abce731",
+        "98ead6d8c3a6b20b"
+      ],
+      "id": "93e63ff0dc7a857e",
+      "date": 1359527336265
+    },
+    {
+      "type": "edit",
+      "id": "61a494684abce731",
+      "item": {
+        "type": "paragraph",
+        "id": "61a494684abce731",
+        "text": "<h3> Make Tests"
+      },
+      "date": 1359527632098
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": "<b>Factor Logic</b> from emit/bind functions and expose them as a node.js style module. We copy the factoring of Report plugin. "
+      },
+      "date": 1359527960246
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2a3511b1bdb8a5bf",
+        "text": ""
+      },
+      "id": "2a3511b1bdb8a5bf",
+      "type": "add",
+      "after": "98ead6d8c3a6b20b",
+      "date": 1359527960753
+    },
+    {
+      "type": "edit",
+      "id": "2a3511b1bdb8a5bf",
+      "item": {
+        "type": "paragraph",
+        "id": "2a3511b1bdb8a5bf",
+        "text": "<b>Write A Test</b> that passes in the simplest way copying the form of test.coffee from Report plugin."
+      },
+      "date": 1359528239942
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": "<b>Factor Logic</b> from emit/bind functions and expose them as a node.js style module. We copy the factoring of Report plugin."
+      },
+      "date": 1359528295508
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3888ea132a89c4f3",
+        "text": ""
+      },
+      "id": "3888ea132a89c4f3",
+      "type": "add",
+      "after": "98ead6d8c3a6b20b",
+      "date": 1359528296015
+    },
+    {
+      "type": "edit",
+      "id": "3888ea132a89c4f3",
+      "item": {
+        "type": "paragraph",
+        "id": "3888ea132a89c4f3",
+        "text": "Tip: use conditions to export the right functions the right way at the right time."
+      },
+      "date": 1359528319340
+    },
+    {
+      "type": "edit",
+      "id": "2a3511b1bdb8a5bf",
+      "item": {
+        "type": "paragraph",
+        "id": "2a3511b1bdb8a5bf",
+        "text": "<b>Write A Test</b> that passes in the simplest way copying from 'plugins/report/test.coffee'"
+      },
+      "date": 1359528434288
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": ""
+      },
+      "id": "54aed14834fb1419",
+      "type": "add",
+      "after": "2a3511b1bdb8a5bf",
+      "date": 1359528452976
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: the uri runtests.html will run the tests. Make a link. [http:/runtests.html tests]"
+      },
+      "date": 1359528579101
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to the test runner. [http:/runtests.html tests]"
+      },
+      "date": 1359528650130
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to the test runner. [http:/runtests.html run tests]"
+      },
+      "date": 1359528658274
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to the test runner. [http:/runtests.html tests] Run them often."
+      },
+      "date": 1359528688311
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to 'runtests.html' the test runner. [http:/runtests.html tests] Run them often."
+      },
+      "date": 1359528710887
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to 'runtests.html' the test runner. [http:/runtests.html tests]"
+      },
+      "date": 1359528729863
+    },
+    {
+      "type": "edit",
+      "id": "61a494684abce731",
+      "item": {
+        "type": "paragraph",
+        "id": "61a494684abce731",
+        "text": "<h3> Keep Building"
+      },
+      "date": 1359528808652
+    },
+    {
+      "type": "edit",
+      "id": "2a3511b1bdb8a5bf",
+      "item": {
+        "type": "paragraph",
+        "id": "2a3511b1bdb8a5bf",
+        "text": "<b>Write Tests</b> that passes in the simplest way copying from 'plugins/report/test.coffee'"
+      },
+      "date": 1359528820508
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "paragraph",
+        "id": "98ead6d8c3a6b20b",
+        "text": "<b>Factor Logic</b> from emit/bind functions and expose them as a node.js style module. We copy the Report plugin."
+      },
+      "date": 1359528850611
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5ab7c819ebaa7c87",
+        "text": ""
+      },
+      "id": "5ab7c819ebaa7c87",
+      "type": "add",
+      "after": "2a3511b1bdb8a5bf",
+      "date": 1359528908282
+    },
+    {
+      "type": "edit",
+      "id": "5ab7c819ebaa7c87",
+      "item": {
+        "type": "paragraph",
+        "id": "5ab7c819ebaa7c87",
+        "text": "Tip: use 'perl builder.pl' to make the test runner each time you save."
+      },
+      "date": 1359528979983
+    },
+    {
+      "type": "edit",
+      "id": "5ab7c819ebaa7c87",
+      "item": {
+        "type": "paragraph",
+        "id": "5ab7c819ebaa7c87",
+        "text": "Tip: use 'perl builder.pl' to make 'testrunner.html' each time you save the plugin or its tests."
+      },
+      "date": 1359529035798
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to run your tests. [http:/runtests.html tests]"
+      },
+      "date": 1359529065971
+    },
+    {
+      "type": "edit",
+      "id": "54aed14834fb1419",
+      "item": {
+        "type": "paragraph",
+        "id": "54aed14834fb1419",
+        "text": "Tip: Make a link to run your tests: [http:/runtests.html tests]"
+      },
+      "date": 1359529075532
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d0e65a2ce089a403",
+        "text": ""
+      },
+      "id": "d0e65a2ce089a403",
+      "type": "add",
+      "after": "54aed14834fb1419",
+      "date": 1360367636125
+    },
+    {
+      "type": "edit",
+      "id": "d0e65a2ce089a403",
+      "item": {
+        "type": "paragraph",
+        "id": "d0e65a2ce089a403",
+        "text": "<b>Work Examples</b> using other plugins for input or output or event sources and sinks."
+      },
+      "date": 1360367709144
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f46e92da9e6b1e57",
+        "text": ""
+      },
+      "id": "f46e92da9e6b1e57",
+      "type": "add",
+      "after": "d0e65a2ce089a403",
+      "date": 1360367709649
+    },
+    {
+      "type": "edit",
+      "id": "f46e92da9e6b1e57",
+      "item": {
+        "type": "paragraph",
+        "id": "f46e92da9e6b1e57",
+        "text": "Tip: Study the input and output protocols of other plugins, especially recently created ones. There is not yet a standard but there are emerging practices."
+      },
+      "date": 1360367846197
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "118c8ee938d533aa",
+        "text": ""
+      },
+      "id": "118c8ee938d533aa",
+      "type": "add",
+      "after": "f46e92da9e6b1e57",
+      "date": 1360367846704
+    },
+    {
+      "type": "edit",
+      "id": "118c8ee938d533aa",
+      "item": {
+        "type": "paragraph",
+        "id": "118c8ee938d533aa",
+        "text": "Tip: Look to emerging practices in Node.js for models of distributed computation. We do."
+      },
+      "date": 1360367899547
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "96b65bf5b2076b42",
+        "text": ""
+      },
+      "id": "96b65bf5b2076b42",
+      "type": "add",
+      "after": "118c8ee938d533aa",
+      "date": 1360367937035
+    },
+    {
+      "type": "edit",
+      "id": "96b65bf5b2076b42",
+      "item": {
+        "type": "paragraph",
+        "id": "96b65bf5b2076b42",
+        "text": "<h3> Finish Up"
+      },
+      "date": 1360367958818
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "550a0fef1f59360b",
+        "text": ""
+      },
+      "id": "550a0fef1f59360b",
+      "type": "add",
+      "after": "96b65bf5b2076b42",
+      "date": 1360367959324
+    },
+    {
+      "type": "edit",
+      "id": "550a0fef1f59360b",
+      "item": {
+        "type": "paragraph",
+        "id": "550a0fef1f59360b",
+        "text": "Documentation."
+      },
+      "date": 1360367969833
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f9781a09458647e4",
+        "text": ""
+      },
+      "id": "f9781a09458647e4",
+      "type": "add",
+      "after": "550a0fef1f59360b",
+      "date": 1360367970338
+    },
+    {
+      "type": "edit",
+      "id": "f9781a09458647e4",
+      "item": {
+        "type": "paragraph",
+        "id": "f9781a09458647e4",
+        "text": "GitHub repo."
+      },
+      "date": 1360367975378
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ef6728584b0f7c27",
+        "text": ""
+      },
+      "id": "ef6728584b0f7c27",
+      "type": "add",
+      "after": "f9781a09458647e4",
+      "date": 1360367975884
+    },
+    {
+      "type": "edit",
+      "id": "ef6728584b0f7c27",
+      "item": {
+        "type": "paragraph",
+        "id": "ef6728584b0f7c27",
+        "text": "[[Choosing Plugins]]"
+      },
+      "date": 1360368005824
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "38d1d230fc095114",
+        "text": ""
+      },
+      "id": "38d1d230fc095114",
+      "type": "add",
+      "after": "ef6728584b0f7c27",
+      "date": 1360368006329
+    },
+    {
+      "type": "remove",
+      "id": "38d1d230fc095114",
+      "date": 1360368007903
+    },
+    {
+      "type": "edit",
+      "id": "ef6728584b0f7c27",
+      "item": {
+        "type": "paragraph",
+        "id": "ef6728584b0f7c27",
+        "text": "[[Choose Plugins]]"
+      },
+      "date": 1360368029065
+    },
+    {
+      "type": "edit",
+      "id": "550a0fef1f59360b",
+      "item": {
+        "type": "paragraph",
+        "id": "550a0fef1f59360b",
+        "text": "Menu."
+      },
+      "date": 1360368061874
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "01c6e7339e7809f9",
+        "text": "Documentation."
+      },
+      "id": "01c6e7339e7809f9",
+      "type": "add",
+      "after": "550a0fef1f59360b",
+      "date": 1360368062380
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ac90f9ebc2ca41dc",
+        "text": ""
+      },
+      "id": "ac90f9ebc2ca41dc",
+      "type": "add",
+      "after": "56fb71e5de91f70f",
+      "date": 1360371191556
+    },
+    {
+      "type": "edit",
+      "id": "ac90f9ebc2ca41dc",
+      "item": {
+        "type": "paragraph",
+        "id": "ac90f9ebc2ca41dc",
+        "text": "Tip: our text formatting convention is to indent by two spaces using spaces, not tabs."
+      },
+      "date": 1360371249201
+    },
+    {
+      "type": "edit",
+      "id": "12fc5f32cd79b3e8",
+      "item": {
+        "type": "paragraph",
+        "id": "12fc5f32cd79b3e8",
+        "text": " "
+      },
+      "date": 1360382155467
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2e4f8d3f3bf8e1e3",
+        "text": ""
+      },
+      "id": "2e4f8d3f3bf8e1e3",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1360382155973
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "75b92f0449dde075",
+        "text": ""
+      },
+      "id": "75b92f0449dde075",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1360382155982
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "12fc5f32cd79b3e8",
+        "text": "Tip: use your browser's debugging tools to examine when your plugin is loaded and where its html ends up in the page."
+      },
+      "after": "cf52ef840a5e4675",
+      "id": "12fc5f32cd79b3e8",
+      "date": 1360382231831
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "068cb5f343e2ab03",
+        "text": ""
+      },
+      "id": "068cb5f343e2ab03",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1360382257699
+    },
+    {
+      "type": "edit",
+      "id": "068cb5f343e2ab03",
+      "item": {
+        "type": "paragraph",
+        "id": "068cb5f343e2ab03",
+        "text": "Tip: report errors by emitting p.error tags."
+      },
+      "date": 1360382326077
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "9615c9ddd59bfd15",
+        "text": ""
+      },
+      "id": "9615c9ddd59bfd15",
+      "type": "add",
+      "after": "12fc5f32cd79b3e8",
+      "date": 1360612344407
+    },
+    {
+      "type": "edit",
+      "id": "9615c9ddd59bfd15",
+      "item": {
+        "type": "paragraph",
+        "id": "9615c9ddd59bfd15",
+        "text": "Tip: use wiki.TextEditor to provide user-editable text field to your item."
+      },
+      "date": 1360612413882
+    },
+    {
+      "type": "edit",
+      "id": "9615c9ddd59bfd15",
+      "item": {
+        "type": "paragraph",
+        "id": "9615c9ddd59bfd15",
+        "text": "Tip: use wiki.textEditor to provide user-editable text field to your item."
+      },
+      "date": 1360612432602
+    },
+    {
+      "type": "edit",
+      "id": "9615c9ddd59bfd15",
+      "item": {
+        "type": "paragraph",
+        "id": "9615c9ddd59bfd15",
+        "text": "Tip: use wiki.textEditor to provide a user-editable text field to your item."
+      },
+      "date": 1360612442113
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f3f008528e2e620d",
+        "text": ""
+      },
+      "id": "f3f008528e2e620d",
+      "type": "add",
+      "after": "118c8ee938d533aa",
+      "date": 1360722385502
+    },
+    {
+      "type": "edit",
+      "id": "f3f008528e2e620d",
+      "item": {
+        "type": "paragraph",
+        "id": "f3f008528e2e620d",
+        "text": "<h3> Build Server-Side"
+      },
+      "date": 1360722411035
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "303356126d20776a",
+        "text": ""
+      },
+      "id": "303356126d20776a",
+      "type": "add",
+      "after": "f3f008528e2e620d",
+      "date": 1360722411541
+    },
+    {
+      "type": "edit",
+      "id": "303356126d20776a",
+      "item": {
+        "type": "paragraph",
+        "id": "303356126d20776a",
+        "text": "<b>Open Connections</b> using WebSocket servers (server.coffee) that are launched when the Express server launches. These are built as their own npm applications with their own "
+      },
+      "date": 1360722608878
+    },
+    {
+      "type": "edit",
+      "id": "303356126d20776a",
+      "item": {
+        "type": "paragraph",
+        "id": "303356126d20776a",
+        "text": "<b>Open Connections</b> using WebSocket servers (server.coffee) that are launched when the Express server launches. These are built as their own npm applications with their own package.json files."
+      },
+      "date": 1360722650187
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ec20e3f089fd6c64",
+        "text": ""
+      },
+      "id": "ec20e3f089fd6c64",
+      "type": "add",
+      "after": "303356126d20776a",
+      "date": 1360722650694
+    },
+    {
+      "type": "edit",
+      "id": "ec20e3f089fd6c64",
+      "item": {
+        "type": "paragraph",
+        "id": "ec20e3f089fd6c64",
+        "text": "Tip: Program the client plugin to look to remote servers for connections."
+      },
+      "date": 1360722713407
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "910ef7f4d539ea33"
+      },
+      "id": "910ef7f4d539ea33",
+      "type": "add",
+      "after": "ef6728584b0f7c27",
+      "date": 1360722720270
+    },
+    {
+      "type": "edit",
+      "id": "910ef7f4d539ea33",
+      "item": {
+        "type": "code",
+        "id": "910ef7f4d539ea33",
+        "text": "$page = $item.parents('.page:first')\nhost = $page.data('site') or window.document.location.host\nsocket = new WebSocket(\"ws://#{host}/plugin/linkmap\")\n"
+      },
+      "date": 1360722741135
+    },
+    {
+      "type": "move",
+      "order": [
+        "9442703addd92f54",
+        "93e63ff0dc7a857e",
+        "6bf91e95b8f94de5",
+        "02ff867d81648bab",
+        "ec44b60dbac16ed4",
+        "67e0c2006e87157c",
+        "a5e7b17e8c8d301f",
+        "56fb71e5de91f70f",
+        "ac90f9ebc2ca41dc",
+        "e6375e89e695bf40",
+        "b58e6e1028a7ae30",
+        "1a38589266394548",
+        "cf52ef840a5e4675",
+        "12fc5f32cd79b3e8",
+        "9615c9ddd59bfd15",
+        "068cb5f343e2ab03",
+        "12fc5f32cd79b3e8",
+        "75b92f0449dde075",
+        "2e4f8d3f3bf8e1e3",
+        "61a494684abce731",
+        "98ead6d8c3a6b20b",
+        "3888ea132a89c4f3",
+        "2a3511b1bdb8a5bf",
+        "5ab7c819ebaa7c87",
+        "54aed14834fb1419",
+        "d0e65a2ce089a403",
+        "f46e92da9e6b1e57",
+        "118c8ee938d533aa",
+        "f3f008528e2e620d",
+        "303356126d20776a",
+        "ec20e3f089fd6c64",
+        "910ef7f4d539ea33",
+        "96b65bf5b2076b42",
+        "550a0fef1f59360b",
+        "01c6e7339e7809f9",
+        "f9781a09458647e4",
+        "ef6728584b0f7c27"
+      ],
+      "id": "910ef7f4d539ea33",
+      "date": 1360722746936
+    },
+    {
+      "type": "edit",
+      "id": "910ef7f4d539ea33",
+      "item": {
+        "type": "code",
+        "id": "910ef7f4d539ea33",
+        "text": "$page = $item.parents('.page:first')\nhost = $page.data('site') or location.host\nsocket = new WebSocket(\"ws://#{host}/plugin/...\")\n"
+      },
+      "date": 1360722839360
+    },
+    {
+      "type": "edit",
+      "id": "96b65bf5b2076b42",
+      "item": {
+        "type": "paragraph",
+        "id": "96b65bf5b2076b42",
+        "text": "Tip: Show connection status in the emitted dom. Find a way to be useful even when connections are not available."
+      },
+      "date": 1360722970026
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4d11d052fe112faa",
+        "text": "<h3> Finish Up"
+      },
+      "id": "4d11d052fe112faa",
+      "type": "add",
+      "after": "96b65bf5b2076b42",
+      "date": 1360722970535
+    },
+    {
+      "type": "edit",
+      "id": "4d11d052fe112faa",
+      "item": {
+        "type": "paragraph",
+        "id": "4d11d052fe112faa",
+        "text": "Tip: Test the code that interprets data moving back and forth. Share all but the code that touches the dom."
+      },
+      "date": 1360723089133
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3e83e4391984218d",
+        "text": "<h3> Finish Up"
+      },
+      "id": "3e83e4391984218d",
+      "type": "add",
+      "after": "4d11d052fe112faa",
+      "date": 1360723089641
+    },
+    {
+      "type": "edit",
+      "id": "6bf91e95b8f94de5",
+      "item": {
+        "type": "html",
+        "id": "6bf91e95b8f94de5",
+        "text": "<h3> Get Started"
+      },
+      "date": 1420345812358
+    },
+    {
+      "type": "edit",
+      "id": "02ff867d81648bab",
+      "item": {
+        "type": "html",
+        "id": "02ff867d81648bab",
+        "text": "<b>Make up a name</b> for the plugin. Names will become complicated someday. Now they are simple. We'll call ours Calendar. We check that this is not abusing the term. [http://dictionary.reference.com/browse/calendar dictionary]"
+      },
+      "date": 1420345817673
+    },
+    {
+      "type": "edit",
+      "id": "ec44b60dbac16ed4",
+      "item": {
+        "type": "html",
+        "id": "ec44b60dbac16ed4",
+        "text": "<b>Create an item</b> of this type. Create a new page. Add a simple item, like Factory. Then text edit the page's json to change the new item's type to 'calendar'. See that the page shows an error."
+      },
+      "date": 1420345819197
+    },
+    {
+      "type": "edit",
+      "id": "a5e7b17e8c8d301f",
+      "item": {
+        "type": "html",
+        "id": "a5e7b17e8c8d301f",
+        "text": "<b>Create a plugin</b>. Copy a simple example like PageFold plugin to get started. [https://github.com/WardCunningham/Smallest-Federated-Wiki/blob/master/client/plugins/pagefold/pagefold.coffee github] We save the new file in 'client/plugins/calendar/calendar.coffee' changing every 'pagefold' to 'calendar'. "
+      },
+      "date": 1420345821865
+    },
+    {
+      "type": "edit",
+      "id": "e6375e89e695bf40",
+      "item": {
+        "type": "html",
+        "id": "e6375e89e695bf40",
+        "text": "<b>Build the javascript</b>. For simple plugins the coffee compiler will do the job. When you have test cases you will use builder.pl to recompile everything."
+      },
+      "date": 1420345825172
+    },
+    {
+      "type": "edit",
+      "id": "1a38589266394548",
+      "item": {
+        "type": "html",
+        "id": "1a38589266394548",
+        "text": "<b>Experiment.</b> Change emit to use different html. Add functions to parse parameters out of image.text and substitute them into the html different ways."
+      },
+      "date": 1420345829140
+    },
+    {
+      "type": "edit",
+      "id": "61a494684abce731",
+      "item": {
+        "type": "html",
+        "id": "61a494684abce731",
+        "text": "<h3> Keep Building"
+      },
+      "date": 1420345833478
+    },
+    {
+      "type": "edit",
+      "id": "98ead6d8c3a6b20b",
+      "item": {
+        "type": "html",
+        "id": "98ead6d8c3a6b20b",
+        "text": "<b>Factor Logic</b> from emit/bind functions and expose them as a node.js style module. We copy the Report plugin."
+      },
+      "date": 1420345835489
+    },
+    {
+      "type": "edit",
+      "id": "2a3511b1bdb8a5bf",
+      "item": {
+        "type": "html",
+        "id": "2a3511b1bdb8a5bf",
+        "text": "<b>Write Tests</b> that passes in the simplest way copying from 'plugins/report/test.coffee'"
+      },
+      "date": 1420345838037
+    },
+    {
+      "type": "edit",
+      "id": "d0e65a2ce089a403",
+      "item": {
+        "type": "html",
+        "id": "d0e65a2ce089a403",
+        "text": "<b>Work Examples</b> using other plugins for input or output or event sources and sinks."
+      },
+      "date": 1420345842300
+    },
+    {
+      "type": "edit",
+      "id": "f3f008528e2e620d",
+      "item": {
+        "type": "html",
+        "id": "f3f008528e2e620d",
+        "text": "<h3> Build Server-Side"
+      },
+      "date": 1420345845224
+    },
+    {
+      "type": "edit",
+      "id": "303356126d20776a",
+      "item": {
+        "type": "html",
+        "id": "303356126d20776a",
+        "text": "<b>Open Connections</b> using WebSocket servers (server.coffee) that are launched when the Express server launches. These are built as their own npm applications with their own package.json files."
+      },
+      "date": 1420345849432
+    },
+    {
+      "type": "edit",
+      "id": "3e83e4391984218d",
+      "item": {
+        "type": "html",
+        "id": "3e83e4391984218d",
+        "text": "<h3> Finish Up"
+      },
+      "date": 1420345856819
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1435492122995
+    }
+  ]
+}

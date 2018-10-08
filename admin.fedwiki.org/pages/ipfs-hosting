@@ -1,0 +1,588 @@
+{
+  "title": "IPFS Hosting",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b2d367ab902b69f9",
+      "text": "Here we look at how we might host our own IPFS Gateway for hosting Fedwiki assets."
+    },
+    {
+      "type": "paragraph",
+      "id": "58e0cb6abc8a4043",
+      "text": "The basic idea is to simply place a standard \"writeable\" IPFS daemon behind an [[Nginx]] reverse proxy."
+    },
+    {
+      "type": "markdown",
+      "id": "e231814fd23fd6a6",
+      "text": "# Writeable HTTP Gateways"
+    },
+    {
+      "type": "paragraph",
+      "id": "72b57142dca12adf",
+      "text": "By default, an HTTP gateway for IPFS only supports the HTTP GET method. This allows you to fetch a resource by its hash and, if the hash is a directory, by the path from that directory to a named file - [https://discuss.ipfs.io/t/writeable-http-gateways/210 discuss.ipfs.io]"
+    },
+    {
+      "type": "paragraph",
+      "id": "f9379bdc9e4281c9",
+      "text": "If you enable the Writeable flag for a gateway, it gains the ability to understand the HTTP POST, PUT, and DELETE methods. This allows clients to add data to IPFS, but doesn't trust them with the full daemon API."
+    },
+    {
+      "type": "paragraph",
+      "id": "d7b9c1c844c24317",
+      "text": "You can enable this mode by setting Gateway.Writeable to true in the daemon configuration, or by passing the --writeable flag on the daemon's command line.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "58d922b605c9b9f7",
+      "text": "# Caching"
+    },
+    {
+      "type": "paragraph",
+      "id": "3f2e648432fa9c4b",
+      "text": "I am not clear how efficient the current IPFS daemon is at retrieving a pinned asset in IPFS. Consequently it may be worth caching media files all though this will result in twice the storage space."
+    },
+    {
+      "type": "markdown",
+      "id": "2cf4b40de8d55b32",
+      "text": "# Workflow"
+    },
+    {
+      "type": "paragraph",
+      "id": "69717e59b13a2ce4",
+      "text": "Uploading a media (audio) file to server will result in hosting the file in Fedwiki, and adding the asset to IPFS. It will be the responsibility of Fedwiki to use IPFS to serve the file where locally available."
+    },
+    {
+      "type": "markdown",
+      "id": "9667cb09f20d601f",
+      "text": "# Desktop Client"
+    },
+    {
+      "type": "paragraph",
+      "id": "553f07dab807d64d",
+      "text": "We consider the option of coding the server and desktop client simultaneously. The desktop client would be useful in order to make it easy to work with the audio (video) archive that we call teh [[Anthropological Archive]]."
+    },
+    {
+      "type": "markdown",
+      "id": "8fc7bd9c0f0d9907",
+      "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS - [https://github.com/ipfs/examples/tree/master/examples/websites github]\n- IPFS Hosting - [http://www.atnnn.com/p/ipfs-hosting/ atnnn.com]\n- DispersionJS - [https://github.com/Dispersionjs/ipfs-disperse github]\n- [[Docker Volume]] IPFS - [https://github.com/vdemeester/docker-volume-ipfs github]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "IPFS Hosting",
+        "story": []
+      },
+      "date": 1497294744522
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b2d367ab902b69f9"
+      },
+      "id": "b2d367ab902b69f9",
+      "type": "add",
+      "date": 1497294745677
+    },
+    {
+      "type": "edit",
+      "id": "b2d367ab902b69f9",
+      "item": {
+        "type": "paragraph",
+        "id": "b2d367ab902b69f9",
+        "text": "Here we look at how we might host our own IPFS Gateway for file hosting."
+      },
+      "date": 1497294912285
+    },
+    {
+      "type": "add",
+      "id": "72b57142dca12adf",
+      "item": {
+        "type": "paragraph",
+        "id": "72b57142dca12adf",
+        "text": "By default, an HTTP gateway for IPFS only supports the HTTP GET method. This allows you to fetch a resource by its hash and, if the hash is a directory, by the path from that directory to a named file.\n\nIf you enable the Writeable flag for a gateway, it gains the ability to understand the HTTP POST, PUT, and DELETE methods. This allows clients to add data to IPFS, but doesn't trust them with the full daemon API.\n\nYou can enable this mode by setting Gateway.Writeable to true in the daemon configuration, or by passing the --writeable flag on the daemon's command line.\n\n"
+      },
+      "after": "b2d367ab902b69f9",
+      "date": 1497294914701
+    },
+    {
+      "type": "edit",
+      "id": "b2d367ab902b69f9",
+      "item": {
+        "type": "paragraph",
+        "id": "b2d367ab902b69f9",
+        "text": "Here we look at how we might host our own IPFS Gateway for hosting Fedwiki assets."
+      },
+      "date": 1497294929908
+    },
+    {
+      "type": "add",
+      "id": "58e0cb6abc8a4043",
+      "item": {
+        "type": "paragraph",
+        "id": "58e0cb6abc8a4043",
+        "text": "The basic idea is to simply place a standard \"writeable\" IPFS daemon behind an [[Nginx]] reverse proxy."
+      },
+      "after": "b2d367ab902b69f9",
+      "date": 1497294982022
+    },
+    {
+      "type": "add",
+      "id": "e231814fd23fd6a6",
+      "item": {
+        "type": "paragraph",
+        "id": "e231814fd23fd6a6",
+        "text": "# Writeable HTTP Gateways"
+      },
+      "after": "58e0cb6abc8a4043",
+      "date": 1497295002528
+    },
+    {
+      "type": "edit",
+      "id": "e231814fd23fd6a6",
+      "item": {
+        "type": "markdown",
+        "id": "e231814fd23fd6a6",
+        "text": "# Writeable HTTP Gateways"
+      },
+      "date": 1497295003942
+    },
+    {
+      "type": "edit",
+      "id": "72b57142dca12adf",
+      "item": {
+        "type": "paragraph",
+        "id": "72b57142dca12adf",
+        "text": "By default, an HTTP gateway for IPFS only supports the HTTP GET method. This allows you to fetch a resource by its hash and, if the hash is a directory, by the path from that directory to a named file - [https://discuss.ipfs.io/t/writeable-http-gateways/210 discuss.ipfs.io]"
+      },
+      "date": 1497295043834
+    },
+    {
+      "type": "add",
+      "id": "f9379bdc9e4281c9",
+      "item": {
+        "type": "paragraph",
+        "id": "f9379bdc9e4281c9",
+        "text": "If you enable the Writeable flag for a gateway, it gains the ability to understand the HTTP POST, PUT, and DELETE methods. This allows clients to add data to IPFS, but doesn't trust them with the full daemon API."
+      },
+      "after": "72b57142dca12adf",
+      "date": 1497295051303
+    },
+    {
+      "type": "add",
+      "id": "d7b9c1c844c24317",
+      "item": {
+        "type": "paragraph",
+        "id": "d7b9c1c844c24317",
+        "text": "You can enable this mode by setting Gateway.Writeable to true in the daemon configuration, or by passing the --writeable flag on the daemon's command line.\n\n"
+      },
+      "after": "f9379bdc9e4281c9",
+      "date": 1497295056136
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "58d922b605c9b9f7"
+      },
+      "id": "58d922b605c9b9f7",
+      "type": "add",
+      "after": "d7b9c1c844c24317",
+      "date": 1497295062669
+    },
+    {
+      "type": "edit",
+      "id": "58d922b605c9b9f7",
+      "item": {
+        "type": "markdown",
+        "id": "58d922b605c9b9f7",
+        "text": "# Caching"
+      },
+      "date": 1497295074328
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3f2e648432fa9c4b"
+      },
+      "id": "3f2e648432fa9c4b",
+      "type": "add",
+      "after": "58d922b605c9b9f7",
+      "date": 1497295076011
+    },
+    {
+      "type": "edit",
+      "id": "3f2e648432fa9c4b",
+      "item": {
+        "type": "paragraph",
+        "id": "3f2e648432fa9c4b",
+        "text": "I am not clear how efficient the current IPFS daemon is at retrieving a pinned asset in IPFS. Consequently it may be worth caching media files all though this will result in twice the storage space."
+      },
+      "date": 1497295216611
+    },
+    {
+      "type": "add",
+      "id": "2cf4b40de8d55b32",
+      "item": {
+        "type": "paragraph",
+        "id": "2cf4b40de8d55b32",
+        "text": "# Wrokflow"
+      },
+      "after": "3f2e648432fa9c4b",
+      "date": 1497295229578
+    },
+    {
+      "type": "edit",
+      "id": "2cf4b40de8d55b32",
+      "item": {
+        "type": "paragraph",
+        "id": "2cf4b40de8d55b32",
+        "text": "# Workflow"
+      },
+      "date": 1497295234730
+    },
+    {
+      "type": "add",
+      "id": "69717e59b13a2ce4",
+      "item": {
+        "type": "paragraph",
+        "id": "69717e59b13a2ce4",
+        "text": "Uploading a media (audio) file to server will result in hosting the file in Fedwiki, and adding the asset to IPFS. It will be the responsibility of Fedwiki to use IPFS to serve the file where locally available."
+      },
+      "after": "2cf4b40de8d55b32",
+      "date": 1497295339662
+    },
+    {
+      "type": "add",
+      "id": "9667cb09f20d601f",
+      "item": {
+        "type": "paragraph",
+        "id": "9667cb09f20d601f",
+        "text": "# Desktop Client"
+      },
+      "after": "69717e59b13a2ce4",
+      "date": 1497295353182
+    },
+    {
+      "type": "add",
+      "id": "553f07dab807d64d",
+      "item": {
+        "type": "paragraph",
+        "id": "553f07dab807d64d",
+        "text": "We consider the option of coding the server and desktop client simultaneously. The desktop client would be useful in order to make it easy to work with the audio (video) archive that we call teh [[Anthropological Archive]]."
+      },
+      "after": "9667cb09f20d601f",
+      "date": 1497295452290
+    },
+    {
+      "type": "edit",
+      "id": "9667cb09f20d601f",
+      "item": {
+        "type": "markdown",
+        "id": "9667cb09f20d601f",
+        "text": "# Desktop Client"
+      },
+      "date": 1497295453283
+    },
+    {
+      "type": "edit",
+      "id": "2cf4b40de8d55b32",
+      "item": {
+        "type": "markdown",
+        "id": "2cf4b40de8d55b32",
+        "text": "# Workflow"
+      },
+      "date": 1497295454195
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8fc7bd9c0f0d9907"
+      },
+      "id": "8fc7bd9c0f0d9907",
+      "type": "add",
+      "after": "553f07dab807d64d",
+      "date": 1497296808467
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]"
+      },
+      "date": 1497296818818
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]"
+      },
+      "date": 1497296836906
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- [[http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297494214
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS and Nix -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297583207
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297590055
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297627416
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFShttp://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297642536
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297648408
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297654985
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -[http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297660850
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]"
+      },
+      "date": 1497297664377
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Example site hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297861648
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Example hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297869456
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Example hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297881448
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297892184
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFShttps://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297907232
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297919801
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297928330
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297939385
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS[http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297948506
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297967602
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS[http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS[https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497297989099
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS -\n [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS -\n [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497298000667
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS - [https://github.com/ipfs/examples/tree/master/examples/websites github]"
+      },
+      "date": 1497298043348
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS - [https://github.com/ipfs/examples/tree/master/examples/websites github]\n- IPFS Hosting - [http://www.atnnn.com/p/ipfs-hosting/ atnnn.com]"
+      },
+      "date": 1497298100526
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS - [https://github.com/ipfs/examples/tree/master/examples/websites github]\n- IPFS Hosting - [http://www.atnnn.com/p/ipfs-hosting/ atnnn.com]\n- DispersionJS - [https://github.com/Dispersionjs/ipfs-disperse github]"
+      },
+      "date": 1497298158688
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS - [https://github.com/ipfs/examples/tree/master/examples/websites github]\n- IPFS Hosting - [http://www.atnnn.com/p/ipfs-hosting/ atnnn.com]\n- DispersionJS - [https://github.com/Dispersionjs/ipfs-disperse github]\n- [Docker Volume IPFS - [https://github.com/vdemeester/docker-volume-ipfs github]"
+      },
+      "date": 1497298246771
+    },
+    {
+      "type": "edit",
+      "id": "8fc7bd9c0f0d9907",
+      "item": {
+        "type": "markdown",
+        "id": "8fc7bd9c0f0d9907",
+        "text": "# See also\n\n- [[Alexandria]]\n- [[Anthropological Archive]]\n- Web Hosting With IPFS - [http://chriswarbo.net/blog/2017-03-20-web_hosting_with_ipfs_and_nix.html chriswarbo.net]\n- Hosting on IPFS - [https://github.com/ipfs/examples/tree/master/examples/websites github]\n- IPFS Hosting - [http://www.atnnn.com/p/ipfs-hosting/ atnnn.com]\n- DispersionJS - [https://github.com/Dispersionjs/ipfs-disperse github]\n- [[Docker Volume]] IPFS - [https://github.com/vdemeester/docker-volume-ipfs github]"
+      },
+      "date": 1497298264483
+    }
+  ]
+}

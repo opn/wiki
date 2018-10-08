@@ -1,0 +1,434 @@
+{
+  "title": "Sitemap Scrape Improvements",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "2fbf8fb4793c0b3e",
+      "text": "The [[Ruby Sitemap Scrape]] provides the first full text search of the visible federation. We've learned a lot by building this ourselves from grep-like utilities. Here we list todos that have surfaced and been completed."
+    },
+    {
+      "type": "pagefold",
+      "id": "699314bb47b5f61f",
+      "text": "done"
+    },
+    {
+      "type": "paragraph",
+      "id": "b04a04fcb450f19e",
+      "text": "Find all pages that share any items with the current page. Prototype search link now available. [https://github.com/fedwiki/wiki-client/pull/132 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "39f0fe449191de0c",
+      "text": "Scrape item ids and save them in items.txt files. Devise some convenient way to initiate a search from any paragraph. See [[Link Symmetry]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2ae0cc9291a91e7d",
+      "text": "Refactor search.fed.wiki.org to have separate what, help and query details pages. Keep them up to date."
+    },
+    {
+      "type": "html",
+      "id": "78780a2d33adb16c",
+      "text": "match:\n<input type=radio checked> and\n<input type=radio> or"
+    },
+    {
+      "type": "paragraph",
+      "id": "d110549e9e544aec",
+      "text": "Add [[Newly Found Sites]] to the activity report even if they are not recently active. This would be reporting the consequence of some other activity that linked to the site."
+    },
+    {
+      "type": "paragraph",
+      "id": "46cce71d6e7c50bd",
+      "text": "Add a permalink to the search results so that searches can be saved and rerun with a single click. [http://search.fed.wiki.org:3030/#/find=items&within=pages&query=dbed99c5d3c702b1 search]"
+    },
+    {
+      "type": "paragraph",
+      "id": "042cbe8982becf40",
+      "text": "Find and remove old rosters after a week or so. Possibly merge them to have into whole days before that."
+    },
+    {
+      "type": "code",
+      "id": "47a9e57b532aab49",
+      "text": "find activity/*00 -mtime +7 -exec rm {} \\;"
+    },
+    {
+      "type": "paragraph",
+      "id": "86640497c64663d4",
+      "text": "Momentarily defeat the scrape's incremental mechanism in order to retrieve the new indices, items.txt and plugins.txt from all pages. See [[Full Scrape]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bd98a5b09bc048e3",
+      "text": "Scrape item types and same them in plugins.txt files."
+    },
+    {
+      "type": "paragraph",
+      "id": "9927266746df4c60",
+      "text": "Add html plugin to sfw.c2.com since we're now generating lots of html items."
+    },
+    {
+      "type": "paragraph",
+      "id": "f60675cdaa10ea64",
+      "text": "Improve the grep sequence so it doesn't blow up with \"too many arguments\" from the shell. [https://github.com/WardCunningham/search/commit/f12133f3cf9be69689af98563f5113e5ca7386b0 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "07fd43e9366a971e",
+      "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view. This was first successful run from cron. Solution online. [http://chrisneedham.com/posts/2014/06/21/ruby-cron-utf8.html post]"
+    },
+    {
+      "type": "code",
+      "id": "cebc0680a0435d46",
+      "text": "can't do sitemap for wikitytest.hapgood.net, \"\\xE2\" on US-ASCII\n\ngrep \"can't do sitemap for\" logs/Sat-1900 | \\\n  cut -d , -f 2 | sort | uniq -c\n\n  11  \"\\xC2\" on US-ASCII\n  15  \"\\xC3\" on US-ASCII\n   3  \"\\xCB\" on US-ASCII\n   3  \"\\xCE\" on US-ASCII\n   1  \"\\xCF\" on US-ASCII\n   1  \"\\xE1\" on US-ASCII\n 106  \"\\xE2\" on US-ASCII\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "160c5575361a590f",
+      "text": "We've figured out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json after giving up on the default 'public' behavior. [https://github.com/WardCunningham/search/blob/3a60aabb4381255a79e1d404bfc11b21615be4ad/server.rb#L94-L98 github]"
+    },
+    {
+      "type": "reference",
+      "id": "a308ed372280a456",
+      "site": "search.fed.wiki.org:3030",
+      "slug": "recent-activity",
+      "title": "Recent Activity",
+      "text": "We run scrapes four times a day and find sites with new activity. We'll list active sites here automatically."
+    },
+    {
+      "type": "paragraph",
+      "id": "c4dbdf0b12280af6",
+      "text": "Grep the words.txt with a simple web app. [http://search.fed.wiki.org:3030/ site]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a87c9d5ff0d7aa14",
+      "text": "Recent activity now includes new sites in a more compact format. [https://github.com/WardCunningham/search/commit/c5e2320ca2e59c71306545102a6f6d59fc94daa0 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "877b8ce6732e7dcb",
+      "text": "I've added a report listing all sites with ten or more pages. I attempt to group these logically based on their subdomain hierarchy. See [[Visible Federation]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "83942d7396741957",
+      "text": "I've revised my 2011 cron job that feeds home sensor network data into the federation on a five minute cycle. This polluted the scrape's activity report until I modified the perl script to date pages with the install date of each sensor, not the date of the reading. [http://sensors.c2.com/ site]"
+    },
+    {
+      "type": "code",
+      "id": "fcba042b03c2fcbe",
+      "text": "$date = (stat($r))[9]*1000;"
+    },
+    {
+      "type": "paragraph",
+      "id": "2bda8603e29bfdab",
+      "text": "I've revised my 2012 cron job that reports farm activity to date the activity in the journal with the date that it happened. A second commit suspends reporting until there is activity after the last report. [https://github.com/WardCunningham/farm-scripts/commit/afcf3f8e20b3ec68fd5f153d4ab72b3ee7f1e813 github] [https://github.com/WardCunningham/farm-scripts/commit/61e9be7e1562598f565300d06cf3d0da9497ad18 github]"
+    },
+    {
+      "type": "pagefold",
+      "id": "7975137e7e11b941",
+      "text": "."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Sitemap Scrape Improvements",
+        "story": []
+      },
+      "date": 1452455901840
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2fbf8fb4793c0b3e"
+      },
+      "id": "2fbf8fb4793c0b3e",
+      "type": "add",
+      "date": 1452455905936
+    },
+    {
+      "type": "edit",
+      "id": "2fbf8fb4793c0b3e",
+      "item": {
+        "type": "paragraph",
+        "id": "2fbf8fb4793c0b3e",
+        "text": "The [[Ruby Sitemap Scrape]] provides the first full text search of the visible federation. We've learned a lot by building this ourselves from grep-like utilities. Here we list todos that have surfaced and been completed."
+      },
+      "date": 1452456129047
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "pagefold",
+        "id": "699314bb47b5f61f",
+        "text": "done"
+      },
+      "after": "2fbf8fb4793c0b3e",
+      "id": "699314bb47b5f61f",
+      "date": 1452456139419
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b04a04fcb450f19e",
+        "text": "Find all pages that share any items with the current page. Prototype search link now available. [https://github.com/fedwiki/wiki-client/pull/132 github]"
+      },
+      "after": "699314bb47b5f61f",
+      "id": "b04a04fcb450f19e",
+      "date": 1452456147928
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "39f0fe449191de0c",
+        "text": "Scrape item ids and save them in items.txt files. Devise some convenient way to initiate a search from any paragraph. See [[Link Symmetry]]"
+      },
+      "after": "b04a04fcb450f19e",
+      "id": "39f0fe449191de0c",
+      "date": 1452456151491
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2ae0cc9291a91e7d",
+        "text": "Refactor search.fed.wiki.org to have separate what, help and query details pages. Keep them up to date."
+      },
+      "after": "39f0fe449191de0c",
+      "id": "2ae0cc9291a91e7d",
+      "date": 1452456154938
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "78780a2d33adb16c",
+        "text": "match:\n<input type=radio checked> and\n<input type=radio> or"
+      },
+      "after": "2ae0cc9291a91e7d",
+      "id": "78780a2d33adb16c",
+      "date": 1452456159757
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d110549e9e544aec",
+        "text": "Add [[Newly Found Sites]] to the activity report even if they are not recently active. This would be reporting the consequence of some other activity that linked to the site."
+      },
+      "after": "78780a2d33adb16c",
+      "id": "d110549e9e544aec",
+      "date": 1452456163753
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "46cce71d6e7c50bd",
+        "text": "Add a permalink to the search results so that searches can be saved and rerun with a single click. [http://search.fed.wiki.org:3030/#/find=items&within=pages&query=dbed99c5d3c702b1 search]"
+      },
+      "after": "d110549e9e544aec",
+      "id": "46cce71d6e7c50bd",
+      "date": 1452456169408
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "042cbe8982becf40",
+        "text": "Find and remove old rosters after a week or so. Possibly merge them to have into whole days before that."
+      },
+      "after": "46cce71d6e7c50bd",
+      "id": "042cbe8982becf40",
+      "date": 1452456174629
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "47a9e57b532aab49",
+        "text": "find activity/*00 -mtime +7 -exec rm {} \\;"
+      },
+      "after": "042cbe8982becf40",
+      "id": "47a9e57b532aab49",
+      "date": 1452456180358
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "86640497c64663d4",
+        "text": "Momentarily defeat the scrape's incremental mechanism in order to retrieve the new indices, items.txt and plugins.txt from all pages. See [[Full Scrape]]"
+      },
+      "after": "47a9e57b532aab49",
+      "id": "86640497c64663d4",
+      "date": 1452456189273
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bd98a5b09bc048e3",
+        "text": "Scrape item types and same them in plugins.txt files."
+      },
+      "after": "86640497c64663d4",
+      "id": "bd98a5b09bc048e3",
+      "date": 1452456192546
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9927266746df4c60",
+        "text": "Add html plugin to sfw.c2.com since we're now generating lots of html items."
+      },
+      "after": "bd98a5b09bc048e3",
+      "id": "9927266746df4c60",
+      "date": 1452456196533
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f60675cdaa10ea64",
+        "text": "Improve the grep sequence so it doesn't blow up with \"too many arguments\" from the shell. [https://github.com/WardCunningham/search/commit/f12133f3cf9be69689af98563f5113e5ca7386b0 github]"
+      },
+      "after": "9927266746df4c60",
+      "id": "f60675cdaa10ea64",
+      "date": 1452456210968
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view. This was first successful run from cron. Solution online. [http://chrisneedham.com/posts/2014/06/21/ruby-cron-utf8.html post]"
+      },
+      "after": "f60675cdaa10ea64",
+      "id": "07fd43e9366a971e",
+      "date": 1452456215802
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "cebc0680a0435d46",
+        "text": "can't do sitemap for wikitytest.hapgood.net, \"\\xE2\" on US-ASCII\n\ngrep \"can't do sitemap for\" logs/Sat-1900 | \\\n  cut -d , -f 2 | sort | uniq -c\n\n  11  \"\\xC2\" on US-ASCII\n  15  \"\\xC3\" on US-ASCII\n   3  \"\\xCB\" on US-ASCII\n   3  \"\\xCE\" on US-ASCII\n   1  \"\\xCF\" on US-ASCII\n   1  \"\\xE1\" on US-ASCII\n 106  \"\\xE2\" on US-ASCII\n"
+      },
+      "after": "07fd43e9366a971e",
+      "id": "cebc0680a0435d46",
+      "date": 1452456224851
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "160c5575361a590f",
+        "text": "We've figured out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json after giving up on the default 'public' behavior. [https://github.com/WardCunningham/search/blob/3a60aabb4381255a79e1d404bfc11b21615be4ad/server.rb#L94-L98 github]"
+      },
+      "after": "cebc0680a0435d46",
+      "id": "160c5575361a590f",
+      "date": 1452456230873
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "a308ed372280a456",
+        "site": "search.fed.wiki.org:3030",
+        "slug": "recent-activity",
+        "title": "Recent Activity",
+        "text": "We run scrapes four times a day and find sites with new activity. We'll list active sites here automatically."
+      },
+      "after": "160c5575361a590f",
+      "id": "a308ed372280a456",
+      "date": 1452456233984
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dbdf0b12280af6",
+        "text": "Grep the words.txt with a simple web app. [http://search.fed.wiki.org:3030/ site]"
+      },
+      "after": "a308ed372280a456",
+      "id": "c4dbdf0b12280af6",
+      "date": 1452456237600
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a87c9d5ff0d7aa14",
+        "text": "Recent activity now includes new sites in a more compact format. [https://github.com/WardCunningham/search/commit/c5e2320ca2e59c71306545102a6f6d59fc94daa0 github]"
+      },
+      "after": "c4dbdf0b12280af6",
+      "id": "a87c9d5ff0d7aa14",
+      "date": 1452456242341
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "877b8ce6732e7dcb",
+        "text": "I've added a report listing all sites with ten or more pages. I attempt to group these logically based on their subdomain hierarchy. See [[Visible Federation]]"
+      },
+      "after": "a87c9d5ff0d7aa14",
+      "id": "877b8ce6732e7dcb",
+      "date": 1452456245779
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "83942d7396741957",
+        "text": "I've revised my 2011 cron job that feeds home sensor network data into the federation on a five minute cycle. This polluted the scrape's activity report until I modified the perl script to date pages with the install date of each sensor, not the date of the reading. [http://sensors.c2.com/ site]"
+      },
+      "after": "877b8ce6732e7dcb",
+      "id": "83942d7396741957",
+      "date": 1452456249861
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "fcba042b03c2fcbe",
+        "text": "$date = (stat($r))[9]*1000;"
+      },
+      "after": "83942d7396741957",
+      "id": "fcba042b03c2fcbe",
+      "date": 1452456255845
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2bda8603e29bfdab",
+        "text": "I've revised my 2012 cron job that reports farm activity to date the activity in the journal with the date that it happened. A second commit suspends reporting until there is activity after the last report. [https://github.com/WardCunningham/farm-scripts/commit/afcf3f8e20b3ec68fd5f153d4ab72b3ee7f1e813 github] [https://github.com/WardCunningham/farm-scripts/commit/61e9be7e1562598f565300d06cf3d0da9497ad18 github]"
+      },
+      "after": "fcba042b03c2fcbe",
+      "id": "2bda8603e29bfdab",
+      "date": 1452456263609
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "pagefold",
+        "id": "7975137e7e11b941",
+        "text": "."
+      },
+      "after": "2bda8603e29bfdab",
+      "id": "7975137e7e11b941",
+      "date": 1452456277654
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1512338411379
+    }
+  ]
+}

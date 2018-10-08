@@ -1,0 +1,1165 @@
+{
+  "title": "Initial Server Setup",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "c8dd97f93b446097",
+      "text": "When you first create a new Ubuntu 14.04 server, there are a few configuration steps that you should take early on as part of the basic setup. This will increase the security and usability of your server and will give you a solid foundation for subsequent actions - [https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04 digitalocean.com]"
+    },
+    {
+      "type": "reference",
+      "id": "77569de864421bfc",
+      "site": "ocean.admin.fedwiki.org",
+      "slug": "ssh-to-your-server",
+      "title": "SSH to Your Server",
+      "text": "To [[ssh]] to your server on [[DigitalOcean]] you should first have [[Set up Your SSH Keys]] on the server. Assuming you have done this, it should be as simple as:"
+    },
+    {
+      "type": "html",
+      "id": "39a17621092c9200",
+      "text": "<H3>About Root"
+    },
+    {
+      "type": "paragraph",
+      "id": "6cbe4f4832216bc8",
+      "text": "The root user is the administrative user in a Linux environment that has very broad privileges. Because of the heightened privileges of the root account, you are actually discouraged from using it on a regular basis. This is because part of the power inherent with the root account is the ability to make very destructive changes, even by accident."
+    },
+    {
+      "type": "html",
+      "id": "e78091641497f840",
+      "text": "<H3>Create a New User"
+    },
+    {
+      "type": "paragraph",
+      "id": "4d6c55d380873088",
+      "text": "Once you are logged in as root, we're prepared to add the new user account that we will use to log in from now on."
+    },
+    {
+      "type": "paragraph",
+      "id": "9daa0f9d90827912",
+      "text": "This example creates a new user called \"demo\", but you should replace it with a user name that you like:"
+    },
+    {
+      "type": "code",
+      "id": "ab980fa178d66d0e",
+      "text": "adduser demo"
+    },
+    {
+      "type": "paragraph",
+      "id": "91979e3ce5f32d7c",
+      "text": "You will be asked a few questions, starting with the account password. Enter a strong password and, optionally, fill in any of the additional information if you would like. This is not required and you can just hit \"ENTER\" in any field you wish to skip."
+    },
+    {
+      "type": "html",
+      "id": "9aaf0e5727a5baaa",
+      "text": "<H3>Step Three — Root Privileges"
+    },
+    {
+      "type": "paragraph",
+      "id": "96da856d8f414cc8",
+      "text": "Now, we have a new user account with regular account privileges. However, we may sometimes need to do administrative tasks.\n\nTo avoid having to log out of our normal user and log back in as the root account, we can set up what is known as \"super user\" or root privileges for our normal account. This will allow our normal user to run commands with administrative privileges by putting the word sudo before each command.\n\nTo add these privileges to our new user, we need to add the new user to the \"sudo\" group. By default, on Ubuntu 14.04, users who belong to the \"sudo\" group are allowed to use the sudo command.\n\nAs root, run this command to add your new user to the sudo group (substitute the highlighted word with your new user):"
+    },
+    {
+      "type": "code",
+      "id": "bab58a4674c0435d",
+      "text": "gpasswd -a demo sudo"
+    },
+    {
+      "type": "paragraph",
+      "id": "c3383b4dc1356597",
+      "text": "Now your user can run commands with super user privileges! For more information about how this works, check out this sudoers tutorial - [https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos digitalocean.com]"
+    },
+    {
+      "type": "reference",
+      "id": "5fe7fb361e8f7d7f",
+      "site": "ocean.admin.fedwiki.org",
+      "slug": "set-up-your-ssh-keys",
+      "title": "Set up Your SSH Keys",
+      "text": "If you haven't done already we are going to have to set up ssh keys on the server for this user."
+    },
+    {
+      "type": "html",
+      "id": "a4a00d69c56430c6",
+      "text": "<H3>Testing your user setup"
+    },
+    {
+      "type": "paragraph",
+      "id": "0e70d5dff364e3d6",
+      "text": "To list all users you can use:\n"
+    },
+    {
+      "type": "code",
+      "id": "be30a666a1b2a485",
+      "text": "cut -d: -f1 /etc/passwd"
+    },
+    {
+      "type": "paragraph",
+      "id": "12e902680735c5fa",
+      "text": "As an example to remove/delete a user \"vivek\", you can use:"
+    },
+    {
+      "type": "code",
+      "id": "b954c1e37603a04d",
+      "text": "userdel vivek"
+    },
+    {
+      "type": "paragraph",
+      "id": "8cd94f4e07d595cb",
+      "text": "If you wanted to remove the user's home directory as well you would pass the -r option to userdel, enter:"
+    },
+    {
+      "type": "code",
+      "id": "ad3cb728d59317ba",
+      "text": "userdel -r vivek"
+    },
+    {
+      "type": "paragraph",
+      "id": "fd8578c2c4b16012",
+      "text": "Now you might need / want to:"
+    },
+    {
+      "type": "video",
+      "id": "a92db56934883888",
+      "text": "VIMEO 132083327\nTutorial to show how to set up your [[DigitalOcean]] server with a user and give that user [[sudo]] permissions.\n\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Initial Server Setup",
+        "story": []
+      },
+      "date": 1435532064082
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8dd97f93b446097"
+      },
+      "id": "c8dd97f93b446097",
+      "type": "add",
+      "date": 1435532079710
+    },
+    {
+      "type": "edit",
+      "id": "c8dd97f93b446097",
+      "item": {
+        "type": "paragraph",
+        "id": "c8dd97f93b446097",
+        "text": "When you first create a new Ubuntu 14.04 server, there are a few configuration steps that you should take early on as part of the basic setup. This will increase the security and usability of your server and will give you a solid foundation for subsequent actions."
+      },
+      "date": 1435532082621
+    },
+    {
+      "type": "edit",
+      "id": "c8dd97f93b446097",
+      "item": {
+        "type": "paragraph",
+        "id": "c8dd97f93b446097",
+        "text": "When you first create a new Ubuntu 14.04 server, there are a few configuration steps that you should take early on as part of the basic setup. This will increase the security and usability of your server and will give you a solid foundation for subsequent actions - [https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04 digitalocean.com]"
+      },
+      "date": 1435532098157
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "77569de864421bfc"
+      },
+      "id": "77569de864421bfc",
+      "type": "add",
+      "after": "c8dd97f93b446097",
+      "date": 1435532384322
+    },
+    {
+      "type": "edit",
+      "id": "77569de864421bfc",
+      "item": {
+        "type": "reference",
+        "id": "77569de864421bfc",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "ssh-to-your-server",
+        "title": "SSH to Your Server",
+        "text": "To [[ssh]] to your server on [[DigitalOcean]] you should first have [[Set up Your SSH Keys]] on the server. Assuming you have done this, it should be as simple as:"
+      },
+      "date": 1435532386947
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "39a17621092c9200"
+      },
+      "id": "39a17621092c9200",
+      "type": "add",
+      "after": "77569de864421bfc",
+      "date": 1435533152217
+    },
+    {
+      "type": "edit",
+      "id": "39a17621092c9200",
+      "item": {
+        "type": "paragraph",
+        "id": "39a17621092c9200",
+        "text": "<H3>About Root"
+      },
+      "date": 1435533163040
+    },
+    {
+      "type": "add",
+      "id": "6cbe4f4832216bc8",
+      "item": {
+        "type": "paragraph",
+        "id": "6cbe4f4832216bc8",
+        "text": "The root user is the administrative user in a Linux environment that has very broad privileges. Because of the heightened privileges of the root account, you are actually discouraged from using it on a regular basis. This is because part of the power inherent with the root account is the ability to make very destructive changes, even by accident."
+      },
+      "after": "39a17621092c9200",
+      "date": 1435533167473
+    },
+    {
+      "type": "add",
+      "id": "e78091641497f840",
+      "item": {
+        "type": "paragraph",
+        "id": "e78091641497f840",
+        "text": "The next step is to set up an alternative user account with a reduced scope of influence for day-to-day work. We'll teach you how to gain increased privileges during the times when you need them."
+      },
+      "after": "6cbe4f4832216bc8",
+      "date": 1435533169974
+    },
+    {
+      "type": "edit",
+      "id": "39a17621092c9200",
+      "item": {
+        "type": "html",
+        "id": "39a17621092c9200",
+        "text": "<H3>About Root"
+      },
+      "date": 1435533171062
+    },
+    {
+      "type": "edit",
+      "id": "e78091641497f840",
+      "item": {
+        "type": "paragraph",
+        "id": "e78091641497f840",
+        "text": "<H3>Create a New User"
+      },
+      "date": 1435533326957
+    },
+    {
+      "type": "add",
+      "id": "4d6c55d380873088",
+      "item": {
+        "type": "paragraph",
+        "id": "4d6c55d380873088",
+        "text": "Once you are logged in as root, we're prepared to add the new user account that we will use to log in from now on."
+      },
+      "after": "e78091641497f840",
+      "date": 1435533339620
+    },
+    {
+      "type": "add",
+      "id": "9daa0f9d90827912",
+      "item": {
+        "type": "paragraph",
+        "id": "9daa0f9d90827912",
+        "text": "This example creates a new user called \"demo\", but you should replace it with a user name that you like:"
+      },
+      "after": "4d6c55d380873088",
+      "date": 1435533345100
+    },
+    {
+      "type": "add",
+      "id": "91979e3ce5f32d7c",
+      "item": {
+        "type": "paragraph",
+        "id": "91979e3ce5f32d7c",
+        "text": "You will be asked a few questions, starting with the account password.\n\nEnter a strong password and, optionally, fill in any of the additional information if you would like. This is not required and you can just hit \"ENTER\" in any field you wish to skip."
+      },
+      "after": "9daa0f9d90827912",
+      "date": 1435533356078
+    },
+    {
+      "type": "add",
+      "id": "9aaf0e5727a5baaa",
+      "item": {
+        "type": "paragraph",
+        "id": "9aaf0e5727a5baaa",
+        "text": "<H3>Step Three — Root Privileges"
+      },
+      "after": "91979e3ce5f32d7c",
+      "date": 1435533361918
+    },
+    {
+      "type": "add",
+      "id": "96da856d8f414cc8",
+      "item": {
+        "type": "paragraph",
+        "id": "96da856d8f414cc8",
+        "text": "Now, we have a new user account with regular account privileges. However, we may sometimes need to do administrative tasks.\n\nTo avoid having to log out of our normal user and log back in as the root account, we can set up what is known as \"super user\" or root privileges for our normal account. This will allow our normal user to run commands with administrative privileges by putting the word sudo before each command.\n\nTo add these privileges to our new user, we need to add the new user to the \"sudo\" group. By default, on Ubuntu 14.04, users who belong to the \"sudo\" group are allowed to use the sudo command.\n\nAs root, run this command to add your new user to the sudo group (substitute the highlighted word with your new user):\n\n    gpasswd -a demo sudo\n\nNow your user can run commands with super user privileges! For more information about how this works, check out this sudoers tutorial.\nStep Four — Add Public Key Authentication (Recommended)\n\nThe next step in securing your server is to set up public key authentication for your new user. Setting this up will increase the security of your server by requiring a private SSH key to log in.\nGenerate a Key Pair\n\nIf you do not already have an SSH key pair, which consists of a public and private key, you need to generate one. If you already have a key that you want to use, skip to the Copy the Public Key step.\n\nTo generate a new key pair, enter the following command at the terminal of your local machine (ie. your computer):\n\n    ssh-keygen\n\nAssuming your local user is called \"localuser\", you will see output that looks like the following:\n\nssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/localuser/.ssh/id_rsa):\n\nHit return to accept this file name and path (or enter a new name).\n\nNext, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication.\n\nThis generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!\nCopy the Public Key\n\nAfter generating an SSH key pair, you will want to copy your public key to your new server. We will cover two easy ways to do this.\nOption 1: Use ssh-copy-id\n\nIf your local machine has the ssh-copy-id script installed, you can use it to install your public key to any user that you have login credentials for.\n\nRun the ssh-copy-id script by specifying the user and IP address of the server that you want to install the key on, like this:\n\n    ssh-copy-id demo@SERVER_IP_ADDRESS\n\nAfter providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+      },
+      "after": "9aaf0e5727a5baaa",
+      "date": 1435533364893
+    },
+    {
+      "type": "edit",
+      "id": "9aaf0e5727a5baaa",
+      "item": {
+        "type": "html",
+        "id": "9aaf0e5727a5baaa",
+        "text": "<H3>Step Three — Root Privileges"
+      },
+      "date": 1435533366137
+    },
+    {
+      "type": "edit",
+      "id": "e78091641497f840",
+      "item": {
+        "type": "html",
+        "id": "e78091641497f840",
+        "text": "<H3>Create a New User"
+      },
+      "date": 1435533367948
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ab980fa178d66d0e"
+      },
+      "id": "ab980fa178d66d0e",
+      "type": "add",
+      "after": "96da856d8f414cc8",
+      "date": 1435533375779
+    },
+    {
+      "type": "edit",
+      "id": "ab980fa178d66d0e",
+      "item": {
+        "type": "code",
+        "id": "ab980fa178d66d0e",
+        "text": "adduser demo"
+      },
+      "date": 1435533380627
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8"
+      ],
+      "id": "ab980fa178d66d0e",
+      "date": 1435533405435
+    },
+    {
+      "type": "edit",
+      "id": "91979e3ce5f32d7c",
+      "item": {
+        "type": "paragraph",
+        "id": "91979e3ce5f32d7c",
+        "text": "You will be asked a few questions, starting with the account password. Enter a strong password and, optionally, fill in any of the additional information if you would like. This is not required and you can just hit \"ENTER\" in any field you wish to skip."
+      },
+      "date": 1435533423656
+    },
+    {
+      "type": "edit",
+      "id": "96da856d8f414cc8",
+      "item": {
+        "type": "paragraph",
+        "id": "96da856d8f414cc8",
+        "text": "Now, we have a new user account with regular account privileges. However, we may sometimes need to do administrative tasks.\n\nTo avoid having to log out of our normal user and log back in as the root account, we can set up what is known as \"super user\" or root privileges for our normal account. This will allow our normal user to run commands with administrative privileges by putting the word sudo before each command.\n\nTo add these privileges to our new user, we need to add the new user to the \"sudo\" group. By default, on Ubuntu 14.04, users who belong to the \"sudo\" group are allowed to use the sudo command.\n\nAs root, run this command to add your new user to the sudo group (substitute the highlighted word with your new user):"
+      },
+      "date": 1435533473677
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bab58a4674c0435d"
+      },
+      "id": "bab58a4674c0435d",
+      "type": "add",
+      "after": "c3383b4dc1356597",
+      "date": 1435533480948
+    },
+    {
+      "type": "add",
+      "id": "c3383b4dc1356597",
+      "item": {
+        "type": "paragraph",
+        "id": "c3383b4dc1356597",
+        "text": "Now your user can run commands with super user privileges! For more information about how this works, check out this sudoers tutorial.\nStep Four — Add Public Key Authentication (Recommended)\n\nThe next step in securing your server is to set up public key authentication for your new user. Setting this up will increase the security of your server by requiring a private SSH key to log in.\nGenerate a Key Pair\n\nIf you do not already have an SSH key pair, which consists of a public and private key, you need to generate one. If you already have a key that you want to use, skip to the Copy the Public Key step.\n\nTo generate a new key pair, enter the following command at the terminal of your local machine (ie. your computer):\n\n    ssh-keygen\n\nAssuming your local user is called \"localuser\", you will see output that looks like the following:\n\nssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/localuser/.ssh/id_rsa):\n\nHit return to accept this file name and path (or enter a new name).\n\nNext, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication.\n\nThis generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!\nCopy the Public Key\n\nAfter generating an SSH key pair, you will want to copy your public key to your new server. We will cover two easy ways to do this.\nOption 1: Use ssh-copy-id\n\nIf your local machine has the ssh-copy-id script installed, you can use it to install your public key to any user that you have login credentials for.\n\nRun the ssh-copy-id script by specifying the user and IP address of the server that you want to install the key on, like this:\n\n    ssh-copy-id demo@SERVER_IP_ADDRESS\n\nAfter providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+      },
+      "after": "96da856d8f414cc8",
+      "date": 1435533482322
+    },
+    {
+      "type": "edit",
+      "id": "bab58a4674c0435d",
+      "item": {
+        "type": "code",
+        "id": "bab58a4674c0435d",
+        "text": "gpasswd -a demo sudo"
+      },
+      "date": 1435533487544
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597"
+      ],
+      "id": "bab58a4674c0435d",
+      "date": 1435533498403
+    },
+    {
+      "type": "edit",
+      "id": "c3383b4dc1356597",
+      "item": {
+        "type": "paragraph",
+        "id": "c3383b4dc1356597",
+        "text": "Now your user can run commands with super user privileges! For more information about how this works, check out this sudoers tutorial."
+      },
+      "date": 1435534147888
+    },
+    {
+      "type": "add",
+      "id": "8621c3fa2b639151",
+      "item": {
+        "type": "paragraph",
+        "id": "8621c3fa2b639151",
+        "text": "<H3>Add Public Key Authentication (Recommended)"
+      },
+      "after": "c3383b4dc1356597",
+      "date": 1435534166674
+    },
+    {
+      "type": "add",
+      "id": "4cc04d35413172f4",
+      "item": {
+        "type": "paragraph",
+        "id": "4cc04d35413172f4",
+        "text": "The next step in securing your server is to set up public key authentication for your new user. Setting this up will increase the security of your server by requiring a private SSH key to log in."
+      },
+      "after": "8621c3fa2b639151",
+      "date": 1435534179668
+    },
+    {
+      "type": "add",
+      "id": "c3507529910c1c67",
+      "item": {
+        "type": "paragraph",
+        "id": "c3507529910c1c67",
+        "text": "<H3>Generate a Key Pair"
+      },
+      "after": "4cc04d35413172f4",
+      "date": 1435534185740
+    },
+    {
+      "type": "add",
+      "id": "9fbb2ae4a9b5615c",
+      "item": {
+        "type": "paragraph",
+        "id": "9fbb2ae4a9b5615c",
+        "text": "If you do not already have an SSH key pair, which consists of a public and private key, you need to generate one. If you already have a key that you want to use, skip to the Copy the Public Key step."
+      },
+      "after": "c3507529910c1c67",
+      "date": 1435534193892
+    },
+    {
+      "type": "add",
+      "id": "319d34cf9c8cf472",
+      "item": {
+        "type": "paragraph",
+        "id": "319d34cf9c8cf472",
+        "text": "To generate a new key pair, enter the following command at the terminal of your local machine (ie. your computer):\n\n    ssh-keygen\n\nAssuming your local user is called \"localuser\", you will see output that looks like the following:\n\nssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/localuser/.ssh/id_rsa):\n\nHit return to accept this file name and path (or enter a new name).\n\nNext, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication.\n\nThis generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!"
+      },
+      "after": "9fbb2ae4a9b5615c",
+      "date": 1435534221586
+    },
+    {
+      "type": "add",
+      "id": "9c03e97119757794",
+      "item": {
+        "type": "paragraph",
+        "id": "9c03e97119757794",
+        "text": "<H3>Copy the Public Key"
+      },
+      "after": "319d34cf9c8cf472",
+      "date": 1435534228003
+    },
+    {
+      "type": "add",
+      "id": "7cbf63f4b6887043",
+      "item": {
+        "type": "paragraph",
+        "id": "7cbf63f4b6887043",
+        "text": "After generating an SSH key pair, you will want to copy your public key to your new server. We will cover two easy ways to do this."
+      },
+      "after": "9c03e97119757794",
+      "date": 1435534251228
+    },
+    {
+      "type": "add",
+      "id": "4405a8f93edd25ed",
+      "item": {
+        "type": "paragraph",
+        "id": "4405a8f93edd25ed",
+        "text": "<H3>Use ssh-copy-id"
+      },
+      "after": "7cbf63f4b6887043",
+      "date": 1435534256036
+    },
+    {
+      "type": "add",
+      "id": "bf59a2880d25e5b5",
+      "item": {
+        "type": "paragraph",
+        "id": "bf59a2880d25e5b5",
+        "text": "If your local machine has the ssh-copy-id script installed, you can use it to install your public key to any user that you have login credentials for."
+      },
+      "after": "4405a8f93edd25ed",
+      "date": 1435534263352
+    },
+    {
+      "type": "add",
+      "id": "6800db28e7d34f6d",
+      "item": {
+        "type": "paragraph",
+        "id": "6800db28e7d34f6d",
+        "text": "Run the ssh-copy-id script by specifying the user and IP address of the server that you want to install the key on, like this:\n\n    ssh-copy-id demo@SERVER_IP_ADDRESS\n\nAfter providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+      },
+      "after": "bf59a2880d25e5b5",
+      "date": 1435534268892
+    },
+    {
+      "type": "edit",
+      "id": "4405a8f93edd25ed",
+      "item": {
+        "type": "html",
+        "id": "4405a8f93edd25ed",
+        "text": "<H3>Use ssh-copy-id"
+      },
+      "date": 1435534271651
+    },
+    {
+      "type": "edit",
+      "id": "9c03e97119757794",
+      "item": {
+        "type": "html",
+        "id": "9c03e97119757794",
+        "text": "<H3>Copy the Public Key"
+      },
+      "date": 1435534272935
+    },
+    {
+      "type": "edit",
+      "id": "c3507529910c1c67",
+      "item": {
+        "type": "html",
+        "id": "c3507529910c1c67",
+        "text": "<H3>Generate a Key Pair"
+      },
+      "date": 1435534277937
+    },
+    {
+      "type": "edit",
+      "id": "8621c3fa2b639151",
+      "item": {
+        "type": "html",
+        "id": "8621c3fa2b639151",
+        "text": "<H3>Add Public Key Authentication (Recommended)"
+      },
+      "date": 1435534281011
+    },
+    {
+      "type": "remove",
+      "id": "8621c3fa2b639151",
+      "date": 1435534328593
+    },
+    {
+      "type": "remove",
+      "id": "4cc04d35413172f4",
+      "date": 1435534336368
+    },
+    {
+      "type": "remove",
+      "id": "c3507529910c1c67",
+      "date": 1435534344215
+    },
+    {
+      "type": "remove",
+      "id": "9fbb2ae4a9b5615c",
+      "date": 1435534350622
+    },
+    {
+      "type": "remove",
+      "id": "319d34cf9c8cf472",
+      "date": 1435534368123
+    },
+    {
+      "type": "remove",
+      "id": "9c03e97119757794",
+      "date": 1435534436512
+    },
+    {
+      "type": "remove",
+      "id": "4405a8f93edd25ed",
+      "date": 1435534441354
+    },
+    {
+      "type": "remove",
+      "id": "7cbf63f4b6887043",
+      "date": 1435534446993
+    },
+    {
+      "type": "remove",
+      "id": "bf59a2880d25e5b5",
+      "date": 1435534454809
+    },
+    {
+      "type": "remove",
+      "id": "6800db28e7d34f6d",
+      "date": 1435534464776
+    },
+    {
+      "type": "edit",
+      "id": "c3383b4dc1356597",
+      "item": {
+        "type": "paragraph",
+        "id": "c3383b4dc1356597",
+        "text": "Now your user can run commands with super user privileges! For more information about how this works, check out this sudoers tutorial - [https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos digitalocean.com]"
+      },
+      "date": 1435534809912
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5fe7fb361e8f7d7f"
+      },
+      "id": "5fe7fb361e8f7d7f",
+      "type": "add",
+      "after": "c3383b4dc1356597",
+      "date": 1435562328056
+    },
+    {
+      "type": "edit",
+      "id": "5fe7fb361e8f7d7f",
+      "item": {
+        "type": "reference",
+        "id": "5fe7fb361e8f7d7f",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "set-up-your-ssh-keys",
+        "title": "Set up Your SSH Keys",
+        "text": "The next step in securing your server is to set up public key authentication for your new user. Setting this up will increase the security of your server by requiring a private SSH key to log in."
+      },
+      "date": 1435562330532
+    },
+    {
+      "type": "edit",
+      "id": "5fe7fb361e8f7d7f",
+      "item": {
+        "type": "reference",
+        "id": "5fe7fb361e8f7d7f",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "set-up-your-ssh-keys",
+        "title": "Set up Your SSH Keys",
+        "text": "If you haven't done already we are going to have to set up ssh keys on the server for this user."
+      },
+      "date": 1435562373075
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0e70d5dff364e3d6"
+      },
+      "id": "0e70d5dff364e3d6",
+      "type": "add",
+      "after": "5fe7fb361e8f7d7f",
+      "date": 1435563317503
+    },
+    {
+      "type": "edit",
+      "id": "0e70d5dff364e3d6",
+      "item": {
+        "type": "paragraph",
+        "id": "0e70d5dff364e3d6",
+        "text": "To list all users you can use:\n"
+      },
+      "date": 1435563328019
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "be30a666a1b2a485"
+      },
+      "id": "be30a666a1b2a485",
+      "type": "add",
+      "after": "0e70d5dff364e3d6",
+      "date": 1435563331623
+    },
+    {
+      "type": "edit",
+      "id": "be30a666a1b2a485",
+      "item": {
+        "type": "code",
+        "id": "be30a666a1b2a485",
+        "text": "cut -d: -f1 /etc/passwd"
+      },
+      "date": 1435563334240
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "0e70d5dff364e3d6",
+        "5fe7fb361e8f7d7f",
+        "be30a666a1b2a485"
+      ],
+      "id": "0e70d5dff364e3d6",
+      "date": 1435563338931
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "5fe7fb361e8f7d7f"
+      ],
+      "id": "be30a666a1b2a485",
+      "date": 1435563340667
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "12e902680735c5fa"
+      },
+      "id": "12e902680735c5fa",
+      "type": "add",
+      "after": "5fe7fb361e8f7d7f",
+      "date": 1435563375312
+    },
+    {
+      "type": "edit",
+      "id": "12e902680735c5fa",
+      "item": {
+        "type": "paragraph",
+        "id": "12e902680735c5fa",
+        "text": "To remove/delete a user, first you can use:"
+      },
+      "date": 1435563381764
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b954c1e37603a04d"
+      },
+      "id": "b954c1e37603a04d",
+      "type": "add",
+      "after": "12e902680735c5fa",
+      "date": 1435563384329
+    },
+    {
+      "type": "edit",
+      "id": "b954c1e37603a04d",
+      "item": {
+        "type": "code",
+        "id": "b954c1e37603a04d",
+        "text": "sudo userdel username"
+      },
+      "date": 1435563386660
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "5fe7fb361e8f7d7f",
+        "b954c1e37603a04d"
+      ],
+      "id": "12e902680735c5fa",
+      "date": 1435563388626
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "b954c1e37603a04d",
+        "5fe7fb361e8f7d7f"
+      ],
+      "id": "b954c1e37603a04d",
+      "date": 1435563392114
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ad3cb728d59317ba"
+      },
+      "id": "ad3cb728d59317ba",
+      "type": "add",
+      "after": "5fe7fb361e8f7d7f",
+      "date": 1435563431640
+    },
+    {
+      "type": "edit",
+      "id": "ad3cb728d59317ba",
+      "item": {
+        "type": "code",
+        "id": "ad3cb728d59317ba",
+        "text": "userdel -r vivek"
+      },
+      "date": 1435563445139
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8cd94f4e07d595cb"
+      },
+      "id": "8cd94f4e07d595cb",
+      "type": "add",
+      "after": "ad3cb728d59317ba",
+      "date": 1435563447215
+    },
+    {
+      "type": "edit",
+      "id": "8cd94f4e07d595cb",
+      "item": {
+        "type": "paragraph",
+        "id": "8cd94f4e07d595cb",
+        "text": "To remove the user's home directory pass the -r option to userdel, enter:"
+      },
+      "date": 1435563460356
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "b954c1e37603a04d",
+        "8cd94f4e07d595cb",
+        "5fe7fb361e8f7d7f",
+        "ad3cb728d59317ba"
+      ],
+      "id": "8cd94f4e07d595cb",
+      "date": 1435563463357
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "b954c1e37603a04d",
+        "8cd94f4e07d595cb",
+        "ad3cb728d59317ba",
+        "5fe7fb361e8f7d7f"
+      ],
+      "id": "ad3cb728d59317ba",
+      "date": 1435563465516
+    },
+    {
+      "type": "edit",
+      "id": "b954c1e37603a04d",
+      "item": {
+        "type": "code",
+        "id": "b954c1e37603a04d",
+        "text": "userdel username"
+      },
+      "date": 1435563488460
+    },
+    {
+      "type": "edit",
+      "id": "b954c1e37603a04d",
+      "item": {
+        "type": "code",
+        "id": "b954c1e37603a04d",
+        "text": "userdel vivek"
+      },
+      "date": 1435563498873
+    },
+    {
+      "type": "edit",
+      "id": "12e902680735c5fa",
+      "item": {
+        "type": "paragraph",
+        "id": "12e902680735c5fa",
+        "text": "As an example to remove/delete a user \"vivek\", you can use:"
+      },
+      "date": 1435563524558
+    },
+    {
+      "type": "edit",
+      "id": "8cd94f4e07d595cb",
+      "item": {
+        "type": "paragraph",
+        "id": "8cd94f4e07d595cb",
+        "text": "If you wanted to remove the user's home directory as well you would pass the -r option to userdel, enter:"
+      },
+      "date": 1435563555030
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a4a00d69c56430c6"
+      },
+      "id": "a4a00d69c56430c6",
+      "type": "add",
+      "after": "5fe7fb361e8f7d7f",
+      "date": 1435563566278
+    },
+    {
+      "type": "edit",
+      "id": "a4a00d69c56430c6",
+      "item": {
+        "type": "html",
+        "id": "a4a00d69c56430c6",
+        "text": "<H3>Testing your user setup"
+      },
+      "date": 1435563583760
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "a4a00d69c56430c6",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "b954c1e37603a04d",
+        "8cd94f4e07d595cb",
+        "ad3cb728d59317ba",
+        "5fe7fb361e8f7d7f"
+      ],
+      "id": "a4a00d69c56430c6",
+      "date": 1435563589493
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fd8578c2c4b16012"
+      },
+      "id": "fd8578c2c4b16012",
+      "type": "add",
+      "after": "5fe7fb361e8f7d7f",
+      "date": 1435563593435
+    },
+    {
+      "type": "edit",
+      "id": "fd8578c2c4b16012",
+      "item": {
+        "type": "paragraph",
+        "id": "fd8578c2c4b16012",
+        "text": "Now you might need / want to:"
+      },
+      "date": 1435563603408
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "a4a00d69c56430c6",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "b954c1e37603a04d",
+        "8cd94f4e07d595cb",
+        "ad3cb728d59317ba",
+        "fd8578c2c4b16012",
+        "5fe7fb361e8f7d7f"
+      ],
+      "id": "fd8578c2c4b16012",
+      "date": 1435563605371
+    },
+    {
+      "type": "move",
+      "order": [
+        "c8dd97f93b446097",
+        "77569de864421bfc",
+        "39a17621092c9200",
+        "6cbe4f4832216bc8",
+        "e78091641497f840",
+        "4d6c55d380873088",
+        "9daa0f9d90827912",
+        "ab980fa178d66d0e",
+        "91979e3ce5f32d7c",
+        "9aaf0e5727a5baaa",
+        "96da856d8f414cc8",
+        "bab58a4674c0435d",
+        "c3383b4dc1356597",
+        "5fe7fb361e8f7d7f",
+        "a4a00d69c56430c6",
+        "0e70d5dff364e3d6",
+        "be30a666a1b2a485",
+        "12e902680735c5fa",
+        "b954c1e37603a04d",
+        "8cd94f4e07d595cb",
+        "ad3cb728d59317ba",
+        "fd8578c2c4b16012"
+      ],
+      "id": "5fe7fb361e8f7d7f",
+      "date": 1435565812329
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a92db56934883888"
+      },
+      "id": "a92db56934883888",
+      "type": "add",
+      "after": "fd8578c2c4b16012",
+      "date": 1435578613399,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "edit",
+      "id": "a92db56934883888",
+      "item": {
+        "type": "video",
+        "id": "a92db56934883888",
+        "text": "VIMEO 132083327\nTutorial to show how to set up your [[DigitalOcean]] server with a user and give that user [[sudo]] permissions.\n\n"
+      },
+      "date": 1435578654459
+    },
+    {
+      "type": "edit",
+      "id": "a92db56934883888",
+      "item": {
+        "type": "video",
+        "id": "a92db56934883888",
+        "text": "VIMEO 132083327\nTutorial to show how to set up your [[DigitalOcean]] server with a user and give that user [[sudo]] permissions.\n\n"
+      },
+      "date": 1435578689759
+    },
+    {
+      "type": "fork",
+      "date": 1435578747129
+    }
+  ]
+}

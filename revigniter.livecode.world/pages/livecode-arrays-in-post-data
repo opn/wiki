@@ -1,0 +1,647 @@
+{
+  "title": "LiveCode Arrays in Post Data",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a734de0d3b064d00",
+      "text": "You can send LiveCode arrays to revIgniter using [[POST]]. For this to work the following headers must be sent along with the POST data:  [http://revigniter.com/userGuide/libraries/input.html revigniter.com]"
+    },
+    {
+      "type": "code",
+      "id": "1919824bcf5eaa8f",
+      "text": "Content-Type: application/lc.array"
+    },
+    {
+      "type": "paragraph",
+      "id": "da0f54491ec6bb49",
+      "text": "or"
+    },
+    {
+      "type": "code",
+      "id": "c18f37fbf2ffcb23",
+      "text": "Content-Type: application/lc.array.compressed"
+    },
+    {
+      "type": "paragraph",
+      "id": "edec475526d39046",
+      "text": " respectively in case you like to send your array in compressed form"
+    },
+    {
+      "type": "markdown",
+      "id": "28c147eee17de7d8",
+      "text": "# Use"
+    },
+    {
+      "type": "code",
+      "id": "6ade30cc3561a9e1",
+      "text": "base64Encode(arrayEncode(myArray))"
+    },
+    {
+      "type": "paragraph",
+      "id": "764769e671b89b35",
+      "text": "or\n"
+    },
+    {
+      "type": "code",
+      "id": "ecf8946700c52519",
+      "text": "base64Encode(compress(arrayEncode(myArray)))"
+    },
+    {
+      "type": "paragraph",
+      "id": "b5998ab313d9be54",
+      "text": "to prepare LiveCode arrays on the client side.\nThen format your data using LiveCode's libURLFormData() function like:"
+    },
+    {
+      "type": "code",
+      "id": "1d43fdd18bd0c8e7",
+      "text": "put libURLFormData(\"arrayName\", tMyPreparedArray, \"anotherArrayName\", tMyOtherPreparedArray, \"keyForSomeString\", \"myString\") into tDataToSend"
+    },
+    {
+      "type": "paragraph",
+      "id": "7c3b537c341dfd79",
+      "text": "Set the correct header and send the data to revIgniter:"
+    },
+    {
+      "type": "code",
+      "id": "01d221e48c4256ed",
+      "text": "set the httpHeaders to \"Content-Type: application/lc.array.compressed\"\npost tDataToSend to URL \"http://mysite.com/mycontroller/\""
+    },
+    {
+      "type": "paragraph",
+      "id": "1b3a5874494bf0a7",
+      "text": "On the server side you can retrieve your data like:"
+    },
+    {
+      "type": "code",
+      "id": "3e3c99b8712d2aeb",
+      "text": "put rigVarPost(\"arrayName\") into tMyArray"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "LiveCode Arrays in Post Data",
+        "story": []
+      },
+      "date": 1459873014277
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a734de0d3b064d00"
+      },
+      "id": "a734de0d3b064d00",
+      "type": "add",
+      "date": 1459873015446
+    },
+    {
+      "type": "edit",
+      "id": "a734de0d3b064d00",
+      "item": {
+        "type": "paragraph",
+        "id": "a734de0d3b064d00",
+        "text": "You can send LiveCode arrays to revIgniter using POST. For this to work the following headers must be sent along with the POST data: \"Content-Type: application/lc.array\" or \"Content-Type: application/lc.array.compressed\" respectively in case you like to send your array in compressed form.\nUse\n\nbase64Encode(arrayEncode(myArray))\nor\nbase64Encode(compress(arrayEncode(myArray)))\nto prepare LiveCode arrays on the client side.\nThen format your data using LiveCode's libURLFormData() function like:\n\nput libURLFormData(\"arrayName\", tMyPreparedArray, \"anotherArrayName\", tMyOtherPreparedArray, \"keyForSomeString\", \"myString\") into tDataToSend\nSet the correct header and send the data to revIgniter:\n\nset the httpHeaders to \"Content-Type: application/lc.array.compressed\"\npost tDataToSend to URL \"http://mysite.com/mycontroller/\"\nOn the server side you can retrieve your data like:\n\nput rigVarPost(\"arrayName\") into tMyArray"
+      },
+      "date": 1459873035668
+    },
+    {
+      "type": "edit",
+      "id": "a734de0d3b064d00",
+      "item": {
+        "type": "paragraph",
+        "id": "a734de0d3b064d00",
+        "text": "You can send LiveCode arrays to revIgniter using POST. For this to work the following headers must be sent along with the POST data: \"Content-Type: application/lc.array\" or \"Content-Type: application/lc.array.compressed\" respectively in case you like to send your array in compressed form [http://revigniter.com/userGuide/libraries/input.html revigniter.com]"
+      },
+      "date": 1459873065875
+    },
+    {
+      "type": "add",
+      "id": "28c147eee17de7d8",
+      "item": {
+        "type": "paragraph",
+        "id": "28c147eee17de7d8",
+        "text": "# Use"
+      },
+      "after": "a734de0d3b064d00",
+      "date": 1459873070491
+    },
+    {
+      "type": "add",
+      "id": "897f7aff498283aa",
+      "item": {
+        "type": "paragraph",
+        "id": "897f7aff498283aa",
+        "text": "\nbase64Encode(arrayEncode(myArray))"
+      },
+      "after": "28c147eee17de7d8",
+      "date": 1459873073115
+    },
+    {
+      "type": "add",
+      "id": "764769e671b89b35",
+      "item": {
+        "type": "paragraph",
+        "id": "764769e671b89b35",
+        "text": "or\n"
+      },
+      "after": "897f7aff498283aa",
+      "date": 1459873076580
+    },
+    {
+      "type": "add",
+      "id": "bd8e254df26c733a",
+      "item": {
+        "type": "paragraph",
+        "id": "bd8e254df26c733a",
+        "text": "base64Encode(compress(arrayEncode(myArray)))"
+      },
+      "after": "764769e671b89b35",
+      "date": 1459873078285
+    },
+    {
+      "type": "add",
+      "id": "b5998ab313d9be54",
+      "item": {
+        "type": "paragraph",
+        "id": "b5998ab313d9be54",
+        "text": "to prepare LiveCode arrays on the client side.\nThen format your data using LiveCode's libURLFormData() function like:"
+      },
+      "after": "bd8e254df26c733a",
+      "date": 1459873080732
+    },
+    {
+      "type": "add",
+      "id": "94a46357136c9399",
+      "item": {
+        "type": "paragraph",
+        "id": "94a46357136c9399",
+        "text": "\nput libURLFormData(\"arrayName\", tMyPreparedArray, \"anotherArrayName\", tMyOtherPreparedArray, \"keyForSomeString\", \"myString\") into tDataToSend"
+      },
+      "after": "b5998ab313d9be54",
+      "date": 1459873086668
+    },
+    {
+      "type": "add",
+      "id": "7c3b537c341dfd79",
+      "item": {
+        "type": "paragraph",
+        "id": "7c3b537c341dfd79",
+        "text": "Set the correct header and send the data to revIgniter:"
+      },
+      "after": "94a46357136c9399",
+      "date": 1459873090740
+    },
+    {
+      "type": "add",
+      "id": "bf51774c6b98b3a2",
+      "item": {
+        "type": "paragraph",
+        "id": "bf51774c6b98b3a2",
+        "text": "\nset the httpHeaders to \"Content-Type: application/lc.array.compressed\"\npost tDataToSend to URL \"http://mysite.com/mycontroller/\""
+      },
+      "after": "7c3b537c341dfd79",
+      "date": 1459873098548
+    },
+    {
+      "type": "add",
+      "id": "1b3a5874494bf0a7",
+      "item": {
+        "type": "paragraph",
+        "id": "1b3a5874494bf0a7",
+        "text": "On the server side you can retrieve your data like:"
+      },
+      "after": "bf51774c6b98b3a2",
+      "date": 1459873100763
+    },
+    {
+      "type": "edit",
+      "id": "28c147eee17de7d8",
+      "item": {
+        "type": "markdown",
+        "id": "28c147eee17de7d8",
+        "text": "# Use"
+      },
+      "date": 1459873102591
+    },
+    {
+      "type": "add",
+      "id": "3b97a6ade56e354b",
+      "item": {
+        "type": "paragraph",
+        "id": "3b97a6ade56e354b",
+        "text": "\nput rigVarPost(\"arrayName\") into tMyArray"
+      },
+      "after": "1b3a5874494bf0a7",
+      "date": 1459873108258
+    },
+    {
+      "type": "edit",
+      "id": "a734de0d3b064d00",
+      "item": {
+        "type": "paragraph",
+        "id": "a734de0d3b064d00",
+        "text": "You can send LiveCode arrays to revIgniter using [[POST]]. "
+      },
+      "date": 1459873125156
+    },
+    {
+      "type": "add",
+      "id": "a099eff1d621cb0a",
+      "item": {
+        "type": "paragraph",
+        "id": "a099eff1d621cb0a",
+        "text": "For this to work the following headers must be sent along with the POST data:"
+      },
+      "after": "a734de0d3b064d00",
+      "date": 1459873135221
+    },
+    {
+      "type": "add",
+      "id": "977ba3786f0a6fda",
+      "item": {
+        "type": "paragraph",
+        "id": "977ba3786f0a6fda",
+        "text": "Content-Type: application/lc.array"
+      },
+      "after": "a099eff1d621cb0a",
+      "date": 1459873143047
+    },
+    {
+      "type": "add",
+      "id": "da0f54491ec6bb49",
+      "item": {
+        "type": "paragraph",
+        "id": "da0f54491ec6bb49",
+        "text": "or"
+      },
+      "after": "977ba3786f0a6fda",
+      "date": 1459873147845
+    },
+    {
+      "type": "add",
+      "id": "bcafd1951b26bcb6",
+      "item": {
+        "type": "paragraph",
+        "id": "bcafd1951b26bcb6",
+        "text": "Content-Type: application/lc.array.compressed"
+      },
+      "after": "da0f54491ec6bb49",
+      "date": 1459873152901
+    },
+    {
+      "type": "add",
+      "id": "edec475526d39046",
+      "item": {
+        "type": "paragraph",
+        "id": "edec475526d39046",
+        "text": " respectively in case you like to send your array in compressed form"
+      },
+      "after": "bcafd1951b26bcb6",
+      "date": 1459873161926
+    },
+    {
+      "type": "remove",
+      "id": "a099eff1d621cb0a",
+      "date": 1459873169878
+    },
+    {
+      "type": "edit",
+      "id": "a734de0d3b064d00",
+      "item": {
+        "type": "paragraph",
+        "id": "a734de0d3b064d00",
+        "text": "You can send LiveCode arrays to revIgniter using [[POST]]. For this to work the following headers must be sent along with the POST data:  [http://revigniter.com/userGuide/libraries/input.html revigniter.com]"
+      },
+      "date": 1459873177447
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1919824bcf5eaa8f"
+      },
+      "id": "1919824bcf5eaa8f",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873183552
+    },
+    {
+      "type": "move",
+      "order": [
+        "a734de0d3b064d00",
+        "1919824bcf5eaa8f",
+        "977ba3786f0a6fda",
+        "da0f54491ec6bb49",
+        "bcafd1951b26bcb6",
+        "edec475526d39046",
+        "28c147eee17de7d8",
+        "897f7aff498283aa",
+        "764769e671b89b35",
+        "bd8e254df26c733a",
+        "b5998ab313d9be54",
+        "94a46357136c9399",
+        "7c3b537c341dfd79",
+        "bf51774c6b98b3a2",
+        "1b3a5874494bf0a7",
+        "3b97a6ade56e354b"
+      ],
+      "id": "1919824bcf5eaa8f",
+      "date": 1459873185160
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c18f37fbf2ffcb23"
+      },
+      "id": "c18f37fbf2ffcb23",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873186464
+    },
+    {
+      "type": "move",
+      "order": [
+        "a734de0d3b064d00",
+        "1919824bcf5eaa8f",
+        "977ba3786f0a6fda",
+        "da0f54491ec6bb49",
+        "c18f37fbf2ffcb23",
+        "bcafd1951b26bcb6",
+        "edec475526d39046",
+        "28c147eee17de7d8",
+        "897f7aff498283aa",
+        "764769e671b89b35",
+        "bd8e254df26c733a",
+        "b5998ab313d9be54",
+        "94a46357136c9399",
+        "7c3b537c341dfd79",
+        "bf51774c6b98b3a2",
+        "1b3a5874494bf0a7",
+        "3b97a6ade56e354b"
+      ],
+      "id": "c18f37fbf2ffcb23",
+      "date": 1459873188818
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "01d221e48c4256ed"
+      },
+      "id": "01d221e48c4256ed",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873190912
+    },
+    {
+      "type": "move",
+      "order": [
+        "a734de0d3b064d00",
+        "1919824bcf5eaa8f",
+        "977ba3786f0a6fda",
+        "da0f54491ec6bb49",
+        "c18f37fbf2ffcb23",
+        "bcafd1951b26bcb6",
+        "edec475526d39046",
+        "28c147eee17de7d8",
+        "897f7aff498283aa",
+        "764769e671b89b35",
+        "bd8e254df26c733a",
+        "b5998ab313d9be54",
+        "94a46357136c9399",
+        "7c3b537c341dfd79",
+        "bf51774c6b98b3a2",
+        "01d221e48c4256ed",
+        "1b3a5874494bf0a7",
+        "3b97a6ade56e354b"
+      ],
+      "id": "01d221e48c4256ed",
+      "date": 1459873193087
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1d43fdd18bd0c8e7"
+      },
+      "id": "1d43fdd18bd0c8e7",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873194543
+    },
+    {
+      "type": "move",
+      "order": [
+        "a734de0d3b064d00",
+        "1919824bcf5eaa8f",
+        "977ba3786f0a6fda",
+        "da0f54491ec6bb49",
+        "c18f37fbf2ffcb23",
+        "bcafd1951b26bcb6",
+        "edec475526d39046",
+        "28c147eee17de7d8",
+        "897f7aff498283aa",
+        "764769e671b89b35",
+        "bd8e254df26c733a",
+        "b5998ab313d9be54",
+        "1d43fdd18bd0c8e7",
+        "94a46357136c9399",
+        "7c3b537c341dfd79",
+        "bf51774c6b98b3a2",
+        "01d221e48c4256ed",
+        "1b3a5874494bf0a7",
+        "3b97a6ade56e354b"
+      ],
+      "id": "1d43fdd18bd0c8e7",
+      "date": 1459873196953
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ecf8946700c52519"
+      },
+      "id": "ecf8946700c52519",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873199511
+    },
+    {
+      "type": "move",
+      "order": [
+        "a734de0d3b064d00",
+        "1919824bcf5eaa8f",
+        "977ba3786f0a6fda",
+        "da0f54491ec6bb49",
+        "c18f37fbf2ffcb23",
+        "bcafd1951b26bcb6",
+        "edec475526d39046",
+        "28c147eee17de7d8",
+        "897f7aff498283aa",
+        "764769e671b89b35",
+        "ecf8946700c52519",
+        "bd8e254df26c733a",
+        "b5998ab313d9be54",
+        "1d43fdd18bd0c8e7",
+        "94a46357136c9399",
+        "7c3b537c341dfd79",
+        "bf51774c6b98b3a2",
+        "01d221e48c4256ed",
+        "1b3a5874494bf0a7",
+        "3b97a6ade56e354b"
+      ],
+      "id": "ecf8946700c52519",
+      "date": 1459873200959
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6ade30cc3561a9e1"
+      },
+      "id": "6ade30cc3561a9e1",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873203670
+    },
+    {
+      "type": "move",
+      "order": [
+        "a734de0d3b064d00",
+        "1919824bcf5eaa8f",
+        "977ba3786f0a6fda",
+        "da0f54491ec6bb49",
+        "c18f37fbf2ffcb23",
+        "bcafd1951b26bcb6",
+        "edec475526d39046",
+        "28c147eee17de7d8",
+        "6ade30cc3561a9e1",
+        "897f7aff498283aa",
+        "764769e671b89b35",
+        "ecf8946700c52519",
+        "bd8e254df26c733a",
+        "b5998ab313d9be54",
+        "1d43fdd18bd0c8e7",
+        "94a46357136c9399",
+        "7c3b537c341dfd79",
+        "bf51774c6b98b3a2",
+        "01d221e48c4256ed",
+        "1b3a5874494bf0a7",
+        "3b97a6ade56e354b"
+      ],
+      "id": "6ade30cc3561a9e1",
+      "date": 1459873207496
+    },
+    {
+      "type": "remove",
+      "id": "977ba3786f0a6fda",
+      "date": 1459873357651
+    },
+    {
+      "type": "edit",
+      "id": "1919824bcf5eaa8f",
+      "item": {
+        "type": "code",
+        "id": "1919824bcf5eaa8f",
+        "text": "Content-Type: application/lc.array"
+      },
+      "date": 1459873360397
+    },
+    {
+      "type": "remove",
+      "id": "bcafd1951b26bcb6",
+      "date": 1459873363723
+    },
+    {
+      "type": "edit",
+      "id": "c18f37fbf2ffcb23",
+      "item": {
+        "type": "code",
+        "id": "c18f37fbf2ffcb23",
+        "text": "Content-Type: application/lc.array.compressed"
+      },
+      "date": 1459873366927
+    },
+    {
+      "type": "remove",
+      "id": "897f7aff498283aa",
+      "date": 1459873377651
+    },
+    {
+      "type": "edit",
+      "id": "6ade30cc3561a9e1",
+      "item": {
+        "type": "code",
+        "id": "6ade30cc3561a9e1",
+        "text": "base64Encode(arrayEncode(myArray))"
+      },
+      "date": 1459873380365
+    },
+    {
+      "type": "remove",
+      "id": "bd8e254df26c733a",
+      "date": 1459873384276
+    },
+    {
+      "type": "edit",
+      "id": "ecf8946700c52519",
+      "item": {
+        "type": "code",
+        "id": "ecf8946700c52519",
+        "text": "base64Encode(compress(arrayEncode(myArray)))"
+      },
+      "date": 1459873387144
+    },
+    {
+      "type": "remove",
+      "id": "94a46357136c9399",
+      "date": 1459873391996
+    },
+    {
+      "type": "edit",
+      "id": "1d43fdd18bd0c8e7",
+      "item": {
+        "type": "code",
+        "id": "1d43fdd18bd0c8e7",
+        "text": "put libURLFormData(\"arrayName\", tMyPreparedArray, \"anotherArrayName\", tMyOtherPreparedArray, \"keyForSomeString\", \"myString\") into tDataToSend"
+      },
+      "date": 1459873394655
+    },
+    {
+      "type": "remove",
+      "id": "bf51774c6b98b3a2",
+      "date": 1459873414365
+    },
+    {
+      "type": "edit",
+      "id": "01d221e48c4256ed",
+      "item": {
+        "type": "code",
+        "id": "01d221e48c4256ed",
+        "text": "set the httpHeaders to \"Content-Type: application/lc.array.compressed\"\npost tDataToSend to URL \"http://mysite.com/mycontroller/\""
+      },
+      "date": 1459873416982
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3e3c99b8712d2aeb"
+      },
+      "id": "3e3c99b8712d2aeb",
+      "type": "add",
+      "after": "3b97a6ade56e354b",
+      "date": 1459873421131
+    },
+    {
+      "type": "remove",
+      "id": "3b97a6ade56e354b",
+      "date": 1459873424486
+    },
+    {
+      "type": "edit",
+      "id": "3e3c99b8712d2aeb",
+      "item": {
+        "type": "code",
+        "id": "3e3c99b8712d2aeb",
+        "text": "put rigVarPost(\"arrayName\") into tMyArray"
+      },
+      "date": 1459873427679
+    }
+  ]
+}

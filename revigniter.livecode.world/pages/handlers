@@ -1,0 +1,588 @@
+{
+  "title": "Handlers",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e4e78a0e65c583f4",
+      "text": "In the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. "
+    },
+    {
+      "type": "paragraph",
+      "id": "faedb74a1b7cfe4c",
+      "text": "Another way to show your \"Hello World!\" message would be this:"
+    },
+    {
+      "type": "code",
+      "id": "a2436838e6816722",
+      "text": "example.com/index.lc/blog/index/"
+    },
+    {
+      "type": "paragraph",
+      "id": "169344781e0d563b",
+      "text": "The second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:"
+    },
+    {
+      "type": "code",
+      "id": "4babdde8ae20272b",
+      "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n  put \"Hello World!\"\nend index\n\ncommand comments\n  put \"Look at this!\"\nend comments"
+    },
+    {
+      "type": "paragraph",
+      "id": "6b2f0fa4d9978dcb",
+      "text": "[[Important]]:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers."
+    },
+    {
+      "type": "paragraph",
+      "id": "c1afb21c16e11b89",
+      "text": "Now load the following URL to see the comments handler:"
+    },
+    {
+      "type": "code",
+      "id": "e0dfe5a87b458287",
+      "text": "example.com/index.lc/blog/comments/"
+    },
+    {
+      "type": "paragraph",
+      "id": "2d537297bcc4b57c",
+      "text": "You should see your new message."
+    },
+    {
+      "type": "paragraph",
+      "id": "1be6c7252e735302",
+      "text": "[[Note]]:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error."
+    },
+    {
+      "type": "reference",
+      "id": "55074f8b48e9be3e",
+      "site": "revigniter.livecode.world",
+      "slug": "passing-uri-segments",
+      "title": "Passing URI Segments",
+      "text": "If your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:"
+    },
+    {
+      "type": "reference",
+      "id": "e3114f9183758009",
+      "site": "revigniter.livecode.world",
+      "slug": "remapping-handler-calls",
+      "title": "Remapping Handler Calls",
+      "text": "As noted above, the second segment of the URI typically determines which handler in the controller gets called. "
+    },
+    {
+      "type": "reference",
+      "id": "00bc50954167a6b8",
+      "site": "revigniter.livecode.world",
+      "slug": "private-handlers",
+      "title": "Private Handlers",
+      "text": "In some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. "
+    },
+    {
+      "type": "reference",
+      "id": "c01035810121246a",
+      "site": "revigniter.livecode.world",
+      "slug": "reserved-handler-names",
+      "title": "Reserved Handler Names",
+      "text": "Since your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Handlers",
+        "story": []
+      },
+      "date": 1459806828585
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e4e78a0e65c583f4",
+        "text": "In the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. Another way to show your \"Hello World!\" message would be this:\n\nexample.com/index.lc/blog/index/\nThe second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments\nImportant:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers.\nNow load the following URL to see the comments handler:\n\nexample.com/index.lc/blog/comments/\nYou should see your new message.\n\nNote:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error.\nPassing URI Segments to your Handlers\n\nIf your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:\n\nexample.com/index.lc/products/shoes/sandals/123\nThe function rigFetchSegment(3) will return \"sandals\" and rigFetchSegment(4) will return \"123\" (URI segments 3 and 4):\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,shoes\" into gControllerHandlers\n\ncommand shoes\n\tput rigFetchSegment(3) && rigFetchSegment(4)\nend shoes\nImportant:  If you are using the URI Routing feature, the re-routed segments must be retrieved using the rigFetchRsegment() function.\nDefining a Default Controller\n\nrevIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested. To specify a default controller, open your application/config/routes.lc file and set this variable:\n\nput \"Blog\" into gRoute[1][\"defaultController\"]\nWhere Blog is the name of the controller library you want used. If you now load your main index.lc file without specifying any URI segments you'll see your Hello World message by default.\n\nRemapping Handler Calls\n\nAs noted above, the second segment of the URI typically determines which handler in the controller gets called. revIgniter permits you to override this behavior through the use of the _remap handler:\n\ncommand _remap\n\t-- Some code here...\nend _remap\nImportant:  If your controller contains a handler named _remap, it will always get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which handler is called, allowing you to define your own handler routing rules.\nThe overridden handler call (typically the second segment of the URI) will be passed as a parameter to the _remap handler:\n\ncommand _remap pHandler\n\tif pHandler is \"someHandler\" then\n\t\tdo handler\n\telse\n\t\tdo defaultHandler\n\tend if\nend _remap\nProcessing Output\n\nrevIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. In some cases, however, you might want to post-process the finalized data in some way and send it to the browser yourself. revIgniter permits you to add a handler named _output to your controller that will receive the finalized output data.\n\nImportant:  If your controller contains a handler named _output, it will always be called by the output library instead of puting the finalized data directly. The first parameter of the handler will contain the finalized output.\n\nHere is an example:\n\ncommand _output pOutput\n\tput pOutput\nend _output\nPlease note that your _output handler will receive the data in its finalized state. Benchmark data will be rendered, cache files written (if you have caching enabled), and headers will be sent (if you use that feature) before it is handed off to the _output handler. If you are using this feature the page execution timer might not be perfectly accurate since it will not take into acccount any further processing you do. For an alternate way to control output before any of the final processing is done, please see the available handlers in the Output Library.\nPrivate Handlers\n\nIn some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. For example, if you were to have a handler like this:\n\ncommand _utility\n\t-- some code\nend _utility\nTrying to access it via the URL, like this, will not work:\n\nexample.com/index.lc/blog/_utility/\nOrganizing Your Controllers into Sub-folders\n\nIf you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this.\n\nSimply create folders within your application/controllers directory and place your controller libraries within them.\n\nNote:  When using this feature the first segment of your URI must specify the folder. For example, lets say you have a controller located here:\n\napplication/controllers/products/shoes.lc\nTo call the above controller your URI will look something like this:\n\nexample.com/index.lc/products/shoes/show/123\nEach of your sub-folders may contain a default controller which will be called if the URL contains only the sub-folder. Simply name your default controller as specified in your application/config/routes.lc file\n\nrevIgniter also permits you to remap your URIs using its URI Routing feature.\n\nReserved Handler Names\n\nSince your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library. See Reserved Names for a full list."
+      },
+      "id": "e4e78a0e65c583f4",
+      "date": 1459806832224
+    },
+    {
+      "type": "edit",
+      "id": "e4e78a0e65c583f4",
+      "item": {
+        "type": "paragraph",
+        "id": "e4e78a0e65c583f4",
+        "text": "In the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. "
+      },
+      "date": 1459806853113
+    },
+    {
+      "type": "add",
+      "id": "faedb74a1b7cfe4c",
+      "item": {
+        "type": "paragraph",
+        "id": "faedb74a1b7cfe4c",
+        "text": "Another way to show your \"Hello World!\" message would be this:"
+      },
+      "after": "e4e78a0e65c583f4",
+      "date": 1459806854888
+    },
+    {
+      "type": "add",
+      "id": "f32c5f3fc9d15f7e",
+      "item": {
+        "type": "paragraph",
+        "id": "f32c5f3fc9d15f7e",
+        "text": "\nexample.com/index.lc/blog/index/"
+      },
+      "after": "faedb74a1b7cfe4c",
+      "date": 1459806857023
+    },
+    {
+      "type": "add",
+      "id": "169344781e0d563b",
+      "item": {
+        "type": "paragraph",
+        "id": "169344781e0d563b",
+        "text": "The second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:"
+      },
+      "after": "f32c5f3fc9d15f7e",
+      "date": 1459806864112
+    },
+    {
+      "type": "add",
+      "id": "0c7c55247db0d915",
+      "item": {
+        "type": "paragraph",
+        "id": "0c7c55247db0d915",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments"
+      },
+      "after": "169344781e0d563b",
+      "date": 1459806870464
+    },
+    {
+      "type": "add",
+      "id": "6b2f0fa4d9978dcb",
+      "item": {
+        "type": "paragraph",
+        "id": "6b2f0fa4d9978dcb",
+        "text": "[[Important]]:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers."
+      },
+      "after": "0c7c55247db0d915",
+      "date": 1459806877743
+    },
+    {
+      "type": "add",
+      "id": "c1afb21c16e11b89",
+      "item": {
+        "type": "paragraph",
+        "id": "c1afb21c16e11b89",
+        "text": "Now load the following URL to see the comments handler:"
+      },
+      "after": "6b2f0fa4d9978dcb",
+      "date": 1459806879520
+    },
+    {
+      "type": "add",
+      "id": "ddad8e00d5a7b973",
+      "item": {
+        "type": "paragraph",
+        "id": "ddad8e00d5a7b973",
+        "text": "example.com/index.lc/blog/comments/"
+      },
+      "after": "c1afb21c16e11b89",
+      "date": 1459806883752
+    },
+    {
+      "type": "add",
+      "id": "2d537297bcc4b57c",
+      "item": {
+        "type": "paragraph",
+        "id": "2d537297bcc4b57c",
+        "text": "You should see your new message."
+      },
+      "after": "ddad8e00d5a7b973",
+      "date": 1459806887416
+    },
+    {
+      "type": "add",
+      "id": "1be6c7252e735302",
+      "item": {
+        "type": "paragraph",
+        "id": "1be6c7252e735302",
+        "text": "[[Note]]:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error."
+      },
+      "after": "2d537297bcc4b57c",
+      "date": 1459806896793
+    },
+    {
+      "type": "add",
+      "id": "3922deb4121b8730",
+      "item": {
+        "type": "paragraph",
+        "id": "3922deb4121b8730",
+        "text": "# Passing URI Segments to your Handlers"
+      },
+      "after": "1be6c7252e735302",
+      "date": 1459806901432
+    },
+    {
+      "type": "add",
+      "id": "ce43aea5116a66fd",
+      "item": {
+        "type": "paragraph",
+        "id": "ce43aea5116a66fd",
+        "text": "If your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:"
+      },
+      "after": "3922deb4121b8730",
+      "date": 1459806906513
+    },
+    {
+      "type": "add",
+      "id": "4d6170f5f73fb34d",
+      "item": {
+        "type": "paragraph",
+        "id": "4d6170f5f73fb34d",
+        "text": "\nexample.com/index.lc/products/shoes/sandals/123"
+      },
+      "after": "ce43aea5116a66fd",
+      "date": 1459806909161
+    },
+    {
+      "type": "add",
+      "id": "5dbe15cf43873211",
+      "item": {
+        "type": "paragraph",
+        "id": "5dbe15cf43873211",
+        "text": "The function rigFetchSegment(3) will return \"sandals\" and rigFetchSegment(4) will return \"123\" (URI segments 3 and 4):"
+      },
+      "after": "4d6170f5f73fb34d",
+      "date": 1459806912329
+    },
+    {
+      "type": "add",
+      "id": "9cc0d9bb9d65b842",
+      "item": {
+        "type": "paragraph",
+        "id": "9cc0d9bb9d65b842",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,shoes\" into gControllerHandlers\n\ncommand shoes\n\tput rigFetchSegment(3) && rigFetchSegment(4)\nend shoes"
+      },
+      "after": "5dbe15cf43873211",
+      "date": 1459806920449
+    },
+    {
+      "type": "add",
+      "id": "3205790f35559d64",
+      "item": {
+        "type": "paragraph",
+        "id": "3205790f35559d64",
+        "text": "Important:  If you are using the URI Routing feature, the re-routed segments must be retrieved using the rigFetchRsegment() function.\nDefining a Default Controller\n\nrevIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested. To specify a default controller, open your application/config/routes.lc file and set this variable:\n\nput \"Blog\" into gRoute[1][\"defaultController\"]\nWhere Blog is the name of the controller library you want used. If you now load your main index.lc file without specifying any URI segments you'll see your Hello World message by default.\n\nRemapping Handler Calls\n\nAs noted above, the second segment of the URI typically determines which handler in the controller gets called. revIgniter permits you to override this behavior through the use of the _remap handler:\n\ncommand _remap\n\t-- Some code here...\nend _remap\nImportant:  If your controller contains a handler named _remap, it will always get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which handler is called, allowing you to define your own handler routing rules.\nThe overridden handler call (typically the second segment of the URI) will be passed as a parameter to the _remap handler:\n\ncommand _remap pHandler\n\tif pHandler is \"someHandler\" then\n\t\tdo handler\n\telse\n\t\tdo defaultHandler\n\tend if\nend _remap\nProcessing Output\n\nrevIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. In some cases, however, you might want to post-process the finalized data in some way and send it to the browser yourself. revIgniter permits you to add a handler named _output to your controller that will receive the finalized output data.\n\nImportant:  If your controller contains a handler named _output, it will always be called by the output library instead of puting the finalized data directly. The first parameter of the handler will contain the finalized output.\n\nHere is an example:\n\ncommand _output pOutput\n\tput pOutput\nend _output\nPlease note that your _output handler will receive the data in its finalized state. Benchmark data will be rendered, cache files written (if you have caching enabled), and headers will be sent (if you use that feature) before it is handed off to the _output handler. If you are using this feature the page execution timer might not be perfectly accurate since it will not take into acccount any further processing you do. For an alternate way to control output before any of the final processing is done, please see the available handlers in the Output Library.\nPrivate Handlers\n\nIn some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. For example, if you were to have a handler like this:\n\ncommand _utility\n\t-- some code\nend _utility\nTrying to access it via the URL, like this, will not work:\n\nexample.com/index.lc/blog/_utility/\nOrganizing Your Controllers into Sub-folders\n\nIf you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this.\n\nSimply create folders within your application/controllers directory and place your controller libraries within them.\n\nNote:  When using this feature the first segment of your URI must specify the folder. For example, lets say you have a controller located here:\n\napplication/controllers/products/shoes.lc\nTo call the above controller your URI will look something like this:\n\nexample.com/index.lc/products/shoes/show/123\nEach of your sub-folders may contain a default controller which will be called if the URL contains only the sub-folder. Simply name your default controller as specified in your application/config/routes.lc file\n\nrevIgniter also permits you to remap your URIs using its URI Routing feature.\n\nReserved Handler Names\n\nSince your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library. See Reserved Names for a full list."
+      },
+      "after": "9cc0d9bb9d65b842",
+      "date": 1459806921012
+    },
+    {
+      "type": "edit",
+      "id": "3922deb4121b8730",
+      "item": {
+        "type": "markdown",
+        "id": "3922deb4121b8730",
+        "text": "# Passing URI Segments to your Handlers"
+      },
+      "date": 1459806925295
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "a2436838e6816722"
+      },
+      "after": "faedb74a1b7cfe4c",
+      "id": "a2436838e6816722",
+      "date": 1459806939576
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "4babdde8ae20272b"
+      },
+      "after": "169344781e0d563b",
+      "id": "4babdde8ae20272b",
+      "date": 1459806942571
+    },
+    {
+      "type": "remove",
+      "id": "f32c5f3fc9d15f7e",
+      "date": 1459806948959
+    },
+    {
+      "type": "edit",
+      "id": "a2436838e6816722",
+      "item": {
+        "type": "code",
+        "id": "a2436838e6816722",
+        "text": "example.com/index.lc/blog/index/"
+      },
+      "date": 1459806950549
+    },
+    {
+      "type": "remove",
+      "id": "0c7c55247db0d915",
+      "date": 1459806956425
+    },
+    {
+      "type": "edit",
+      "id": "4babdde8ae20272b",
+      "item": {
+        "type": "code",
+        "id": "4babdde8ae20272b",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments"
+      },
+      "date": 1459806959733
+    },
+    {
+      "type": "edit",
+      "id": "4babdde8ae20272b",
+      "item": {
+        "type": "code",
+        "id": "4babdde8ae20272b",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n  put \"Hello World!\"\nend index\n\ncommand comments\n  put \"Look at this!\"\nend comments"
+      },
+      "date": 1459806969932
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "e0dfe5a87b458287"
+      },
+      "after": "1be6c7252e735302",
+      "id": "e0dfe5a87b458287",
+      "date": 1459806979612
+    },
+    {
+      "type": "move",
+      "order": [
+        "e4e78a0e65c583f4",
+        "faedb74a1b7cfe4c",
+        "a2436838e6816722",
+        "169344781e0d563b",
+        "4babdde8ae20272b",
+        "6b2f0fa4d9978dcb",
+        "c1afb21c16e11b89",
+        "ddad8e00d5a7b973",
+        "e0dfe5a87b458287",
+        "2d537297bcc4b57c",
+        "1be6c7252e735302",
+        "3922deb4121b8730",
+        "ce43aea5116a66fd",
+        "4d6170f5f73fb34d",
+        "5dbe15cf43873211",
+        "9cc0d9bb9d65b842",
+        "3205790f35559d64"
+      ],
+      "id": "e0dfe5a87b458287",
+      "date": 1459806988599
+    },
+    {
+      "type": "remove",
+      "id": "ddad8e00d5a7b973",
+      "date": 1459806992211
+    },
+    {
+      "type": "edit",
+      "id": "e0dfe5a87b458287",
+      "item": {
+        "type": "code",
+        "id": "e0dfe5a87b458287",
+        "text": "example.com/index.lc/blog/comments/"
+      },
+      "date": 1459806994901
+    },
+    {
+      "type": "edit",
+      "id": "3922deb4121b8730",
+      "item": {
+        "type": "markdown",
+        "id": "3922deb4121b8730",
+        "text": "# [[Passing URI Segments to your Handlers]]"
+      },
+      "date": 1459807022334
+    },
+    {
+      "type": "edit",
+      "id": "3922deb4121b8730",
+      "item": {
+        "type": "markdown",
+        "id": "3922deb4121b8730",
+        "text": "# [[Passing URI Segments]] to your Handlers"
+      },
+      "date": 1459807032869
+    },
+    {
+      "type": "remove",
+      "id": "ce43aea5116a66fd",
+      "date": 1459807043249
+    },
+    {
+      "type": "remove",
+      "id": "4d6170f5f73fb34d",
+      "date": 1459807046080
+    },
+    {
+      "type": "remove",
+      "id": "5dbe15cf43873211",
+      "date": 1459807049783
+    },
+    {
+      "type": "remove",
+      "id": "9cc0d9bb9d65b842",
+      "date": 1459807053094
+    },
+    {
+      "type": "remove",
+      "id": "3205790f35559d64",
+      "date": 1459807091500
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "55074f8b48e9be3e"
+      },
+      "id": "55074f8b48e9be3e",
+      "type": "add",
+      "after": "3922deb4121b8730",
+      "date": 1459807794310
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "88fad455899f22a4"
+      },
+      "id": "88fad455899f22a4",
+      "type": "add",
+      "after": "55074f8b48e9be3e",
+      "date": 1459807795709
+    },
+    {
+      "type": "remove",
+      "id": "3922deb4121b8730",
+      "date": 1459807802649
+    },
+    {
+      "type": "edit",
+      "id": "55074f8b48e9be3e",
+      "item": {
+        "type": "reference",
+        "id": "55074f8b48e9be3e",
+        "site": "revigniter.livecode.world",
+        "slug": "passing-uri-segments",
+        "title": "Passing URI Segments",
+        "text": "If your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:"
+      },
+      "date": 1459807809784
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "af434a4f79a858c4",
+        "site": "revigniter.livecode.world",
+        "slug": "defining-a-default-controller",
+        "title": "Defining a Default Controller",
+        "text": "revIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested."
+      },
+      "after": "55074f8b48e9be3e",
+      "id": "af434a4f79a858c4",
+      "date": 1459807878917
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "e3114f9183758009",
+        "site": "revigniter.livecode.world",
+        "slug": "remapping-handler-calls",
+        "title": "Remapping Handler Calls",
+        "text": "As noted above, the second segment of the URI typically determines which handler in the controller gets called. "
+      },
+      "after": "af434a4f79a858c4",
+      "id": "e3114f9183758009",
+      "date": 1459807880966
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "e6d99ecd04806f7e",
+        "site": "revigniter.livecode.world",
+        "slug": "processing-output",
+        "title": "Processing Output",
+        "text": "revIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. "
+      },
+      "after": "e3114f9183758009",
+      "id": "e6d99ecd04806f7e",
+      "date": 1459807883163
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "00bc50954167a6b8",
+        "site": "revigniter.livecode.world",
+        "slug": "private-handlers",
+        "title": "Private Handlers",
+        "text": "In some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. "
+      },
+      "after": "e6d99ecd04806f7e",
+      "id": "00bc50954167a6b8",
+      "date": 1459807885123
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "2233cc4259ce1537",
+        "site": "revigniter.livecode.world",
+        "slug": "organizing-controllers-into-sub-folders",
+        "title": "Organizing Controllers into Sub-folders",
+        "text": "If you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this."
+      },
+      "after": "00bc50954167a6b8",
+      "id": "2233cc4259ce1537",
+      "date": 1459807888776
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "c01035810121246a",
+        "site": "revigniter.livecode.world",
+        "slug": "reserved-handler-names",
+        "title": "Reserved Handler Names",
+        "text": "Since your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library."
+      },
+      "after": "2233cc4259ce1537",
+      "id": "c01035810121246a",
+      "date": 1459807891640
+    },
+    {
+      "type": "remove",
+      "id": "af434a4f79a858c4",
+      "date": 1459807925027
+    },
+    {
+      "type": "remove",
+      "id": "e6d99ecd04806f7e",
+      "date": 1459807932153
+    },
+    {
+      "type": "remove",
+      "id": "2233cc4259ce1537",
+      "date": 1459807937933
+    },
+    {
+      "type": "remove",
+      "id": "88fad455899f22a4",
+      "date": 1459807944012
+    }
+  ]
+}

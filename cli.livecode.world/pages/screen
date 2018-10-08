@@ -1,0 +1,1431 @@
+{
+  "title": "Screen",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a104764d1521e4af",
+      "text": "[[Screen]] is a full-screen window manager that multiplexes a physical terminal between several processes, typically interactive shells. "
+    },
+    {
+      "type": "markdown",
+      "id": "e77cf7e47c3ed779",
+      "text": "# Using Screen with Livecode"
+    },
+    {
+      "type": "paragraph",
+      "id": "1dc7f2f8fb3a022b",
+      "text": "The reason to use screen is so that you can run a long standing command in the background, without the shell() function just hanging and blocking. You can call something like:"
+    },
+    {
+      "type": "code",
+      "id": "9119fabe77bf52c7",
+      "text": "screen -dmS fedwiki wiki"
+    },
+    {
+      "type": "markdown",
+      "id": "ba6244a29b948d40",
+      "text": "First is the d option, in conjunction with the m option. The dm option simply causes your screen to \"launch into the background,\" if you will  - [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "f9c7c697955bca08",
+      "text": " It means your screen will be \"detached\" instead of showing the screen when you type the command. You can omit this option if you aren't sure if the server will run (like when you're debugging) to show the screen as soon as it starts. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f4b277d732bb43fa",
+      "text": "This also means that if Screen itself hasn't been started already, it will be, then the command will be added to a new screen."
+    },
+    {
+      "type": "paragraph",
+      "id": "e6642e9e59489e53",
+      "text": "Next is the S option. This option is basically a \"vanity\" option. When you create a new screen, it is automatically assigned a \"title\" such as \"pts-1,\" \"pts-2,\" etc. This can be confusing. the S option is used to set your own \"title\" (more on this in a second) to your screen, making things easier to remember."
+    },
+    {
+      "type": "paragraph",
+      "id": "63d5cae8948e76ab",
+      "text": "Next is the title. This is very simply an easy-to-remember name for the screen you are creating. It can be any string of characters, except spaces, with some exceptions, though a good rule is to use words seperated by underscores (_) or dashes/hyphens (-). "
+    },
+    {
+      "type": "paragraph",
+      "id": "aeda06a25c972f84",
+      "text": "Lastly is the command. This should be obvious if you already have your server running. (Screen is, after all, more or less your last step.)"
+    },
+    {
+      "type": "code",
+      "id": "4ba9943af661e93b",
+      "text": "screen -list"
+    },
+    {
+      "type": "paragraph",
+      "id": "4c0bc1d30e44b68a",
+      "text": "This will return something like:"
+    },
+    {
+      "type": "code",
+      "id": "af2ed217582f5b2a",
+      "text": "There are screens on:\n               9999.counter-strike (Detached)\n1 Sockets in /tmp/uscreens/S-user."
+    },
+    {
+      "type": "paragraph",
+      "id": "8e19b6a0f78876fc",
+      "text": "It will look a little different. 9999 is the numeric identifier. This will generally change each time you make a new screen, and will certainly be different for you than \"9999.\" Then \"counter-strike\" is the title you assigned to the screen before. "
+    },
+    {
+      "type": "paragraph",
+      "id": "fc33b345c9cd3696",
+      "text": "To connect to a given screen, you use the r option."
+    },
+    {
+      "type": "code",
+      "id": "9baca71bff2e8e90",
+      "text": "screen -r identifier"
+    },
+    {
+      "type": "paragraph",
+      "id": "069d2c3cb96404a8",
+      "text": "This is how supposed to prevent \"session killing\". Need to investigate what bash is doing here:"
+    },
+    {
+      "type": "code",
+      "id": "a2478cb95de31f72",
+      "text": "screen -dmS test bash -c 'echo waiting 5 senconds...; sleep 5; exec bash'"
+    },
+    {
+      "type": "markdown",
+      "id": "3a343fa000053274",
+      "text": "# Tutorials"
+    },
+    {
+      "type": "markdown",
+      "id": "a859fecb7f6df10c",
+      "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* Taking Command of the Terminal with GNU Screen - [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]\n* Screen users manual - [https://www.gnu.org/software/screen/manual/screen.html gnu.org]\n* [http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ tecmint.com]\n* [http://askubuntu.com/questions/62562/run-a-program-with-gnu-screen-and-immediately-detach-after askubuntu.com]\n* [http://unix.stackexchange.com/questions/162133/run-script-in-a-screen stackexchange.com]"
+    },
+    {
+      "type": "video",
+      "id": "621861a0b4ef1181",
+      "text": "YOUTUBE hB6Y72DK8mc\nLearn how to use screen in this 2 minute tutorial - [http://www.rackaid.com/blog/linux-screen-tutorial-and-how-to/ rackaid.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8ff806b0edf1a558",
+      "text": "For an easy reference, here's a list of the most common screen commands that you'll want to know. This isn't exhaustive, but it should be enough for most users to get started using screen happily for most use cases."
+    },
+    {
+      "type": "code",
+      "id": "d024d54d8d478f6f",
+      "text": "Start Screen: screen\nDetatch Screen: Ctrl-a d\nRe-attach Screen: screen -x or screen -x PID\nSplit Horizontally: Ctrl-a S\nSplit Vertically: Ctrl-a |\nMove Between Windows: Ctrl-a Tab\nName Session: Ctrl-a A\nLog Session: Ctrl-a H\nNote Session: Ctrl-a h"
+    },
+    {
+      "type": "paragraph",
+      "id": "c7617c26d8a452ec",
+      "text": "Finally, if you want help on GNU Screen, use the man page (man screen) and its built-in help with Ctrl-a :help. Screen has quite a few advanced options that are beyond an introductory tutorial, so be sure to check out the man page when you have the basics down."
+    },
+    {
+      "type": "markdown",
+      "id": "bde81afaf6479efa",
+      "text": "# About"
+    },
+    {
+      "type": "paragraph",
+      "id": "78e584781aa1274c",
+      "text": "Each virtual terminal provides the functions of the DEC VT100 terminal and, in addition, several control functions from the ANSI X3.64 (ISO 6429) and ISO 2022 standards (e.g., insert/delete line and support for multiple character sets) - [https://www.gnu.org/software/screen/ gnu.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a0e4c6148f345695",
+      "text": "There is a scrollback history buffer for each virtual terminal and a copy-and-paste mechanism that allows the user to move text regions between windows. When screen is called, it creates a single window with a shell in it (or the specified command) and then gets out of your way so that you can use the program as you normally would. "
+    },
+    {
+      "type": "paragraph",
+      "id": "d46871a7749d0679",
+      "text": "Then, at any time, you can create new (full-screen) windows with other programs in them (including more shells), kill the current window, view a list of the active windows, turn output logging on and off, copy text between windows, view the scrollback history, switch between windows, etc. "
+    },
+    {
+      "type": "paragraph",
+      "id": "84b4238df7ca5f42",
+      "text": "All windows run their programs completely independent of each other. Programs continue to run when their window is currently not visible and even when the whole screen session is detached from the users terminal."
+    },
+    {
+      "type": "markdown",
+      "id": "add64eaf8b201deb",
+      "text": "# byobu\nLooks nice - [http://byobu.co/ byobu.co]"
+    },
+    {
+      "type": "paragraph",
+      "id": "39524c651109cfac",
+      "text": "You can install it on OSX with:"
+    },
+    {
+      "type": "code",
+      "id": "c25583413ed06200",
+      "text": "brew install byobu"
+    },
+    {
+      "type": "html",
+      "id": "78bcde2f92faf7fc",
+      "text": "<video src=\"http://people.canonical.com/~kirkland/byobu.mp4\" width=420 controls>"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Screen",
+        "story": []
+      },
+      "date": 1464368071797
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e73576baae45cd43"
+      },
+      "id": "e73576baae45cd43",
+      "type": "add",
+      "date": 1464368073352
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a104764d1521e4af",
+        "text": "[[Screen]] is a full-screen window manager that multiplexes a physical terminal between several processes, typically interactive shells. Each virtual terminal provides the functions of the DEC VT100 terminal and, in addition, several control functions from the ANSI X3.64 (ISO 6429) and ISO 2022 standards (e.g., insert/delete line and support for multiple character sets) - [https://www.gnu.org/software/screen/ gnu.org]"
+      },
+      "id": "a104764d1521e4af",
+      "date": 1464368078270
+    },
+    {
+      "type": "remove",
+      "id": "e73576baae45cd43",
+      "date": 1464368081036
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a0e4c6148f345695",
+        "text": "There is a scrollback history buffer for each virtual terminal and a copy-and-paste mechanism that allows the user to move text regions between windows. When screen is called, it creates a single window with a shell in it (or the specified command) and then gets out of your way so that you can use the program as you normally would. "
+      },
+      "after": "a104764d1521e4af",
+      "id": "a0e4c6148f345695",
+      "date": 1464368083193
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d46871a7749d0679",
+        "text": "Then, at any time, you can create new (full-screen) windows with other programs in them (including more shells), kill the current window, view a list of the active windows, turn output logging on and off, copy text between windows, view the scrollback history, switch between windows, etc. "
+      },
+      "after": "a0e4c6148f345695",
+      "id": "d46871a7749d0679",
+      "date": 1464368085237
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "84b4238df7ca5f42",
+        "text": "All windows run their programs completely independent of each other. Programs continue to run when their window is currently not visible and even when the whole screen session is detached from the users terminal."
+      },
+      "after": "d46871a7749d0679",
+      "id": "84b4238df7ca5f42",
+      "date": 1464368087145
+    },
+    {
+      "type": "edit",
+      "id": "a104764d1521e4af",
+      "item": {
+        "type": "paragraph",
+        "id": "a104764d1521e4af",
+        "text": "[[Screen]] is a full-screen window manager that multiplexes a physical terminal between several processes, typically interactive shells. "
+      },
+      "date": 1464368119324
+    },
+    {
+      "type": "add",
+      "id": "3a343fa000053274",
+      "item": {
+        "type": "paragraph",
+        "id": "3a343fa000053274",
+        "text": "Each virtual terminal provides the functions of the DEC VT100 terminal and, in addition, several control functions from the ANSI X3.64 (ISO 6429) and ISO 2022 standards (e.g., insert/delete line and support for multiple character sets) - [https://www.gnu.org/software/screen/ gnu.org]"
+      },
+      "after": "a104764d1521e4af",
+      "date": 1464368120093
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "621861a0b4ef1181"
+      },
+      "id": "621861a0b4ef1181",
+      "type": "add",
+      "after": "84b4238df7ca5f42",
+      "date": 1464368133854
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "621861a0b4ef1181",
+        "3a343fa000053274",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42"
+      ],
+      "id": "621861a0b4ef1181",
+      "date": 1464368135551
+    },
+    {
+      "type": "edit",
+      "id": "621861a0b4ef1181",
+      "item": {
+        "type": "video",
+        "id": "621861a0b4ef1181",
+        "text": "YOUTUBE hB6Y72DK8mc\n(double-click to edit caption)\n"
+      },
+      "date": 1464368142758
+    },
+    {
+      "type": "edit",
+      "id": "621861a0b4ef1181",
+      "item": {
+        "type": "video",
+        "id": "621861a0b4ef1181",
+        "text": "YOUTUBE hB6Y72DK8mc\nLearn how to use screen in this 2 minute tutorial. "
+      },
+      "date": 1464368169808
+    },
+    {
+      "type": "edit",
+      "id": "621861a0b4ef1181",
+      "item": {
+        "type": "video",
+        "id": "621861a0b4ef1181",
+        "text": "YOUTUBE hB6Y72DK8mc\nLearn how to use screen in this 2 minute tutorial - [http://www.rackaid.com/blog/linux-screen-tutorial-and-how-to/ rackaid.com]"
+      },
+      "date": 1464368191316
+    },
+    {
+      "type": "edit",
+      "id": "3a343fa000053274",
+      "item": {
+        "type": "paragraph",
+        "id": "3a343fa000053274",
+        "text": "# Tutorials"
+      },
+      "date": 1464368376012
+    },
+    {
+      "type": "add",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "paragraph",
+        "id": "a859fecb7f6df10c",
+        "text": "* https://www.mattcutts.com/blog/a-quick-tutorial-on-screen/"
+      },
+      "after": "3a343fa000053274",
+      "date": 1464368379994
+    },
+    {
+      "type": "add",
+      "id": "bde81afaf6479efa",
+      "item": {
+        "type": "paragraph",
+        "id": "bde81afaf6479efa",
+        "text": "# About"
+      },
+      "after": "a859fecb7f6df10c",
+      "date": 1464368386954
+    },
+    {
+      "type": "edit",
+      "id": "bde81afaf6479efa",
+      "item": {
+        "type": "markdown",
+        "id": "bde81afaf6479efa",
+        "text": "# About"
+      },
+      "date": 1464368388494
+    },
+    {
+      "type": "edit",
+      "id": "3a343fa000053274",
+      "item": {
+        "type": "markdown",
+        "id": "3a343fa000053274",
+        "text": "# Tutorials"
+      },
+      "date": 1464368389471
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* https://www.mattcutts.com/blog/a-quick-tutorial-on-screen/"
+      },
+      "date": 1464368390391
+    },
+    {
+      "type": "add",
+      "id": "78e584781aa1274c",
+      "item": {
+        "type": "paragraph",
+        "id": "78e584781aa1274c",
+        "text": "Each virtual terminal provides the functions of the DEC VT100 terminal and, in addition, several control functions from the ANSI X3.64 (ISO 6429) and ISO 2022 standards (e.g., insert/delete line and support for multiple character sets) - [https://www.gnu.org/software/screen/ gnu.org]"
+      },
+      "after": "bde81afaf6479efa",
+      "date": 1464368392021
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]"
+      },
+      "date": 1464368426629
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]"
+      },
+      "date": 1464368443824
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]"
+      },
+      "date": 1464368457238
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8ff806b0edf1a558"
+      },
+      "id": "8ff806b0edf1a558",
+      "type": "add",
+      "after": "84b4238df7ca5f42",
+      "date": 1464368816693
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "621861a0b4ef1181",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "8ff806b0edf1a558",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42"
+      ],
+      "id": "8ff806b0edf1a558",
+      "date": 1464368818490
+    },
+    {
+      "type": "edit",
+      "id": "8ff806b0edf1a558",
+      "item": {
+        "type": "paragraph",
+        "id": "8ff806b0edf1a558",
+        "text": "For an easy reference, here's a list of the most common screen commands that you'll want to know. This isn't exhaustive, but it should be enough for most users to get started using screen happily for most use cases."
+      },
+      "date": 1464368846532
+    },
+    {
+      "type": "add",
+      "id": "6a1f72a27dcb92ea",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1f72a27dcb92ea",
+        "text": "Start Screen: screen\nDetatch Screen: Ctrl-a d\nRe-attach Screen: screen -x or screen -x PID\nSplit Horizontally: Ctrl-a S\nSplit Vertically: Ctrl-a |\nMove Between Windows: Ctrl-a Tab\nName Session: Ctrl-a A\nLog Session: Ctrl-a H\nNote Session: Ctrl-a h"
+      },
+      "after": "8ff806b0edf1a558",
+      "date": 1464368849870
+    },
+    {
+      "type": "add",
+      "id": "c7617c26d8a452ec",
+      "item": {
+        "type": "paragraph",
+        "id": "c7617c26d8a452ec",
+        "text": "Finally, if you want help on GNU Screen, use the man page (man screen) and its built-in help with Ctrl-a :help. Screen has quite a few advanced options that are beyond an introductory tutorial, so be sure to check out the man page when you have the basics down."
+      },
+      "after": "6a1f72a27dcb92ea",
+      "date": 1464368851413
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d024d54d8d478f6f"
+      },
+      "id": "d024d54d8d478f6f",
+      "type": "add",
+      "after": "84b4238df7ca5f42",
+      "date": 1464368853570
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "621861a0b4ef1181",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "6a1f72a27dcb92ea",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42"
+      ],
+      "id": "d024d54d8d478f6f",
+      "date": 1464368856727
+    },
+    {
+      "type": "remove",
+      "id": "6a1f72a27dcb92ea",
+      "date": 1464368859796
+    },
+    {
+      "type": "edit",
+      "id": "d024d54d8d478f6f",
+      "item": {
+        "type": "code",
+        "id": "d024d54d8d478f6f",
+        "text": "Start Screen: screen\nDetatch Screen: Ctrl-a d\nRe-attach Screen: screen -x or screen -x PID\nSplit Horizontally: Ctrl-a S\nSplit Vertically: Ctrl-a |\nMove Between Windows: Ctrl-a Tab\nName Session: Ctrl-a A\nLog Session: Ctrl-a H\nNote Session: Ctrl-a h"
+      },
+      "date": 1464368862483
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]"
+      },
+      "date": 1464381867823
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* Taking Command of the Terminal with GNU Screen - [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]"
+      },
+      "date": 1464381896764
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "add64eaf8b201deb"
+      },
+      "id": "add64eaf8b201deb",
+      "type": "add",
+      "after": "84b4238df7ca5f42",
+      "date": 1464381915803
+    },
+    {
+      "type": "edit",
+      "id": "add64eaf8b201deb",
+      "item": {
+        "type": "markdown",
+        "id": "add64eaf8b201deb",
+        "text": "# byobu\nLooks nice."
+      },
+      "date": 1464381930726
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "39524c651109cfac"
+      },
+      "id": "39524c651109cfac",
+      "type": "add",
+      "after": "add64eaf8b201deb",
+      "date": 1464381931820
+    },
+    {
+      "type": "edit",
+      "id": "add64eaf8b201deb",
+      "item": {
+        "type": "markdown",
+        "id": "add64eaf8b201deb",
+        "text": "# byobu\nLooks nice - [http://byobu.co/ byobu.co]"
+      },
+      "date": 1464381945344
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c25583413ed06200"
+      },
+      "id": "c25583413ed06200",
+      "type": "add",
+      "after": "39524c651109cfac",
+      "date": 1464381961226
+    },
+    {
+      "type": "edit",
+      "id": "39524c651109cfac",
+      "item": {
+        "type": "paragraph",
+        "id": "39524c651109cfac",
+        "text": "You can install it on OSX with:"
+      },
+      "date": 1464381962319
+    },
+    {
+      "type": "edit",
+      "id": "c25583413ed06200",
+      "item": {
+        "type": "code",
+        "id": "c25583413ed06200",
+        "text": "brew install byobu"
+      },
+      "date": 1464381968971
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* Taking Command of the Terminal with GNU Screen - [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]\n* Screen users manual - [https://www.gnu.org/software/screen/manual/screen.html gnu.org]"
+      },
+      "date": 1464382016056
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ecd4178dca758efe"
+      },
+      "id": "ecd4178dca758efe",
+      "type": "add",
+      "after": "c25583413ed06200",
+      "date": 1464382047305
+    },
+    {
+      "type": "edit",
+      "id": "ecd4178dca758efe",
+      "item": {
+        "type": "video",
+        "id": "ecd4178dca758efe",
+        "text": "http://people.canonical.com/~kirkland/byobu.mp4"
+      },
+      "date": 1464382058707
+    },
+    {
+      "type": "edit",
+      "id": "ecd4178dca758efe",
+      "item": {
+        "type": "video",
+        "id": "ecd4178dca758efe",
+        "text": "<video src=\"http://people.canonical.com/~kirkland/byobu.mp4\">"
+      },
+      "date": 1464382084626
+    },
+    {
+      "type": "remove",
+      "id": "ecd4178dca758efe",
+      "date": 1464382090448
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "78bcde2f92faf7fc"
+      },
+      "id": "78bcde2f92faf7fc",
+      "type": "add",
+      "after": "c25583413ed06200",
+      "date": 1464382091605
+    },
+    {
+      "type": "edit",
+      "id": "78bcde2f92faf7fc",
+      "item": {
+        "type": "html",
+        "id": "78bcde2f92faf7fc",
+        "text": "<video src=\"http://people.canonical.com/~kirkland/byobu.mp4\">"
+      },
+      "date": 1464382094196
+    },
+    {
+      "type": "edit",
+      "id": "78bcde2f92faf7fc",
+      "item": {
+        "type": "html",
+        "id": "78bcde2f92faf7fc",
+        "text": "<video src=\"http://people.canonical.com/~kirkland/byobu.mp4\" width=420>"
+      },
+      "date": 1464382108804
+    },
+    {
+      "type": "edit",
+      "id": "78bcde2f92faf7fc",
+      "item": {
+        "type": "html",
+        "id": "78bcde2f92faf7fc",
+        "text": "<video src=\"http://people.canonical.com/~kirkland/byobu.mp4\" width=420 controls>"
+      },
+      "date": 1464382205943
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* Taking Command of the Terminal with GNU Screen - [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]\n* Screen users manual - [https://www.gnu.org/software/screen/manual/screen.html gnu.org]\n* [http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ tecmint.com]"
+      },
+      "date": 1464382482061
+    },
+    {
+      "type": "add",
+      "id": "e77cf7e47c3ed779",
+      "item": {
+        "type": "paragraph",
+        "id": "e77cf7e47c3ed779",
+        "text": "# Using Screen with Livecode"
+      },
+      "after": "a104764d1521e4af",
+      "date": 1464616624996
+    },
+    {
+      "type": "add",
+      "id": "1dc7f2f8fb3a022b",
+      "item": {
+        "type": "paragraph",
+        "id": "1dc7f2f8fb3a022b",
+        "text": "The reason to use screen is so that you can run a long standing command in the background, without the shell() function just hanging and blocking. You can call something like:"
+      },
+      "after": "e77cf7e47c3ed779",
+      "date": 1464616674109
+    },
+    {
+      "type": "add",
+      "id": "adb6290af1506540",
+      "item": {
+        "type": "paragraph",
+        "id": "adb6290af1506540",
+        "text": "fdsa"
+      },
+      "after": "1dc7f2f8fb3a022b",
+      "date": 1464616676333
+    },
+    {
+      "type": "add",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "paragraph",
+        "id": "ba6244a29b948d40",
+        "text": "There is a nice simple toturial over at:* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "after": "adb6290af1506540",
+      "date": 1464616714537
+    },
+    {
+      "type": "edit",
+      "id": "e77cf7e47c3ed779",
+      "item": {
+        "type": "markdown",
+        "id": "e77cf7e47c3ed779",
+        "text": "# Using Screen with Livecode"
+      },
+      "date": 1464616715918
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "e77cf7e47c3ed779",
+        "1dc7f2f8fb3a022b",
+        "adb6290af1506540",
+        "ba6244a29b948d40",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "621861a0b4ef1181",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42",
+        "add64eaf8b201deb",
+        "39524c651109cfac",
+        "c25583413ed06200",
+        "78bcde2f92faf7fc"
+      ],
+      "id": "621861a0b4ef1181",
+      "date": 1464616731322
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bb95cf9966cf4db7"
+      },
+      "id": "bb95cf9966cf4db7",
+      "type": "add",
+      "after": "78bcde2f92faf7fc",
+      "date": 1464616741691
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "e77cf7e47c3ed779",
+        "1dc7f2f8fb3a022b",
+        "bb95cf9966cf4db7",
+        "adb6290af1506540",
+        "ba6244a29b948d40",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "621861a0b4ef1181",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42",
+        "add64eaf8b201deb",
+        "39524c651109cfac",
+        "c25583413ed06200",
+        "78bcde2f92faf7fc"
+      ],
+      "id": "bb95cf9966cf4db7",
+      "date": 1464616747365
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "There is a nice simple toturial over at:* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "date": 1464616828659
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "There is a nice simple toturial over at:\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "date": 1464616838074
+    },
+    {
+      "type": "add",
+      "id": "4c0bc1d30e44b68a",
+      "item": {
+        "type": "paragraph",
+        "id": "4c0bc1d30e44b68a",
+        "text": "This is how supposed to prevent \"session killing\". Need to investigate what bash is doing here:"
+      },
+      "after": "adb6290af1506540",
+      "date": 1464616889139
+    },
+    {
+      "type": "add",
+      "id": "085fd2b8b1faf488",
+      "item": {
+        "type": "paragraph",
+        "id": "085fd2b8b1faf488",
+        "text": "screen -dmS test bash -c 'echo waiting 5 senconds...; sleep 5; exec bash'\n"
+      },
+      "after": "4c0bc1d30e44b68a",
+      "date": 1464616892309
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "a2478cb95de31f72"
+      },
+      "after": "4c0bc1d30e44b68a",
+      "id": "a2478cb95de31f72",
+      "date": 1464616907942
+    },
+    {
+      "type": "remove",
+      "id": "085fd2b8b1faf488",
+      "date": 1464616911877
+    },
+    {
+      "type": "edit",
+      "id": "a2478cb95de31f72",
+      "item": {
+        "type": "code",
+        "id": "a2478cb95de31f72",
+        "text": "screen -dmS test bash -c 'echo waiting 5 senconds...; sleep 5; exec bash'"
+      },
+      "date": 1464616914337
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "There is a nice simple toturial over at:\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 fsda]"
+      },
+      "date": 1464617040053
+    },
+    {
+      "type": "edit",
+      "id": "bb95cf9966cf4db7",
+      "item": {
+        "type": "html",
+        "id": "bb95cf9966cf4db7",
+        "text": "screen -dmS fedwiki wiki"
+      },
+      "date": 1464617092513
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "First is the d option, in conjunction with the m option. The dm option simply causes your screen to \"launch into the background,\" if you will. It means your screen will be \"detached\" instead of showing the screen when you type the command. You can omit this option if you aren't sure if the server will run (like when you're debugging) to show the screen as soon as it starts. This also means that if Screen itself hasn't been started already, it will be, then the command will be added to a new screen - [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]\n\nNext is the S option. This option is basically a \"vanity\" option. When you create a new screen, it is automatically assigned a \"title\" such as \"pts-1,\" \"pts-2,\" etc. This can be confusing. the S option is used to set your own \"title\" (more on this in a second) to your screen, making things easier to remember.\n\nNext is the title. This is very simply an easy-to-remember name for the screen you are creating. It can be any string of characters, except spaces, with some exceptions, though a good rule is to use words seperated by underscores (_) or dashes/hyphens (-). If you are starting a Counter-Strike Source server, a good name would be \"cssds,\" (counter-strike source dedicated server) \"counter-strike,\" \"cstrike,\" or \"my_cs_source_server.\"\n\nLastly is the command. This should be obvious if you already have your server running. (Screen is, after all, more or less your last step.)\n\nNow for reattaching. This works in two steps at first. The first step is listing screens, the second is attaching to a screen.\n\nThere is a nice simple toturial over at:\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 fsda]"
+      },
+      "date": 1464617143058
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "First is the d option, in conjunction with the m option. The dm option simply causes your screen to \"launch into the background,\" if you will. It means your screen will be \"detached\" instead of showing the screen when you type the command. You can omit this option if you aren't sure if the server will run (like when you're debugging) to show the screen as soon as it starts. This also means that if Screen itself hasn't been started already, it will be, then the command will be added to a new screen - [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "date": 1464617154426
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "First is the d option, in conjunction with the m option. The dm option simply causes your screen to \"launch into the background,\" if you will.\n It means your screen will be \"detached\" instead of showing the screen when you type the command. You can omit this option if you aren't sure if the server will run (like when you're debugging) to show the screen as soon as it starts. This also means that if Screen itself hasn't been started already, it will be, then the command will be added to a new screen - [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "date": 1464617166534
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f9c7c697955bca08",
+        "text": "\n\n\nNext is the S option. This option is basically a \"vanity\" option. When you create a new screen, it is automatically assigned a \"title\" such as \"pts-1,\" \"pts-2,\" etc. This can be confusing. the S option is used to set your own \"title\" (more on this in a second) to your screen, making things easier to remember.\n\nNext is the title. This is very simply an easy-to-remember name for the screen you are creating. It can be any string of characters, except spaces, with some exceptions, though a good rule is to use words seperated by underscores (_) or dashes/hyphens (-). If you are starting a Counter-Strike Source server, a good name would be \"cssds,\" (counter-strike source dedicated server) \"counter-strike,\" \"cstrike,\" or \"my_cs_source_server.\"\n\nLastly is the command. This should be obvious if you already have your server running. (Screen is, after all, more or less your last step.)\n\nNow for reattaching. This works in two steps at first. The first step is listing screens, the second is attaching to a screen.\n\nThere is a nice simple toturial over at:\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 fsda]"
+      },
+      "after": "ba6244a29b948d40",
+      "id": "f9c7c697955bca08",
+      "date": 1464617173329
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "First is the d option, in conjunction with the m option. The dm option simply causes your screen to \"launch into the background,\" if you will."
+      },
+      "date": 1464617184210
+    },
+    {
+      "type": "edit",
+      "id": "f9c7c697955bca08",
+      "item": {
+        "type": "paragraph",
+        "id": "f9c7c697955bca08",
+        "text": " It means your screen will be \"detached\" instead of showing the screen when you type the command. You can omit this option if you aren't sure if the server will run (like when you're debugging) to show the screen as soon as it starts. This also means that if Screen itself hasn't been started already, it will be, then the command will be added to a new screen - [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "date": 1464617189098
+    },
+    {
+      "type": "add",
+      "id": "e6642e9e59489e53",
+      "item": {
+        "type": "paragraph",
+        "id": "e6642e9e59489e53",
+        "text": "Next is the S option. This option is basically a \"vanity\" option. When you create a new screen, it is automatically assigned a \"title\" such as \"pts-1,\" \"pts-2,\" etc. This can be confusing. the S option is used to set your own \"title\" (more on this in a second) to your screen, making things easier to remember."
+      },
+      "after": "f9c7c697955bca08",
+      "date": 1464617194593
+    },
+    {
+      "type": "add",
+      "id": "63d5cae8948e76ab",
+      "item": {
+        "type": "paragraph",
+        "id": "63d5cae8948e76ab",
+        "text": "Next is the title. This is very simply an easy-to-remember name for the screen you are creating. It can be any string of characters, except spaces, with some exceptions, though a good rule is to use words seperated by underscores (_) or dashes/hyphens (-). "
+      },
+      "after": "e6642e9e59489e53",
+      "date": 1464617204562
+    },
+    {
+      "type": "add",
+      "id": "0d32a48c3f623c47",
+      "item": {
+        "type": "paragraph",
+        "id": "0d32a48c3f623c47",
+        "text": "If you are starting a Counter-Strike Source server, a good name would be \"cssds,\" (counter-strike source dedicated server) \"counter-strike,\" \"cstrike,\" or \"my_cs_source_server.\"\n\nLastly is the command. This should be obvious if you already have your server running. (Screen is, after all, more or less your last step.)\n\nNow for reattaching. This works in two steps at first. The first step is listing screens, the second is attaching to a screen.\n\nThere is a nice simple toturial over at:\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 fsda]"
+      },
+      "after": "63d5cae8948e76ab",
+      "date": 1464617204948
+    },
+    {
+      "type": "edit",
+      "id": "f9c7c697955bca08",
+      "item": {
+        "type": "paragraph",
+        "id": "f9c7c697955bca08",
+        "text": " It means your screen will be \"detached\" instead of showing the screen when you type the command. You can omit this option if you aren't sure if the server will run (like when you're debugging) to show the screen as soon as it starts. "
+      },
+      "date": 1464617223946
+    },
+    {
+      "type": "add",
+      "id": "f4b277d732bb43fa",
+      "item": {
+        "type": "paragraph",
+        "id": "f4b277d732bb43fa",
+        "text": "This also means that if Screen itself hasn't been started already, it will be, then the command will be added to a new screen."
+      },
+      "after": "f9c7c697955bca08",
+      "date": 1464617230540
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "e77cf7e47c3ed779",
+        "1dc7f2f8fb3a022b",
+        "bb95cf9966cf4db7",
+        "adb6290af1506540",
+        "4c0bc1d30e44b68a",
+        "ba6244a29b948d40",
+        "f9c7c697955bca08",
+        "f4b277d732bb43fa",
+        "e6642e9e59489e53",
+        "63d5cae8948e76ab",
+        "0d32a48c3f623c47",
+        "a2478cb95de31f72",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "621861a0b4ef1181",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42",
+        "add64eaf8b201deb",
+        "39524c651109cfac",
+        "c25583413ed06200",
+        "78bcde2f92faf7fc"
+      ],
+      "id": "a2478cb95de31f72",
+      "date": 1464617248176
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "e77cf7e47c3ed779",
+        "1dc7f2f8fb3a022b",
+        "bb95cf9966cf4db7",
+        "adb6290af1506540",
+        "ba6244a29b948d40",
+        "f9c7c697955bca08",
+        "f4b277d732bb43fa",
+        "e6642e9e59489e53",
+        "63d5cae8948e76ab",
+        "0d32a48c3f623c47",
+        "4c0bc1d30e44b68a",
+        "a2478cb95de31f72",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "621861a0b4ef1181",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42",
+        "add64eaf8b201deb",
+        "39524c651109cfac",
+        "c25583413ed06200",
+        "78bcde2f92faf7fc"
+      ],
+      "id": "4c0bc1d30e44b68a",
+      "date": 1464617251094
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "e77cf7e47c3ed779",
+        "1dc7f2f8fb3a022b",
+        "adb6290af1506540",
+        "bb95cf9966cf4db7",
+        "ba6244a29b948d40",
+        "f9c7c697955bca08",
+        "f4b277d732bb43fa",
+        "e6642e9e59489e53",
+        "63d5cae8948e76ab",
+        "0d32a48c3f623c47",
+        "4c0bc1d30e44b68a",
+        "a2478cb95de31f72",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "621861a0b4ef1181",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42",
+        "add64eaf8b201deb",
+        "39524c651109cfac",
+        "c25583413ed06200",
+        "78bcde2f92faf7fc"
+      ],
+      "id": "adb6290af1506540",
+      "date": 1464617258628
+    },
+    {
+      "type": "move",
+      "order": [
+        "a104764d1521e4af",
+        "e77cf7e47c3ed779",
+        "1dc7f2f8fb3a022b",
+        "bb95cf9966cf4db7",
+        "adb6290af1506540",
+        "ba6244a29b948d40",
+        "f9c7c697955bca08",
+        "f4b277d732bb43fa",
+        "e6642e9e59489e53",
+        "63d5cae8948e76ab",
+        "0d32a48c3f623c47",
+        "4c0bc1d30e44b68a",
+        "a2478cb95de31f72",
+        "3a343fa000053274",
+        "a859fecb7f6df10c",
+        "621861a0b4ef1181",
+        "8ff806b0edf1a558",
+        "d024d54d8d478f6f",
+        "c7617c26d8a452ec",
+        "bde81afaf6479efa",
+        "78e584781aa1274c",
+        "a0e4c6148f345695",
+        "d46871a7749d0679",
+        "84b4238df7ca5f42",
+        "add64eaf8b201deb",
+        "39524c651109cfac",
+        "c25583413ed06200",
+        "78bcde2f92faf7fc"
+      ],
+      "id": "adb6290af1506540",
+      "date": 1464617268218
+    },
+    {
+      "type": "edit",
+      "id": "ba6244a29b948d40",
+      "item": {
+        "type": "markdown",
+        "id": "ba6244a29b948d40",
+        "text": "First is the d option, in conjunction with the m option. The dm option simply causes your screen to \"launch into the background,\" if you will  - [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]"
+      },
+      "date": 1464617274933
+    },
+    {
+      "type": "remove",
+      "id": "adb6290af1506540",
+      "date": 1464617278821
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "9119fabe77bf52c7"
+      },
+      "after": "1dc7f2f8fb3a022b",
+      "id": "9119fabe77bf52c7",
+      "date": 1464617282471
+    },
+    {
+      "type": "remove",
+      "id": "bb95cf9966cf4db7",
+      "date": 1464617285237
+    },
+    {
+      "type": "edit",
+      "id": "9119fabe77bf52c7",
+      "item": {
+        "type": "code",
+        "id": "9119fabe77bf52c7",
+        "text": "screen -dmS fedwiki wiki"
+      },
+      "date": 1464617287588
+    },
+    {
+      "type": "edit",
+      "id": "0d32a48c3f623c47",
+      "item": {
+        "type": "paragraph",
+        "id": "0d32a48c3f623c47",
+        "text": "If you are starting a Counter-Strike Source server, a good name would be \"cssds,\" (counter-strike source dedicated server) \"counter-strike,\" \"cstrike,\" or \"my_cs_source_server.\"\n\n"
+      },
+      "date": 1464617316103
+    },
+    {
+      "type": "add",
+      "id": "aeda06a25c972f84",
+      "item": {
+        "type": "paragraph",
+        "id": "aeda06a25c972f84",
+        "text": "Lastly is the command. This should be obvious if you already have your server running. (Screen is, after all, more or less your last step.)"
+      },
+      "after": "0d32a48c3f623c47",
+      "date": 1464617319126
+    },
+    {
+      "type": "add",
+      "id": "d4d66962471dfc19",
+      "item": {
+        "type": "paragraph",
+        "id": "d4d66962471dfc19",
+        "text": "Now for reattaching. This works in two steps at first. The first step is listing screens, the second is attaching to a screen.\n\nThere is a nice simple tutorial over at:\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 steampowered.com]\n* [http://forums.steampowered.com/forums/showthread.php?t=427146 fsda]"
+      },
+      "after": "aeda06a25c972f84",
+      "date": 1464617343617
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* Taking Command of the Terminal with GNU Screen - [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]\n* Screen users manual - [https://www.gnu.org/software/screen/manual/screen.html gnu.org]\n* [http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ tecmint.com]\n* [http://askubuntu.com/questions/62562/run-a-program-with-gnu-screen-and-immediately-detach-after askubuntu.com]"
+      },
+      "date": 1464617397635
+    },
+    {
+      "type": "edit",
+      "id": "a859fecb7f6df10c",
+      "item": {
+        "type": "markdown",
+        "id": "a859fecb7f6df10c",
+        "text": "* A quick tutorial on screen - [https://www.mattcutts.com/blog/a-quick-tutorial-on-screen mattcutts.com]\n* Screen power tips: .screenrc - [https://www.mattcutts.com/blog/screen-power-tips-screenrc/ mattcutts.com]\n* Taking Command of the Terminal with GNU Screen - [https://www.linux.com/learn/taking-command-terminal-gnu-screen linux.com]\n* Screen users manual - [https://www.gnu.org/software/screen/manual/screen.html gnu.org]\n* [http://www.tecmint.com/screen-command-examples-to-manage-linux-terminals/ tecmint.com]\n* [http://askubuntu.com/questions/62562/run-a-program-with-gnu-screen-and-immediately-detach-after askubuntu.com]\n* [http://unix.stackexchange.com/questions/162133/run-script-in-a-screen stackexchange.com]"
+      },
+      "date": 1464617449590
+    },
+    {
+      "type": "remove",
+      "id": "d4d66962471dfc19",
+      "date": 1464617473468
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "4ba9943af661e93b"
+      },
+      "after": "aeda06a25c972f84",
+      "id": "4ba9943af661e93b",
+      "date": 1464617492890
+    },
+    {
+      "type": "edit",
+      "id": "4ba9943af661e93b",
+      "item": {
+        "type": "code",
+        "id": "4ba9943af661e93b",
+        "text": "screen -list"
+      },
+      "date": 1464617496249
+    },
+    {
+      "type": "remove",
+      "id": "0d32a48c3f623c47",
+      "date": 1464617499461
+    },
+    {
+      "type": "edit",
+      "id": "4c0bc1d30e44b68a",
+      "item": {
+        "type": "paragraph",
+        "id": "4c0bc1d30e44b68a",
+        "text": "This will return something like\n\nCode:\nThere are screens on:\n               9999.counter-strike (Detached)\n1 Sockets in /tmp/uscreens/S-user.\nIt will look a little different. 9999 is the numeric identifier. This will generally change each time you make a new screen, and will certainly be different for you than \"9999.\" Then \"counter-strike\" is the title you assigned to the screen before. \n\nTo connect to a given screen, you use the r option.\n\nCode:\nscreen -r identifier\n"
+      },
+      "date": 1464617527143
+    },
+    {
+      "type": "add",
+      "id": "069d2c3cb96404a8",
+      "item": {
+        "type": "paragraph",
+        "id": "069d2c3cb96404a8",
+        "text": "This is how supposed to prevent \"session killing\". Need to investigate what bash is doing here:"
+      },
+      "after": "4c0bc1d30e44b68a",
+      "date": 1464617529272
+    },
+    {
+      "type": "edit",
+      "id": "4c0bc1d30e44b68a",
+      "item": {
+        "type": "paragraph",
+        "id": "4c0bc1d30e44b68a",
+        "text": "This will return something like\n\nCode:\nThere are screens on:\n               9999.counter-strike (Detached)\n1 Sockets in /tmp/uscreens/S-user.\nIt will look a little different. 9999 is the numeric identifier. This will generally change each time you make a new screen, and will certainly be different for you than \"9999.\" Then \"counter-strike\" is the title you assigned to the screen before. \n\nTo connect to a given screen, you use the r option.\n"
+      },
+      "date": 1464617539008
+    },
+    {
+      "type": "add",
+      "id": "51b6137301c1f557",
+      "item": {
+        "type": "paragraph",
+        "id": "51b6137301c1f557",
+        "text": "screen -r identifier"
+      },
+      "after": "4c0bc1d30e44b68a",
+      "date": 1464617540656
+    },
+    {
+      "type": "edit",
+      "id": "4c0bc1d30e44b68a",
+      "item": {
+        "type": "paragraph",
+        "id": "4c0bc1d30e44b68a",
+        "text": "This will return something like\n\nCode:\nThere are screens on:\n               9999.counter-strike (Detached)\n1 Sockets in /tmp/uscreens/S-user.\nIt will look a little different. 9999 is the numeric identifier. This will generally change each time you make a new screen, and will certainly be different for you than \"9999.\" Then \"counter-strike\" is the title you assigned to the screen before. "
+      },
+      "date": 1464617547591
+    },
+    {
+      "type": "add",
+      "id": "fc33b345c9cd3696",
+      "item": {
+        "type": "paragraph",
+        "id": "fc33b345c9cd3696",
+        "text": "To connect to a given screen, you use the r option."
+      },
+      "after": "4c0bc1d30e44b68a",
+      "date": 1464617548948
+    },
+    {
+      "type": "edit",
+      "id": "4c0bc1d30e44b68a",
+      "item": {
+        "type": "paragraph",
+        "id": "4c0bc1d30e44b68a",
+        "text": "This will return something like:"
+      },
+      "date": 1464617558455
+    },
+    {
+      "type": "add",
+      "id": "0f2073c33b33d208",
+      "item": {
+        "type": "paragraph",
+        "id": "0f2073c33b33d208",
+        "text": "There are screens on:\n               9999.counter-strike (Detached)\n1 Sockets in /tmp/uscreens/S-user."
+      },
+      "after": "4c0bc1d30e44b68a",
+      "date": 1464617561791
+    },
+    {
+      "type": "add",
+      "id": "8e19b6a0f78876fc",
+      "item": {
+        "type": "paragraph",
+        "id": "8e19b6a0f78876fc",
+        "text": "It will look a little different. 9999 is the numeric identifier. This will generally change each time you make a new screen, and will certainly be different for you than \"9999.\" Then \"counter-strike\" is the title you assigned to the screen before. "
+      },
+      "after": "0f2073c33b33d208",
+      "date": 1464617566352
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "af2ed217582f5b2a"
+      },
+      "after": "4c0bc1d30e44b68a",
+      "id": "af2ed217582f5b2a",
+      "date": 1464617570058
+    },
+    {
+      "type": "edit",
+      "id": "af2ed217582f5b2a",
+      "item": {
+        "type": "code",
+        "id": "af2ed217582f5b2a",
+        "text": "There are screens on:\n               9999.counter-strike (Detached)\n1 Sockets in /tmp/uscreens/S-user."
+      },
+      "date": 1464617575595
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "9baca71bff2e8e90"
+      },
+      "after": "fc33b345c9cd3696",
+      "id": "9baca71bff2e8e90",
+      "date": 1464617592173
+    },
+    {
+      "type": "remove",
+      "id": "51b6137301c1f557",
+      "date": 1464617595025
+    },
+    {
+      "type": "edit",
+      "id": "9baca71bff2e8e90",
+      "item": {
+        "type": "code",
+        "id": "9baca71bff2e8e90",
+        "text": "screen -r identifier"
+      },
+      "date": 1464617597248
+    },
+    {
+      "type": "remove",
+      "id": "0f2073c33b33d208",
+      "date": 1464617601609
+    }
+  ]
+}

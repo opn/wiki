@@ -1,0 +1,631 @@
+{
+  "title": "The Part Time Parliament",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "6584bd40ec4e05d4",
+      "text": "This is a funny, but important story for science and anyone interested noth in how academic pubishing works, and how we might improve it."
+    },
+    {
+      "type": "paragraph",
+      "id": "6eb2e7db3c9856e2",
+      "text": "I've included the full description here, only adding some links and paragraph breaks to make it more readable. You can find the original post here - [http://research.microsoft.com/en-us/um/people/lamport/pubs/pubs.html#lamport-paxos research.microsoft.com]"
+    },
+    {
+      "type": "pagefold",
+      "id": "f0e0cf32fabf659d",
+      "text": "Quote: Leslie Lamport"
+    },
+    {
+      "type": "paragraph",
+      "id": "670bb01dc4847c75",
+      "text": "A fault-tolerant file system called Echo was built at SRC in the late 80s.  The builders claimed that it would maintain consistency despite any number of non-Byzantine faults, and would make progress if any majority of the processors were working.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "6247a34b3fc72728",
+      "text": "As with most such systems, it was quite simple when nothing went wrong, but had a complicated algorithm for handling failures based on taking care of all the cases that the implementers could think of.  I decided that what they were trying to do was impossible, and set out to prove it.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "d5395202e15791e2",
+      "text": "Instead, I discovered the [[Paxos]] Algorithm, described in this paper.  At the heart of the algorithm is a three-phase consensus protocol.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "1bee86e31f49e15e",
+      "text": "Dale Skeen seems to have been the first to have recognized the need for a three-phase protocol to avoid blocking in the presence of an arbitrary single failure.  However, to my knowledge, Paxos contains the first three-phase commit algorithm that is a real algorithm, with a clearly stated correctness condition and a proof of correctness. "
+    },
+    {
+      "type": "paragraph",
+      "id": "bd64150fab899783",
+      "text": "I thought, and still think, that Paxos is an important algorithm.  Inspired by my success at popularizing the consensus problem by describing it with Byzantine generals, I decided to cast the algorithm in terms of a parliament on an ancient Greek island.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "8b208524cb249b67",
+      "text": "Leo Guibas suggested the name Paxos for the island.  I gave the Greek legislators the names of computer scientists working in the field, transliterated with Guibas's help into a bogus Greek dialect.  (Peter Ladkin suggested the title.)  Writing about a lost civilization allowed me to eliminate uninteresting details and indicate generalizations by saying that some details of the parliamentary protocol had been lost.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "108eddb72c879a00",
+      "text": "To carry the image further, I gave a few lectures in the persona of an Indiana-Jones-style archaeologist, replete with Stetson hat and hip flask."
+    },
+    {
+      "type": "paragraph",
+      "id": "93a2844c590ecbe3",
+      "text": "My attempt at inserting some humor into the subject was a dismal failure.  People who attended my lecture remembered Indiana Jones, but not the algorithm.  People reading the paper apparently got so distracted by the Greek parable that they didn't understand the algorithm.  Among the people I sent the paper to, and who claimed to have read it, were Nancy Lynch, Vassos Hadzilacos, and Phil Bernstein.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "3d3716193ce44a48",
+      "text": "A couple of months later I emailed them the following question:"
+    },
+    {
+      "type": "html",
+      "id": "c66ccdb9d163c422",
+      "text": "<blockquote>\nCan you implement a distributed database that can tolerate the failure of any number of its processes (possibly all of them) without losing consistency, and that will resume normal behavior when more than half the processes are again working properly?\n</blockquote>"
+    },
+    {
+      "type": "paragraph",
+      "id": "e67911e2ef5fb87b",
+      "text": "None of them noticed any connection between this question and the Paxos algorithm."
+    },
+    {
+      "type": "paragraph",
+      "id": "62961ee895d3fe2f",
+      "text": "I submitted the paper to TOCS in 1990.  All three referees said that the paper was mildly interesting, though not very important, but that all the Paxos stuff had to be removed.  I was quite annoyed at how humorless everyone working in the field seemed to be, so I did nothing with the paper.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "e59261da6719e7de",
+      "text": "A number of years later, a couple of people at SRC needed algorithms for distributed systems they were building, and Paxos provided just what they needed.  I gave them the paper to read and they had no problem with it.  Here is Chandu Thekkath's account of the history of Paxos at SRC. "
+    },
+    {
+      "type": "html",
+      "id": "076d8d5955f8cbbf",
+      "text": "<blockquote>\nWhen Ed Lee and I were working on Petal we needed some sort of commit protocol to make sure global operations in the distributed system completed correctly in the presence of server failures. \n<p>\nWe knew about 3PC and studied a description of it in Bernstein, Hadzilacos, and Goodman's book Concurrency Control and Recovery in Database Systems.  We found the protocol a bit difficult to understand and therefore abandoned our attempts at implementing it.  \n<p>\nAt around this time, Mike Schroeder told us about a protocol for consensus that Leslie Lamport had invented and suggested we ask him about it.  Leslie gave Ed a copy of the Part-Time Parliament tech report, which we both enjoyed reading.  \n<p>\nI particularly liked its humour and to this day, cannot understand why people don't like that tech report.  Paxos had all the necessary properties we wanted for our system and we figured we could implement it.  Leslie provided essential consulting help as well, which resulted in the first implementation of the Paxos algorithm (including dynamic reconfiguration) as far as I am aware.\n<p>\nA year later, when we needed a distributed lock server for the Frangipani file system we used Paxos again. \n</blockquote>"
+    },
+    {
+      "type": "paragraph",
+      "id": "c27b5d2bd450cbda",
+      "text": "So, I thought that maybe the time had come to try publishing it again. "
+    },
+    {
+      "type": "paragraph",
+      "id": "03db85b78b9bbd8a",
+      "text": "Meanwhile, the one exception in this dismal tale was Butler Lampson, who immediately understood the algorithm's significance.  He mentioned it in lectures and in a paper, and he interested Nancy Lynch in it.  De Prisco, Lynch, and Lampson published their version of a specification and proof.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "2d4f2d2e2a8ead11",
+      "text": "Their papers made it more obvious that it was time for me to publish my paper.  So, I proposed to Ken Birman, who was then the editor of TOCS, that he publish it.  He suggested revising it, perhaps adding a TLA specification of the algorithm.  But rereading the paper convinced me that the description and proof of the algorithm, while not what I would write today, was precise and rigorous enough.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "9ca2a4247d4ca6a1",
+      "text": "Admittedly, the paper needed revision to take into account the work that had been published in the intervening years.  As a way of both carrying on the joke and saving myself work, I suggested that instead of my writing a revision, it be published as a recently rediscovered manuscript, with annotations by Keith Marzullo.  Marzullo was willing, Birman agreed, and the paper finally appeared. "
+    },
+    {
+      "type": "pagefold",
+      "id": "8f1e7b96d2a8ac49",
+      "text": "."
+    },
+    {
+      "type": "paragraph",
+      "id": "b7fcc6bbdebcf62c",
+      "text": "This paper won an ACM SIGOPS Hall of Fame Award in 2012.  "
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "The Part Time Parliament",
+        "story": []
+      },
+      "date": 1466346214383
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6584bd40ec4e05d4"
+      },
+      "id": "6584bd40ec4e05d4",
+      "type": "add",
+      "date": 1466346215631
+    },
+    {
+      "type": "edit",
+      "id": "6584bd40ec4e05d4",
+      "item": {
+        "type": "paragraph",
+        "id": "6584bd40ec4e05d4",
+        "text": "A fault-tolerant file system called Echo was built at SRC in the late 80s.  The builders claimed that it would maintain consistency despite any number of non-Byzantine faults, and would make progress if any majority of the processors were working.  "
+      },
+      "date": 1466346277140
+    },
+    {
+      "type": "add",
+      "id": "6247a34b3fc72728",
+      "item": {
+        "type": "paragraph",
+        "id": "6247a34b3fc72728",
+        "text": "As with most such systems, it was quite simple when nothing went wrong, but had a complicated algorithm for handling failures based on taking care of all the cases that the implementers could think of.  I decided that what they were trying to do was impossible, and set out to prove it.  "
+      },
+      "after": "6584bd40ec4e05d4",
+      "date": 1466346286509
+    },
+    {
+      "type": "add",
+      "id": "d5395202e15791e2",
+      "item": {
+        "type": "paragraph",
+        "id": "d5395202e15791e2",
+        "text": "Instead, I discovered the [[Paxos Algorithm]], described in this paper.  At the heart of the algorithm is a three-phase consensus protocol.  "
+      },
+      "after": "6247a34b3fc72728",
+      "date": 1466346317029
+    },
+    {
+      "type": "add",
+      "id": "1bee86e31f49e15e",
+      "item": {
+        "type": "paragraph",
+        "id": "1bee86e31f49e15e",
+        "text": "Dale Skeen seems to have been the first to have recognized the need for a three-phase protocol to avoid blocking in the presence of an arbitrary single failure.  However, to my knowledge, Paxos contains the first three-phase commit algorithm that is a real algorithm, with a clearly stated correctness condition and a proof of correctness. "
+      },
+      "after": "d5395202e15791e2",
+      "date": 1466346321751
+    },
+    {
+      "type": "add",
+      "id": "bd64150fab899783",
+      "item": {
+        "type": "paragraph",
+        "id": "bd64150fab899783",
+        "text": "I thought, and still think, that Paxos is an important algorithm.  Inspired by my success at popularizing the consensus problem by describing it with Byzantine generals, I decided to cast the algorithm in terms of a parliament on an ancient Greek island.  "
+      },
+      "after": "1bee86e31f49e15e",
+      "date": 1466346335000
+    },
+    {
+      "type": "add",
+      "id": "8b208524cb249b67",
+      "item": {
+        "type": "paragraph",
+        "id": "8b208524cb249b67",
+        "text": "Leo Guibas suggested the name Paxos for the island.  I gave the Greek legislators the names of computer scientists working in the field, transliterated with Guibas's help into a bogus Greek dialect.  (Peter Ladkin suggested the title.)  Writing about a lost civilization allowed me to eliminate uninteresting details and indicate generalizations by saying that some details of the parliamentary protocol had been lost.  To carry the image further, I gave a few lectures in the persona of an Indiana-Jones-style archaeologist, replete with Stetson hat and hip flask."
+      },
+      "after": "bd64150fab899783",
+      "date": 1466346342024
+    },
+    {
+      "type": "add",
+      "id": "93a2844c590ecbe3",
+      "item": {
+        "type": "paragraph",
+        "id": "93a2844c590ecbe3",
+        "text": "My attempt at inserting some humor into the subject was a dismal failure.  People who attended my lecture remembered Indiana Jones, but not the algorithm.  People reading the paper apparently got so distracted by the Greek parable that they didn't understand the algorithm.  Among the people I sent the paper to, and who claimed to have read it, were Nancy Lynch, Vassos Hadzilacos, and Phil Bernstein.  "
+      },
+      "after": "8b208524cb249b67",
+      "date": 1466346354407
+    },
+    {
+      "type": "add",
+      "id": "3d3716193ce44a48",
+      "item": {
+        "type": "paragraph",
+        "id": "3d3716193ce44a48",
+        "text": "A couple of months later I emailed them the following question:\n\nCan you implement a distributed database that can tolerate the failure of any number of its processes (possibly all of them) without losing consistency, and that will resume normal behavior when more than half the processes are again working properly?"
+      },
+      "after": "93a2844c590ecbe3",
+      "date": 1466346359024
+    },
+    {
+      "type": "add",
+      "id": "e67911e2ef5fb87b",
+      "item": {
+        "type": "paragraph",
+        "id": "e67911e2ef5fb87b",
+        "text": "None of them noticed any connection between this question and the Paxos algorithm."
+      },
+      "after": "3d3716193ce44a48",
+      "date": 1466346363809
+    },
+    {
+      "type": "add",
+      "id": "62961ee895d3fe2f",
+      "item": {
+        "type": "paragraph",
+        "id": "62961ee895d3fe2f",
+        "text": "I submitted the paper to TOCS in 1990.  All three referees said that the paper was mildly interesting, though not very important, but that all the Paxos stuff had to be removed.  I was quite annoyed at how humorless everyone working in the field seemed to be, so I did nothing with the paper.  "
+      },
+      "after": "e67911e2ef5fb87b",
+      "date": 1466346389824
+    },
+    {
+      "type": "add",
+      "id": "e59261da6719e7de",
+      "item": {
+        "type": "paragraph",
+        "id": "e59261da6719e7de",
+        "text": "A number of years later, a couple of people at SRC needed algorithms for distributed systems they were building, and Paxos provided just what they needed.  I gave them the paper to read and they had no problem with it.  Here is Chandu Thekkath's account of the history of Paxos at SRC. "
+      },
+      "after": "62961ee895d3fe2f",
+      "date": 1466346393104
+    },
+    {
+      "type": "add",
+      "id": "076d8d5955f8cbbf",
+      "item": {
+        "type": "paragraph",
+        "id": "076d8d5955f8cbbf",
+        "text": "<blockquote>\nWhen Ed Lee and I were working on Petal we needed some sort of commit protocol to make sure global operations in the distributed system completed correctly in the presence of server failures.  We knew about 3PC and studied a description of it in Bernstein, Hadzilacos, and Goodman's book Concurrency Control and Recovery in Database Systems.  We found the protocol a bit difficult to understand and therefore abandoned our attempts at implementing it.  At around this time, Mike Schroeder told us about a protocol for consensus that Leslie Lamport had invented and suggested we ask him about it.  Leslie gave Ed a copy of the Part-Time Parliament tech report, which we both enjoyed reading.  I particularly liked its humour and to this day, cannot understand why people don't like that tech report.  Paxos had all the necessary properties we wanted for our system and we figured we could implement it.  Leslie provided essential consulting help as well, which resulted in the first implementation of the Paxos algorithm (including dynamic reconfiguration) as far as I am aware.  A year later, when we needed a distributed lock server for the Frangipani file system we used Paxos again. \n</blockquote>"
+      },
+      "after": "e59261da6719e7de",
+      "date": 1466346419528
+    },
+    {
+      "type": "edit",
+      "id": "076d8d5955f8cbbf",
+      "item": {
+        "type": "html",
+        "id": "076d8d5955f8cbbf",
+        "text": "<blockquote>\nWhen Ed Lee and I were working on Petal we needed some sort of commit protocol to make sure global operations in the distributed system completed correctly in the presence of server failures.  We knew about 3PC and studied a description of it in Bernstein, Hadzilacos, and Goodman's book Concurrency Control and Recovery in Database Systems.  We found the protocol a bit difficult to understand and therefore abandoned our attempts at implementing it.  At around this time, Mike Schroeder told us about a protocol for consensus that Leslie Lamport had invented and suggested we ask him about it.  Leslie gave Ed a copy of the Part-Time Parliament tech report, which we both enjoyed reading.  I particularly liked its humour and to this day, cannot understand why people don't like that tech report.  Paxos had all the necessary properties we wanted for our system and we figured we could implement it.  Leslie provided essential consulting help as well, which resulted in the first implementation of the Paxos algorithm (including dynamic reconfiguration) as far as I am aware.  A year later, when we needed a distributed lock server for the Frangipani file system we used Paxos again. \n</blockquote>"
+      },
+      "date": 1466346421368
+    },
+    {
+      "type": "add",
+      "id": "c27b5d2bd450cbda",
+      "item": {
+        "type": "paragraph",
+        "id": "c27b5d2bd450cbda",
+        "text": "So, I thought that maybe the time had come to try publishing it again. "
+      },
+      "after": "076d8d5955f8cbbf",
+      "date": 1466346426490
+    },
+    {
+      "type": "add",
+      "id": "03db85b78b9bbd8a",
+      "item": {
+        "type": "paragraph",
+        "id": "03db85b78b9bbd8a",
+        "text": "Meanwhile, the one exception in this dismal tale was Butler Lampson, who immediately understood the algorithm's significance.  He mentioned it in lectures and in a paper, and he interested Nancy Lynch in it.  De Prisco, Lynch, and Lampson published their version of a specification and proof.  Their papers made it more obvious that it was time for me to publish my paper.  So, I proposed to Ken Birman, who was then the editor of TOCS, that he publish it.  He suggested revising it, perhaps adding a TLA specification of the algorithm.  But rereading the paper convinced me that the description and proof of the algorithm, while not what I would write today, was precise and rigorous enough.  Admittedly, the paper needed revision to take into account the work that had been published in the intervening years.  As a way of both carrying on the joke and saving myself work, I suggested that instead of my writing a revision, it be published as a recently rediscovered manuscript, with annotations by Keith Marzullo.  Marzullo was willing, Birman agreed, and the paper finally appeared. "
+      },
+      "after": "c27b5d2bd450cbda",
+      "date": 1466346431916
+    },
+    {
+      "type": "add",
+      "id": "d3b37a8aad128089",
+      "item": {
+        "type": "paragraph",
+        "id": "d3b37a8aad128089",
+        "text": "There was an amusing typesetting footnote to this.  To set off Marzullo's annotations, I decided that they should be printed on a gray background.  ACM had recently acquired some wonderful new typesetting software, and TOCS was not accepting camera-ready copy.  Unfortunately, their wonderful new software could not do shading.  So, I had to provide camera-ready copy for the shaded text.  "
+      },
+      "after": "03db85b78b9bbd8a",
+      "date": 1466346440602
+    },
+    {
+      "type": "add",
+      "id": "b7fcc6bbdebcf62c",
+      "item": {
+        "type": "paragraph",
+        "id": "b7fcc6bbdebcf62c",
+        "text": "Moreover, their brilliant software could accept this copy only in floating figures, so Marzullo's annotations don't appear quite where they should.  Furthermore, their undoubtedly expensive software wasn't up to typesetting serious math.  (After all, it's a computing journal, so why should they have to typeset formulas?) Therefore, I had to provide the camera-ready copy for the definitions of the invariants in section A2, which they inserted as Figure 3 in the published version.  So, the fonts in that figure don't match those in the rest of the paper. \n\nThis paper won an ACM SIGOPS Hall of Fame Award in 2012.  "
+      },
+      "after": "d3b37a8aad128089",
+      "date": 1466346445939
+    },
+    {
+      "type": "remove",
+      "id": "d3b37a8aad128089",
+      "date": 1466346447587
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8f1e7b96d2a8ac49"
+      },
+      "id": "8f1e7b96d2a8ac49",
+      "type": "add",
+      "after": "b7fcc6bbdebcf62c",
+      "date": 1466346464868
+    },
+    {
+      "type": "edit",
+      "id": "b7fcc6bbdebcf62c",
+      "item": {
+        "type": "paragraph",
+        "id": "b7fcc6bbdebcf62c",
+        "text": "This paper won an ACM SIGOPS Hall of Fame Award in 2012.  "
+      },
+      "date": 1466346466332
+    },
+    {
+      "type": "edit",
+      "id": "8f1e7b96d2a8ac49",
+      "item": {
+        "type": "pagefold",
+        "id": "8f1e7b96d2a8ac49",
+        "text": "."
+      },
+      "date": 1466346468335
+    },
+    {
+      "type": "move",
+      "order": [
+        "6584bd40ec4e05d4",
+        "6247a34b3fc72728",
+        "d5395202e15791e2",
+        "1bee86e31f49e15e",
+        "bd64150fab899783",
+        "8b208524cb249b67",
+        "93a2844c590ecbe3",
+        "3d3716193ce44a48",
+        "e67911e2ef5fb87b",
+        "62961ee895d3fe2f",
+        "e59261da6719e7de",
+        "076d8d5955f8cbbf",
+        "c27b5d2bd450cbda",
+        "03db85b78b9bbd8a",
+        "8f1e7b96d2a8ac49",
+        "b7fcc6bbdebcf62c"
+      ],
+      "id": "8f1e7b96d2a8ac49",
+      "date": 1466346470413
+    },
+    {
+      "type": "edit",
+      "id": "03db85b78b9bbd8a",
+      "item": {
+        "type": "paragraph",
+        "id": "03db85b78b9bbd8a",
+        "text": "Meanwhile, the one exception in this dismal tale was Butler Lampson, who immediately understood the algorithm's significance.  He mentioned it in lectures and in a paper, and he interested Nancy Lynch in it.  De Prisco, Lynch, and Lampson published their version of a specification and proof.  "
+      },
+      "date": 1466346478012
+    },
+    {
+      "type": "add",
+      "id": "2d4f2d2e2a8ead11",
+      "item": {
+        "type": "paragraph",
+        "id": "2d4f2d2e2a8ead11",
+        "text": "Their papers made it more obvious that it was time for me to publish my paper.  So, I proposed to Ken Birman, who was then the editor of TOCS, that he publish it.  He suggested revising it, perhaps adding a TLA specification of the algorithm.  But rereading the paper convinced me that the description and proof of the algorithm, while not what I would write today, was precise and rigorous enough.  "
+      },
+      "after": "03db85b78b9bbd8a",
+      "date": 1466346489356
+    },
+    {
+      "type": "add",
+      "id": "9ca2a4247d4ca6a1",
+      "item": {
+        "type": "paragraph",
+        "id": "9ca2a4247d4ca6a1",
+        "text": "Admittedly, the paper needed revision to take into account the work that had been published in the intervening years.  As a way of both carrying on the joke and saving myself work, I suggested that instead of my writing a revision, it be published as a recently rediscovered manuscript, with annotations by Keith Marzullo.  Marzullo was willing, Birman agreed, and the paper finally appeared. "
+      },
+      "after": "2d4f2d2e2a8ead11",
+      "date": 1466346491974
+    },
+    {
+      "type": "edit",
+      "id": "8b208524cb249b67",
+      "item": {
+        "type": "paragraph",
+        "id": "8b208524cb249b67",
+        "text": "Leo Guibas suggested the name Paxos for the island.  I gave the Greek legislators the names of computer scientists working in the field, transliterated with Guibas's help into a bogus Greek dialect.  (Peter Ladkin suggested the title.)  Writing about a lost civilization allowed me to eliminate uninteresting details and indicate generalizations by saying that some details of the parliamentary protocol had been lost.  "
+      },
+      "date": 1466346505085
+    },
+    {
+      "type": "add",
+      "id": "108eddb72c879a00",
+      "item": {
+        "type": "paragraph",
+        "id": "108eddb72c879a00",
+        "text": "To carry the image further, I gave a few lectures in the persona of an Indiana-Jones-style archaeologist, replete with Stetson hat and hip flask."
+      },
+      "after": "8b208524cb249b67",
+      "date": 1466346505960
+    },
+    {
+      "type": "edit",
+      "id": "076d8d5955f8cbbf",
+      "item": {
+        "type": "html",
+        "id": "076d8d5955f8cbbf",
+        "text": "<blockquote>\nWhen Ed Lee and I were working on Petal we needed some sort of commit protocol to make sure global operations in the distributed system completed correctly in the presence of server failures. \n<p>\nWe knew about 3PC and studied a description of it in Bernstein, Hadzilacos, and Goodman's book Concurrency Control and Recovery in Database Systems.  We found the protocol a bit difficult to understand and therefore abandoned our attempts at implementing it.  \n<p>\nAt around this time, Mike Schroeder told us about a protocol for consensus that Leslie Lamport had invented and suggested we ask him about it.  Leslie gave Ed a copy of the Part-Time Parliament tech report, which we both enjoyed reading.  \n<p>\nI particularly liked its humour and to this day, cannot understand why people don't like that tech report.  Paxos had all the necessary properties we wanted for our system and we figured we could implement it.  Leslie provided essential consulting help as well, which resulted in the first implementation of the Paxos algorithm (including dynamic reconfiguration) as far as I am aware.\n<p>\nA year later, when we needed a distributed lock server for the Frangipani file system we used Paxos again. \n</blockquote>"
+      },
+      "date": 1466346565755
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f0e0cf32fabf659d"
+      },
+      "id": "f0e0cf32fabf659d",
+      "type": "add",
+      "after": "b7fcc6bbdebcf62c",
+      "date": 1466346580433
+    },
+    {
+      "type": "move",
+      "order": [
+        "f0e0cf32fabf659d",
+        "6584bd40ec4e05d4",
+        "6247a34b3fc72728",
+        "d5395202e15791e2",
+        "1bee86e31f49e15e",
+        "bd64150fab899783",
+        "8b208524cb249b67",
+        "108eddb72c879a00",
+        "93a2844c590ecbe3",
+        "3d3716193ce44a48",
+        "e67911e2ef5fb87b",
+        "62961ee895d3fe2f",
+        "e59261da6719e7de",
+        "076d8d5955f8cbbf",
+        "c27b5d2bd450cbda",
+        "03db85b78b9bbd8a",
+        "2d4f2d2e2a8ead11",
+        "9ca2a4247d4ca6a1",
+        "8f1e7b96d2a8ac49",
+        "b7fcc6bbdebcf62c"
+      ],
+      "id": "f0e0cf32fabf659d",
+      "date": 1466346587278
+    },
+    {
+      "type": "edit",
+      "id": "f0e0cf32fabf659d",
+      "item": {
+        "type": "pagefold",
+        "id": "f0e0cf32fabf659d",
+        "text": "Quote: Leslie Lamport"
+      },
+      "date": 1466346619165
+    },
+    {
+      "type": "edit",
+      "id": "6584bd40ec4e05d4",
+      "item": {
+        "type": "paragraph",
+        "id": "6584bd40ec4e05d4",
+        "text": "This is a funny, but important story for science and anyone interested noth in how academic pubishing works, and how we might improve it."
+      },
+      "date": 1466346677250
+    },
+    {
+      "type": "add",
+      "id": "670bb01dc4847c75",
+      "item": {
+        "type": "paragraph",
+        "id": "670bb01dc4847c75",
+        "text": "A fault-tolerant file system called Echo was built at SRC in the late 80s.  The builders claimed that it would maintain consistency despite any number of non-Byzantine faults, and would make progress if any majority of the processors were working.  "
+      },
+      "after": "6584bd40ec4e05d4",
+      "date": 1466346687210
+    },
+    {
+      "type": "move",
+      "order": [
+        "6584bd40ec4e05d4",
+        "f0e0cf32fabf659d",
+        "670bb01dc4847c75",
+        "6247a34b3fc72728",
+        "d5395202e15791e2",
+        "1bee86e31f49e15e",
+        "bd64150fab899783",
+        "8b208524cb249b67",
+        "108eddb72c879a00",
+        "93a2844c590ecbe3",
+        "3d3716193ce44a48",
+        "e67911e2ef5fb87b",
+        "62961ee895d3fe2f",
+        "e59261da6719e7de",
+        "076d8d5955f8cbbf",
+        "c27b5d2bd450cbda",
+        "03db85b78b9bbd8a",
+        "2d4f2d2e2a8ead11",
+        "9ca2a4247d4ca6a1",
+        "8f1e7b96d2a8ac49",
+        "b7fcc6bbdebcf62c"
+      ],
+      "id": "6584bd40ec4e05d4",
+      "date": 1466346689459
+    },
+    {
+      "type": "edit",
+      "id": "d5395202e15791e2",
+      "item": {
+        "type": "paragraph",
+        "id": "d5395202e15791e2",
+        "text": "Instead, I discovered the [[Paxos]] Algorithm, described in this paper.  At the heart of the algorithm is a three-phase consensus protocol.  "
+      },
+      "date": 1466346749855
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c66ccdb9d163c422"
+      },
+      "id": "c66ccdb9d163c422",
+      "type": "add",
+      "after": "b7fcc6bbdebcf62c",
+      "date": 1466347036308
+    },
+    {
+      "type": "move",
+      "order": [
+        "6584bd40ec4e05d4",
+        "f0e0cf32fabf659d",
+        "670bb01dc4847c75",
+        "6247a34b3fc72728",
+        "d5395202e15791e2",
+        "1bee86e31f49e15e",
+        "bd64150fab899783",
+        "8b208524cb249b67",
+        "108eddb72c879a00",
+        "93a2844c590ecbe3",
+        "3d3716193ce44a48",
+        "c66ccdb9d163c422",
+        "e67911e2ef5fb87b",
+        "62961ee895d3fe2f",
+        "e59261da6719e7de",
+        "076d8d5955f8cbbf",
+        "c27b5d2bd450cbda",
+        "03db85b78b9bbd8a",
+        "2d4f2d2e2a8ead11",
+        "9ca2a4247d4ca6a1",
+        "8f1e7b96d2a8ac49",
+        "b7fcc6bbdebcf62c"
+      ],
+      "id": "c66ccdb9d163c422",
+      "date": 1466347043963
+    },
+    {
+      "type": "edit",
+      "id": "3d3716193ce44a48",
+      "item": {
+        "type": "paragraph",
+        "id": "3d3716193ce44a48",
+        "text": "A couple of months later I emailed them the following question:"
+      },
+      "date": 1466347050885
+    },
+    {
+      "type": "edit",
+      "id": "c66ccdb9d163c422",
+      "item": {
+        "type": "html",
+        "id": "c66ccdb9d163c422",
+        "text": "<blockquote>\nCan you implement a distributed database that can tolerate the failure of any number of its processes (possibly all of them) without losing consistency, and that will resume normal behavior when more than half the processes are again working properly?\n</blockquote>"
+      },
+      "date": 1466347068646
+    },
+    {
+      "type": "add",
+      "id": "6eb2e7db3c9856e2",
+      "item": {
+        "type": "paragraph",
+        "id": "6eb2e7db3c9856e2",
+        "text": "I've included the full description here, only adding some links and paragraph breaks to make it more readable. You can find the original post here - [fads fads]"
+      },
+      "after": "6584bd40ec4e05d4",
+      "date": 1466347121308
+    },
+    {
+      "type": "edit",
+      "id": "6eb2e7db3c9856e2",
+      "item": {
+        "type": "paragraph",
+        "id": "6eb2e7db3c9856e2",
+        "text": "I've included the full description here, only adding some links and paragraph breaks to make it more readable. You can find the original post here - [http://research.microsoft.com/en-us/um/people/lamport/pubs/pubs.html#lamport-paxos research.microsoft.com]"
+      },
+      "date": 1466347146026
+    }
+  ]
+}

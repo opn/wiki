@@ -1,0 +1,925 @@
+{
+  "title": ".opf",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a29ff0cd9af3d285",
+      "text": "The OPF file, traditionally named content.opf, houses the [[EPUB]] book's metadata, file manifest, and linear reading order. "
+    },
+    {
+      "type": "html",
+      "id": "ecd0401f38ab2800",
+      "text": "This file has a root element package and four child elements:<OL><LI>  metadata<LI>  manifest<LI>  spine<LI>  guide</ol>"
+    },
+    {
+      "type": "paragraph",
+      "id": "e3b278270a4cae4d",
+      "text": "Furthermore, the package node must have the unique-identifier attribute. The .opf file's mimetype is:"
+    },
+    {
+      "type": "code",
+      "id": "dc7d0701a595c072",
+      "text": "application/oebps-package+xml"
+    },
+    {
+      "type": "paragraph",
+      "id": "1beb00b85d35d33d",
+      "text": "The identifier's id attribute should equal the unique-identifier attribute from the package element."
+    },
+    {
+      "type": "code",
+      "id": "f045521990846e9e",
+      "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata>  </metadata>\n  <manifest> </manifest>\n  <spine toc=\"ncx\">  </spine>\n  <guide>  </guide>\n\n</package>"
+    },
+    {
+      "type": "html",
+      "id": "4873ee45ab76513a",
+      "text": "<H3>Metadata Element"
+    },
+    {
+      "type": "html",
+      "id": "69e8e97ffe857038",
+      "text": "The metadata element contains all the metadata information for a particular EPUB file. Three metadata tags are required (though many more are available):\n<ul>\n<li>  title (title of the book)\n<li>  language (RFC 3066 format or  RFC 4646)\n<li>  identifier (unique identifier ie ISBN or a URL)\n</ul>"
+    },
+    {
+      "type": "code",
+      "id": "544e3e2bd2171c5e",
+      "text": "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">\n    <dc:title>Pride and Prejudice</dc:title>\n    <dc:language>en</dc:language>\n    <dc:identifier id=\"BookId\" opf:scheme=\"ISBN\">123456789X</dc:identifier>\n    <dc:creator opf:file-as=\"Austen, Jane\" opf:role=\"aut\">Jane Austen</dc:creator>\n</metadata>"
+    },
+    {
+      "type": "html",
+      "id": "4ddce50e4ae6ed42",
+      "text": "<H3>Manifest Element"
+    },
+    {
+      "type": "html",
+      "id": "4995fd5307c9db43",
+      "text": "The manifest element lists all the files contained in the package. Each file is represented by an item element, and has the attributes:<ul><li>  id<li>  href<li>  media-type. "
+    },
+    {
+      "type": "paragraph",
+      "id": "77ef8516e19fff7f",
+      "text": "All XHTML (content documents), stylesheets, images or other media, embedded fonts, and the NCX file should be listed here. "
+    },
+    {
+      "type": "paragraph",
+      "id": "ec150ee91ef45114",
+      "text": "Only the .opf file itself, the container.xml, and the mimetype files should not be included."
+    },
+    {
+      "type": "code",
+      "id": "6bff2ce671c33927",
+      "text": "<manifest>\n    <item id=\"chapter1\" href=\"chapter1.xhtml\" media-type=\"application/xhtml+xml\"/>\n    <item id=\"stylesheet\" href=\"style.css\" media-type=\"text/css\"/>\n    <item id=\"ch1-pic\" href=\"ch1-pic.png\" media-type=\"image/png\"/>\n    <item id=\"myfont\" href=\"css/myfont.otf\" media-type=\"application/x-font-opentype\"/>\n    <item id=\"ncx\" href=\"toc.ncx\" media-type=\"application/x-dtbncx+xml\"/>\n</manifest>"
+    },
+    {
+      "type": "paragraph",
+      "id": "6d6c4e8003c797a7",
+      "text": "Note that in the section above, an arbitrary media-type is given to the included font file, even though no mimetype exists for fonts."
+    },
+    {
+      "type": "html",
+      "id": "81eb3e51db0db81b",
+      "text": "<H3>Spine Element"
+    },
+    {
+      "type": "paragraph",
+      "id": "d639e1b83dea7b07",
+      "text": "The spine element lists all the XHTML content documents in their linear reading order. Also, any content document that can be reached through linking or the table of contents must be listed as well. The toc attribute of spine must contain the id of the NCX file listed in the manifest. Each itemref element's idref is set to the id of its respective content document."
+    },
+    {
+      "type": "code",
+      "id": "17552e612db9bb32",
+      "text": "<spine toc=\"ncx\">\n  <itemref idref=\"chapter1\" />\n</spine>\n"
+    },
+    {
+      "type": "html",
+      "id": "bc10d4f8a85849ae",
+      "text": "<H3>Guide Element"
+    },
+    {
+      "type": "paragraph",
+      "id": "0ce64f31b4aef04f",
+      "text": "The guide element is an optional element for the purpose of identifying fundamental structural components of the book. Each reference element has the attributes type, title, href. Files referenced in href must be listed in the manifest, and are allowed to have an element identifier (e.g. #figures in the example)."
+    },
+    {
+      "type": "code",
+      "id": "627d082a1714abb0",
+      "text": "<guide>\n  <reference type=\"loi\" title=\"List Of Illustrations\" href=\"appendix.html#figures\" />\n</guide>"
+    },
+    {
+      "type": "reference",
+      "id": "a7fc8aa1fc14c1f9",
+      "site": "c0de.academy",
+      "slug": "epub",
+      "title": "ePub",
+      "text": "EPUB (short for electronic publication; sometimes styled ePub) is a free and open e-book standard by the International Digital Publishing Forum (IDPF). Files have the extension .epub - [https://en.wikipedia.org/wiki/EPUB wikipedia]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": ".opf",
+        "story": []
+      },
+      "date": 1437409293384
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4ddce50e4ae6ed42"
+      },
+      "id": "4ddce50e4ae6ed42",
+      "type": "add",
+      "date": 1437409296719
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a29ff0cd9af3d285",
+        "text": "The OPF file, traditionally named content.opf, houses the EPUB book's metadata, file manifest, and linear reading order. "
+      },
+      "id": "a29ff0cd9af3d285",
+      "date": 1437409298887
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "ecd0401f38ab2800",
+        "text": "This file has a root element package and four child elements:<OL><LI>  metadata<LI>  manifest<LI>  spine<LI>  guide</ol>"
+      },
+      "after": "a29ff0cd9af3d285",
+      "id": "ecd0401f38ab2800",
+      "date": 1437409301376
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "69e8e97ffe857038",
+        "text": "The metadata element contains all the metadata information for a particular EPUB file. Three metadata tags are required (though many more are available):\n<ul>\n<li>  title (title of the book)\n<li>  language (RFC 3066 format or  RFC 4646)\n<li>  identifier (unique identifier ie ISBN or a URL)\n</ul>"
+      },
+      "after": "ecd0401f38ab2800",
+      "id": "69e8e97ffe857038",
+      "date": 1437409305923
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e3b278270a4cae4d",
+        "text": "Furthermore, the package node must have the unique-identifier attribute. The .opf file's mimetype is application/oebps-package+xml."
+      },
+      "after": "ecd0401f38ab2800",
+      "id": "e3b278270a4cae4d",
+      "date": 1437409311808
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1beb00b85d35d33d",
+        "text": "The identifier's id attribute should equal the unique-identifier attribute from the package element."
+      },
+      "after": "e3b278270a4cae4d",
+      "id": "1beb00b85d35d33d",
+      "date": 1437409325590
+    },
+    {
+      "type": "add",
+      "id": "4873ee45ab76513a",
+      "item": {
+        "type": "paragraph",
+        "id": "4873ee45ab76513a",
+        "text": "<H3>Metadata Element"
+      },
+      "after": "1beb00b85d35d33d",
+      "date": 1437409338605
+    },
+    {
+      "type": "edit",
+      "id": "4873ee45ab76513a",
+      "item": {
+        "type": "html",
+        "id": "4873ee45ab76513a",
+        "text": "<H3>Metadata Element"
+      },
+      "date": 1437409340005
+    },
+    {
+      "type": "edit",
+      "id": "4ddce50e4ae6ed42",
+      "item": {
+        "type": "html",
+        "id": "4ddce50e4ae6ed42",
+        "text": "<H3>Manifest Element"
+      },
+      "date": 1437409375200
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "4995fd5307c9db43",
+        "text": "The manifest element lists all the files contained in the package. Each file is represented by an item element, and has the attributes:<ul><li>  id<li>  href<li>  media-type. "
+      },
+      "after": "4ddce50e4ae6ed42",
+      "id": "4995fd5307c9db43",
+      "date": 1437409380673
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "77ef8516e19fff7f",
+        "text": "All XHTML (content documents), stylesheets, images or other media, embedded fonts, and the NCX file should be listed here. Only the .opf file itself, the container.xml, and the mimetype files should not be included.[21] Note that in the example below, an arbitrary media-type is given to the included font file, even though no mimetype exists for fonts.\n\nThe spine element lists all the XHTML content documents in their linear reading order. Also, any content document that can be reached through linking or the table of contents must be listed as well. The toc attribute of spine must contain the id of the NCX file listed in the manifest. Each itemref element's idref is set to the id of its respective content document.\n\nThe guide element is an optional element for the purpose of identifying fundamental structural components of the book. Each reference element has the attributes type, title, href. Files referenced in href must be listed in the manifest, and are allowed to have an element identifier (e.g. #figures in the example)."
+      },
+      "after": "4995fd5307c9db43",
+      "id": "77ef8516e19fff7f",
+      "date": 1437409386643
+    },
+    {
+      "type": "edit",
+      "id": "77ef8516e19fff7f",
+      "item": {
+        "type": "paragraph",
+        "id": "77ef8516e19fff7f",
+        "text": "All XHTML (content documents), stylesheets, images or other media, embedded fonts, and the NCX file should be listed here. "
+      },
+      "date": 1437409423149
+    },
+    {
+      "type": "add",
+      "id": "ec150ee91ef45114",
+      "item": {
+        "type": "paragraph",
+        "id": "ec150ee91ef45114",
+        "text": "Only the .opf file itself, the container.xml, and the mimetype files should not be included."
+      },
+      "after": "77ef8516e19fff7f",
+      "date": 1437409430825
+    },
+    {
+      "type": "add",
+      "id": "81eb3e51db0db81b",
+      "item": {
+        "type": "paragraph",
+        "id": "81eb3e51db0db81b",
+        "text": "<H3>Spine Element"
+      },
+      "after": "ec150ee91ef45114",
+      "date": 1437409463313
+    },
+    {
+      "type": "edit",
+      "id": "81eb3e51db0db81b",
+      "item": {
+        "type": "html",
+        "id": "81eb3e51db0db81b",
+        "text": "<H3>Spine Element"
+      },
+      "date": 1437409464647
+    },
+    {
+      "type": "add",
+      "id": "d639e1b83dea7b07",
+      "item": {
+        "type": "paragraph",
+        "id": "d639e1b83dea7b07",
+        "text": "The spine element lists all the XHTML content documents in their linear reading order. Also, any content document that can be reached through linking or the table of contents must be listed as well. The toc attribute of spine must contain the id of the NCX file listed in the manifest. Each itemref element's idref is set to the id of its respective content document."
+      },
+      "after": "81eb3e51db0db81b",
+      "date": 1437409467111
+    },
+    {
+      "type": "add",
+      "id": "bc10d4f8a85849ae",
+      "item": {
+        "type": "paragraph",
+        "id": "bc10d4f8a85849ae",
+        "text": "<H3>Guide Element"
+      },
+      "after": "d639e1b83dea7b07",
+      "date": 1437409495695
+    },
+    {
+      "type": "edit",
+      "id": "bc10d4f8a85849ae",
+      "item": {
+        "type": "html",
+        "id": "bc10d4f8a85849ae",
+        "text": "<H3>Guide Element"
+      },
+      "date": 1437409497259
+    },
+    {
+      "type": "add",
+      "id": "0ce64f31b4aef04f",
+      "item": {
+        "type": "paragraph",
+        "id": "0ce64f31b4aef04f",
+        "text": "The guide element is an optional element for the purpose of identifying fundamental structural components of the book. Each reference element has the attributes type, title, href. Files referenced in href must be listed in the manifest, and are allowed to have an element identifier (e.g. #figures in the example)."
+      },
+      "after": "bc10d4f8a85849ae",
+      "date": 1437409498846
+    },
+    {
+      "type": "add",
+      "id": "6d6c4e8003c797a7",
+      "item": {
+        "type": "paragraph",
+        "id": "6d6c4e8003c797a7",
+        "text": "Note that in the example below, an arbitrary media-type is given to the included font file, even though no mimetype exists for fonts.\n"
+      },
+      "after": "0ce64f31b4aef04f",
+      "date": 1437409500428
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f045521990846e9e"
+      },
+      "id": "f045521990846e9e",
+      "type": "add",
+      "after": "6d6c4e8003c797a7",
+      "date": 1437409520743
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">\n    <dc:title>Pride and Prejudice</dc:title>\n    <dc:language>en</dc:language>\n    <dc:identifier id=\"BookId\" opf:scheme=\"ISBN\">123456789X</dc:identifier>\n    <dc:creator opf:file-as=\"Austen, Jane\" opf:role=\"aut\">Jane Austen</dc:creator>\n  </metadata>\n\n  <manifest>\n    <item id=\"chapter1\" href=\"chapter1.xhtml\" media-type=\"application/xhtml+xml\"/>\n    <item id=\"stylesheet\" href=\"style.css\" media-type=\"text/css\"/>\n    <item id=\"ch1-pic\" href=\"ch1-pic.png\" media-type=\"image/png\"/>\n    <item id=\"myfont\" href=\"css/myfont.otf\" media-type=\"application/x-font-opentype\"/>\n    <item id=\"ncx\" href=\"toc.ncx\" media-type=\"application/x-dtbncx+xml\"/>\n  </manifest>\n\n  <spine toc=\"ncx\">\n    <itemref idref=\"chapter1\" />\n  </spine>\n\n  <guide>\n    <reference type=\"loi\" title=\"List Of Illustrations\" href=\"appendix.html#figures\" />\n  </guide>\n\n</package>"
+      },
+      "date": 1437409530699
+    },
+    {
+      "type": "edit",
+      "id": "6d6c4e8003c797a7",
+      "item": {
+        "type": "paragraph",
+        "id": "6d6c4e8003c797a7",
+        "text": "Note that in the example below, an arbitrary media-type is given to the included font file, even though no mimetype exists for fonts."
+      },
+      "date": 1437409535424
+    },
+    {
+      "type": "add",
+      "id": "2fb60603cf65ef78",
+      "item": {
+        "type": "paragraph",
+        "id": "2fb60603cf65ef78",
+        "text": "An example OPF file:"
+      },
+      "after": "6d6c4e8003c797a7",
+      "date": 1437409542071
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "2fb60603cf65ef78",
+        "f045521990846e9e",
+        "6d6c4e8003c797a7"
+      ],
+      "id": "6d6c4e8003c797a7",
+      "date": 1437409546486
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "627d082a1714abb0"
+      },
+      "id": "627d082a1714abb0",
+      "type": "add",
+      "after": "6d6c4e8003c797a7",
+      "date": 1437409575589
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">\n    <dc:title>Pride and Prejudice</dc:title>\n    <dc:language>en</dc:language>\n    <dc:identifier id=\"BookId\" opf:scheme=\"ISBN\">123456789X</dc:identifier>\n    <dc:creator opf:file-as=\"Austen, Jane\" opf:role=\"aut\">Jane Austen</dc:creator>\n  </metadata>\n\n  <manifest>\n    <item id=\"chapter1\" href=\"chapter1.xhtml\" media-type=\"application/xhtml+xml\"/>\n    <item id=\"stylesheet\" href=\"style.css\" media-type=\"text/css\"/>\n    <item id=\"ch1-pic\" href=\"ch1-pic.png\" media-type=\"image/png\"/>\n    <item id=\"myfont\" href=\"css/myfont.otf\" media-type=\"application/x-font-opentype\"/>\n    <item id=\"ncx\" href=\"toc.ncx\" media-type=\"application/x-dtbncx+xml\"/>\n  </manifest>\n\n  <spine toc=\"ncx\">\n    <itemref idref=\"chapter1\" />\n  </spine>\n\n  <guide>  </guide>\n\n</package>"
+      },
+      "date": 1437409625816
+    },
+    {
+      "type": "edit",
+      "id": "627d082a1714abb0",
+      "item": {
+        "type": "code",
+        "id": "627d082a1714abb0",
+        "text": "  <guide>\n    <reference type=\"loi\" title=\"List Of Illustrations\" href=\"appendix.html#figures\" />\n  </guide>"
+      },
+      "date": 1437409631851
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a7fc8aa1fc14c1f9"
+      },
+      "id": "a7fc8aa1fc14c1f9",
+      "type": "add",
+      "after": "627d082a1714abb0",
+      "date": 1437409645281
+    },
+    {
+      "type": "edit",
+      "id": "a7fc8aa1fc14c1f9",
+      "item": {
+        "type": "reference",
+        "id": "a7fc8aa1fc14c1f9",
+        "site": "c0de.academy",
+        "slug": "epub",
+        "title": "ePub",
+        "text": "EPUB (short for electronic publication; sometimes styled ePub) is a free and open e-book standard by the International Digital Publishing Forum (IDPF). Files have the extension .epub - [https://en.wikipedia.org/wiki/EPUB wikipedia]"
+      },
+      "date": 1437409648504
+    },
+    {
+      "type": "edit",
+      "id": "627d082a1714abb0",
+      "item": {
+        "type": "code",
+        "id": "627d082a1714abb0",
+        "text": "<guide>\n  <reference type=\"loi\" title=\"List Of Illustrations\" href=\"appendix.html#figures\" />\n</guide>"
+      },
+      "date": 1437409677643
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "2fb60603cf65ef78",
+        "f045521990846e9e",
+        "6d6c4e8003c797a7",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "627d082a1714abb0",
+      "date": 1437409684241
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17552e612db9bb32"
+      },
+      "id": "17552e612db9bb32",
+      "type": "add",
+      "after": "a7fc8aa1fc14c1f9",
+      "date": 1437409697514
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">\n    <dc:title>Pride and Prejudice</dc:title>\n    <dc:language>en</dc:language>\n    <dc:identifier id=\"BookId\" opf:scheme=\"ISBN\">123456789X</dc:identifier>\n    <dc:creator opf:file-as=\"Austen, Jane\" opf:role=\"aut\">Jane Austen</dc:creator>\n  </metadata>\n\n  <manifest>\n    <item id=\"chapter1\" href=\"chapter1.xhtml\" media-type=\"application/xhtml+xml\"/>\n    <item id=\"stylesheet\" href=\"style.css\" media-type=\"text/css\"/>\n    <item id=\"ch1-pic\" href=\"ch1-pic.png\" media-type=\"image/png\"/>\n    <item id=\"myfont\" href=\"css/myfont.otf\" media-type=\"application/x-font-opentype\"/>\n    <item id=\"ncx\" href=\"toc.ncx\" media-type=\"application/x-dtbncx+xml\"/>\n  </manifest>\n\n  <spine toc=\"ncx\">  </spine>\n\n  <guide>  </guide>\n\n</package>"
+      },
+      "date": 1437409717902
+    },
+    {
+      "type": "edit",
+      "id": "17552e612db9bb32",
+      "item": {
+        "type": "code",
+        "id": "17552e612db9bb32",
+        "text": "<spine toc=\"ncx\">\n  <itemref idref=\"chapter1\" />\n</spine>\n"
+      },
+      "date": 1437409729163
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "2fb60603cf65ef78",
+        "f045521990846e9e",
+        "6d6c4e8003c797a7",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "17552e612db9bb32",
+      "date": 1437409739146
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">\n    <dc:title>Pride and Prejudice</dc:title>\n    <dc:language>en</dc:language>\n    <dc:identifier id=\"BookId\" opf:scheme=\"ISBN\">123456789X</dc:identifier>\n    <dc:creator opf:file-as=\"Austen, Jane\" opf:role=\"aut\">Jane Austen</dc:creator>\n  </metadata>\n\n  <manifest> </manifest>\n\n  <spine toc=\"ncx\">  </spine>\n\n  <guide>  </guide>\n\n</package>"
+      },
+      "date": 1437409759959
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6bff2ce671c33927"
+      },
+      "id": "6bff2ce671c33927",
+      "type": "add",
+      "after": "a7fc8aa1fc14c1f9",
+      "date": 1437409762413
+    },
+    {
+      "type": "edit",
+      "id": "6bff2ce671c33927",
+      "item": {
+        "type": "code",
+        "id": "6bff2ce671c33927",
+        "text": "<manifest>\n    <item id=\"chapter1\" href=\"chapter1.xhtml\" media-type=\"application/xhtml+xml\"/>\n    <item id=\"stylesheet\" href=\"style.css\" media-type=\"text/css\"/>\n    <item id=\"ch1-pic\" href=\"ch1-pic.png\" media-type=\"image/png\"/>\n    <item id=\"myfont\" href=\"css/myfont.otf\" media-type=\"application/x-font-opentype\"/>\n    <item id=\"ncx\" href=\"toc.ncx\" media-type=\"application/x-dtbncx+xml\"/>\n</manifest>"
+      },
+      "date": 1437409771096
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "2fb60603cf65ef78",
+        "f045521990846e9e",
+        "6d6c4e8003c797a7",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "6bff2ce671c33927",
+      "date": 1437409782278
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">  </metadata>\n\n  <manifest> </manifest>\n\n  <spine toc=\"ncx\">  </spine>\n\n  <guide>  </guide>\n\n</package>"
+      },
+      "date": 1437409810401
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "544e3e2bd2171c5e"
+      },
+      "id": "544e3e2bd2171c5e",
+      "type": "add",
+      "after": "a7fc8aa1fc14c1f9",
+      "date": 1437409815905
+    },
+    {
+      "type": "edit",
+      "id": "544e3e2bd2171c5e",
+      "item": {
+        "type": "code",
+        "id": "544e3e2bd2171c5e",
+        "text": "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:opf=\"http://www.idpf.org/2007/opf\">\n    <dc:title>Pride and Prejudice</dc:title>\n    <dc:language>en</dc:language>\n    <dc:identifier id=\"BookId\" opf:scheme=\"ISBN\">123456789X</dc:identifier>\n    <dc:creator opf:file-as=\"Austen, Jane\" opf:role=\"aut\">Jane Austen</dc:creator>\n</metadata>"
+      },
+      "date": 1437409821322
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "2fb60603cf65ef78",
+        "f045521990846e9e",
+        "6d6c4e8003c797a7",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "544e3e2bd2171c5e",
+      "date": 1437409831246
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata>  </metadata>\n\n  <manifest> </manifest>\n\n  <spine toc=\"ncx\">  </spine>\n\n  <guide>  </guide>\n\n</package>"
+      },
+      "date": 1437409856449
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n  <metadata>  </metadata>\n  <manifest> </manifest>\n  <spine toc=\"ncx\">  </spine>\n  <guide>  </guide>\n</package>"
+      },
+      "date": 1437409869612
+    },
+    {
+      "type": "edit",
+      "id": "f045521990846e9e",
+      "item": {
+        "type": "code",
+        "id": "f045521990846e9e",
+        "text": "<?xml version=\"1.0\"?>\n<package version=\"2.0\" xmlns=\"http://www.idpf.org/2007/opf\" unique-identifier=\"BookId\">\n\n  <metadata>  </metadata>\n  <manifest> </manifest>\n  <spine toc=\"ncx\">  </spine>\n  <guide>  </guide>\n\n</package>"
+      },
+      "date": 1437409877064
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "f045521990846e9e",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "2fb60603cf65ef78",
+        "6d6c4e8003c797a7",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "f045521990846e9e",
+      "date": 1437409893438
+    },
+    {
+      "type": "remove",
+      "id": "2fb60603cf65ef78",
+      "date": 1437409906443
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "f045521990846e9e",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "6d6c4e8003c797a7",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "6d6c4e8003c797a7",
+      "date": 1437409929639
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "f045521990846e9e",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "6d6c4e8003c797a7",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "6d6c4e8003c797a7",
+      "date": 1437409947454
+    },
+    {
+      "type": "edit",
+      "id": "6d6c4e8003c797a7",
+      "item": {
+        "type": "paragraph",
+        "id": "6d6c4e8003c797a7",
+        "text": "Note that in the section above, an arbitrary media-type is given to the included font file, even though no mimetype exists for fonts."
+      },
+      "date": 1437409961926
+    },
+    {
+      "type": "edit",
+      "id": "a29ff0cd9af3d285",
+      "item": {
+        "type": "paragraph",
+        "id": "a29ff0cd9af3d285",
+        "text": "The OPF file, traditionally named content.opf, houses the [[EPUB]] book's metadata, file manifest, and linear reading order. "
+      },
+      "date": 1437410011650
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dc7d0701a595c072"
+      },
+      "id": "dc7d0701a595c072",
+      "type": "add",
+      "after": "a7fc8aa1fc14c1f9",
+      "date": 1437410075078
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "dc7d0701a595c072",
+        "e3b278270a4cae4d",
+        "f045521990846e9e",
+        "1beb00b85d35d33d",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "6d6c4e8003c797a7",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "dc7d0701a595c072",
+      "date": 1437410084048
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "dc7d0701a595c072",
+        "e3b278270a4cae4d",
+        "1beb00b85d35d33d",
+        "f045521990846e9e",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "6d6c4e8003c797a7",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "1beb00b85d35d33d",
+      "date": 1437410088536
+    },
+    {
+      "type": "move",
+      "order": [
+        "a29ff0cd9af3d285",
+        "ecd0401f38ab2800",
+        "e3b278270a4cae4d",
+        "dc7d0701a595c072",
+        "1beb00b85d35d33d",
+        "f045521990846e9e",
+        "4873ee45ab76513a",
+        "69e8e97ffe857038",
+        "544e3e2bd2171c5e",
+        "4ddce50e4ae6ed42",
+        "4995fd5307c9db43",
+        "77ef8516e19fff7f",
+        "ec150ee91ef45114",
+        "6bff2ce671c33927",
+        "6d6c4e8003c797a7",
+        "81eb3e51db0db81b",
+        "d639e1b83dea7b07",
+        "17552e612db9bb32",
+        "bc10d4f8a85849ae",
+        "0ce64f31b4aef04f",
+        "627d082a1714abb0",
+        "a7fc8aa1fc14c1f9"
+      ],
+      "id": "e3b278270a4cae4d",
+      "date": 1437410091480
+    },
+    {
+      "type": "edit",
+      "id": "e3b278270a4cae4d",
+      "item": {
+        "type": "paragraph",
+        "id": "e3b278270a4cae4d",
+        "text": "Furthermore, the package node must have the unique-identifier attribute. The .opf file's mimetype is:"
+      },
+      "date": 1437410103744
+    },
+    {
+      "type": "edit",
+      "id": "dc7d0701a595c072",
+      "item": {
+        "type": "code",
+        "id": "dc7d0701a595c072",
+        "text": "application/oebps-package+xml"
+      },
+      "date": 1437410106299
+    }
+  ]
+}

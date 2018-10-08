@@ -1,0 +1,139 @@
+{
+  "title": "Bank",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d840245d0f994608",
+      "text": "This is a contract for a simple distributed bank application. The core logic (what would normally be the server logic) is contained within smart-contract accounts on a blockchain, which is accessed from node.js via a javascript API (eris-contracts.js). It is a typical setup for a distributed [[Eris]] application."
+    },
+    {
+      "type": "paragraph",
+      "id": "d78433e5ca7b1f5b",
+      "text": "The bank contract is written in Solidity. It lets people create accounts, get currency (GhavCoin) from the bank owner, and transfer them between accounts - [https://github.com/androlo/bank.js/blob/master/contracts/src/Bank.sol GitHub]"
+    },
+    {
+      "type": "code",
+      "id": "33fafbe5e5bb0a94",
+      "text": "/// @title Bank\n/// @author Andreas Olofsson (andreas@erisindustries.com)\ncontract Bank {\n\n    // The bank account struct.\n    struct Account {\n        address owner;\n        uint balance;\n    }\n\n    // Null address\n    address constant ADDRESS_NULL = 0;\n\n    // Error codes.\n\n    // General\n    uint8 constant SUCCESS = 0; // Success\n    // Account related.\n    uint8 constant NO_ACCOUNT = 10; // Caller has no account.\n    uint8 constant ACCOUNT_EXISTS = 11; // Caller already has an account.\n    uint8 constant NO_TARGET = 12; // Recipient does not have an account.\n    uint8 constant NOT_OWNER = 13; // Caller is not owner of bank.\n    uint8 constant NOT_ACCOUNT_OWNER = 14; // Caller is not owner of bank account.\n    uint8 constant INVALID_NAME = 15; // Name is invalid.\n    // Balance related\n    uint8 constant NO_AMOUNT = 20; // Transacted amount is 0\n    uint8 constant INSUFFICIENT_BALANCE = 21; // Insufficient balance.\n\n    // Fields\n\n    // The owner of the contract.\n    uint constant public TOTAL_AMOUNT = 10000000;\n    uint public currentAmount = TOTAL_AMOUNT;\n    address public owner;\n\n    // The accounts.\n    mapping(bytes32 => Account) accounts;\n    mapping(address => bytes32) public names;\n\n    // Constructor\n    function Bank(){\n        owner = msg.sender;\n    }\n\n    /// @dev Registers if not already registered.\n    /// @param name - the user name.\n    /// @return Error code. INVALID_NAME || ACCOUNT_EXISTS || ADDRESS_EXISTS || SUCCESS\n    function registerNewAccount(bytes32 name) external returns (uint16 result){\n        if(name == \"\"){\n            return INVALID_NAME;\n        }\n        if(names[msg.sender] != \"\"){\n            return ACCOUNT_EXISTS;\n        }\n        accounts[name] = Account(msg.sender, 0);\n        names[msg.sender] = name;\n        return SUCCESS;\n    }\n\n    /// @dev Deletes an existing account. This can be done only by the bank owner or the owner of the account.\n    /// @param name - the user name.\n    /// @return Error code. NO_ACCOUNT || NOT_ACCOUNT_OWNER || SUCCESS\n    function deleteAccount(bytes32 name) external returns (uint16 results){\n        var acc = accounts[name];\n        var accOwner = acc.owner;\n\n        if(accOwner == ADDRESS_NULL){\n            return NO_ACCOUNT;\n        }\n        if(accOwner != msg.sender && msg.sender != owner){\n            return NOT_ACCOUNT_OWNER;\n        }\n\n        delete accounts[name];\n\n        if(msg.sender != owner || (msg.sender == owner && acc.owner == owner)){\n            delete names[msg.sender];\n        }\n        return SUCCESS;\n    }\n\n    /// @dev Used by the owner to endow an account with GhavCoin\n    /// @param user The user name.\n    /// @param amount The amount.\n    /// @param message The message.\n    /// @return Error code. NO_AMOUNT || NOT_OWNER || NO_TARGET || SUCCESS\n    function endow(bytes32 user, uint amount, bytes32 message) external returns (uint16 result) {\n        if (amount > currentAmount){\n            result = 345;\n            return;\n        }\n        if(amount == 0){\n            return NO_AMOUNT;\n        }\n        if(msg.sender != owner){\n            return NOT_OWNER;\n        }\n        var account = accounts[user];\n\n        if(account.owner == ADDRESS_NULL){\n            return NO_TARGET;\n        }\n        accounts[user].balance += amount;\n        currentAmount -= amount;\n        return SUCCESS;\n    }\n\n    /// @dev Transfer Ghavcoin between accounts. The sender is always the account that called the function.\n    /// @param to The recipients public address.\n    /// @param amount The amount.\n    /// @param message The message.\n    /// @return Error code. NO_AMOUNT || INSUFFICIENT_BALANCE || NO_ACCOUNT || NO_TARGET || SUCCESS\n    function transfer(bytes32 to, uint amount, bytes32 message) external returns (uint16 result) {\n\n        if(amount == 0){\n            return NO_AMOUNT;\n        }\n\n        var sndr = names[msg.sender];\n\n        if(sndr == \"\"){\n            return NO_ACCOUNT;\n        }\n\n        var account = accounts[sndr];\n\n        if(account.owner == ADDRESS_NULL){\n            return NO_ACCOUNT;\n        }\n        // TODO should be a check that user isn't transferring to himself, and an error to go with it.\n\n        if(account.balance < amount){\n            return INSUFFICIENT_BALANCE;\n        }\n\n        var target = accounts[to];\n        if(target.owner == ADDRESS_NULL){\n            return NO_TARGET;\n        } else {\n            target.balance += amount;\n            account.balance -= amount;\n        }\n    }\n\n    /// @dev Get the balance of a user account.\n    /// @param user The users public address.\n    /// @return The users current balance (non existing users would have 0).\n    function getBalance(bytes32 user) constant returns (uint accountBalance) {\n         return accounts[user].balance;\n    }\n\n    // Convenience method.\n    function getMyAddress() constant returns (address myAddress){\n        myAddress = msg.sender;\n        return;\n    }\n\n    // Convenience method.\n    function getMyName() constant returns (bytes32 myName){\n        myName = names[msg.sender];\n        return;\n    }\n\n    /// @dev Used by the owner to remove (suicide) the contract.\n    function remove() external {\n        if(msg.sender == owner){\n            suicide(owner);\n        }\n    }\n\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Bank",
+        "story": []
+      },
+      "date": 1449000834398
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "33fafbe5e5bb0a94"
+      },
+      "id": "33fafbe5e5bb0a94",
+      "type": "add",
+      "date": 1449000835361
+    },
+    {
+      "type": "edit",
+      "id": "33fafbe5e5bb0a94",
+      "item": {
+        "type": "code",
+        "id": "33fafbe5e5bb0a94",
+        "text": "/// @title Bank\n/// @author Andreas Olofsson (andreas@erisindustries.com)\ncontract Bank {\n\n    // The bank account struct.\n    struct Account {\n        address owner;\n        uint balance;\n    }\n\n    // Null address\n    address constant ADDRESS_NULL = 0;\n\n    // Error codes.\n\n    // General\n    uint8 constant SUCCESS = 0; // Success\n    // Account related.\n    uint8 constant NO_ACCOUNT = 10; // Caller has no account.\n    uint8 constant ACCOUNT_EXISTS = 11; // Caller already has an account.\n    uint8 constant NO_TARGET = 12; // Recipient does not have an account.\n    uint8 constant NOT_OWNER = 13; // Caller is not owner of bank.\n    uint8 constant NOT_ACCOUNT_OWNER = 14; // Caller is not owner of bank account.\n    uint8 constant INVALID_NAME = 15; // Name is invalid.\n    // Balance related\n    uint8 constant NO_AMOUNT = 20; // Transacted amount is 0\n    uint8 constant INSUFFICIENT_BALANCE = 21; // Insufficient balance.\n\n    // Fields\n\n    // The owner of the contract.\n    uint constant public TOTAL_AMOUNT = 10000000;\n    uint public currentAmount = TOTAL_AMOUNT;\n    address public owner;\n\n    // The accounts.\n    mapping(bytes32 => Account) accounts;\n    mapping(address => bytes32) public names;\n\n    // Constructor\n    function Bank(){\n        owner = msg.sender;\n    }\n\n    /// @dev Registers if not already registered.\n    /// @param name - the user name.\n    /// @return Error code. INVALID_NAME || ACCOUNT_EXISTS || ADDRESS_EXISTS || SUCCESS\n    function registerNewAccount(bytes32 name) external returns (uint16 result){\n        if(name == \"\"){\n            return INVALID_NAME;\n        }\n        if(names[msg.sender] != \"\"){\n            return ACCOUNT_EXISTS;\n        }\n        accounts[name] = Account(msg.sender, 0);\n        names[msg.sender] = name;\n        return SUCCESS;\n    }\n\n    /// @dev Deletes an existing account. This can be done only by the bank owner or the owner of the account.\n    /// @param name - the user name.\n    /// @return Error code. NO_ACCOUNT || NOT_ACCOUNT_OWNER || SUCCESS\n    function deleteAccount(bytes32 name) external returns (uint16 results){\n        var acc = accounts[name];\n        var accOwner = acc.owner;\n\n        if(accOwner == ADDRESS_NULL){\n            return NO_ACCOUNT;\n        }\n        if(accOwner != msg.sender && msg.sender != owner){\n            return NOT_ACCOUNT_OWNER;\n        }\n\n        delete accounts[name];\n\n        if(msg.sender != owner || (msg.sender == owner && acc.owner == owner)){\n            delete names[msg.sender];\n        }\n        return SUCCESS;\n    }\n\n    /// @dev Used by the owner to endow an account with GhavCoin\n    /// @param user The user name.\n    /// @param amount The amount.\n    /// @param message The message.\n    /// @return Error code. NO_AMOUNT || NOT_OWNER || NO_TARGET || SUCCESS\n    function endow(bytes32 user, uint amount, bytes32 message) external returns (uint16 result) {\n        if (amount > currentAmount){\n            result = 345;\n            return;\n        }\n        if(amount == 0){\n            return NO_AMOUNT;\n        }\n        if(msg.sender != owner){\n            return NOT_OWNER;\n        }\n        var account = accounts[user];\n\n        if(account.owner == ADDRESS_NULL){\n            return NO_TARGET;\n        }\n        accounts[user].balance += amount;\n        currentAmount -= amount;\n        return SUCCESS;\n    }\n\n    /// @dev Transfer Ghavcoin between accounts. The sender is always the account that called the function.\n    /// @param to The recipients public address.\n    /// @param amount The amount.\n    /// @param message The message.\n    /// @return Error code. NO_AMOUNT || INSUFFICIENT_BALANCE || NO_ACCOUNT || NO_TARGET || SUCCESS\n    function transfer(bytes32 to, uint amount, bytes32 message) external returns (uint16 result) {\n\n        if(amount == 0){\n            return NO_AMOUNT;\n        }\n\n        var sndr = names[msg.sender];\n\n        if(sndr == \"\"){\n            return NO_ACCOUNT;\n        }\n\n        var account = accounts[sndr];\n\n        if(account.owner == ADDRESS_NULL){\n            return NO_ACCOUNT;\n        }\n        // TODO should be a check that user isn't transferring to himself, and an error to go with it.\n\n        if(account.balance < amount){\n            return INSUFFICIENT_BALANCE;\n        }\n\n        var target = accounts[to];\n        if(target.owner == ADDRESS_NULL){\n            return NO_TARGET;\n        } else {\n            target.balance += amount;\n            account.balance -= amount;\n        }\n    }\n\n    /// @dev Get the balance of a user account.\n    /// @param user The users public address.\n    /// @return The users current balance (non existing users would have 0).\n    function getBalance(bytes32 user) constant returns (uint accountBalance) {\n         return accounts[user].balance;\n    }\n\n    // Convenience method.\n    function getMyAddress() constant returns (address myAddress){\n        myAddress = msg.sender;\n        return;\n    }\n\n    // Convenience method.\n    function getMyName() constant returns (bytes32 myName){\n        myName = names[msg.sender];\n        return;\n    }\n\n    /// @dev Used by the owner to remove (suicide) the contract.\n    function remove() external {\n        if(msg.sender == owner){\n            suicide(owner);\n        }\n    }\n\n}"
+      },
+      "date": 1449000838907
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1b894d94a3960b0c"
+      },
+      "id": "1b894d94a3960b0c",
+      "type": "add",
+      "after": "33fafbe5e5bb0a94",
+      "date": 1449000850151
+    },
+    {
+      "type": "remove",
+      "id": "1b894d94a3960b0c",
+      "date": 1449000885134
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d840245d0f994608"
+      },
+      "id": "d840245d0f994608",
+      "type": "add",
+      "after": "33fafbe5e5bb0a94",
+      "date": 1449000900047
+    },
+    {
+      "type": "edit",
+      "id": "d840245d0f994608",
+      "item": {
+        "type": "paragraph",
+        "id": "d840245d0f994608",
+        "text": "This is a contract for a simple distributed bank application. The core logic (what would normally be the server logic) is contained within smart-contract accounts on a blockchain, which is accessed from node.js via a javascript API (eris-contracts.js). It is a typical setup for a distributed Eris application"
+      },
+      "date": 1449000914512
+    },
+    {
+      "type": "move",
+      "order": [
+        "d840245d0f994608",
+        "33fafbe5e5bb0a94"
+      ],
+      "id": "d840245d0f994608",
+      "date": 1449000951140
+    },
+    {
+      "type": "edit",
+      "id": "d840245d0f994608",
+      "item": {
+        "type": "paragraph",
+        "id": "d840245d0f994608",
+        "text": "This is a contract for a simple distributed bank application. The core logic (what would normally be the server logic) is contained within smart-contract accounts on a blockchain, which is accessed from node.js via a javascript API (eris-contracts.js). It is a typical setup for a distributed [[Eris]] application"
+      },
+      "date": 1449000957628
+    },
+    {
+      "type": "edit",
+      "id": "d840245d0f994608",
+      "item": {
+        "type": "paragraph",
+        "id": "d840245d0f994608",
+        "text": "This is a contract for a simple distributed bank application. The core logic (what would normally be the server logic) is contained within smart-contract accounts on a blockchain, which is accessed from node.js via a javascript API (eris-contracts.js). It is a typical setup for a distributed [[Eris]] application."
+      },
+      "date": 1449000980442
+    },
+    {
+      "type": "add",
+      "id": "d78433e5ca7b1f5b",
+      "item": {
+        "type": "paragraph",
+        "id": "d78433e5ca7b1f5b",
+        "text": "The bank contract is written in Solidity. It lets people create accounts, get currency (GhavCoin) from the bank owner, and transfer them between accounts - "
+      },
+      "after": "d840245d0f994608",
+      "date": 1449001074871
+    },
+    {
+      "type": "edit",
+      "id": "d78433e5ca7b1f5b",
+      "item": {
+        "type": "paragraph",
+        "id": "d78433e5ca7b1f5b",
+        "text": "The bank contract is written in Solidity. It lets people create accounts, get currency (GhavCoin) from the bank owner, and transfer them between accounts - [https://github.com/androlo/bank.js/blob/master/contracts/src/Bank.sol GitHub]"
+      },
+      "date": 1449001117122
+    },
+    {
+      "type": "fork",
+      "site": "ksenya.cryptoacademy.org",
+      "date": 1492425340304
+    }
+  ]
+}

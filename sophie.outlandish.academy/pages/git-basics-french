@@ -1,0 +1,3904 @@
+{
+  "title": "Git Basics French",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b929109d61dd7330",
+      "text": "Voici un tuto pour apprendre les bases de git et des branches"
+    },
+    {
+      "type": "paragraph",
+      "id": "384e06f8cd182671",
+      "text": "[https://learngitbranching.js.org/?demo learning git branching demo]"
+    },
+    {
+      "type": "paragraph",
+      "id": "0c6ca084a04a6943",
+      "text": "[https://learngitbranching.js.org/ learning git branching]"
+    },
+    {
+      "type": "markdown",
+      "id": "fd2cf8133166cc76",
+      "text": "# Commandes Git"
+    },
+    {
+      "type": "paragraph",
+      "id": "d8dc1281f296b9bc",
+      "text": "Il existe une large variété de commandes git disponibles dans le mode bac à sable. Sont inclues :"
+    },
+    {
+      "type": "code",
+      "id": "3ba0a7d7ceaebbd6",
+      "text": "commit"
+    },
+    {
+      "type": "code",
+      "id": "3883afdb0bc54187",
+      "text": "branch"
+    },
+    {
+      "type": "code",
+      "id": "ce46b3195fb8a3b6",
+      "text": "checkout"
+    },
+    {
+      "type": "code",
+      "id": "ca34382dad19a420",
+      "text": "cherry-pick"
+    },
+    {
+      "type": "code",
+      "id": "5c5ea22f05953147",
+      "text": "reset"
+    },
+    {
+      "type": "code",
+      "id": "0d5affcc62a91b9b",
+      "text": "revert"
+    },
+    {
+      "type": "code",
+      "id": "0587ddd8bb86dda4",
+      "text": "rebase"
+    },
+    {
+      "type": "code",
+      "id": "0ec6971a76b1f477",
+      "text": "merge"
+    },
+    {
+      "type": "markdown",
+      "id": "5f78a0180117f77a",
+      "text": "# Partager, c'est se soucier !"
+    },
+    {
+      "type": "paragraph",
+      "id": "530727c762bc3e61",
+      "text": "Vous pouvez utiliser ce bac à sable avec des arbres existants et / ou partager des arbres via cet extension :"
+    },
+    {
+      "type": "paragraph",
+      "id": "2596990fc58d6c68",
+      "text": "Partagez des arbres avec vos amis via "
+    },
+    {
+      "type": "code",
+      "id": "ffe07ff3779b0d6a",
+      "text": "export tree"
+    },
+    {
+      "type": "paragraph",
+      "id": "b05af64bc33d6f1b",
+      "text": "et "
+    },
+    {
+      "type": "code",
+      "id": "43749ffb0dd1b5c9",
+      "text": "import tree"
+    },
+    {
+      "type": "paragraph",
+      "id": "45e694d1c0d58919",
+      "text": "Vous avez une grande leçon à partager ? Essayez de construire un niveau avec "
+    },
+    {
+      "type": "code",
+      "id": "774d65cd3b6e41c1",
+      "text": "build level"
+    },
+    {
+      "type": "paragraph",
+      "id": "4a77f5c4ab6ed8be",
+      "text": " ou essayez le niveau d'un ami avec "
+    },
+    {
+      "type": "code",
+      "id": "b5f9b301cd1fc6f0",
+      "text": "import level"
+    },
+    {
+      "type": "paragraph",
+      "id": "fa5764f6a69cc955",
+      "text": "Pour voir la gamme complète des commandes, tapez "
+    },
+    {
+      "type": "code",
+      "id": "b785bb1b0b75454c",
+      "text": "show commands"
+    },
+    {
+      "type": "paragraph",
+      "id": "c0fa90601f6889f3",
+      "text": "Il y a quelques perles telles que "
+    },
+    {
+      "type": "code",
+      "id": "c071f42f17e7899d",
+      "text": "undo"
+    },
+    {
+      "type": "paragraph",
+      "id": "23ec62fd642ee150",
+      "text": " et "
+    },
+    {
+      "type": "code",
+      "id": "b41ac67ae3f2508f",
+      "text": "reset"
+    },
+    {
+      "type": "paragraph",
+      "id": "487019f7ab0a1726",
+      "text": "Jouez !"
+    },
+    {
+      "type": "markdown",
+      "id": "39a73fe709cb10e1",
+      "text": "# 1.Séquence d'introduction"
+    },
+    {
+      "type": "paragraph",
+      "id": "68fb8a818a0c2590",
+      "text": "Une introduction en douceur à la majorité des commandes git "
+    },
+    {
+      "type": "markdown",
+      "id": "726cc0e133afea41",
+      "text": "**1.1. Introduction aux commits avec Git**\n"
+    },
+    {
+      "type": "markdown",
+      "id": "321ef97d25a87b2d",
+      "text": "**Commits Git**\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n"
+    },
+    {
+      "type": "code",
+      "id": "128bce778d74c502",
+      "text": "resolving deltas"
+    },
+    {
+      "type": "paragraph",
+      "id": "63adc0fd4a06946e",
+      "text": "lorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+    },
+    {
+      "type": "markdown",
+      "id": "4b49842750524afb",
+      "text": "**1.2. Gérer les branches avec Git**"
+    },
+    {
+      "type": "markdown",
+      "id": "59a79dedaf96bee0",
+      "text": "**Branches Git**\n\nLes branches sous Git sont incroyablement légères. Elles sont simplement des références sur un commit spécifique -- rien de plus. C'est pourquoi beaucoup d'enthousiastes répètent en cœur :\n\n>\"des branches le plus tôt possible, et des branches souvent\"\n\nParce qu'il n'y a pas de surcoût (stockage/mémoire) associé aux branches, il est facile de diviser son travail en de nombreuses branches plutôt que d'avoir quelques grosses branches.\n\nNous verrons comment les branches et les commits interagissent quand nous les utiliserons ensemble. Pour l'instant, souvenez-vous qu'une branche est un moyen d'exprimer \"Je veux inclure le contenu de ce commit et de tous les commits parents.\"\n"
+    },
+    {
+      "type": "markdown",
+      "id": "754295a451f8e4a3",
+      "text": "**1.3. Faire des 'merge' (fusions de branches) avec Git**"
+    },
+    {
+      "type": "markdown",
+      "id": "65d4946f7dc4978f",
+      "text": "**Branches et Merges**\n\nSuper ! Nous savons désormais comment faire des commits et des branches. Maintenant nous devons apprendre comment combiner ensemble les contenus de deux branches différentes. Ceci nous permettra de créer une nouvelle branche, développer une nouvelle fonctionnalité sur cette dernière, puis intégrer cette fonctionnalité en combinant le contenu de cette branche de développement à la branche d'origine(master par exemple).\n\nLa première méthode que nous allons voir pour combiner le contenu de deux branches est "
+    },
+    {
+      "type": "code",
+      "id": "5173e9e5aaeeb5d6",
+      "text": "git merge"
+    },
+    {
+      "type": "paragraph",
+      "id": "1199fa10eacd7a57",
+      "text": "Faire un 'merge' avec Git crée un commit spécial qui a deux parents. Un commit avec deux parents indique en susbtance \"Je veux inclure le contenu de ce parent et le contenu de cet autre parent, et l'ensemble de leurs parents.\"\n"
+    },
+    {
+      "type": "markdown",
+      "id": "6663f45ef94849c9",
+      "text": "**1.4. Introduction à rebase**"
+    },
+    {
+      "type": "markdown",
+      "id": "529b0d48a1b22a5c",
+      "text": "**Git Rebase**\n\nLa seconde façon de combiner les contenus de deux branches est rebase. Rebase prend un ensemble de commits, les \"recopie\", et les ajoute en bout de chaîne à un autre endroit.\n\nBien que cela puisse sembler compliqué, l'avantage de rebase est de permettre d'obtenir une simple séquence linéaire de commits. Les logs/l'historique du dépôt seront bien plus propres si seul rebase est autorisé (plutôt que merge)."
+    },
+    {
+      "type": "markdown",
+      "id": "96458cfbaca182f5",
+      "text": "# 2.Montée en puissance"
+    },
+    {
+      "type": "markdown",
+      "id": "ee9accee77ed222a",
+      "text": "**Se déplacer dans Git**\n\nAvant que nous découvrions quelques-unes des fonctionnalités les plus avancées de Git, il est important de comprendre les différents manières de se déplacer dans l'arbre des commits qui représente votre projet.\n\nUne fois que ces déplacements seront aisés, votre puissance avec les autres commandes de git sera amplifiée !"
+    },
+    {
+      "type": "markdown",
+      "id": "80f72c8dcfe04b5c",
+      "text": "**HEAD**\n\nPremièrement nous avons parlé de \"HEAD\". HEAD est le nom symbolique pour le commit sur lequel nous nous situons actuellement -- plus simplement c'est le commit sur lequel nous travaillons.\n\nHEAD pointe toujours sur le commit le plus récent dans l'arbre des commits. La plupart des commandes git qui modifient l'arbre des commits vont commencer par modifier HEAD.\n\nNormalement HEAD pointe sur le nom d'une branche (comme bugFix). Quand vous effectuez un commit, le statut de bugFix est modifié et ce changement est visible par le biais de HEAD."
+    },
+    {
+      "type": "markdown",
+      "id": "9800befae1a96a01",
+      "text": "**2.1. Détachez votre HEAD**"
+    },
+    {
+      "type": "paragraph",
+      "id": "0034bab20c3ceb41",
+      "text": "Détacher HEAD signifie simplement que l'on attache HEAD à un commit au lieu d'une branche."
+    },
+    {
+      "type": "markdown",
+      "id": "90c040302386cb00",
+      "text": "**2.2. Références relatives (^)**"
+    },
+    {
+      "type": "paragraph",
+      "id": "68b77964aefa5a0b",
+      "text": "Références relatives\n\nSe déplacer dans Git en spécifiant des identifiants de commits (hashes) peut être un peu agaçant. Dans le monde réel vous n'aurez pas une vue sur un joli arbre des commits à côté de votre terminal, ainsi vous aurez à utiliser git log pour connaître les identifiants.\n\nDe plus, les identifiants sont plus longs dans le vrai monde de Git qu'ici. Par exemple, l'identifiant du commit introduit au précédent niveau était fed2da64c0efc5293610bdd892f82a58e8cbc5d8. Difficilement mémorisable ...\n\nLe côté positif est que Git est intelligent avec les identifiants. Vous avez seulement à spécifier les premiers caractères de l'identifiant jusqu'à ce qu'il reconnaisse exactement le commit. Ainsi je peux taper fed2 au lieu de la longue chaîne ci-dessus."
+    },
+    {
+      "type": "paragraph",
+      "id": "2d736e55ae2bc7ec",
+      "text": "Comme je l'ai dit, spécifier un commit par son identifiant n'est pas très pratique, c'est pourquoi Git a des références relatives. Elles sont géniales !\n\nAvec les références relatives vous pouvez commencer par vous placer à un endroit mémorisable (comme la branche bugFix ou HEAD) et travailler depuis ici.\n\nLes commits relatifs sont puissants, et on va en introduire deux simples ici :\n\n    Revenir d'un commit en arrière avec ^\n    Revenir de plusieurs en arrière avec ~<num>"
+    },
+    {
+      "type": "markdown",
+      "id": "784e57c878f9be76",
+      "text": "**2.3. Références relatives #2 (~)**"
+    },
+    {
+      "type": "paragraph",
+      "id": "c800722ba2cf9dca",
+      "text": "L'opérateur \"~\"\n\nDisons que vous souhaitez remonter beaucoup de niveaux dans l'arbre des commits. Cela peut être ennuyeux d'utiliser ^ plusieurs fois, ainsi Git a aussi l'opérateur tilde (~).\n\nL'opérateur tilde prend optionnellement à sa suite un nombre qui spécifie le nombre de parents que vous souhaitez remonter."
+    },
+    {
+      "type": "paragraph",
+      "id": "a0f55de1e4a8b47b",
+      "text": "Forcer les branches\n\nVous êtes maintenant un expert des références relatives, alors servons-nous en.\n\nL'une des principales façons dont j'utilise les références relatives est pour réorganiser les branches. Vous pouvez directement réassigner les branches à un commit avec l'option -f. Ainsi quelque chose comme :\n\ngit branch -f master HEAD~3\n\nbouge (de force) la branche master à trois parents derrière HEAD.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8ad87bea135491ff",
+      "text": "**2.4. Annuler des changements avec Git**"
+    },
+    {
+      "type": "markdown",
+      "id": "737b4179aaea2597",
+      "text": "# 3.Déplacer le travail"
+    },
+    {
+      "type": "paragraph",
+      "id": "8699c404ae967ad5",
+      "text": "Soyez alaise de modifier l'arbre Git "
+    },
+    {
+      "type": "markdown",
+      "id": "ae28c708b1422524",
+      "text": "**3.1. Introduction à cherry-pick**"
+    },
+    {
+      "type": "markdown",
+      "id": "7366cbc38bdb5ab6",
+      "text": "**3.2. Introduction à rebase**"
+    },
+    {
+      "type": "markdown",
+      "id": "75fd802469b43961",
+      "text": "# 4.Un assortiment"
+    },
+    {
+      "type": "markdown",
+      "id": "b250917016a2b9cb",
+      "text": "**4.1. Choisir seulement 1 commit**"
+    },
+    {
+      "type": "markdown",
+      "id": "85c9884657a6a903",
+      "text": "**4.2. Jongler avec les Commits**"
+    },
+    {
+      "type": "markdown",
+      "id": "b031c430ccbe4dee",
+      "text": "**4.3. Jongler avec les commits #2**"
+    },
+    {
+      "type": "markdown",
+      "id": "bf1d57cb0b93f59f",
+      "text": "**4.4 Git Tags**"
+    },
+    {
+      "type": "markdown",
+      "id": "62ab61a7809000d1",
+      "text": "**4.5. Git describe**"
+    },
+    {
+      "type": "markdown",
+      "id": "e24b118a087efb12",
+      "text": "# 5.Sujets Avancés "
+    },
+    {
+      "type": "markdown",
+      "id": "f99fa41197307d03",
+      "text": "**5.1. Rebaser plus de 1000 fois**"
+    },
+    {
+      "type": "markdown",
+      "id": "83d221b9bb51220f",
+      "text": "**5.2. Parents multiples**"
+    },
+    {
+      "type": "markdown",
+      "id": "c6ece59d3b0b20d2",
+      "text": "**5.3. Branches spaghetti**"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Git Basics French",
+        "story": []
+      },
+      "date": 1523201938830
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "384e06f8cd182671"
+      },
+      "id": "384e06f8cd182671",
+      "type": "add",
+      "date": 1523201940734
+    },
+    {
+      "type": "edit",
+      "id": "384e06f8cd182671",
+      "item": {
+        "type": "paragraph",
+        "id": "384e06f8cd182671",
+        "text": "https://learngitbranching.js.org/?demo"
+      },
+      "date": 1523201945472
+    },
+    {
+      "type": "edit",
+      "id": "384e06f8cd182671",
+      "item": {
+        "type": "paragraph",
+        "id": "384e06f8cd182671",
+        "text": "[https://learngitbranching.js.org/?demo learhning git branching demo]"
+      },
+      "date": 1523201978732
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fd2cf8133166cc76"
+      },
+      "id": "fd2cf8133166cc76",
+      "type": "add",
+      "after": "384e06f8cd182671",
+      "date": 1523202006018
+    },
+    {
+      "type": "edit",
+      "id": "fd2cf8133166cc76",
+      "item": {
+        "type": "paragraph",
+        "id": "fd2cf8133166cc76",
+        "text": "Commandes Git\n\nIl existe une large variété de commandes git disponibles dans le mode bac à sable. Sont inclues :\n\n    commit\n    branch\n    checkout\n    cherry-pick\n    reset\n    revert\n    rebase\n    merge"
+      },
+      "date": 1523202016214
+    },
+    {
+      "type": "edit",
+      "id": "fd2cf8133166cc76",
+      "item": {
+        "type": "paragraph",
+        "id": "fd2cf8133166cc76",
+        "text": "#Commandes Git"
+      },
+      "date": 1523202035596
+    },
+    {
+      "type": "edit",
+      "id": "fd2cf8133166cc76",
+      "item": {
+        "type": "markdown",
+        "id": "fd2cf8133166cc76",
+        "text": "#Commandes Git"
+      },
+      "date": 1523202043142
+    },
+    {
+      "type": "add",
+      "id": "d8dc1281f296b9bc",
+      "item": {
+        "type": "paragraph",
+        "id": "d8dc1281f296b9bc",
+        "text": "\nIl existe une large variété de commandes git disponibles dans le mode bac à sable. Sont inclues :\n\n    commit\n    branch\n    checkout\n    cherry-pick\n    reset\n    revert\n    rebase\n    merge"
+      },
+      "after": "fd2cf8133166cc76",
+      "date": 1523202044070
+    },
+    {
+      "type": "edit",
+      "id": "fd2cf8133166cc76",
+      "item": {
+        "type": "markdown",
+        "id": "fd2cf8133166cc76",
+        "text": "# Commandes Git"
+      },
+      "date": 1523202051742
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6a66dcb46b23e203"
+      },
+      "id": "6a66dcb46b23e203",
+      "type": "add",
+      "after": "d8dc1281f296b9bc",
+      "date": 1523202071234
+    },
+    {
+      "type": "edit",
+      "id": "d8dc1281f296b9bc",
+      "item": {
+        "type": "paragraph",
+        "id": "d8dc1281f296b9bc",
+        "text": "Il existe une large variété de commandes git disponibles dans le mode bac à sable. Sont inclues :"
+      },
+      "date": 1523202072842
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    branch\n    checkout\n    cherry-pick\n    reset\n    revert\n    rebase\n    merge"
+      },
+      "date": 1523202075968
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3883afdb0bc54187"
+      },
+      "id": "3883afdb0bc54187",
+      "type": "add",
+      "after": "6a66dcb46b23e203",
+      "date": 1523202088286
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    checkout\n    cherry-pick\n    reset\n    revert\n    rebase\n    merge"
+      },
+      "date": 1523202090528
+    },
+    {
+      "type": "edit",
+      "id": "3883afdb0bc54187",
+      "item": {
+        "type": "code",
+        "id": "3883afdb0bc54187",
+        "text": "branch"
+      },
+      "date": 1523202099946
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9f0c671a8ec7bcc5"
+      },
+      "id": "9f0c671a8ec7bcc5",
+      "type": "add",
+      "after": "3883afdb0bc54187",
+      "date": 1523202124530
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    cherry-pick\n    reset\n    revert\n    rebase\n    merge"
+      },
+      "date": 1523202125778
+    },
+    {
+      "type": "edit",
+      "id": "9f0c671a8ec7bcc5",
+      "item": {
+        "type": "paragraph",
+        "id": "9f0c671a8ec7bcc5",
+        "text": "checkout"
+      },
+      "date": 1523202128262
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ce46b3195fb8a3b6"
+      },
+      "id": "ce46b3195fb8a3b6",
+      "type": "add",
+      "after": "9f0c671a8ec7bcc5",
+      "date": 1523202131022
+    },
+    {
+      "type": "remove",
+      "id": "9f0c671a8ec7bcc5",
+      "date": 1523202139364
+    },
+    {
+      "type": "edit",
+      "id": "ce46b3195fb8a3b6",
+      "item": {
+        "type": "code",
+        "id": "ce46b3195fb8a3b6",
+        "text": "checkout"
+      },
+      "date": 1523202145402
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca34382dad19a420"
+      },
+      "id": "ca34382dad19a420",
+      "type": "add",
+      "after": "ce46b3195fb8a3b6",
+      "date": 1523202155826
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    \n    reset\n    revert\n    rebase\n    merge"
+      },
+      "date": 1523202157652
+    },
+    {
+      "type": "edit",
+      "id": "ca34382dad19a420",
+      "item": {
+        "type": "code",
+        "id": "ca34382dad19a420",
+        "text": "cherry-pick"
+      },
+      "date": 1523202160418
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5c5ea22f05953147"
+      },
+      "id": "5c5ea22f05953147",
+      "type": "add",
+      "after": "ca34382dad19a420",
+      "date": 1523202168002
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    \n    \n    revert\n    rebase\n    merge"
+      },
+      "date": 1523202169792
+    },
+    {
+      "type": "edit",
+      "id": "5c5ea22f05953147",
+      "item": {
+        "type": "code",
+        "id": "5c5ea22f05953147",
+        "text": "reset"
+      },
+      "date": 1523202173934
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0d5affcc62a91b9b"
+      },
+      "id": "0d5affcc62a91b9b",
+      "type": "add",
+      "after": "5c5ea22f05953147",
+      "date": 1523202179640
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    \n    \n    \n    rebase\n    merge"
+      },
+      "date": 1523202182338
+    },
+    {
+      "type": "edit",
+      "id": "0d5affcc62a91b9b",
+      "item": {
+        "type": "code",
+        "id": "0d5affcc62a91b9b",
+        "text": "revert"
+      },
+      "date": 1523202185238
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0587ddd8bb86dda4"
+      },
+      "id": "0587ddd8bb86dda4",
+      "type": "add",
+      "after": "0d5affcc62a91b9b",
+      "date": 1523202191798
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    \n    \n    \n    \n    merge"
+      },
+      "date": 1523202193396
+    },
+    {
+      "type": "edit",
+      "id": "0587ddd8bb86dda4",
+      "item": {
+        "type": "code",
+        "id": "0587ddd8bb86dda4",
+        "text": "rebase"
+      },
+      "date": 1523202196380
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0ec6971a76b1f477"
+      },
+      "id": "0ec6971a76b1f477",
+      "type": "add",
+      "after": "0587ddd8bb86dda4",
+      "date": 1523202201914
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    \n    \n    \n    \n    "
+      },
+      "date": 1523202203806
+    },
+    {
+      "type": "edit",
+      "id": "0ec6971a76b1f477",
+      "item": {
+        "type": "code",
+        "id": "0ec6971a76b1f477",
+        "text": "merge"
+      },
+      "date": 1523202206254
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit\n    \n    \n    \n    \n    "
+      },
+      "date": 1523202213728
+    },
+    {
+      "type": "edit",
+      "id": "6a66dcb46b23e203",
+      "item": {
+        "type": "code",
+        "id": "6a66dcb46b23e203",
+        "text": "commit \n    \n    \n    "
+      },
+      "date": 1523202222714
+    },
+    {
+      "type": "remove",
+      "id": "6a66dcb46b23e203",
+      "date": 1523202242972
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6caa73cfb960a191"
+      },
+      "id": "6caa73cfb960a191",
+      "type": "add",
+      "after": "0ec6971a76b1f477",
+      "date": 1523202245810
+    },
+    {
+      "type": "edit",
+      "id": "6caa73cfb960a191",
+      "item": {
+        "type": "paragraph",
+        "id": "6caa73cfb960a191",
+        "text": "committ"
+      },
+      "date": 1523202256912
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3ba0a7d7ceaebbd6"
+      },
+      "id": "3ba0a7d7ceaebbd6",
+      "type": "add",
+      "after": "6caa73cfb960a191",
+      "date": 1523202259100
+    },
+    {
+      "type": "edit",
+      "id": "3ba0a7d7ceaebbd6",
+      "item": {
+        "type": "code",
+        "id": "3ba0a7d7ceaebbd6",
+        "text": "committ"
+      },
+      "date": 1523202265020
+    },
+    {
+      "type": "remove",
+      "id": "6caa73cfb960a191",
+      "date": 1523202271350
+    },
+    {
+      "type": "move",
+      "order": [
+        "384e06f8cd182671",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477"
+      ],
+      "id": "3ba0a7d7ceaebbd6",
+      "date": 1523202274960
+    },
+    {
+      "type": "edit",
+      "id": "3ba0a7d7ceaebbd6",
+      "item": {
+        "type": "code",
+        "id": "3ba0a7d7ceaebbd6",
+        "text": "commit"
+      },
+      "date": 1523202296304
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5f78a0180117f77a"
+      },
+      "id": "5f78a0180117f77a",
+      "type": "add",
+      "after": "0ec6971a76b1f477",
+      "date": 1523202323652
+    },
+    {
+      "type": "edit",
+      "id": "5f78a0180117f77a",
+      "item": {
+        "type": "paragraph",
+        "id": "5f78a0180117f77a",
+        "text": "# Partager, c'est se soucier !"
+      },
+      "date": 1523202335790
+    },
+    {
+      "type": "edit",
+      "id": "5f78a0180117f77a",
+      "item": {
+        "type": "markdown",
+        "id": "5f78a0180117f77a",
+        "text": "# Partager, c'est se soucier !"
+      },
+      "date": 1523202338622
+    },
+    {
+      "type": "add",
+      "id": "2596990fc58d6c68",
+      "item": {
+        "type": "paragraph",
+        "id": "2596990fc58d6c68",
+        "text": "Partagez des arbres avec vos amis via "
+      },
+      "after": "5f78a0180117f77a",
+      "date": 1523202348118
+    },
+    {
+      "type": "add",
+      "id": "e2b1d38cacba507f",
+      "item": {
+        "type": "paragraph",
+        "id": "e2b1d38cacba507f",
+        "text": "export tree "
+      },
+      "after": "2596990fc58d6c68",
+      "date": 1523202352924
+    },
+    {
+      "type": "add",
+      "id": "b05af64bc33d6f1b",
+      "item": {
+        "type": "paragraph",
+        "id": "b05af64bc33d6f1b",
+        "text": "et "
+      },
+      "after": "e2b1d38cacba507f",
+      "date": 1523202355814
+    },
+    {
+      "type": "add",
+      "id": "868f2cfeb67b8615",
+      "item": {
+        "type": "paragraph",
+        "id": "868f2cfeb67b8615",
+        "text": "import tree"
+      },
+      "after": "b05af64bc33d6f1b",
+      "date": 1523202358452
+    },
+    {
+      "type": "add",
+      "id": "45e694d1c0d58919",
+      "item": {
+        "type": "paragraph",
+        "id": "45e694d1c0d58919",
+        "text": "Vous avez une grande leçon à partager ? Essayez de construire un niveau avec build level ou essayez le niveau d'un ami avec import level\n\nPour voir la gamme complète des commandes, tapez show commands. Il y a quelques perles telles que undo et reset\n\nMais tout de suite commencez sur les levels…"
+      },
+      "after": "868f2cfeb67b8615",
+      "date": 1523202364982
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ffe07ff3779b0d6a"
+      },
+      "id": "ffe07ff3779b0d6a",
+      "type": "add",
+      "after": "45e694d1c0d58919",
+      "date": 1523202386432
+    },
+    {
+      "type": "remove",
+      "id": "e2b1d38cacba507f",
+      "date": 1523202388480
+    },
+    {
+      "type": "edit",
+      "id": "ffe07ff3779b0d6a",
+      "item": {
+        "type": "code",
+        "id": "ffe07ff3779b0d6a",
+        "text": "export tree"
+      },
+      "date": 1523202393636
+    },
+    {
+      "type": "move",
+      "order": [
+        "384e06f8cd182671",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "868f2cfeb67b8615",
+        "45e694d1c0d58919"
+      ],
+      "id": "ffe07ff3779b0d6a",
+      "date": 1523202415098
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "43749ffb0dd1b5c9"
+      },
+      "id": "43749ffb0dd1b5c9",
+      "type": "add",
+      "after": "45e694d1c0d58919",
+      "date": 1523202427888
+    },
+    {
+      "type": "remove",
+      "id": "868f2cfeb67b8615",
+      "date": 1523202429404
+    },
+    {
+      "type": "edit",
+      "id": "43749ffb0dd1b5c9",
+      "item": {
+        "type": "code",
+        "id": "43749ffb0dd1b5c9",
+        "text": "import tree"
+      },
+      "date": 1523202432416
+    },
+    {
+      "type": "move",
+      "order": [
+        "384e06f8cd182671",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919"
+      ],
+      "id": "43749ffb0dd1b5c9",
+      "date": 1523202435436
+    },
+    {
+      "type": "add",
+      "id": "0c6ca084a04a6943",
+      "item": {
+        "type": "paragraph",
+        "id": "0c6ca084a04a6943",
+        "text": "[https://learngitbranching.js.org/ learning git branching]"
+      },
+      "after": "384e06f8cd182671",
+      "date": 1523202483406
+    },
+    {
+      "type": "add",
+      "id": "b929109d61dd7330",
+      "item": {
+        "type": "paragraph",
+        "id": "b929109d61dd7330",
+        "text": "Voici un tuto pour apprendre les bases de git et des branches"
+      },
+      "after": "0c6ca084a04a6943",
+      "date": 1523202557738
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919"
+      ],
+      "id": "b929109d61dd7330",
+      "date": 1523202564278
+    },
+    {
+      "type": "edit",
+      "id": "384e06f8cd182671",
+      "item": {
+        "type": "paragraph",
+        "id": "384e06f8cd182671",
+        "text": "[https://learngitbranching.js.org/?demo learning git branching demo]"
+      },
+      "date": 1523202569720
+    },
+    {
+      "type": "edit",
+      "id": "45e694d1c0d58919",
+      "item": {
+        "type": "paragraph",
+        "id": "45e694d1c0d58919",
+        "text": "Vous avez une grande leçon à partager ? Essayez de construire un niveau avec "
+      },
+      "date": 1523202585870
+    },
+    {
+      "type": "add",
+      "id": "20fdc08cb028b91e",
+      "item": {
+        "type": "paragraph",
+        "id": "20fdc08cb028b91e",
+        "text": "build level"
+      },
+      "after": "45e694d1c0d58919",
+      "date": 1523202588460
+    },
+    {
+      "type": "add",
+      "id": "4a77f5c4ab6ed8be",
+      "item": {
+        "type": "paragraph",
+        "id": "4a77f5c4ab6ed8be",
+        "text": " ou essayez le niveau d'un ami avec "
+      },
+      "after": "20fdc08cb028b91e",
+      "date": 1523202591328
+    },
+    {
+      "type": "add",
+      "id": "fa5764f6a69cc955",
+      "item": {
+        "type": "paragraph",
+        "id": "fa5764f6a69cc955",
+        "text": "import level\n\nPour voir la gamme complète des commandes, tapez "
+      },
+      "after": "4a77f5c4ab6ed8be",
+      "date": 1523202634970
+    },
+    {
+      "type": "add",
+      "id": "d1a2f99675e39263",
+      "item": {
+        "type": "paragraph",
+        "id": "d1a2f99675e39263",
+        "text": "show commands."
+      },
+      "after": "fa5764f6a69cc955",
+      "date": 1523202637926
+    },
+    {
+      "type": "add",
+      "id": "c0fa90601f6889f3",
+      "item": {
+        "type": "paragraph",
+        "id": "c0fa90601f6889f3",
+        "text": "Il y a quelques perles telles que "
+      },
+      "after": "d1a2f99675e39263",
+      "date": 1523202654418
+    },
+    {
+      "type": "add",
+      "id": "6799f9468522de3f",
+      "item": {
+        "type": "paragraph",
+        "id": "6799f9468522de3f",
+        "text": "undo"
+      },
+      "after": "c0fa90601f6889f3",
+      "date": 1523202657042
+    },
+    {
+      "type": "add",
+      "id": "23ec62fd642ee150",
+      "item": {
+        "type": "paragraph",
+        "id": "23ec62fd642ee150",
+        "text": " et "
+      },
+      "after": "6799f9468522de3f",
+      "date": 1523202659128
+    },
+    {
+      "type": "add",
+      "id": "24d8ed77db47671d",
+      "item": {
+        "type": "paragraph",
+        "id": "24d8ed77db47671d",
+        "text": "reset"
+      },
+      "after": "23ec62fd642ee150",
+      "date": 1523202661198
+    },
+    {
+      "type": "add",
+      "id": "487019f7ab0a1726",
+      "item": {
+        "type": "paragraph",
+        "id": "487019f7ab0a1726",
+        "text": "\nMais tout de suite commencez sur les levels…"
+      },
+      "after": "24d8ed77db47671d",
+      "date": 1523202677998
+    },
+    {
+      "type": "add",
+      "id": "530727c762bc3e61",
+      "item": {
+        "type": "paragraph",
+        "id": "530727c762bc3e61",
+        "text": "Vous pouvez utiliser ce bac à sable avec des arbres existants :"
+      },
+      "after": "2596990fc58d6c68",
+      "date": 1523202711312
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "20fdc08cb028b91e",
+        "4a77f5c4ab6ed8be",
+        "fa5764f6a69cc955",
+        "d1a2f99675e39263",
+        "c0fa90601f6889f3",
+        "6799f9468522de3f",
+        "23ec62fd642ee150",
+        "24d8ed77db47671d",
+        "487019f7ab0a1726"
+      ],
+      "id": "530727c762bc3e61",
+      "date": 1523202712960
+    },
+    {
+      "type": "edit",
+      "id": "530727c762bc3e61",
+      "item": {
+        "type": "paragraph",
+        "id": "530727c762bc3e61",
+        "text": "Vous pouvez utiliser ce bac à sable avec des arbres existants et / ou partager des arbres via cet extension :"
+      },
+      "date": 1523202749814
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "774d65cd3b6e41c1"
+      },
+      "id": "774d65cd3b6e41c1",
+      "type": "add",
+      "after": "487019f7ab0a1726",
+      "date": 1523202759674
+    },
+    {
+      "type": "remove",
+      "id": "20fdc08cb028b91e",
+      "date": 1523202762262
+    },
+    {
+      "type": "edit",
+      "id": "774d65cd3b6e41c1",
+      "item": {
+        "type": "code",
+        "id": "774d65cd3b6e41c1",
+        "text": "build level"
+      },
+      "date": 1523202765342
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "fa5764f6a69cc955",
+        "d1a2f99675e39263",
+        "c0fa90601f6889f3",
+        "6799f9468522de3f",
+        "23ec62fd642ee150",
+        "24d8ed77db47671d",
+        "487019f7ab0a1726"
+      ],
+      "id": "774d65cd3b6e41c1",
+      "date": 1523202771896
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b5f9b301cd1fc6f0"
+      },
+      "id": "b5f9b301cd1fc6f0",
+      "type": "add",
+      "after": "487019f7ab0a1726",
+      "date": 1523202783488
+    },
+    {
+      "type": "edit",
+      "id": "fa5764f6a69cc955",
+      "item": {
+        "type": "paragraph",
+        "id": "fa5764f6a69cc955",
+        "text": "Pour voir la gamme complète des commandes, tapez "
+      },
+      "date": 1523202784680
+    },
+    {
+      "type": "edit",
+      "id": "b5f9b301cd1fc6f0",
+      "item": {
+        "type": "code",
+        "id": "b5f9b301cd1fc6f0",
+        "text": "import level"
+      },
+      "date": 1523202787114
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "d1a2f99675e39263",
+        "c0fa90601f6889f3",
+        "6799f9468522de3f",
+        "23ec62fd642ee150",
+        "24d8ed77db47671d",
+        "487019f7ab0a1726"
+      ],
+      "id": "b5f9b301cd1fc6f0",
+      "date": 1523202791954
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b785bb1b0b75454c"
+      },
+      "id": "b785bb1b0b75454c",
+      "type": "add",
+      "after": "487019f7ab0a1726",
+      "date": 1523202806864
+    },
+    {
+      "type": "remove",
+      "id": "d1a2f99675e39263",
+      "date": 1523202808264
+    },
+    {
+      "type": "edit",
+      "id": "b785bb1b0b75454c",
+      "item": {
+        "type": "code",
+        "id": "b785bb1b0b75454c",
+        "text": "show commands"
+      },
+      "date": 1523202811852
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "6799f9468522de3f",
+        "23ec62fd642ee150",
+        "24d8ed77db47671d",
+        "487019f7ab0a1726"
+      ],
+      "id": "b785bb1b0b75454c",
+      "date": 1523202815776
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c071f42f17e7899d"
+      },
+      "id": "c071f42f17e7899d",
+      "type": "add",
+      "after": "487019f7ab0a1726",
+      "date": 1523202820174
+    },
+    {
+      "type": "edit",
+      "id": "c071f42f17e7899d",
+      "item": {
+        "type": "code",
+        "id": "c071f42f17e7899d",
+        "text": "undo"
+      },
+      "date": 1523202825326
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "6799f9468522de3f",
+        "23ec62fd642ee150",
+        "c071f42f17e7899d",
+        "24d8ed77db47671d",
+        "487019f7ab0a1726"
+      ],
+      "id": "c071f42f17e7899d",
+      "date": 1523202826610
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "6799f9468522de3f",
+        "23ec62fd642ee150",
+        "24d8ed77db47671d",
+        "487019f7ab0a1726"
+      ],
+      "id": "c071f42f17e7899d",
+      "date": 1523202828454
+    },
+    {
+      "type": "remove",
+      "id": "6799f9468522de3f",
+      "date": 1523202833316
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b41ac67ae3f2508f"
+      },
+      "id": "b41ac67ae3f2508f",
+      "type": "add",
+      "after": "487019f7ab0a1726",
+      "date": 1523202837680
+    },
+    {
+      "type": "remove",
+      "id": "24d8ed77db47671d",
+      "date": 1523202841382
+    },
+    {
+      "type": "edit",
+      "id": "b41ac67ae3f2508f",
+      "item": {
+        "type": "code",
+        "id": "b41ac67ae3f2508f",
+        "text": "reset"
+      },
+      "date": 1523202847132
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726"
+      ],
+      "id": "b41ac67ae3f2508f",
+      "date": 1523202849248
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "39a73fe709cb10e1"
+      },
+      "id": "39a73fe709cb10e1",
+      "type": "add",
+      "after": "487019f7ab0a1726",
+      "date": 1523202907590
+    },
+    {
+      "type": "edit",
+      "id": "39a73fe709cb10e1",
+      "item": {
+        "type": "paragraph",
+        "id": "39a73fe709cb10e1",
+        "text": "\n1.Séquence d'introduction"
+      },
+      "date": 1523202918506
+    },
+    {
+      "type": "edit",
+      "id": "39a73fe709cb10e1",
+      "item": {
+        "type": "markdown",
+        "id": "39a73fe709cb10e1",
+        "text": "\n1.Séquence d'introduction"
+      },
+      "date": 1523202921084
+    },
+    {
+      "type": "add",
+      "id": "68fb8a818a0c2590",
+      "item": {
+        "type": "paragraph",
+        "id": "68fb8a818a0c2590",
+        "text": "\nUne introduction en douceur à la majorité des commandes git "
+      },
+      "after": "39a73fe709cb10e1",
+      "date": 1523202924290
+    },
+    {
+      "type": "edit",
+      "id": "39a73fe709cb10e1",
+      "item": {
+        "type": "markdown",
+        "id": "39a73fe709cb10e1",
+        "text": "1.Séquence d'introduction"
+      },
+      "date": 1523202924446
+    },
+    {
+      "type": "edit",
+      "id": "39a73fe709cb10e1",
+      "item": {
+        "type": "markdown",
+        "id": "39a73fe709cb10e1",
+        "text": "# 1.Séquence d'introduction"
+      },
+      "date": 1523202930616
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "726cc0e133afea41"
+      },
+      "id": "726cc0e133afea41",
+      "type": "add",
+      "after": "68fb8a818a0c2590",
+      "date": 1523202956346
+    },
+    {
+      "type": "edit",
+      "id": "726cc0e133afea41",
+      "item": {
+        "type": "paragraph",
+        "id": "726cc0e133afea41",
+        "text": "1.1 1: Introduction aux commits avec Git"
+      },
+      "date": 1523202963722
+    },
+    {
+      "type": "edit",
+      "id": "726cc0e133afea41",
+      "item": {
+        "type": "paragraph",
+        "id": "726cc0e133afea41",
+        "text": "1.1: Introduction aux commits avec Git"
+      },
+      "date": 1523202971374
+    },
+    {
+      "type": "edit",
+      "id": "726cc0e133afea41",
+      "item": {
+        "type": "paragraph",
+        "id": "726cc0e133afea41",
+        "text": "1.1. Introduction aux commits avec Git"
+      },
+      "date": 1523202980742
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4b49842750524afb"
+      },
+      "id": "4b49842750524afb",
+      "type": "add",
+      "after": "726cc0e133afea41",
+      "date": 1523203029384
+    },
+    {
+      "type": "edit",
+      "id": "4b49842750524afb",
+      "item": {
+        "type": "paragraph",
+        "id": "4b49842750524afb",
+        "text": "1.2. Gérer les branches avec Git"
+      },
+      "date": 1523203045340
+    },
+    {
+      "type": "edit",
+      "id": "726cc0e133afea41",
+      "item": {
+        "type": "paragraph",
+        "id": "726cc0e133afea41",
+        "text": "**1.1. Introduction aux commits avec Git**"
+      },
+      "date": 1523203056714
+    },
+    {
+      "type": "edit",
+      "id": "726cc0e133afea41",
+      "item": {
+        "type": "markdown",
+        "id": "726cc0e133afea41",
+        "text": "**1.1. Introduction aux commits avec Git**"
+      },
+      "date": 1523203058848
+    },
+    {
+      "type": "edit",
+      "id": "4b49842750524afb",
+      "item": {
+        "type": "paragraph",
+        "id": "4b49842750524afb",
+        "text": "**1.2. Gérer les branches avec Git**"
+      },
+      "date": 1523203069126
+    },
+    {
+      "type": "edit",
+      "id": "4b49842750524afb",
+      "item": {
+        "type": "markdown",
+        "id": "4b49842750524afb",
+        "text": "**1.2. Gérer les branches avec Git**"
+      },
+      "date": 1523203070834
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "754295a451f8e4a3"
+      },
+      "id": "754295a451f8e4a3",
+      "type": "add",
+      "after": "4b49842750524afb",
+      "date": 1523203090330
+    },
+    {
+      "type": "edit",
+      "id": "754295a451f8e4a3",
+      "item": {
+        "type": "paragraph",
+        "id": "754295a451f8e4a3",
+        "text": "3: Faire des 'merge' (fusions de branches) avec Git"
+      },
+      "date": 1523203094550
+    },
+    {
+      "type": "edit",
+      "id": "754295a451f8e4a3",
+      "item": {
+        "type": "paragraph",
+        "id": "754295a451f8e4a3",
+        "text": "**1.3. Faire des 'merge' (fusions de branches) avec Git**"
+      },
+      "date": 1523203110842
+    },
+    {
+      "type": "edit",
+      "id": "754295a451f8e4a3",
+      "item": {
+        "type": "markdown",
+        "id": "754295a451f8e4a3",
+        "text": "**1.3. Faire des 'merge' (fusions de branches) avec Git**"
+      },
+      "date": 1523203112698
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6663f45ef94849c9"
+      },
+      "id": "6663f45ef94849c9",
+      "type": "add",
+      "after": "754295a451f8e4a3",
+      "date": 1523203128354
+    },
+    {
+      "type": "edit",
+      "id": "6663f45ef94849c9",
+      "item": {
+        "type": "paragraph",
+        "id": "6663f45ef94849c9",
+        "text": "**1.4. Introduction à rebase**"
+      },
+      "date": 1523203146738
+    },
+    {
+      "type": "edit",
+      "id": "6663f45ef94849c9",
+      "item": {
+        "type": "markdown",
+        "id": "6663f45ef94849c9",
+        "text": "**1.4. Introduction à rebase**"
+      },
+      "date": 1523203147976
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "96458cfbaca182f5"
+      },
+      "id": "96458cfbaca182f5",
+      "type": "add",
+      "after": "6663f45ef94849c9",
+      "date": 1523203172676
+    },
+    {
+      "type": "edit",
+      "id": "96458cfbaca182f5",
+      "item": {
+        "type": "paragraph",
+        "id": "96458cfbaca182f5",
+        "text": "# Montée en puissance"
+      },
+      "date": 1523203186880
+    },
+    {
+      "type": "edit",
+      "id": "96458cfbaca182f5",
+      "item": {
+        "type": "markdown",
+        "id": "96458cfbaca182f5",
+        "text": "# Montée en puissance"
+      },
+      "date": 1523203194180
+    },
+    {
+      "type": "edit",
+      "id": "96458cfbaca182f5",
+      "item": {
+        "type": "markdown",
+        "id": "96458cfbaca182f5",
+        "text": "# 2.Montée en puissance"
+      },
+      "date": 1523203216016
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9800befae1a96a01"
+      },
+      "id": "9800befae1a96a01",
+      "type": "add",
+      "after": "96458cfbaca182f5",
+      "date": 1523203232888
+    },
+    {
+      "type": "edit",
+      "id": "9800befae1a96a01",
+      "item": {
+        "type": "paragraph",
+        "id": "9800befae1a96a01",
+        "text": "**2.1. Détachez votre HEAD**"
+      },
+      "date": 1523203262932
+    },
+    {
+      "type": "edit",
+      "id": "9800befae1a96a01",
+      "item": {
+        "type": "markdown",
+        "id": "9800befae1a96a01",
+        "text": "**2.1. Détachez votre HEAD**"
+      },
+      "date": 1523203264782
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "90c040302386cb00"
+      },
+      "id": "90c040302386cb00",
+      "type": "add",
+      "after": "9800befae1a96a01",
+      "date": 1523203286864
+    },
+    {
+      "type": "edit",
+      "id": "90c040302386cb00",
+      "item": {
+        "type": "paragraph",
+        "id": "90c040302386cb00",
+        "text": "**2.2. Références relatives (^)**"
+      },
+      "date": 1523203306956
+    },
+    {
+      "type": "edit",
+      "id": "90c040302386cb00",
+      "item": {
+        "type": "markdown",
+        "id": "90c040302386cb00",
+        "text": "**2.2. Références relatives (^)**"
+      },
+      "date": 1523203308622
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "784e57c878f9be76"
+      },
+      "id": "784e57c878f9be76",
+      "type": "add",
+      "after": "90c040302386cb00",
+      "date": 1523203327632
+    },
+    {
+      "type": "edit",
+      "id": "784e57c878f9be76",
+      "item": {
+        "type": "paragraph",
+        "id": "784e57c878f9be76",
+        "text": "**2.3. Références relatives #2 (~)**"
+      },
+      "date": 1523203344222
+    },
+    {
+      "type": "edit",
+      "id": "784e57c878f9be76",
+      "item": {
+        "type": "markdown",
+        "id": "784e57c878f9be76",
+        "text": "**2.3. Références relatives #2 (~)**"
+      },
+      "date": 1523203345494
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8ad87bea135491ff"
+      },
+      "id": "8ad87bea135491ff",
+      "type": "add",
+      "after": "784e57c878f9be76",
+      "date": 1523203370120
+    },
+    {
+      "type": "edit",
+      "id": "8ad87bea135491ff",
+      "item": {
+        "type": "paragraph",
+        "id": "8ad87bea135491ff",
+        "text": "**2.4. Annuler des changements avec Git**"
+      },
+      "date": 1523203391788
+    },
+    {
+      "type": "edit",
+      "id": "8ad87bea135491ff",
+      "item": {
+        "type": "markdown",
+        "id": "8ad87bea135491ff",
+        "text": "**2.4. Annuler des changements avec Git**"
+      },
+      "date": 1523203393440
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "737b4179aaea2597"
+      },
+      "id": "737b4179aaea2597",
+      "type": "add",
+      "after": "8ad87bea135491ff",
+      "date": 1523203410824
+    },
+    {
+      "type": "edit",
+      "id": "737b4179aaea2597",
+      "item": {
+        "type": "paragraph",
+        "id": "737b4179aaea2597",
+        "text": "# \n\nSoyez alaise de modifier l'arbre Git "
+      },
+      "date": 1523203418634
+    },
+    {
+      "type": "edit",
+      "id": "737b4179aaea2597",
+      "item": {
+        "type": "paragraph",
+        "id": "737b4179aaea2597",
+        "text": "# 3.Déplacer le travail"
+      },
+      "date": 1523203436598
+    },
+    {
+      "type": "edit",
+      "id": "737b4179aaea2597",
+      "item": {
+        "type": "markdown",
+        "id": "737b4179aaea2597",
+        "text": "# 3.Déplacer le travail"
+      },
+      "date": 1523203437948
+    },
+    {
+      "type": "add",
+      "id": "8699c404ae967ad5",
+      "item": {
+        "type": "paragraph",
+        "id": "8699c404ae967ad5",
+        "text": "Soyez alaise de modifier l'arbre Git "
+      },
+      "after": "737b4179aaea2597",
+      "date": 1523203441808
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ae28c708b1422524"
+      },
+      "id": "ae28c708b1422524",
+      "type": "add",
+      "after": "8699c404ae967ad5",
+      "date": 1523203459160
+    },
+    {
+      "type": "edit",
+      "id": "ae28c708b1422524",
+      "item": {
+        "type": "paragraph",
+        "id": "ae28c708b1422524",
+        "text": "**3.1. Introduction à cherry-pick**"
+      },
+      "date": 1523203480166
+    },
+    {
+      "type": "edit",
+      "id": "ae28c708b1422524",
+      "item": {
+        "type": "markdown",
+        "id": "ae28c708b1422524",
+        "text": "**3.1. Introduction à cherry-pick**"
+      },
+      "date": 1523203481754
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7366cbc38bdb5ab6"
+      },
+      "id": "7366cbc38bdb5ab6",
+      "type": "add",
+      "after": "ae28c708b1422524",
+      "date": 1523203494460
+    },
+    {
+      "type": "edit",
+      "id": "7366cbc38bdb5ab6",
+      "item": {
+        "type": "paragraph",
+        "id": "7366cbc38bdb5ab6",
+        "text": "**3.2. Introduction à rebase**"
+      },
+      "date": 1523203508620
+    },
+    {
+      "type": "edit",
+      "id": "7366cbc38bdb5ab6",
+      "item": {
+        "type": "markdown",
+        "id": "7366cbc38bdb5ab6",
+        "text": "**3.2. Introduction à rebase**"
+      },
+      "date": 1523203510214
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "75fd802469b43961"
+      },
+      "id": "75fd802469b43961",
+      "type": "add",
+      "after": "7366cbc38bdb5ab6",
+      "date": 1523203527742
+    },
+    {
+      "type": "edit",
+      "id": "75fd802469b43961",
+      "item": {
+        "type": "paragraph",
+        "id": "75fd802469b43961",
+        "text": "# 4.Un assortiment"
+      },
+      "date": 1523203536248
+    },
+    {
+      "type": "edit",
+      "id": "75fd802469b43961",
+      "item": {
+        "type": "markdown",
+        "id": "75fd802469b43961",
+        "text": "# 4.Un assortiment"
+      },
+      "date": 1523203545208
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b250917016a2b9cb"
+      },
+      "id": "b250917016a2b9cb",
+      "type": "add",
+      "after": "75fd802469b43961",
+      "date": 1523203559092
+    },
+    {
+      "type": "edit",
+      "id": "b250917016a2b9cb",
+      "item": {
+        "type": "paragraph",
+        "id": "b250917016a2b9cb",
+        "text": "**4.1. Choisir seulement 1 commit**"
+      },
+      "date": 1523203572644
+    },
+    {
+      "type": "edit",
+      "id": "b250917016a2b9cb",
+      "item": {
+        "type": "markdown",
+        "id": "b250917016a2b9cb",
+        "text": "**4.1. Choisir seulement 1 commit**"
+      },
+      "date": 1523203574254
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "85c9884657a6a903"
+      },
+      "id": "85c9884657a6a903",
+      "type": "add",
+      "after": "b250917016a2b9cb",
+      "date": 1523203586382
+    },
+    {
+      "type": "edit",
+      "id": "85c9884657a6a903",
+      "item": {
+        "type": "paragraph",
+        "id": "85c9884657a6a903",
+        "text": "**4.2. Jongler avec les Commits**"
+      },
+      "date": 1523203601988
+    },
+    {
+      "type": "edit",
+      "id": "85c9884657a6a903",
+      "item": {
+        "type": "markdown",
+        "id": "85c9884657a6a903",
+        "text": "**4.2. Jongler avec les Commits**"
+      },
+      "date": 1523203603788
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b031c430ccbe4dee"
+      },
+      "id": "b031c430ccbe4dee",
+      "type": "add",
+      "after": "85c9884657a6a903",
+      "date": 1523203622080
+    },
+    {
+      "type": "edit",
+      "id": "b031c430ccbe4dee",
+      "item": {
+        "type": "paragraph",
+        "id": "b031c430ccbe4dee",
+        "text": "**4.3. Jongler avec les commits #2**"
+      },
+      "date": 1523203645866
+    },
+    {
+      "type": "edit",
+      "id": "b031c430ccbe4dee",
+      "item": {
+        "type": "markdown",
+        "id": "b031c430ccbe4dee",
+        "text": "**4.3. Jongler avec les commits #2**"
+      },
+      "date": 1523203649134
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bf1d57cb0b93f59f"
+      },
+      "id": "bf1d57cb0b93f59f",
+      "type": "add",
+      "after": "b031c430ccbe4dee",
+      "date": 1523203663622
+    },
+    {
+      "type": "edit",
+      "id": "bf1d57cb0b93f59f",
+      "item": {
+        "type": "paragraph",
+        "id": "bf1d57cb0b93f59f",
+        "text": "**4.4 Git Tags**"
+      },
+      "date": 1523203679408
+    },
+    {
+      "type": "edit",
+      "id": "bf1d57cb0b93f59f",
+      "item": {
+        "type": "markdown",
+        "id": "bf1d57cb0b93f59f",
+        "text": "**4.4 Git Tags**"
+      },
+      "date": 1523203681568
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "62ab61a7809000d1"
+      },
+      "id": "62ab61a7809000d1",
+      "type": "add",
+      "after": "bf1d57cb0b93f59f",
+      "date": 1523203697812
+    },
+    {
+      "type": "edit",
+      "id": "62ab61a7809000d1",
+      "item": {
+        "type": "paragraph",
+        "id": "62ab61a7809000d1",
+        "text": "**4.5. Git describe**"
+      },
+      "date": 1523203715422
+    },
+    {
+      "type": "edit",
+      "id": "62ab61a7809000d1",
+      "item": {
+        "type": "markdown",
+        "id": "62ab61a7809000d1",
+        "text": "**4.5. Git describe**"
+      },
+      "date": 1523203717796
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e24b118a087efb12"
+      },
+      "id": "e24b118a087efb12",
+      "type": "add",
+      "after": "62ab61a7809000d1",
+      "date": 1523203735644
+    },
+    {
+      "type": "edit",
+      "id": "e24b118a087efb12",
+      "item": {
+        "type": "paragraph",
+        "id": "e24b118a087efb12",
+        "text": "# 5.Sujets Avancés "
+      },
+      "date": 1523203743996
+    },
+    {
+      "type": "edit",
+      "id": "e24b118a087efb12",
+      "item": {
+        "type": "markdown",
+        "id": "e24b118a087efb12",
+        "text": "# 5.Sujets Avancés "
+      },
+      "date": 1523203745324
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f99fa41197307d03"
+      },
+      "id": "f99fa41197307d03",
+      "type": "add",
+      "after": "e24b118a087efb12",
+      "date": 1523203747286
+    },
+    {
+      "type": "edit",
+      "id": "f99fa41197307d03",
+      "item": {
+        "type": "paragraph",
+        "id": "f99fa41197307d03",
+        "text": "**5.1. Rebaser plus de 1000 fois**"
+      },
+      "date": 1523203769742
+    },
+    {
+      "type": "edit",
+      "id": "f99fa41197307d03",
+      "item": {
+        "type": "markdown",
+        "id": "f99fa41197307d03",
+        "text": "**5.1. Rebaser plus de 1000 fois**"
+      },
+      "date": 1523203771942
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "83d221b9bb51220f"
+      },
+      "id": "83d221b9bb51220f",
+      "type": "add",
+      "after": "f99fa41197307d03",
+      "date": 1523203788142
+    },
+    {
+      "type": "edit",
+      "id": "83d221b9bb51220f",
+      "item": {
+        "type": "paragraph",
+        "id": "83d221b9bb51220f",
+        "text": "**5.2. Parents multiples**"
+      },
+      "date": 1523203806660
+    },
+    {
+      "type": "edit",
+      "id": "83d221b9bb51220f",
+      "item": {
+        "type": "markdown",
+        "id": "83d221b9bb51220f",
+        "text": "**5.2. Parents multiples**"
+      },
+      "date": 1523203808826
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c6ece59d3b0b20d2"
+      },
+      "id": "c6ece59d3b0b20d2",
+      "type": "add",
+      "after": "83d221b9bb51220f",
+      "date": 1523203834530
+    },
+    {
+      "type": "edit",
+      "id": "c6ece59d3b0b20d2",
+      "item": {
+        "type": "paragraph",
+        "id": "c6ece59d3b0b20d2",
+        "text": "**5.3. Branches spaghetti"
+      },
+      "date": 1523203871010
+    },
+    {
+      "type": "edit",
+      "id": "c6ece59d3b0b20d2",
+      "item": {
+        "type": "paragraph",
+        "id": "c6ece59d3b0b20d2",
+        "text": "**5.3. Branches spaghetti**"
+      },
+      "date": 1523203879032
+    },
+    {
+      "type": "edit",
+      "id": "c6ece59d3b0b20d2",
+      "item": {
+        "type": "markdown",
+        "id": "c6ece59d3b0b20d2",
+        "text": "**5.3. Branches spaghetti**"
+      },
+      "date": 1523203881148
+    },
+    {
+      "type": "edit",
+      "id": "726cc0e133afea41",
+      "item": {
+        "type": "markdown",
+        "id": "726cc0e133afea41",
+        "text": "**1.1. Introduction aux commits avec Git**\n"
+      },
+      "date": 1523203919426
+    },
+    {
+      "type": "edit",
+      "id": "68fb8a818a0c2590",
+      "item": {
+        "type": "paragraph",
+        "id": "68fb8a818a0c2590",
+        "text": "Une introduction en douceur à la majorité des commandes git "
+      },
+      "date": 1523203920558
+    },
+    {
+      "type": "add",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "paragraph",
+        "id": "321ef97d25a87b2d",
+        "text": "Commits Git\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n\nresolving deltas\n\nlorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+      },
+      "after": "68fb8a818a0c2590",
+      "date": 1523203931656
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "4b49842750524afb",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "321ef97d25a87b2d",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "321ef97d25a87b2d",
+      "date": 1523203946168
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "321ef97d25a87b2d",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "4b49842750524afb",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "321ef97d25a87b2d",
+      "date": 1523203955016
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "4b49842750524afb",
+        "754295a451f8e4a3",
+        "321ef97d25a87b2d",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "321ef97d25a87b2d",
+      "date": 1523203963746
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "4b49842750524afb",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "321ef97d25a87b2d",
+      "date": 1523203968544
+    },
+    {
+      "type": "edit",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "paragraph",
+        "id": "321ef97d25a87b2d",
+        "text": "**Commits Git\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n\nresolving deltas\n\nlorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+      },
+      "date": 1523203974756
+    },
+    {
+      "type": "edit",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "paragraph",
+        "id": "321ef97d25a87b2d",
+        "text": "**Commits Git**\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n\nresolving deltas\n\nlorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+      },
+      "date": 1523203983234
+    },
+    {
+      "type": "edit",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "markdown",
+        "id": "321ef97d25a87b2d",
+        "text": "**Commits Git**\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n\nresolving deltas\n\nlorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+      },
+      "date": 1523203985890
+    },
+    {
+      "type": "edit",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "markdown",
+        "id": "321ef97d25a87b2d",
+        "text": "**Commits Git**\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n\n*resolving deltas*\n\nlorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+      },
+      "date": 1523204025094
+    },
+    {
+      "type": "edit",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "markdown",
+        "id": "321ef97d25a87b2d",
+        "text": "**Commits Git**\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n\n*resolving deltas*\n"
+      },
+      "date": 1523204059230
+    },
+    {
+      "type": "add",
+      "id": "63adc0fd4a06946e",
+      "item": {
+        "type": "paragraph",
+        "id": "63adc0fd4a06946e",
+        "text": "lorsque l'on clone un dépôt.\n\nC'est beaucoup à absorber, mais pour l'instant vous pouvez considérer les commits comme des snapshots du projet. Les commits sont très légers et passer de l'un à l'autre est très rapide !"
+      },
+      "after": "68fb8a818a0c2590",
+      "date": 1523204067284
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "63adc0fd4a06946e",
+      "date": 1523204073126
+    },
+    {
+      "type": "edit",
+      "id": "321ef97d25a87b2d",
+      "item": {
+        "type": "markdown",
+        "id": "321ef97d25a87b2d",
+        "text": "**Commits Git**\n\nUn commit dans un dépôt (repository) git enregistre une image (snapshot) de tous les fichiers du repertoire. Comme un Copier-Coller géant, mais en bien mieux !\n\nGit fait en sorte que les commits soient aussi légers que possible donc il ne recopie pas tout le répertoire à chaque commit. En fait, git n'enregistre que l'ensemble des changements (\"delta\") depuis la version précédente du dépôt. C'est pour cette raison que la plupart des commits ont un commit parent -- ainsi que nous le verrons plus tard.\n\nPour cloner un dépôt, il faut décompresser (\"résoudre\") tous ces deltas. C'est la raison pour laquelle la commande écrit :\n"
+      },
+      "date": 1523204083928
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "128bce778d74c502"
+      },
+      "id": "128bce778d74c502",
+      "type": "add",
+      "after": "c6ece59d3b0b20d2",
+      "date": 1523204087572
+    },
+    {
+      "type": "edit",
+      "id": "128bce778d74c502",
+      "item": {
+        "type": "code",
+        "id": "128bce778d74c502",
+        "text": "resolving deltas"
+      },
+      "date": 1523204097304
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "128bce778d74c502",
+      "date": 1523204102626
+    },
+    {
+      "type": "add",
+      "id": "59a79dedaf96bee0",
+      "item": {
+        "type": "paragraph",
+        "id": "59a79dedaf96bee0",
+        "text": "\nBranches Git\n\nLes branches sous Git sont incroyablement légères. Elles sont simplement des références sur un commit spécifique -- rien de plus. C'est pourquoi beaucoup d'enthousiastes répètent en cœur :\n\ndes branches le plus tôt possible, et des branches souvent\n\nParce qu'il n'y a pas de surcoût (stockage/mémoire) associé aux branches, il est facile de diviser son travail en de nombreuses branches plutôt que d'avoir quelques grosses branches.\n\nNous verrons comment les branches et les commits interagissent quand nous les utiliserons ensemble. Pour l'instant, souvenez-vous qu'une branche est un moyen d'exprimer \"Je veux inclure le contenu de ce commit et de tous les commits parents.\"\n"
+      },
+      "after": "63adc0fd4a06946e",
+      "date": 1523204166940
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "4b49842750524afb",
+      "date": 1523204177124
+    },
+    {
+      "type": "edit",
+      "id": "59a79dedaf96bee0",
+      "item": {
+        "type": "paragraph",
+        "id": "59a79dedaf96bee0",
+        "text": "**Branches Git**\n\nLes branches sous Git sont incroyablement légères. Elles sont simplement des références sur un commit spécifique -- rien de plus. C'est pourquoi beaucoup d'enthousiastes répètent en cœur :\n\n>des branches le plus tôt possible, et des branches souvent\n\nParce qu'il n'y a pas de surcoût (stockage/mémoire) associé aux branches, il est facile de diviser son travail en de nombreuses branches plutôt que d'avoir quelques grosses branches.\n\nNous verrons comment les branches et les commits interagissent quand nous les utiliserons ensemble. Pour l'instant, souvenez-vous qu'une branche est un moyen d'exprimer \"Je veux inclure le contenu de ce commit et de tous les commits parents.\"\n"
+      },
+      "date": 1523204195834
+    },
+    {
+      "type": "edit",
+      "id": "59a79dedaf96bee0",
+      "item": {
+        "type": "markdown",
+        "id": "59a79dedaf96bee0",
+        "text": "**Branches Git**\n\nLes branches sous Git sont incroyablement légères. Elles sont simplement des références sur un commit spécifique -- rien de plus. C'est pourquoi beaucoup d'enthousiastes répètent en cœur :\n\n>des branches le plus tôt possible, et des branches souvent\n\nParce qu'il n'y a pas de surcoût (stockage/mémoire) associé aux branches, il est facile de diviser son travail en de nombreuses branches plutôt que d'avoir quelques grosses branches.\n\nNous verrons comment les branches et les commits interagissent quand nous les utiliserons ensemble. Pour l'instant, souvenez-vous qu'une branche est un moyen d'exprimer \"Je veux inclure le contenu de ce commit et de tous les commits parents.\"\n"
+      },
+      "date": 1523204198136
+    },
+    {
+      "type": "edit",
+      "id": "59a79dedaf96bee0",
+      "item": {
+        "type": "markdown",
+        "id": "59a79dedaf96bee0",
+        "text": "**Branches Git**\n\nLes branches sous Git sont incroyablement légères. Elles sont simplement des références sur un commit spécifique -- rien de plus. C'est pourquoi beaucoup d'enthousiastes répètent en cœur :\n\n>\"des branches le plus tôt possible, et des branches souvent\"\n\nParce qu'il n'y a pas de surcoût (stockage/mémoire) associé aux branches, il est facile de diviser son travail en de nombreuses branches plutôt que d'avoir quelques grosses branches.\n\nNous verrons comment les branches et les commits interagissent quand nous les utiliserons ensemble. Pour l'instant, souvenez-vous qu'une branche est un moyen d'exprimer \"Je veux inclure le contenu de ce commit et de tous les commits parents.\"\n"
+      },
+      "date": 1523204213778
+    },
+    {
+      "type": "add",
+      "id": "65d4946f7dc4978f",
+      "item": {
+        "type": "paragraph",
+        "id": "65d4946f7dc4978f",
+        "text": "Branches et Merges\n\nSuper ! Nous savons désormais comment faire des commits et des branches. Maintenant nous devons apprendre comment combiner ensemble les contenus de deux branches différentes. Ceci nous permettra de créer une nouvelle branche, développer une nouvelle fonctionnalité sur cette dernière, puis intégrer cette fonctionnalité en combinant le contenu de cette branche de développement à la branche d'origine(master par exemple).\n\nLa première méthode que nous allons voir pour combiner le contenu de deux branches est git merge. Faire un 'merge' avec Git crée un commit spécial qui a deux parents. Un commit avec deux parents indique en susbtance \"Je veux inclure le contenu de ce parent et le contenu de cet autre parent, et l'ensemble de leurs parents.\"\n\nC'est plus facile en visualisant, regardons dans la vue suivante\n"
+      },
+      "after": "63adc0fd4a06946e",
+      "date": 1523204379922
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "6663f45ef94849c9",
+        "65d4946f7dc4978f",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "65d4946f7dc4978f",
+      "date": 1523204384982
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "65d4946f7dc4978f",
+      "date": 1523204389734
+    },
+    {
+      "type": "edit",
+      "id": "65d4946f7dc4978f",
+      "item": {
+        "type": "paragraph",
+        "id": "65d4946f7dc4978f",
+        "text": "**Branches et Merges\n\nSuper ! Nous savons désormais comment faire des commits et des branches. Maintenant nous devons apprendre comment combiner ensemble les contenus de deux branches différentes. Ceci nous permettra de créer une nouvelle branche, développer une nouvelle fonctionnalité sur cette dernière, puis intégrer cette fonctionnalité en combinant le contenu de cette branche de développement à la branche d'origine(master par exemple).\n\nLa première méthode que nous allons voir pour combiner le contenu de deux branches est git merge. Faire un 'merge' avec Git crée un commit spécial qui a deux parents. Un commit avec deux parents indique en susbtance \"Je veux inclure le contenu de ce parent et le contenu de cet autre parent, et l'ensemble de leurs parents.\"\n\nC'est plus facile en visualisant, regardons dans la vue suivante\n"
+      },
+      "date": 1523204396276
+    },
+    {
+      "type": "edit",
+      "id": "65d4946f7dc4978f",
+      "item": {
+        "type": "paragraph",
+        "id": "65d4946f7dc4978f",
+        "text": "**Branches et Merges**\n\nSuper ! Nous savons désormais comment faire des commits et des branches. Maintenant nous devons apprendre comment combiner ensemble les contenus de deux branches différentes. Ceci nous permettra de créer une nouvelle branche, développer une nouvelle fonctionnalité sur cette dernière, puis intégrer cette fonctionnalité en combinant le contenu de cette branche de développement à la branche d'origine(master par exemple).\n\nLa première méthode que nous allons voir pour combiner le contenu de deux branches est "
+      },
+      "date": 1523204434694
+    },
+    {
+      "type": "add",
+      "id": "9ce32084eff09e2a",
+      "item": {
+        "type": "paragraph",
+        "id": "9ce32084eff09e2a",
+        "text": "git merge. "
+      },
+      "after": "65d4946f7dc4978f",
+      "date": 1523204438050
+    },
+    {
+      "type": "add",
+      "id": "1199fa10eacd7a57",
+      "item": {
+        "type": "paragraph",
+        "id": "1199fa10eacd7a57",
+        "text": "Faire un 'merge' avec Git crée un commit spécial qui a deux parents. Un commit avec deux parents indique en susbtance \"Je veux inclure le contenu de ce parent et le contenu de cet autre parent, et l'ensemble de leurs parents.\"\n\nC'est plus facile en visualisant, regardons dans la vue suivante\n"
+      },
+      "after": "9ce32084eff09e2a",
+      "date": 1523204455880
+    },
+    {
+      "type": "edit",
+      "id": "65d4946f7dc4978f",
+      "item": {
+        "type": "markdown",
+        "id": "65d4946f7dc4978f",
+        "text": "**Branches et Merges**\n\nSuper ! Nous savons désormais comment faire des commits et des branches. Maintenant nous devons apprendre comment combiner ensemble les contenus de deux branches différentes. Ceci nous permettra de créer une nouvelle branche, développer une nouvelle fonctionnalité sur cette dernière, puis intégrer cette fonctionnalité en combinant le contenu de cette branche de développement à la branche d'origine(master par exemple).\n\nLa première méthode que nous allons voir pour combiner le contenu de deux branches est "
+      },
+      "date": 1523204462400
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5173e9e5aaeeb5d6"
+      },
+      "id": "5173e9e5aaeeb5d6",
+      "type": "add",
+      "after": "c6ece59d3b0b20d2",
+      "date": 1523204467668
+    },
+    {
+      "type": "remove",
+      "id": "9ce32084eff09e2a",
+      "date": 1523204469330
+    },
+    {
+      "type": "edit",
+      "id": "5173e9e5aaeeb5d6",
+      "item": {
+        "type": "code",
+        "id": "5173e9e5aaeeb5d6",
+        "text": "git merge"
+      },
+      "date": 1523204473882
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "5173e9e5aaeeb5d6",
+      "date": 1523204500472
+    },
+    {
+      "type": "edit",
+      "id": "1199fa10eacd7a57",
+      "item": {
+        "type": "paragraph",
+        "id": "1199fa10eacd7a57",
+        "text": "Faire un 'merge' avec Git crée un commit spécial qui a deux parents. Un commit avec deux parents indique en susbtance \"Je veux inclure le contenu de ce parent et le contenu de cet autre parent, et l'ensemble de leurs parents.\"\n"
+      },
+      "date": 1523204519964
+    },
+    {
+      "type": "add",
+      "id": "529b0d48a1b22a5c",
+      "item": {
+        "type": "paragraph",
+        "id": "529b0d48a1b22a5c",
+        "text": "**Git Rebase**\n\nLa seconde façon de combiner les contenus de deux branches est rebase. Rebase prend un ensemble de commits, les \"recopie\", et les ajoute en bout de chaîne à un autre endroit.\n\nBien que cela puisse sembler compliqué, l'avantage de rebase est de permettre d'obtenir une simple séquence linéaire de commits. Les logs/l'historique du dépôt seront bien plus propres si seul rebase est autorisé (plutôt que merge)."
+      },
+      "after": "1199fa10eacd7a57",
+      "date": 1523205399472
+    },
+    {
+      "type": "edit",
+      "id": "529b0d48a1b22a5c",
+      "item": {
+        "type": "markdown",
+        "id": "529b0d48a1b22a5c",
+        "text": "**Git Rebase**\n\nLa seconde façon de combiner les contenus de deux branches est rebase. Rebase prend un ensemble de commits, les \"recopie\", et les ajoute en bout de chaîne à un autre endroit.\n\nBien que cela puisse sembler compliqué, l'avantage de rebase est de permettre d'obtenir une simple séquence linéaire de commits. Les logs/l'historique du dépôt seront bien plus propres si seul rebase est autorisé (plutôt que merge)."
+      },
+      "date": 1523205401522
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "529b0d48a1b22a5c",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "529b0d48a1b22a5c",
+      "date": 1523205409176
+    },
+    {
+      "type": "add",
+      "id": "ee9accee77ed222a",
+      "item": {
+        "type": "paragraph",
+        "id": "ee9accee77ed222a",
+        "text": "Se déplacer dans Git\n\nAvant que nous découvrions quelques-unes des fonctionnalités les plus avancées de Git, il est important de comprendre les différents manières de se déplacer dans l'arbre des commits qui représente votre projet.\n\nUne fois que ces déplacements seront aisés, votre puissance avec les autres commandes de git sera amplifiée !"
+      },
+      "after": "1199fa10eacd7a57",
+      "date": 1523205903046
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "529b0d48a1b22a5c",
+        "96458cfbaca182f5",
+        "9800befae1a96a01",
+        "ee9accee77ed222a",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "ee9accee77ed222a",
+      "date": 1523205911528
+    },
+    {
+      "type": "edit",
+      "id": "ee9accee77ed222a",
+      "item": {
+        "type": "paragraph",
+        "id": "ee9accee77ed222a",
+        "text": "**Se déplacer dans Git**\n\nAvant que nous découvrions quelques-unes des fonctionnalités les plus avancées de Git, il est important de comprendre les différents manières de se déplacer dans l'arbre des commits qui représente votre projet.\n\nUne fois que ces déplacements seront aisés, votre puissance avec les autres commandes de git sera amplifiée !"
+      },
+      "date": 1523205925108
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "529b0d48a1b22a5c",
+        "96458cfbaca182f5",
+        "ee9accee77ed222a",
+        "9800befae1a96a01",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "ee9accee77ed222a",
+      "date": 1523205969322
+    },
+    {
+      "type": "add",
+      "id": "80f72c8dcfe04b5c",
+      "item": {
+        "type": "paragraph",
+        "id": "80f72c8dcfe04b5c",
+        "text": "HEAD\n\nPremièrement nous avons parlé de \"HEAD\". HEAD est le nom symbolique pour le commit sur lequel nous nous situons actuellement -- plus simplement c'est le commit sur lequel nous travaillons.\n\nHEAD pointe toujours sur le commit le plus récent dans l'arbre des commits. La plupart des commandes git qui modifient l'arbre des commits vont commencer par modifier HEAD.\n\nNormalement HEAD pointe sur le nom d'une branche (comme bugFix). Quand vous effectuez un commit, le statut de bugFix est modifié et ce changement est visible par le biais de HEAD."
+      },
+      "after": "ee9accee77ed222a",
+      "date": 1523205977056
+    },
+    {
+      "type": "edit",
+      "id": "ee9accee77ed222a",
+      "item": {
+        "type": "markdown",
+        "id": "ee9accee77ed222a",
+        "text": "**Se déplacer dans Git**\n\nAvant que nous découvrions quelques-unes des fonctionnalités les plus avancées de Git, il est important de comprendre les différents manières de se déplacer dans l'arbre des commits qui représente votre projet.\n\nUne fois que ces déplacements seront aisés, votre puissance avec les autres commandes de git sera amplifiée !"
+      },
+      "date": 1523206000782
+    },
+    {
+      "type": "edit",
+      "id": "80f72c8dcfe04b5c",
+      "item": {
+        "type": "paragraph",
+        "id": "80f72c8dcfe04b5c",
+        "text": "**HEAD**\n\nPremièrement nous avons parlé de \"HEAD\". HEAD est le nom symbolique pour le commit sur lequel nous nous situons actuellement -- plus simplement c'est le commit sur lequel nous travaillons.\n\nHEAD pointe toujours sur le commit le plus récent dans l'arbre des commits. La plupart des commandes git qui modifient l'arbre des commits vont commencer par modifier HEAD.\n\nNormalement HEAD pointe sur le nom d'une branche (comme bugFix). Quand vous effectuez un commit, le statut de bugFix est modifié et ce changement est visible par le biais de HEAD."
+      },
+      "date": 1523206003908
+    },
+    {
+      "type": "add",
+      "id": "0034bab20c3ceb41",
+      "item": {
+        "type": "paragraph",
+        "id": "0034bab20c3ceb41",
+        "text": "Détacher HEAD signifie simplement que l'on attache HEAD à un commit au lieu d'une branche."
+      },
+      "after": "80f72c8dcfe04b5c",
+      "date": 1523206109946
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "529b0d48a1b22a5c",
+        "96458cfbaca182f5",
+        "ee9accee77ed222a",
+        "80f72c8dcfe04b5c",
+        "9800befae1a96a01",
+        "0034bab20c3ceb41",
+        "90c040302386cb00",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "0034bab20c3ceb41",
+      "date": 1523206120308
+    },
+    {
+      "type": "edit",
+      "id": "80f72c8dcfe04b5c",
+      "item": {
+        "type": "markdown",
+        "id": "80f72c8dcfe04b5c",
+        "text": "**HEAD**\n\nPremièrement nous avons parlé de \"HEAD\". HEAD est le nom symbolique pour le commit sur lequel nous nous situons actuellement -- plus simplement c'est le commit sur lequel nous travaillons.\n\nHEAD pointe toujours sur le commit le plus récent dans l'arbre des commits. La plupart des commandes git qui modifient l'arbre des commits vont commencer par modifier HEAD.\n\nNormalement HEAD pointe sur le nom d'une branche (comme bugFix). Quand vous effectuez un commit, le statut de bugFix est modifié et ce changement est visible par le biais de HEAD."
+      },
+      "date": 1523206124280
+    },
+    {
+      "type": "add",
+      "id": "68b77964aefa5a0b",
+      "item": {
+        "type": "paragraph",
+        "id": "68b77964aefa5a0b",
+        "text": "Références relatives\n\nSe déplacer dans Git en spécifiant des identifiants de commits (hashes) peut être un peu agaçant. Dans le monde réel vous n'aurez pas une vue sur un joli arbre des commits à côté de votre terminal, ainsi vous aurez à utiliser git log pour connaître les identifiants.\n\nDe plus, les identifiants sont plus longs dans le vrai monde de Git qu'ici. Par exemple, l'identifiant du commit introduit au précédent niveau était fed2da64c0efc5293610bdd892f82a58e8cbc5d8. Difficilement mémorisable ...\n\nLe côté positif est que Git est intelligent avec les identifiants. Vous avez seulement à spécifier les premiers caractères de l'identifiant jusqu'à ce qu'il reconnaisse exactement le commit. Ainsi je peux taper fed2 au lieu de la longue chaîne ci-dessus."
+      },
+      "after": "0034bab20c3ceb41",
+      "date": 1523206382748
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "529b0d48a1b22a5c",
+        "96458cfbaca182f5",
+        "ee9accee77ed222a",
+        "80f72c8dcfe04b5c",
+        "9800befae1a96a01",
+        "0034bab20c3ceb41",
+        "90c040302386cb00",
+        "68b77964aefa5a0b",
+        "784e57c878f9be76",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "90c040302386cb00",
+      "date": 1523206388732
+    },
+    {
+      "type": "add",
+      "id": "2d736e55ae2bc7ec",
+      "item": {
+        "type": "paragraph",
+        "id": "2d736e55ae2bc7ec",
+        "text": "Comme je l'ai dit, spécifier un commit par son identifiant n'est pas très pratique, c'est pourquoi Git a des références relatives. Elles sont géniales !\n\nAvec les références relatives vous pouvez commencer par vous placer à un endroit mémorisable (comme la branche bugFix ou HEAD) et travailler depuis ici.\n\nLes commits relatifs sont puissants, et on va en introduire deux simples ici :\n\n    Revenir d'un commit en arrière avec ^\n    Revenir de plusieurs en arrière avec ~<num>\n\n"
+      },
+      "after": "68b77964aefa5a0b",
+      "date": 1523206513652
+    },
+    {
+      "type": "edit",
+      "id": "2d736e55ae2bc7ec",
+      "item": {
+        "type": "paragraph",
+        "id": "2d736e55ae2bc7ec",
+        "text": "Comme je l'ai dit, spécifier un commit par son identifiant n'est pas très pratique, c'est pourquoi Git a des références relatives. Elles sont géniales !\n\nAvec les références relatives vous pouvez commencer par vous placer à un endroit mémorisable (comme la branche bugFix ou HEAD) et travailler depuis ici.\n\nLes commits relatifs sont puissants, et on va en introduire deux simples ici :\n\n    Revenir d'un commit en arrière avec ^\n    Revenir de plusieurs en arrière avec ~<num>"
+      },
+      "date": 1523206934332
+    },
+    {
+      "type": "add",
+      "id": "c800722ba2cf9dca",
+      "item": {
+        "type": "paragraph",
+        "id": "c800722ba2cf9dca",
+        "text": "L'opérateur \"~\"\n\nDisons que vous souhaitez remonter beaucoup de niveaux dans l'arbre des commits. Cela peut être ennuyeux d'utiliser ^ plusieurs fois, ainsi Git a aussi l'opérateur tilde (~).\n\nL'opérateur tilde prend optionnellement à sa suite un nombre qui spécifie le nombre de parents que vous souhaitez remonter. Voyons cela en action\n"
+      },
+      "after": "2d736e55ae2bc7ec",
+      "date": 1523206945918
+    },
+    {
+      "type": "move",
+      "order": [
+        "b929109d61dd7330",
+        "384e06f8cd182671",
+        "0c6ca084a04a6943",
+        "fd2cf8133166cc76",
+        "d8dc1281f296b9bc",
+        "3ba0a7d7ceaebbd6",
+        "3883afdb0bc54187",
+        "ce46b3195fb8a3b6",
+        "ca34382dad19a420",
+        "5c5ea22f05953147",
+        "0d5affcc62a91b9b",
+        "0587ddd8bb86dda4",
+        "0ec6971a76b1f477",
+        "5f78a0180117f77a",
+        "530727c762bc3e61",
+        "2596990fc58d6c68",
+        "ffe07ff3779b0d6a",
+        "b05af64bc33d6f1b",
+        "43749ffb0dd1b5c9",
+        "45e694d1c0d58919",
+        "774d65cd3b6e41c1",
+        "4a77f5c4ab6ed8be",
+        "b5f9b301cd1fc6f0",
+        "fa5764f6a69cc955",
+        "b785bb1b0b75454c",
+        "c0fa90601f6889f3",
+        "c071f42f17e7899d",
+        "23ec62fd642ee150",
+        "b41ac67ae3f2508f",
+        "487019f7ab0a1726",
+        "39a73fe709cb10e1",
+        "68fb8a818a0c2590",
+        "726cc0e133afea41",
+        "321ef97d25a87b2d",
+        "128bce778d74c502",
+        "63adc0fd4a06946e",
+        "4b49842750524afb",
+        "59a79dedaf96bee0",
+        "754295a451f8e4a3",
+        "65d4946f7dc4978f",
+        "5173e9e5aaeeb5d6",
+        "1199fa10eacd7a57",
+        "6663f45ef94849c9",
+        "529b0d48a1b22a5c",
+        "96458cfbaca182f5",
+        "ee9accee77ed222a",
+        "80f72c8dcfe04b5c",
+        "9800befae1a96a01",
+        "0034bab20c3ceb41",
+        "90c040302386cb00",
+        "68b77964aefa5a0b",
+        "2d736e55ae2bc7ec",
+        "784e57c878f9be76",
+        "c800722ba2cf9dca",
+        "8ad87bea135491ff",
+        "737b4179aaea2597",
+        "8699c404ae967ad5",
+        "ae28c708b1422524",
+        "7366cbc38bdb5ab6",
+        "75fd802469b43961",
+        "b250917016a2b9cb",
+        "85c9884657a6a903",
+        "b031c430ccbe4dee",
+        "bf1d57cb0b93f59f",
+        "62ab61a7809000d1",
+        "e24b118a087efb12",
+        "f99fa41197307d03",
+        "83d221b9bb51220f",
+        "c6ece59d3b0b20d2"
+      ],
+      "id": "c800722ba2cf9dca",
+      "date": 1523206953328
+    },
+    {
+      "type": "edit",
+      "id": "c800722ba2cf9dca",
+      "item": {
+        "type": "paragraph",
+        "id": "c800722ba2cf9dca",
+        "text": "L'opérateur \"~\"\n\nDisons que vous souhaitez remonter beaucoup de niveaux dans l'arbre des commits. Cela peut être ennuyeux d'utiliser ^ plusieurs fois, ainsi Git a aussi l'opérateur tilde (~).\n\nL'opérateur tilde prend optionnellement à sa suite un nombre qui spécifie le nombre de parents que vous souhaitez remonter."
+      },
+      "date": 1523206980112
+    },
+    {
+      "type": "add",
+      "id": "a0f55de1e4a8b47b",
+      "item": {
+        "type": "paragraph",
+        "id": "a0f55de1e4a8b47b",
+        "text": "Forcer les branches\n\nVous êtes maintenant un expert des références relatives, alors servons-nous en.\n\nL'une des principales façons dont j'utilise les références relatives est pour réorganiser les branches. Vous pouvez directement réassigner les branches à un commit avec l'option -f. Ainsi quelque chose comme :\n\ngit branch -f master HEAD~3\n\nbouge (de force) la branche master à trois parents derrière HEAD.\n"
+      },
+      "after": "c800722ba2cf9dca",
+      "date": 1523207054236
+    },
+    {
+      "type": "edit",
+      "id": "487019f7ab0a1726",
+      "item": {
+        "type": "paragraph",
+        "id": "487019f7ab0a1726",
+        "text": "Jouez !"
+      },
+      "date": 1523260831790
+    }
+  ]
+}

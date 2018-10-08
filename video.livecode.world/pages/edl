@@ -1,0 +1,1894 @@
+{
+  "title": "EDL",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "7c2d5d7d3731d9b3",
+      "text": "An edit decision list or [[EDL]] is used in the post-production process of film editing and video editing. The list contains an ordered list of reel and timecode data representing where each video clip can be obtained in order to conform the final cut - [https://en.wikipedia.org/wiki/Edit_decision_list wikipedia]"
+    },
+    {
+      "type": "markdown",
+      "id": "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+      "text": "# Coding with video timecode"
+    },
+    {
+      "type": "paragraph",
+      "id": "397e90a6334e66b7",
+      "text": "[[Ffmpeg]] and the [[MLT Multimedia Framework]] are command-line tools for editing and manipulating video based on [[video timecode]] (or [[edit decision list]]s."
+    },
+    {
+      "type": "markdown",
+      "id": "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+      "text": "# EDL Formats"
+    },
+    {
+      "type": "paragraph",
+      "id": "b2ac28d95f27374b",
+      "text": "This section describes components of an EDL using the CMX 3600 EDL format. Other formats may vary slightly."
+    },
+    {
+      "type": "html",
+      "id": "21ba2891-247c-42b8-8781-0088b00c9d0e",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=www.niwa.nu' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://www.niwa.nu/2013/05/how-to-read-an-edl/'>How to read an EDL &ndash; Niwa</a>"
+    },
+    {
+      "type": "html",
+      "id": "f23695d1-60e7-4b89-a892-b61aff2bac19",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=documentation.apple.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=96%26section=1%26tasks=true'>Final Cut Pro 7 User Manual: About EDLs</a>"
+    },
+    {
+      "type": "paragraph",
+      "id": "03b03182aaafe239",
+      "text": "In an EDL, each clip in your sequence is represented by a line of text called an event, which has a unique event number. "
+    },
+    {
+      "type": "paragraph",
+      "id": "245e237e1a205694",
+      "text": "A clip in an EDL is defined by a source reel name and two pairs of timecode In and Out points. The first pair of timecode numbers describes the source tape (or clip) In and Out points. The second pair describes the timecode location where that clip should be placed onto a master tape (or Timeline)."
+    },
+    {
+      "type": "html",
+      "id": "e7e49d8b-d8c3-4c76-89e6-7070998a1b76",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://edlmax.com/SMPTETimeCodeConversion.htm'>EdlMax - Convessssiiiooonnn of Audio Samples</a>"
+    },
+    {
+      "type": "html",
+      "id": "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=www.edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.edlmax.com/EdlMaxHelp/Edl/maxguide.html'>Guide to EDL Management</a>"
+    },
+    {
+      "type": "markdown",
+      "id": "86be0754b8fbd2e4",
+      "text": "# Elements of an EDL"
+    },
+    {
+      "type": "paragraph",
+      "id": "daf770b9f260e150",
+      "text": "The elements of an EDL are described in the following sections."
+    },
+    {
+      "type": "html",
+      "id": "1e6a90f6-c3ce-427f-af24-ec050c026493",
+      "text": "<div style='padding: 12px; background:#eee; width:96%; align=centered;'>\n<a href='https://www.niwa.nu/wp-content/uploads/2013/05/EDL-short.png' target='_blank'>\n<img style='display:block; margin:auto; width:100%;'\nsrc='https://www.niwa.nu/wp-content/uploads/2013/05/EDL-short.png'>\n</a>\n\n<p class=caption>\nThis is an image\n[https://www.niwa.nu/wp-content/uploads/2013/05/EDL-short.png - niwa.nu]\n</p></div>"
+    },
+    {
+      "type": "code",
+      "id": "9399f7b76f915f4b",
+      "text": "171  001      V     C        01:38:41:00 01:39:15:24 01:38:41:00 01:39:15:24  "
+    },
+    {
+      "type": "code",
+      "id": "66af2be51cbd98ad",
+      "text": "001004VC04:31:13:04 04:31:22:23 01:00:00:00 01:00:10:00\n001014VD030 14:27:03:03 14:27:25:22 01:00:10:10 01:00:30:00\n"
+    },
+    {
+      "type": "markdown",
+      "id": "1c2493a699b9cc0d",
+      "text": "# Title and Sequence Timecode Format\nThe first line of an EDL contains the title of the sequence. In NTSC sequences, the second line displays whether the sequence timecode is drop frame or non-drop frame."
+    },
+    {
+      "type": "code",
+      "id": "de29a3046b16b249",
+      "text": "Row 1: TITLE (the title of the EDL)\nRow 2: FCM: – Frame Code Mode"
+    },
+    {
+      "type": "code",
+      "id": "57da1b64f6abc59f",
+      "text": "Column 1: 001 – number of edit event\nColumn 2: TAPE1 – name of Source tape\nColumn 3: V – this tells that edit is Video only\nColumn 4: C, D or W (Cut, Dissolve or Wipe)\n\nColumn 5: timecode for Source In point\nColumn 6: timecode for Source Out point\nColumn 7: timecode for Master / Recorder  In point\nColumn 8: timecode for Master / Recorder Out point"
+    },
+    {
+      "type": "markdown",
+      "id": "b56536385a2bc2c7",
+      "text": "# Column 1:  Event Number\n\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot."
+    },
+    {
+      "type": "markdown",
+      "id": "f04eac61dcb7acb3",
+      "text": "# Column 2:  Reel Name\nA reel name describes which source tape (or reel) the clip comes from. Final Cut Pro assumes that clips without reel names come from non-tape sources, such as color bars, black, or other generators. Final Cut Pro automatically designates these auxiliary sources with the reel name AX.\n\nImportant: Make sure all clips with timecode sources have reel names before exporting an EDL, or you won’t be able to easily re-create your sequence when you open the EDL on another editing system.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "df06483c4df9ce75",
+      "text": "# Column 3:  Track Type\n\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event."
+    },
+    {
+      "type": "markdown",
+      "id": "873a2ce4e3873db7",
+      "text": "- V: Video\n- A: Audio (Some EDL formats label this 1 or 2.)\n- A2: Audio 2\n- AA: Both channels of audio"
+    },
+    {
+      "type": "paragraph",
+      "id": "6c5e0bb3909e4aa1",
+      "text": "Video track V1 is the only video track exported. Clips on video track V2 appear as key effect (K) over the V1. Video tracks V3 and above are ignored during EDL export."
+    },
+    {
+      "type": "markdown",
+      "id": "a41ee5d2083438c7",
+      "text": "# Column 4:  Edit (or Transition) Type\n\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL."
+    },
+    {
+      "type": "markdown",
+      "id": "53823ff6815b7318",
+      "text": "- C: Cut. This is the simplest kind of edit.\n- D: Dissolve. This transition begins with one source and dissolves to a second source.\n- W: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\n- K: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key."
+    },
+    {
+      "type": "paragraph",
+      "id": "2fcac91476694b84",
+      "text": "A dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "31af85b773eb9497",
+      "text": "Figure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17"
+    },
+    {
+      "type": "markdown",
+      "id": "fccf7f373eac88f8",
+      "text": "# Column 5:  Transition Duration (sometimes)\n\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve."
+    },
+    {
+      "type": "markdown",
+      "id": "f82b6ee5864dcda9",
+      "text": "# Column 5 & 6:  Source In and Out\n\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. "
+    },
+    {
+      "type": "markdown",
+      "id": "d71a0f9c4d93e115",
+      "text": "# Column 7 & 8:  Record In and Out\n\nThe second pair are the record In and Out points, which correspond to the clip’s location in the Timeline."
+    },
+    {
+      "type": "markdown",
+      "id": "5cb0cf9f96b4e88f",
+      "text": "# Edits and Transitions"
+    },
+    {
+      "type": "paragraph",
+      "id": "8915a8a52a73f1ed",
+      "text": "Edits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition."
+    },
+    {
+      "type": "paragraph",
+      "id": "818d767eba4fbd84",
+      "text": "On tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog."
+    },
+    {
+      "type": "paragraph",
+      "id": "ed06f0d21a6c1766",
+      "text": "Split edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "42918cc97def7023",
+      "text": "The first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track."
+    },
+    {
+      "type": "markdown",
+      "id": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "text": "# See also\n\n- [[Edit decision list]]\n- [[B-Roll]]\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "EDL",
+        "story": []
+      },
+      "date": 1509363222038
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4bd324018d1f602f"
+      },
+      "id": "4bd324018d1f602f",
+      "type": "add",
+      "date": 1509363225551
+    },
+    {
+      "type": "edit",
+      "id": "4bd324018d1f602f",
+      "item": {
+        "type": "reference",
+        "id": "4bd324018d1f602f",
+        "site": "video.outlandish.academy",
+        "slug": "edit-decision-list",
+        "title": "Edit decision list",
+        "text": "An edit decision list or [[EDL]] is used in the post-production process of film editing and video editing. The list contains an ordered list of reel and timecode data representing where each video clip can be obtained in order to conform the final cut - [https://en.wikipedia.org/wiki/Edit_decision_list wikipedia]"
+      },
+      "date": 1509363227657
+    },
+    {
+      "type": "remove",
+      "id": "4bd324018d1f602f",
+      "date": 1509363236157
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7c2d5d7d3731d9b3"
+      },
+      "id": "7c2d5d7d3731d9b3",
+      "type": "add",
+      "date": 1509363237535
+    },
+    {
+      "type": "edit",
+      "id": "7c2d5d7d3731d9b3",
+      "item": {
+        "type": "paragraph",
+        "id": "7c2d5d7d3731d9b3",
+        "text": "An edit decision list or [[EDL]] is used in the post-production process of film editing and video editing. The list contains an ordered list of reel and timecode data representing where each video clip can be obtained in order to conform the final cut - [https://en.wikipedia.org/wiki/Edit_decision_list wikipedia]"
+      },
+      "date": 1509363239775
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+        "text": "# See also\n* [[B-Roll]]\n* [[Incompatibilities and potential problems]]\n* [[Systems known to support EDL to some extent]]\n* [[Systems supporting EDL playback, not just EDL cutting]]\n* [[See also]]\n* [[External links]]\n* [[References]]"
+      },
+      "after": "7c2d5d7d3731d9b3",
+      "id": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509363248091
+    },
+    {
+      "type": "edit",
+      "id": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "item": {
+        "type": "markdown",
+        "id": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+        "text": "# See also\n\n- [[Edit decision list]]\n- [[B-Roll]]\n"
+      },
+      "date": 1509363292993
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9399f7b76f915f4b",
+        "text": "171  001      V     C        01:38:41:00 01:39:15:24 01:38:41:00 01:39:15:24  \n"
+      },
+      "after": "7c2d5d7d3731d9b3",
+      "id": "9399f7b76f915f4b",
+      "date": 1509365549972
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "text": "# EDL Formats"
+      },
+      "after": "7c2d5d7d3731d9b3",
+      "id": "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+      "date": 1509365957387
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=www.edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.edlmax.com/EdlMaxHelp/Edl/maxguide.html'>Guide to EDL Management</a>"
+      },
+      "after": "9399f7b76f915f4b",
+      "id": "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+      "date": 1509365960227
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=documentation.apple.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://documentation.apple.com/en/finalcutpro/usermanual/index.html#chapter=96%26section=1%26tasks=true'>Final Cut Pro 7 User Manual: About EDLs</a>"
+      },
+      "after": "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+      "id": "f23695d1-60e7-4b89-a892-b61aff2bac19",
+      "date": 1509365962780
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=www.niwa.nu' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://www.niwa.nu/2013/05/how-to-read-an-edl/'>How to read an EDL &ndash; Niwa</a>"
+      },
+      "after": "f23695d1-60e7-4b89-a892-b61aff2bac19",
+      "id": "21ba2891-247c-42b8-8781-0088b00c9d0e",
+      "date": 1509365965225
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "9399f7b76f915f4b",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+      "date": 1509367398918
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "9399f7b76f915f4b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "21ba2891-247c-42b8-8781-0088b00c9d0e",
+      "date": 1509367402483
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b2ac28d95f27374b"
+      },
+      "id": "b2ac28d95f27374b",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509367507844
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "9399f7b76f915f4b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "b2ac28d95f27374b",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "b2ac28d95f27374b",
+      "date": 1509367509853
+    },
+    {
+      "type": "edit",
+      "id": "b2ac28d95f27374b",
+      "item": {
+        "type": "paragraph",
+        "id": "b2ac28d95f27374b",
+        "text": "An EDL contains the same basic clip information as a Final Cut Pro sequence, but the presentation is very different. Because EDLs originated with linear, tape-to-tape editing systems, each event is described in terms of a source tape and a record (or master) tape.\n\nNote: This section describes components of an EDL using the CMX 3600 EDL format. Other formats may vary slightly.\n\nIn an EDL, each clip in your sequence is represented by a line of text called an event, which has a unique event number. A clip in an EDL is defined by a source reel name and two pairs of timecode In and Out points. The first pair of timecode numbers describes the source tape (or clip) In and Out points. The second pair describes the timecode location where that clip should be placed onto a master tape (or Timeline).\n\nFigure. Timeline window showing clips identified as events.\nFigure. Master EDL window showing the components of an EDL list.\nTip: To better understand how an EDL describes edit information from your sequence, try exporting a simple sequence with just a few cuts to an EDL, and then compare your Final Cut Pro sequence to the EDL.\n\nElements of an EDL\nThe elements of an EDL are described in the following sections.\n\nTitle and Sequence Timecode Format\nThe first line of an EDL contains the title of the sequence. In NTSC sequences, the second line displays whether the sequence timecode is drop frame or non-drop frame.\n\nEvent Number\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot.\n\n001004VC04:31:13:04 04:31:22:23 01:00:00:00 01:00:10:00\n001014VD030 14:27:03:03 14:27:25:22 01:00:10:10 01:00:30:00\nReel Name\nA reel name describes which source tape (or reel) the clip comes from. Final Cut Pro assumes that clips without reel names come from non-tape sources, such as color bars, black, or other generators. Final Cut Pro automatically designates these auxiliary sources with the reel name AX.\n\nImportant: Make sure all clips with timecode sources have reel names before exporting an EDL, or you won’t be able to easily re-create your sequence when you open the EDL on another editing system.\n\nTrack Type\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event.\n\nV: Video\nA: Audio (Some EDL formats label this 1 or 2.)\nA2: Audio 2\nAA: Both channels of audio\nVideo track V1 is the only video track exported. Clips on video track V2 appear as key effect (K) over the V1. Video tracks V3 and above are ignored during EDL export.\n\nEdit (or Transition) Type\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL.\n\nC: Cut. This is the simplest kind of edit.\nD: Dissolve. This transition begins with one source and dissolves to a second source.\nW: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\nK: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key.\nA dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\nFigure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nTransition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve.\n\nSource In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline.\n\nEdits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition.\n\nOn tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog.\n\nSplit edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nThe first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track.\n\nNotes"
+      },
+      "date": 1509367513757
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d8d0c7b22db5ca55"
+      },
+      "id": "d8d0c7b22db5ca55",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509367532512
+    },
+    {
+      "type": "edit",
+      "id": "d8d0c7b22db5ca55",
+      "item": {
+        "type": "markdown",
+        "id": "d8d0c7b22db5ca55",
+        "text": "Row 1: TITLE (the title of the EDL)\nRow 2: FCM: – Frame Code Mode\n\nColumn 1: 001 – number of the edit event\nColumn 2: TAPE1 – name of the Source tape\nColumn 3: V – this tells that the edit is Video only\nColumn 4: C, D or W – this tells if it’s a Cut, Dissolve or Wipe\n\nColumn 5: timecode for the Source In point\nColumn 6: timecode for the Source Out point\nColumn 7: timecode for the Master / Recorder  In point\nColumn 8: timecode for the Master / Recorder Out point"
+      },
+      "date": 1509367732073
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "de29a3046b16b249"
+      },
+      "id": "de29a3046b16b249",
+      "type": "add",
+      "after": "d8d0c7b22db5ca55",
+      "date": 1509367738073
+    },
+    {
+      "type": "edit",
+      "id": "de29a3046b16b249",
+      "item": {
+        "type": "code",
+        "id": "de29a3046b16b249",
+        "text": "Row 1: TITLE (the title of the EDL)\nRow 2: FCM: – Frame Code Mode\n\nColumn 1: 001 – number of the edit event\nColumn 2: TAPE1 – name of the Source tape\nColumn 3: V – this tells that the edit is Video only\nColumn 4: C, D or W – this tells if it’s a Cut, Dissolve or Wipe\n\nColumn 5: timecode for the Source In point\nColumn 6: timecode for the Source Out point\nColumn 7: timecode for the Master / Recorder  In point\nColumn 8: timecode for the Master / Recorder Out point"
+      },
+      "date": 1509367740613
+    },
+    {
+      "type": "edit",
+      "id": "de29a3046b16b249",
+      "item": {
+        "type": "code",
+        "id": "de29a3046b16b249",
+        "text": "Row 1: TITLE (the title of the EDL)\nRow 2: FCM: – Frame Code Mode\n\nColumn 1: 001 – number of the edit event\nColumn 2: TAPE1 – name of the Source tape\nColumn 3: V – this tells that the edit is Video only\nColumn 4: C, D or W (Cut, Dissolve or Wipe)\n\nColumn 5: timecode for the Source In point\nColumn 6: timecode for the Source Out point\nColumn 7: timecode for the Master / Recorder  In point\nColumn 8: timecode for the Master / Recorder Out point"
+      },
+      "date": 1509367771820
+    },
+    {
+      "type": "edit",
+      "id": "de29a3046b16b249",
+      "item": {
+        "type": "code",
+        "id": "de29a3046b16b249",
+        "text": "Row 1: TITLE (the title of the EDL)\nRow 2: FCM: – Frame Code Mode\n\nColumn 1: 001 – number of edit event\nColumn 2: TAPE1 – name of Source tape\nColumn 3: V – this tells that edit is Video only\nColumn 4: C, D or W (Cut, Dissolve or Wipe)\n\nColumn 5: timecode for Source In point\nColumn 6: timecode for Source Out point\nColumn 7: timecode for Master / Recorder  In point\nColumn 8: timecode for Master / Recorder Out point"
+      },
+      "date": 1509367812432
+    },
+    {
+      "type": "remove",
+      "id": "d8d0c7b22db5ca55",
+      "date": 1509367840030
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "9399f7b76f915f4b",
+        "de29a3046b16b249",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "b2ac28d95f27374b",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "de29a3046b16b249",
+      "date": 1509367854218
+    },
+    {
+      "type": "edit",
+      "id": "b2ac28d95f27374b",
+      "item": {
+        "type": "paragraph",
+        "id": "b2ac28d95f27374b",
+        "text": "This section describes components of an EDL using the CMX 3600 EDL format. Other formats may vary slightly."
+      },
+      "date": 1509367884738
+    },
+    {
+      "type": "add",
+      "id": "03b03182aaafe239",
+      "item": {
+        "type": "paragraph",
+        "id": "03b03182aaafe239",
+        "text": "In an EDL, each clip in your sequence is represented by a line of text called an event, which has a unique event number. "
+      },
+      "after": "b2ac28d95f27374b",
+      "date": 1509367894723
+    },
+    {
+      "type": "add",
+      "id": "245e237e1a205694",
+      "item": {
+        "type": "paragraph",
+        "id": "245e237e1a205694",
+        "text": "A clip in an EDL is defined by a source reel name and two pairs of timecode In and Out points. The first pair of timecode numbers describes the source tape (or clip) In and Out points. The second pair describes the timecode location where that clip should be placed onto a master tape (or Timeline)."
+      },
+      "after": "03b03182aaafe239",
+      "date": 1509367903972
+    },
+    {
+      "type": "add",
+      "id": "86be0754b8fbd2e4",
+      "item": {
+        "type": "paragraph",
+        "id": "86be0754b8fbd2e4",
+        "text": "# Elements of an EDL"
+      },
+      "after": "245e237e1a205694",
+      "date": 1509367925117
+    },
+    {
+      "type": "edit",
+      "id": "86be0754b8fbd2e4",
+      "item": {
+        "type": "markdown",
+        "id": "86be0754b8fbd2e4",
+        "text": "# Elements of an EDL"
+      },
+      "date": 1509367926355
+    },
+    {
+      "type": "add",
+      "id": "daf770b9f260e150",
+      "item": {
+        "type": "paragraph",
+        "id": "daf770b9f260e150",
+        "text": "The elements of an EDL are described in the following sections."
+      },
+      "after": "86be0754b8fbd2e4",
+      "date": 1509367929270
+    },
+    {
+      "type": "add",
+      "id": "1c2493a699b9cc0d",
+      "item": {
+        "type": "paragraph",
+        "id": "1c2493a699b9cc0d",
+        "text": "\nTitle and Sequence Timecode Format\nThe first line of an EDL contains the title of the sequence. In NTSC sequences, the second line displays whether the sequence timecode is drop frame or non-drop frame.\n\nEvent Number\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot.\n\n001004VC04:31:13:04 04:31:22:23 01:00:00:00 01:00:10:00\n001014VD030 14:27:03:03 14:27:25:22 01:00:10:10 01:00:30:00\nReel Name\nA reel name describes which source tape (or reel) the clip comes from. Final Cut Pro assumes that clips without reel names come from non-tape sources, such as color bars, black, or other generators. Final Cut Pro automatically designates these auxiliary sources with the reel name AX.\n\nImportant: Make sure all clips with timecode sources have reel names before exporting an EDL, or you won’t be able to easily re-create your sequence when you open the EDL on another editing system.\n\nTrack Type\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event.\n\nV: Video\nA: Audio (Some EDL formats label this 1 or 2.)\nA2: Audio 2\nAA: Both channels of audio\nVideo track V1 is the only video track exported. Clips on video track V2 appear as key effect (K) over the V1. Video tracks V3 and above are ignored during EDL export.\n\nEdit (or Transition) Type\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL.\n\nC: Cut. This is the simplest kind of edit.\nD: Dissolve. This transition begins with one source and dissolves to a second source.\nW: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\nK: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key.\nA dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\nFigure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nTransition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve.\n\nSource In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline.\n\nEdits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition.\n\nOn tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog.\n\nSplit edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nThe first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track.\n\nNotes"
+      },
+      "after": "daf770b9f260e150",
+      "date": 1509367930532
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "9399f7b76f915f4b",
+        "de29a3046b16b249",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "b2ac28d95f27374b",
+      "date": 1509367936396
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "de29a3046b16b249",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "03b03182aaafe239",
+      "date": 1509367940159
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "de29a3046b16b249",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "21ba2891-247c-42b8-8781-0088b00c9d0e",
+      "date": 1509367946853
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "de29a3046b16b249",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "f23695d1-60e7-4b89-a892-b61aff2bac19",
+      "date": 1509367949584
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "de29a3046b16b249",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "245e237e1a205694",
+      "date": 1509367954290
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "de29a3046b16b249",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "86be0754b8fbd2e4",
+      "date": 1509367970286
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "de29a3046b16b249",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "daf770b9f260e150",
+      "date": 1509367973272
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57da1b64f6abc59f"
+      },
+      "id": "57da1b64f6abc59f",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509368018619
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "1c2493a699b9cc0d",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "57da1b64f6abc59f",
+      "date": 1509368023912
+    },
+    {
+      "type": "edit",
+      "id": "de29a3046b16b249",
+      "item": {
+        "type": "code",
+        "id": "de29a3046b16b249",
+        "text": "Row 1: TITLE (the title of the EDL)\nRow 2: FCM: – Frame Code Mode"
+      },
+      "date": 1509368031035
+    },
+    {
+      "type": "edit",
+      "id": "57da1b64f6abc59f",
+      "item": {
+        "type": "code",
+        "id": "57da1b64f6abc59f",
+        "text": "Column 1: 001 – number of edit event\nColumn 2: TAPE1 – name of Source tape\nColumn 3: V – this tells that edit is Video only\nColumn 4: C, D or W (Cut, Dissolve or Wipe)\n\nColumn 5: timecode for Source In point\nColumn 6: timecode for Source Out point\nColumn 7: timecode for Master / Recorder  In point\nColumn 8: timecode for Master / Recorder Out point"
+      },
+      "date": 1509368035917
+    },
+    {
+      "type": "edit",
+      "id": "1c2493a699b9cc0d",
+      "item": {
+        "type": "paragraph",
+        "id": "1c2493a699b9cc0d",
+        "text": "Title and Sequence Timecode Format\nThe first line of an EDL contains the title of the sequence. In NTSC sequences, the second line displays whether the sequence timecode is drop frame or non-drop frame."
+      },
+      "date": 1509368050333
+    },
+    {
+      "type": "add",
+      "id": "b56536385a2bc2c7",
+      "item": {
+        "type": "paragraph",
+        "id": "b56536385a2bc2c7",
+        "text": "# Event Number\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot.\n\n001004VC04:31:13:04 04:31:22:23 01:00:00:00 01:00:10:00\n001014VD030 14:27:03:03 14:27:25:22 01:00:10:10 01:00:30:00\n"
+      },
+      "after": "1c2493a699b9cc0d",
+      "date": 1509368070926
+    },
+    {
+      "type": "add",
+      "id": "f04eac61dcb7acb3",
+      "item": {
+        "type": "paragraph",
+        "id": "f04eac61dcb7acb3",
+        "text": "# Reel Name\nA reel name describes which source tape (or reel) the clip comes from. Final Cut Pro assumes that clips without reel names come from non-tape sources, such as color bars, black, or other generators. Final Cut Pro automatically designates these auxiliary sources with the reel name AX.\n\nImportant: Make sure all clips with timecode sources have reel names before exporting an EDL, or you won’t be able to easily re-create your sequence when you open the EDL on another editing system.\n\n"
+      },
+      "after": "b56536385a2bc2c7",
+      "date": 1509368080767
+    },
+    {
+      "type": "add",
+      "id": "df06483c4df9ce75",
+      "item": {
+        "type": "paragraph",
+        "id": "df06483c4df9ce75",
+        "text": "# Track Type\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event.\n\nV: Video\nA: Audio (Some EDL formats label this 1 or 2.)\nA2: Audio 2\nAA: Both channels of audio\nVideo track V1 is the only video track exported. Clips on video track V2 appear as key effect (K) over the V1. Video tracks V3 and above are ignored during EDL export.\n\n"
+      },
+      "after": "f04eac61dcb7acb3",
+      "date": 1509368089127
+    },
+    {
+      "type": "add",
+      "id": "a41ee5d2083438c7",
+      "item": {
+        "type": "paragraph",
+        "id": "a41ee5d2083438c7",
+        "text": "# Edit (or Transition) Type\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL.\n\nC: Cut. This is the simplest kind of edit.\nD: Dissolve. This transition begins with one source and dissolves to a second source.\nW: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\nK: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key.\nA dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\nFigure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nTransition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve.\n\nSource In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline.\n\nEdits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition.\n\nOn tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog.\n\nSplit edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nThe first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track.\n\nNotes"
+      },
+      "after": "df06483c4df9ce75",
+      "date": 1509368091782
+    },
+    {
+      "type": "edit",
+      "id": "df06483c4df9ce75",
+      "item": {
+        "type": "markdown",
+        "id": "df06483c4df9ce75",
+        "text": "# Track Type\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event.\n\nV: Video\nA: Audio (Some EDL formats label this 1 or 2.)\nA2: Audio 2\nAA: Both channels of audio\nVideo track V1 is the only video track exported. Clips on video track V2 appear as key effect (K) over the V1. Video tracks V3 and above are ignored during EDL export.\n\n"
+      },
+      "date": 1509368093551
+    },
+    {
+      "type": "edit",
+      "id": "a41ee5d2083438c7",
+      "item": {
+        "type": "markdown",
+        "id": "a41ee5d2083438c7",
+        "text": "# Edit (or Transition) Type\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL.\n\nC: Cut. This is the simplest kind of edit.\nD: Dissolve. This transition begins with one source and dissolves to a second source.\nW: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\nK: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key.\nA dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\nFigure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nTransition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve.\n\nSource In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline.\n\nEdits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition.\n\nOn tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog.\n\nSplit edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nThe first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track.\n\nNotes"
+      },
+      "date": 1509368095605
+    },
+    {
+      "type": "edit",
+      "id": "f04eac61dcb7acb3",
+      "item": {
+        "type": "markdown",
+        "id": "f04eac61dcb7acb3",
+        "text": "# Reel Name\nA reel name describes which source tape (or reel) the clip comes from. Final Cut Pro assumes that clips without reel names come from non-tape sources, such as color bars, black, or other generators. Final Cut Pro automatically designates these auxiliary sources with the reel name AX.\n\nImportant: Make sure all clips with timecode sources have reel names before exporting an EDL, or you won’t be able to easily re-create your sequence when you open the EDL on another editing system.\n\n"
+      },
+      "date": 1509368102079
+    },
+    {
+      "type": "edit",
+      "id": "b56536385a2bc2c7",
+      "item": {
+        "type": "markdown",
+        "id": "b56536385a2bc2c7",
+        "text": "# Event Number\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot.\n\n001004VC04:31:13:04 04:31:22:23 01:00:00:00 01:00:10:00\n001014VD030 14:27:03:03 14:27:25:22 01:00:10:10 01:00:30:00\n"
+      },
+      "date": 1509368103625
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "de29a3046b16b249",
+        "1c2493a699b9cc0d",
+        "57da1b64f6abc59f",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "1c2493a699b9cc0d",
+      "date": 1509368110079
+    },
+    {
+      "type": "edit",
+      "id": "1c2493a699b9cc0d",
+      "item": {
+        "type": "paragraph",
+        "id": "1c2493a699b9cc0d",
+        "text": "# Title and Sequence Timecode Format\nThe first line of an EDL contains the title of the sequence. In NTSC sequences, the second line displays whether the sequence timecode is drop frame or non-drop frame."
+      },
+      "date": 1509368122455
+    },
+    {
+      "type": "edit",
+      "id": "1c2493a699b9cc0d",
+      "item": {
+        "type": "markdown",
+        "id": "1c2493a699b9cc0d",
+        "text": "# Title and Sequence Timecode Format\nThe first line of an EDL contains the title of the sequence. In NTSC sequences, the second line displays whether the sequence timecode is drop frame or non-drop frame."
+      },
+      "date": 1509368123322
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "1c2493a699b9cc0d",
+      "date": 1509368125645
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+      "date": 1509368137840
+    },
+    {
+      "type": "edit",
+      "id": "a41ee5d2083438c7",
+      "item": {
+        "type": "markdown",
+        "id": "a41ee5d2083438c7",
+        "text": "# Edit (or Transition) Type\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL.\n\nC: Cut. This is the simplest kind of edit.\nD: Dissolve. This transition begins with one source and dissolves to a second source.\nW: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\nK: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key.\nA dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\n"
+      },
+      "date": 1509368172730
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2fcac91476694b84"
+      },
+      "id": "2fcac91476694b84",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509368175243
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "9399f7b76f915f4b",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "2fcac91476694b84",
+      "date": 1509368176915
+    },
+    {
+      "type": "edit",
+      "id": "2fcac91476694b84",
+      "item": {
+        "type": "paragraph",
+        "id": "2fcac91476694b84",
+        "text": "Figure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nTransition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve.\n\nSource In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline.\n\nEdits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition.\n\nOn tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog.\n\nSplit edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\nThe first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track.\n\nNotes"
+      },
+      "date": 1509368179339
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "9399f7b76f915f4b",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "9399f7b76f915f4b",
+      "date": 1509368199128
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "9399f7b76f915f4b",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "9399f7b76f915f4b",
+      "date": 1509368201973
+    },
+    {
+      "type": "edit",
+      "id": "b56536385a2bc2c7",
+      "item": {
+        "type": "markdown",
+        "id": "b56536385a2bc2c7",
+        "text": "# Event Number\n\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot."
+      },
+      "date": 1509368278424
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "9399f7b76f915f4b",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "9399f7b76f915f4b",
+      "date": 1509368282287
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "66af2be51cbd98ad"
+      },
+      "id": "66af2be51cbd98ad",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509368286091
+    },
+    {
+      "type": "edit",
+      "id": "66af2be51cbd98ad",
+      "item": {
+        "type": "code",
+        "id": "66af2be51cbd98ad",
+        "text": "001004VC04:31:13:04 04:31:22:23 01:00:00:00 01:00:10:00\n001014VD030 14:27:03:03 14:27:25:22 01:00:10:10 01:00:30:00\n"
+      },
+      "date": 1509368289082
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "9399f7b76f915f4b",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "66af2be51cbd98ad",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "66af2be51cbd98ad",
+      "date": 1509368296580
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "text": "<div style='padding: 12px; background:#eee; width:96%; align=centered;'>\n<a href='https://www.niwa.nu/wp-content/uploads/2013/05/EDL-short.png' target='_blank'>\n<img style='display:block; margin:auto; width:100%;'\nsrc='https://www.niwa.nu/wp-content/uploads/2013/05/EDL-short.png'>\n</a>\n\n<p class=caption>\nThis is an image\n[https://www.niwa.nu/wp-content/uploads/2013/05/EDL-short.png - niwa.nu]\n</p></div>"
+      },
+      "after": "9399f7b76f915f4b",
+      "id": "1e6a90f6-c3ce-427f-af24-ec050c026493",
+      "date": 1509368609902
+    },
+    {
+      "type": "edit",
+      "id": "9399f7b76f915f4b",
+      "item": {
+        "type": "code",
+        "id": "9399f7b76f915f4b",
+        "text": "171  001      V     C        01:38:41:00 01:39:15:24 01:38:41:00 01:39:15:24  \n\n171 001 V C 01:38:41:00 01:39:15:24 01:38:41:00 01:39:15:24  \n\n"
+      },
+      "date": 1509368688184
+    },
+    {
+      "type": "edit",
+      "id": "9399f7b76f915f4b",
+      "item": {
+        "type": "code",
+        "id": "9399f7b76f915f4b",
+        "text": "171  001      V     C        01:38:41:00 01:39:15:24 01:38:41:00 01:39:15:24  "
+      },
+      "date": 1509368705489
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "66af2be51cbd98ad",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "1e6a90f6-c3ce-427f-af24-ec050c026493",
+      "date": 1509368719917
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "66af2be51cbd98ad",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "66af2be51cbd98ad",
+      "date": 1509368741531
+    },
+    {
+      "type": "edit",
+      "id": "df06483c4df9ce75",
+      "item": {
+        "type": "markdown",
+        "id": "df06483c4df9ce75",
+        "text": "# Track Type\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event.\n\n- V: Video\n- A: Audio (Some EDL formats label this 1 or 2.)\n- A2: Audio 2\n- AA: Both channels of audio\n"
+      },
+      "date": 1509368771621
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6c5e0bb3909e4aa1"
+      },
+      "id": "6c5e0bb3909e4aa1",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509368775637
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "66af2be51cbd98ad",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "6c5e0bb3909e4aa1",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "6c5e0bb3909e4aa1",
+      "date": 1509368779841
+    },
+    {
+      "type": "edit",
+      "id": "6c5e0bb3909e4aa1",
+      "item": {
+        "type": "paragraph",
+        "id": "6c5e0bb3909e4aa1",
+        "text": "Video track V1 is the only video track exported. Clips on video track V2 appear as key effect (K) over the V1. Video tracks V3 and above are ignored during EDL export."
+      },
+      "date": 1509368782974
+    },
+    {
+      "type": "edit",
+      "id": "a41ee5d2083438c7",
+      "item": {
+        "type": "markdown",
+        "id": "a41ee5d2083438c7",
+        "text": "# Edit (or Transition) Type\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL.\n\n- C: Cut. This is the simplest kind of edit.\n- D: Dissolve. This transition begins with one source and dissolves to a second source.\n- W: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\n- K: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key."
+      },
+      "date": 1509368818031
+    },
+    {
+      "type": "edit",
+      "id": "2fcac91476694b84",
+      "item": {
+        "type": "paragraph",
+        "id": "2fcac91476694b84",
+        "text": "A dissolve from a Final Cut Pro sequence is shown below in EDL format.\n\n"
+      },
+      "date": 1509368836250
+    },
+    {
+      "type": "add",
+      "id": "31af85b773eb9497",
+      "item": {
+        "type": "paragraph",
+        "id": "31af85b773eb9497",
+        "text": "Figure. Timeline window showing a cross dissolve transition.\n001002VC02:10:42:13 02:11:16:18 01:00:00:00 01:00:34:05\n001002VD024 02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17"
+      },
+      "after": "2fcac91476694b84",
+      "date": 1509368839827
+    },
+    {
+      "type": "add",
+      "id": "fccf7f373eac88f8",
+      "item": {
+        "type": "paragraph",
+        "id": "fccf7f373eac88f8",
+        "text": "# Transition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve."
+      },
+      "after": "31af85b773eb9497",
+      "date": 1509368847947
+    },
+    {
+      "type": "add",
+      "id": "f82b6ee5864dcda9",
+      "item": {
+        "type": "paragraph",
+        "id": "f82b6ee5864dcda9",
+        "text": "# Source In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline."
+      },
+      "after": "fccf7f373eac88f8",
+      "date": 1509368864276
+    },
+    {
+      "type": "add",
+      "id": "d71a0f9c4d93e115",
+      "item": {
+        "type": "paragraph",
+        "id": "d71a0f9c4d93e115",
+        "text": "Edits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition."
+      },
+      "after": "f82b6ee5864dcda9",
+      "date": 1509368868164
+    },
+    {
+      "type": "add",
+      "id": "818d767eba4fbd84",
+      "item": {
+        "type": "paragraph",
+        "id": "818d767eba4fbd84",
+        "text": "On tape-to-tape editing systems, the tapes containing the two shots are loaded in two video decks—VTR A and VTR B. To perform a dissolve or wipe, the edit controller plays both decks simultaneously and uses a hardware video switcher to create the transition effect as it’s recording on the final master tape. However, when both shots in a dissolve, wipe, or key are on the same reel, it is impossible to perform the effect in a tape-based editing suite. This is because the tape cannot be in both places at the same time. For a workaround to this problem, see Settings and Options in the EDL Import Dialog."
+      },
+      "after": "d71a0f9c4d93e115",
+      "date": 1509368873635
+    },
+    {
+      "type": "add",
+      "id": "ed06f0d21a6c1766",
+      "item": {
+        "type": "paragraph",
+        "id": "ed06f0d21a6c1766",
+        "text": "Split edits, where the video and audio have separate In and Out points, require three lines.\n\nFigure. Timeline window showing a split edit.\nSPLIT: VIDEO DELAY= 00:00:02:00\n004002AAC02:18:30:07 02:18:56:19 01:00:32:05 01:00:58:17\n004002VC02:18:32:07 02:18:56:19 01:00:34:05 01:00:58:17\n"
+      },
+      "after": "818d767eba4fbd84",
+      "date": 1509368882221
+    },
+    {
+      "type": "add",
+      "id": "42918cc97def7023",
+      "item": {
+        "type": "paragraph",
+        "id": "42918cc97def7023",
+        "text": "The first line indicates which track is delayed and by how much, the second line indicates the track (audio or video) that plays through the entire edit duration, and the third line contains the delayed track."
+      },
+      "after": "ed06f0d21a6c1766",
+      "date": 1509368887115
+    },
+    {
+      "type": "fork",
+      "site": "video.outlandish.academy",
+      "date": 1509382334064
+    },
+    {
+      "type": "edit",
+      "id": "df06483c4df9ce75",
+      "item": {
+        "type": "markdown",
+        "id": "df06483c4df9ce75",
+        "text": "# Track Type\n\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event."
+      },
+      "date": 1509382385626
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "873a2ce4e3873db7"
+      },
+      "id": "873a2ce4e3873db7",
+      "type": "add",
+      "after": "7d36eb03-9e86-4a0f-aee6-82bf7b880837",
+      "date": 1509382389049
+    },
+    {
+      "type": "edit",
+      "id": "873a2ce4e3873db7",
+      "item": {
+        "type": "markdown",
+        "id": "873a2ce4e3873db7",
+        "text": "- V: Video\n- A: Audio (Some EDL formats label this 1 or 2.)\n- A2: Audio 2\n- AA: Both channels of audio"
+      },
+      "date": 1509382392581
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "66af2be51cbd98ad",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "6c5e0bb3909e4aa1",
+        "873a2ce4e3873db7",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "31af85b773eb9497",
+        "fccf7f373eac88f8",
+        "f82b6ee5864dcda9",
+        "d71a0f9c4d93e115",
+        "818d767eba4fbd84",
+        "ed06f0d21a6c1766",
+        "42918cc97def7023",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "873a2ce4e3873db7",
+      "date": 1509382411890
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "66af2be51cbd98ad",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "873a2ce4e3873db7",
+        "6c5e0bb3909e4aa1",
+        "a41ee5d2083438c7",
+        "2fcac91476694b84",
+        "31af85b773eb9497",
+        "fccf7f373eac88f8",
+        "f82b6ee5864dcda9",
+        "d71a0f9c4d93e115",
+        "818d767eba4fbd84",
+        "ed06f0d21a6c1766",
+        "42918cc97def7023",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "6c5e0bb3909e4aa1",
+      "date": 1509382416369
+    },
+    {
+      "type": "add",
+      "id": "53823ff6815b7318",
+      "item": {
+        "type": "paragraph",
+        "id": "53823ff6815b7318",
+        "text": "asdf"
+      },
+      "after": "2fcac91476694b84",
+      "date": 1509382428335
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "66af2be51cbd98ad",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "873a2ce4e3873db7",
+        "6c5e0bb3909e4aa1",
+        "a41ee5d2083438c7",
+        "53823ff6815b7318",
+        "2fcac91476694b84",
+        "31af85b773eb9497",
+        "fccf7f373eac88f8",
+        "f82b6ee5864dcda9",
+        "d71a0f9c4d93e115",
+        "818d767eba4fbd84",
+        "ed06f0d21a6c1766",
+        "42918cc97def7023",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "53823ff6815b7318",
+      "date": 1509382429926
+    },
+    {
+      "type": "edit",
+      "id": "a41ee5d2083438c7",
+      "item": {
+        "type": "markdown",
+        "id": "a41ee5d2083438c7",
+        "text": "# Edit (or Transition) Type\n\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL."
+      },
+      "date": 1509382439464
+    },
+    {
+      "type": "edit",
+      "id": "53823ff6815b7318",
+      "item": {
+        "type": "paragraph",
+        "id": "53823ff6815b7318",
+        "text": "- C: Cut. This is the simplest kind of edit.\n- D: Dissolve. This transition begins with one source and dissolves to a second source.\n- W: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\n- K: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key."
+      },
+      "date": 1509382443144
+    },
+    {
+      "type": "edit",
+      "id": "53823ff6815b7318",
+      "item": {
+        "type": "markdown",
+        "id": "53823ff6815b7318",
+        "text": "- C: Cut. This is the simplest kind of edit.\n- D: Dissolve. This transition begins with one source and dissolves to a second source.\n- W: A wipe. This is followed by a wipe code that indicates the type of standard wipe.\n- K: A key edit. Clips on Video track 2 can be used as the foreground (fill) layer in a standard video key."
+      },
+      "date": 1509382444023
+    },
+    {
+      "type": "edit",
+      "id": "fccf7f373eac88f8",
+      "item": {
+        "type": "markdown",
+        "id": "fccf7f373eac88f8",
+        "text": "# Transition Duration\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve."
+      },
+      "date": 1509382449178
+    },
+    {
+      "type": "edit",
+      "id": "f82b6ee5864dcda9",
+      "item": {
+        "type": "markdown",
+        "id": "f82b6ee5864dcda9",
+        "text": "# Source In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline."
+      },
+      "date": 1509382452354
+    },
+    {
+      "type": "edit",
+      "id": "b56536385a2bc2c7",
+      "item": {
+        "type": "markdown",
+        "id": "b56536385a2bc2c7",
+        "text": "# Column 1:  Event Number\n\nAn event number uniquely identifies each event in the EDL. An EDL event requires two lines if more than one source is used. For example, a dissolve requires one line for the outgoing shot and a second line for the incoming shot."
+      },
+      "date": 1509537646633
+    },
+    {
+      "type": "edit",
+      "id": "f04eac61dcb7acb3",
+      "item": {
+        "type": "markdown",
+        "id": "f04eac61dcb7acb3",
+        "text": "# Column 2:  Reel Name\nA reel name describes which source tape (or reel) the clip comes from. Final Cut Pro assumes that clips without reel names come from non-tape sources, such as color bars, black, or other generators. Final Cut Pro automatically designates these auxiliary sources with the reel name AX.\n\nImportant: Make sure all clips with timecode sources have reel names before exporting an EDL, or you won’t be able to easily re-create your sequence when you open the EDL on another editing system.\n\n"
+      },
+      "date": 1509537653569
+    },
+    {
+      "type": "edit",
+      "id": "df06483c4df9ce75",
+      "item": {
+        "type": "markdown",
+        "id": "df06483c4df9ce75",
+        "text": "# Column 3:  Track Type\n\nEach edit uses one or more tracks in the sequence. In the case of tape-to-tape editing, this field determines which tracks are turned on on the record deck during this event."
+      },
+      "date": 1509537659322
+    },
+    {
+      "type": "edit",
+      "id": "a41ee5d2083438c7",
+      "item": {
+        "type": "markdown",
+        "id": "a41ee5d2083438c7",
+        "text": "# Column 4:  Edit (or Transition) Type\n\nAn EDL can represent several kinds of video edits, or transitions. A cut requires a single source, while all other types of edits require two sources, and thus two lines in an EDL."
+      },
+      "date": 1509537666146
+    },
+    {
+      "type": "edit",
+      "id": "fccf7f373eac88f8",
+      "item": {
+        "type": "markdown",
+        "id": "fccf7f373eac88f8",
+        "text": "# Column 5:  Transition Duration (sometimes)\n\nThe duration of a transition (in frames) follows the transition type. For example, D 024 indicates a 24-frame dissolve."
+      },
+      "date": 1509537712324
+    },
+    {
+      "type": "edit",
+      "id": "f82b6ee5864dcda9",
+      "item": {
+        "type": "markdown",
+        "id": "f82b6ee5864dcda9",
+        "text": "# Column 5:  Source In and Out, Record In and Out\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. The second pair are the record In and Out points, which correspond to the clip’s location in the Timeline."
+      },
+      "date": 1509537721933
+    },
+    {
+      "type": "edit",
+      "id": "f82b6ee5864dcda9",
+      "item": {
+        "type": "markdown",
+        "id": "f82b6ee5864dcda9",
+        "text": "# Column 5 & 6:  Source In and Out\n\nIn each line of an EDL, the first pair of timecode numbers are the source In and Out points. "
+      },
+      "date": 1509537790017
+    },
+    {
+      "type": "edit",
+      "id": "d71a0f9c4d93e115",
+      "item": {
+        "type": "paragraph",
+        "id": "d71a0f9c4d93e115",
+        "text": "# Column 7 & 8:  Record In and Out\n\nThe second pair are the record In and Out points, which correspond to the clip’s location in the Timeline."
+      },
+      "date": 1509537794459
+    },
+    {
+      "type": "edit",
+      "id": "d71a0f9c4d93e115",
+      "item": {
+        "type": "markdown",
+        "id": "d71a0f9c4d93e115",
+        "text": "# Column 7 & 8:  Record In and Out\n\nThe second pair are the record In and Out points, which correspond to the clip’s location in the Timeline."
+      },
+      "date": 1509537795825
+    },
+    {
+      "type": "add",
+      "id": "5cb0cf9f96b4e88f",
+      "item": {
+        "type": "paragraph",
+        "id": "5cb0cf9f96b4e88f",
+        "text": "Edits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition."
+      },
+      "after": "d71a0f9c4d93e115",
+      "date": 1509537797569
+    },
+    {
+      "type": "edit",
+      "id": "5cb0cf9f96b4e88f",
+      "item": {
+        "type": "paragraph",
+        "id": "5cb0cf9f96b4e88f",
+        "text": "# Edits and Transitions"
+      },
+      "date": 1509537811388
+    },
+    {
+      "type": "edit",
+      "id": "5cb0cf9f96b4e88f",
+      "item": {
+        "type": "markdown",
+        "id": "5cb0cf9f96b4e88f",
+        "text": "# Edits and Transitions"
+      },
+      "date": 1509537813303
+    },
+    {
+      "type": "add",
+      "id": "8915a8a52a73f1ed",
+      "item": {
+        "type": "paragraph",
+        "id": "8915a8a52a73f1ed",
+        "text": "Edits that use transitions such as dissolves or wipes require two lines. The first line represents the source before the transition, and the second line is the source after the transition."
+      },
+      "after": "5cb0cf9f96b4e88f",
+      "date": 1509537814142
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+        "text": "# Video Timecode"
+      },
+      "after": "7c2d5d7d3731d9b3",
+      "id": "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+      "date": 1509800754307
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "e7e49d8b-d8c3-4c76-89e6-7070998a1b76",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://edlmax.com/SMPTETimeCodeConversion.htm'>EdlMax - Convessssiiiooonnn of Audio Samples</a>"
+      },
+      "after": "245e237e1a205694",
+      "id": "e7e49d8b-d8c3-4c76-89e6-7070998a1b76",
+      "date": 1509800781495
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "9433000d-ebc8-40ee-95d9-eb7dba561e41",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/Seeking#Timeunitsyntax'>Seeking &ndash; FFmpeg</a>"
+      },
+      "after": "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+      "id": "9433000d-ebc8-40ee-95d9-eb7dba561e41",
+      "date": 1509800794619
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "7fae9739-2923-45aa-90f4-14dc19a92889",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=www.codecogs.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.codecogs.com/library/units/time/timehms.php'>time HMS - Time - Units in C, C++</a>"
+      },
+      "after": "9433000d-ebc8-40ee-95d9-eb7dba561e41",
+      "id": "7fae9739-2923-45aa-90f4-14dc19a92889",
+      "date": 1509800796858
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "b8a2d864-b13a-4ebe-9fb0-0a931ae410c7",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=en.wikipedia.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://en.wikipedia.org/wiki/Burnt-in_timecode'>Burnt-in timecode - Wikipedia</a>"
+      },
+      "after": "9433000d-ebc8-40ee-95d9-eb7dba561e41",
+      "id": "b8a2d864-b13a-4ebe-9fb0-0a931ae410c7",
+      "date": 1509800799192
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "8ad88569-eb1d-40e2-a473-c48bece3b312",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/FFprobeTips'>FFprobeTips &ndash; FFmpeg</a>"
+      },
+      "after": "7fae9739-2923-45aa-90f4-14dc19a92889",
+      "id": "8ad88569-eb1d-40e2-a473-c48bece3b312",
+      "date": 1509800801638
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "13a2e880-281c-4696-8b8b-b22346cd84ad",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=superuser.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video'>command line - Using ffmpeg to cut up video - Super User</a>"
+      },
+      "after": "7fae9739-2923-45aa-90f4-14dc19a92889",
+      "id": "13a2e880-281c-4696-8b8b-b22346cd84ad",
+      "date": 1509800803752
+    },
+    {
+      "type": "remove",
+      "id": "9433000d-ebc8-40ee-95d9-eb7dba561e41",
+      "date": 1509800829603
+    },
+    {
+      "type": "remove",
+      "id": "b8a2d864-b13a-4ebe-9fb0-0a931ae410c7",
+      "date": 1509800831753
+    },
+    {
+      "type": "remove",
+      "id": "7fae9739-2923-45aa-90f4-14dc19a92889",
+      "date": 1509800834061
+    },
+    {
+      "type": "remove",
+      "id": "13a2e880-281c-4696-8b8b-b22346cd84ad",
+      "date": 1509800836925
+    },
+    {
+      "type": "remove",
+      "id": "8ad88569-eb1d-40e2-a473-c48bece3b312",
+      "date": 1509800839142
+    },
+    {
+      "type": "edit",
+      "id": "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+      "item": {
+        "type": "markdown",
+        "id": "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+        "text": "# Coding with video timecode"
+      },
+      "date": 1509800938268
+    },
+    {
+      "type": "add",
+      "id": "397e90a6334e66b7",
+      "item": {
+        "type": "paragraph",
+        "id": "397e90a6334e66b7",
+        "text": "[[Ffmpeg]] and the [[MLT Framework]] are command-line tool sfor editing and manipulating video based on [[video timecode]] (or [[edit decision list]]s."
+      },
+      "after": "7c2d5d7d3731d9b3",
+      "date": 1509801020863
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c2d5d7d3731d9b3",
+        "7e1dea91-a1ea-4788-9c4e-62a1d05f50ce",
+        "397e90a6334e66b7",
+        "e0c8b337-214c-4a2b-8ac0-7a8daff815a6",
+        "b2ac28d95f27374b",
+        "21ba2891-247c-42b8-8781-0088b00c9d0e",
+        "f23695d1-60e7-4b89-a892-b61aff2bac19",
+        "03b03182aaafe239",
+        "245e237e1a205694",
+        "e7e49d8b-d8c3-4c76-89e6-7070998a1b76",
+        "6a889cc0-5372-4780-85e3-2c2b6f59fe82",
+        "86be0754b8fbd2e4",
+        "daf770b9f260e150",
+        "1e6a90f6-c3ce-427f-af24-ec050c026493",
+        "9399f7b76f915f4b",
+        "66af2be51cbd98ad",
+        "1c2493a699b9cc0d",
+        "de29a3046b16b249",
+        "57da1b64f6abc59f",
+        "b56536385a2bc2c7",
+        "f04eac61dcb7acb3",
+        "df06483c4df9ce75",
+        "873a2ce4e3873db7",
+        "6c5e0bb3909e4aa1",
+        "a41ee5d2083438c7",
+        "53823ff6815b7318",
+        "2fcac91476694b84",
+        "31af85b773eb9497",
+        "fccf7f373eac88f8",
+        "f82b6ee5864dcda9",
+        "d71a0f9c4d93e115",
+        "5cb0cf9f96b4e88f",
+        "8915a8a52a73f1ed",
+        "818d767eba4fbd84",
+        "ed06f0d21a6c1766",
+        "42918cc97def7023",
+        "7d36eb03-9e86-4a0f-aee6-82bf7b880837"
+      ],
+      "id": "397e90a6334e66b7",
+      "date": 1509801022772
+    },
+    {
+      "type": "edit",
+      "id": "397e90a6334e66b7",
+      "item": {
+        "type": "paragraph",
+        "id": "397e90a6334e66b7",
+        "text": "[[Ffmpeg]] and the [[MLT Multimedia Framework]] are command-line tools for editing and manipulating video based on [[video timecode]] (or [[edit decision list]]s."
+      },
+      "date": 1509801082274
+    }
+  ]
+}

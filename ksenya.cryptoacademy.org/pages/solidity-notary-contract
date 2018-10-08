@@ -1,0 +1,214 @@
+{
+  "title": "Solidity Notary Contract",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "6c8fb55b609fa318",
+      "text": "Very basic contract for a notary (timestamping system) written as a design suggestion by [https://github.com/Ryanmtate Ryanmtate]"
+    },
+    {
+      "type": "paragraph",
+      "id": "7e5ef5ab7161650b",
+      "text": "I described a basic functionality: minimal functionality of a lab book where an individual records experimental data, and a hash of JSON file is timestamped on the blockchain while the data it can be also published on IPFS."
+    },
+    {
+      "type": "pagefold",
+      "id": "bb38f4b0bd127d34",
+      "text": "Quote"
+    },
+    {
+      "type": "paragraph",
+      "id": "ee2db1fa9a04d0db",
+      "text": "yeah; not sure if that leads you in the right direction\nbut essentially Note is a data structure that you could map to/from a JSON you could listen for the event or index notes, since notes is public, getter functions are provided in the ABI for you."
+    },
+    {
+      "type": "code",
+      "id": "a4a2f603d87e9e65",
+      "text": "contract AuthoredBy {\n    address author;\n    function AuthoredBy(){\n        author = msg.sender;\n    }\n\n    modifier isAuthor { if(msg.sender == author) _ }\n}\n\ncontract LabNote is AuthoredBy {\n    struct Note {\n        string name;\n        string description;\n        uint result;\n        uint date;\n        address author;\n    }\n\n    Note [] public notes;\n\n    event NewNote(string _name, string _description, uint _result, uint _date, address _author);\n\n    function addNote(string _name, string _description, uint _result) isAuthor {\n        uint dated = now;\n        NewNote(_name, _description, _result, dated, msg.sender);\n        notes.push(Note({name : _name, description : _description, : result : _result, date : dated, author : msg.sender}));\n    }\n\n\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Solidity Notary Contract",
+        "story": []
+      },
+      "date": 1449192385009
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6c8fb55b609fa318"
+      },
+      "id": "6c8fb55b609fa318",
+      "type": "add",
+      "date": 1449192386040
+    },
+    {
+      "type": "edit",
+      "id": "6c8fb55b609fa318",
+      "item": {
+        "type": "paragraph",
+        "id": "6c8fb55b609fa318",
+        "text": "Very basic contract for a notary (timestamping system) written as a adesign suggestion by "
+      },
+      "date": 1449192424160
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a4a2f603d87e9e65"
+      },
+      "id": "a4a2f603d87e9e65",
+      "type": "add",
+      "after": "6c8fb55b609fa318",
+      "date": 1449195022837
+    },
+    {
+      "type": "edit",
+      "id": "a4a2f603d87e9e65",
+      "item": {
+        "type": "code",
+        "id": "a4a2f603d87e9e65",
+        "text": "contract AuthoredBy {\n    address author;\n    function AuthoredBy(){\n        author = msg.sender;\n    }\n\n    modifier isAuthor { if(msg.sender == author) _ }\n}\n\ncontract LabNote is AuthoredBy {\n    struct Note {\n        string name;\n        string description;\n        uint result;\n        uint date;\n        address author;\n    }\n\n    Note [] public notes;\n\n    event NewNote(string _name, string _description, uint _result, uint _date, address _author);\n\n    function addNote(string _name, string _description, uint _result) isAuthor {\n        uint dated = now;\n        NewNote(_name, _description, _result, dated, msg.sender);\n        notes.push(Note({name : _name, description : _description, : result : _result, date : dated, author : msg.sender}));\n    }\n\n\n}"
+      },
+      "date": 1449195026030
+    },
+    {
+      "type": "edit",
+      "id": "6c8fb55b609fa318",
+      "item": {
+        "type": "paragraph",
+        "id": "6c8fb55b609fa318",
+        "text": "Very basic contract for a notary (timestamping system) written as a adesign suggestion by [https://github.com/Ryanmtate Ryanmtate]"
+      },
+      "date": 1449195071249
+    },
+    {
+      "type": "edit",
+      "id": "6c8fb55b609fa318",
+      "item": {
+        "type": "paragraph",
+        "id": "6c8fb55b609fa318",
+        "text": "Very basic contract for a notary (timestamping system) written as a design suggestion by [https://github.com/Ryanmtate Ryanmtate]"
+      },
+      "date": 1449195074658
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7e5ef5ab7161650b"
+      },
+      "id": "7e5ef5ab7161650b",
+      "type": "add",
+      "after": "a4a2f603d87e9e65",
+      "date": 1449195102423
+    },
+    {
+      "type": "move",
+      "order": [
+        "6c8fb55b609fa318",
+        "7e5ef5ab7161650b",
+        "a4a2f603d87e9e65"
+      ],
+      "id": "7e5ef5ab7161650b",
+      "date": 1449195105720
+    },
+    {
+      "type": "edit",
+      "id": "7e5ef5ab7161650b",
+      "item": {
+        "type": "paragraph",
+        "id": "7e5ef5ab7161650b",
+        "text": "After I described a basic functionality, which is"
+      },
+      "date": 1449195140853
+    },
+    {
+      "type": "add",
+      "id": "ee2db1fa9a04d0db",
+      "item": {
+        "type": "paragraph",
+        "id": "ee2db1fa9a04d0db",
+        "text": "yeah; not sure if that leads you in the right direction\nbut essentially Note is a data structure that you could map to/from a JSON you could listen for the event or index notes, since notes is public, getter functions are provided in the ABI for you"
+      },
+      "after": "7e5ef5ab7161650b",
+      "date": 1449195165316
+    },
+    {
+      "type": "edit",
+      "id": "ee2db1fa9a04d0db",
+      "item": {
+        "type": "paragraph",
+        "id": "ee2db1fa9a04d0db",
+        "text": "yeah; not sure if that leads you in the right direction\nbut essentially Note is a data structure that you could map to/from a JSON you could listen for the event or index notes, since notes is public, getter functions are provided in the ABI for you."
+      },
+      "date": 1449195169133
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bb38f4b0bd127d34"
+      },
+      "id": "bb38f4b0bd127d34",
+      "type": "add",
+      "after": "a4a2f603d87e9e65",
+      "date": 1449195171622
+    },
+    {
+      "type": "edit",
+      "id": "bb38f4b0bd127d34",
+      "item": {
+        "type": "pagefold",
+        "id": "bb38f4b0bd127d34",
+        "text": "Quote"
+      },
+      "date": 1449195178426
+    },
+    {
+      "type": "move",
+      "order": [
+        "6c8fb55b609fa318",
+        "7e5ef5ab7161650b",
+        "ee2db1fa9a04d0db",
+        "bb38f4b0bd127d34",
+        "a4a2f603d87e9e65"
+      ],
+      "id": "bb38f4b0bd127d34",
+      "date": 1449195184297
+    },
+    {
+      "type": "move",
+      "order": [
+        "6c8fb55b609fa318",
+        "7e5ef5ab7161650b",
+        "bb38f4b0bd127d34",
+        "ee2db1fa9a04d0db",
+        "a4a2f603d87e9e65"
+      ],
+      "id": "bb38f4b0bd127d34",
+      "date": 1449195185951
+    },
+    {
+      "type": "edit",
+      "id": "7e5ef5ab7161650b",
+      "item": {
+        "type": "paragraph",
+        "id": "7e5ef5ab7161650b",
+        "text": "After I described a basic functionality: minimal functionality of a lab book where an individual records experimental data, and a hash of JSON file is timestamped on the blockchain while the data it can be also published on IPFS."
+      },
+      "date": 1449195242950
+    },
+    {
+      "type": "edit",
+      "id": "7e5ef5ab7161650b",
+      "item": {
+        "type": "paragraph",
+        "id": "7e5ef5ab7161650b",
+        "text": "I described a basic functionality: minimal functionality of a lab book where an individual records experimental data, and a hash of JSON file is timestamped on the blockchain while the data it can be also published on IPFS."
+      },
+      "date": 1449197431883
+    }
+  ]
+}

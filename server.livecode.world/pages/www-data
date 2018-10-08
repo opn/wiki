@@ -1,0 +1,213 @@
+{
+  "title": "www-data",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3f933e911baa8827",
+      "text": "This is the user that the [[Apache Daemon]] runs under. This means that by default and CGI that you call runs under this www-data users and has the same permissions as this user."
+    },
+    {
+      "type": "paragraph",
+      "id": "c4e6aa5498586e25",
+      "text": "The www-data user has restricted permissions, it does not have the same permissions as the user you will often be ssh'ing to your server with. Therefore things that work on the commandline with ssh access will not necessarily work when you use shell() in Livcode."
+    },
+    {
+      "type": "markdown",
+      "id": "417b3793c2e9e1b0",
+      "text": "You might be tempted to:\n\n- [[Add www-data to group]]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "35498636be8c30d7",
+      "text": "# See also\n\n- [[Home Away from Home]]\n- [[Livecode Server on DigitalOcean]]\n- [[Configure Apache for Livecode]]\n- [[Let's Encrypt Livecode]]\n- [[Serving Static Content]]\n- [[Nginx]]\n- [[Apache HTTP Server]]\n- [[Caddy]]\n- [[Revigniter]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "www-data",
+        "story": []
+      },
+      "date": 1498296895726
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3f933e911baa8827"
+      },
+      "id": "3f933e911baa8827",
+      "type": "add",
+      "date": 1498296897566
+    },
+    {
+      "type": "edit",
+      "id": "3f933e911baa8827",
+      "item": {
+        "type": "paragraph",
+        "id": "3f933e911baa8827",
+        "text": "This is the user that the [[Apache Daemon]] runs under. This means that by default and CGI that you call runs under this www-data users and has the same permissions as this user."
+      },
+      "date": 1498296978527
+    },
+    {
+      "type": "add",
+      "id": "c4e6aa5498586e25",
+      "item": {
+        "type": "paragraph",
+        "id": "c4e6aa5498586e25",
+        "text": "The www-data user has restricted permissions, it does not have the same permissions as the user you will often be ssh'ing to your server with. Therefore things that work on the commandline with ssh access will not necessarily work when you use shell() in Livcode."
+      },
+      "after": "3f933e911baa8827",
+      "date": 1498297053456
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "417b3793c2e9e1b0",
+        "text": "# Add www-data to group\n"
+      },
+      "after": "c4e6aa5498586e25",
+      "id": "417b3793c2e9e1b0",
+      "date": 1498297063145
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "cb0d264e51ba71b4",
+        "text": "Now I want [[www-data]] (Apache daemon) to have an access to this directory, so in my mind I am planning to add www-data to group devs. "
+      },
+      "after": "417b3793c2e9e1b0",
+      "id": "cb0d264e51ba71b4",
+      "date": 1498297066571
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f99bb30aba67f66d",
+        "text": "However I fear that I would cause wreckage if I execute this:\n\n"
+      },
+      "after": "cb0d264e51ba71b4",
+      "id": "f99bb30aba67f66d",
+      "date": 1498297091016
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "dfc9944e5aa63e22",
+        "text": "usermod -a -G devs www-data"
+      },
+      "after": "f99bb30aba67f66d",
+      "id": "dfc9944e5aa63e22",
+      "date": 1498297094543
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0967173aa16c9063",
+        "text": "This won't break anything, but might cause a security issue, since anyone accessing the www-data account (php scripts, unpatched, hacked pages, etc.) will get read/write access to everything that the 'devs' group has."
+      },
+      "after": "dfc9944e5aa63e22",
+      "id": "0967173aa16c9063",
+      "date": 1498297097782
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c343b8c424014f3c",
+        "text": "\"www-data\" already has read access to that folder, try limiting the write access to just the files it really really needs to write to."
+      },
+      "after": "0967173aa16c9063",
+      "id": "c343b8c424014f3c",
+      "date": 1498297100994
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "35498636be8c30d7",
+        "text": "# See also\n\n- [[Home Away from Home]]\n- [[Livecode Server on DigitalOcean]]\n- [[Configure Apache for Livecode]]\n- [[Let's Encrypt Livecode]]\n- [[Serving Static Content]]\n- [[Nginx]]\n- [[Apache HTTP Server]]\n- [[Caddy]]\n- [[Revigniter]]"
+      },
+      "after": "c343b8c424014f3c",
+      "id": "35498636be8c30d7",
+      "date": 1498297105994
+    },
+    {
+      "type": "add",
+      "id": "1f26b7b69434fdb7",
+      "item": {
+        "type": "paragraph",
+        "id": "1f26b7b69434fdb7",
+        "text": "See [[Apache Permissions]] for some links relating to this."
+      },
+      "after": "c343b8c424014f3c",
+      "date": 1498297535821
+    },
+    {
+      "type": "edit",
+      "id": "417b3793c2e9e1b0",
+      "item": {
+        "type": "markdown",
+        "id": "417b3793c2e9e1b0",
+        "text": "# [[Add www-data to group]]\n"
+      },
+      "date": 1498297545935
+    },
+    {
+      "type": "remove",
+      "id": "cb0d264e51ba71b4",
+      "date": 1498297552156
+    },
+    {
+      "type": "remove",
+      "id": "f99bb30aba67f66d",
+      "date": 1498297554745
+    },
+    {
+      "type": "remove",
+      "id": "dfc9944e5aa63e22",
+      "date": 1498297557932
+    },
+    {
+      "type": "remove",
+      "id": "0967173aa16c9063",
+      "date": 1498297560074
+    },
+    {
+      "type": "remove",
+      "id": "c343b8c424014f3c",
+      "date": 1498297562091
+    },
+    {
+      "type": "remove",
+      "id": "1f26b7b69434fdb7",
+      "date": 1498297564928
+    },
+    {
+      "type": "edit",
+      "id": "417b3793c2e9e1b0",
+      "item": {
+        "type": "markdown",
+        "id": "417b3793c2e9e1b0",
+        "text": "- [[Add www-data to group]]\n"
+      },
+      "date": 1498297574489
+    },
+    {
+      "type": "edit",
+      "id": "417b3793c2e9e1b0",
+      "item": {
+        "type": "markdown",
+        "id": "417b3793c2e9e1b0",
+        "text": "You might be tempted to:\n\n- [[Add www-data to group]]\n"
+      },
+      "date": 1498297588232
+    }
+  ]
+}

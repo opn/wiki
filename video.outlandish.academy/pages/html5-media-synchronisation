@@ -1,0 +1,702 @@
+{
+  "title": "HTML5 Media Synchronisation",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3ffa7ff77d60220d",
+      "text": "This seems to be going backwards. Especially with Mozilla retiring PopcornJS. Here are a bunch of links:"
+    },
+    {
+      "type": "markdown",
+      "id": "f5553b69286ded41",
+      "text": "* HTML5 video - http://www.w3schools.com/html/html5_video.asp w3schools.com]\nCrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* Popcorn-js - [https://github.com/mozilla/popcorn-js github]\n* Web Audio API - [https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#Browser_compatibility developer.mozilla.org]\n* Wikipedia Commons timed text - [https://commons.wikimedia.org/wiki/Commons:Timed_Text_Demo_Page?withJS=MediaWiki:MwEmbed.js wikipedia]\n* Well supporter (btu no events) - [http://docs.videojs.com/docs/api/index.html ideojs.com]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "72617eb78145798f",
+      "text": "# Track and cue events\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2674fd2465c13ce1",
+      "text": "The ability to use structured data in cues makes the track element extremely powerful and flexible. A web app can listen for cue events, extract the text of each cue as it fires, parse the data and then use the results to make DOM changes (or perform other JavaScript or CSS tasks) synchronised with media playback. This technique is used to synchronise video playback and map marker position in the demo at [samdutton.net/mapTrack samdutton.net]"
+    },
+    {
+      "type": "markdown",
+      "id": "334f020f9a3aeb82",
+      "text": "* Synchronised video [https://developer.jwplayer.com/jw-player/demos/innovation/timeline-interaction/ developer.jwplayer.com]\n* HTML5-Video-with-WebVTT-Chapters - [http://thenewcode.com/977/Create-Interactive-HTML5-Video-with-WebVTT-Chapters thenewcode.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "f9a2911a9fbaa86b",
+      "text": "The two types of cue event are:\n* enter and exit events fired for cues\n* cuechange events fired for tracks."
+    },
+    {
+      "type": "paragraph",
+      "id": "5024b4d4761864af",
+      "text": "In the previous example, cue event listeners could have been added like this:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "031a52aa739e1beb",
+      "text": "cue.onenter = function(){\n  // do something\n};\n\ncue.onexit = function(){\n  // do something else\n};"
+    },
+    {
+      "type": "paragraph",
+      "id": "c03ce0fc2c2f8f79",
+      "text": "Be aware that the enter and exit events are only fired when cues are entered or exited via playback. If the user drags the timeline slider manually, a cuechange event will be fired for the track at the new time, but enter and exits events will not be fired. It's possible to get around this by listening for the cuechange track event, then getting the active cues. (Note that there may be more than one active cue.)"
+    },
+    {
+      "type": "paragraph",
+      "id": "e7f986b8144dd48f",
+      "text": "The following example gets the current cue, when the cue changes, and attempts to create an object by parsing the cue text:"
+    },
+    {
+      "type": "code",
+      "id": "9b78252d20fbdd5d",
+      "text": "textTrack.oncuechange = function (){\n  // \"this\" is a textTrack\n  var cue = this.activeCues[0]; // assuming there is only one active cue\n  var obj = JSON.parse(cue.text);\n  // do something\n}"
+    },
+    {
+      "type": "markdown",
+      "id": "5b85844d6b3b1101",
+      "text": "# Not just for video"
+    },
+    {
+      "type": "paragraph",
+      "id": "79e82080e7884c23",
+      "text": "Don't forget that tracks can be used with audio as well as video–and that you don't need audio, video or track elements in HTML markup to take advantage of their APIs. The TextTrack API documentation has a nice example of this, showing a neat way to implement audio 'sprites':"
+    },
+    {
+      "type": "code",
+      "id": "d84ff52369558b6b",
+      "text": "var sfx = new Audio('sfx.wav');\nvar track = sfx.addTextTrack('metadata'); // previously implemented as addTrack()\n\n// Add cues for sounds we care about.\ntrack.addCue(new TextTrackCue(12.783, 13.612, 'dog bark')); // startTime, endTime, text\ntrack.addCue(new TextTrackCue(13.612, 15.091, 'kitten mew'));\n\nfunction playSound(id) {\n  sfx.currentTime = track.getCueById(id).startTime;\n  sfx.play();\n}\n\nplaySound('dog bark');\nplaySound('kitten mew');"
+    },
+    {
+      "type": "paragraph",
+      "id": "a626cb439ceae073",
+      "text": "You can see a more elaborate example in action at [samdutton.com/track/audioSprites samdutton.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "ea97d212463b17fd",
+      "text": "# Video Events\n* Sam Dutton - [http://samdutton.net/video/events/ samdutton.net]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "HTML5 Media Synchronisation",
+        "story": []
+      },
+      "date": 1464268573064
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3ffa7ff77d60220d"
+      },
+      "id": "3ffa7ff77d60220d",
+      "type": "add",
+      "date": 1464268574509
+    },
+    {
+      "type": "edit",
+      "id": "3ffa7ff77d60220d",
+      "item": {
+        "type": "paragraph",
+        "id": "3ffa7ff77d60220d",
+        "text": "This seems to be going backwards. Especially with Mozilla retiring PopcornJS. Here are a bunch of links:"
+      },
+      "date": 1464268621065
+    },
+    {
+      "type": "add",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "paragraph",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]"
+      },
+      "after": "3ffa7ff77d60220d",
+      "date": 1464268648341
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]"
+      },
+      "date": 1464268650698
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n"
+      },
+      "date": 1464268686105
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n"
+      },
+      "date": 1464268731233
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n"
+      },
+      "date": 1464268769004
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* [Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n"
+      },
+      "date": 1464268806612
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* [Popcorn-js - https://github.com/mozilla/popcorn-js github]\n"
+      },
+      "date": 1464268844293
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* Popcorn-js - [https://github.com/mozilla/popcorn-js github]\n"
+      },
+      "date": 1464268854739
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* Popcorn-js - [https://github.com/mozilla/popcorn-js github]\n* Web Audio API - [https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#Browser_compatibility developer.mozilla.org]\n"
+      },
+      "date": 1464269092496
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* Popcorn-js - [https://github.com/mozilla/popcorn-js github]\n* Web Audio API - [https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#Browser_compatibility developer.mozilla.org]\n* Wikipedia Commons timed text - [https://commons.wikimedia.org/wiki/Commons:Timed_Text_Demo_Page?withJS=MediaWiki:MwEmbed.js wikipedia]\n"
+      },
+      "date": 1464269169924
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* CrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* Popcorn-js - [https://github.com/mozilla/popcorn-js github]\n* Web Audio API - [https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#Browser_compatibility developer.mozilla.org]\n* Wikipedia Commons timed text - [https://commons.wikimedia.org/wiki/Commons:Timed_Text_Demo_Page?withJS=MediaWiki:MwEmbed.js wikipedia]\n* Well supporter (btu no events) - [http://docs.videojs.com/docs/api/index.html ideojs.com]\n"
+      },
+      "date": 1464269645749
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "973406aba14bc0c0"
+      },
+      "id": "973406aba14bc0c0",
+      "type": "add",
+      "after": "f5553b69286ded41",
+      "date": 1464270357831
+    },
+    {
+      "type": "edit",
+      "id": "973406aba14bc0c0",
+      "item": {
+        "type": "paragraph",
+        "id": "973406aba14bc0c0",
+        "text": "A promising avenue is to use webtVTT or chpater markers:"
+      },
+      "date": 1464270385028
+    },
+    {
+      "type": "add",
+      "id": "334f020f9a3aeb82",
+      "item": {
+        "type": "paragraph",
+        "id": "334f020f9a3aeb82",
+        "text": "* Synchronised video [https://developer.jwplayer.com/jw-player/demos/innovation/timeline-interaction/ developer.jwplayer.com]"
+      },
+      "after": "973406aba14bc0c0",
+      "date": 1464270406119
+    },
+    {
+      "type": "edit",
+      "id": "334f020f9a3aeb82",
+      "item": {
+        "type": "markdown",
+        "id": "334f020f9a3aeb82",
+        "text": "* Synchronised video [https://developer.jwplayer.com/jw-player/demos/innovation/timeline-interaction/ developer.jwplayer.com]"
+      },
+      "date": 1464270408339
+    },
+    {
+      "type": "edit",
+      "id": "334f020f9a3aeb82",
+      "item": {
+        "type": "markdown",
+        "id": "334f020f9a3aeb82",
+        "text": "* Synchronised video [https://developer.jwplayer.com/jw-player/demos/innovation/timeline-interaction/ developer.jwplayer.com]\n* HTML5-Video-with-WebVTT-Chapters - [http://thenewcode.com/977/Create-Interactive-HTML5-Video-with-WebVTT-Chapters thenewcode.com]"
+      },
+      "date": 1464270456147
+    },
+    {
+      "type": "edit",
+      "id": "f5553b69286ded41",
+      "item": {
+        "type": "markdown",
+        "id": "f5553b69286ded41",
+        "text": "* HTML5 video - http://www.w3schools.com/html/html5_video.asp w3schools.com]\nCrossoverLabs review - [http://www.xolabs.co.uk/2015/06/29/interactive-filmmaking-round-up/ xolabs.co.uk]\n* Audio Scheduling - [http://www.html5rocks.com/en/tutorials/audio/scheduling/ html5rocks.com]\n* Audio and video events - [https://www.sitepoint.com/essential-audio-and-video-events-for-html5/ sitepoint.com]\n* Timed audio events - [https://www.sitepoint.com/accessible-audio-descriptions-for-html5-video/ sitepoint.com]\n* Timed text-tracks - [https://html.spec.whatwg.org/multipage/embedded-content.html#timed-text-tracks whatwg.org]\n* Popcorn-js - [https://github.com/mozilla/popcorn-js github]\n* Web Audio API - [https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API#Browser_compatibility developer.mozilla.org]\n* Wikipedia Commons timed text - [https://commons.wikimedia.org/wiki/Commons:Timed_Text_Demo_Page?withJS=MediaWiki:MwEmbed.js wikipedia]\n* Well supporter (btu no events) - [http://docs.videojs.com/docs/api/index.html ideojs.com]\n"
+      },
+      "date": 1464270506667
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2674fd2465c13ce1"
+      },
+      "id": "2674fd2465c13ce1",
+      "type": "add",
+      "after": "334f020f9a3aeb82",
+      "date": 1464270626609
+    },
+    {
+      "type": "edit",
+      "id": "2674fd2465c13ce1",
+      "item": {
+        "type": "paragraph",
+        "id": "2674fd2465c13ce1",
+        "text": "The ability to use structured data in cues makes the track element extremely powerful and flexible. A web app can listen for cue events, extract the text of each cue as it fires, parse the data and then use the results to make DOM changes (or perform other JavaScript or CSS tasks) synchronised with media playback. This technique is used to synchronise video playback and map marker position in the demo at [samdutton.net/mapTrack samdutton.net]"
+      },
+      "date": 1464270642697
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "72617eb78145798f"
+      },
+      "id": "72617eb78145798f",
+      "type": "add",
+      "after": "2674fd2465c13ce1",
+      "date": 1464270764170
+    },
+    {
+      "type": "edit",
+      "id": "72617eb78145798f",
+      "item": {
+        "type": "paragraph",
+        "id": "72617eb78145798f",
+        "text": "# Track and cue events\n"
+      },
+      "date": 1464270780832
+    },
+    {
+      "type": "add",
+      "id": "f9a2911a9fbaa86b",
+      "item": {
+        "type": "paragraph",
+        "id": "f9a2911a9fbaa86b",
+        "text": "The two types of cue event are:\n* enter and exit events fired for cues\n* cuechange events fired for tracks."
+      },
+      "after": "72617eb78145798f",
+      "date": 1464270794750
+    },
+    {
+      "type": "add",
+      "id": "5024b4d4761864af",
+      "item": {
+        "type": "paragraph",
+        "id": "5024b4d4761864af",
+        "text": "In the previous example, cue event listeners could have been added like this:\n\n"
+      },
+      "after": "f9a2911a9fbaa86b",
+      "date": 1464270797493
+    },
+    {
+      "type": "add",
+      "id": "6700e311598ab7b6",
+      "item": {
+        "type": "paragraph",
+        "id": "6700e311598ab7b6",
+        "text": "cue.onenter = function(){\n  // do something\n};\n\ncue.onexit = function(){\n  // do something else\n};"
+      },
+      "after": "5024b4d4761864af",
+      "date": 1464270800548
+    },
+    {
+      "type": "add",
+      "id": "c03ce0fc2c2f8f79",
+      "item": {
+        "type": "paragraph",
+        "id": "c03ce0fc2c2f8f79",
+        "text": "Be aware that the enter and exit events are only fired when cues are entered or exited via playback. If the user drags the timeline slider manually, a cuechange event will be fired for the track at the new time, but enter and exits events will not be fired. It's possible to get around this by listening for the cuechange track event, then getting the active cues. (Note that there may be more than one active cue.)"
+      },
+      "after": "6700e311598ab7b6",
+      "date": 1464270804028
+    },
+    {
+      "type": "add",
+      "id": "e7f986b8144dd48f",
+      "item": {
+        "type": "paragraph",
+        "id": "e7f986b8144dd48f",
+        "text": "The following example gets the current cue, when the cue changes, and attempts to create an object by parsing the cue text:"
+      },
+      "after": "c03ce0fc2c2f8f79",
+      "date": 1464270808564
+    },
+    {
+      "type": "add",
+      "id": "5639c542d9b686d9",
+      "item": {
+        "type": "paragraph",
+        "id": "5639c542d9b686d9",
+        "text": "textTrack.oncuechange = function (){\n  // \"this\" is a textTrack\n  var cue = this.activeCues[0]; // assuming there is only one active cue\n  var obj = JSON.parse(cue.text);\n  // do something\n}"
+      },
+      "after": "e7f986b8144dd48f",
+      "date": 1464270813925
+    },
+    {
+      "type": "add",
+      "id": "5b85844d6b3b1101",
+      "item": {
+        "type": "paragraph",
+        "id": "5b85844d6b3b1101",
+        "text": "# Not just for video"
+      },
+      "after": "5639c542d9b686d9",
+      "date": 1464270817382
+    },
+    {
+      "type": "add",
+      "id": "79e82080e7884c23",
+      "item": {
+        "type": "paragraph",
+        "id": "79e82080e7884c23",
+        "text": "Don't forget that tracks can be used with audio as well as video–and that you don't need audio, video or track elements in HTML markup to take advantage of their APIs. The TextTrack API documentation has a nice example of this, showing a neat way to implement audio 'sprites':"
+      },
+      "after": "5b85844d6b3b1101",
+      "date": 1464270826789
+    },
+    {
+      "type": "add",
+      "id": "a49b0cd149711b53",
+      "item": {
+        "type": "paragraph",
+        "id": "a49b0cd149711b53",
+        "text": "\nvar sfx = new Audio('sfx.wav');\nvar track = sfx.addTextTrack('metadata'); // previously implemented as addTrack()\n\n// Add cues for sounds we care about.\ntrack.addCue(new TextTrackCue(12.783, 13.612, 'dog bark')); // startTime, endTime, text\ntrack.addCue(new TextTrackCue(13.612, 15.091, 'kitten mew'));\n\nfunction playSound(id) {\n  sfx.currentTime = track.getCueById(id).startTime;\n  sfx.play();\n}\n\nplaySound('dog bark');\nplaySound('kitten mew');"
+      },
+      "after": "79e82080e7884c23",
+      "date": 1464270835620
+    },
+    {
+      "type": "add",
+      "id": "a626cb439ceae073",
+      "item": {
+        "type": "paragraph",
+        "id": "a626cb439ceae073",
+        "text": "You can see a more elaborate example in action at [samdutton.com/track/audioSprites samdutton.com]"
+      },
+      "after": "a49b0cd149711b53",
+      "date": 1464270855684
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9b78252d20fbdd5d"
+      },
+      "id": "9b78252d20fbdd5d",
+      "type": "add",
+      "after": "a626cb439ceae073",
+      "date": 1464270856895
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ffa7ff77d60220d",
+        "f5553b69286ded41",
+        "973406aba14bc0c0",
+        "334f020f9a3aeb82",
+        "2674fd2465c13ce1",
+        "72617eb78145798f",
+        "f9a2911a9fbaa86b",
+        "5024b4d4761864af",
+        "6700e311598ab7b6",
+        "c03ce0fc2c2f8f79",
+        "e7f986b8144dd48f",
+        "9b78252d20fbdd5d",
+        "5639c542d9b686d9",
+        "5b85844d6b3b1101",
+        "79e82080e7884c23",
+        "a49b0cd149711b53",
+        "a626cb439ceae073"
+      ],
+      "id": "9b78252d20fbdd5d",
+      "date": 1464270859596
+    },
+    {
+      "type": "remove",
+      "id": "5639c542d9b686d9",
+      "date": 1464270863658
+    },
+    {
+      "type": "edit",
+      "id": "9b78252d20fbdd5d",
+      "item": {
+        "type": "code",
+        "id": "9b78252d20fbdd5d",
+        "text": "textTrack.oncuechange = function (){\n  // \"this\" is a textTrack\n  var cue = this.activeCues[0]; // assuming there is only one active cue\n  var obj = JSON.parse(cue.text);\n  // do something\n}"
+      },
+      "date": 1464270866270
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d84ff52369558b6b"
+      },
+      "id": "d84ff52369558b6b",
+      "type": "add",
+      "after": "a626cb439ceae073",
+      "date": 1464270868646
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ffa7ff77d60220d",
+        "f5553b69286ded41",
+        "973406aba14bc0c0",
+        "334f020f9a3aeb82",
+        "2674fd2465c13ce1",
+        "72617eb78145798f",
+        "f9a2911a9fbaa86b",
+        "5024b4d4761864af",
+        "6700e311598ab7b6",
+        "c03ce0fc2c2f8f79",
+        "e7f986b8144dd48f",
+        "9b78252d20fbdd5d",
+        "5b85844d6b3b1101",
+        "79e82080e7884c23",
+        "a49b0cd149711b53",
+        "d84ff52369558b6b",
+        "a626cb439ceae073"
+      ],
+      "id": "d84ff52369558b6b",
+      "date": 1464270871514
+    },
+    {
+      "type": "remove",
+      "id": "a49b0cd149711b53",
+      "date": 1464270875138
+    },
+    {
+      "type": "edit",
+      "id": "d84ff52369558b6b",
+      "item": {
+        "type": "code",
+        "id": "d84ff52369558b6b",
+        "text": "var sfx = new Audio('sfx.wav');\nvar track = sfx.addTextTrack('metadata'); // previously implemented as addTrack()\n\n// Add cues for sounds we care about.\ntrack.addCue(new TextTrackCue(12.783, 13.612, 'dog bark')); // startTime, endTime, text\ntrack.addCue(new TextTrackCue(13.612, 15.091, 'kitten mew'));\n\nfunction playSound(id) {\n  sfx.currentTime = track.getCueById(id).startTime;\n  sfx.play();\n}\n\nplaySound('dog bark');\nplaySound('kitten mew');"
+      },
+      "date": 1464270879386
+    },
+    {
+      "type": "edit",
+      "id": "5b85844d6b3b1101",
+      "item": {
+        "type": "markdown",
+        "id": "5b85844d6b3b1101",
+        "text": "# Not just for video"
+      },
+      "date": 1464270882959
+    },
+    {
+      "type": "edit",
+      "id": "72617eb78145798f",
+      "item": {
+        "type": "markdown",
+        "id": "72617eb78145798f",
+        "text": "# Track and cue events\n"
+      },
+      "date": 1464270886357
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "031a52aa739e1beb"
+      },
+      "id": "031a52aa739e1beb",
+      "type": "add",
+      "after": "a626cb439ceae073",
+      "date": 1464270888741
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ffa7ff77d60220d",
+        "f5553b69286ded41",
+        "973406aba14bc0c0",
+        "334f020f9a3aeb82",
+        "2674fd2465c13ce1",
+        "72617eb78145798f",
+        "f9a2911a9fbaa86b",
+        "5024b4d4761864af",
+        "031a52aa739e1beb",
+        "6700e311598ab7b6",
+        "c03ce0fc2c2f8f79",
+        "e7f986b8144dd48f",
+        "9b78252d20fbdd5d",
+        "5b85844d6b3b1101",
+        "79e82080e7884c23",
+        "d84ff52369558b6b",
+        "a626cb439ceae073"
+      ],
+      "id": "031a52aa739e1beb",
+      "date": 1464270892177
+    },
+    {
+      "type": "remove",
+      "id": "6700e311598ab7b6",
+      "date": 1464270896179
+    },
+    {
+      "type": "edit",
+      "id": "031a52aa739e1beb",
+      "item": {
+        "type": "code",
+        "id": "031a52aa739e1beb",
+        "text": "cue.onenter = function(){\n  // do something\n};\n\ncue.onexit = function(){\n  // do something else\n};"
+      },
+      "date": 1464270898895
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ffa7ff77d60220d",
+        "f5553b69286ded41",
+        "973406aba14bc0c0",
+        "334f020f9a3aeb82",
+        "72617eb78145798f",
+        "f9a2911a9fbaa86b",
+        "5024b4d4761864af",
+        "2674fd2465c13ce1",
+        "031a52aa739e1beb",
+        "c03ce0fc2c2f8f79",
+        "e7f986b8144dd48f",
+        "9b78252d20fbdd5d",
+        "5b85844d6b3b1101",
+        "79e82080e7884c23",
+        "d84ff52369558b6b",
+        "a626cb439ceae073"
+      ],
+      "id": "2674fd2465c13ce1",
+      "date": 1464270910902
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ffa7ff77d60220d",
+        "f5553b69286ded41",
+        "973406aba14bc0c0",
+        "72617eb78145798f",
+        "334f020f9a3aeb82",
+        "f9a2911a9fbaa86b",
+        "5024b4d4761864af",
+        "2674fd2465c13ce1",
+        "031a52aa739e1beb",
+        "c03ce0fc2c2f8f79",
+        "e7f986b8144dd48f",
+        "9b78252d20fbdd5d",
+        "5b85844d6b3b1101",
+        "79e82080e7884c23",
+        "d84ff52369558b6b",
+        "a626cb439ceae073"
+      ],
+      "id": "334f020f9a3aeb82",
+      "date": 1464270922049
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ffa7ff77d60220d",
+        "f5553b69286ded41",
+        "973406aba14bc0c0",
+        "72617eb78145798f",
+        "2674fd2465c13ce1",
+        "334f020f9a3aeb82",
+        "f9a2911a9fbaa86b",
+        "5024b4d4761864af",
+        "031a52aa739e1beb",
+        "c03ce0fc2c2f8f79",
+        "e7f986b8144dd48f",
+        "9b78252d20fbdd5d",
+        "5b85844d6b3b1101",
+        "79e82080e7884c23",
+        "d84ff52369558b6b",
+        "a626cb439ceae073"
+      ],
+      "id": "2674fd2465c13ce1",
+      "date": 1464270923999
+    },
+    {
+      "type": "remove",
+      "id": "973406aba14bc0c0",
+      "date": 1464270927987
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ea97d212463b17fd"
+      },
+      "id": "ea97d212463b17fd",
+      "type": "add",
+      "after": "a626cb439ceae073",
+      "date": 1464271248071
+    },
+    {
+      "type": "edit",
+      "id": "ea97d212463b17fd",
+      "item": {
+        "type": "markdown",
+        "id": "ea97d212463b17fd",
+        "text": "# Video Events\n* Sam Dutton - [http://samdutton.net/video/events/ samdutton.net]"
+      },
+      "date": 1464271272685
+    },
+    {
+      "type": "fork",
+      "site": "video.livecode.world",
+      "date": 1509117964885
+    }
+  ]
+}

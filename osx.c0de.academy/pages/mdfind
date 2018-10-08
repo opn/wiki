@@ -1,0 +1,2686 @@
+{
+  "title": "mdfind",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "84613cded34fb5ff",
+      "text": "mdfind is the built in command line tool that utilises the [[spotlight]] search engine on [[macOS]]. Every Spotlight query is an AND search by default. It is surprisingly powerful."
+    },
+    {
+      "type": "markdown",
+      "id": "45e261afa5a7b3a3",
+      "text": "* Mastering Spotlight - [http://blog.superuser.com/2011/06/03/digging-deeper-mastering-spotlight-in-os-x/ superuser.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "418334b14d45c765",
+      "text": "The mdfind command consults the central metadata store and returns a list of files that match the given metadata query. The query can be a string or a query expression."
+    },
+    {
+      "type": "markdown",
+      "id": "d5dd7285f56c19f4",
+      "text": "The following useful options are available:\n\n* -onlyin dir (search the directory specified)\n* -name fileName (matching file names)\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "11be47698a0d340f",
+      "text": "Passing a simple string searches all metadata fields. So:"
+    },
+    {
+      "type": "code",
+      "id": "06b306a311f2a8b3",
+      "text": "mdfind image"
+    },
+    {
+      "type": "paragraph",
+      "id": "43140eb5b28b9c8b",
+      "text": "returns all files with any metadata attribute value matching the string \"image\"\n"
+    },
+    {
+      "type": "code",
+      "id": "6808b59ef53a55e8",
+      "text": "mdfind \"kMDItemAuthors == '*MyFavoriteAuthor*'\""
+    },
+    {
+      "type": "paragraph",
+      "id": "6ac1c4bad0a7db4f",
+      "text": "returns all files that contain \"MyFavoriteAuthor\" in the kMDItemAuthor metadata attribute:\n"
+    },
+    {
+      "type": "markdown",
+      "id": "9b13e45a611c8e95",
+      "text": "Here are some useful links:\n\n* The Power of mdfind - [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]\n* Spotlight syntax, mdfind examples, and metadata attributes - [http://osxnotes.net/spotlight.html osxnotes.net]"
+    },
+    {
+      "type": "paragraph",
+      "id": "14f477c99cf25b62",
+      "text": "Spotlight/mdfind uses the following frequently uses search syntax:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "d1f5e0a3d72cb619",
+      "text": "name:file.txt\nkind:\"jpeg image\"\ndate:today\ndate:\"this week\"\nmodified:12/31/11\ncreated:12/1/11-12/31/11\nkind:video AND size:<100000"
+    },
+    {
+      "type": "reference",
+      "id": "78fe7b5e180798e7",
+      "site": "osx.c0de.academy",
+      "slug": "spotlight-boolean-operators",
+      "title": "Spotlight boolean Operators",
+      "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+    },
+    {
+      "type": "markdown",
+      "id": "da4eebc7d674f642",
+      "text": "# Searching for named attributes"
+    },
+    {
+      "type": "paragraph",
+      "id": "cd746dfaadc314c3",
+      "text": "If I'm only interested in certain attributes, I can use the -name option:"
+    },
+    {
+      "type": "code",
+      "id": "f04fa0df2e7ddf22",
+      "text": "mdls -name kMDItemComposer \"11 Space Truckin'.m4a\""
+    },
+    {
+      "type": "code",
+      "id": "82a84e9eca603103",
+      "text": "mdfind -name javascript -onlyin ~/Books"
+    },
+    {
+      "type": "paragraph",
+      "id": "60200fc4c9f0a298",
+      "text": "and you can use wildcards:"
+    },
+    {
+      "type": "code",
+      "id": "51d73a0bcfa1d02d",
+      "text": "mdfind 'kMDItemFSName=*.pdf'\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "5a9ab03b6e4a734d",
+      "text": "If you want to only list folders (in spotlight kind:folders):"
+    },
+    {
+      "type": "code",
+      "id": "3770271210e9d5a2",
+      "text": "mdfind 'kMDItemKind=folders&&kMDItemFSName=[[folderName]]''"
+    },
+    {
+      "type": "paragraph",
+      "id": "715e7b4d2cc7274b",
+      "text": "You can create complex searches by building up complex strings:"
+    },
+    {
+      "type": "code",
+      "id": "4d6d820cecef05e1",
+      "text": "mdfind 'kMDItemFSName=convert&&kMDItemContentType=public.unix-executable'\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8a10057dd7c9386a",
+      "text": "# Getting precise"
+    },
+    {
+      "type": "paragraph",
+      "id": "1a394ce29ee1997f",
+      "text": "Now that I know some attribute names, I can get very precise in how I search. Say I want to find songs composed by Roger Waters. I need to search the kMDItemComposer attribute for \"Waters\". I'll put the string I'm searching for in double quotes, and then the entire search expression in single quotes."
+    },
+    {
+      "type": "code",
+      "id": "507890961a5eb689",
+      "text": "mdfind 'kMDItemComposer = \"Waters\"'"
+    },
+    {
+      "type": "paragraph",
+      "id": "39a895dd56f8c95c",
+      "text": "\nI know that I have more than three songs written by Roger Waters, so I'll rerun the search with wildcards, with an asterisk to mean \"any string.\""
+    },
+    {
+      "type": "code",
+      "id": "dbbb768f14466a68",
+      "text": "mdfind 'kMDItemComposer = \"*Waters*\"'"
+    },
+    {
+      "type": "paragraph",
+      "id": "4c333725be9e0f0b",
+      "text": "If I want a case-insensitive search, I can put the letter c outside the double quotes, as in this search to find all forms of \"McCartney\", regardless of the capitalization."
+    },
+    {
+      "type": "code",
+      "id": "18c08947f45845d4",
+      "text": "mdfind 'kMDItemComposer = \"*mccartney*\"c'"
+    },
+    {
+      "type": "markdown",
+      "id": "a059ca92c8722d76",
+      "text": "# More shell examples\n\nYou can find many more examples over at [http://osxnotes.net/spotlight.html osxnotes.net]"
+    },
+    {
+      "type": "markdown",
+      "id": "cea42558a6557ce4",
+      "text": "# See also"
+    },
+    {
+      "type": "reference",
+      "id": "c277f8adffdf1d0a",
+      "site": "osx.c0de.academy",
+      "slug": "spotlight",
+      "title": "Spotlight",
+      "text": "Spotlight is a system-wide desktop search feature of Apple's OS X and iOS operating systems - [https://en.wikipedia.org/wiki/Spotlight_(software) wikipedia]"
+    },
+    {
+      "type": "reference",
+      "id": "73c80188087ed521",
+      "site": "osx.c0de.academy",
+      "slug": "spotlight-and-word-search",
+      "title": "Spotlight and word search",
+      "text": "When you type in your search terms, [[Spotlight]] looks for even a partial match at the beginning of a word. So, when you search for phon you’ll find phone, phony, and phonatory, but not symphony."
+    },
+    {
+      "type": "reference",
+      "id": "c52c7df76a464c00",
+      "site": "osx.c0de.academy",
+      "slug": "spotlight-attributes",
+      "title": "Spotlight attributes",
+      "text": "Here are some commonly used [[spotlight]] attributes that you can use with [[mdfind]]:"
+    },
+    {
+      "type": "reference",
+      "id": "53caaf24c466b7ae",
+      "site": "osx.c0de.academy",
+      "slug": "spotlight-boolean-operators",
+      "title": "Spotlight boolean Operators",
+      "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "mdfind",
+        "story": []
+      },
+      "date": 1471620308571
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4bac73c4d516827e"
+      },
+      "id": "4bac73c4d516827e",
+      "type": "add",
+      "date": 1471620320859
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "paragraph",
+        "id": "4bac73c4d516827e",
+        "text": "Boolean Operators\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:\n\n|, the pipe character, means Boolean OR\n- means to exclude a term\n() create groups\nWorking with these operators can be tricky. Whitespace is significant when building queries. To get all documents with \"invoice\" or \"o'reilly\", I write\n\n$ mdfind \"invoice|o'reilly\"\nwith no spaces between the terms. If I want to find all documents with \"invoice\" but not \"apress\", it's\n\n$ mdfind \"invoice(-apress)\"\nwith no intervening spaces, and parentheses around the term I want to exclude. To get a list of invoices or contracts from O'Reilly, I'd use\n\n$ mdfind \"(invoice|contract) o'reilly\"\nNote that in all these examples that have more than a single word, I'm using double quotes around the search term. This makes the Unix shell pass our multiple words as a single parameter. Otherwise, mdfind uses only the last word, so that\n\n$ mdfind invoice contract\nis the same as\n\n$ mdfind contract\nIt also prevents the shell from intercepting characters that it would use as special, like the parentheses, and passes them unmolested to mdfind. This is especially important if I try to search for \"O'Reilly\". Without quotes, I get this:\n\n$ mdfind O'Reilly\n>\nThe angle bracket is the shell telling me \"You started a quoted string, and now I'm waiting for you to finish it.\" It will sit and wait for input until it sees another single quote, or I type Ctrl-C to cancel. The shell has interpreted the single quote in \"O'Reilly\" as the start of a quoted string. Instead, I want\n\n$ mdfind \"O'Reilly\""
+      },
+      "date": 1471620435399
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9b13e45a611c8e95"
+      },
+      "id": "9b13e45a611c8e95",
+      "type": "add",
+      "after": "4bac73c4d516827e",
+      "date": 1471620464124
+    },
+    {
+      "type": "edit",
+      "id": "9b13e45a611c8e95",
+      "item": {
+        "type": "paragraph",
+        "id": "9b13e45a611c8e95",
+        "text": "* [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]"
+      },
+      "date": 1471620479743
+    },
+    {
+      "type": "edit",
+      "id": "9b13e45a611c8e95",
+      "item": {
+        "type": "paragraph",
+        "id": "9b13e45a611c8e95",
+        "text": "* The Power of mdfind - [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]"
+      },
+      "date": 1471620497808
+    },
+    {
+      "type": "edit",
+      "id": "9b13e45a611c8e95",
+      "item": {
+        "type": "markdown",
+        "id": "9b13e45a611c8e95",
+        "text": "* The Power of mdfind - [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]"
+      },
+      "date": 1471620499503
+    },
+    {
+      "type": "move",
+      "order": [
+        "9b13e45a611c8e95",
+        "4bac73c4d516827e"
+      ],
+      "id": "9b13e45a611c8e95",
+      "date": 1471620501634
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "paragraph",
+        "id": "4bac73c4d516827e",
+        "text": "# Boolean Operators\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:\n\n|, the pipe character, means Boolean OR\n- means to exclude a term\n() create groups"
+      },
+      "date": 1471620515576
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# Boolean Operators\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:\n\n|, the pipe character, means Boolean OR\n- means to exclude a term\n() create groups"
+      },
+      "date": 1471620517670
+    },
+    {
+      "type": "add",
+      "id": "c5f2cec581be5e25",
+      "item": {
+        "type": "paragraph",
+        "id": "c5f2cec581be5e25",
+        "text": "Working with these operators can be tricky. Whitespace is significant when building queries. To get all documents with \"invoice\" or \"o'reilly\", I write\n\n$ mdfind \"invoice|o'reilly\"\nwith no spaces between the terms. If I want to find all documents with \"invoice\" but not \"apress\", it's\n\n$ mdfind \"invoice(-apress)\"\nwith no intervening spaces, and parentheses around the term I want to exclude. To get a list of invoices or contracts from O'Reilly, I'd use\n\n$ mdfind \"(invoice|contract) o'reilly\"\nNote that in all these examples that have more than a single word, I'm using double quotes around the search term. This makes the Unix shell pass our multiple words as a single parameter. Otherwise, mdfind uses only the last word, so that\n\n$ mdfind invoice contract\nis the same as\n\n$ mdfind contract\nIt also prevents the shell from intercepting characters that it would use as special, like the parentheses, and passes them unmolested to mdfind. This is especially important if I try to search for \"O'Reilly\". Without quotes, I get this:\n\n$ mdfind O'Reilly\n>\nThe angle bracket is the shell telling me \"You started a quoted string, and now I'm waiting for you to finish it.\" It will sit and wait for input until it sees another single quote, or I type Ctrl-C to cancel. The shell has interpreted the single quote in \"O'Reilly\" as the start of a quoted string. Instead, I want\n\n$ mdfind \"O'Reilly\""
+      },
+      "after": "4bac73c4d516827e",
+      "date": 1471620521754
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# Boolean Operators\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "date": 1471620532001
+    },
+    {
+      "type": "edit",
+      "id": "c5f2cec581be5e25",
+      "item": {
+        "type": "paragraph",
+        "id": "c5f2cec581be5e25",
+        "text": "|, the pipe character, means Boolean OR\n- means to exclude a term\n() create groups"
+      },
+      "date": 1471620538928
+    },
+    {
+      "type": "add",
+      "id": "64aea62bf7a66d4c",
+      "item": {
+        "type": "paragraph",
+        "id": "64aea62bf7a66d4c",
+        "text": "Working with these operators can be tricky. Whitespace is significant when building queries. To get all documents with \"invoice\" or \"o'reilly\", I write\n\n"
+      },
+      "after": "c5f2cec581be5e25",
+      "date": 1471620554507
+    },
+    {
+      "type": "add",
+      "id": "6accc2a82a9448f6",
+      "item": {
+        "type": "paragraph",
+        "id": "6accc2a82a9448f6",
+        "text": "$ mdfind \"invoice|o'reilly\"\nwith no spaces between the terms. If I want to find all documents with \"invoice\" but not \"apress\", it's\n\n$ mdfind \"invoice(-apress)\""
+      },
+      "after": "64aea62bf7a66d4c",
+      "date": 1471620556361
+    },
+    {
+      "type": "add",
+      "id": "471696d9b7bc5467",
+      "item": {
+        "type": "paragraph",
+        "id": "471696d9b7bc5467",
+        "text": "with no intervening spaces, and parentheses around the term I want to exclude. To get a list of invoices or contracts from O'Reilly, I'd use\n\n"
+      },
+      "after": "6accc2a82a9448f6",
+      "date": 1471620561738
+    },
+    {
+      "type": "add",
+      "id": "f27447d7a1c55f45",
+      "item": {
+        "type": "paragraph",
+        "id": "f27447d7a1c55f45",
+        "text": "$ mdfind \"(invoice|contract) o'reilly\"\n"
+      },
+      "after": "471696d9b7bc5467",
+      "date": 1471620564988
+    },
+    {
+      "type": "add",
+      "id": "b3e0c344a038d4d5",
+      "item": {
+        "type": "paragraph",
+        "id": "b3e0c344a038d4d5",
+        "text": "Note that in all these examples that have more than a single word, I'm using double quotes around the search term. This makes the Unix shell pass our multiple words as a single parameter. Otherwise, mdfind uses only the last word, so that"
+      },
+      "after": "f27447d7a1c55f45",
+      "date": 1471620571602
+    },
+    {
+      "type": "add",
+      "id": "bffec1cf8c472b72",
+      "item": {
+        "type": "paragraph",
+        "id": "bffec1cf8c472b72",
+        "text": "\n$ mdfind invoice contract"
+      },
+      "after": "b3e0c344a038d4d5",
+      "date": 1471620573627
+    },
+    {
+      "type": "add",
+      "id": "ee5be6e6cec5e474",
+      "item": {
+        "type": "paragraph",
+        "id": "ee5be6e6cec5e474",
+        "text": "is the same as\n\n"
+      },
+      "after": "bffec1cf8c472b72",
+      "date": 1471620576034
+    },
+    {
+      "type": "add",
+      "id": "1aa5c635a0ee632a",
+      "item": {
+        "type": "paragraph",
+        "id": "1aa5c635a0ee632a",
+        "text": "$ mdfind contract\n"
+      },
+      "after": "ee5be6e6cec5e474",
+      "date": 1471620578752
+    },
+    {
+      "type": "add",
+      "id": "b7f0eb0e44639731",
+      "item": {
+        "type": "paragraph",
+        "id": "b7f0eb0e44639731",
+        "text": "It also prevents the shell from intercepting characters that it would use as special, like the parentheses, and passes them unmolested to mdfind. This is especially important if I try to search for \"O'Reilly\". Without quotes, I get this:\n\n"
+      },
+      "after": "1aa5c635a0ee632a",
+      "date": 1471620581010
+    },
+    {
+      "type": "add",
+      "id": "219c2760c30f92fe",
+      "item": {
+        "type": "paragraph",
+        "id": "219c2760c30f92fe",
+        "text": "$ mdfind O'Reilly\n>\n"
+      },
+      "after": "b7f0eb0e44639731",
+      "date": 1471620584698
+    },
+    {
+      "type": "add",
+      "id": "0bf8ef042294eee8",
+      "item": {
+        "type": "paragraph",
+        "id": "0bf8ef042294eee8",
+        "text": "The angle bracket is the shell telling me \"You started a quoted string, and now I'm waiting for you to finish it.\" It will sit and wait for input until it sees another single quote, or I type Ctrl-C to cancel. The shell has interpreted the single quote in \"O'Reilly\" as the start of a quoted string. Instead, I want\n\n"
+      },
+      "after": "219c2760c30f92fe",
+      "date": 1471620587831
+    },
+    {
+      "type": "add",
+      "id": "1804317c08f895d6",
+      "item": {
+        "type": "paragraph",
+        "id": "1804317c08f895d6",
+        "text": "$ mdfind \"O'Reilly\""
+      },
+      "after": "0bf8ef042294eee8",
+      "date": 1471620588171
+    },
+    {
+      "type": "edit",
+      "id": "9b13e45a611c8e95",
+      "item": {
+        "type": "markdown",
+        "id": "9b13e45a611c8e95",
+        "text": "* The Power of mdfind - [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]\n* fads - [http://osxnotes.net/spotlight.html osxnotes.net]"
+      },
+      "date": 1471620631109
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d1f5e0a3d72cb619"
+      },
+      "id": "d1f5e0a3d72cb619",
+      "type": "add",
+      "after": "1804317c08f895d6",
+      "date": 1471620688049
+    },
+    {
+      "type": "edit",
+      "id": "d1f5e0a3d72cb619",
+      "item": {
+        "type": "code",
+        "id": "d1f5e0a3d72cb619",
+        "text": "name:file.txt\nkind:\"jpeg image\"\ndate:today\ndate:\"this week\"\nmodified:12/31/11\ncreated:12/1/11-12/31/11\nkind:video AND size:<100000"
+      },
+      "date": 1471620690753
+    },
+    {
+      "type": "move",
+      "order": [
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "bffec1cf8c472b72",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "b7f0eb0e44639731",
+        "219c2760c30f92fe",
+        "0bf8ef042294eee8",
+        "1804317c08f895d6"
+      ],
+      "id": "d1f5e0a3d72cb619",
+      "date": 1471620695096
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# Boolean Operators\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:\nasfd"
+      },
+      "date": 1471620699968
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# Boolean Operators\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "date": 1471620707352
+    },
+    {
+      "type": "add",
+      "id": "314660d30dfe5883",
+      "item": {
+        "type": "paragraph",
+        "id": "314660d30dfe5883",
+        "text": "asdf"
+      },
+      "after": "c5f2cec581be5e25",
+      "date": 1471620712899
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "bffec1cf8c472b72",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "b7f0eb0e44639731",
+        "219c2760c30f92fe",
+        "0bf8ef042294eee8",
+        "1804317c08f895d6"
+      ],
+      "id": "314660d30dfe5883",
+      "date": 1471620715557
+    },
+    {
+      "type": "edit",
+      "id": "c5f2cec581be5e25",
+      "item": {
+        "type": "paragraph",
+        "id": "c5f2cec581be5e25",
+        "text": "* |, the pipe character, means Boolean OR\n* - means to exclude a term\n* () create groups"
+      },
+      "date": 1471620753426
+    },
+    {
+      "type": "edit",
+      "id": "c5f2cec581be5e25",
+      "item": {
+        "type": "markdown",
+        "id": "c5f2cec581be5e25",
+        "text": "* |, the pipe character, means Boolean OR\n* - means to exclude a term\n* () create groups"
+      },
+      "date": 1471620754694
+    },
+    {
+      "type": "edit",
+      "id": "6accc2a82a9448f6",
+      "item": {
+        "type": "paragraph",
+        "id": "6accc2a82a9448f6",
+        "text": "$ mdfind \"invoice|o'reilly\""
+      },
+      "date": 1471620767754
+    },
+    {
+      "type": "add",
+      "id": "b028472fdbd1bec7",
+      "item": {
+        "type": "paragraph",
+        "id": "b028472fdbd1bec7",
+        "text": "with no spaces between the terms. If I want to find all documents with \"invoice\" but not \"apress\", it's:"
+      },
+      "after": "6accc2a82a9448f6",
+      "date": 1471620773202
+    },
+    {
+      "type": "add",
+      "id": "12e34f2f70ea7aa3",
+      "item": {
+        "type": "paragraph",
+        "id": "12e34f2f70ea7aa3",
+        "text": "\n$ mdfind \"invoice(-apress)\""
+      },
+      "after": "b028472fdbd1bec7",
+      "date": 1471620773738
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5cf510f30a5ee80f"
+      },
+      "id": "5cf510f30a5ee80f",
+      "type": "add",
+      "after": "1804317c08f895d6",
+      "date": 1471620777000
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "bffec1cf8c472b72",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "b7f0eb0e44639731",
+        "219c2760c30f92fe",
+        "0bf8ef042294eee8",
+        "1804317c08f895d6"
+      ],
+      "id": "5cf510f30a5ee80f",
+      "date": 1471620779686
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "da685198578a2302"
+      },
+      "id": "da685198578a2302",
+      "type": "add",
+      "after": "1804317c08f895d6",
+      "date": 1471620781047
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "da685198578a2302",
+        "bffec1cf8c472b72",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "b7f0eb0e44639731",
+        "219c2760c30f92fe",
+        "0bf8ef042294eee8",
+        "1804317c08f895d6"
+      ],
+      "id": "da685198578a2302",
+      "date": 1471620782592
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "86ccecd08c7e84a5"
+      },
+      "id": "86ccecd08c7e84a5",
+      "type": "add",
+      "after": "1804317c08f895d6",
+      "date": 1471620783992
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "da685198578a2302",
+        "bffec1cf8c472b72",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "b7f0eb0e44639731",
+        "219c2760c30f92fe",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "1804317c08f895d6"
+      ],
+      "id": "86ccecd08c7e84a5",
+      "date": 1471620785222
+    },
+    {
+      "type": "remove",
+      "id": "1804317c08f895d6",
+      "date": 1471620790346
+    },
+    {
+      "type": "edit",
+      "id": "86ccecd08c7e84a5",
+      "item": {
+        "type": "code",
+        "id": "86ccecd08c7e84a5",
+        "text": "mdfind \"O'Reilly\""
+      },
+      "date": 1471620794804
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3558c5a0a54fee07"
+      },
+      "id": "3558c5a0a54fee07",
+      "type": "add",
+      "after": "86ccecd08c7e84a5",
+      "date": 1471620796690
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "da685198578a2302",
+        "bffec1cf8c472b72",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "b7f0eb0e44639731",
+        "219c2760c30f92fe",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5"
+      ],
+      "id": "3558c5a0a54fee07",
+      "date": 1471620798396
+    },
+    {
+      "type": "remove",
+      "id": "219c2760c30f92fe",
+      "date": 1471620801691
+    },
+    {
+      "type": "edit",
+      "id": "3558c5a0a54fee07",
+      "item": {
+        "type": "code",
+        "id": "3558c5a0a54fee07",
+        "text": "$ mdfind O'Reilly\n>\n"
+      },
+      "date": 1471620804140
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca9656b07759a0a3"
+      },
+      "id": "ca9656b07759a0a3",
+      "type": "add",
+      "after": "86ccecd08c7e84a5",
+      "date": 1471620806961
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "da685198578a2302",
+        "bffec1cf8c472b72",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "1aa5c635a0ee632a",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5"
+      ],
+      "id": "ca9656b07759a0a3",
+      "date": 1471620808798
+    },
+    {
+      "type": "remove",
+      "id": "1aa5c635a0ee632a",
+      "date": 1471620811715
+    },
+    {
+      "type": "edit",
+      "id": "ca9656b07759a0a3",
+      "item": {
+        "type": "code",
+        "id": "ca9656b07759a0a3",
+        "text": "$ mdfind contract\n"
+      },
+      "date": 1471620814941
+    },
+    {
+      "type": "remove",
+      "id": "bffec1cf8c472b72",
+      "date": 1471620821059
+    },
+    {
+      "type": "edit",
+      "id": "5cf510f30a5ee80f",
+      "item": {
+        "type": "code",
+        "id": "5cf510f30a5ee80f",
+        "text": "mdfind invoice contract"
+      },
+      "date": 1471620825285
+    },
+    {
+      "type": "edit",
+      "id": "3558c5a0a54fee07",
+      "item": {
+        "type": "code",
+        "id": "3558c5a0a54fee07",
+        "text": "mdfind O'Reilly\n>\n"
+      },
+      "date": 1471620829813
+    },
+    {
+      "type": "edit",
+      "id": "ca9656b07759a0a3",
+      "item": {
+        "type": "code",
+        "id": "ca9656b07759a0a3",
+        "text": "mdfind contract\n"
+      },
+      "date": 1471620836853
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "242e0cea92b8fe5a"
+      },
+      "id": "242e0cea92b8fe5a",
+      "type": "add",
+      "after": "86ccecd08c7e84a5",
+      "date": 1471620841152
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "da685198578a2302",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5"
+      ],
+      "id": "242e0cea92b8fe5a",
+      "date": 1471620844138
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "6accc2a82a9448f6",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "12e34f2f70ea7aa3",
+        "471696d9b7bc5467",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5"
+      ],
+      "id": "da685198578a2302",
+      "date": 1471620847976
+    },
+    {
+      "type": "remove",
+      "id": "6accc2a82a9448f6",
+      "date": 1471620853590
+    },
+    {
+      "type": "edit",
+      "id": "da685198578a2302",
+      "item": {
+        "type": "code",
+        "id": "da685198578a2302",
+        "text": "mdfind \"invoice|o'reilly\""
+      },
+      "date": 1471620857286
+    },
+    {
+      "type": "remove",
+      "id": "12e34f2f70ea7aa3",
+      "date": 1471620862573
+    },
+    {
+      "type": "edit",
+      "id": "242e0cea92b8fe5a",
+      "item": {
+        "type": "code",
+        "id": "242e0cea92b8fe5a",
+        "text": "mdfind \"invoice(-apress)\""
+      },
+      "date": 1471620869879
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "25e2097679929559"
+      },
+      "id": "25e2097679929559",
+      "type": "add",
+      "after": "86ccecd08c7e84a5",
+      "date": 1471620899957
+    },
+    {
+      "type": "move",
+      "order": [
+        "314660d30dfe5883",
+        "9b13e45a611c8e95",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "f27447d7a1c55f45",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5"
+      ],
+      "id": "25e2097679929559",
+      "date": 1471620903938
+    },
+    {
+      "type": "remove",
+      "id": "f27447d7a1c55f45",
+      "date": 1471620906598
+    },
+    {
+      "type": "edit",
+      "id": "25e2097679929559",
+      "item": {
+        "type": "code",
+        "id": "25e2097679929559",
+        "text": "mdfind \"(invoice|contract) o'reilly\"\n"
+      },
+      "date": 1471620912104
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "84613cded34fb5ff",
+        "text": "Every Spotlight query is an AND search by default. This means the program looks for files containing all the words you type. For instance, if you enter time machine, Spotlight seeks out anything that contains both the word time and the word machine."
+      },
+      "id": "84613cded34fb5ff",
+      "date": 1471620925995
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a059ca92c8722d76"
+      },
+      "id": "a059ca92c8722d76",
+      "type": "add",
+      "after": "86ccecd08c7e84a5",
+      "date": 1471621002839
+    },
+    {
+      "type": "edit",
+      "id": "a059ca92c8722d76",
+      "item": {
+        "type": "markdown",
+        "id": "a059ca92c8722d76",
+        "text": "# Shell examples\n\nmdfind '\"exact phrase\"'\nmdfind -name javascript -onlyin ~/Books\nmdfind 'kMDItemFSName=*.pdf'\nmdfind 'kMDItemFSName=convert&&kMDItemContentType=public.unix-executable'\nmdfind kMDItemContentType=com.apple.application-bundle -onlyin /usr/local\nmdfind kMDItemContentTypeTree=com.apple.bundle\nmdfind kMDItemContentTypeTree=public.movie\nmdfind 'kMDItemTextContent=\"*expose*\"cd' # search for files whose content matches `expose` ignoring case and diacritics\nmdfind 'kMDItemTextContent=\"*search phrase*\"c' -onlyin ~/Library/Caches/Metadata/Safari/History\nmdfind kMDItemFSSize=$(stat -f%z file) # quickly find duplicate files by size\nmdfind 'kMDItemFSCreationDate>$time.iso(2014-03-16T01:03:08Z)' -onlyin . # like `TZ=UTC0 find . -newerBt '2014-03-16 01:03:08'`\nmdfind 'kMDItemFSContentChangeDate>$time.now(-86400)' -onlyin ~/Library/Caches/Metadata/Safari/History|xargs mdls -n kMDItemURL|cut -d\\\" -f2\nmdfind 'kMDItemDateAdded>$time.today(-7)' # find files first indexed or moved in the last week\nmdfind 'kMDItemLastUsedDate!=*' -onlyin . # find files that have not been opened before\nmdfind 'kMDItemKind=*movie&&kMDItemPixelHeight>=720'\nmdfind 'kMDItemAuthors=\"Artist Name\"' -onlyin ~/Music\nmdfind 'kMDItemContentType=*' -onlyin . # kMDItemFSName=* stopped working in 10.9\nmdfind 'kMDItemURL=*stackoverflow.com*' -onlyin ~/Library/Caches/Metadata/Safari/History\nmdfind 'kMDItemFSSize>1e8'\nmdfind -name xcode -0|xargs -0 du -sm|sort -rn\nmdfind -0 -onlyin ~/Music 'kMDItemFSName=*.mp3&&kMDItemAudioBitRate<=192000'|xargs -0 mdls -n kMDItemAlbum|sort -u\nmdfind $'kMDItemFSName=\"*\\n*\"'\nmdfind -onlyin / # like `mdfind -onlyin /Volumes/Macintosh\\ HD`\nmdfind 'kMDItemDurationSeconds<=180&&kMDItemContentType=public.mp3' -onlyin .\nmdfind 'kMDItemUserTags=*' # find files that have tags\nmdfind -s example # like `mdfind \"$(PlistBuddy -c 'Print RawQuery' ~/Library/Saved\\ Searches/example.savedSearch)\"`\nmdfind 'search phrase' -0|xargs -0 ls -l"
+      },
+      "date": 1471621053514
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "82a84e9eca603103"
+      },
+      "id": "82a84e9eca603103",
+      "type": "add",
+      "after": "a059ca92c8722d76",
+      "date": 1471621074620
+    },
+    {
+      "type": "edit",
+      "id": "82a84e9eca603103",
+      "item": {
+        "type": "code",
+        "id": "82a84e9eca603103",
+        "text": "mdfind -name javascript -onlyin ~/Books"
+      },
+      "date": 1471621078513
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "51d73a0bcfa1d02d"
+      },
+      "id": "51d73a0bcfa1d02d",
+      "type": "add",
+      "after": "82a84e9eca603103",
+      "date": 1471621099439
+    },
+    {
+      "type": "edit",
+      "id": "51d73a0bcfa1d02d",
+      "item": {
+        "type": "code",
+        "id": "51d73a0bcfa1d02d",
+        "text": "mdfind 'kMDItemFSName=*.pdf'\n"
+      },
+      "date": 1471621101434
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4d6d820cecef05e1"
+      },
+      "id": "4d6d820cecef05e1",
+      "type": "add",
+      "after": "51d73a0bcfa1d02d",
+      "date": 1471621147871
+    },
+    {
+      "type": "edit",
+      "id": "4d6d820cecef05e1",
+      "item": {
+        "type": "code",
+        "id": "4d6d820cecef05e1",
+        "text": "mdfind 'kMDItemFSName=convert&&kMDItemContentType=public.unix-executable'\n"
+      },
+      "date": 1471621150948
+    },
+    {
+      "type": "edit",
+      "id": "a059ca92c8722d76",
+      "item": {
+        "type": "markdown",
+        "id": "a059ca92c8722d76",
+        "text": "# Shell examples\n\nYou can find many more examples over at [fdas afsd]"
+      },
+      "date": 1471621179229
+    },
+    {
+      "type": "edit",
+      "id": "a059ca92c8722d76",
+      "item": {
+        "type": "markdown",
+        "id": "a059ca92c8722d76",
+        "text": "# Shell examples\n\nYou can find many more examples over at [http://osxnotes.net/spotlight.html osxnotes.net]"
+      },
+      "date": 1471621206791
+    },
+    {
+      "type": "edit",
+      "id": "84613cded34fb5ff",
+      "item": {
+        "type": "paragraph",
+        "id": "84613cded34fb5ff",
+        "text": "mdfind is the built in command line tool that utilises the [[spotlight]] search engine on [[macOS]]. Every Spotlight query is an AND search by default. It is surprisingly powerful."
+      },
+      "date": 1471621399100
+    },
+    {
+      "type": "remove",
+      "id": "314660d30dfe5883",
+      "date": 1471621416307
+    },
+    {
+      "type": "edit",
+      "id": "9b13e45a611c8e95",
+      "item": {
+        "type": "markdown",
+        "id": "9b13e45a611c8e95",
+        "text": "Here are some useful links:\n\n* The Power of mdfind - [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]\n* fads - [http://osxnotes.net/spotlight.html osxnotes.net]"
+      },
+      "date": 1471621422690
+    },
+    {
+      "type": "edit",
+      "id": "9b13e45a611c8e95",
+      "item": {
+        "type": "markdown",
+        "id": "9b13e45a611c8e95",
+        "text": "Here are some useful links:\n\n* The Power of mdfind - [http://www.macdevcenter.com/pub/a/mac/2006/01/04/mdfind.html macdevcenter.com]\n* Spotlight syntax, mdfind examples, and metadata attributes - [http://osxnotes.net/spotlight.html osxnotes.net]"
+      },
+      "date": 1471621437397
+    },
+    {
+      "type": "add",
+      "id": "14f477c99cf25b62",
+      "item": {
+        "type": "paragraph",
+        "id": "14f477c99cf25b62",
+        "text": "Spotlight/mdfind uses the following frequently uses search syntax:\n\n"
+      },
+      "after": "84613cded34fb5ff",
+      "date": 1471621500279
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76",
+        "82a84e9eca603103",
+        "51d73a0bcfa1d02d",
+        "4d6d820cecef05e1"
+      ],
+      "id": "14f477c99cf25b62",
+      "date": 1471621502575
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "82a84e9eca603103",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76",
+        "51d73a0bcfa1d02d",
+        "4d6d820cecef05e1"
+      ],
+      "id": "82a84e9eca603103",
+      "date": 1471621528584
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "82a84e9eca603103",
+        "51d73a0bcfa1d02d",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76",
+        "4d6d820cecef05e1"
+      ],
+      "id": "51d73a0bcfa1d02d",
+      "date": 1471621550471
+    },
+    {
+      "type": "add",
+      "id": "da4eebc7d674f642",
+      "item": {
+        "type": "paragraph",
+        "id": "da4eebc7d674f642",
+        "text": "You can search for a file by name also using this syntax:"
+      },
+      "after": "84613cded34fb5ff",
+      "date": 1471621616872
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "da4eebc7d674f642",
+        "82a84e9eca603103",
+        "51d73a0bcfa1d02d",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76",
+        "4d6d820cecef05e1"
+      ],
+      "id": "da4eebc7d674f642",
+      "date": 1471621620756
+    },
+    {
+      "type": "add",
+      "id": "60200fc4c9f0a298",
+      "item": {
+        "type": "paragraph",
+        "id": "60200fc4c9f0a298",
+        "text": "and you can use wildcards:"
+      },
+      "after": "da4eebc7d674f642",
+      "date": 1471621635393
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "da4eebc7d674f642",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76",
+        "4d6d820cecef05e1"
+      ],
+      "id": "60200fc4c9f0a298",
+      "date": 1471621637760
+    },
+    {
+      "type": "add",
+      "id": "715e7b4d2cc7274b",
+      "item": {
+        "type": "paragraph",
+        "id": "715e7b4d2cc7274b",
+        "text": "You can create complex searches by building up complex strings:"
+      },
+      "after": "60200fc4c9f0a298",
+      "date": 1471621682926
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "da4eebc7d674f642",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "715e7b4d2cc7274b",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76",
+        "4d6d820cecef05e1"
+      ],
+      "id": "51d73a0bcfa1d02d",
+      "date": 1471621684745
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "da4eebc7d674f642",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "4bac73c4d516827e",
+        "c5f2cec581be5e25",
+        "64aea62bf7a66d4c",
+        "da685198578a2302",
+        "b028472fdbd1bec7",
+        "242e0cea92b8fe5a",
+        "471696d9b7bc5467",
+        "25e2097679929559",
+        "b3e0c344a038d4d5",
+        "5cf510f30a5ee80f",
+        "ee5be6e6cec5e474",
+        "ca9656b07759a0a3",
+        "b7f0eb0e44639731",
+        "3558c5a0a54fee07",
+        "0bf8ef042294eee8",
+        "86ccecd08c7e84a5",
+        "a059ca92c8722d76"
+      ],
+      "id": "4d6d820cecef05e1",
+      "date": 1471621708861
+    },
+    {
+      "type": "edit",
+      "id": "a059ca92c8722d76",
+      "item": {
+        "type": "markdown",
+        "id": "a059ca92c8722d76",
+        "text": "# More shell examples\n\nYou can find many more examples over at [http://osxnotes.net/spotlight.html osxnotes.net]"
+      },
+      "date": 1471621719231
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c096ee3fbd3b998a"
+      },
+      "id": "c096ee3fbd3b998a",
+      "type": "add",
+      "after": "a059ca92c8722d76",
+      "date": 1471622560022
+    },
+    {
+      "type": "edit",
+      "id": "c096ee3fbd3b998a",
+      "item": {
+        "type": "markdown",
+        "id": "c096ee3fbd3b998a",
+        "text": "* kMDItemPath: absolute path.\n* kMDItemFSName: basename.\n* kMDItemFSSize: size in bytes.\n* kMDItemDisplayName: display name.\n* kMDItemContentType: UTI.\n* kMDItemContentTypeTree: UTI and parent UTIs.\n* kMDItemKind: a localized name for the content type.\n* kMDItemFSContentChangeDate: modification time.\n* kMDItemFSCreationDate: creation time.\n* kMDItemLastUsedDate: date last opened.\n* kMDItemDateAdded: date added.\n* kMDItemFinderComment: Spotlight comment.\n* kMDItemTextContent: plain text content of for example text, HTML, or PDF files.\n* kMDItemDurationSeconds: for example the duration of an audio or video file.\n* kMDItemTitle: for example the title of a webloc, PDF, or MP3 file.\n* kMDItemURL: for example the URL of a webloc file.\n* kMDItemWhereFroms: the URL or URLs that a file was downloaded from.\n* kMDItemUserTags: tags in 10.9 and later.\n* kMDItemAuthors: for example the artist of an MP3 file.\n"
+      },
+      "date": 1471622619974
+    },
+    {
+      "type": "edit",
+      "id": "c096ee3fbd3b998a",
+      "item": {
+        "type": "markdown",
+        "id": "c096ee3fbd3b998a",
+        "text": "# Commonly used attributes\n\n* kMDItemPath: absolute path.\n* kMDItemFSName: basename.\n* kMDItemFSSize: size in bytes.\n* kMDItemDisplayName: display name.\n* kMDItemContentType: UTI.\n* kMDItemContentTypeTree: UTI and parent UTIs.\n* kMDItemKind: a localized name for the content type.\n* kMDItemFSContentChangeDate: modification time.\n* kMDItemFSCreationDate: creation time.\n* kMDItemLastUsedDate: date last opened.\n* kMDItemDateAdded: date added.\n* kMDItemFinderComment: Spotlight comment.\n* kMDItemTextContent: plain text content of for example text, HTML, or PDF files.\n* kMDItemDurationSeconds: for example the duration of an audio or video file.\n* kMDItemTitle: for example the title of a webloc, PDF, or MP3 file.\n* kMDItemURL: for example the URL of a webloc file.\n* kMDItemWhereFroms: the URL or URLs that a file was downloaded from.\n* kMDItemUserTags: tags in 10.9 and later.\n* kMDItemAuthors: for example the artist of an MP3 file.\n"
+      },
+      "date": 1471622634777
+    },
+    {
+      "type": "edit",
+      "id": "da4eebc7d674f642",
+      "item": {
+        "type": "paragraph",
+        "id": "da4eebc7d674f642",
+        "text": "# Searching for named attributes"
+      },
+      "date": 1471622795098
+    },
+    {
+      "type": "add",
+      "id": "cd746dfaadc314c3",
+      "item": {
+        "type": "paragraph",
+        "id": "cd746dfaadc314c3",
+        "text": "If I'm only interested in certain attributes, I can use the -name option:\n\n$ mdls -name kMDItemComposer \"11 Space Truckin'.m4a\"\n11 Space Truckin'.m4a -------------\nkMDItemComposer = \"Blackmore/Gillan/Glover/Lord/Paice\"\nNow that I know some attribute names, I can get very precise in how I search. Say I want to find songs composed by Roger Waters. I need to search the kMDItemComposer attribute for \"Waters\". I'll put the string I'm searching for in double quotes, and then the entire search expression in single quotes.\n\n$ mdfind 'kMDItemComposer = \"Waters\"'\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-06 Money.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-09 Brain Damage.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-10 Eclipse.m4a\nI know that I have more than three songs written by Roger Waters, so I'll rerun the search with wildcards, with an asterisk to mean \"any string.\"\n\n$ mdfind 'kMDItemComposer = \"*Waters*\"'\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Animals/02 Dogs.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Dark Side Of The Moon/01 Speak To Me _ Breathe.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Dark Side Of The Moon/02 On The Run.m4a\n... 42 more tracks ...\nIf I want a case-insensitive search, I can put the letter c outside the double quotes, as in this search to find all forms of \"McCartney\", regardless of the capitalization.\n\n$ mdfind 'kMDItemComposer = \"*mccartney*\"c'"
+      },
+      "after": "da4eebc7d674f642",
+      "date": 1471622796718
+    },
+    {
+      "type": "add",
+      "id": "782b78643de940fb",
+      "item": {
+        "type": "paragraph",
+        "id": "782b78643de940fb",
+        "text": "You can search for a file by name also using this syntax:"
+      },
+      "after": "cd746dfaadc314c3",
+      "date": 1471622799539
+    },
+    {
+      "type": "edit",
+      "id": "da4eebc7d674f642",
+      "item": {
+        "type": "markdown",
+        "id": "da4eebc7d674f642",
+        "text": "# Searching for named attributes"
+      },
+      "date": 1471622802455
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# [[Spotlight boolean Operators]]\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "date": 1471622852697
+    },
+    {
+      "type": "remove",
+      "id": "4bac73c4d516827e",
+      "date": 1471622858985
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "78fe7b5e180798e7",
+        "site": "osx.c0de.academy",
+        "slug": "spotlight-boolean-operators",
+        "title": "Spotlight boolean Operators",
+        "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "after": "d1f5e0a3d72cb619",
+      "id": "78fe7b5e180798e7",
+      "date": 1471622894210
+    },
+    {
+      "type": "remove",
+      "id": "c5f2cec581be5e25",
+      "date": 1471622935705
+    },
+    {
+      "type": "remove",
+      "id": "64aea62bf7a66d4c",
+      "date": 1471622942355
+    },
+    {
+      "type": "remove",
+      "id": "da685198578a2302",
+      "date": 1471622944983
+    },
+    {
+      "type": "remove",
+      "id": "b028472fdbd1bec7",
+      "date": 1471622948022
+    },
+    {
+      "type": "remove",
+      "id": "242e0cea92b8fe5a",
+      "date": 1471622951099
+    },
+    {
+      "type": "remove",
+      "id": "471696d9b7bc5467",
+      "date": 1471622954165
+    },
+    {
+      "type": "remove",
+      "id": "b3e0c344a038d4d5",
+      "date": 1471622959108
+    },
+    {
+      "type": "remove",
+      "id": "25e2097679929559",
+      "date": 1471622962327
+    },
+    {
+      "type": "remove",
+      "id": "5cf510f30a5ee80f",
+      "date": 1471622969360
+    },
+    {
+      "type": "remove",
+      "id": "ee5be6e6cec5e474",
+      "date": 1471622975947
+    },
+    {
+      "type": "remove",
+      "id": "ca9656b07759a0a3",
+      "date": 1471622979328
+    },
+    {
+      "type": "remove",
+      "id": "b7f0eb0e44639731",
+      "date": 1471622983250
+    },
+    {
+      "type": "remove",
+      "id": "0bf8ef042294eee8",
+      "date": 1471622988869
+    },
+    {
+      "type": "remove",
+      "id": "86ccecd08c7e84a5",
+      "date": 1471622996612
+    },
+    {
+      "type": "remove",
+      "id": "3558c5a0a54fee07",
+      "date": 1471623000876
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c52c7df76a464c00"
+      },
+      "id": "c52c7df76a464c00",
+      "type": "add",
+      "after": "c096ee3fbd3b998a",
+      "date": 1471623057779
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "782b78643de940fb",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76",
+        "c096ee3fbd3b998a"
+      ],
+      "id": "c52c7df76a464c00",
+      "date": 1471623063387
+    },
+    {
+      "type": "edit",
+      "id": "c096ee3fbd3b998a",
+      "item": {
+        "type": "markdown",
+        "id": "c096ee3fbd3b998a",
+        "text": "# Commonly used [[Spotlight attributes]]\n\n* kMDItemPath: absolute path.\n* kMDItemFSName: basename.\n* kMDItemFSSize: size in bytes.\n* kMDItemDisplayName: display name.\n* kMDItemContentType: UTI.\n* kMDItemContentTypeTree: UTI and parent UTIs.\n* kMDItemKind: a localized name for the content type.\n* kMDItemFSContentChangeDate: modification time.\n* kMDItemFSCreationDate: creation time.\n* kMDItemLastUsedDate: date last opened.\n* kMDItemDateAdded: date added.\n* kMDItemFinderComment: Spotlight comment.\n* kMDItemTextContent: plain text content of for example text, HTML, or PDF files.\n* kMDItemDurationSeconds: for example the duration of an audio or video file.\n* kMDItemTitle: for example the title of a webloc, PDF, or MP3 file.\n* kMDItemURL: for example the URL of a webloc file.\n* kMDItemWhereFroms: the URL or URLs that a file was downloaded from.\n* kMDItemUserTags: tags in 10.9 and later.\n* kMDItemAuthors: for example the artist of an MP3 file.\n"
+      },
+      "date": 1471623109823
+    },
+    {
+      "type": "remove",
+      "id": "c096ee3fbd3b998a",
+      "date": 1471623119503
+    },
+    {
+      "type": "edit",
+      "id": "c52c7df76a464c00",
+      "item": {
+        "type": "reference",
+        "id": "c52c7df76a464c00",
+        "site": "osx.c0de.academy",
+        "slug": "spotlight-attributes",
+        "title": "Spotlight attributes",
+        "text": "Here are some commonly used [[spotlight]] attributes that you can use with [[mdfind]]:"
+      },
+      "date": 1471623154078
+    },
+    {
+      "type": "edit",
+      "id": "cd746dfaadc314c3",
+      "item": {
+        "type": "paragraph",
+        "id": "cd746dfaadc314c3",
+        "text": "If I'm only interested in certain attributes, I can use the -name option:"
+      },
+      "date": 1471623180445
+    },
+    {
+      "type": "add",
+      "id": "8a10057dd7c9386a",
+      "item": {
+        "type": "paragraph",
+        "id": "8a10057dd7c9386a",
+        "text": "\n\nNow that I know some attribute names, I can get very precise in how I search. Say I want to find songs composed by Roger Waters. I need to search the kMDItemComposer attribute for \"Waters\". I'll put the string I'm searching for in double quotes, and then the entire search expression in single quotes."
+      },
+      "after": "cd746dfaadc314c3",
+      "date": 1471623200886
+    },
+    {
+      "type": "add",
+      "id": "39a895dd56f8c95c",
+      "item": {
+        "type": "paragraph",
+        "id": "39a895dd56f8c95c",
+        "text": "\n$ mdfind 'kMDItemComposer = \"Waters\"'\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-06 Money.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-09 Brain Damage.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-10 Eclipse.m4a\nI know that I have more than three songs written by Roger Waters, so I'll rerun the search with wildcards, with an asterisk to mean \"any string.\"\n\n$ mdfind 'kMDItemComposer = \"*Waters*\"'\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Animals/02 Dogs.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Dark Side Of The Moon/01 Speak To Me _ Breathe.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Dark Side Of The Moon/02 On The Run.m4a\n... 42 more tracks ...\nIf I want a case-insensitive search, I can put the letter c outside the double quotes, as in this search to find all forms of \"McCartney\", regardless of the capitalization.\n\n$ mdfind 'kMDItemComposer = \"*mccartney*\"c'"
+      },
+      "after": "8a10057dd7c9386a",
+      "date": 1471623202720
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "f04fa0df2e7ddf22",
+        "text": "mdls -name kMDItemComposer \"11 Space Truckin'.m4a\"\n11 Space Truckin'.m4a -------------\nkMDItemComposer = \"Blackmore/Gillan/Glover/Lord/Paice\""
+      },
+      "after": "cd746dfaadc314c3",
+      "id": "f04fa0df2e7ddf22",
+      "date": 1471623206969
+    },
+    {
+      "type": "edit",
+      "id": "f04fa0df2e7ddf22",
+      "item": {
+        "type": "code",
+        "id": "f04fa0df2e7ddf22",
+        "text": "mdls -name kMDItemComposer \"11 Space Truckin'.m4a\"\n\n11 Space Truckin'.m4a -------------\nkMDItemComposer = \"Blackmore/Gillan/Glover/Lord/Paice\""
+      },
+      "date": 1471623246958
+    },
+    {
+      "type": "edit",
+      "id": "39a895dd56f8c95c",
+      "item": {
+        "type": "paragraph",
+        "id": "39a895dd56f8c95c",
+        "text": "\nI know that I have more than three songs written by Roger Waters, so I'll rerun the search with wildcards, with an asterisk to mean \"any string.\""
+      },
+      "date": 1471623274030
+    },
+    {
+      "type": "add",
+      "id": "93264f7c4b8740f9",
+      "item": {
+        "type": "paragraph",
+        "id": "93264f7c4b8740f9",
+        "text": "\n$ mdfind 'kMDItemComposer = \"*Waters*\"'\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Animals/02 Dogs.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Dark Side Of The Moon/01 Speak To Me _ Breathe.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Dark Side Of The Moon/02 On The Run.m4a\n... 42 more tracks ...\nIf I want a case-insensitive search, I can put the letter c outside the double quotes, as in this search to find all forms of \"McCartney\", regardless of the capitalization.\n\n$ mdfind 'kMDItemComposer = \"*mccartney*\"c'"
+      },
+      "after": "39a895dd56f8c95c",
+      "date": 1471623275537
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "507890961a5eb689",
+        "text": "$ mdfind 'kMDItemComposer = \"Waters\"'\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-06 Money.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-09 Brain Damage.m4a\n/Users/andy/Music/iTunes/iTunes Music/Pink Floyd/\n    Pulse/2-10 Eclipse.m4a"
+      },
+      "after": "8a10057dd7c9386a",
+      "id": "507890961a5eb689",
+      "date": 1471623283988
+    },
+    {
+      "type": "edit",
+      "id": "507890961a5eb689",
+      "item": {
+        "type": "code",
+        "id": "507890961a5eb689",
+        "text": "mdfind 'kMDItemComposer = \"Waters\"'"
+      },
+      "date": 1471623306648
+    },
+    {
+      "type": "edit",
+      "id": "f04fa0df2e7ddf22",
+      "item": {
+        "type": "code",
+        "id": "f04fa0df2e7ddf22",
+        "text": "mdls -name kMDItemComposer \"11 Space Truckin'.m4a\""
+      },
+      "date": 1471623312112
+    },
+    {
+      "type": "edit",
+      "id": "93264f7c4b8740f9",
+      "item": {
+        "type": "paragraph",
+        "id": "93264f7c4b8740f9",
+        "text": "$ mdfind 'kMDItemComposer = \"*Waters*\"'"
+      },
+      "date": 1471623329969
+    },
+    {
+      "type": "add",
+      "id": "36d7043f14118721",
+      "item": {
+        "type": "paragraph",
+        "id": "36d7043f14118721",
+        "text": "/"
+      },
+      "after": "93264f7c4b8740f9",
+      "date": 1471623339272
+    },
+    {
+      "type": "add",
+      "id": "4c333725be9e0f0b",
+      "item": {
+        "type": "paragraph",
+        "id": "4c333725be9e0f0b",
+        "text": "If I want a case-insensitive search, I can put the letter c outside the double quotes, as in this search to find all forms of \"McCartney\", regardless of the capitalization."
+      },
+      "after": "36d7043f14118721",
+      "date": 1471623343560
+    },
+    {
+      "type": "add",
+      "id": "9e4cf28ac3c87704",
+      "item": {
+        "type": "paragraph",
+        "id": "9e4cf28ac3c87704",
+        "text": "\n$ mdfind 'kMDItemComposer = \"*mccartney*\"c'"
+      },
+      "after": "4c333725be9e0f0b",
+      "date": 1471623346122
+    },
+    {
+      "type": "remove",
+      "id": "36d7043f14118721",
+      "date": 1471623348857
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "dbbb768f14466a68"
+      },
+      "after": "39a895dd56f8c95c",
+      "id": "dbbb768f14466a68",
+      "date": 1471623352403
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "18c08947f45845d4"
+      },
+      "after": "4c333725be9e0f0b",
+      "id": "18c08947f45845d4",
+      "date": 1471623356666
+    },
+    {
+      "type": "remove",
+      "id": "93264f7c4b8740f9",
+      "date": 1471623361594
+    },
+    {
+      "type": "edit",
+      "id": "dbbb768f14466a68",
+      "item": {
+        "type": "code",
+        "id": "dbbb768f14466a68",
+        "text": "mdfind 'kMDItemComposer = \"*Waters*\"'"
+      },
+      "date": 1471623366578
+    },
+    {
+      "type": "remove",
+      "id": "9e4cf28ac3c87704",
+      "date": 1471623370457
+    },
+    {
+      "type": "edit",
+      "id": "18c08947f45845d4",
+      "item": {
+        "type": "code",
+        "id": "18c08947f45845d4",
+        "text": "mdfind 'kMDItemComposer = \"*mccartney*\"c'"
+      },
+      "date": 1471623374731
+    },
+    {
+      "type": "edit",
+      "id": "782b78643de940fb",
+      "item": {
+        "type": "paragraph",
+        "id": "782b78643de940fb",
+        "text": "You can search for a file by attribute name also using this syntax:"
+      },
+      "date": 1471623405396
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "8a10057dd7c9386a",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "782b78643de940fb",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76"
+      ],
+      "id": "82a84e9eca603103",
+      "date": 1471623450779
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "51d73a0bcfa1d02d",
+        "8a10057dd7c9386a",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "782b78643de940fb",
+        "60200fc4c9f0a298",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76"
+      ],
+      "id": "51d73a0bcfa1d02d",
+      "date": 1471623463840
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "8a10057dd7c9386a",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "782b78643de940fb",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76"
+      ],
+      "id": "60200fc4c9f0a298",
+      "date": 1471623467775
+    },
+    {
+      "type": "remove",
+      "id": "782b78643de940fb",
+      "date": 1471623473261
+    },
+    {
+      "type": "edit",
+      "id": "8a10057dd7c9386a",
+      "item": {
+        "type": "paragraph",
+        "id": "8a10057dd7c9386a",
+        "text": "# Getting precise"
+      },
+      "date": 1471623615729
+    },
+    {
+      "type": "edit",
+      "id": "8a10057dd7c9386a",
+      "item": {
+        "type": "markdown",
+        "id": "8a10057dd7c9386a",
+        "text": "# Getting precise"
+      },
+      "date": 1471623617083
+    },
+    {
+      "type": "add",
+      "id": "1a394ce29ee1997f",
+      "item": {
+        "type": "paragraph",
+        "id": "1a394ce29ee1997f",
+        "text": "Now that I know some attribute names, I can get very precise in how I search. Say I want to find songs composed by Roger Waters. I need to search the kMDItemComposer attribute for \"Waters\". I'll put the string I'm searching for in double quotes, and then the entire search expression in single quotes."
+      },
+      "after": "8a10057dd7c9386a",
+      "date": 1471623621233
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "3770271210e9d5a2",
+        "text": "mdfind kind:folders"
+      },
+      "after": "51d73a0bcfa1d02d",
+      "id": "3770271210e9d5a2",
+      "date": 1471623628835
+    },
+    {
+      "type": "add",
+      "id": "5a9ab03b6e4a734d",
+      "item": {
+        "type": "paragraph",
+        "id": "5a9ab03b6e4a734d",
+        "text": "If you want to only list folders:"
+      },
+      "after": "60200fc4c9f0a298",
+      "date": 1471623642140
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76"
+      ],
+      "id": "5a9ab03b6e4a734d",
+      "date": 1471623643841
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "4d6d820cecef05e1",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76"
+      ],
+      "id": "715e7b4d2cc7274b",
+      "date": 1471625247392
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "c52c7df76a464c00",
+        "a059ca92c8722d76"
+      ],
+      "id": "4d6d820cecef05e1",
+      "date": 1471625252632
+    },
+    {
+      "type": "edit",
+      "id": "3770271210e9d5a2",
+      "item": {
+        "type": "code",
+        "id": "3770271210e9d5a2",
+        "text": "mdfind 'kMDItemKind -folders'"
+      },
+      "date": 1471625349038
+    },
+    {
+      "type": "edit",
+      "id": "5a9ab03b6e4a734d",
+      "item": {
+        "type": "paragraph",
+        "id": "5a9ab03b6e4a734d",
+        "text": "If you want to only list folders (in spotlight kind:folders):"
+      },
+      "date": 1471625360867
+    },
+    {
+      "type": "edit",
+      "id": "3770271210e9d5a2",
+      "item": {
+        "type": "code",
+        "id": "3770271210e9d5a2",
+        "text": "mdfind 'kMDItemKind=folders&&kMDItemFSName=[[folderName]]''"
+      },
+      "date": 1471625417004
+    },
+    {
+      "type": "add",
+      "id": "418334b14d45c765",
+      "item": {
+        "type": "paragraph",
+        "id": "418334b14d45c765",
+        "text": "The mdfind command consults the central metadata store and returns a list of files that match the given metadata query. The query can be a string or a query expression."
+      },
+      "after": "84613cded34fb5ff",
+      "date": 1471625701659
+    },
+    {
+      "type": "add",
+      "id": "d5dd7285f56c19f4",
+      "item": {
+        "type": "paragraph",
+        "id": "d5dd7285f56c19f4",
+        "text": "The following options are available:\n\n* -onlyin dir (search the directory specified)\n\n* -name fileName (matching file names)\n\n"
+      },
+      "after": "418334b14d45c765",
+      "date": 1471625839714
+    },
+    {
+      "type": "edit",
+      "id": "d5dd7285f56c19f4",
+      "item": {
+        "type": "markdown",
+        "id": "d5dd7285f56c19f4",
+        "text": "The following options are available:\n\n* -onlyin dir (search the directory specified)\n\n* -name fileName (matching file names)\n\n"
+      },
+      "date": 1471625848481
+    },
+    {
+      "type": "add",
+      "id": "11be47698a0d340f",
+      "item": {
+        "type": "paragraph",
+        "id": "11be47698a0d340f",
+        "text": "Passing a simple string searches all metadata fields. So:"
+      },
+      "after": "d5dd7285f56c19f4",
+      "date": 1471625883087
+    },
+    {
+      "type": "add",
+      "id": "df276ec4b01420e4",
+      "item": {
+        "type": "paragraph",
+        "id": "df276ec4b01420e4",
+        "text": "mdfind image"
+      },
+      "after": "11be47698a0d340f",
+      "date": 1471625891375
+    },
+    {
+      "type": "add",
+      "id": "43140eb5b28b9c8b",
+      "item": {
+        "type": "paragraph",
+        "id": "43140eb5b28b9c8b",
+        "text": "returns all files with any metadata attribute value matching the string \"image\"\n"
+      },
+      "after": "df276ec4b01420e4",
+      "date": 1471625921424
+    },
+    {
+      "type": "add",
+      "id": "6ac1c4bad0a7db4f",
+      "item": {
+        "type": "paragraph",
+        "id": "6ac1c4bad0a7db4f",
+        "text": "returns all files that contain \"MyFavoriteAuthor\" in the kMDItemAuthor metadata attribute:\n"
+      },
+      "after": "43140eb5b28b9c8b",
+      "date": 1471625926336
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6808b59ef53a55e8",
+        "text": "mdfind \"kMDItemAuthors == '*MyFavoriteAuthor*'\""
+      },
+      "after": "43140eb5b28b9c8b",
+      "id": "6808b59ef53a55e8",
+      "date": 1471625935527
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "06b306a311f2a8b3"
+      },
+      "after": "11be47698a0d340f",
+      "id": "06b306a311f2a8b3",
+      "date": 1471625944546
+    },
+    {
+      "type": "remove",
+      "id": "df276ec4b01420e4",
+      "date": 1471625948113
+    },
+    {
+      "type": "edit",
+      "id": "06b306a311f2a8b3",
+      "item": {
+        "type": "code",
+        "id": "06b306a311f2a8b3",
+        "text": "mdfind image"
+      },
+      "date": 1471625950834
+    },
+    {
+      "type": "edit",
+      "id": "d5dd7285f56c19f4",
+      "item": {
+        "type": "markdown",
+        "id": "d5dd7285f56c19f4",
+        "text": "The following useful options are available:\n\n* -onlyin dir (search the directory specified)\n* -name fileName (matching file names)\n\n"
+      },
+      "date": 1471625965179
+    },
+    {
+      "type": "add",
+      "id": "45e261afa5a7b3a3",
+      "item": {
+        "type": "paragraph",
+        "id": "45e261afa5a7b3a3",
+        "text": "* [http://blog.superuser.com/2011/06/03/digging-deeper-mastering-spotlight-in-os-x/ superuser.com]"
+      },
+      "after": "84613cded34fb5ff",
+      "date": 1471633411150
+    },
+    {
+      "type": "edit",
+      "id": "45e261afa5a7b3a3",
+      "item": {
+        "type": "paragraph",
+        "id": "45e261afa5a7b3a3",
+        "text": "* Mastering Spotlight in OS X - [http://blog.superuser.com/2011/06/03/digging-deeper-mastering-spotlight-in-os-x/ superuser.com]"
+      },
+      "date": 1471633436678
+    },
+    {
+      "type": "edit",
+      "id": "45e261afa5a7b3a3",
+      "item": {
+        "type": "markdown",
+        "id": "45e261afa5a7b3a3",
+        "text": "* Mastering Spotlight in OS X - [http://blog.superuser.com/2011/06/03/digging-deeper-mastering-spotlight-in-os-x/ superuser.com]"
+      },
+      "date": 1471633438452
+    },
+    {
+      "type": "edit",
+      "id": "45e261afa5a7b3a3",
+      "item": {
+        "type": "markdown",
+        "id": "45e261afa5a7b3a3",
+        "text": "* Mastering Spotlight - [http://blog.superuser.com/2011/06/03/digging-deeper-mastering-spotlight-in-os-x/ superuser.com]"
+      },
+      "date": 1471633448566
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "53caaf24c466b7ae"
+      },
+      "id": "53caaf24c466b7ae",
+      "type": "add",
+      "after": "a059ca92c8722d76",
+      "date": 1471633467275
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "45e261afa5a7b3a3",
+        "418334b14d45c765",
+        "d5dd7285f56c19f4",
+        "11be47698a0d340f",
+        "06b306a311f2a8b3",
+        "43140eb5b28b9c8b",
+        "6808b59ef53a55e8",
+        "6ac1c4bad0a7db4f",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "c52c7df76a464c00",
+        "53caaf24c466b7ae",
+        "a059ca92c8722d76"
+      ],
+      "id": "53caaf24c466b7ae",
+      "date": 1471633469367
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "73c80188087ed521"
+      },
+      "id": "73c80188087ed521",
+      "type": "add",
+      "after": "a059ca92c8722d76",
+      "date": 1471633471450
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "45e261afa5a7b3a3",
+        "418334b14d45c765",
+        "d5dd7285f56c19f4",
+        "11be47698a0d340f",
+        "06b306a311f2a8b3",
+        "43140eb5b28b9c8b",
+        "6808b59ef53a55e8",
+        "6ac1c4bad0a7db4f",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "c52c7df76a464c00",
+        "53caaf24c466b7ae",
+        "73c80188087ed521",
+        "a059ca92c8722d76"
+      ],
+      "id": "73c80188087ed521",
+      "date": 1471633473796
+    },
+    {
+      "type": "edit",
+      "id": "53caaf24c466b7ae",
+      "item": {
+        "type": "reference",
+        "id": "53caaf24c466b7ae",
+        "site": "osx.c0de.academy",
+        "slug": "spotlight-boolean-operators",
+        "title": "Spotlight boolean Operators",
+        "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "date": 1471633476953
+    },
+    {
+      "type": "edit",
+      "id": "73c80188087ed521",
+      "item": {
+        "type": "reference",
+        "id": "73c80188087ed521",
+        "site": "osx.c0de.academy",
+        "slug": "spotlight-and-word-search",
+        "title": "Spotlight and word search",
+        "text": "When you type in your search terms, [[Spotlight]] looks for even a partial match at the beginning of a word. So, when you search for phon you’ll find phone, phony, and phonatory, but not symphony."
+      },
+      "date": 1471633500187
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "45e261afa5a7b3a3",
+        "418334b14d45c765",
+        "d5dd7285f56c19f4",
+        "11be47698a0d340f",
+        "06b306a311f2a8b3",
+        "43140eb5b28b9c8b",
+        "6808b59ef53a55e8",
+        "6ac1c4bad0a7db4f",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "a059ca92c8722d76",
+        "c52c7df76a464c00",
+        "53caaf24c466b7ae",
+        "73c80188087ed521"
+      ],
+      "id": "a059ca92c8722d76",
+      "date": 1471633505534
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cea42558a6557ce4"
+      },
+      "id": "cea42558a6557ce4",
+      "type": "add",
+      "after": "73c80188087ed521",
+      "date": 1471633508905
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "45e261afa5a7b3a3",
+        "418334b14d45c765",
+        "d5dd7285f56c19f4",
+        "11be47698a0d340f",
+        "06b306a311f2a8b3",
+        "43140eb5b28b9c8b",
+        "6808b59ef53a55e8",
+        "6ac1c4bad0a7db4f",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "a059ca92c8722d76",
+        "cea42558a6557ce4",
+        "c52c7df76a464c00",
+        "53caaf24c466b7ae",
+        "73c80188087ed521"
+      ],
+      "id": "cea42558a6557ce4",
+      "date": 1471633511100
+    },
+    {
+      "type": "edit",
+      "id": "cea42558a6557ce4",
+      "item": {
+        "type": "markdown",
+        "id": "cea42558a6557ce4",
+        "text": "# See also"
+      },
+      "date": 1471633518068
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c277f8adffdf1d0a"
+      },
+      "id": "c277f8adffdf1d0a",
+      "type": "add",
+      "after": "73c80188087ed521",
+      "date": 1471633521733
+    },
+    {
+      "type": "edit",
+      "id": "c277f8adffdf1d0a",
+      "item": {
+        "type": "reference",
+        "id": "c277f8adffdf1d0a",
+        "site": "osx.c0de.academy",
+        "slug": "spotlight",
+        "title": "Spotlight",
+        "text": "Spotlight is a system-wide desktop search feature of Apple's OS X and iOS operating systems - [https://en.wikipedia.org/wiki/Spotlight_(software) wikipedia]"
+      },
+      "date": 1471633524945
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "45e261afa5a7b3a3",
+        "418334b14d45c765",
+        "d5dd7285f56c19f4",
+        "11be47698a0d340f",
+        "06b306a311f2a8b3",
+        "43140eb5b28b9c8b",
+        "6808b59ef53a55e8",
+        "6ac1c4bad0a7db4f",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "a059ca92c8722d76",
+        "cea42558a6557ce4",
+        "c277f8adffdf1d0a",
+        "c52c7df76a464c00",
+        "53caaf24c466b7ae",
+        "73c80188087ed521"
+      ],
+      "id": "c277f8adffdf1d0a",
+      "date": 1471633526835
+    },
+    {
+      "type": "move",
+      "order": [
+        "84613cded34fb5ff",
+        "45e261afa5a7b3a3",
+        "418334b14d45c765",
+        "d5dd7285f56c19f4",
+        "11be47698a0d340f",
+        "06b306a311f2a8b3",
+        "43140eb5b28b9c8b",
+        "6808b59ef53a55e8",
+        "6ac1c4bad0a7db4f",
+        "9b13e45a611c8e95",
+        "14f477c99cf25b62",
+        "d1f5e0a3d72cb619",
+        "78fe7b5e180798e7",
+        "da4eebc7d674f642",
+        "cd746dfaadc314c3",
+        "f04fa0df2e7ddf22",
+        "82a84e9eca603103",
+        "60200fc4c9f0a298",
+        "51d73a0bcfa1d02d",
+        "5a9ab03b6e4a734d",
+        "3770271210e9d5a2",
+        "715e7b4d2cc7274b",
+        "4d6d820cecef05e1",
+        "8a10057dd7c9386a",
+        "1a394ce29ee1997f",
+        "507890961a5eb689",
+        "39a895dd56f8c95c",
+        "dbbb768f14466a68",
+        "4c333725be9e0f0b",
+        "18c08947f45845d4",
+        "a059ca92c8722d76",
+        "cea42558a6557ce4",
+        "c277f8adffdf1d0a",
+        "73c80188087ed521",
+        "c52c7df76a464c00",
+        "53caaf24c466b7ae"
+      ],
+      "id": "73c80188087ed521",
+      "date": 1471633529341
+    }
+  ]
+}

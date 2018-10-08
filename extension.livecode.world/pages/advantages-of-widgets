@@ -1,0 +1,217 @@
+{
+  "title": "Advantages of Widgets",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "896c6fa48b14b3da",
+      "text": "Some notes, thoughts and research on the advantages of using widgets in Livecode:"
+    },
+    {
+      "type": "markdown",
+      "id": "e8211507bc9c31e0",
+      "text": "# Questions"
+    },
+    {
+      "type": "paragraph",
+      "id": "c68266333b853893",
+      "text": "  1) Does the ability / robustness of using compound widgets - vs doing the\nsame with groups make it a here and now option to do compound layouts\nwithin widgets only?"
+    },
+    {
+      "type": "paragraph",
+      "id": "a17454e4c8fcec51",
+      "text": "At present you cannot 'wrap up' existing LiveCode Script objects as a widget with an 'inner script' (which would be akin to the code you write for a widget right now). It is, however, something which would fit with the current model of LiveCode Script very well - when we can figure out how to do it."
+    },
+    {
+      "type": "paragraph",
+      "id": "6a33db98fb452fb1",
+      "text": "Widgets are completely encapsulated (compared to Script groups with behaviors) which has numerous advantages for all kinds of 'leaf' controls (things which have no real substructure and are 'just' a rendering of data in some fashion). This is mainly because rendering is done 'on demand' so your widget can have as many graphical elements as you like, without the (sometimes significant!) overhead of many many controls you would need in LiveCode Script. (The advantages are not only down to lower overhead, but also editing in the IDE and grokking by Script - even though you can 'hide' substructure of LiveCode groups in the Project Browser, that are still part of the object tree from Script's point of view which means you do, at the very least, have to make sure you name things appropriately lest scripts accidentally manage to resolve a reference to one of the objects in one of your control's groups rather than one they meant to)."
+    },
+    {
+      "type": "paragraph",
+      "id": "0619a39b53f89ced",
+      "text": "Basically, if you have group-based controls which are essentially just collections of graphics and areas to interact with the mouse and touch and don't require other script controls within them to be manipulated from outside the control then they would likely make good candidates for widgetization. In Script, you don't need to tweak properties of numerous objects whenever the data changes - you just issue a 'redraw all' inside the widget and the OnPaint handler causes the display to be updated."
+    },
+    {
+      "type": "paragraph",
+      "id": "ebb4f104fd249744",
+      "text": "For example, the Clock widget would consist of 16 internal controls if it were a LiveCode group-based control - and on each resize you'd have to work out all the scaling and positioning and set all the properties of each of those objects. As a widget, however, you set up the transform appropriately in OnPaint then just render to a unit-square based on the time which is currently set as a property. When the time changes, you just 'redraw all' and OnPaint triggers to update the display."
+    },
+    {
+      "type": "paragraph",
+      "id": "e79e021e0a824727",
+      "text": "2) Which animation and paint routines are significantly better with\nBuilder so that making a widget is preferable to doing the same with groups\nand script. In particular how about rostering images, of doing animations?"
+    },
+    {
+      "type": "paragraph",
+      "id": "64da477f6126b902",
+      "text": "\nAs Builder uses the same image caching mechanism as Script, there isn't probably much performance difference between changing the id of an image to do animation compared to doing the same within a widget.\n\nHowever, in Builder you have access to a full 2d Canvas API - including full affine transformations so you can do more in a widget with graphics, more easily. Also, the widget canvas you render to is completely sub-pixel based meaning you get a higher fidelity of display then you would get using graphics (as they currently are).\n\nIn terms of animation, one advantage of widgets is that the 'Timer' mechanism they currently have is entirely internal to the widget - you don't see any messages in the pending messages, and suspend and resume is automatically handled between Edit and Browse mode. This simplifies coding to a good degree as well as minimising any interaction with other scripts running and the internal operation of your widget (control).\n\nSo, if you have custom controls currently which are visualizations of some data, and don't require any user input beyond mouse interaction (or any at all) then they probably are really good candidates for turning into widgets.\n\nI know Trevor has had great success in improving the UIs in his applications by using widgets as they allow him to much more easily create easy to use controls which render precisely how you need - what might require 3 or 4 graphics and a couple of fields before now, can be done with a single control. The latter simplifies the script view of the object tree, as well as making things more efficient.\n\nSimilarly, once we have Infinite LiveCode, then a good example of something which would make more sense as a widget rather than a script custom control might be a 'battery status widget' - something which displays the current charge level of the battery. It will be easy enough to present two interfaces to the battery monitoring APIs (as espoused in a recent blog post) - one for script, and one for Builder. The Builder one will have the advantage that the subscription to the battery level updates will be entirely private to the widget - no messages anywhere outside which can get interfered with. This means that you could easily write one where you simply drag out the 'battery status' widget and it hooks itself up to the notifications internally, and 'just works'."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Advantages of Widgets",
+        "story": []
+      },
+      "date": 1466512592557
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "896c6fa48b14b3da"
+      },
+      "id": "896c6fa48b14b3da",
+      "type": "add",
+      "date": 1466512593696
+    },
+    {
+      "type": "edit",
+      "id": "896c6fa48b14b3da",
+      "item": {
+        "type": "paragraph",
+        "id": "896c6fa48b14b3da",
+        "text": "Some notes, thoughts and research on the advantages of using widgets in Livecode:"
+      },
+      "date": 1466512651594
+    },
+    {
+      "type": "add",
+      "id": "e8211507bc9c31e0",
+      "item": {
+        "type": "paragraph",
+        "id": "e8211507bc9c31e0",
+        "text": "My question are:\n\n  1) Does the ability / robustness of using compound widgets - vs doing the\nsame with groups make it a here and now option to do compound layouts\nwithin widgets only? How does this relate to your \"black box\" comment\nabove. I ask because I do a lot of compound nested groups with behaviours,\nand I am wandering what bits to shift o widget only.\n\nWell, rewriting existing code probably should only be done *if there are tangible advantages to doing so*.\n\nAt present you cannot 'wrap up' existing LiveCode Script objects as a widget with an 'inner script' (which would be akin to the code you write for a widget right now). It is, however, something which would fit with the current model of LiveCode Script very well - when we can figure out how to do it.\n\nWidgets are completely encapsulated (compared to Script groups with behaviors) which has numerous advantages for all kinds of 'leaf' controls (things which have no real substructure and are 'just' a rendering of data in some fashion). This is mainly because rendering is done 'on demand' so your widget can have as many graphical elements as you like, without the (sometimes significant!) overhead of many many controls you would need in LiveCode Script. (The advantages are not only down to lower overhead, but also editing in the IDE and grokking by Script - even though you can 'hide' substructure of LiveCode groups in the Project Browser, that are still part of the object tree from Script's point of view which means you do, at the very least, have to make sure you name things appropriately lest scripts accidentally manage to resolve a reference to one of the objects in one of your control's groups rather than one they meant to).\n\nBasically, if you have group-based controls which are essentially just collections of graphics and areas to interact with the mouse and touch and don't require other script controls within them to be manipulated from outside the control then they would likely make good candidates for widgetization. In Script, you don't need to tweak properties of numerous objects whenever the data changes - you just issue a 'redraw all' inside the widget and the OnPaint handler causes the display to be updated.\n\nFor example, the Clock widget would consist of 16 internal controls if it were a LiveCode group-based control - and on each resize you'd have to work out all the scaling and positioning and set all the properties of each of those objects. As a widget, however, you set up the transform appropriately in OnPaint then just render to a unit-square based on the time which is currently set as a property. When the time changes, you just 'redraw all' and OnPaint triggers to update the display.\n\n  2) Which animation and paint routines are significantly better with\nBuilder so that making a widget is preferable to doing the same with groups\nand script. In particular how about rostering images, of doing animations?\n\nAs Builder uses the same image caching mechanism as Script, there isn't probably much performance difference between changing the id of an image to do animation compared to doing the same within a widget.\n\nHowever, in Builder you have access to a full 2d Canvas API - including full affine transformations so you can do more in a widget with graphics, more easily. Also, the widget canvas you render to is completely sub-pixel based meaning you get a higher fidelity of display then you would get using graphics (as they currently are).\n\nIn terms of animation, one advantage of widgets is that the 'Timer' mechanism they currently have is entirely internal to the widget - you don't see any messages in the pending messages, and suspend and resume is automatically handled between Edit and Browse mode. This simplifies coding to a good degree as well as minimising any interaction with other scripts running and the internal operation of your widget (control).\n\nSo, if you have custom controls currently which are visualizations of some data, and don't require any user input beyond mouse interaction (or any at all) then they probably are really good candidates for turning into widgets.\n\nI know Trevor has had great success in improving the UIs in his applications by using widgets as they allow him to much more easily create easy to use controls which render precisely how you need - what might require 3 or 4 graphics and a couple of fields before now, can be done with a single control. The latter simplifies the script view of the object tree, as well as making things more efficient.\n\nSimilarly, once we have Infinite LiveCode, then a good example of something which would make more sense as a widget rather than a script custom control might be a 'battery status widget' - something which displays the current charge level of the battery. It will be easy enough to present two interfaces to the battery monitoring APIs (as espoused in a recent blog post) - one for script, and one for Builder. The Builder one will have the advantage that the subscription to the battery level updates will be entirely private to the widget - no messages anywhere outside which can get interfered with. This means that you could easily write one where you simply drag out the 'battery status' widget and it hooks itself up to the notifications internally, and 'just works'."
+      },
+      "after": "896c6fa48b14b3da",
+      "date": 1466512659123
+    },
+    {
+      "type": "edit",
+      "id": "e8211507bc9c31e0",
+      "item": {
+        "type": "paragraph",
+        "id": "e8211507bc9c31e0",
+        "text": "# Questions"
+      },
+      "date": 1466512686444
+    },
+    {
+      "type": "add",
+      "id": "c68266333b853893",
+      "item": {
+        "type": "paragraph",
+        "id": "c68266333b853893",
+        "text": "\n  1) Does the ability / robustness of using compound widgets - vs doing the\nsame with groups make it a here and now option to do compound layouts\nwithin widgets only? How does this relate to your \"black box\" comment\nabove. I ask because I do a lot of compound nested groups with behaviours,\nand I am wandering what bits to shift o widget only.\n\nWell, rewriting existing code probably should only be done *if there are tangible advantages to doing so*.\n\nAt present you cannot 'wrap up' existing LiveCode Script objects as a widget with an 'inner script' (which would be akin to the code you write for a widget right now). It is, however, something which would fit with the current model of LiveCode Script very well - when we can figure out how to do it.\n\nWidgets are completely encapsulated (compared to Script groups with behaviors) which has numerous advantages for all kinds of 'leaf' controls (things which have no real substructure and are 'just' a rendering of data in some fashion). This is mainly because rendering is done 'on demand' so your widget can have as many graphical elements as you like, without the (sometimes significant!) overhead of many many controls you would need in LiveCode Script. (The advantages are not only down to lower overhead, but also editing in the IDE and grokking by Script - even though you can 'hide' substructure of LiveCode groups in the Project Browser, that are still part of the object tree from Script's point of view which means you do, at the very least, have to make sure you name things appropriately lest scripts accidentally manage to resolve a reference to one of the objects in one of your control's groups rather than one they meant to).\n\nBasically, if you have group-based controls which are essentially just collections of graphics and areas to interact with the mouse and touch and don't require other script controls within them to be manipulated from outside the control then they would likely make good candidates for widgetization. In Script, you don't need to tweak properties of numerous objects whenever the data changes - you just issue a 'redraw all' inside the widget and the OnPaint handler causes the display to be updated.\n\nFor example, the Clock widget would consist of 16 internal controls if it were a LiveCode group-based control - and on each resize you'd have to work out all the scaling and positioning and set all the properties of each of those objects. As a widget, however, you set up the transform appropriately in OnPaint then just render to a unit-square based on the time which is currently set as a property. When the time changes, you just 'redraw all' and OnPaint triggers to update the display.\n\n  2) Which animation and paint routines are significantly better with\nBuilder so that making a widget is preferable to doing the same with groups\nand script. In particular how about rostering images, of doing animations?\n\nAs Builder uses the same image caching mechanism as Script, there isn't probably much performance difference between changing the id of an image to do animation compared to doing the same within a widget.\n\nHowever, in Builder you have access to a full 2d Canvas API - including full affine transformations so you can do more in a widget with graphics, more easily. Also, the widget canvas you render to is completely sub-pixel based meaning you get a higher fidelity of display then you would get using graphics (as they currently are).\n\nIn terms of animation, one advantage of widgets is that the 'Timer' mechanism they currently have is entirely internal to the widget - you don't see any messages in the pending messages, and suspend and resume is automatically handled between Edit and Browse mode. This simplifies coding to a good degree as well as minimising any interaction with other scripts running and the internal operation of your widget (control).\n\nSo, if you have custom controls currently which are visualizations of some data, and don't require any user input beyond mouse interaction (or any at all) then they probably are really good candidates for turning into widgets.\n\nI know Trevor has had great success in improving the UIs in his applications by using widgets as they allow him to much more easily create easy to use controls which render precisely how you need - what might require 3 or 4 graphics and a couple of fields before now, can be done with a single control. The latter simplifies the script view of the object tree, as well as making things more efficient.\n\nSimilarly, once we have Infinite LiveCode, then a good example of something which would make more sense as a widget rather than a script custom control might be a 'battery status widget' - something which displays the current charge level of the battery. It will be easy enough to present two interfaces to the battery monitoring APIs (as espoused in a recent blog post) - one for script, and one for Builder. The Builder one will have the advantage that the subscription to the battery level updates will be entirely private to the widget - no messages anywhere outside which can get interfered with. This means that you could easily write one where you simply drag out the 'battery status' widget and it hooks itself up to the notifications internally, and 'just works'."
+      },
+      "after": "e8211507bc9c31e0",
+      "date": 1466512686924
+    },
+    {
+      "type": "edit",
+      "id": "e8211507bc9c31e0",
+      "item": {
+        "type": "markdown",
+        "id": "e8211507bc9c31e0",
+        "text": "# Questions"
+      },
+      "date": 1466512687865
+    },
+    {
+      "type": "edit",
+      "id": "c68266333b853893",
+      "item": {
+        "type": "paragraph",
+        "id": "c68266333b853893",
+        "text": "  1) Does the ability / robustness of using compound widgets - vs doing the\nsame with groups make it a here and now option to do compound layouts\nwithin widgets only? How does this relate to your \"black box\" comment\nabove. I ask because I do a lot of compound nested groups with behaviours,\nand I am wandering what bits to shift o widget only.\n\nWell, rewriting existing code probably should only be done *if there are tangible advantages to doing so*.\n\nAt present you cannot 'wrap up' existing LiveCode Script objects as a widget with an 'inner script' (which would be akin to the code you write for a widget right now). It is, however, something which would fit with the current model of LiveCode Script very well - when we can figure out how to do it.\n\nWidgets are completely encapsulated (compared to Script groups with behaviors) which has numerous advantages for all kinds of 'leaf' controls (things which have no real substructure and are 'just' a rendering of data in some fashion). This is mainly because rendering is done 'on demand' so your widget can have as many graphical elements as you like, without the (sometimes significant!) overhead of many many controls you would need in LiveCode Script. (The advantages are not only down to lower overhead, but also editing in the IDE and grokking by Script - even though you can 'hide' substructure of LiveCode groups in the Project Browser, that are still part of the object tree from Script's point of view which means you do, at the very least, have to make sure you name things appropriately lest scripts accidentally manage to resolve a reference to one of the objects in one of your control's groups rather than one they meant to).\n\nBasically, if you have group-based controls which are essentially just collections of graphics and areas to interact with the mouse and touch and don't require other script controls within them to be manipulated from outside the control then they would likely make good candidates for widgetization. In Script, you don't need to tweak properties of numerous objects whenever the data changes - you just issue a 'redraw all' inside the widget and the OnPaint handler causes the display to be updated.\n\nFor example, the Clock widget would consist of 16 internal controls if it were a LiveCode group-based control - and on each resize you'd have to work out all the scaling and positioning and set all the properties of each of those objects. As a widget, however, you set up the transform appropriately in OnPaint then just render to a unit-square based on the time which is currently set as a property. When the time changes, you just 'redraw all' and OnPaint triggers to update the display.\n\n  2) Which animation and paint routines are significantly better with\nBuilder so that making a widget is preferable to doing the same with groups\nand script. In particular how about rostering images, of doing animations?\n\nAs Builder uses the same image caching mechanism as Script, there isn't probably much performance difference between changing the id of an image to do animation compared to doing the same within a widget.\n\nHowever, in Builder you have access to a full 2d Canvas API - including full affine transformations so you can do more in a widget with graphics, more easily. Also, the widget canvas you render to is completely sub-pixel based meaning you get a higher fidelity of display then you would get using graphics (as they currently are).\n\nIn terms of animation, one advantage of widgets is that the 'Timer' mechanism they currently have is entirely internal to the widget - you don't see any messages in the pending messages, and suspend and resume is automatically handled between Edit and Browse mode. This simplifies coding to a good degree as well as minimising any interaction with other scripts running and the internal operation of your widget (control).\n\nSo, if you have custom controls currently which are visualizations of some data, and don't require any user input beyond mouse interaction (or any at all) then they probably are really good candidates for turning into widgets.\n\nI know Trevor has had great success in improving the UIs in his applications by using widgets as they allow him to much more easily create easy to use controls which render precisely how you need - what might require 3 or 4 graphics and a couple of fields before now, can be done with a single control. The latter simplifies the script view of the object tree, as well as making things more efficient.\n\nSimilarly, once we have Infinite LiveCode, then a good example of something which would make more sense as a widget rather than a script custom control might be a 'battery status widget' - something which displays the current charge level of the battery. It will be easy enough to present two interfaces to the battery monitoring APIs (as espoused in a recent blog post) - one for script, and one for Builder. The Builder one will have the advantage that the subscription to the battery level updates will be entirely private to the widget - no messages anywhere outside which can get interfered with. This means that you could easily write one where you simply drag out the 'battery status' widget and it hooks itself up to the notifications internally, and 'just works'."
+      },
+      "date": 1466512690131
+    },
+    {
+      "type": "edit",
+      "id": "c68266333b853893",
+      "item": {
+        "type": "paragraph",
+        "id": "c68266333b853893",
+        "text": "  1) Does the ability / robustness of using compound widgets - vs doing the\nsame with groups make it a here and now option to do compound layouts\nwithin widgets only? How does this relate to your \"black box\" comment\nabove. I ask because I do a lot of compound nested groups with behaviours,\nand I am wandering what bits to shift o widget only."
+      },
+      "date": 1466512698507
+    },
+    {
+      "type": "add",
+      "id": "a17454e4c8fcec51",
+      "item": {
+        "type": "paragraph",
+        "id": "a17454e4c8fcec51",
+        "text": "At present you cannot 'wrap up' existing LiveCode Script objects as a widget with an 'inner script' (which would be akin to the code you write for a widget right now). It is, however, something which would fit with the current model of LiveCode Script very well - when we can figure out how to do it."
+      },
+      "after": "c68266333b853893",
+      "date": 1466512704825
+    },
+    {
+      "type": "add",
+      "id": "6a33db98fb452fb1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a33db98fb452fb1",
+        "text": "Widgets are completely encapsulated (compared to Script groups with behaviors) which has numerous advantages for all kinds of 'leaf' controls (things which have no real substructure and are 'just' a rendering of data in some fashion). This is mainly because rendering is done 'on demand' so your widget can have as many graphical elements as you like, without the (sometimes significant!) overhead of many many controls you would need in LiveCode Script. (The advantages are not only down to lower overhead, but also editing in the IDE and grokking by Script - even though you can 'hide' substructure of LiveCode groups in the Project Browser, that are still part of the object tree from Script's point of view which means you do, at the very least, have to make sure you name things appropriately lest scripts accidentally manage to resolve a reference to one of the objects in one of your control's groups rather than one they meant to)."
+      },
+      "after": "a17454e4c8fcec51",
+      "date": 1466512711323
+    },
+    {
+      "type": "add",
+      "id": "0619a39b53f89ced",
+      "item": {
+        "type": "paragraph",
+        "id": "0619a39b53f89ced",
+        "text": "Basically, if you have group-based controls which are essentially just collections of graphics and areas to interact with the mouse and touch and don't require other script controls within them to be manipulated from outside the control then they would likely make good candidates for widgetization. In Script, you don't need to tweak properties of numerous objects whenever the data changes - you just issue a 'redraw all' inside the widget and the OnPaint handler causes the display to be updated."
+      },
+      "after": "6a33db98fb452fb1",
+      "date": 1466512717115
+    },
+    {
+      "type": "add",
+      "id": "ebb4f104fd249744",
+      "item": {
+        "type": "paragraph",
+        "id": "ebb4f104fd249744",
+        "text": "For example, the Clock widget would consist of 16 internal controls if it were a LiveCode group-based control - and on each resize you'd have to work out all the scaling and positioning and set all the properties of each of those objects. As a widget, however, you set up the transform appropriately in OnPaint then just render to a unit-square based on the time which is currently set as a property. When the time changes, you just 'redraw all' and OnPaint triggers to update the display."
+      },
+      "after": "0619a39b53f89ced",
+      "date": 1466512728938
+    },
+    {
+      "type": "add",
+      "id": "e79e021e0a824727",
+      "item": {
+        "type": "paragraph",
+        "id": "e79e021e0a824727",
+        "text": "2) Which animation and paint routines are significantly better with\nBuilder so that making a widget is preferable to doing the same with groups\nand script. In particular how about rostering images, of doing animations?"
+      },
+      "after": "ebb4f104fd249744",
+      "date": 1466512737084
+    },
+    {
+      "type": "add",
+      "id": "64da477f6126b902",
+      "item": {
+        "type": "paragraph",
+        "id": "64da477f6126b902",
+        "text": "\nAs Builder uses the same image caching mechanism as Script, there isn't probably much performance difference between changing the id of an image to do animation compared to doing the same within a widget.\n\nHowever, in Builder you have access to a full 2d Canvas API - including full affine transformations so you can do more in a widget with graphics, more easily. Also, the widget canvas you render to is completely sub-pixel based meaning you get a higher fidelity of display then you would get using graphics (as they currently are).\n\nIn terms of animation, one advantage of widgets is that the 'Timer' mechanism they currently have is entirely internal to the widget - you don't see any messages in the pending messages, and suspend and resume is automatically handled between Edit and Browse mode. This simplifies coding to a good degree as well as minimising any interaction with other scripts running and the internal operation of your widget (control).\n\nSo, if you have custom controls currently which are visualizations of some data, and don't require any user input beyond mouse interaction (or any at all) then they probably are really good candidates for turning into widgets.\n\nI know Trevor has had great success in improving the UIs in his applications by using widgets as they allow him to much more easily create easy to use controls which render precisely how you need - what might require 3 or 4 graphics and a couple of fields before now, can be done with a single control. The latter simplifies the script view of the object tree, as well as making things more efficient.\n\nSimilarly, once we have Infinite LiveCode, then a good example of something which would make more sense as a widget rather than a script custom control might be a 'battery status widget' - something which displays the current charge level of the battery. It will be easy enough to present two interfaces to the battery monitoring APIs (as espoused in a recent blog post) - one for script, and one for Builder. The Builder one will have the advantage that the subscription to the battery level updates will be entirely private to the widget - no messages anywhere outside which can get interfered with. This means that you could easily write one where you simply drag out the 'battery status' widget and it hooks itself up to the notifications internally, and 'just works'."
+      },
+      "after": "e79e021e0a824727",
+      "date": 1466512738742
+    },
+    {
+      "type": "edit",
+      "id": "c68266333b853893",
+      "item": {
+        "type": "paragraph",
+        "id": "c68266333b853893",
+        "text": "  1) Does the ability / robustness of using compound widgets - vs doing the\nsame with groups make it a here and now option to do compound layouts\nwithin widgets only?"
+      },
+      "date": 1466512760174
+    }
+  ]
+}

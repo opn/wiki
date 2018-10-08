@@ -1,0 +1,110 @@
+{
+  "title": "Livecode Nginx Hosting",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "79e61c14c36b7cc9",
+      "text": "Story made short : Appart the amazing Lua platform (preferably set as an Openresty one), well configured LC application’s servers still outperforms anything available around (Websphere, Tomcat, PHP5/7, Perl5, NodeJS, Go, Python, RoR,…) - [http://runtime-revolution.278305.n4.nabble.com/connecting-db-sqlserver-with-my-app-livecode-how-td4700842.html nabble.com] "
+    },
+    {
+      "type": "paragraph",
+      "id": "5d2151d5f3672aca",
+      "text": "In-between, LC application’s server is 60 times faster than the stock’s Livecode CGI Server. Using Nginx as the load balancer of the same LC app running on clustered front-end servers can make a very reliable scalable configuration : 1500 connections for each server added to the cluster. In taking care to scale the ACID-SQL backend cluster as attendee, the platform can handle very high-end solutions at a fraction of the cost of more known main stream proposals. \n\nWhat the story don’t tell is that the still mono-theaded LC engine don’t crashes nor slowdown against heavy loads where Java powered ones does (mostly because Java’s heap space shared memory unreliability and the cache misconfiguration surprises) and PHP too, because too many unreliable frameworks used in front of it (Symphony 2, etc…). \n"
+    },
+    {
+      "type": "paragraph",
+      "id": "8729124b4ecf6468",
+      "text": "Only related to the test config set-up using voluntarily a very minimalistic cluster of 3 low-powered boxes. Nginx does perfectly the load-balancer job (very low top average) but OpenLiteSpeed should have being a good proposal too in the same rôle (untested), where lighttpd or apache2 seemed less productive, at least, at first glance. \n> \n> What do you mean by \"LC application’s servers\"?  A socket server?   \n\nPrecisely. \n\n> Can you share some code? \n\nNot at this time. The final release will probably not rely on a PHP sockets proxy script anymore but on a direct FastCGI set-up with the advantage to provide a way to relaunch automatically the app’s sever instances in case of need; an ExternalAppClass directive will replace the PHP sockets proxy script in the new set-up. Each app node will rely on its own localhost web server instead of on the currents ones, for yet, running on the box witch hosts the Nginx proxy server. The ACID-SQL back-end cluster will, in a first time, runs only a PostgreSQL 9 instance and, if needed, (but i’m reserved on this point, as long as PostgreSQL should be able to handle 10 of thousands of connections at once without stress), a master instance dedicated to write operations and two slave nodes dedicated to read operations and master writes replications (one box peer PostgreSQL instance). To avoid unwanted side-effects, this configuration will not rely on UDP sockets « à la Oracle VLAN’s » at all to synchronize data flows in-between db nodes. \n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Livecode Nginx Hosting",
+        "story": []
+      },
+      "date": 1497943613690
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "79e61c14c36b7cc9"
+      },
+      "id": "79e61c14c36b7cc9",
+      "type": "add",
+      "date": 1497943614691
+    },
+    {
+      "type": "edit",
+      "id": "79e61c14c36b7cc9",
+      "item": {
+        "type": "paragraph",
+        "id": "79e61c14c36b7cc9",
+        "text": "Story made short : Appart the amazing Lua platform (preferably set as an Openresty one), well configured LC application’s servers still outperforms anything available around (Websphere, Tomcat, PHP5/7, Perl5, NodeJS, Go, Python, RoR,…). In-between, LC application’s server is 60 times faster than the stock’s Livecode CGI Server. Using Nginx as the load balancer of the same LC app running on clustered front-end servers can make a very reliable scalable configuration : 1500 connections for each server added to the cluster. In taking care to scale the ACID-SQL backend cluster as attendee, the platform can handle very high-end solutions at a fraction of the cost of more known main stream proposals. \n\nWhat the story don’t tell is that the still mono-theaded LC engine don’t crashes nor slowdown against heavy loads where Java powered ones does (mostly because Java’s heap space shared memory unreliability and the cache misconfiguration surprises) and PHP too, because too many unreliable frameworks used in front of it (Symphony 2, etc…). \n"
+      },
+      "date": 1497944225078
+    },
+    {
+      "type": "edit",
+      "id": "79e61c14c36b7cc9",
+      "item": {
+        "type": "paragraph",
+        "id": "79e61c14c36b7cc9",
+        "text": "Story made short : Appart the amazing Lua platform (preferably set as an Openresty one), well configured LC application’s servers still outperforms anything available around (Websphere, Tomcat, PHP5/7, Perl5, NodeJS, Go, Python, RoR,…). "
+      },
+      "date": 1497944248830
+    },
+    {
+      "type": "add",
+      "id": "5d2151d5f3672aca",
+      "item": {
+        "type": "paragraph",
+        "id": "5d2151d5f3672aca",
+        "text": "In-between, LC application’s server is 60 times faster than the stock’s Livecode CGI Server. Using Nginx as the load balancer of the same LC app running on clustered front-end servers can make a very reliable scalable configuration : 1500 connections for each server added to the cluster. In taking care to scale the ACID-SQL backend cluster as attendee, the platform can handle very high-end solutions at a fraction of the cost of more known main stream proposals. \n\nWhat the story don’t tell is that the still mono-theaded LC engine don’t crashes nor slowdown against heavy loads where Java powered ones does (mostly because Java’s heap space shared memory unreliability and the cache misconfiguration surprises) and PHP too, because too many unreliable frameworks used in front of it (Symphony 2, etc…). \n"
+      },
+      "after": "79e61c14c36b7cc9",
+      "date": 1497944250759
+    },
+    {
+      "type": "edit",
+      "id": "79e61c14c36b7cc9",
+      "item": {
+        "type": "paragraph",
+        "id": "79e61c14c36b7cc9",
+        "text": "Story made short : Appart the amazing Lua platform (preferably set as an Openresty one), well configured LC application’s servers still outperforms anything available around (Websphere, Tomcat, PHP5/7, Perl5, NodeJS, Go, Python, RoR,…) - [http://runtime-revolution.278305.n4.nabble.com/connecting-db-sqlserver-with-my-app-livecode-how-td4700842.html nabble.com] "
+      },
+      "date": 1497944266152
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8729124b4ecf6468"
+      },
+      "id": "8729124b4ecf6468",
+      "type": "add",
+      "after": "5d2151d5f3672aca",
+      "date": 1497944297615
+    },
+    {
+      "type": "edit",
+      "id": "8729124b4ecf6468",
+      "item": {
+        "type": "paragraph",
+        "id": "8729124b4ecf6468",
+        "text": "Only related to the test config set-up using voluntarily a very minimalistic cluster of 3 low-powered boxes. Nginx does perfectly the load-balancer job (very low top average) but OpenLiteSpeed should have being a good proposal too in the same rôle (untested), where lighttpd or apache2 seemed less productive, at least, at first glance. \n> \n> What do you mean by \"LC application’s servers\"?  A socket server?   \n\nPrecisely. \n\n> Can you share some code? \n\nNot at this time. The final release will probably not rely on a PHP sockets proxy script anymore but on a direct FastCGI set-up with the advantage to provide a way to relaunch automatically the app’s sever instances in case of need; an ExternalAppClass directive will replace the PHP sockets proxy script in the new set-up. Each app node will rely on its own localhost web server instead of on the currents ones, for yet, running on the box witch hosts the Nginx proxy server. The ACID-SQL back-end cluster will, in a first time, runs only a PostgreSQL 9 instance and, if needed, (but i’m reserved on this point, as long as PostgreSQL should be able to handle 10 of thousands of connections at once without stress), a master instance dedicated to write operations and two slave nodes dedicated to read operations and master writes replications (one box peer PostgreSQL instance). To avoid unwanted side-effects, this configuration will not rely on UDP sockets « à la Oracle VLAN’s » at all to synchronize data flows in-between db nodes. \n"
+      },
+      "date": 1497944303356
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1497944319702
+    },
+    {
+      "type": "fork",
+      "site": "admin.fedwiki.org",
+      "date": 1497944326971
+    }
+  ]
+}

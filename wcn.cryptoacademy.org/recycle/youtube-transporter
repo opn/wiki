@@ -1,0 +1,1266 @@
+{
+  "title": "Youtube Transporter",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "728921eae995ab44",
+      "text": "This [[Transporter]] allows you to import videos from [[Youtube]], complete with all their metadata. It also allows you to import playlists, channels, and all uploads from a user."
+    },
+    {
+      "type": "paragraph",
+      "id": "aa55c73a9ad4b99a",
+      "text": "Simply drag and drop a page url from [[Youtube]] onto the transporter:"
+    },
+    {
+      "type": "transport",
+      "id": "10ea2af363e51a5f",
+      "text": "POST https://livecode.world/youtube"
+    },
+    {
+      "type": "paragraph",
+      "id": "9c87c71c62825b8f",
+      "text": "The transporter above is limited for convenience to only a maximum of 10 videos imported at a time. "
+    },
+    {
+      "type": "paragraph",
+      "id": "b3b61ee5ff7857c1",
+      "text": "To create a [[Video Index Page]] of all the videos for a channel, user, or playlist, use the \"recentFirst\" version of the [[tranpsorter]] below:"
+    },
+    {
+      "type": "transport",
+      "id": "cb0754ba72e26390",
+      "text": "POST https://livecode.world/youtube/recentFirst"
+    },
+    {
+      "type": "paragraph",
+      "id": "62a48afe4f02773b",
+      "text": "If you want to list all the videos for a channel, user, or playlist, use the \"oldestFirst\" version of the [[transporter]] below:"
+    },
+    {
+      "type": "transport",
+      "id": "bf7405ed9533dbd3",
+      "text": "POST https://livecode.world/youtube/oldestFirst"
+    },
+    {
+      "type": "paragraph",
+      "id": "902128dd7307a555",
+      "text": "Warning: the \"fetchAll\" version of the [[transporter]] below can import hundreds of videos if your list is large:"
+    },
+    {
+      "type": "transport",
+      "id": "9e994ad77e1681f0",
+      "text": "POST https://livecode.world/youtube/fetchAll"
+    },
+    {
+      "type": "markdown",
+      "id": "9546dbda40035b5a",
+      "text": "# Work In Progress"
+    },
+    {
+      "type": "paragraph",
+      "id": "4d3fac567f0addbc",
+      "text": "The \"fetchThumb\" transporter creates a thumbnail image and link when a video url is dropped onto it. It should create a small video index such as those displayed on Youtube - but for that I need some more HTML and CSS skills. It is done is usch a way that it is easy to extend to create indexes with thumbanils for all types of list."
+    },
+    {
+      "type": "transport",
+      "id": "df94860bed064db4",
+      "text": "POST https://livecode.world/youtube/fetchThumb"
+    },
+    {
+      "type": "paragraph",
+      "id": "ad8998b5fcf4f905",
+      "text": "It is also possible to show an index as numbered or as below with bullets, and to choose which way it is sorted. belwo we show recent bullets first:"
+    },
+    {
+      "type": "transport",
+      "id": "dd272817c3c76800",
+      "text": "POST https://livecode.world/youtube/recentBullets"
+    },
+    {
+      "type": "paragraph",
+      "id": "8b3ea16736a35112",
+      "text": "This version creates a markdown list. The code is there to generate lists in markdown sorted in either direction."
+    },
+    {
+      "type": "transport",
+      "id": "ade68ca5493648c3",
+      "text": "POST https://livecode.world/youtube/recentMarkdown"
+    },
+    {
+      "type": "markdown",
+      "id": "d9f45aae0a436d21",
+      "text": "# Code"
+    },
+    {
+      "type": "markdown",
+      "id": "334c2012ca8b4ccb",
+      "text": "The code is based on:\n* Youtube V3 API - [https://developers.google.com/youtube/v3/docs/ developers.google.com]\n* Check API usage - [https://console.developers.google.com/apis/api/youtube/usage?project=youtube-tranporter&duration=P30D console.developers.google.com]"
+    },
+    {
+      "type": "factory",
+      "id": "d330205810afa8a1",
+      "prompt": "Unexpected Item\nWe can't make sense of the drop.\nTry something else or see [[About Factory Plugin]].",
+      "punt": {
+        "url": "https://www.youtube.com/playlist?list=PLPj3KCksGbSY-RaXfrGPnY8uEOl6uylky",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36"
+      }
+    },
+    {
+      "type": "markdown",
+      "id": "5a4d4c50029ad335",
+      "text": "# To Do"
+    },
+    {
+      "type": "markdown",
+      "id": "1e7deed8de779e92",
+      "text": "It should be enhanced to:\n- [ ] Use pretty thumbnails in the index.\n- [ ] Create index pages in a better way"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Youtube Transporter",
+        "story": [
+          {
+            "type": "paragraph",
+            "id": "728921eae995ab44",
+            "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] from the data displayed on [[CCC-TV]] site - [https://media.ccc.de/v/30C3_-_5278_-_en_-_saal_6_-_201312301300_-_the_philosophy_of_hacking_-_groente#video media.ccc.de]. "
+          },
+          {
+            "type": "paragraph",
+            "id": "aa55c73a9ad4b99a",
+            "text": "Simply drag and drop a video page url from this site onto the transporter:"
+          },
+          {
+            "type": "transport",
+            "id": "10ea2af363e51a5f",
+            "text": "POST https://livecode.world/mediawiki/importpage"
+          },
+          {
+            "type": "markdown",
+            "id": "9546dbda40035b5a",
+            "text": "# About"
+          },
+          {
+            "type": "paragraph",
+            "id": "f9842d5b2be9e775",
+            "text": "This plugin is an experimental web page scraper coded in [[LiveCode]]. The web service does the following things:"
+          },
+          {
+            "type": "markdown",
+            "id": "334c2012ca8b4ccb",
+            "text": "* Fetches the HTML of the video page\n* Runs this through html-[[tidy]] using [[shell()]] to create a valid [[xml]]/[[xhtml]] document\n* Painfully steps through the xhtml to find the relevant sections\n• Constructs the [[wiki page json]]"
+          },
+          {
+            "type": "markdown",
+            "id": "d9f45aae0a436d21",
+            "text": "# Code"
+          },
+          {
+            "type": "factory",
+            "id": "8869c0772777be8e"
+          },
+          {
+            "type": "markdown",
+            "id": "5a4d4c50029ad335",
+            "text": "# To Do"
+          },
+          {
+            "type": "markdown",
+            "id": "1e7deed8de779e92",
+            "text": "It should be enhanced to:\n* Use [[XPath]] rather than relying on the order of the [[xml]] sections\n* Spit out the Fedwiki, and helper code into libraries"
+          }
+        ]
+      },
+      "date": 1457895937960
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] from the data displayed on [[Youtube]]. "
+      },
+      "date": 1457895982710
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://livecode.world/youtube"
+      },
+      "date": 1457895990799
+    },
+    {
+      "type": "edit",
+      "id": "334c2012ca8b4ccb",
+      "item": {
+        "type": "markdown",
+        "id": "334c2012ca8b4ccb",
+        "text": "* Fetches JSON from the Youtube V3 API"
+      },
+      "date": 1457896031527
+    },
+    {
+      "type": "edit",
+      "id": "aa55c73a9ad4b99a",
+      "item": {
+        "type": "paragraph",
+        "id": "aa55c73a9ad4b99a",
+        "text": "Simply drag and drop a page url from [[Youtube]] onto the transporter:"
+      },
+      "date": 1457944590018
+    },
+    {
+      "type": "add",
+      "id": "9c87c71c62825b8f",
+      "item": {
+        "type": "paragraph",
+        "id": "9c87c71c62825b8f",
+        "text": "The transporter above is limited for convenience to only a maximum of 10 videos imported at a time. If you want to import all the videos for a channel, user, or playlist, use the \"fetchAll\" version of the [[tranporter]] below:"
+      },
+      "after": "aa55c73a9ad4b99a",
+      "date": 1457944687183
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transporter]] allows you to import videos from [[Youtube]], complete with all their metadata. It also allows you to import playlists, channels, and all uploads from a user.. "
+      },
+      "date": 1457944743559
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "9c87c71c62825b8f",
+      "date": 1457944754662
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9e994ad77e1681f0"
+      },
+      "id": "9e994ad77e1681f0",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457944759524
+    },
+    {
+      "type": "edit",
+      "id": "9e994ad77e1681f0",
+      "item": {
+        "type": "transport",
+        "id": "9e994ad77e1681f0",
+        "text": "POST https://livecode.world/youtube/fetchAll"
+      },
+      "date": 1457944767634
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "9e994ad77e1681f0",
+      "date": 1457944770173
+    },
+    {
+      "type": "edit",
+      "id": "9c87c71c62825b8f",
+      "item": {
+        "type": "paragraph",
+        "id": "9c87c71c62825b8f",
+        "text": "The transporter above is limited for convenience to only a maximum of 10 videos imported at a time. "
+      },
+      "date": 1457951307947
+    },
+    {
+      "item": {
+        "type": "transport",
+        "id": "cb0754ba72e26390",
+        "text": "POST https://livecode.world/youtube/listAll"
+      },
+      "id": "cb0754ba72e26390",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457951313446
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "cb0754ba72e26390",
+      "date": 1457951319934,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "add",
+      "id": "62a48afe4f02773b",
+      "item": {
+        "type": "paragraph",
+        "id": "62a48afe4f02773b",
+        "text": "If you want to import all the videos for a channel, user, or playlist, use the \"fetchAll\" version of the [[transporter]] below:"
+      },
+      "after": "9c87c71c62825b8f",
+      "date": 1457951328774
+    },
+    {
+      "type": "add",
+      "id": "b3b61ee5ff7857c1",
+      "item": {
+        "type": "paragraph",
+        "id": "b3b61ee5ff7857c1",
+        "text": "To create a [[Video Index Page]] of all the videos for a channel, user, or playlist, use the \"listAll\" version of the [[tranpsorter]] below:"
+      },
+      "after": "62a48afe4f02773b",
+      "date": 1457951370674
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "b3b61ee5ff7857c1",
+      "date": 1457951375163
+    },
+    {
+      "type": "edit",
+      "id": "62a48afe4f02773b",
+      "item": {
+        "type": "paragraph",
+        "id": "62a48afe4f02773b",
+        "text": "If you want to import all the videos for a channel, user, or playlist, use the \"fetchAll\" version of the [[transporter]] below:"
+      },
+      "date": 1457951384610
+    },
+    {
+      "type": "edit",
+      "id": "cb0754ba72e26390",
+      "item": {
+        "type": "transport",
+        "id": "cb0754ba72e26390",
+        "text": "POST https://livecode.world/youtube/listAll"
+      },
+      "date": 1457951395987
+    },
+    {
+      "type": "fork",
+      "date": 1457951401819
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "cb0754ba72e26390",
+      "date": 1457951442296
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8d846daef4ad2b1"
+      },
+      "id": "c8d846daef4ad2b1",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457953800519
+    },
+    {
+      "type": "edit",
+      "id": "c8d846daef4ad2b1",
+      "item": {
+        "type": "html",
+        "id": "c8d846daef4ad2b1",
+        "text": "<tr class=\"pl-video yt-uix-tile \" data-set-video-id=\"\" data-video-id=\"i7gTWHebfNk\" data-title=\"DN030: Speculators Sell On Anoncoin Delays, Unimpresesd By BitcoinDark 2.0?\"><td class=\"pl-video-handle \"></td><td class=\"pl-video-index\"></td><td class=\"pl-video-thumbnail\"><span class=\"pl-video-thumb ux-thumb-wrap contains-addto\"><a href=\"/watch?v=i7gTWHebfNk&amp;list=PLPj3KCksGbSZ1lqnjbdhxfP-iV70BGCtx&amp;index=1\" class=\"yt-uix-sessionlink\" aria-hidden=\"true\" data-sessionlink=\"ei=gpvmVsCJI4KVWpnAhIgO&amp;feature=plpp_video&amp;ved=CAwQxjQYACITCMDSlNOEwMsCFYKKFgodGSAB4Sj6LA\">  <span class=\"video-thumb  yt-thumb yt-thumb-72\">\n    <span class=\"yt-thumb-default\">\n      <span class=\"yt-thumb-clip\">\n        <img width=\"72\" src=\"//i.ytimg.com/vi_webp/i7gTWHebfNk/default.webp\" alt=\"\" aria-hidden=\"true\">\n        <span class=\"vertical-align\"></span>\n      </span>\n    </span>\n  </span>\n</a>  <span class=\"thumb-menu dark-overflow-action-menu video-actions\">\n    <button type=\"button\" aria-expanded=\"false\" class=\"yt-uix-button-reverse flip addto-watch-queue-menu spf-nolink hide-until-delayloaded yt-uix-button yt-uix-button-dark-overflow-action-menu yt-uix-button-size-default yt-uix-button-has-icon no-icon-markup yt-uix-button-empty\" onclick=\";return false;\" aria-haspopup=\"true\"><span class=\"yt-uix-button-arrow yt-sprite\"></span><ul class=\"watch-queue-thumb-menu yt-uix-button-menu yt-uix-button-menu-dark-overflow-action-menu hid\"><li role=\"menuitem\" class=\"overflow-menu-choice addto-watch-queue-menu-choice addto-watch-queue-play-next yt-uix-button-menu-item\" data-action=\"play-next\" onclick=\";return false;\" data-video-ids=\"i7gTWHebfNk\"><span class=\"addto-watch-queue-menu-text\">Play next</span></li><li role=\"menuitem\" class=\"overflow-menu-choice addto-watch-queue-menu-choice addto-watch-queue-play-now yt-uix-button-menu-item\" data-action=\"play-now\" onclick=\";return false;\" data-video-ids=\"i7gTWHebfNk\"><span class=\"addto-watch-queue-menu-text\">Play now</span></li></ul></button>\n  </span>\n\n\n  <button class=\"yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-button-empty yt-uix-button-has-icon no-icon-markup addto-button video-actions spf-nolink hide-until-delayloaded addto-watch-later-button yt-uix-tooltip\" type=\"button\" onclick=\";return false;\" role=\"button\" title=\"Watch Later\" data-video-ids=\"i7gTWHebfNk\" data-tooltip-text=\"Watch Later\" aria-labelledby=\"yt-uix-tooltip591-arialabel\"></button>\n  <button class=\"yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-button-empty yt-uix-button-has-icon no-icon-markup addto-button addto-queue-button video-actions spf-nolink hide-until-delayloaded addto-tv-queue-button yt-uix-tooltip\" type=\"button\" onclick=\";return false;\" title=\"Queue\" data-style=\"tv-queue\" data-video-ids=\"i7gTWHebfNk\"></button>\n</span></td>  <td class=\"pl-video-title\">\n    <a class=\"pl-video-title-link yt-uix-tile-link yt-uix-sessionlink  spf-link \" dir=\"ltr\" href=\"/watch?v=i7gTWHebfNk&amp;list=PLPj3KCksGbSZ1lqnjbdhxfP-iV70BGCtx&amp;index=1\" data-sessionlink=\"ei=gpvmVsCJI4KVWpnAhIgO&amp;feature=plpp_video&amp;ved=CAwQxjQYACITCMDSlNOEwMsCFYKKFgodGSAB4Sj6LA\">\n      DN030: Speculators Sell On Anoncoin Delays, Unimpresesd By BitcoinDark 2.0?\n    </a>\n      <div class=\"pl-video-owner\">\nby <a href=\"/user/WorldCryptoNetwork\" class=\"yt-uix-sessionlink g-hovercard      spf-link \" data-ytid=\"UCR9gdpWisRwnk_k23GsHfcA\" data-sessionlink=\"ei=gpvmVsCJI4KVWpnAhIgO&amp;feature=playlist&amp;ved=CAwQxjQYACITCMDSlNOEwMsCFYKKFgodGSAB4Sj6LA\" data-name=\"playlist\">World Crypto Network</a>\n      </div>\n      <div class=\"pl-video-bottom-standalone-badge\">\n        \n      </div>\n</td><td class=\"pl-video-badges\"></td><td class=\"pl-video-added-by\"></td><td class=\"pl-video-time\"><div class=\"more-menu-wrapper\">  <div class=\"timestamp\"><span aria-label=\"11 minutes\">11:24</span></div>\n<div class=\"pl-video-edit-options\"></div></div></td></tr>"
+      },
+      "date": 1457953804047
+    },
+    {
+      "type": "edit",
+      "id": "cb0754ba72e26390",
+      "item": {
+        "type": "transport",
+        "id": "cb0754ba72e26390",
+        "text": "POST https://livecode.world/youtube/recentFirst"
+      },
+      "date": 1457955207024
+    },
+    {
+      "type": "remove",
+      "id": "8869c0772777be8e",
+      "date": 1457955374629
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bf7405ed9533dbd3"
+      },
+      "id": "bf7405ed9533dbd3",
+      "type": "add",
+      "after": "c8d846daef4ad2b1",
+      "date": 1457955381901
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "c8d846daef4ad2b1"
+      ],
+      "id": "bf7405ed9533dbd3",
+      "date": 1457955383533
+    },
+    {
+      "type": "edit",
+      "id": "c8d846daef4ad2b1",
+      "item": {
+        "type": "html",
+        "id": "c8d846daef4ad2b1",
+        "text": "    <span class=\"yt-thumb-default\">\n      <span class=\"yt-thumb-clip\">\n        <img width=\"72\" src=\"//i.ytimg.com/vi_webp/i7gTWHebfNk/default.webp\" alt=\"\" aria-hidden=\"true\">\n        <span class=\"vertical-align\"></span>\n      </span>\n    </span>\n  </span>\n</a>  <span class=\"thumb-menu dark-overflow-action-menu video-actions\">\n    <button type=\"button\" aria-expanded=\"false\" class=\"yt-uix-button-reverse flip addto-watch-queue-menu spf-nolink hide-until-delayloaded yt-uix-button yt-uix-button-dark-overflow-action-menu yt-uix-button-size-default yt-uix-button-has-icon no-icon-markup yt-uix-button-empty\" onclick=\";return false;\" aria-haspopup=\"true\"><span class=\"yt-uix-button-arrow yt-sprite\"></span><ul class=\"watch-queue-thumb-menu yt-uix-button-menu yt-uix-button-menu-dark-overflow-action-menu hid\"><li role=\"menuitem\" class=\"overflow-menu-choice addto-watch-queue-menu-choice addto-watch-queue-play-next yt-uix-button-menu-item\" data-action=\"play-next\" onclick=\";return false;\" data-video-ids=\"i7gTWHebfNk\"><span class=\"addto-watch-queue-menu-text\">Play next</span></li><li role=\"menuitem\" class=\"overflow-menu-choice addto-watch-queue-menu-choice addto-watch-queue-play-now yt-uix-button-menu-item\" data-action=\"play-now\" onclick=\";return false;\" data-video-ids=\"i7gTWHebfNk\"><span class=\"addto-watch-queue-menu-text\">Play now</span></li></ul></button>\n  </span>\n\n\n  <button class=\"yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-button-empty yt-uix-button-has-icon no-icon-markup addto-button video-actions spf-nolink hide-until-delayloaded addto-watch-later-button yt-uix-tooltip\" type=\"button\" onclick=\";return false;\" role=\"button\" title=\"Watch Later\" data-video-ids=\"i7gTWHebfNk\" data-tooltip-text=\"Watch Later\" aria-labelledby=\"yt-uix-tooltip591-arialabel\"></button>\n  <button class=\"yt-uix-button yt-uix-button-size-small yt-uix-button-default yt-uix-button-empty yt-uix-button-has-icon no-icon-markup addto-button addto-queue-button video-actions spf-nolink hide-until-delayloaded addto-tv-queue-button yt-uix-tooltip\" type=\"button\" onclick=\";return false;\" title=\"Queue\" data-style=\"tv-queue\" data-video-ids=\"i7gTWHebfNk\"></button>\n</span></td>  <td class=\"pl-video-title\">\n    <a class=\"pl-video-title-link yt-uix-tile-link yt-uix-sessionlink  spf-link \" dir=\"ltr\" href=\"/watch?v=i7gTWHebfNk&amp;list=PLPj3KCksGbSZ1lqnjbdhxfP-iV70BGCtx&amp;index=1\" data-sessionlink=\"ei=gpvmVsCJI4KVWpnAhIgO&amp;feature=plpp_video&amp;ved=CAwQxjQYACITCMDSlNOEwMsCFYKKFgodGSAB4Sj6LA\">\n      DN030: Speculators Sell On Anoncoin Delays, Unimpresesd By BitcoinDark 2.0?\n    </a>\n      <div class=\"pl-video-owner\">\nby <a href=\"/user/WorldCryptoNetwork\" class=\"yt-uix-sessionlink g-hovercard      spf-link \" data-ytid=\"UCR9gdpWisRwnk_k23GsHfcA\" data-sessionlink=\"ei=gpvmVsCJI4KVWpnAhIgO&amp;feature=playlist&amp;ved=CAwQxjQYACITCMDSlNOEwMsCFYKKFgodGSAB4Sj6LA\" data-name=\"playlist\">World Crypto Network</a>\n      </div>\n      <div class=\"pl-video-bottom-standalone-badge\">\n        \n      </div>\n</td><td class=\"pl-video-badges\"></td><td class=\"pl-video-added-by\"></td><td class=\"pl-video-time\"><div class=\"more-menu-wrapper\">  <div class=\"timestamp\"><span aria-label=\"11 minutes\">11:24</span></div>\n<div class=\"pl-video-edit-options\"></div></div></td></tr>"
+      },
+      "date": 1457955392793
+    },
+    {
+      "type": "remove",
+      "id": "c8d846daef4ad2b1",
+      "date": 1457955397269
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Use pretty thumbnails in the index.\n* Create index pages in a better way"
+      },
+      "date": 1457955439239
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dd272817c3c76800"
+      },
+      "id": "dd272817c3c76800",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457955442195
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "dd272817c3c76800",
+      "date": 1457955446748
+    },
+    {
+      "type": "edit",
+      "id": "dd272817c3c76800",
+      "item": {
+        "type": "transport",
+        "id": "dd272817c3c76800",
+        "text": "POST https://livecode.world/youtube/bulletsFirst"
+      },
+      "date": 1457955465314
+    },
+    {
+      "type": "edit",
+      "id": "dd272817c3c76800",
+      "item": {
+        "type": "transport",
+        "id": "dd272817c3c76800",
+        "text": "POST https://livecode.world/youtube/recentBullets"
+      },
+      "date": 1457955508267
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ade68ca5493648c3"
+      },
+      "id": "ade68ca5493648c3",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457956045066
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "ade68ca5493648c3",
+      "date": 1457956050288
+    },
+    {
+      "type": "edit",
+      "id": "ade68ca5493648c3",
+      "item": {
+        "type": "transport",
+        "id": "ade68ca5493648c3",
+        "text": "POST https://livecode.world/youtube/recentMarkdown"
+      },
+      "date": 1457956066144
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "9546dbda40035b5a",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "9546dbda40035b5a",
+      "date": 1457958489250
+    },
+    {
+      "type": "remove",
+      "id": "f9842d5b2be9e775",
+      "date": 1457958500815
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9bbcc75b582ad5eb"
+      },
+      "id": "9bbcc75b582ad5eb",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457958506519
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "9bbcc75b582ad5eb",
+        "9546dbda40035b5a",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "9bbcc75b582ad5eb",
+      "date": 1457958511176
+    },
+    {
+      "type": "remove",
+      "id": "9bbcc75b582ad5eb",
+      "date": 1457958518848
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "df94860bed064db4"
+      },
+      "id": "df94860bed064db4",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457958520933
+    },
+    {
+      "type": "edit",
+      "id": "df94860bed064db4",
+      "item": {
+        "type": "transport",
+        "id": "df94860bed064db4",
+        "text": "POST https://livecode.world/youtube/thumbNails"
+      },
+      "date": 1457958530715
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "df94860bed064db4",
+        "9546dbda40035b5a",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "df94860bed064db4",
+      "date": 1457958537792
+    },
+    {
+      "type": "edit",
+      "id": "df94860bed064db4",
+      "item": {
+        "type": "transport",
+        "id": "df94860bed064db4",
+        "text": "POST https://livecode.world/youtube/fetchThumb"
+      },
+      "date": 1457958550946
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "9546dbda40035b5a",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "334c2012ca8b4ccb",
+        "df94860bed064db4",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "df94860bed064db4",
+      "date": 1457961489466
+    },
+    {
+      "type": "edit",
+      "id": "9546dbda40035b5a",
+      "item": {
+        "type": "markdown",
+        "id": "9546dbda40035b5a",
+        "text": "# Work In Progress"
+      },
+      "date": 1457961525129
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "334c2012ca8b4ccb",
+        "9546dbda40035b5a",
+        "df94860bed064db4",
+        "d9f45aae0a436d21",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "9546dbda40035b5a",
+      "date": 1457961536787
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "ade68ca5493648c3",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "df94860bed064db4",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "334c2012ca8b4ccb",
+      "date": 1457961589278
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "df94860bed064db4",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "ade68ca5493648c3",
+      "date": 1457961603137
+    },
+    {
+      "type": "add",
+      "id": "4d3fac567f0addbc",
+      "item": {
+        "type": "paragraph",
+        "id": "4d3fac567f0addbc",
+        "text": "The \"fetchThumb\" transporter creates a thumbnail image and link when a video url is dropped onto it. It should create a small video index such as those displayed on Youtube - but for that I need some more HTML and CSS skills. It is done is usch a way that it is easy to extend to create indexes with thumbanils for all types of list."
+      },
+      "after": "62a48afe4f02773b",
+      "date": 1457961710959
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "4d3fac567f0addbc",
+      "date": 1457961716679
+    },
+    {
+      "type": "add",
+      "id": "8b3ea16736a35112",
+      "item": {
+        "type": "paragraph",
+        "id": "8b3ea16736a35112",
+        "text": "This version creates a markdown list. The code is there to generate lists in markdown sorted in either direction."
+      },
+      "after": "4d3fac567f0addbc",
+      "date": 1457961768496
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "dd272817c3c76800",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "8b3ea16736a35112",
+      "date": 1457961770866
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "dd272817c3c76800",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "dd272817c3c76800",
+      "date": 1457961781976
+    },
+    {
+      "type": "add",
+      "id": "ad8998b5fcf4f905",
+      "item": {
+        "type": "paragraph",
+        "id": "ad8998b5fcf4f905",
+        "text": "It is also possible to show an index as numbered or as below with bullets, and to choose which way it is sorted. belwo we show recent bullets first:"
+      },
+      "after": "4d3fac567f0addbc",
+      "date": 1457961830955
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "ad8998b5fcf4f905",
+        "dd272817c3c76800",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "ad8998b5fcf4f905",
+      "date": 1457961833336
+    },
+    {
+      "type": "edit",
+      "id": "b3b61ee5ff7857c1",
+      "item": {
+        "type": "paragraph",
+        "id": "b3b61ee5ff7857c1",
+        "text": "To create a [[Video Index Page]] of all the videos for a channel, user, or playlist, use the \"recentFirst\" version of the [[tranpsorter]] below:"
+      },
+      "date": 1457961869524
+    },
+    {
+      "type": "fork",
+      "site": "plugin.fedwiki.org"
+    },
+    {
+      "type": "edit",
+      "id": "bf7405ed9533dbd3",
+      "item": {
+        "type": "transport",
+        "id": "bf7405ed9533dbd3",
+        "text": "POST https://livecode.world/youtube/recentBullets"
+      },
+      "date": 1457962174035
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d330205810afa8a1"
+      },
+      "id": "d330205810afa8a1",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1457962198723
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "ad8998b5fcf4f905",
+        "dd272817c3c76800",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "bf7405ed9533dbd3",
+        "d330205810afa8a1",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "d330205810afa8a1",
+      "date": 1457962200436
+    },
+    {
+      "type": "edit",
+      "id": "bf7405ed9533dbd3",
+      "item": {
+        "type": "transport",
+        "id": "bf7405ed9533dbd3",
+        "text": "POST https://livecode.world/youtube/oldestFirst"
+      },
+      "date": 1457962208963
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "bf7405ed9533dbd3",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "ad8998b5fcf4f905",
+        "dd272817c3c76800",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "d330205810afa8a1",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "bf7405ed9533dbd3",
+      "date": 1457962222335
+    },
+    {
+      "type": "add",
+      "id": "902128dd7307a555",
+      "item": {
+        "type": "paragraph",
+        "id": "902128dd7307a555",
+        "text": "Warning: the \"fetchAll\" version of the [[transporter]] below can import hundreds of videos if your list is large:"
+      },
+      "after": "62a48afe4f02773b",
+      "date": 1457962269149
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "bf7405ed9533dbd3",
+        "902128dd7307a555",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "ad8998b5fcf4f905",
+        "dd272817c3c76800",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "d330205810afa8a1",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "902128dd7307a555",
+      "date": 1457962272849
+    },
+    {
+      "type": "edit",
+      "id": "62a48afe4f02773b",
+      "item": {
+        "type": "paragraph",
+        "id": "62a48afe4f02773b",
+        "text": "If you want to list all the videos for a channel, user, or playlist, use the \"oldestFirst\" version of the [[transporter]] below:"
+      },
+      "date": 1457962287188
+    },
+    {
+      "type": "fork",
+      "site": "wcn.cryptoacademy.org",
+      "date": 1457962335193
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://livecode.world/youtube"
+      },
+      "id": "10ea2af363e51a5f",
+      "date": 1457962378902
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "9c87c71c62825b8f",
+        "b3b61ee5ff7857c1",
+        "cb0754ba72e26390",
+        "62a48afe4f02773b",
+        "bf7405ed9533dbd3",
+        "902128dd7307a555",
+        "9e994ad77e1681f0",
+        "9546dbda40035b5a",
+        "4d3fac567f0addbc",
+        "df94860bed064db4",
+        "ad8998b5fcf4f905",
+        "dd272817c3c76800",
+        "8b3ea16736a35112",
+        "ade68ca5493648c3",
+        "d9f45aae0a436d21",
+        "334c2012ca8b4ccb",
+        "d330205810afa8a1",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "728921eae995ab44",
+      "date": 1457962380954
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "aa55c73a9ad4b99a",
+        "text": "Simply drag and drop a page url from [[Youtube]] onto the transporter:"
+      },
+      "after": "728921eae995ab44",
+      "id": "aa55c73a9ad4b99a",
+      "date": 1457962387062
+    },
+    {
+      "type": "fork",
+      "site": "plugin.fedwiki.org",
+      "date": 1457962460037
+    },
+    {
+      "type": "edit",
+      "id": "d330205810afa8a1",
+      "item": {
+        "type": "factory",
+        "id": "d330205810afa8a1",
+        "prompt": "Unexpected Item\nWe can't make sense of the drop.\nTry something else or see [[About Factory Plugin]].",
+        "punt": {
+          "url": "https://www.youtube.com/playlist?list=PLPj3KCksGbSY-RaXfrGPnY8uEOl6uylky",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36"
+        }
+      },
+      "date": 1457962537936
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transporter]] allows you to import videos from [[Youtube]], complete with all their metadata. It also allows you to import playlists, channels, and all uploads from a user."
+      },
+      "date": 1458424580707
+    },
+    {
+      "type": "edit",
+      "id": "334c2012ca8b4ccb",
+      "item": {
+        "type": "markdown",
+        "id": "334c2012ca8b4ccb",
+        "text": "* Fetches JSON from the Youtube V3 API - [https://developers.google.com/youtube/v3/docs/ developers.google.com]"
+      },
+      "date": 1458424599386
+    },
+    {
+      "type": "edit",
+      "id": "334c2012ca8b4ccb",
+      "item": {
+        "type": "markdown",
+        "id": "334c2012ca8b4ccb",
+        "text": "* Fetches JSON from the Youtube V3 API - [https://developers.google.com/youtube/v3/docs/ developers.google.com]\n* Check API usage - [https://console.developers.google.com/apis/api/youtube/usage?project=youtube-tranporter&duration=P30D console.developers.google.com]"
+      },
+      "date": 1458424662613
+    },
+    {
+      "type": "edit",
+      "id": "334c2012ca8b4ccb",
+      "item": {
+        "type": "markdown",
+        "id": "334c2012ca8b4ccb",
+        "text": "* Youtube V3 API - [https://developers.google.com/youtube/v3/docs/ developers.google.com]\n* Check API usage - [https://console.developers.google.com/apis/api/youtube/usage?project=youtube-tranporter&duration=P30D console.developers.google.com]"
+      },
+      "date": 1458424671749
+    },
+    {
+      "type": "edit",
+      "id": "334c2012ca8b4ccb",
+      "item": {
+        "type": "markdown",
+        "id": "334c2012ca8b4ccb",
+        "text": "The code is based on:\n* Youtube V3 API - [https://developers.google.com/youtube/v3/docs/ developers.google.com]\n* Check API usage - [https://console.developers.google.com/apis/api/youtube/usage?project=youtube-tranporter&duration=P30D console.developers.google.com]"
+      },
+      "date": 1458424684566
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n- [ ] Use pretty thumbnails in the index.\n- [ ] Create index pages in a better way"
+      },
+      "date": 1458424706711
+    }
+  ]
+}

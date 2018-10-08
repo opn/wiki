@@ -1,0 +1,1409 @@
+{
+  "title": "Federation Graph Representation",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "71083aa01486068e",
+      "text": "Here we look in more detail at how [[graphs in wiki]] can be specified. We look to define a markup, or [[domain specific language]] for authors wishing to create maps or network graphs."
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\n\nMuch of this content comes from [https://github.com/bobbyno @bobbyno] from an early discussion of [[Knowledge Representation]]  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+    },
+    {
+      "type": "markdown",
+      "id": "120620f1fe6e1a53",
+      "text": "See:\n* [[Graphs of Wiki]]\n* [[Graphs in Wiki]]\n* [[Authoring Graphs in Wiki]]"
+    },
+    {
+      "type": "markdown",
+      "id": "c7fa7610e3f6952e",
+      "text": "# An example would be handy right about now...\n\nThe [[SVG]] of the 64 vertex multi-service centre [[pattern language]] can be transformed into a [[TGF]] representation that yEd understands."
+    },
+    {
+      "type": "paragraph",
+      "id": "93cd6a1c2001296b",
+      "text": "[[Trivial Graph Format]] (TGF) is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:"
+    },
+    {
+      "type": "markdown",
+      "id": "df6acf21f381693d",
+      "text": "* [[Hierarchical Layout]]\n* [[Organic Layout]]\n* [[Circular Layout]]\n* [[Clustered Layout]]"
+    },
+    {
+      "type": "markdown",
+      "id": "99af29ba4a697a08",
+      "text": "# Extending TGF with Properties...PGF?"
+    },
+    {
+      "type": "paragraph",
+      "id": "03ee82c0b54a8a3e",
+      "text": "Adding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format."
+    },
+    {
+      "type": "paragraph",
+      "id": "56a15b81685ace17",
+      "text": "Extending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:"
+    },
+    {
+      "type": "code",
+      "id": "aa3f6fbceda56ec7",
+      "text": "1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n..."
+    },
+    {
+      "type": "paragraph",
+      "id": "13749cbe2f5580b8",
+      "text": "I think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:"
+    },
+    {
+      "type": "code",
+      "id": "fd7eeda3c05221ec",
+      "text": "Door has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed."
+    },
+    {
+      "type": "paragraph",
+      "id": "e732f72f86706541",
+      "text": "This description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?"
+    },
+    {
+      "type": "code",
+      "id": "eeb68d69e922e86b",
+      "text": "0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\""
+    },
+    {
+      "type": "paragraph",
+      "id": "020f64c6c02a3a71",
+      "text": "Translating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL."
+    },
+    {
+      "type": "paragraph",
+      "id": "566daf300bb530de",
+      "text": "For a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard"
+    },
+    {
+      "type": "paragraph",
+      "id": "0292b6c8f84cf05c",
+      "text": "PGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js."
+    },
+    {
+      "type": "markdown",
+      "id": "61769de2c7292022",
+      "text": "# Visual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly."
+    },
+    {
+      "type": "paragraph",
+      "id": "ee1a28f93c6f991c",
+      "text": "This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. For an example of a drag-and-drop interface for vertex and edge creation see [http://visjs.org/examples/network/other/manipulation.html visjs.org] "
+    },
+    {
+      "type": "paragraph",
+      "id": "8faffba28782a166",
+      "text": "Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented."
+    },
+    {
+      "type": "markdown",
+      "id": "fa6c9983dfe2b6b0",
+      "text": "# What problems are we trying to solve?"
+    },
+    {
+      "type": "markdown",
+      "id": "78e0284fb4790ce3",
+      "text": "Here are a few options that come to mind of computationally difficult but useful tasks for which network analytics provide new information that can help drive a decision:\n\n* Automatic community detection \"A map (or graph) could aid the visualization in various groupings of patterns. An example of this is below.\n* Topic recommendation via link prediction.\n* Link Analysis, i.e. find paths between two vertices, if any exist."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Federation Graph Representation",
+        "story": []
+      },
+      "date": 1446999444615
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fa6c9983dfe2b6b0"
+      },
+      "id": "fa6c9983dfe2b6b0",
+      "type": "add",
+      "date": 1446999445908
+    },
+    {
+      "type": "edit",
+      "id": "fa6c9983dfe2b6b0",
+      "item": {
+        "type": "paragraph",
+        "id": "fa6c9983dfe2b6b0",
+        "text": "What problems are we trying to solve with a graph representation?\n\nHere are a few options that come to mind of computationally difficult but useful tasks for which network analytics provide new information that can help drive a decision:\n\n• Automatic community detection \"A map (or graph) could aid the visualization in various groupings of patterns. An example of this is below.\n• Topic recommendation via link prediction.\n• Link Analysis, i.e. find paths between two vertices, if any exist.\n\nGraphs of Wiki\n\nVisualizing fedwiki as a network. The Linkmap plugin \"will ask the server to create a map of all its pages and the links between them\".\n\nI think this is an interesting topic, but this wasn't the primary focus of the conversation I had with @coevolving that started this thread.\n\nGraphs in Wiki\n\nDefining a network in wiki markup.\n\nAs a concrete example, @coevolving created a visualization of an influence network of C.A.'s A Pattern Language Which Generates Multi-Service Centers as SVG. Of course, SVG does not separate presentation and content: Let's explore representing this network in a manner that does.\n\nFirst, let's describe this network as a unimodal directed graph in one dimension. What does that mean and why do we care? Knowing that the network is unimodal and that edges have uniform meaning is important for many network analytics such as community detection and centrality algorithms.\n\nVertices: All vertices represent a pattern in the language. Since all the vertices are the same, this is formally known as a unimodal network.\n\nEdges: An edge between two vertices is directed and represents influence: \n\"Small Target Areas\" --influences--> \"Location\"\nAlternately, we could reverse the direction of the edges and preserve meaning: \n\"Location\" --influenced-by--> \"Small Target Areas\"\nSince only one type of edge is present, edge-labels can be inferred from the context so long as we are consistent with edge direction.\n\n\"An example would be handy right about now...\"\n\nThe SVG of the 64 vertex multi-service center pattern language can be transformed into a TGF representation that yEd understands.\n\nTGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\nHierarchical Layout, similar to the original SVG\n\nOrganic Layout\n\nCircular Layout, ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\nVisual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented.\n\nWhat do you think of this approach to \"Graphs in Wiki\"? Is a markup like the proposed PGF worth pursuing?\n\nShould we be solving for \"Graphs of Wiki\" first?\n\nSomething altogether different?"
+      },
+      "date": 1446999450843
+    },
+    {
+      "type": "edit",
+      "id": "fa6c9983dfe2b6b0",
+      "item": {
+        "type": "paragraph",
+        "id": "fa6c9983dfe2b6b0",
+        "text": "# What problems are we trying to solve?"
+      },
+      "date": 1446999488551
+    },
+    {
+      "type": "edit",
+      "id": "fa6c9983dfe2b6b0",
+      "item": {
+        "type": "markdown",
+        "id": "fa6c9983dfe2b6b0",
+        "text": "# What problems are we trying to solve?"
+      },
+      "date": 1446999489695
+    },
+    {
+      "type": "add",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "paragraph",
+        "id": "120620f1fe6e1a53",
+        "text": "# Graphs of Wiki"
+      },
+      "after": "78e0284fb4790ce3",
+      "date": 1446999507919
+    },
+    {
+      "type": "add",
+      "id": "78e0284fb4790ce3",
+      "item": {
+        "type": "paragraph",
+        "id": "78e0284fb4790ce3",
+        "text": "Here are a few options that come to mind of computationally difficult but useful tasks for which network analytics provide new information that can help drive a decision:\n\n• Automatic community detection \"A map (or graph) could aid the visualization in various groupings of patterns. An example of this is below.\n• Topic recommendation via link prediction.\n• Link Analysis, i.e. find paths between two vertices, if any exist."
+      },
+      "after": "fa6c9983dfe2b6b0",
+      "date": 1446999501871
+    },
+    {
+      "type": "add",
+      "id": "a10b342845acc0d6",
+      "item": {
+        "type": "paragraph",
+        "id": "a10b342845acc0d6",
+        "text": "Visualizing fedwiki as a network. The Linkmap plugin \"will ask the server to create a map of all its pages and the links between them\".\n\nI think this is an interesting topic, but this wasn't the primary focus of the conversation I had with @coevolving that started this thread.\n\nGraphs in Wiki\n\nDefining a network in wiki markup.\n\nAs a concrete example, @coevolving created a visualization of an influence network of C.A.'s A Pattern Language Which Generates Multi-Service Centers as SVG. Of course, SVG does not separate presentation and content: Let's explore representing this network in a manner that does.\n\nFirst, let's describe this network as a unimodal directed graph in one dimension. What does that mean and why do we care? Knowing that the network is unimodal and that edges have uniform meaning is important for many network analytics such as community detection and centrality algorithms.\n\nVertices: All vertices represent a pattern in the language. Since all the vertices are the same, this is formally known as a unimodal network.\n\nEdges: An edge between two vertices is directed and represents influence: \n\"Small Target Areas\" --influences--> \"Location\"\nAlternately, we could reverse the direction of the edges and preserve meaning: \n\"Location\" --influenced-by--> \"Small Target Areas\"\nSince only one type of edge is present, edge-labels can be inferred from the context so long as we are consistent with edge direction.\n\n\"An example would be handy right about now...\"\n\nThe SVG of the 64 vertex multi-service center pattern language can be transformed into a TGF representation that yEd understands.\n\nTGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\nHierarchical Layout, similar to the original SVG\n\nOrganic Layout\n\nCircular Layout, ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\nVisual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented.\n\nWhat do you think of this approach to \"Graphs in Wiki\"? Is a markup like the proposed PGF worth pursuing?\n\nShould we be solving for \"Graphs of Wiki\" first?\n\nSomething altogether different?"
+      },
+      "after": "120620f1fe6e1a53",
+      "date": 1446999510348
+    },
+    {
+      "type": "edit",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "markdown",
+        "id": "120620f1fe6e1a53",
+        "text": "# Graphs of Wiki"
+      },
+      "date": 1446999511572
+    },
+    {
+      "type": "edit",
+      "id": "78e0284fb4790ce3",
+      "item": {
+        "type": "markdown",
+        "id": "78e0284fb4790ce3",
+        "text": "Here are a few options that come to mind of computationally difficult but useful tasks for which network analytics provide new information that can help drive a decision:\n\n• Automatic community detection \"A map (or graph) could aid the visualization in various groupings of patterns. An example of this is below.\n• Topic recommendation via link prediction.\n• Link Analysis, i.e. find paths between two vertices, if any exist."
+      },
+      "date": 1446999512923
+    },
+    {
+      "type": "edit",
+      "id": "78e0284fb4790ce3",
+      "item": {
+        "type": "markdown",
+        "id": "78e0284fb4790ce3",
+        "text": "Here are a few options that come to mind of computationally difficult but useful tasks for which network analytics provide new information that can help drive a decision:\n\n* Automatic community detection \"A map (or graph) could aid the visualization in various groupings of patterns. An example of this is below.\n* Topic recommendation via link prediction.\n* Link Analysis, i.e. find paths between two vertices, if any exist."
+      },
+      "date": 1446999527888
+    },
+    {
+      "type": "edit",
+      "id": "a10b342845acc0d6",
+      "item": {
+        "type": "paragraph",
+        "id": "a10b342845acc0d6",
+        "text": "Visualizing fedwiki as a network. The Linkmap plugin \"will ask the server to create a map of all its pages and the links between them\".\n\nI think this is an interesting topic, but this wasn't the primary focus of the conversation I had with @coevolving that started this thread.\n\n"
+      },
+      "date": 1447002467161
+    },
+    {
+      "type": "add",
+      "id": "59d14fa50f4ff84a",
+      "item": {
+        "type": "paragraph",
+        "id": "59d14fa50f4ff84a",
+        "text": "# Graphs in Wiki"
+      },
+      "after": "a10b342845acc0d6",
+      "date": 1447002468928
+    },
+    {
+      "type": "edit",
+      "id": "59d14fa50f4ff84a",
+      "item": {
+        "type": "markdown",
+        "id": "59d14fa50f4ff84a",
+        "text": "# Graphs in Wiki"
+      },
+      "date": 1447002470260
+    },
+    {
+      "type": "add",
+      "id": "8037678e27d42bdb",
+      "item": {
+        "type": "paragraph",
+        "id": "8037678e27d42bdb",
+        "text": "\nDefining a network in wiki markup.\n\nAs a concrete example, @coevolving created a visualization of an influence network of C.A.'s A Pattern Language Which Generates Multi-Service Centers as SVG. Of course, SVG does not separate presentation and content: Let's explore representing this network in a manner that does.\n\nFirst, let's describe this network as a unimodal directed graph in one dimension. What does that mean and why do we care? Knowing that the network is unimodal and that edges have uniform meaning is important for many network analytics such as community detection and centrality algorithms.\n\nVertices: All vertices represent a pattern in the language. Since all the vertices are the same, this is formally known as a unimodal network.\n\nEdges: An edge between two vertices is directed and represents influence: \n\"Small Target Areas\" --influences--> \"Location\"\nAlternately, we could reverse the direction of the edges and preserve meaning: \n\"Location\" --influenced-by--> \"Small Target Areas\"\nSince only one type of edge is present, edge-labels can be inferred from the context so long as we are consistent with edge direction.\n\n\"An example would be handy right about now...\"\n\nThe SVG of the 64 vertex multi-service center pattern language can be transformed into a TGF representation that yEd understands.\n\nTGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\nHierarchical Layout, similar to the original SVG\n\nOrganic Layout\n\nCircular Layout, ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\nVisual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented.\n\nWhat do you think of this approach to \"Graphs in Wiki\"? Is a markup like the proposed PGF worth pursuing?\n\nShould we be solving for \"Graphs of Wiki\" first?\n\nSomething altogether different?"
+      },
+      "after": "59d14fa50f4ff84a",
+      "date": 1447002472254
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "72466301fb5d7177"
+      },
+      "id": "72466301fb5d7177",
+      "type": "add",
+      "after": "78e0284fb4790ce3",
+      "date": 1455626398359
+    },
+    {
+      "type": "edit",
+      "id": "72466301fb5d7177",
+      "item": {
+        "type": "reference",
+        "id": "72466301fb5d7177",
+        "site": "future.fedwiki.org",
+        "slug": "hand-drawn-graphs",
+        "title": "Hand Drawn Graphs",
+        "text": "Here we examine the utility of hand drawn graphs in concept and wiki navigation and comprehension."
+      },
+      "date": 1455626400076
+    },
+    {
+      "type": "move",
+      "order": [
+        "120620f1fe6e1a53",
+        "a10b342845acc0d6",
+        "72466301fb5d7177",
+        "59d14fa50f4ff84a",
+        "8037678e27d42bdb",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "72466301fb5d7177",
+      "date": 1455626413809
+    },
+    {
+      "type": "edit",
+      "id": "8037678e27d42bdb",
+      "item": {
+        "type": "paragraph",
+        "id": "8037678e27d42bdb",
+        "text": "# Defining a network in wiki markup"
+      },
+      "date": 1464598624539
+    },
+    {
+      "type": "add",
+      "id": "98373b2fbccbcc30",
+      "item": {
+        "type": "paragraph",
+        "id": "98373b2fbccbcc30",
+        "text": "As a concrete example, @coevolving created a visualization of an influence network of C.A.'s A Pattern Language Which Generates Multi-Service Centers as SVG. Of course, SVG does not separate presentation and content: Let's explore representing this network in a manner that does."
+      },
+      "after": "8037678e27d42bdb",
+      "date": 1464598630691
+    },
+    {
+      "type": "add",
+      "id": "06eacdd95ec128d3",
+      "item": {
+        "type": "paragraph",
+        "id": "06eacdd95ec128d3",
+        "text": "First, let's describe this network as a unimodal directed graph in one dimension. What does that mean and why do we care? Knowing that the network is unimodal and that edges have uniform meaning is important for many network analytics such as community detection and centrality algorithms."
+      },
+      "after": "98373b2fbccbcc30",
+      "date": 1464598635601
+    },
+    {
+      "type": "add",
+      "id": "67783fecbb3f6d20",
+      "item": {
+        "type": "paragraph",
+        "id": "67783fecbb3f6d20",
+        "text": "**Vertices:** All vertices represent a pattern in the language. Since all the vertices are the same, this is formally known as a unimodal network.\n\n**Edges:** An edge between two vertices is directed and represents influence: "
+      },
+      "after": "06eacdd95ec128d3",
+      "date": 1464598685463
+    },
+    {
+      "type": "add",
+      "id": "9e7b900297627b48",
+      "item": {
+        "type": "paragraph",
+        "id": "9e7b900297627b48",
+        "text": "\"Small Target Areas\" --influences--> \"Location\"\nAlternately, we could reverse the direction of the edges and preserve meaning: "
+      },
+      "after": "67783fecbb3f6d20",
+      "date": 1464598689496
+    },
+    {
+      "type": "add",
+      "id": "194e99bdb114aa9a",
+      "item": {
+        "type": "paragraph",
+        "id": "194e99bdb114aa9a",
+        "text": "\"Location\" --influenced-by--> \"Small Target Areas\"\nSince only one type of edge is present, edge-labels can be inferred from the context so long as we are consistent with edge direction."
+      },
+      "after": "9e7b900297627b48",
+      "date": 1464598694904
+    },
+    {
+      "type": "add",
+      "id": "c7fa7610e3f6952e",
+      "item": {
+        "type": "paragraph",
+        "id": "c7fa7610e3f6952e",
+        "text": "\"An example would be handy right about now...\"\n\nThe SVG of the 64 vertex multi-service center pattern language can be transformed into a TGF representation that yEd understands.\n\nTGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\n"
+      },
+      "after": "194e99bdb114aa9a",
+      "date": 1464598717407
+    },
+    {
+      "type": "add",
+      "id": "93cd6a1c2001296b",
+      "item": {
+        "type": "paragraph",
+        "id": "93cd6a1c2001296b",
+        "text": "Hierarchical Layout, similar to the original SVG\n\nOrganic Layout\n\nCircular Layout, ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\nVisual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented.\n\nWhat do you think of this approach to \"Graphs in Wiki\"? Is a markup like the proposed PGF worth pursuing?\n\nShould we be solving for \"Graphs of Wiki\" first?\n\nSomething altogether different?"
+      },
+      "after": "c7fa7610e3f6952e",
+      "date": 1464598717978
+    },
+    {
+      "type": "edit",
+      "id": "8037678e27d42bdb",
+      "item": {
+        "type": "markdown",
+        "id": "8037678e27d42bdb",
+        "text": "# Defining a network in wiki markup"
+      },
+      "date": 1464598721870
+    },
+    {
+      "type": "remove",
+      "id": "59d14fa50f4ff84a",
+      "date": 1464598725493
+    },
+    {
+      "type": "edit",
+      "id": "98373b2fbccbcc30",
+      "item": {
+        "type": "paragraph",
+        "id": "98373b2fbccbcc30",
+        "text": "As a concrete example, @coevolving created a visualization of an influence network of C.A.'s A Pattern Language Which Generates Multi-Service Centers as SVG. Of course, SVG does not separate presentation and content: Let's explore representing this network in a manner that does - [https://github.com/fedwiki/wiki/issues/63 github issue]"
+      },
+      "date": 1464598920308
+    },
+    {
+      "type": "edit",
+      "id": "67783fecbb3f6d20",
+      "item": {
+        "type": "markdown",
+        "id": "67783fecbb3f6d20",
+        "text": "**Vertices:** All vertices represent a pattern in the language. Since all the vertices are the same, this is formally known as a unimodal network.\n\n**Edges:** An edge between two vertices is directed and represents influence: "
+      },
+      "date": 1464598930358
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "390b9e73e8a90bf4"
+      },
+      "after": "67783fecbb3f6d20",
+      "id": "390b9e73e8a90bf4",
+      "date": 1464598941737
+    },
+    {
+      "type": "edit",
+      "id": "9e7b900297627b48",
+      "item": {
+        "type": "paragraph",
+        "id": "9e7b900297627b48",
+        "text": "Alternately, we could reverse the direction of the edges and preserve meaning: "
+      },
+      "date": 1464598950748
+    },
+    {
+      "type": "edit",
+      "id": "390b9e73e8a90bf4",
+      "item": {
+        "type": "bytebeat",
+        "id": "390b9e73e8a90bf4",
+        "text": "\"Small Target Areas\" --influences--> \"Location\""
+      },
+      "date": 1464598961631
+    },
+    {
+      "type": "remove",
+      "id": "390b9e73e8a90bf4",
+      "date": 1464598967169
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "44c1c1fba414f3d8",
+        "text": "\"Small Target Areas\" --influences--> \"Location\""
+      },
+      "after": "67783fecbb3f6d20",
+      "id": "44c1c1fba414f3d8",
+      "date": 1464598975721
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "8c5a3cd056a06f77"
+      },
+      "after": "194e99bdb114aa9a",
+      "id": "8c5a3cd056a06f77",
+      "date": 1464598979938
+    },
+    {
+      "type": "edit",
+      "id": "194e99bdb114aa9a",
+      "item": {
+        "type": "paragraph",
+        "id": "194e99bdb114aa9a",
+        "text": "Since only one type of edge is present, edge-labels can be inferred from the context so long as we are consistent with edge direction."
+      },
+      "date": 1464598988991
+    },
+    {
+      "type": "edit",
+      "id": "8c5a3cd056a06f77",
+      "item": {
+        "type": "code",
+        "id": "8c5a3cd056a06f77",
+        "text": "\"Location\" --influenced-by--> \"Small Target Areas\""
+      },
+      "date": 1464598992320
+    },
+    {
+      "type": "move",
+      "order": [
+        "120620f1fe6e1a53",
+        "a10b342845acc0d6",
+        "72466301fb5d7177",
+        "8037678e27d42bdb",
+        "98373b2fbccbcc30",
+        "06eacdd95ec128d3",
+        "67783fecbb3f6d20",
+        "44c1c1fba414f3d8",
+        "9e7b900297627b48",
+        "8c5a3cd056a06f77",
+        "194e99bdb114aa9a",
+        "c7fa7610e3f6952e",
+        "93cd6a1c2001296b",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "8c5a3cd056a06f77",
+      "date": 1464598994539
+    },
+    {
+      "type": "edit",
+      "id": "c7fa7610e3f6952e",
+      "item": {
+        "type": "paragraph",
+        "id": "c7fa7610e3f6952e",
+        "text": "# An example would be handy right about now...\n\nThe SVG of the 64 vertex multi-service center pattern language can be transformed into a TGF representation that yEd understands.\n\nTGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\n"
+      },
+      "date": 1464599020700
+    },
+    {
+      "type": "edit",
+      "id": "c7fa7610e3f6952e",
+      "item": {
+        "type": "markdown",
+        "id": "c7fa7610e3f6952e",
+        "text": "# An example would be handy right about now...\n\nThe SVG of the 64 vertex multi-service center pattern language can be transformed into a TGF representation that yEd understands.\n\nTGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\n"
+      },
+      "date": 1464599021759
+    },
+    {
+      "type": "edit",
+      "id": "c7fa7610e3f6952e",
+      "item": {
+        "type": "markdown",
+        "id": "c7fa7610e3f6952e",
+        "text": "# An example would be handy right about now...\n\nThe [[SVG]] of the 64 vertex multi-service centre [[pattern language]] can be transformed into a [[TGF]] representation that yEd understands."
+      },
+      "date": 1464599057952
+    },
+    {
+      "type": "edit",
+      "id": "93cd6a1c2001296b",
+      "item": {
+        "type": "paragraph",
+        "id": "93cd6a1c2001296b",
+        "text": "TGF is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\n"
+      },
+      "date": 1464599088770
+    },
+    {
+      "type": "add",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "paragraph",
+        "id": "df6acf21f381693d",
+        "text": "Hierarchical Layout, similar to the original SVG\n\nOrganic Layout\n\nCircular Layout, ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\nVisual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented.\n\nWhat do you think of this approach to \"Graphs in Wiki\"? Is a markup like the proposed PGF worth pursuing?\n\nShould we be solving for \"Graphs of Wiki\" first?\n\nSomething altogether different?"
+      },
+      "after": "93cd6a1c2001296b",
+      "date": 1464599092292
+    },
+    {
+      "type": "edit",
+      "id": "93cd6a1c2001296b",
+      "item": {
+        "type": "paragraph",
+        "id": "93cd6a1c2001296b",
+        "text": "[[Trivial Graph Format]] (TGF) is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:\n\n"
+      },
+      "date": 1464599186215
+    },
+    {
+      "type": "edit",
+      "id": "a10b342845acc0d6",
+      "item": {
+        "type": "paragraph",
+        "id": "a10b342845acc0d6",
+        "text": "Visualizing fedwiki as a network."
+      },
+      "date": 1464600147608
+    },
+    {
+      "type": "add",
+      "id": "6c47fd0d7f161160",
+      "item": {
+        "type": "paragraph",
+        "id": "6c47fd0d7f161160",
+        "text": "This is different from using wiki to define graphs."
+      },
+      "after": "a10b342845acc0d6",
+      "date": 1464600192385
+    },
+    {
+      "type": "edit",
+      "id": "a10b342845acc0d6",
+      "item": {
+        "type": "paragraph",
+        "id": "a10b342845acc0d6",
+        "text": "Visualizing fedwiki as a network. See also [[Hand Drawn Graphs]]."
+      },
+      "date": 1464600224504
+    },
+    {
+      "type": "remove",
+      "id": "72466301fb5d7177",
+      "date": 1464600227853
+    },
+    {
+      "type": "edit",
+      "id": "8037678e27d42bdb",
+      "item": {
+        "type": "markdown",
+        "id": "8037678e27d42bdb",
+        "text": "# [[Defining a network in wiki markup]]"
+      },
+      "date": 1464600251809
+    },
+    {
+      "type": "edit",
+      "id": "8037678e27d42bdb",
+      "item": {
+        "type": "markdown",
+        "id": "8037678e27d42bdb",
+        "text": "# [[Authoring Graphs In Wiki]] Defining a network in wiki markup"
+      },
+      "date": 1464600291339
+    },
+    {
+      "type": "remove",
+      "id": "98373b2fbccbcc30",
+      "date": 1464600301635
+    },
+    {
+      "type": "remove",
+      "id": "06eacdd95ec128d3",
+      "date": 1464600311605
+    },
+    {
+      "type": "remove",
+      "id": "67783fecbb3f6d20",
+      "date": 1464600314221
+    },
+    {
+      "type": "remove",
+      "id": "44c1c1fba414f3d8",
+      "date": 1464600317141
+    },
+    {
+      "type": "remove",
+      "id": "9e7b900297627b48",
+      "date": 1464600321303
+    },
+    {
+      "type": "remove",
+      "id": "8c5a3cd056a06f77",
+      "date": 1464600323740
+    },
+    {
+      "type": "remove",
+      "id": "194e99bdb114aa9a",
+      "date": 1464600326526
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "paragraph",
+        "id": "df6acf21f381693d",
+        "text": "Hierarchical Layout, similar to the original SVG\n\nOrganic Layout\n\nCircular Layout, ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\n"
+      },
+      "date": 1464600775644
+    },
+    {
+      "type": "add",
+      "id": "61769de2c7292022",
+      "item": {
+        "type": "paragraph",
+        "id": "61769de2c7292022",
+        "text": "# Visual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. "
+      },
+      "after": "df6acf21f381693d",
+      "date": 1464600790904
+    },
+    {
+      "type": "add",
+      "id": "8faffba28782a166",
+      "item": {
+        "type": "paragraph",
+        "id": "8faffba28782a166",
+        "text": "Given there would be a need for persisting any edits, however, we still would need to decide how the serialized version of the graph would be represented."
+      },
+      "after": "61769de2c7292022",
+      "date": 1464600799142
+    },
+    {
+      "type": "edit",
+      "id": "61769de2c7292022",
+      "item": {
+        "type": "markdown",
+        "id": "61769de2c7292022",
+        "text": "# Visual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly. This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. "
+      },
+      "date": 1464600819027
+    },
+    {
+      "type": "edit",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "markdown",
+        "id": "120620f1fe6e1a53",
+        "text": "[[Graphs of Wiki]]\n[[Graphs in Wiki]]"
+      },
+      "date": 1464600844713
+    },
+    {
+      "type": "edit",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "markdown",
+        "id": "120620f1fe6e1a53",
+        "text": "[[Graphs of Wiki]]\n[[Authoring Graphs in Wiki]]"
+      },
+      "date": 1464600872367
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "1327285811a88ad3"
+      },
+      "after": "120620f1fe6e1a53",
+      "id": "1327285811a88ad3",
+      "date": 1464604936761
+    },
+    {
+      "type": "edit",
+      "id": "1327285811a88ad3",
+      "item": {
+        "type": "reference",
+        "id": "1327285811a88ad3",
+        "site": "future.fedwiki.org",
+        "slug": "authoring-graphs-in-wiki",
+        "title": "Authoring Graphs In Wiki",
+        "text": "Here we look at how wiki can be used to author, or define a network simply be creating wiki links between pages, or by using a special markup within wiki."
+      },
+      "date": 1464604939001
+    },
+    {
+      "type": "edit",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "markdown",
+        "id": "120620f1fe6e1a53",
+        "text": "* [[Graphs of Wiki]]\n* [[Graphs in Wiki]]\n* [[Authoring Graphs in Wiki]]"
+      },
+      "date": 1464605012005
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "71083aa01486068e",
+        "text": "Here we look in more detail at how [[graphs in wiki]] can be specified. We look to define a markup, or [[domain specific language]] for authors wishing to create maps or network graphs."
+      },
+      "id": "71083aa01486068e",
+      "date": 1464605130099
+    },
+    {
+      "type": "edit",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "markdown",
+        "id": "120620f1fe6e1a53",
+        "text": "See;\n* [[Graphs of Wiki]]\n* [[Graphs in Wiki]]\n* [[Authoring Graphs in Wiki]]"
+      },
+      "date": 1464605138446
+    },
+    {
+      "type": "edit",
+      "id": "120620f1fe6e1a53",
+      "item": {
+        "type": "markdown",
+        "id": "120620f1fe6e1a53",
+        "text": "See:\n* [[Graphs of Wiki]]\n* [[Graphs in Wiki]]\n* [[Authoring Graphs in Wiki]]"
+      },
+      "date": 1464605142598
+    },
+    {
+      "type": "remove",
+      "id": "1327285811a88ad3",
+      "date": 1464605146220
+    },
+    {
+      "type": "remove",
+      "id": "6c47fd0d7f161160",
+      "date": 1464605172030
+    },
+    {
+      "type": "remove",
+      "id": "8037678e27d42bdb",
+      "date": 1464605318167
+    },
+    {
+      "type": "remove",
+      "id": "a10b342845acc0d6",
+      "date": 1464605335439
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "paragraph",
+        "id": "df6acf21f381693d",
+        "text": "[[Hierarchical Layout]]\n\n[[Organic Layout]]\n\n[[Circular Layout]], ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\nThe edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\nExtending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\n"
+      },
+      "date": 1464606479804
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "paragraph",
+        "id": "df6acf21f381693d",
+        "text": "[[Hierarchical Layout]]\n\n[[Organic Layout]]\n\n[[Circular Layout]], ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n\nOrganic layout grouped by detected communities, sized by out-degree\n\n"
+      },
+      "date": 1464606609608
+    },
+    {
+      "type": "add",
+      "id": "9ac68259b0f0684c",
+      "item": {
+        "type": "paragraph",
+        "id": "9ac68259b0f0684c",
+        "text": "The edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\n"
+      },
+      "after": "df6acf21f381693d",
+      "date": 1464606622387
+    },
+    {
+      "type": "add",
+      "id": "99af29ba4a697a08",
+      "item": {
+        "type": "paragraph",
+        "id": "99af29ba4a697a08",
+        "text": "Extending TGF with Properties...PGF?\n\nAdding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format.\n\nExtending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:\n\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\nI think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:\n\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed.\nThis description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?\n\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\"\nTranslating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL.\n\n\n\nFor a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard\n\nPGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js.\n\n"
+      },
+      "after": "9ac68259b0f0684c",
+      "date": 1464606623780
+    },
+    {
+      "type": "remove",
+      "id": "9ac68259b0f0684c",
+      "date": 1464606656900
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nFor an early discussion of these ideas see the  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+      },
+      "after": "71083aa01486068e",
+      "id": "20084356ff8e69ce",
+      "date": 1464607157971
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "paragraph",
+        "id": "df6acf21f381693d",
+        "text": "[[Hierarchical Layout]]\n\n[[Organic Layout]]\n\n"
+      },
+      "date": 1464607512375
+    },
+    {
+      "type": "add",
+      "id": "ab0124e34a0839c3",
+      "item": {
+        "type": "paragraph",
+        "id": "ab0124e34a0839c3",
+        "text": "[[Circular Layout]], ranked by out-degree\nIn the context of an influence network represented as A -influences-> B,\na vertex is more important or \"central\" in network analytics terms relative to the number of outgoing edges it has, its \"out-degree\". If we invert the edges to mean \"influenced by\", in-degree centrality will be a better measure of influence.\n"
+      },
+      "after": "df6acf21f381693d",
+      "date": 1464607518492
+    },
+    {
+      "type": "add",
+      "id": "4911a70ffd73b7a3",
+      "item": {
+        "type": "paragraph",
+        "id": "4911a70ffd73b7a3",
+        "text": "[[Clustered Layouts]]. Organic layout grouped by detected communities, sized by out-degree\n\n"
+      },
+      "after": "ab0124e34a0839c3",
+      "date": 1464607534213
+    },
+    {
+      "type": "edit",
+      "id": "4911a70ffd73b7a3",
+      "item": {
+        "type": "paragraph",
+        "id": "4911a70ffd73b7a3",
+        "text": "[[Clustered Layout]]. Organic layout grouped by detected communities, sized by out-degree\n\n"
+      },
+      "date": 1464607541965
+    },
+    {
+      "type": "edit",
+      "id": "93cd6a1c2001296b",
+      "item": {
+        "type": "paragraph",
+        "id": "93cd6a1c2001296b",
+        "text": "[[Trivial Graph Format]] (TGF) is purely a representation of network structure, and includes no presentation concerns. yEd can handle the presentation:"
+      },
+      "date": 1464607607760
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "paragraph",
+        "id": "df6acf21f381693d",
+        "text": "* [[Hierarchical Layout]]\n* [[Organic Layout]]"
+      },
+      "date": 1464607627618
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "markdown",
+        "id": "df6acf21f381693d",
+        "text": "* [[Hierarchical Layout]]\n* [[Organic Layout]]"
+      },
+      "date": 1464607628933
+    },
+    {
+      "type": "edit",
+      "id": "df6acf21f381693d",
+      "item": {
+        "type": "markdown",
+        "id": "df6acf21f381693d",
+        "text": "* [[Hierarchical Layout]]\n* [[Organic Layout]]\n* [[Circular Layout]]\n* [[Clustered Layout]]"
+      },
+      "date": 1464607648033
+    },
+    {
+      "type": "remove",
+      "id": "ab0124e34a0839c3",
+      "date": 1464607689344
+    },
+    {
+      "type": "remove",
+      "id": "4911a70ffd73b7a3",
+      "date": 1464607700341
+    },
+    {
+      "type": "edit",
+      "id": "99af29ba4a697a08",
+      "item": {
+        "type": "paragraph",
+        "id": "99af29ba4a697a08",
+        "text": "# Extending TGF with Properties...PGF?"
+      },
+      "date": 1464607758228
+    },
+    {
+      "type": "add",
+      "id": "03ee82c0b54a8a3e",
+      "item": {
+        "type": "paragraph",
+        "id": "03ee82c0b54a8a3e",
+        "text": "Adding a map of properties on the TGF structure would allow arbitrarily complex graphs to be represented. TGF doesn't currently support this, but maybe we'll create a new graph representation format right here: Property Graph Format."
+      },
+      "after": "99af29ba4a697a08",
+      "date": 1464607761997
+    },
+    {
+      "type": "add",
+      "id": "56a15b81685ace17",
+      "item": {
+        "type": "paragraph",
+        "id": "56a15b81685ace17",
+        "text": "Extending a few of the edges from the 64 patterns with the URL's from the SVG we omitted earlier could like something closer to DOT graph description language, but in a tool and domain-agnostic way:"
+      },
+      "after": "03ee82c0b54a8a3e",
+      "date": 1464607766900
+    },
+    {
+      "type": "add",
+      "id": "88fe19b7b8235e31",
+      "item": {
+        "type": "paragraph",
+        "id": "88fe19b7b8235e31",
+        "text": "\n1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n...\n"
+      },
+      "after": "56a15b81685ace17",
+      "date": 1464607784406
+    },
+    {
+      "type": "add",
+      "id": "13749cbe2f5580b8",
+      "item": {
+        "type": "paragraph",
+        "id": "13749cbe2f5580b8",
+        "text": "I think this type of notation will also accommodate @coevolving's dishwasher / OPM example. A simple representation of some dishwasher states could include:"
+      },
+      "after": "88fe19b7b8235e31",
+      "date": 1464607786222
+    },
+    {
+      "type": "add",
+      "id": "cc46b1960288b25a",
+      "item": {
+        "type": "paragraph",
+        "id": "cc46b1960288b25a",
+        "text": "\nDoor has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed."
+      },
+      "after": "13749cbe2f5580b8",
+      "date": 1464607789989
+    },
+    {
+      "type": "add",
+      "id": "e732f72f86706541",
+      "item": {
+        "type": "paragraph",
+        "id": "e732f72f86706541",
+        "text": "This description is similar to the \"Object-Process Language\" that accompanies an \"Object-Process Diagram\" in the OPM methodology. Note again the separation of content from presentation. Rather than support OPL in wiki, which requires a richer grammar, what does this look like in PGF?"
+      },
+      "after": "cc46b1960288b25a",
+      "date": 1464607793318
+    },
+    {
+      "type": "add",
+      "id": "83cf1665083a2925",
+      "item": {
+        "type": "paragraph",
+        "id": "83cf1665083a2925",
+        "text": "\n0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\""
+      },
+      "after": "e732f72f86706541",
+      "date": 1464607798520
+    },
+    {
+      "type": "add",
+      "id": "020f64c6c02a3a71",
+      "item": {
+        "type": "paragraph",
+        "id": "020f64c6c02a3a71",
+        "text": "Translating to OPL and rendering could produce a diagram similar to OPD. It could also be readily translated into OPL."
+      },
+      "after": "83cf1665083a2925",
+      "date": 1464607802702
+    },
+    {
+      "type": "add",
+      "id": "566daf300bb530de",
+      "item": {
+        "type": "paragraph",
+        "id": "566daf300bb530de",
+        "text": "For a brief introduction to OPM from the principal investigator Dov Dori, see this presentation from the MIT SDM Systems Thinking Webinar Series by Dov Dori: The Maturation of Model-Based Systems Engineering: OPM as the ISO Conceptual Modeling Language Standard"
+      },
+      "after": "020f64c6c02a3a71",
+      "date": 1464607819358
+    },
+    {
+      "type": "add",
+      "id": "0292b6c8f84cf05c",
+      "item": {
+        "type": "paragraph",
+        "id": "0292b6c8f84cf05c",
+        "text": "PGF could readily be transformed into something other tools understand. jsfiddle would be a great place to experiment with vis.js to prototype this idea by transforming PGF into the json format supported by vis.js."
+      },
+      "after": "566daf300bb530de",
+      "date": 1464607831421
+    },
+    {
+      "type": "edit",
+      "id": "99af29ba4a697a08",
+      "item": {
+        "type": "markdown",
+        "id": "99af29ba4a697a08",
+        "text": "# Extending TGF with Properties...PGF?"
+      },
+      "date": 1464607835446
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "aa3f6fbceda56ec7"
+      },
+      "id": "aa3f6fbceda56ec7",
+      "type": "add",
+      "after": "78e0284fb4790ce3",
+      "date": 1464607843020
+    },
+    {
+      "type": "move",
+      "order": [
+        "71083aa01486068e",
+        "20084356ff8e69ce",
+        "120620f1fe6e1a53",
+        "c7fa7610e3f6952e",
+        "93cd6a1c2001296b",
+        "df6acf21f381693d",
+        "99af29ba4a697a08",
+        "03ee82c0b54a8a3e",
+        "56a15b81685ace17",
+        "aa3f6fbceda56ec7",
+        "88fe19b7b8235e31",
+        "13749cbe2f5580b8",
+        "cc46b1960288b25a",
+        "e732f72f86706541",
+        "83cf1665083a2925",
+        "020f64c6c02a3a71",
+        "566daf300bb530de",
+        "0292b6c8f84cf05c",
+        "61769de2c7292022",
+        "8faffba28782a166",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "aa3f6fbceda56ec7",
+      "date": 1464607848100
+    },
+    {
+      "type": "remove",
+      "id": "88fe19b7b8235e31",
+      "date": 1464607851660
+    },
+    {
+      "type": "edit",
+      "id": "aa3f6fbceda56ec7",
+      "item": {
+        "type": "code",
+        "id": "aa3f6fbceda56ec7",
+        "text": "1 \"Small Target Areas\" url=http://bit.ly/1SxrkQ0\n2 \"Location\" url=http://bit.ly/1HycBOq\n...\n#\n1 2\n1 3\n2 7\n..."
+      },
+      "date": 1464607855047
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eeb68d69e922e86b"
+      },
+      "id": "eeb68d69e922e86b",
+      "type": "add",
+      "after": "78e0284fb4790ce3",
+      "date": 1464607861043
+    },
+    {
+      "type": "move",
+      "order": [
+        "71083aa01486068e",
+        "20084356ff8e69ce",
+        "120620f1fe6e1a53",
+        "c7fa7610e3f6952e",
+        "93cd6a1c2001296b",
+        "df6acf21f381693d",
+        "99af29ba4a697a08",
+        "03ee82c0b54a8a3e",
+        "56a15b81685ace17",
+        "aa3f6fbceda56ec7",
+        "13749cbe2f5580b8",
+        "cc46b1960288b25a",
+        "e732f72f86706541",
+        "eeb68d69e922e86b",
+        "83cf1665083a2925",
+        "020f64c6c02a3a71",
+        "566daf300bb530de",
+        "0292b6c8f84cf05c",
+        "61769de2c7292022",
+        "8faffba28782a166",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "eeb68d69e922e86b",
+      "date": 1464607864634
+    },
+    {
+      "type": "remove",
+      "id": "83cf1665083a2925",
+      "date": 1464607868831
+    },
+    {
+      "type": "edit",
+      "id": "eeb68d69e922e86b",
+      "item": {
+        "type": "code",
+        "id": "eeb68d69e922e86b",
+        "text": "0 \"Door\" type=object\n1 \"Open\" type=state\n2 \"Closed\" type=state\n3 \"Opening\" type=process\n4 \"Closing\" type=process\n#\n0 1 \"has state\"\n0 2 \"has state\"\n3 0 \"changes\"\n3 1 \"to state\"\n4 0 \"changes\"\n4 2 \"to state\""
+      },
+      "date": 1464607870915
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ee1a28f93c6f991c"
+      },
+      "id": "ee1a28f93c6f991c",
+      "type": "add",
+      "after": "78e0284fb4790ce3",
+      "date": 1464607873554
+    },
+    {
+      "type": "move",
+      "order": [
+        "71083aa01486068e",
+        "20084356ff8e69ce",
+        "120620f1fe6e1a53",
+        "c7fa7610e3f6952e",
+        "93cd6a1c2001296b",
+        "df6acf21f381693d",
+        "99af29ba4a697a08",
+        "03ee82c0b54a8a3e",
+        "56a15b81685ace17",
+        "aa3f6fbceda56ec7",
+        "13749cbe2f5580b8",
+        "cc46b1960288b25a",
+        "e732f72f86706541",
+        "eeb68d69e922e86b",
+        "020f64c6c02a3a71",
+        "ee1a28f93c6f991c",
+        "566daf300bb530de",
+        "0292b6c8f84cf05c",
+        "61769de2c7292022",
+        "8faffba28782a166",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "ee1a28f93c6f991c",
+      "date": 1464607876048
+    },
+    {
+      "type": "edit",
+      "id": "61769de2c7292022",
+      "item": {
+        "type": "markdown",
+        "id": "61769de2c7292022",
+        "text": "# Visual Editing\n\nIt's possible to edit a network directly in JavaScript and avoid editing the text representation directly."
+      },
+      "date": 1464607900959
+    },
+    {
+      "type": "move",
+      "order": [
+        "71083aa01486068e",
+        "20084356ff8e69ce",
+        "120620f1fe6e1a53",
+        "c7fa7610e3f6952e",
+        "93cd6a1c2001296b",
+        "df6acf21f381693d",
+        "99af29ba4a697a08",
+        "03ee82c0b54a8a3e",
+        "56a15b81685ace17",
+        "aa3f6fbceda56ec7",
+        "13749cbe2f5580b8",
+        "cc46b1960288b25a",
+        "e732f72f86706541",
+        "eeb68d69e922e86b",
+        "020f64c6c02a3a71",
+        "566daf300bb530de",
+        "0292b6c8f84cf05c",
+        "61769de2c7292022",
+        "ee1a28f93c6f991c",
+        "8faffba28782a166",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "ee1a28f93c6f991c",
+      "date": 1464607907015
+    },
+    {
+      "type": "edit",
+      "id": "ee1a28f93c6f991c",
+      "item": {
+        "type": "paragraph",
+        "id": "ee1a28f93c6f991c",
+        "text": " This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. See http://visjs.org/examples/network/other/manipulation.html for an example of a drag-and-drop interface for vertex and edge creation. "
+      },
+      "date": 1464607911592
+    },
+    {
+      "type": "edit",
+      "id": "ee1a28f93c6f991c",
+      "item": {
+        "type": "paragraph",
+        "id": "ee1a28f93c6f991c",
+        "text": "This could simplify the otherwise somewhat burdensome task of keeping track of vertex id's when creating edges. For an example of a drag-and-drop interface for vertex and edge creation see [http://visjs.org/examples/network/other/manipulation.html visjs.org] "
+      },
+      "date": 1464607957066
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "fd7eeda3c05221ec"
+      },
+      "after": "aa3f6fbceda56ec7",
+      "id": "fd7eeda3c05221ec",
+      "date": 1464607978492
+    },
+    {
+      "type": "move",
+      "order": [
+        "71083aa01486068e",
+        "20084356ff8e69ce",
+        "120620f1fe6e1a53",
+        "c7fa7610e3f6952e",
+        "93cd6a1c2001296b",
+        "df6acf21f381693d",
+        "99af29ba4a697a08",
+        "03ee82c0b54a8a3e",
+        "56a15b81685ace17",
+        "aa3f6fbceda56ec7",
+        "13749cbe2f5580b8",
+        "cc46b1960288b25a",
+        "fd7eeda3c05221ec",
+        "e732f72f86706541",
+        "eeb68d69e922e86b",
+        "020f64c6c02a3a71",
+        "566daf300bb530de",
+        "0292b6c8f84cf05c",
+        "61769de2c7292022",
+        "ee1a28f93c6f991c",
+        "8faffba28782a166",
+        "fa6c9983dfe2b6b0",
+        "78e0284fb4790ce3"
+      ],
+      "id": "fd7eeda3c05221ec",
+      "date": 1464607984403
+    },
+    {
+      "type": "remove",
+      "id": "cc46b1960288b25a",
+      "date": 1464607987873
+    },
+    {
+      "type": "edit",
+      "id": "fd7eeda3c05221ec",
+      "item": {
+        "type": "code",
+        "id": "fd7eeda3c05221ec",
+        "text": "Door has state Open or Closed.\nOpening changes Door from Closed to Open.\nClosing changes Door from Open to Closed."
+      },
+      "date": 1464607990190
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nMuch of this content comes from [https://github.com/bobbyno @bobbyno0 from an early discussion of these ideas see the  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+      },
+      "date": 1464608202821
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nMuch of this content comes from [https://github.com/bobbyno @bobbyno] from an early discussion of [[Graphs for knowledge representation]]  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+      },
+      "date": 1464608236845
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nMuch of this content comes from [https://github.com/bobbyno @bobbyno] from an early discussion of [[Graphs For knowledge representation]]  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+      },
+      "date": 1464608248920
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nMuch of this content comes from [https://github.com/bobbyno @bobbyno] from an early discussion of [[Knowledge Representation]]  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+      },
+      "date": 1464608293911
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1503049725372
+    }
+  ]
+}

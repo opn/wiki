@@ -1,0 +1,531 @@
+{
+  "title": "Title Cleaner Transport",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "728921eae995ab44",
+      "text": "This [[Transport]] allows you to fix uncapitalised title on a Fedwiki page."
+    },
+    {
+      "type": "paragraph",
+      "id": "aa55c73a9ad4b99a",
+      "text": "Simply drag and drop a video page url from this site onto the transporter:"
+    },
+    {
+      "type": "paragraph",
+      "id": "0f4c1b04f72f7e6a",
+      "text": "The following transporter capitalises the first letter of each word (but does not strip dashes (-):"
+    },
+    {
+      "type": "transport",
+      "id": "b78622efdbf2799e",
+      "text": "POST https://livecode.world/fedwiki/clean_Title"
+    },
+    {
+      "type": "paragraph",
+      "id": "ffff0bbe203dc4cf",
+      "text": "This transporter capitalises the first letter of each word and also strips all dashes::"
+    },
+    {
+      "text": "POST https://livecode.world/fedwiki/fix_Title",
+      "id": "10ea2af363e51a5f",
+      "type": "transport"
+    },
+    {
+      "type": "paragraph",
+      "id": "93429b68f60798b9",
+      "text": "While this transporter only capitalises the first letter:"
+    },
+    {
+      "type": "transport",
+      "id": "baa038a6f9ee87e8",
+      "text": "POST https://livecode.world/fedwiki/clean_FirstLetter"
+    },
+    {
+      "type": "markdown",
+      "id": "9546dbda40035b5a",
+      "text": "# About"
+    },
+    {
+      "type": "paragraph",
+      "id": "f9842d5b2be9e775",
+      "text": "This plugin is an experimental web page scraper coded in [[LiveCode]]. The web service does the following things:"
+    },
+    {
+      "type": "markdown",
+      "id": "d9f45aae0a436d21",
+      "text": "# Code"
+    },
+    {
+      "type": "paragraph",
+      "id": "754cddd4b5150cee",
+      "text": "Below are the important parts of the controller code. The full code can be found on GitHub -  [https://gist.github.com/opn/4cc35bc7818c0df1501f713c2d9384cd gist]"
+    },
+    {
+      "type": "code",
+      "id": "8869c0772777be8e",
+      "text": "on clean_Title\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   put text_InitialCaps (pageTitle) into pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend clean_Title\n   \non fix_Title\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   replace \"-\" with space in pageTitle\n   put word 1 to -1 of pageTitle into pageTitle\n   put text_InitialCaps (pageTitle) into pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend fix_Title\n\non clean_FirstLetter\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   get toUpper (char 1 of pageTitle)\n   put it into char 1 of pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend clean_FirstLetter"
+    },
+    {
+      "type": "markdown",
+      "id": "5a4d4c50029ad335",
+      "text": "# To Do"
+    },
+    {
+      "type": "markdown",
+      "id": "1e7deed8de779e92",
+      "text": "It should be enhanced to:\n* xxx"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Title Cleaner Transport",
+        "story": [
+          {
+            "type": "paragraph",
+            "id": "728921eae995ab44",
+            "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] from the data displayed on [[CCC-TV]] site - [https://media.ccc.de/v/30C3_-_5278_-_en_-_saal_6_-_201312301300_-_the_philosophy_of_hacking_-_groente#video media.ccc.de]. "
+          },
+          {
+            "type": "paragraph",
+            "id": "aa55c73a9ad4b99a",
+            "text": "Simply drag and drop a video page url from this site onto the transporter:"
+          },
+          {
+            "type": "transport",
+            "id": "10ea2af363e51a5f",
+            "text": "POST https://livecode.world/mediawiki/importpage"
+          },
+          {
+            "type": "markdown",
+            "id": "9546dbda40035b5a",
+            "text": "# About"
+          },
+          {
+            "type": "paragraph",
+            "id": "f9842d5b2be9e775",
+            "text": "This plugin is an experimental web page scraper coded in [[LiveCode]]. The web service does the following things:"
+          },
+          {
+            "type": "markdown",
+            "id": "334c2012ca8b4ccb",
+            "text": "* Fetches the HTML of the video page\n* Runs this through html-[[tidy]] using [[shell()]] to create a valid [[xml]]/[[xhtml]] document\n* Painfully steps through the xhtml to find the relevant sections\n• Constructs the [[wiki page json]]"
+          },
+          {
+            "type": "markdown",
+            "id": "d9f45aae0a436d21",
+            "text": "# Code"
+          },
+          {
+            "type": "factory",
+            "id": "8869c0772777be8e"
+          },
+          {
+            "type": "markdown",
+            "id": "5a4d4c50029ad335",
+            "text": "# To Do"
+          },
+          {
+            "type": "markdown",
+            "id": "1e7deed8de779e92",
+            "text": "It should be enhanced to:\n* Use [[XPath]] rather than relying on the order of the [[xml]] sections\n* Spit out the Fedwiki, and helper code into libraries"
+          }
+        ]
+      },
+      "date": 1452105313419
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://livecode.world/test"
+      },
+      "date": 1452105322906
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "text": "POST https://livecode.world/slideshow",
+        "id": "10ea2af363e51a5f",
+        "type": "transport"
+      },
+      "date": 1452105614787
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "text": "POST https://livecode.world/fedwiki/title_Cleaner",
+        "id": "10ea2af363e51a5f",
+        "type": "transport"
+      },
+      "date": 1452364069761
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] allows you to fix uncapitalised title on a Fedwiki page."
+      },
+      "date": 1466194473362
+    },
+    {
+      "type": "remove",
+      "id": "334c2012ca8b4ccb",
+      "date": 1466194486410
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* xxx"
+      },
+      "date": 1466194494844
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "text": "POST https://livecode.world/fedwiki/fix_Title",
+        "id": "10ea2af363e51a5f",
+        "type": "transport"
+      },
+      "date": 1466314797858
+    },
+    {
+      "type": "add",
+      "id": "0f4c1b04f72f7e6a",
+      "item": {
+        "type": "paragraph",
+        "id": "0f4c1b04f72f7e6a",
+        "text": "The following transporter capitalises the first letter of each word (but does not strip dashes (-):"
+      },
+      "after": "aa55c73a9ad4b99a",
+      "date": 1466314909298
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "0f4c1b04f72f7e6a",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "0f4c1b04f72f7e6a",
+      "date": 1466314911395
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b78622efdbf2799e"
+      },
+      "id": "b78622efdbf2799e",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1466314912759
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "0f4c1b04f72f7e6a",
+        "b78622efdbf2799e",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "b78622efdbf2799e",
+      "date": 1466314914765
+    },
+    {
+      "type": "edit",
+      "id": "b78622efdbf2799e",
+      "item": {
+        "type": "transport",
+        "id": "b78622efdbf2799e",
+        "text": "POST https://livecode.world/fedwiki/clean_Title"
+      },
+      "date": 1466314934715
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "0f4c1b04f72f7e6a",
+        "10ea2af363e51a5f",
+        "b78622efdbf2799e",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "0f4c1b04f72f7e6a",
+      "date": 1466314976027
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "0f4c1b04f72f7e6a",
+        "b78622efdbf2799e",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "b78622efdbf2799e",
+      "date": 1466314984556
+    },
+    {
+      "type": "add",
+      "id": "ffff0bbe203dc4cf",
+      "item": {
+        "type": "paragraph",
+        "id": "ffff0bbe203dc4cf",
+        "text": "This transporter capitalises the first letter of each word and also strips all dashes::"
+      },
+      "after": "0f4c1b04f72f7e6a",
+      "date": 1466315016979
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "0f4c1b04f72f7e6a",
+        "b78622efdbf2799e",
+        "ffff0bbe203dc4cf",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "ffff0bbe203dc4cf",
+      "date": 1466315019246
+    },
+    {
+      "type": "add",
+      "id": "93429b68f60798b9",
+      "item": {
+        "type": "paragraph",
+        "id": "93429b68f60798b9",
+        "text": "While this transporter only capitalises the first letter:"
+      },
+      "after": "ffff0bbe203dc4cf",
+      "date": 1466315053077
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "0f4c1b04f72f7e6a",
+        "b78622efdbf2799e",
+        "ffff0bbe203dc4cf",
+        "10ea2af363e51a5f",
+        "93429b68f60798b9",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "93429b68f60798b9",
+      "date": 1466315056151
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "baa038a6f9ee87e8"
+      },
+      "id": "baa038a6f9ee87e8",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1466315063070
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "0f4c1b04f72f7e6a",
+        "b78622efdbf2799e",
+        "ffff0bbe203dc4cf",
+        "10ea2af363e51a5f",
+        "93429b68f60798b9",
+        "baa038a6f9ee87e8",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "baa038a6f9ee87e8",
+      "date": 1466315066081
+    },
+    {
+      "type": "edit",
+      "id": "baa038a6f9ee87e8",
+      "item": {
+        "type": "transport",
+        "id": "baa038a6f9ee87e8",
+        "text": "POST https://livecode.world/fedwiki/clean_FirstLetter"
+      },
+      "date": 1466315137339
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "<?lc\n   /* =  DESCRIPTION  =\n   --\n   The fedwiki.lc controller can be found at: fedwiki.lc\n\n\n\n   Below we declare the global variables gControllerHandlers AND gData\n   And put the public method names that we wish to expose into gControllerHandlers\n   --\n   */\n\n   global gControllerHandlers, gData\n\n   put \"index,fedwiki,journal,clean_FirstLetter,fix_Title,clean_Title,fork_Cleaner\" into gControllerHandlers\n\n\n   /* ==  INITIALISATION  ==\n   --\n   Put all the handlers and variables that you wish to merge into your views\n   into the global array \"gData\".\n\n   Write any initialisation statements (loading any neeeded libraries for instance)\n   into the initialisation handler \"fedwiki.lc\" below.\n   --\n   */\n\n   command fedwiki\n      start using stack (gAPPPATH & \"stacks/lib_Fedwiki.livecode\")\n   end fedwiki\n\n\n   /* ==  CODE  ==\n   --\n   Here we put the public handlers the controller uses and exposes as urls.\n   --\n   */\n\n   on index\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_ConstructErrorJSON (droppedURL &CR&CR& $_POST_RAW) into errorJSON\n      fedwiki_ReturnJSON errorJSON\n   end index\n\n   on fork_Cleaner\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_CleanLastLineUpJournal (droppedURL, \"create,fork\", \"fedwiki-transport\") into cleanJSON\n      fedwiki_ReturnJSON cleanJSON\n   end fork_Cleaner\n\n   on journal\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_CleanLastLineUpJournal (droppedURL) into cleanJSON\n      fedwiki_ReturnJSON cleanJSON\n   end journal\n\n   on clean_Title\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      --\n      put pageArray [\"Title\"] into pageTitle\n      -- put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n      put text_InitialCaps (pageTitle) into pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end clean_Title\n\n   on fix_Title\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      if pageArray is false then\n         put merge (\"The dropped url [[droppedURL]] is not a Fedwiki url.\") into errorText\n          fedwiki_ExitAndReturnError errorText, \"Not a Fedwiki URL\"\n      end if\n      --\n      put pageArray [\"Title\"] into pageTitle\n      replace \"-\" with space in pageTitle\n      put word 1 to -1 of pageTitle into pageTitle\n      put text_InitialCaps (pageTitle) into pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end fix_Title\n\n   on clean_FirstLetter\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      --\n      put pageArray [\"Title\"] into pageTitle\n      put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end clean_FirstLetter\n\n   function text_InitialCaps someText\n      repeat with wordNum = 1 to the number of words of someText\n         put tolower(word wordNum of someText) into someWord\n         put toupper(char 1 of someWord ) into char 1 of someWord\n         put someWord into word wordNum of someText\n      end repeat\n      return someText\n   end text_InitialCaps\n\n?>"
+      },
+      "date": 1466315162676
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "<?lc\n   on index\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_ConstructErrorJSON (droppedURL &CR&CR& $_POST_RAW) into errorJSON\n      fedwiki_ReturnJSON errorJSON\n   end index\n\n   on fork_Cleaner\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_CleanLastLineUpJournal (droppedURL, \"create,fork\", \"fedwiki-transport\") into cleanJSON\n      fedwiki_ReturnJSON cleanJSON\n   end fork_Cleaner\n\n   on journal\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_CleanLastLineUpJournal (droppedURL) into cleanJSON\n      fedwiki_ReturnJSON cleanJSON\n   end journal\n\n   on clean_Title\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      --\n      put pageArray [\"Title\"] into pageTitle\n      -- put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n      put text_InitialCaps (pageTitle) into pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end clean_Title\n\n   on fix_Title\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      if pageArray is false then\n         put merge (\"The dropped url [[droppedURL]] is not a Fedwiki url.\") into errorText\n          fedwiki_ExitAndReturnError errorText, \"Not a Fedwiki URL\"\n      end if\n      --\n      put pageArray [\"Title\"] into pageTitle\n      replace \"-\" with space in pageTitle\n      put word 1 to -1 of pageTitle into pageTitle\n      put text_InitialCaps (pageTitle) into pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end fix_Title\n\n   on clean_FirstLetter\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      --\n      put pageArray [\"Title\"] into pageTitle\n      put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end clean_FirstLetter\n\n   function text_InitialCaps someText\n      repeat with wordNum = 1 to the number of words of someText\n         put tolower(word wordNum of someText) into someWord\n         put toupper(char 1 of someWord ) into char 1 of someWord\n         put someWord into word wordNum of someText\n      end repeat\n      return someText\n   end text_InitialCaps\n?>"
+      },
+      "date": 1466315205239
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "on clean_Title\n put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n --\n  put pageArray [\"Title\"] into pageTitle\n -- put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n put text_InitialCaps (pageTitle) into pageTitle\n put pageTitle into pageArray [\"Title\"]\n --\n put json_FromArray (pageArray) into pageJSON\n fedwiki_ReturnJSON pageJSON\nend clean_Title\n\n   on fix_Title\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      if pageArray is false then\n         put merge (\"The dropped url [[droppedURL]] is not a Fedwiki url.\") into errorText\n          fedwiki_ExitAndReturnError errorText, \"Not a Fedwiki URL\"\n      end if\n      --\n      put pageArray [\"Title\"] into pageTitle\n      replace \"-\" with space in pageTitle\n      put word 1 to -1 of pageTitle into pageTitle\n      put text_InitialCaps (pageTitle) into pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end fix_Title\n\n   on clean_FirstLetter\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      --\n      put pageArray [\"Title\"] into pageTitle\n      put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end clean_FirstLetter\n\n   function text_InitialCaps someText\n      repeat with wordNum = 1 to the number of words of someText\n         put tolower(word wordNum of someText) into someWord\n         put toupper(char 1 of someWord ) into char 1 of someWord\n         put someWord into word wordNum of someText\n      end repeat\n      return someText\n   end text_InitialCaps\n?>"
+      },
+      "date": 1466315282627
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "on clean_Title\n put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n --\n put pageArray [\"Title\"] into pageTitle\n put text_InitialCaps (pageTitle) into pageTitle\n put pageTitle into pageArray [\"Title\"]\n --\n put json_FromArray (pageArray) into pageJSON\n fedwiki_ReturnJSON pageJSON\nend clean_Title\n\n   on fix_Title\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      if pageArray is false then\n         put merge (\"The dropped url [[droppedURL]] is not a Fedwiki url.\") into errorText\n          fedwiki_ExitAndReturnError errorText, \"Not a Fedwiki URL\"\n      end if\n      --\n      put pageArray [\"Title\"] into pageTitle\n      replace \"-\" with space in pageTitle\n      put word 1 to -1 of pageTitle into pageTitle\n      put text_InitialCaps (pageTitle) into pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end fix_Title\n\n   on clean_FirstLetter\n      put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n      put fedwiki_FetchLastLineUpArray (droppedURL) into pageArray\n      --\n      put pageArray [\"Title\"] into pageTitle\n      put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n      put pageTitle into pageArray [\"Title\"]\n      --\n      put json_FromArray (pageArray) into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end clean_FirstLetter\n\n   function text_InitialCaps someText\n      repeat with wordNum = 1 to the number of words of someText\n         put tolower(word wordNum of someText) into someWord\n         put toupper(char 1 of someWord ) into char 1 of someWord\n         put someWord into word wordNum of someText\n      end repeat\n      return someText\n   end text_InitialCaps\n?>"
+      },
+      "date": 1466315318683
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "on clean_Title\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   put text_InitialCaps (pageTitle) into pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend clean_Title\n   \non fix_Title\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   replace \"-\" with space in pageTitle\n   put word 1 to -1 of pageTitle into pageTitle\n   put text_InitialCaps (pageTitle) into pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend fix_Title\n\non clean_FirstLetter\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   put toUpper (char 1 of pageTitle) into char 1 of pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend clean_FirstLetter"
+      },
+      "date": 1466315690808
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "on clean_Title\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   put text_InitialCaps (pageTitle) into pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend clean_Title\n   \non fix_Title\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   replace \"-\" with space in pageTitle\n   put word 1 to -1 of pageTitle into pageTitle\n   put text_InitialCaps (pageTitle) into pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend fix_Title\n\non clean_FirstLetter\n   put getPageArray ($_POST_RAW) into pageArray\n   --\n   put pageArray [\"Title\"] into pageTitle\n   get toUpper (char 1 of pageTitle)\n   put it into char 1 of pageTitle\n   put pageTitle into pageArray [\"Title\"]\n   --\n   returnPageArray pageArray\nend clean_FirstLetter"
+      },
+      "date": 1466315758485
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "754cddd4b5150cee"
+      },
+      "id": "754cddd4b5150cee",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1466315778108
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "0f4c1b04f72f7e6a",
+        "b78622efdbf2799e",
+        "ffff0bbe203dc4cf",
+        "10ea2af363e51a5f",
+        "93429b68f60798b9",
+        "baa038a6f9ee87e8",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "d9f45aae0a436d21",
+        "754cddd4b5150cee",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "754cddd4b5150cee",
+      "date": 1466315779940
+    },
+    {
+      "type": "edit",
+      "id": "754cddd4b5150cee",
+      "item": {
+        "type": "paragraph",
+        "id": "754cddd4b5150cee",
+        "text": "Below are the important parts of the controller code. The full code can be found here [http;//fds gist]"
+      },
+      "date": 1466315828060
+    },
+    {
+      "type": "edit",
+      "id": "754cddd4b5150cee",
+      "item": {
+        "type": "paragraph",
+        "id": "754cddd4b5150cee",
+        "text": "Below are the important parts of the controller code. The full code can be found here [https://gist.github.com/opn/4cc35bc7818c0df1501f713c2d9384cd gist]"
+      },
+      "date": 1466317920753
+    },
+    {
+      "type": "edit",
+      "id": "754cddd4b5150cee",
+      "item": {
+        "type": "paragraph",
+        "id": "754cddd4b5150cee",
+        "text": "Below are the important parts of the controller code. The full code can be found on GitHub -  [https://gist.github.com/opn/4cc35bc7818c0df1501f713c2d9384cd gist]"
+      },
+      "date": 1466317944731
+    }
+  ]
+}

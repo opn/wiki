@@ -1,0 +1,2095 @@
+{
+  "title": "Livecode Server on DigitalOcean",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "2e7caae0a337f971",
+      "text": "The following instructions are thanks to Mike Bonner and describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+    },
+    {
+      "type": "video",
+      "id": "583c09e8d8b84927",
+      "text": "VIMEO 131920147\nA quick rough and ready tutorial about how to set up your own [[Livecode Server]] and [[Apache]] set up on Digital Ocean.\n"
+    },
+    {
+      "type": "html",
+      "id": "6a1a2bfee0e9a4a1",
+      "text": "<H3>Fetch and Install LiveCode Server"
+    },
+    {
+      "type": "paragraph",
+      "id": "6eb8c5758a209628",
+      "text": "1) Create your Droplet. Choose LAMP 14.04 (Ubuntu) so you don't have to mess with setting up [[Apache]] and all by hand. "
+    },
+    {
+      "type": "paragraph",
+      "id": "c6d9d1a478f15284",
+      "text": "2) Fetch Livecode. After [[Droplet]] creation, log into the server with ssh in the [[terminal]] used [[wget]] to grab the 64bit version of lc server 7.0.6. "
+    },
+    {
+      "type": "code",
+      "id": "308ccc1432f83382",
+      "text": "wget http://downloads.livecode.com/livecode/7_0_6/LiveCodeCommunityServer-7_0_6_rc_3-Linux-x86_64.zip"
+    },
+    {
+      "type": "paragraph",
+      "id": "0de250892fd496dc",
+      "text": "Alternatively you can use [[Digital Ocean]]s built in web console to issue terminal commands on the server through the web interface."
+    },
+    {
+      "type": "paragraph",
+      "id": "53e974187bb7568a",
+      "text": "3) Install [[unzip]]:"
+    },
+    {
+      "type": "code",
+      "id": "16add05187abe1ac",
+      "text": "apt-get install unzip"
+    },
+    {
+      "type": "paragraph",
+      "id": "fa1cb693a9dc7da1",
+      "text": "4) [[unzip]] the file (to expand the contents):"
+    },
+    {
+      "type": "code",
+      "id": "321e2e8f22eda08e",
+      "text": "unzip <lc server filename>"
+    },
+    {
+      "type": "paragraph",
+      "id": "ef533d1e691e28f8",
+      "text": "5) Make it executable the server file executable so you can launch it as a programme and not edit it as text:"
+    },
+    {
+      "type": "code",
+      "id": "ed38f32c70b6fb36",
+      "text": "chmod 755 livecode-community-server"
+    },
+    {
+      "type": "paragraph",
+      "id": "2782e7ad36fc8b90",
+      "text": "6) Move the files to the correct location (you could have moved the zipped file then could unzipped them there):"
+    },
+    {
+      "type": "code",
+      "id": "944147663e23c930",
+      "text": "mv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin"
+    },
+    {
+      "type": "html",
+      "id": "242970b808a1a078",
+      "text": "<H3>Configure Apache"
+    },
+    {
+      "type": "paragraph",
+      "id": "eca204be058a56f0",
+      "text": "7) Enable the actions and cgi mods:"
+    },
+    {
+      "type": "code",
+      "id": "ea47fd446133cb52",
+      "text": "a2enmod actions\na2enmod cgi"
+    },
+    {
+      "type": "paragraph",
+      "id": "094fa7c9ed1fe3a9",
+      "text": "8) Edit the [[Apache]] .conf file:"
+    },
+    {
+      "type": "code",
+      "id": "6053bd84d5ab916d",
+      "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "07e531771457df51",
+      "text": "9) In the editor I added the 2 required lines as follows right before the end </virtualhost> line:"
+    },
+    {
+      "type": "code",
+      "id": "45e1685fc33d4589",
+      "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+    },
+    {
+      "type": "paragraph",
+      "id": "d41481db39b39d87",
+      "text": "I did NOT uncomment the line that says to include the serve-cgi-bin.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "d1138e365c515f45",
+      "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it). "
+    },
+    {
+      "type": "paragraph",
+      "id": "eb5751be1f85c055",
+      "text": "10) Restart your [[Apache]] server:"
+    },
+    {
+      "type": "code",
+      "id": "0894435af481a1f7",
+      "text": "service apache2 restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f9fade8f6ddf0b9",
+      "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up."
+    },
+    {
+      "type": "paragraph",
+      "id": "150ebeeec33f80bf",
+      "text": "11) Add a test script to see if [[Apache]] is serving up [[LiveCode]] scripts as cgi's. Create a simple file:"
+    },
+    {
+      "type": "code",
+      "id": "d8698c480b3cba06",
+      "text": "nano -w /var/www/html/test.lc"
+    },
+    {
+      "type": "paragraph",
+      "id": "48100bd36098d45d",
+      "text": "and paste into it the following script:"
+    },
+    {
+      "type": "code",
+      "id": "623975c7629ac052",
+      "text": "<?lc\n  put random(542545)\n?>"
+    },
+    {
+      "type": "paragraph",
+      "id": "dab7f85e39ca1b00",
+      "text": "Then I went to the droplets ip..\nhttp://xxx.xxx.xxx.xx/test.lc and voila' it works."
+    },
+    {
+      "type": "html",
+      "id": "b80e282ed57053a4",
+      "text": "<H3>See also"
+    },
+    {
+      "type": "paragraph",
+      "id": "ec34f3e20fded485",
+      "text": "You may then want to install [[RevIgniter]]:"
+    },
+    {
+      "type": "reference",
+      "id": "a1aa256fa83dc69d",
+      "site": "livecode.viral.academy",
+      "slug": "revigniter",
+      "title": "RevIgniter",
+      "text": "RevIgniter is an open source Web Application Development Framework primarily modeled on CodeIgniter, Ellislab, Inc   - [http://revigniter.com/ revigniter.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Livecode Server on DigitalOcean",
+        "story": []
+      },
+      "date": 1433705633237
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2e7caae0a337f971"
+      },
+      "id": "2e7caae0a337f971",
+      "type": "add",
+      "date": 1433705634601
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions from fads describe how to get Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1433705688921
+    },
+    {
+      "type": "add",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": " running on a droplet.\nI chose lamp 14.04 (ubuntu) so that I didn't have to mess with setting up\napache and all by hand.\nAfter droplet creation, I logged into the console with the browser based\nvnc and used wget to grab the 64bit version of lc server 7.0.4\nthen..\napt-get install unzip\nso that I could unzip the file\n\nunzip <lc server filename>\nto expand the contents.\n\nchmod 755 livecode-community-server\nto make it executable\n\nthen\nmv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin\nto move the files to the correct location (I could hvae unzipped them there)\n\nThen..\na2enmod actions\na2enmod cgi\nto enabled the actions and cgi mods\n\nThen the following..\ncd /etc/apache2/sites-enabled\nnano 000-default.conf\n\nin the editor I added the 2 required lines as follows right before the end\n</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc\n\nI did NOT uncomment the line that says to include the serve-cgi-bin.conf\n\nctrl-x yes to save, enter to keep the file name (make sure you don't change\nit)\n\nthen\nservice apache2 restart\n\nYou may get a message on restart about not being able to reliably determine\nthe servers domain name, depending on how things are currently set up.\n\nAfter restart, I created a simple file /var/www/html/test.lc\nand put in it\n<?lc\nput random(542545)\n?>\nThen I went to the droplets ip..\nhttp://104.236.131.29/test.lc and voila' it works."
+      },
+      "after": "2e7caae0a337f971",
+      "date": 1433705691057
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions from fads describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1433705698496
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions from Mike Bonner describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1433705726775
+    },
+    {
+      "type": "fork",
+      "site": "livecode.viral.academy",
+      "date": 1435342877741
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "16add05187abe1ac"
+      },
+      "id": "16add05187abe1ac",
+      "type": "add",
+      "after": "6a1a2bfee0e9a4a1",
+      "site": "livecode.viral.academy",
+      "date": 1435342877738
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1a5c2883987ebad3"
+      },
+      "id": "1a5c2883987ebad3",
+      "type": "add",
+      "after": "16add05187abe1ac",
+      "date": 1435342880371
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "321e2e8f22eda08e"
+      },
+      "id": "321e2e8f22eda08e",
+      "type": "add",
+      "after": "1a5c2883987ebad3",
+      "date": 1435342881526
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "I chose lamp 14.04 (ubuntu) so that I didn't have to mess with setting up apache and all by hand. After droplet creation, I logged into the console with the browser based vnc and used wget to grab the 64bit version of lc server 7.0.4"
+      },
+      "date": 1435342945227
+    },
+    {
+      "type": "add",
+      "id": "53e974187bb7568a",
+      "item": {
+        "type": "paragraph",
+        "id": "53e974187bb7568a",
+        "text": "then.."
+      },
+      "after": "6a1a2bfee0e9a4a1",
+      "date": 1435342947906
+    },
+    {
+      "type": "add",
+      "id": "c12f4a3d3947e1dc",
+      "item": {
+        "type": "paragraph",
+        "id": "c12f4a3d3947e1dc",
+        "text": "apt-get install unzip"
+      },
+      "after": "53e974187bb7568a",
+      "date": 1435342951035
+    },
+    {
+      "type": "add",
+      "id": "fa1cb693a9dc7da1",
+      "item": {
+        "type": "paragraph",
+        "id": "fa1cb693a9dc7da1",
+        "text": "so that I could unzip the file"
+      },
+      "after": "c12f4a3d3947e1dc",
+      "date": 1435342959837
+    },
+    {
+      "type": "add",
+      "id": "8a13ba710f4836e6",
+      "item": {
+        "type": "paragraph",
+        "id": "8a13ba710f4836e6",
+        "text": "unzip <lc server filename>"
+      },
+      "after": "fa1cb693a9dc7da1",
+      "date": 1435342962343
+    },
+    {
+      "type": "add",
+      "id": "efe9e1437839a51e",
+      "item": {
+        "type": "paragraph",
+        "id": "efe9e1437839a51e",
+        "text": "to expand the contents."
+      },
+      "after": "8a13ba710f4836e6",
+      "date": 1435342965621
+    },
+    {
+      "type": "add",
+      "id": "ca4f16bef443859e",
+      "item": {
+        "type": "paragraph",
+        "id": "ca4f16bef443859e",
+        "text": "chmod 755 livecode-community-server"
+      },
+      "after": "efe9e1437839a51e",
+      "date": 1435342967630
+    },
+    {
+      "type": "add",
+      "id": "ef533d1e691e28f8",
+      "item": {
+        "type": "paragraph",
+        "id": "ef533d1e691e28f8",
+        "text": "to make it executable. Then:"
+      },
+      "after": "ca4f16bef443859e",
+      "date": 1435342980771
+    },
+    {
+      "type": "add",
+      "id": "210f0ed77ed0fd26",
+      "item": {
+        "type": "paragraph",
+        "id": "210f0ed77ed0fd26",
+        "text": "mv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin"
+      },
+      "after": "ef533d1e691e28f8",
+      "date": 1435342983676
+    },
+    {
+      "type": "add",
+      "id": "87c729552eb7b2dc",
+      "item": {
+        "type": "paragraph",
+        "id": "87c729552eb7b2dc",
+        "text": "to move the files to the correct location (I could hvae unzipped them there)"
+      },
+      "after": "210f0ed77ed0fd26",
+      "date": 1435342986668
+    },
+    {
+      "type": "add",
+      "id": "242970b808a1a078",
+      "item": {
+        "type": "paragraph",
+        "id": "242970b808a1a078",
+        "text": "Then.."
+      },
+      "after": "87c729552eb7b2dc",
+      "date": 1435342993799
+    },
+    {
+      "type": "add",
+      "id": "e36609ad3d778a58",
+      "item": {
+        "type": "paragraph",
+        "id": "e36609ad3d778a58",
+        "text": "a2enmod actions\na2enmod cgi"
+      },
+      "after": "242970b808a1a078",
+      "date": 1435342996357
+    },
+    {
+      "type": "add",
+      "id": "094fa7c9ed1fe3a9",
+      "item": {
+        "type": "paragraph",
+        "id": "094fa7c9ed1fe3a9",
+        "text": "to enabled the actions and cgi mods\n\nThen the following.."
+      },
+      "after": "e36609ad3d778a58",
+      "date": 1435343002135
+    },
+    {
+      "type": "add",
+      "id": "04bcf30c609024da",
+      "item": {
+        "type": "paragraph",
+        "id": "04bcf30c609024da",
+        "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+      },
+      "after": "094fa7c9ed1fe3a9",
+      "date": 1435343004776
+    },
+    {
+      "type": "add",
+      "id": "07e531771457df51",
+      "item": {
+        "type": "paragraph",
+        "id": "07e531771457df51",
+        "text": "In the editor I added the 2 required lines as follows right before the end:"
+      },
+      "after": "04bcf30c609024da",
+      "date": 1435343013203
+    },
+    {
+      "type": "add",
+      "id": "dc6389c9d2ef9717",
+      "item": {
+        "type": "paragraph",
+        "id": "dc6389c9d2ef9717",
+        "text": "</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+      },
+      "after": "07e531771457df51",
+      "date": 1435343020317
+    },
+    {
+      "type": "add",
+      "id": "d41481db39b39d87",
+      "item": {
+        "type": "paragraph",
+        "id": "d41481db39b39d87",
+        "text": "I did NOT uncomment the line that says to include the serve-cgi-bin.conf"
+      },
+      "after": "dc6389c9d2ef9717",
+      "date": 1435343023687
+    },
+    {
+      "type": "add",
+      "id": "d1138e365c515f45",
+      "item": {
+        "type": "paragraph",
+        "id": "d1138e365c515f45",
+        "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it). Then:"
+      },
+      "after": "d41481db39b39d87",
+      "date": 1435343041240
+    },
+    {
+      "type": "add",
+      "id": "c479e0ca7efff6fe",
+      "item": {
+        "type": "paragraph",
+        "id": "c479e0ca7efff6fe",
+        "text": "service apache2 restart"
+      },
+      "after": "d1138e365c515f45",
+      "date": 1435343042690
+    },
+    {
+      "type": "add",
+      "id": "1f9fade8f6ddf0b9",
+      "item": {
+        "type": "paragraph",
+        "id": "1f9fade8f6ddf0b9",
+        "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up."
+      },
+      "after": "c479e0ca7efff6fe",
+      "date": 1435343054323
+    },
+    {
+      "type": "add",
+      "id": "150ebeeec33f80bf",
+      "item": {
+        "type": "paragraph",
+        "id": "150ebeeec33f80bf",
+        "text": "After restart, I created a simple file /var/www/html/test.lc and put in it:"
+      },
+      "after": "1f9fade8f6ddf0b9",
+      "date": 1435343071027
+    },
+    {
+      "type": "add",
+      "id": "a661f23c70d0ab5c",
+      "item": {
+        "type": "paragraph",
+        "id": "a661f23c70d0ab5c",
+        "text": "<?lc\nput random(542545)\n?>"
+      },
+      "after": "150ebeeec33f80bf",
+      "date": 1435343072873
+    },
+    {
+      "type": "add",
+      "id": "dab7f85e39ca1b00",
+      "item": {
+        "type": "paragraph",
+        "id": "dab7f85e39ca1b00",
+        "text": "Then I went to the droplets ip..\nhttp://xxx.xxx.xxx.xx/test.lc and voila' it works."
+      },
+      "after": "a661f23c70d0ab5c",
+      "date": 1435343098226
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "c12f4a3d3947e1dc",
+        "fa1cb693a9dc7da1",
+        "16add05187abe1ac",
+        "8a13ba710f4836e6",
+        "efe9e1437839a51e",
+        "ca4f16bef443859e",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "a661f23c70d0ab5c",
+        "dab7f85e39ca1b00",
+        "1a5c2883987ebad3",
+        "321e2e8f22eda08e"
+      ],
+      "id": "16add05187abe1ac",
+      "date": 1435343105652
+    },
+    {
+      "type": "remove",
+      "id": "c12f4a3d3947e1dc",
+      "date": 1435343113814
+    },
+    {
+      "type": "edit",
+      "id": "16add05187abe1ac",
+      "item": {
+        "type": "code",
+        "id": "16add05187abe1ac",
+        "text": "apt-get install unzip"
+      },
+      "date": 1435343115351
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "8a13ba710f4836e6",
+        "efe9e1437839a51e",
+        "ca4f16bef443859e",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "a661f23c70d0ab5c",
+        "dab7f85e39ca1b00",
+        "1a5c2883987ebad3",
+        "321e2e8f22eda08e"
+      ],
+      "id": "16add05187abe1ac",
+      "date": 1435343117820
+    },
+    {
+      "type": "fork",
+      "date": 1435343164919
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "8a13ba710f4836e6",
+        "efe9e1437839a51e",
+        "ca4f16bef443859e",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "1a5c2883987ebad3",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "a661f23c70d0ab5c",
+        "dab7f85e39ca1b00",
+        "321e2e8f22eda08e"
+      ],
+      "id": "1a5c2883987ebad3",
+      "date": 1435343175869
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "8a13ba710f4836e6",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "ca4f16bef443859e",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "1a5c2883987ebad3",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "a661f23c70d0ab5c",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "321e2e8f22eda08e",
+      "date": 1435343185365
+    },
+    {
+      "type": "remove",
+      "id": "8a13ba710f4836e6",
+      "date": 1435343190908
+    },
+    {
+      "type": "edit",
+      "id": "321e2e8f22eda08e",
+      "item": {
+        "type": "code",
+        "id": "321e2e8f22eda08e",
+        "text": "unzip <lc server filename>"
+      },
+      "date": 1435343193814
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ca4f16bef443859e",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "a661f23c70d0ab5c",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "1a5c2883987ebad3",
+      "date": 1435343200876
+    },
+    {
+      "type": "remove",
+      "id": "ca4f16bef443859e",
+      "date": 1435343205425
+    },
+    {
+      "type": "edit",
+      "id": "1a5c2883987ebad3",
+      "item": {
+        "type": "paragraph",
+        "id": "1a5c2883987ebad3",
+        "text": "chmod 755 livecode-community-server"
+      },
+      "date": 1435343212275
+    },
+    {
+      "type": "fork",
+      "date": 1435343214993
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "623975c7629ac052"
+      },
+      "id": "623975c7629ac052",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435343216362
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0894435af481a1f7"
+      },
+      "id": "0894435af481a1f7",
+      "type": "add",
+      "after": "623975c7629ac052",
+      "date": 1435343217545
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "45e1685fc33d4589"
+      },
+      "id": "45e1685fc33d4589",
+      "type": "add",
+      "after": "0894435af481a1f7",
+      "date": 1435343218634
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "a661f23c70d0ab5c",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00",
+        "0894435af481a1f7",
+        "45e1685fc33d4589"
+      ],
+      "id": "623975c7629ac052",
+      "date": 1435343220481
+    },
+    {
+      "type": "remove",
+      "id": "a661f23c70d0ab5c",
+      "date": 1435343226642
+    },
+    {
+      "type": "edit",
+      "id": "623975c7629ac052",
+      "item": {
+        "type": "code",
+        "id": "623975c7629ac052",
+        "text": "<?lc\n  put random(542545)\n?>"
+      },
+      "date": 1435343232337
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "c479e0ca7efff6fe",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00",
+        "45e1685fc33d4589"
+      ],
+      "id": "0894435af481a1f7",
+      "date": 1435343237668
+    },
+    {
+      "type": "remove",
+      "id": "c479e0ca7efff6fe",
+      "date": 1435343241862
+    },
+    {
+      "type": "edit",
+      "id": "0894435af481a1f7",
+      "item": {
+        "type": "code",
+        "id": "0894435af481a1f7",
+        "text": "service apache2 restart"
+      },
+      "date": 1435343243644
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "dc6389c9d2ef9717",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "45e1685fc33d4589",
+      "date": 1435343248672
+    },
+    {
+      "type": "remove",
+      "id": "dc6389c9d2ef9717",
+      "date": 1435343253490
+    },
+    {
+      "type": "edit",
+      "id": "45e1685fc33d4589",
+      "item": {
+        "type": "code",
+        "id": "45e1685fc33d4589",
+        "text": "</virtualhost> line\nAction lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+      },
+      "date": 1435343255471
+    },
+    {
+      "type": "edit",
+      "id": "45e1685fc33d4589",
+      "item": {
+        "type": "code",
+        "id": "45e1685fc33d4589",
+        "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+      },
+      "date": 1435343269885
+    },
+    {
+      "type": "edit",
+      "id": "07e531771457df51",
+      "item": {
+        "type": "paragraph",
+        "id": "07e531771457df51",
+        "text": "In the editor I added the 2 required lines as follows right before the end </virtualhost> line:"
+      },
+      "date": 1435343275061
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6053bd84d5ab916d"
+      },
+      "id": "6053bd84d5ab916d",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435343278364
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "6053bd84d5ab916d",
+      "date": 1435343280412
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ea47fd446133cb52"
+      },
+      "id": "ea47fd446133cb52",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435343282949
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "ea47fd446133cb52",
+        "6053bd84d5ab916d",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "ea47fd446133cb52",
+      "date": 1435343284810
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "16e4d49718ae9f0c"
+      },
+      "id": "16e4d49718ae9f0c",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435343286682
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "ea47fd446133cb52",
+        "6053bd84d5ab916d",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "16e4d49718ae9f0c",
+      "date": 1435343290999
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "ea47fd446133cb52",
+      "date": 1435343295593
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "6053bd84d5ab916d",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "e36609ad3d778a58",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "6053bd84d5ab916d",
+      "date": 1435343299423
+    },
+    {
+      "type": "remove",
+      "id": "e36609ad3d778a58",
+      "date": 1435343304902
+    },
+    {
+      "type": "edit",
+      "id": "ea47fd446133cb52",
+      "item": {
+        "type": "code",
+        "id": "ea47fd446133cb52",
+        "text": "a2enmod actions\na2enmod cgi"
+      },
+      "date": 1435343306518
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "04bcf30c609024da",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "6053bd84d5ab916d",
+      "date": 1435343320881
+    },
+    {
+      "type": "remove",
+      "id": "04bcf30c609024da",
+      "date": 1435343324686
+    },
+    {
+      "type": "edit",
+      "id": "6053bd84d5ab916d",
+      "item": {
+        "type": "code",
+        "id": "6053bd84d5ab916d",
+        "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+      },
+      "date": 1435343327107
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ed38f32c70b6fb36"
+      },
+      "id": "ed38f32c70b6fb36",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435343330888
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "944147663e23c930"
+      },
+      "id": "944147663e23c930",
+      "type": "add",
+      "after": "ed38f32c70b6fb36",
+      "date": 1435343333104
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4ec1c77b229a10a5"
+      },
+      "id": "4ec1c77b229a10a5",
+      "type": "add",
+      "after": "944147663e23c930",
+      "date": 1435343334953
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "ed38f32c70b6fb36",
+        "1a5c2883987ebad3",
+        "ef533d1e691e28f8",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00",
+        "944147663e23c930",
+        "4ec1c77b229a10a5"
+      ],
+      "id": "ed38f32c70b6fb36",
+      "date": 1435343341428
+    },
+    {
+      "type": "remove",
+      "id": "1a5c2883987ebad3",
+      "date": 1435343347537
+    },
+    {
+      "type": "edit",
+      "id": "ed38f32c70b6fb36",
+      "item": {
+        "type": "code",
+        "id": "ed38f32c70b6fb36",
+        "text": "chmod 755 livecode-community-server"
+      },
+      "date": 1435343349763
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "ed38f32c70b6fb36",
+        "ef533d1e691e28f8",
+        "944147663e23c930",
+        "210f0ed77ed0fd26",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00",
+        "4ec1c77b229a10a5"
+      ],
+      "id": "944147663e23c930",
+      "date": 1435343364486
+    },
+    {
+      "type": "remove",
+      "id": "210f0ed77ed0fd26",
+      "date": 1435343369294
+    },
+    {
+      "type": "edit",
+      "id": "944147663e23c930",
+      "item": {
+        "type": "code",
+        "id": "944147663e23c930",
+        "text": "mv livecode-community-server /usr/lib/cgi-bin\nmv externals /usr/lib/cgi-bin\nmv drivers /usr/lib/cgi-bin"
+      },
+      "date": 1435343372059
+    },
+    {
+      "type": "remove",
+      "id": "4ec1c77b229a10a5",
+      "date": 1435343398848
+    },
+    {
+      "type": "edit",
+      "id": "16e4d49718ae9f0c",
+      "item": {
+        "type": "paragraph",
+        "id": "16e4d49718ae9f0c",
+        "text": "adfs"
+      },
+      "date": 1435343545762
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "308ccc1432f83382"
+      },
+      "id": "308ccc1432f83382",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435343612749
+    },
+    {
+      "type": "edit",
+      "id": "308ccc1432f83382",
+      "item": {
+        "type": "code",
+        "id": "308ccc1432f83382",
+        "text": "wget http://downloads.livecode.com/livecode/7_0_6/LiveCodeCommunityInstaller-7_0_6_rc_3-Linux.x64"
+      },
+      "date": 1435343618258
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "16e4d49718ae9f0c",
+        "308ccc1432f83382",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "ed38f32c70b6fb36",
+        "ef533d1e691e28f8",
+        "944147663e23c930",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "308ccc1432f83382",
+      "date": 1435343627445
+    },
+    {
+      "type": "remove",
+      "id": "16e4d49718ae9f0c",
+      "date": 1435343630870
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "Choose LAMP 14.04 (Ubuntu) so you don't have to mess with setting up [[Apache]] and all by hand. After [[Droplet]] creation, log into the server with ssh in the [[terminal]] used [[wget]] to grab the 64bit version of lc server 7.0.6. "
+      },
+      "date": 1435343776655
+    },
+    {
+      "type": "add",
+      "id": "0de250892fd496dc",
+      "item": {
+        "type": "paragraph",
+        "id": "0de250892fd496dc",
+        "text": "Alternatively you can use [[Digital Ocean]]s built in web console to issue terminal commands on the server through the web interface."
+      },
+      "after": "6a1a2bfee0e9a4a1",
+      "date": 1435343781928
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "308ccc1432f83382",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "0de250892fd496dc",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "ed38f32c70b6fb36",
+        "ef533d1e691e28f8",
+        "944147663e23c930",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "0de250892fd496dc",
+      "date": 1435343784724
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "308ccc1432f83382",
+        "0de250892fd496dc",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "efe9e1437839a51e",
+        "ed38f32c70b6fb36",
+        "ef533d1e691e28f8",
+        "944147663e23c930",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "0de250892fd496dc",
+      "date": 1435343788492
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions are thanks to Mike Bonner describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1435343803300
+    },
+    {
+      "type": "edit",
+      "id": "2e7caae0a337f971",
+      "item": {
+        "type": "paragraph",
+        "id": "2e7caae0a337f971",
+        "text": "The following instructions are thanks to Mike Bonner and describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "date": 1435343812296
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "1) Create your Droplet. Choose LAMP 14.04 (Ubuntu) so you don't have to mess with setting up [[Apache]] and all by hand. "
+      },
+      "date": 1435343845171
+    },
+    {
+      "type": "add",
+      "id": "c6d9d1a478f15284",
+      "item": {
+        "type": "paragraph",
+        "id": "c6d9d1a478f15284",
+        "text": "2) Fetch Livecode. After [[Droplet]] creation, log into the server with ssh in the [[terminal]] used [[wget]] to grab the 64bit version of lc server 7.0.6. "
+      },
+      "after": "6a1a2bfee0e9a4a1",
+      "date": 1435343869204
+    },
+    {
+      "type": "edit",
+      "id": "53e974187bb7568a",
+      "item": {
+        "type": "paragraph",
+        "id": "53e974187bb7568a",
+        "text": "3) Install [[unzip]]:"
+      },
+      "date": 1435343899843
+    },
+    {
+      "type": "edit",
+      "id": "fa1cb693a9dc7da1",
+      "item": {
+        "type": "paragraph",
+        "id": "fa1cb693a9dc7da1",
+        "text": "4) [[unzip]] the file"
+      },
+      "date": 1435343920041
+    },
+    {
+      "type": "remove",
+      "id": "efe9e1437839a51e",
+      "date": 1435343935613
+    },
+    {
+      "type": "edit",
+      "id": "fa1cb693a9dc7da1",
+      "item": {
+        "type": "paragraph",
+        "id": "fa1cb693a9dc7da1",
+        "text": "4) [[unzip]] the file (to expand the contents):"
+      },
+      "date": 1435343947546
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "c6d9d1a478f15284",
+        "308ccc1432f83382",
+        "0de250892fd496dc",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "ef533d1e691e28f8",
+        "ed38f32c70b6fb36",
+        "944147663e23c930",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "ef533d1e691e28f8",
+      "date": 1435343950508
+    },
+    {
+      "type": "edit",
+      "id": "ef533d1e691e28f8",
+      "item": {
+        "type": "paragraph",
+        "id": "ef533d1e691e28f8",
+        "text": "5) Make it executable the server file executable so you can launch it as a programme and not edit it as text:"
+      },
+      "date": 1435343995492
+    },
+    {
+      "type": "add",
+      "id": "2782e7ad36fc8b90",
+      "item": {
+        "type": "paragraph",
+        "id": "2782e7ad36fc8b90",
+        "text": "6) move stuff to the right locations:"
+      },
+      "after": "ef533d1e691e28f8",
+      "date": 1435344013087
+    },
+    {
+      "type": "edit",
+      "id": "2782e7ad36fc8b90",
+      "item": {
+        "type": "paragraph",
+        "id": "2782e7ad36fc8b90",
+        "text": "6) Move stuff to the right locations:"
+      },
+      "date": 1435344018444
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "c6d9d1a478f15284",
+        "308ccc1432f83382",
+        "0de250892fd496dc",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "ef533d1e691e28f8",
+        "ed38f32c70b6fb36",
+        "2782e7ad36fc8b90",
+        "944147663e23c930",
+        "87c729552eb7b2dc",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "2782e7ad36fc8b90",
+      "date": 1435344020416
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "c6d9d1a478f15284",
+        "308ccc1432f83382",
+        "0de250892fd496dc",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "ef533d1e691e28f8",
+        "ed38f32c70b6fb36",
+        "2782e7ad36fc8b90",
+        "87c729552eb7b2dc",
+        "944147663e23c930",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "87c729552eb7b2dc",
+      "date": 1435344027595
+    },
+    {
+      "type": "remove",
+      "id": "87c729552eb7b2dc",
+      "date": 1435344031918
+    },
+    {
+      "type": "edit",
+      "id": "2782e7ad36fc8b90",
+      "item": {
+        "type": "paragraph",
+        "id": "2782e7ad36fc8b90",
+        "text": "6) Move the files to the correct location (you could have moved the zipped file then could unzipped them there):"
+      },
+      "date": 1435344064775
+    },
+    {
+      "type": "edit",
+      "id": "094fa7c9ed1fe3a9",
+      "item": {
+        "type": "paragraph",
+        "id": "094fa7c9ed1fe3a9",
+        "text": "Then the following.."
+      },
+      "date": 1435344075866
+    },
+    {
+      "type": "edit",
+      "id": "242970b808a1a078",
+      "item": {
+        "type": "paragraph",
+        "id": "242970b808a1a078",
+        "text": "7) Enable the actions and cgi mods:"
+      },
+      "date": 1435344088731
+    },
+    {
+      "type": "edit",
+      "id": "094fa7c9ed1fe3a9",
+      "item": {
+        "type": "paragraph",
+        "id": "094fa7c9ed1fe3a9",
+        "text": "8) Edit the [[Apache]] .conf file:"
+      },
+      "date": 1435344121802
+    },
+    {
+      "type": "edit",
+      "id": "07e531771457df51",
+      "item": {
+        "type": "paragraph",
+        "id": "07e531771457df51",
+        "text": "9) In the editor I added the 2 required lines as follows right before the end </virtualhost> line:"
+      },
+      "date": 1435344134942
+    },
+    {
+      "type": "edit",
+      "id": "d1138e365c515f45",
+      "item": {
+        "type": "paragraph",
+        "id": "d1138e365c515f45",
+        "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it). "
+      },
+      "date": 1435344244609
+    },
+    {
+      "type": "add",
+      "id": "eb5751be1f85c055",
+      "item": {
+        "type": "paragraph",
+        "id": "eb5751be1f85c055",
+        "text": "10) Restart your [[Apache]] server:"
+      },
+      "after": "d1138e365c515f45",
+      "date": 1435344267605
+    },
+    {
+      "type": "edit",
+      "id": "150ebeeec33f80bf",
+      "item": {
+        "type": "paragraph",
+        "id": "150ebeeec33f80bf",
+        "text": "11) Add a test script to see if [[Apache]] is serving up [[LiveCode]] scripts as cgi's. Create a simple file:"
+      },
+      "date": 1435344343266
+    },
+    {
+      "type": "add",
+      "id": "48100bd36098d45d",
+      "item": {
+        "type": "paragraph",
+        "id": "48100bd36098d45d",
+        "text": "and paste into it the following script:"
+      },
+      "after": "150ebeeec33f80bf",
+      "date": 1435344381594
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d8698c480b3cba06"
+      },
+      "id": "d8698c480b3cba06",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435344386447
+    },
+    {
+      "type": "edit",
+      "id": "d8698c480b3cba06",
+      "item": {
+        "type": "code",
+        "id": "d8698c480b3cba06",
+        "text": "nano -w /var/www/html/test.lc"
+      },
+      "date": 1435344400740
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "6a1a2bfee0e9a4a1",
+        "c6d9d1a478f15284",
+        "308ccc1432f83382",
+        "0de250892fd496dc",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "ef533d1e691e28f8",
+        "ed38f32c70b6fb36",
+        "2782e7ad36fc8b90",
+        "944147663e23c930",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "eb5751be1f85c055",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "d8698c480b3cba06",
+        "48100bd36098d45d",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "d8698c480b3cba06",
+      "date": 1435344403255
+    },
+    {
+      "type": "edit",
+      "id": "308ccc1432f83382",
+      "item": {
+        "type": "code",
+        "id": "308ccc1432f83382",
+        "text": "wget http://downloads.livecode.com/livecode/7_0_6/LiveCodeCommunityServer-7_0_6_rc_3-Linux-x86_64.zip"
+      },
+      "date": 1435344865476
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "583c09e8d8b84927"
+      },
+      "id": "583c09e8d8b84927",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435350054216
+    },
+    {
+      "type": "move",
+      "order": [
+        "2e7caae0a337f971",
+        "583c09e8d8b84927",
+        "6a1a2bfee0e9a4a1",
+        "c6d9d1a478f15284",
+        "308ccc1432f83382",
+        "0de250892fd496dc",
+        "53e974187bb7568a",
+        "16add05187abe1ac",
+        "fa1cb693a9dc7da1",
+        "321e2e8f22eda08e",
+        "ef533d1e691e28f8",
+        "ed38f32c70b6fb36",
+        "2782e7ad36fc8b90",
+        "944147663e23c930",
+        "242970b808a1a078",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d41481db39b39d87",
+        "d1138e365c515f45",
+        "eb5751be1f85c055",
+        "0894435af481a1f7",
+        "1f9fade8f6ddf0b9",
+        "150ebeeec33f80bf",
+        "d8698c480b3cba06",
+        "48100bd36098d45d",
+        "623975c7629ac052",
+        "dab7f85e39ca1b00"
+      ],
+      "id": "583c09e8d8b84927",
+      "date": 1435350061410
+    },
+    {
+      "type": "edit",
+      "id": "583c09e8d8b84927",
+      "item": {
+        "type": "video",
+        "id": "583c09e8d8b84927",
+        "text": "VIMEO 131920147\n(double-click to edit caption)\n"
+      },
+      "date": 1435350067998
+    },
+    {
+      "type": "edit",
+      "id": "583c09e8d8b84927",
+      "item": {
+        "type": "video",
+        "id": "583c09e8d8b84927",
+        "text": "VIMEO 131920147\nA quick rough and ready tutorial about how to set up your own cheap [[Livecode Server]] and [[Apache]] set up on Digital Ocean.\n"
+      },
+      "date": 1435350102248
+    },
+    {
+      "type": "edit",
+      "id": "583c09e8d8b84927",
+      "item": {
+        "type": "video",
+        "id": "583c09e8d8b84927",
+        "text": "VIMEO 131920147\nA quick rough and ready tutorial about how to set up your own [[Livecode Server]] and [[Apache]] set up on Digital Ocean.\n"
+      },
+      "date": 1435485384542,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1435485420415
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "<H3>Fetch and Install LiveCode Server"
+      },
+      "date": 1435485604268
+    },
+    {
+      "type": "edit",
+      "id": "6a1a2bfee0e9a4a1",
+      "item": {
+        "type": "html",
+        "id": "6a1a2bfee0e9a4a1",
+        "text": "<H3>Fetch and Install LiveCode Server"
+      },
+      "date": 1435485605676
+    },
+    {
+      "type": "add",
+      "id": "6eb8c5758a209628",
+      "item": {
+        "type": "paragraph",
+        "id": "6eb8c5758a209628",
+        "text": "1) Create your Droplet. Choose LAMP 14.04 (Ubuntu) so you don't have to mess with setting up [[Apache]] and all by hand. "
+      },
+      "after": "6a1a2bfee0e9a4a1",
+      "date": 1435485606972
+    },
+    {
+      "type": "edit",
+      "id": "242970b808a1a078",
+      "item": {
+        "type": "paragraph",
+        "id": "242970b808a1a078",
+        "text": "<H3>Fetch and Install LiveCode Server"
+      },
+      "date": 1435485632299
+    },
+    {
+      "type": "add",
+      "id": "eca204be058a56f0",
+      "item": {
+        "type": "paragraph",
+        "id": "eca204be058a56f0",
+        "text": "7) Enable the actions and cgi mods:"
+      },
+      "after": "242970b808a1a078",
+      "date": 1435485634209
+    },
+    {
+      "type": "edit",
+      "id": "242970b808a1a078",
+      "item": {
+        "type": "paragraph",
+        "id": "242970b808a1a078",
+        "text": "<H3>Configure Apache"
+      },
+      "date": 1435485642471
+    },
+    {
+      "type": "edit",
+      "id": "242970b808a1a078",
+      "item": {
+        "type": "html",
+        "id": "242970b808a1a078",
+        "text": "<H3>Configure Apache"
+      },
+      "date": 1435485643677
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b80e282ed57053a4"
+      },
+      "id": "b80e282ed57053a4",
+      "type": "add",
+      "after": "dab7f85e39ca1b00",
+      "date": 1435485670335
+    },
+    {
+      "type": "edit",
+      "id": "b80e282ed57053a4",
+      "item": {
+        "type": "paragraph",
+        "id": "b80e282ed57053a4",
+        "text": "<H3>See also"
+      },
+      "date": 1435485684096
+    },
+    {
+      "type": "add",
+      "id": "ec34f3e20fded485",
+      "item": {
+        "type": "paragraph",
+        "id": "ec34f3e20fded485",
+        "text": "You may then want to install [[RevIgniter]]"
+      },
+      "after": "b80e282ed57053a4",
+      "date": 1435485699659
+    },
+    {
+      "type": "edit",
+      "id": "b80e282ed57053a4",
+      "item": {
+        "type": "html",
+        "id": "b80e282ed57053a4",
+        "text": "<H3>See also"
+      },
+      "date": 1435485701073
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a1aa256fa83dc69d"
+      },
+      "id": "a1aa256fa83dc69d",
+      "type": "add",
+      "after": "ec34f3e20fded485",
+      "date": 1435487456790
+    },
+    {
+      "type": "edit",
+      "id": "a1aa256fa83dc69d",
+      "item": {
+        "type": "reference",
+        "id": "a1aa256fa83dc69d",
+        "site": "livecode.viral.academy",
+        "slug": "revigniter",
+        "title": "RevIgniter",
+        "text": "RevIgniter is an open source Web Application Development Framework primarily modeled on CodeIgniter, Ellislab, Inc   - [http://revigniter.com/ revigniter.com]"
+      },
+      "date": 1435487458112
+    },
+    {
+      "type": "edit",
+      "id": "ec34f3e20fded485",
+      "item": {
+        "type": "paragraph",
+        "id": "ec34f3e20fded485",
+        "text": "You may then want to install [[RevIgniter]]:"
+      },
+      "date": 1435487463049
+    }
+  ]
+}

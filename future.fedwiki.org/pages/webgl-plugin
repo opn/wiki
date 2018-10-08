@@ -1,0 +1,244 @@
+{
+  "title": "WebGL Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "35a7712c03ba26b9",
+      "text": "[[WebGL]] is fantastic. Here we ask how we could include this technology in wiki."
+    },
+    {
+      "type": "paragraph",
+      "id": "e1bee489d48b19bc",
+      "text": "Here is an example of a self-contained piece of [[WebGL]] that might be included in such a plugin - [https://codepen.io/Mipmap/pen/dcagy/ codepen]"
+    },
+    {
+      "type": "code",
+      "id": "7364264249b9c10a",
+      "text": "<script type=\"text/javascript\">\n\nfunction shaderProgram(gl, vs, fs) {\n var prog = gl.createProgram();\n var addshader = function(type, source) {\n  var s = gl.createShader((type == 'vertex') ?\n\t\t\tgl.VERTEX_SHADER : \n gl.FRAGMENT_SHADER);\n gl.shaderSource(s, source);\n gl.compileShader(s);\n if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {\n  throw \"Could not compile \"+type+\n\t\t\t\t\" shader:\\n\\n\"+gl.getShaderInfoLog(s);\n\t\t}\n\t\tgl.attachShader(prog, s);\n\t};\n\taddshader('vertex', vs);\n\taddshader('fragment', fs);\n\tgl.linkProgram(prog);\n\tif (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {\n\t\tthrow \"Could not link the shader program!\";\n\t}\n\treturn prog;\n}\n\nfunction attributeSetFloats(gl, prog, attr_name, rsize, arr) {\n\tgl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());\n\tgl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),\n\t\tgl.STATIC_DRAW);\n\tvar attr = gl.getAttribLocation(prog, attr_name);\n\tgl.enableVertexAttribArray(attr);\n\tgl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);\n}\n\nfunction draw() {\n\ttry {\n\t\tvar gl = document.getElementById(\"webgl\")\n\t\t\t.getContext(\"experimental-webgl\");\n\t\tif (!gl) { throw \"x\"; }\n\t} catch (err) {\n\t\tthrow \"Your web browser does not support WebGL!\";\n\t}\n\tgl.clearColor(0.8, 0.8, 0.8, 1);\n\tgl.clear(gl.COLOR_BUFFER_BIT);\n\n\tvar prog = shaderProgram(gl,\n\t\t\"attribute vec3 pos;\"+\n\t\t\"void main() {\"+\n\t\t\"\tgl_Position = vec4(pos, 2.0);\"+\n\t\t\"}\",\n\t\t\"void main() {\"+\n\t\t\"\tgl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);\"+\n\t\t\"}\"\n\t);\n\tgl.useProgram(prog);\n\n\tattributeSetFloats(gl, prog, \"pos\", 3, [\n\t\t-1, 0, 0,\n\t\t0, 1, 0,\n\t\t0, -1, 0,\n\t\t1, 0, 0\n\t]);\n\t\n\tgl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);\n}\n\nfunction init() {\n\ttry {\n\t\tdraw();\n\t} catch (e) {\n\t\talert(\"Error: \"+e);\n\t}\n}\nsetTimeout(init, 100);\n\n</script>\n<canvas id=\"webgl\" width=\"320\" height=\"240\"></canvas>"
+    },
+    {
+      "type": "markdown",
+      "id": "a55e127ece8ceb44",
+      "text": "# Security"
+    },
+    {
+      "type": "paragraph",
+      "id": "bb413690b9ff7409",
+      "text": "Only a wiki author could upload a [[WebGL Model]]. How then is this different to a web site author ftping malicious code to their site? The reason this is a more serious issue is that the included Javascript would be brought into a web page served by an authors own domain using [[CORS]].. "
+    },
+    {
+      "type": "paragraph",
+      "id": "5167392375911591",
+      "text": "We therefore have a real [[Cross-site Javascript]] issue."
+    },
+    {
+      "type": "markdown",
+      "id": "5692382617fc0a1f",
+      "text": "# Signed Code"
+    },
+    {
+      "type": "paragraph",
+      "id": "689fd68ff9f64d17",
+      "text": "The most immediate thought is to utilise a more general [[Code signing]] utility in wiki. The WebGl would need to be signed by the community however, so this is more complex than it seems and might require building on a robust notion of client sided [[wiki identity]] and a [[Roster Based WOT]]."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "WebGL Plugin",
+        "story": []
+      },
+      "date": 1512231852962
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "35a7712c03ba26b9"
+      },
+      "id": "35a7712c03ba26b9",
+      "type": "add",
+      "date": 1512231854439
+    },
+    {
+      "type": "edit",
+      "id": "35a7712c03ba26b9",
+      "item": {
+        "type": "paragraph",
+        "id": "35a7712c03ba26b9",
+        "text": "[[WebGL]] is fantastic. Here we ask how we could include this technology in wiki."
+      },
+      "date": 1512231893627
+    },
+    {
+      "type": "add",
+      "id": "5692382617fc0a1f",
+      "item": {
+        "type": "paragraph",
+        "id": "5692382617fc0a1f",
+        "text": "# Signed Code"
+      },
+      "after": "35a7712c03ba26b9",
+      "date": 1512231914186
+    },
+    {
+      "type": "add",
+      "id": "689fd68ff9f64d17",
+      "item": {
+        "type": "paragraph",
+        "id": "689fd68ff9f64d17",
+        "text": "The most immediate thought is to utilise a more general [[Code signing]] utility in wiki. The WebGl would need to be signed by the community however, so this is more complex than it seems and might require building on a robust notion of client sided [[wiki identity]] and a [[Roster Based WOT]]."
+      },
+      "after": "5692382617fc0a1f",
+      "date": 1512232131378
+    },
+    {
+      "type": "edit",
+      "id": "5692382617fc0a1f",
+      "item": {
+        "type": "markdown",
+        "id": "5692382617fc0a1f",
+        "text": "# Signed Code"
+      },
+      "date": 1512232133333
+    },
+    {
+      "type": "add",
+      "id": "a55e127ece8ceb44",
+      "item": {
+        "type": "paragraph",
+        "id": "a55e127ece8ceb44",
+        "text": "# Security"
+      },
+      "after": "35a7712c03ba26b9",
+      "date": 1512232147171
+    },
+    {
+      "type": "add",
+      "id": "bb413690b9ff7409",
+      "item": {
+        "type": "paragraph",
+        "id": "bb413690b9ff7409",
+        "text": "Only a wiki author could upload a [[WebGL Model]]. How then is this different to a web site author ftping malicious code to their site? The reason this is a more serious issue is that the included Javascript would be brought into a web page served by an authors own domain using [[CORS]].. "
+      },
+      "after": "a55e127ece8ceb44",
+      "date": 1512232347990
+    },
+    {
+      "type": "add",
+      "id": "5167392375911591",
+      "item": {
+        "type": "paragraph",
+        "id": "5167392375911591",
+        "text": "We therefore have a real [[Cross-site Javascript]] issue."
+      },
+      "after": "bb413690b9ff7409",
+      "date": 1512232354157
+    },
+    {
+      "type": "edit",
+      "id": "a55e127ece8ceb44",
+      "item": {
+        "type": "markdown",
+        "id": "a55e127ece8ceb44",
+        "text": "# Security"
+      },
+      "date": 1512232356820
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7364264249b9c10a"
+      },
+      "id": "7364264249b9c10a",
+      "type": "add",
+      "after": "689fd68ff9f64d17",
+      "date": 1512232358473
+    },
+    {
+      "type": "move",
+      "order": [
+        "35a7712c03ba26b9",
+        "7364264249b9c10a",
+        "a55e127ece8ceb44",
+        "bb413690b9ff7409",
+        "5167392375911591",
+        "5692382617fc0a1f",
+        "689fd68ff9f64d17"
+      ],
+      "id": "7364264249b9c10a",
+      "date": 1512232360322
+    },
+    {
+      "type": "edit",
+      "id": "7364264249b9c10a",
+      "item": {
+        "type": "code",
+        "id": "7364264249b9c10a",
+        "text": "<script type=\"text/javascript\">\n\nfunction shaderProgram(gl, vs, fs) {\n\tvar prog = gl.createProgram();\n\tvar addshader = function(type, source) {\n\t\tvar s = gl.createShader((type == 'vertex') ?\n\t\t\tgl.VERTEX_SHADER : gl.FRAGMENT_SHADER);\n\t\tgl.shaderSource(s, source);\n\t\tgl.compileShader(s);\n\t\tif (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {\n\t\t\tthrow \"Could not compile \"+type+\n\t\t\t\t\" shader:\\n\\n\"+gl.getShaderInfoLog(s);\n\t\t}\n\t\tgl.attachShader(prog, s);\n\t};\n\taddshader('vertex', vs);\n\taddshader('fragment', fs);\n\tgl.linkProgram(prog);\n\tif (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {\n\t\tthrow \"Could not link the shader program!\";\n\t}\n\treturn prog;\n}\n\nfunction attributeSetFloats(gl, prog, attr_name, rsize, arr) {\n\tgl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());\n\tgl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),\n\t\tgl.STATIC_DRAW);\n\tvar attr = gl.getAttribLocation(prog, attr_name);\n\tgl.enableVertexAttribArray(attr);\n\tgl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);\n}\n\nfunction draw() {\n\ttry {\n\t\tvar gl = document.getElementById(\"webgl\")\n\t\t\t.getContext(\"experimental-webgl\");\n\t\tif (!gl) { throw \"x\"; }\n\t} catch (err) {\n\t\tthrow \"Your web browser does not support WebGL!\";\n\t}\n\tgl.clearColor(0.8, 0.8, 0.8, 1);\n\tgl.clear(gl.COLOR_BUFFER_BIT);\n\n\tvar prog = shaderProgram(gl,\n\t\t\"attribute vec3 pos;\"+\n\t\t\"void main() {\"+\n\t\t\"\tgl_Position = vec4(pos, 2.0);\"+\n\t\t\"}\",\n\t\t\"void main() {\"+\n\t\t\"\tgl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);\"+\n\t\t\"}\"\n\t);\n\tgl.useProgram(prog);\n\n\tattributeSetFloats(gl, prog, \"pos\", 3, [\n\t\t-1, 0, 0,\n\t\t0, 1, 0,\n\t\t0, -1, 0,\n\t\t1, 0, 0\n\t]);\n\t\n\tgl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);\n}\n\nfunction init() {\n\ttry {\n\t\tdraw();\n\t} catch (e) {\n\t\talert(\"Error: \"+e);\n\t}\n}\nsetTimeout(init, 100);\n\n</script>\n<canvas id=\"webgl\" width=\"320\" height=\"240\"></canvas>"
+      },
+      "date": 1512232365147
+    },
+    {
+      "type": "add",
+      "id": "e1bee489d48b19bc",
+      "item": {
+        "type": "paragraph",
+        "id": "e1bee489d48b19bc",
+        "text": "Here is an example of a \"simple\" self-contained piece of WebGl that might be included in such a plugin - [asdf adfs]"
+      },
+      "after": "35a7712c03ba26b9",
+      "date": 1512232421014
+    },
+    {
+      "type": "edit",
+      "id": "e1bee489d48b19bc",
+      "item": {
+        "type": "paragraph",
+        "id": "e1bee489d48b19bc",
+        "text": "Here is an example of a \"simple\" self-contained piece of [[WebGL]] that might be included in such a plugin - [https://codepen.io/Mipmap/pen/dcagy/ codepen]"
+      },
+      "date": 1512232452504
+    },
+    {
+      "type": "edit",
+      "id": "e1bee489d48b19bc",
+      "item": {
+        "type": "paragraph",
+        "id": "e1bee489d48b19bc",
+        "text": "Here is an example of a self-contained piece of [[WebGL]] that might be included in such a plugin - [https://codepen.io/Mipmap/pen/dcagy/ codepen]"
+      },
+      "date": 1512232467016
+    },
+    {
+      "type": "edit",
+      "id": "7364264249b9c10a",
+      "item": {
+        "type": "code",
+        "id": "7364264249b9c10a",
+        "text": "<script type=\"text/javascript\">\n\nfunction shaderProgram(gl, vs, fs) {\n var prog = gl.createProgram();\n var addshader = function(type, source) {\n  var s = gl.createShader((type == 'vertex') ?\n\t\t\tgl.VERTEX_SHADER : gl.FRAGMENT_SHADER);\n\t\tgl.shaderSource(s, source);\n\t\tgl.compileShader(s);\n\t\tif (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {\n\t\t\tthrow \"Could not compile \"+type+\n\t\t\t\t\" shader:\\n\\n\"+gl.getShaderInfoLog(s);\n\t\t}\n\t\tgl.attachShader(prog, s);\n\t};\n\taddshader('vertex', vs);\n\taddshader('fragment', fs);\n\tgl.linkProgram(prog);\n\tif (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {\n\t\tthrow \"Could not link the shader program!\";\n\t}\n\treturn prog;\n}\n\nfunction attributeSetFloats(gl, prog, attr_name, rsize, arr) {\n\tgl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());\n\tgl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),\n\t\tgl.STATIC_DRAW);\n\tvar attr = gl.getAttribLocation(prog, attr_name);\n\tgl.enableVertexAttribArray(attr);\n\tgl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);\n}\n\nfunction draw() {\n\ttry {\n\t\tvar gl = document.getElementById(\"webgl\")\n\t\t\t.getContext(\"experimental-webgl\");\n\t\tif (!gl) { throw \"x\"; }\n\t} catch (err) {\n\t\tthrow \"Your web browser does not support WebGL!\";\n\t}\n\tgl.clearColor(0.8, 0.8, 0.8, 1);\n\tgl.clear(gl.COLOR_BUFFER_BIT);\n\n\tvar prog = shaderProgram(gl,\n\t\t\"attribute vec3 pos;\"+\n\t\t\"void main() {\"+\n\t\t\"\tgl_Position = vec4(pos, 2.0);\"+\n\t\t\"}\",\n\t\t\"void main() {\"+\n\t\t\"\tgl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);\"+\n\t\t\"}\"\n\t);\n\tgl.useProgram(prog);\n\n\tattributeSetFloats(gl, prog, \"pos\", 3, [\n\t\t-1, 0, 0,\n\t\t0, 1, 0,\n\t\t0, -1, 0,\n\t\t1, 0, 0\n\t]);\n\t\n\tgl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);\n}\n\nfunction init() {\n\ttry {\n\t\tdraw();\n\t} catch (e) {\n\t\talert(\"Error: \"+e);\n\t}\n}\nsetTimeout(init, 100);\n\n</script>\n<canvas id=\"webgl\" width=\"320\" height=\"240\"></canvas>"
+      },
+      "date": 1512232513017
+    },
+    {
+      "type": "edit",
+      "id": "7364264249b9c10a",
+      "item": {
+        "type": "code",
+        "id": "7364264249b9c10a",
+        "text": "<script type=\"text/javascript\">\n\nfunction shaderProgram(gl, vs, fs) {\n var prog = gl.createProgram();\n var addshader = function(type, source) {\n  var s = gl.createShader((type == 'vertex') ?\n\t\t\tgl.VERTEX_SHADER : gl.FRAGMENT_SHADER);\n gl.shaderSource(s, source);\n gl.compileShader(s);\n if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {\n  throw \"Could not compile \"+type+\n\t\t\t\t\" shader:\\n\\n\"+gl.getShaderInfoLog(s);\n\t\t}\n\t\tgl.attachShader(prog, s);\n\t};\n\taddshader('vertex', vs);\n\taddshader('fragment', fs);\n\tgl.linkProgram(prog);\n\tif (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {\n\t\tthrow \"Could not link the shader program!\";\n\t}\n\treturn prog;\n}\n\nfunction attributeSetFloats(gl, prog, attr_name, rsize, arr) {\n\tgl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());\n\tgl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),\n\t\tgl.STATIC_DRAW);\n\tvar attr = gl.getAttribLocation(prog, attr_name);\n\tgl.enableVertexAttribArray(attr);\n\tgl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);\n}\n\nfunction draw() {\n\ttry {\n\t\tvar gl = document.getElementById(\"webgl\")\n\t\t\t.getContext(\"experimental-webgl\");\n\t\tif (!gl) { throw \"x\"; }\n\t} catch (err) {\n\t\tthrow \"Your web browser does not support WebGL!\";\n\t}\n\tgl.clearColor(0.8, 0.8, 0.8, 1);\n\tgl.clear(gl.COLOR_BUFFER_BIT);\n\n\tvar prog = shaderProgram(gl,\n\t\t\"attribute vec3 pos;\"+\n\t\t\"void main() {\"+\n\t\t\"\tgl_Position = vec4(pos, 2.0);\"+\n\t\t\"}\",\n\t\t\"void main() {\"+\n\t\t\"\tgl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);\"+\n\t\t\"}\"\n\t);\n\tgl.useProgram(prog);\n\n\tattributeSetFloats(gl, prog, \"pos\", 3, [\n\t\t-1, 0, 0,\n\t\t0, 1, 0,\n\t\t0, -1, 0,\n\t\t1, 0, 0\n\t]);\n\t\n\tgl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);\n}\n\nfunction init() {\n\ttry {\n\t\tdraw();\n\t} catch (e) {\n\t\talert(\"Error: \"+e);\n\t}\n}\nsetTimeout(init, 100);\n\n</script>\n<canvas id=\"webgl\" width=\"320\" height=\"240\"></canvas>"
+      },
+      "date": 1512232551522
+    },
+    {
+      "type": "edit",
+      "id": "7364264249b9c10a",
+      "item": {
+        "type": "code",
+        "id": "7364264249b9c10a",
+        "text": "<script type=\"text/javascript\">\n\nfunction shaderProgram(gl, vs, fs) {\n var prog = gl.createProgram();\n var addshader = function(type, source) {\n  var s = gl.createShader((type == 'vertex') ?\n\t\t\tgl.VERTEX_SHADER : \n gl.FRAGMENT_SHADER);\n gl.shaderSource(s, source);\n gl.compileShader(s);\n if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {\n  throw \"Could not compile \"+type+\n\t\t\t\t\" shader:\\n\\n\"+gl.getShaderInfoLog(s);\n\t\t}\n\t\tgl.attachShader(prog, s);\n\t};\n\taddshader('vertex', vs);\n\taddshader('fragment', fs);\n\tgl.linkProgram(prog);\n\tif (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {\n\t\tthrow \"Could not link the shader program!\";\n\t}\n\treturn prog;\n}\n\nfunction attributeSetFloats(gl, prog, attr_name, rsize, arr) {\n\tgl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());\n\tgl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),\n\t\tgl.STATIC_DRAW);\n\tvar attr = gl.getAttribLocation(prog, attr_name);\n\tgl.enableVertexAttribArray(attr);\n\tgl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);\n}\n\nfunction draw() {\n\ttry {\n\t\tvar gl = document.getElementById(\"webgl\")\n\t\t\t.getContext(\"experimental-webgl\");\n\t\tif (!gl) { throw \"x\"; }\n\t} catch (err) {\n\t\tthrow \"Your web browser does not support WebGL!\";\n\t}\n\tgl.clearColor(0.8, 0.8, 0.8, 1);\n\tgl.clear(gl.COLOR_BUFFER_BIT);\n\n\tvar prog = shaderProgram(gl,\n\t\t\"attribute vec3 pos;\"+\n\t\t\"void main() {\"+\n\t\t\"\tgl_Position = vec4(pos, 2.0);\"+\n\t\t\"}\",\n\t\t\"void main() {\"+\n\t\t\"\tgl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);\"+\n\t\t\"}\"\n\t);\n\tgl.useProgram(prog);\n\n\tattributeSetFloats(gl, prog, \"pos\", 3, [\n\t\t-1, 0, 0,\n\t\t0, 1, 0,\n\t\t0, -1, 0,\n\t\t1, 0, 0\n\t]);\n\t\n\tgl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);\n}\n\nfunction init() {\n\ttry {\n\t\tdraw();\n\t} catch (e) {\n\t\talert(\"Error: \"+e);\n\t}\n}\nsetTimeout(init, 100);\n\n</script>\n<canvas id=\"webgl\" width=\"320\" height=\"240\"></canvas>"
+      },
+      "date": 1512232581461
+    }
+  ]
+}

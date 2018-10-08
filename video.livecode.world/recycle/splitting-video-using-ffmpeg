@@ -1,0 +1,1441 @@
+{
+  "title": "Splitting video using ffmpeg",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "3218965c980a50b6",
+      "text": "\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "b632a1547c6e09b5",
+      "text": "Ffmpeg is an excellent and flexible tool for chopping up video - [https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video superuser.com]"
+    },
+    {
+      "type": "html",
+      "id": "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=stackoverflow.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://stackoverflow.com/questions/18444194/cutting-the-videos-based-on-start-and-end-time-using-ffmpeg'>linux - Cutting the videos based on start and end time using ffmpeg - Stack Overflow</a>"
+    },
+    {
+      "type": "paragraph",
+      "id": "4c1cf2c04fd4de7e",
+      "text": "In order to cut videos without re-encoding the video (which can take a very long time) use the:"
+    },
+    {
+      "type": "code",
+      "id": "b7a1453fdf1c33a6",
+      "text": "-c copy"
+    },
+    {
+      "type": "paragraph",
+      "id": "0cab52a3057fea3e",
+      "text": "The following command copies a clip from 5.5 seconds to 11.5 seconds:"
+    },
+    {
+      "type": "code",
+      "id": "adf4af3496dcab7b",
+      "text": "ffmpeg -i input.mp4 -ss 5.5 -t 6 -c copy output.mp4"
+    },
+    {
+      "type": "code",
+      "id": "9ef910610b8365fb",
+      "text": "-i:      This specifies the input file\n-ss:     Seeks in input file to position 00:01:00\n-to:     Time your trimmed video will end with\n-c copy: Trim via stream copy. (NB: Very fast) "
+    },
+    {
+      "type": "markdown",
+      "id": "4b64a58d13fcfcfe",
+      "text": "# Time unit syntax"
+    },
+    {
+      "type": "markdown",
+      "id": "aa3cae943a20588e",
+      "text": "When working with ffmpeg, you can use two different time unit formats: \n\n- sexagesimal HH:MM:SS.xxx format\n- seconds (s.msec). "
+    },
+    {
+      "type": "paragraph",
+      "id": "6cbdc716058c9040",
+      "text": "So if a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. "
+    },
+    {
+      "type": "paragraph",
+      "id": "b7fd796b5ba0c58b",
+      "text": "For instance, 02:30.5 would be 2 minutes, 30 seconds, and a half a second, which would be the same as using 150.5 in seconds."
+    },
+    {
+      "type": "paragraph",
+      "id": "e24dbb9a7c642522",
+      "text": "This means that you must not use the HMSF format that is used for instances in [[EDL]]s."
+    },
+    {
+      "type": "paragraph",
+      "id": "6cd571a8d5566b37",
+      "text": "Therefore a time code from an [[EDL]] like this:"
+    },
+    {
+      "type": "code",
+      "id": "cd86ee0185a92941",
+      "text": "01:39:15:30"
+    },
+    {
+      "type": "paragraph",
+      "id": "278dfb8b818dbe98",
+      "text": "Needs to be translated to:"
+    },
+    {
+      "type": "code",
+      "id": "204529b13804921f",
+      "text": "01:39:15.5"
+    },
+    {
+      "type": "markdown",
+      "id": "3c017399ccf25c13",
+      "text": "# Careful how you seek"
+    },
+    {
+      "type": "paragraph",
+      "id": "64bc126bdead6e48",
+      "text": "It is faster to supply -ss BEFORE the input file (before -i), because that way ffmpeg will skip directly to the location. "
+    },
+    {
+      "type": "html",
+      "id": "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/Seeking#Cuttingsmallsections'>Seeking &ndash; FFmpeg</a>"
+    },
+    {
+      "type": "paragraph",
+      "id": "8258634bfc535fef",
+      "text": "However, that will result in inaccurate seeking and therefore cutting, it will also set the time \"zero\" to that location, meaning that -to will point to the wrong time - [https://trac.ffmpeg.org/wiki/Seeking ffmpeg.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+      "text": "# Splitting large video files"
+    },
+    {
+      "type": "paragraph",
+      "id": "2d9234311145b75e",
+      "text": "To split a large file into segments respecting existing keyframes you can use the segment muxer to break the input into segments - [https://stackoverflow.com/questions/35133119/ffmpeg-splitting-large-files stackoverflow]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5b7b80d9a81243d6",
+      "text": "\nffmpeg -i testfile.mp4 -c copy -f segment -segment_time 1200 testfile_piece_%02d.mp4"
+    },
+    {
+      "type": "paragraph",
+      "id": "ca7610759420b98c",
+      "text": "This will split the source at keyframes, so segments may not be exactly 1200 seconds long. And the timestamps aren't reset, so some players will fail to play the 2nd and latter segments. If playability is needed, insert -reset_timestamps 1."
+    },
+    {
+      "type": "html",
+      "id": "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=unix.stackexchange.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://unix.stackexchange.com/questions/1670/how-can-i-use-ffmpeg-to-split-mpeg-video-into-10-minute-chunks'>How can I use ffmpeg to split MPEG video into 10 minute chunks? - Unix & Linux Stack Exchange</a>"
+    },
+    {
+      "type": "html",
+      "id": "706cffae-0c38-4093-85cc-1686ef5c36b7",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=stackoverflow.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://stackoverflow.com/questions/21420296/how-to-extract-time-accurate-video-segments-with-ffmpeg'>How to extract time-accurate video segments with ffmpeg? - Stack Overflow</a>"
+    },
+    {
+      "type": "html",
+      "id": "df720586-8a89-48fb-b494-973a2916c14e",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=askubuntu.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://askubuntu.com/questions/948304/how-to-automatically-segment-video-using-ffmpeg-without-re-encoding'>How to automatically segment video using ffmpeg without re-encoding? - Ask Ubuntu</a>"
+    },
+    {
+      "type": "html",
+      "id": "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://ffmpeg.org/ffmpeg-formats.html#segment_002c-stream_005fsegment_002c-ssegment'>FFmpeg Formats Documentation</a>"
+    },
+    {
+      "type": "markdown",
+      "id": "aab534d07a7254b9",
+      "text": "# Rejoining split files"
+    },
+    {
+      "type": "paragraph",
+      "id": "59617e8720e0a86f",
+      "text": "After the parallel encoding, you can stitch the generated segments by first creating a text file seg.txt like this:"
+    },
+    {
+      "type": "code",
+      "id": "08d78b268ca96e7a",
+      "text": "file 'encoded_testfile_piece_00.mp4'\nfile 'encoded_testfile_piece_01.mp4'\nfile 'encoded_testfile_piece_02.mp4'\nfile 'encoded_testfile_piece_03.mp4'\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "9af11b7b5a035b3f",
+      "text": "And then running:"
+    },
+    {
+      "type": "code",
+      "id": "a0b16febfc72ffb9",
+      "text": "ffmpeg -f concat -i seg.txt -c copy -fflags +genpts encoded_full.mp4"
+    },
+    {
+      "type": "code",
+      "id": "7b21084e9081abc2",
+      "text": "01:23:45.678 (HOURS:MM:SS.MICROSECONDS)\n\n1 hour\n23 minutes\n45 seconds\n678 microseconds (hundredths of a second)"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Splitting video using ffmpeg",
+        "story": []
+      },
+      "date": 1509272869395
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b632a1547c6e09b5"
+      },
+      "id": "b632a1547c6e09b5",
+      "type": "add",
+      "date": 1509272870675
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "3218965c980a50b6",
+        "text": "# Chopping video\n\nFfmpeg is an excellent and flexible tool for chopping up video - [https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video superuser.com]"
+      },
+      "id": "3218965c980a50b6",
+      "date": 1509272873950
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=stackoverflow.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://stackoverflow.com/questions/18444194/cutting-the-videos-based-on-start-and-end-time-using-ffmpeg'>linux - Cutting the videos based on start and end time using ffmpeg - Stack Overflow</a>"
+      },
+      "after": "3218965c980a50b6",
+      "id": "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+      "date": 1509272878199
+    },
+    {
+      "type": "edit",
+      "id": "3218965c980a50b6",
+      "item": {
+        "type": "markdown",
+        "id": "3218965c980a50b6",
+        "text": "# Chopping video\n\n"
+      },
+      "date": 1509272883286
+    },
+    {
+      "type": "edit",
+      "id": "3218965c980a50b6",
+      "item": {
+        "type": "markdown",
+        "id": "3218965c980a50b6",
+        "text": "\n"
+      },
+      "date": 1509272886294
+    },
+    {
+      "type": "edit",
+      "id": "b632a1547c6e09b5",
+      "item": {
+        "type": "paragraph",
+        "id": "b632a1547c6e09b5",
+        "text": "Ffmpeg is an excellent and flexible tool for chopping up video - [https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video superuser.com]"
+      },
+      "date": 1509272888782
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9"
+      ],
+      "id": "b632a1547c6e09b5",
+      "date": 1509272890479
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4c1cf2c04fd4de7e",
+        "text": "In order to cut videos without re-encoding the video (which can take a very long time) use the:"
+      },
+      "after": "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+      "id": "4c1cf2c04fd4de7e",
+      "date": 1509272894171
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0cab52a3057fea3e",
+        "text": "The following command copies a clip from 5.5 seconds to 11.5 seconds:"
+      },
+      "after": "4c1cf2c04fd4de7e",
+      "id": "0cab52a3057fea3e",
+      "date": 1509272896369
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "b7a1453fdf1c33a6",
+        "text": "-c copy"
+      },
+      "after": "4c1cf2c04fd4de7e",
+      "id": "b7a1453fdf1c33a6",
+      "date": 1509272899308
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "adf4af3496dcab7b",
+        "text": "ffmpeg -i input.mp4 -ss 5.5 -t 6 -c copy output.mp4"
+      },
+      "after": "0cab52a3057fea3e",
+      "id": "adf4af3496dcab7b",
+      "date": 1509272901325
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4b64a58d13fcfcfe",
+        "text": "Use timestamps either in HH:MM:SS.xxx format or in seconds (s.msec). The following explains the rest of the parameters used above:"
+      },
+      "after": "adf4af3496dcab7b",
+      "id": "4b64a58d13fcfcfe",
+      "date": 1509272903611
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9ef910610b8365fb",
+        "text": "-i:      This specifies the input file\n-ss:     Seeks in input file to position 00:01:00\n-to:     Time your trimmed video will end with\n-c copy: Trim via stream copy. (NB: Very fast) "
+      },
+      "after": "4b64a58d13fcfcfe",
+      "id": "9ef910610b8365fb",
+      "date": 1509272905766
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3c017399ccf25c13",
+        "text": "Note: it is faster to supply -ss BEFORE the input file (before -i), because that way ffmpeg will skip directly to the location. However, that will also set the time \"zero\" to that location, meaning that -to will point to the wrong time - [https://trac.ffmpeg.org/wiki/Seeking ffmpeg.org]"
+      },
+      "after": "9ef910610b8365fb",
+      "id": "3c017399ccf25c13",
+      "date": 1509272908051
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "3c017399ccf25c13"
+      ],
+      "id": "9ef910610b8365fb",
+      "date": 1509272948410
+    },
+    {
+      "type": "edit",
+      "id": "4b64a58d13fcfcfe",
+      "item": {
+        "type": "paragraph",
+        "id": "4b64a58d13fcfcfe",
+        "text": "# Timestamps"
+      },
+      "date": 1509272956585
+    },
+    {
+      "type": "add",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "paragraph",
+        "id": "aa3cae943a20588e",
+        "text": "Use timestamps either in HH:MM:SS.xxx format or in seconds (s.msec). The following explains the rest of the parameters used above:"
+      },
+      "after": "4b64a58d13fcfcfe",
+      "date": 1509272957088
+    },
+    {
+      "type": "edit",
+      "id": "4b64a58d13fcfcfe",
+      "item": {
+        "type": "markdown",
+        "id": "4b64a58d13fcfcfe",
+        "text": "# Timestamps"
+      },
+      "date": 1509272958055
+    },
+    {
+      "type": "edit",
+      "id": "3c017399ccf25c13",
+      "item": {
+        "type": "paragraph",
+        "id": "3c017399ccf25c13",
+        "text": "# Seeking"
+      },
+      "date": 1509272965960
+    },
+    {
+      "type": "add",
+      "id": "64bc126bdead6e48",
+      "item": {
+        "type": "paragraph",
+        "id": "64bc126bdead6e48",
+        "text": "Note: it is faster to supply -ss BEFORE the input file (before -i), because that way ffmpeg will skip directly to the location. However, that will also set the time \"zero\" to that location, meaning that -to will point to the wrong time - [https://trac.ffmpeg.org/wiki/Seeking ffmpeg.org]"
+      },
+      "after": "3c017399ccf25c13",
+      "date": 1509272966497
+    },
+    {
+      "type": "edit",
+      "id": "3c017399ccf25c13",
+      "item": {
+        "type": "markdown",
+        "id": "3c017399ccf25c13",
+        "text": "# Seeking"
+      },
+      "date": 1509272967473
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "text": "# Splitting large video files"
+      },
+      "after": "64bc126bdead6e48",
+      "id": "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+      "date": 1509274792755
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://ffmpeg.org/ffmpeg-formats.html#segment_002c-stream_005fsegment_002c-ssegment'>FFmpeg Formats Documentation</a>"
+      },
+      "after": "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+      "id": "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+      "date": 1509274797403
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=unix.stackexchange.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://unix.stackexchange.com/questions/1670/how-can-i-use-ffmpeg-to-split-mpeg-video-into-10-minute-chunks'>How can I use ffmpeg to split MPEG video into 10 minute chunks? - Unix & Linux Stack Exchange</a>"
+      },
+      "after": "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+      "id": "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+      "date": 1509274800777
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=stackoverflow.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://stackoverflow.com/questions/35133119/ffmpeg-splitting-large-files'>video - FFmpeg splitting large files - Stack Overflow</a>"
+      },
+      "after": "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+      "id": "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+      "date": 1509274803603
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=stackoverflow.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://stackoverflow.com/questions/21420296/how-to-extract-time-accurate-video-segments-with-ffmpeg'>How to extract time-accurate video segments with ffmpeg? - Stack Overflow</a>"
+      },
+      "after": "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+      "id": "706cffae-0c38-4093-85cc-1686ef5c36b7",
+      "date": 1509274812151
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "3ca3f9ea-a6f4-483a-ac01-4746180cb344",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=tips.tutorialhorizon.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://tips.tutorialhorizon.com/2016/07/21/how-to-trim-videos-in-vlc-on-mac/'>How to cut/edit/trim videos in vlc on mac? | Tips &Tricks</a>"
+      },
+      "after": "706cffae-0c38-4093-85cc-1686ef5c36b7",
+      "id": "3ca3f9ea-a6f4-483a-ac01-4746180cb344",
+      "date": 1509274818159
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/Seeking#Cuttingsmallsections'>Seeking &ndash; FFmpeg</a>"
+      },
+      "after": "3ca3f9ea-a6f4-483a-ac01-4746180cb344",
+      "id": "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+      "date": 1509274821728
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "df720586-8a89-48fb-b494-973a2916c14e",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=askubuntu.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://askubuntu.com/questions/948304/how-to-automatically-segment-video-using-ffmpeg-without-re-encoding'>How to automatically segment video using ffmpeg without re-encoding? - Ask Ubuntu</a>"
+      },
+      "after": "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+      "id": "df720586-8a89-48fb-b494-973a2916c14e",
+      "date": 1509274824991
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "3ca3f9ea-a6f4-483a-ac01-4746180cb344",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "df720586-8a89-48fb-b494-973a2916c14e"
+      ],
+      "id": "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+      "date": 1509274837118
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "3ca3f9ea-a6f4-483a-ac01-4746180cb344",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "df720586-8a89-48fb-b494-973a2916c14e"
+      ],
+      "id": "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+      "date": 1509274840491
+    },
+    {
+      "type": "remove",
+      "id": "3ca3f9ea-a6f4-483a-ac01-4746180cb344",
+      "date": 1509274871281
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e"
+      ],
+      "id": "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+      "date": 1509274914076
+    },
+    {
+      "type": "edit",
+      "id": "64bc126bdead6e48",
+      "item": {
+        "type": "paragraph",
+        "id": "64bc126bdead6e48",
+        "text": "It is faster to supply -ss BEFORE the input file (before -i), because that way ffmpeg will skip directly to the location. "
+      },
+      "date": 1509274926114
+    },
+    {
+      "type": "add",
+      "id": "8258634bfc535fef",
+      "item": {
+        "type": "paragraph",
+        "id": "8258634bfc535fef",
+        "text": "However, that will also set the time \"zero\" to that location, meaning that -to will point to the wrong time - [https://trac.ffmpeg.org/wiki/Seeking ffmpeg.org]"
+      },
+      "after": "64bc126bdead6e48",
+      "date": 1509274926611
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e"
+      ],
+      "id": "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+      "date": 1509274928209
+    },
+    {
+      "type": "edit",
+      "id": "8258634bfc535fef",
+      "item": {
+        "type": "paragraph",
+        "id": "8258634bfc535fef",
+        "text": "However, that will result in inaccurate seeking and therefore cutting, it will also set the time \"zero\" to that location, meaning that -to will point to the wrong time - [https://trac.ffmpeg.org/wiki/Seeking ffmpeg.org]"
+      },
+      "date": 1509274965244
+    },
+    {
+      "type": "edit",
+      "id": "3c017399ccf25c13",
+      "item": {
+        "type": "markdown",
+        "id": "3c017399ccf25c13",
+        "text": "# Careful how you seek"
+      },
+      "date": 1509274977147
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2d9234311145b75e"
+      },
+      "id": "2d9234311145b75e",
+      "type": "add",
+      "after": "df720586-8a89-48fb-b494-973a2916c14e",
+      "date": 1509279137778
+    },
+    {
+      "type": "edit",
+      "id": "2d9234311145b75e",
+      "item": {
+        "type": "paragraph",
+        "id": "2d9234311145b75e",
+        "text": "To split a large file into segments respecting existing keyframes you can use the segment muxer to break the input into segments:"
+      },
+      "date": 1509279180803
+    },
+    {
+      "type": "add",
+      "id": "5b7b80d9a81243d6",
+      "item": {
+        "type": "paragraph",
+        "id": "5b7b80d9a81243d6",
+        "text": "\nffmpeg -i testfile.mp4 -c copy -f segment -segment_time 1200 testfile_piece_%02d.mp4"
+      },
+      "after": "2d9234311145b75e",
+      "date": 1509279183627
+    },
+    {
+      "type": "add",
+      "id": "ca7610759420b98c",
+      "item": {
+        "type": "paragraph",
+        "id": "ca7610759420b98c",
+        "text": "This will split the source at keyframes, so segments may not be exactly 1200 seconds long. And the timestamps aren't reset, so some players will fail to play the 2nd and latter segments. If playability is needed, insert -reset_timestamps 1."
+      },
+      "after": "5b7b80d9a81243d6",
+      "date": 1509279190700
+    },
+    {
+      "type": "add",
+      "id": "aab534d07a7254b9",
+      "item": {
+        "type": "paragraph",
+        "id": "aab534d07a7254b9",
+        "text": "\n# Rejoining split files"
+      },
+      "after": "ca7610759420b98c",
+      "date": 1509279207562
+    },
+    {
+      "type": "add",
+      "id": "59617e8720e0a86f",
+      "item": {
+        "type": "paragraph",
+        "id": "59617e8720e0a86f",
+        "text": "After the parallel encoding, you can stitch the generated segments by first creating a text file seg.txt like this\n\nfile 'encoded_testfile_piece_00.mp4'\nfile 'encoded_testfile_piece_01.mp4'\nfile 'encoded_testfile_piece_02.mp4'\nfile 'encoded_testfile_piece_03.mp4'\nAnd then running\n\nffmpeg -f concat -i seg.txt -c copy -fflags +genpts encoded_full.mp4"
+      },
+      "after": "aab534d07a7254b9",
+      "date": 1509279208984
+    },
+    {
+      "type": "edit",
+      "id": "aab534d07a7254b9",
+      "item": {
+        "type": "paragraph",
+        "id": "aab534d07a7254b9",
+        "text": "# Rejoining split files"
+      },
+      "date": 1509279210378
+    },
+    {
+      "type": "edit",
+      "id": "aab534d07a7254b9",
+      "item": {
+        "type": "markdown",
+        "id": "aab534d07a7254b9",
+        "text": "# Rejoining split files"
+      },
+      "date": 1509279211261
+    },
+    {
+      "type": "edit",
+      "id": "59617e8720e0a86f",
+      "item": {
+        "type": "paragraph",
+        "id": "59617e8720e0a86f",
+        "text": "After the parallel encoding, you can stitch the generated segments by first creating a text file seg.txt like this:"
+      },
+      "date": 1509279215986
+    },
+    {
+      "type": "add",
+      "id": "0cbb5c1fe6bf36aa",
+      "item": {
+        "type": "paragraph",
+        "id": "0cbb5c1fe6bf36aa",
+        "text": "\nfile 'encoded_testfile_piece_00.mp4'\nfile 'encoded_testfile_piece_01.mp4'\nfile 'encoded_testfile_piece_02.mp4'\nfile 'encoded_testfile_piece_03.mp4'\nAnd then running\n\nffmpeg -f concat -i seg.txt -c copy -fflags +genpts encoded_full.mp4"
+      },
+      "after": "59617e8720e0a86f",
+      "date": 1509279217409
+    },
+    {
+      "type": "edit",
+      "id": "0cbb5c1fe6bf36aa",
+      "item": {
+        "type": "paragraph",
+        "id": "0cbb5c1fe6bf36aa",
+        "text": "file 'encoded_testfile_piece_00.mp4'\nfile 'encoded_testfile_piece_01.mp4'\nfile 'encoded_testfile_piece_02.mp4'\nfile 'encoded_testfile_piece_03.mp4'\n"
+      },
+      "date": 1509279222363
+    },
+    {
+      "type": "add",
+      "id": "9af11b7b5a035b3f",
+      "item": {
+        "type": "paragraph",
+        "id": "9af11b7b5a035b3f",
+        "text": "And then running:\n\nffmpeg -f concat -i seg.txt -c copy -fflags +genpts encoded_full.mp4"
+      },
+      "after": "0cbb5c1fe6bf36aa",
+      "date": 1509279225660
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a0b16febfc72ffb9"
+      },
+      "id": "a0b16febfc72ffb9",
+      "type": "add",
+      "after": "9af11b7b5a035b3f",
+      "date": 1509279229071
+    },
+    {
+      "type": "edit",
+      "id": "9af11b7b5a035b3f",
+      "item": {
+        "type": "paragraph",
+        "id": "9af11b7b5a035b3f",
+        "text": "And then running:"
+      },
+      "date": 1509279233835
+    },
+    {
+      "type": "edit",
+      "id": "a0b16febfc72ffb9",
+      "item": {
+        "type": "code",
+        "id": "a0b16febfc72ffb9",
+        "text": "ffmpeg -f concat -i seg.txt -c copy -fflags +genpts encoded_full.mp4"
+      },
+      "date": 1509279235741
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "08d78b268ca96e7a"
+      },
+      "id": "08d78b268ca96e7a",
+      "type": "add",
+      "after": "a0b16febfc72ffb9",
+      "date": 1509279237633
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "0cbb5c1fe6bf36aa",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "08d78b268ca96e7a",
+      "date": 1509279239759
+    },
+    {
+      "type": "remove",
+      "id": "0cbb5c1fe6bf36aa",
+      "date": 1509279243187
+    },
+    {
+      "type": "edit",
+      "id": "08d78b268ca96e7a",
+      "item": {
+        "type": "code",
+        "id": "08d78b268ca96e7a",
+        "text": "file 'encoded_testfile_piece_00.mp4'\nfile 'encoded_testfile_piece_01.mp4'\nfile 'encoded_testfile_piece_02.mp4'\nfile 'encoded_testfile_piece_03.mp4'\n"
+      },
+      "date": 1509279245140
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+      "date": 1509279268896
+    },
+    {
+      "type": "edit",
+      "id": "2d9234311145b75e",
+      "item": {
+        "type": "paragraph",
+        "id": "2d9234311145b75e",
+        "text": "To split a large file into segments respecting existing keyframes you can use the segment muxer to break the input into segments - [https://stackoverflow.com/questions/35133119/ffmpeg-splitting-large-files stackoverflow]"
+      },
+      "date": 1509279302982
+    },
+    {
+      "type": "remove",
+      "id": "999ab44f-9c7d-40fc-afb9-ea2c3e01d66d",
+      "date": 1509279325750
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "df720586-8a89-48fb-b494-973a2916c14e",
+      "date": 1509279331803
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "706cffae-0c38-4093-85cc-1686ef5c36b7",
+      "date": 1509279334788
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+      "date": 1509279340973
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+      "date": 1509279343959
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "paragraph",
+        "id": "aa3cae943a20588e",
+        "text": "Use timestamps either in HH:MM:SS.xxx format or in seconds (s.msec). This means that you must not use the HMSF format that is used for instances in [[EDL]]s."
+      },
+      "date": 1509382554135
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cd86ee0185a92941"
+      },
+      "id": "cd86ee0185a92941",
+      "type": "add",
+      "after": "a0b16febfc72ffb9",
+      "date": 1509382775677
+    },
+    {
+      "type": "edit",
+      "id": "cd86ee0185a92941",
+      "item": {
+        "type": "code",
+        "id": "cd86ee0185a92941",
+        "text": "01:39:15:24"
+      },
+      "date": 1509382779355
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "cd86ee0185a92941",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "cd86ee0185a92941",
+      "date": 1509382786183
+    },
+    {
+      "type": "add",
+      "id": "6cd571a8d5566b37",
+      "item": {
+        "type": "paragraph",
+        "id": "6cd571a8d5566b37",
+        "text": "Therefore a time code from an EDL like this:"
+      },
+      "after": "aa3cae943a20588e",
+      "date": 1509382808798
+    },
+    {
+      "type": "add",
+      "id": "278dfb8b818dbe98",
+      "item": {
+        "type": "paragraph",
+        "id": "278dfb8b818dbe98",
+        "text": "Needs to be translated to:"
+      },
+      "after": "6cd571a8d5566b37",
+      "date": 1509382817534
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "6cd571a8d5566b37",
+        "cd86ee0185a92941",
+        "278dfb8b818dbe98",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "278dfb8b818dbe98",
+      "date": 1509382819477
+    },
+    {
+      "type": "edit",
+      "id": "6cd571a8d5566b37",
+      "item": {
+        "type": "paragraph",
+        "id": "6cd571a8d5566b37",
+        "text": "Therefore a time code from an [[EDL]] like this:"
+      },
+      "date": 1509382825558
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "204529b13804921f"
+      },
+      "id": "204529b13804921f",
+      "type": "add",
+      "after": "a0b16febfc72ffb9",
+      "date": 1509382828827
+    },
+    {
+      "type": "move",
+      "order": [
+        "3218965c980a50b6",
+        "b632a1547c6e09b5",
+        "29cee491-03df-4a3c-9113-cdcc640bbbd9",
+        "4c1cf2c04fd4de7e",
+        "b7a1453fdf1c33a6",
+        "0cab52a3057fea3e",
+        "adf4af3496dcab7b",
+        "9ef910610b8365fb",
+        "4b64a58d13fcfcfe",
+        "aa3cae943a20588e",
+        "6cd571a8d5566b37",
+        "cd86ee0185a92941",
+        "278dfb8b818dbe98",
+        "204529b13804921f",
+        "3c017399ccf25c13",
+        "64bc126bdead6e48",
+        "f1d61359-ef58-46f7-b59f-d53018ace6ef",
+        "8258634bfc535fef",
+        "c10df20b-652f-48f4-a1ae-8d66cbab0d6d",
+        "2d9234311145b75e",
+        "5b7b80d9a81243d6",
+        "ca7610759420b98c",
+        "1df774cc-bfd7-44b5-9785-3f7b5bbbfb0a",
+        "706cffae-0c38-4093-85cc-1686ef5c36b7",
+        "df720586-8a89-48fb-b494-973a2916c14e",
+        "d66634cf-a9d9-4a54-810e-92ac9d39a247",
+        "aab534d07a7254b9",
+        "59617e8720e0a86f",
+        "08d78b268ca96e7a",
+        "9af11b7b5a035b3f",
+        "a0b16febfc72ffb9"
+      ],
+      "id": "204529b13804921f",
+      "date": 1509382834473
+    },
+    {
+      "type": "edit",
+      "id": "cd86ee0185a92941",
+      "item": {
+        "type": "code",
+        "id": "cd86ee0185a92941",
+        "text": "01:39:15:30"
+      },
+      "date": 1509382848951
+    },
+    {
+      "type": "edit",
+      "id": "204529b13804921f",
+      "item": {
+        "type": "code",
+        "id": "204529b13804921f",
+        "text": "01:39:15.5"
+      },
+      "date": 1509382854017
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "paragraph",
+        "id": "aa3cae943a20588e",
+        "text": "Time unit syntax\n\nNote that you can use two different time unit formats: sexagesimal (HOURS:MM:SS.MICROSECONDS, as in 01:23:45.678), or in seconds. If a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. For instance, 02:30.5 would be 2 minutes, 30 seconds, and a half a second, which would be the same as using 150.5 in seconds."
+      },
+      "date": 1509383006434
+    },
+    {
+      "type": "add",
+      "id": "e24dbb9a7c642522",
+      "item": {
+        "type": "paragraph",
+        "id": "e24dbb9a7c642522",
+        "text": "Use timestamps either in HH:MM:SS.xxx format or in seconds (s.msec). This means that you must not use the HMSF format that is used for instances in [[EDL]]s."
+      },
+      "after": "aa3cae943a20588e",
+      "date": 1509383008777
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "paragraph",
+        "id": "aa3cae943a20588e",
+        "text": "You can use two different time unit formats: sexagesimal (HOURS:MM:SS.MICROSECONDS, as in 01:23:45.678), or in seconds. "
+      },
+      "date": 1509383029796
+    },
+    {
+      "type": "add",
+      "id": "56e44fb940eb44df",
+      "item": {
+        "type": "paragraph",
+        "id": "56e44fb940eb44df",
+        "text": "If a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. For instance, 02:30.5 would be 2 minutes, 30 seconds, and a half a second, which would be the same as using 150.5 in seconds."
+      },
+      "after": "aa3cae943a20588e",
+      "date": 1509383031505
+    },
+    {
+      "type": "edit",
+      "id": "4b64a58d13fcfcfe",
+      "item": {
+        "type": "markdown",
+        "id": "4b64a58d13fcfcfe",
+        "text": "# Time unit syntax"
+      },
+      "date": 1509383034299
+    },
+    {
+      "type": "edit",
+      "id": "56e44fb940eb44df",
+      "item": {
+        "type": "paragraph",
+        "id": "56e44fb940eb44df",
+        "text": "If a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. "
+      },
+      "date": 1509383064446
+    },
+    {
+      "type": "add",
+      "id": "b7fd796b5ba0c58b",
+      "item": {
+        "type": "paragraph",
+        "id": "b7fd796b5ba0c58b",
+        "text": "For instance, 02:30.5 would be 2 minutes, 30 seconds, and a half a second, which would be the same as using 150.5 in seconds."
+      },
+      "after": "56e44fb940eb44df",
+      "date": 1509383096719
+    },
+    {
+      "type": "edit",
+      "id": "e24dbb9a7c642522",
+      "item": {
+        "type": "paragraph",
+        "id": "e24dbb9a7c642522",
+        "text": "This means that you must not use the HMSF format that is used for instances in [[EDL]]s."
+      },
+      "date": 1509383117128
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "paragraph",
+        "id": "aa3cae943a20588e",
+        "text": "You can use two different time unit formats: -\n sexagesimal HH:MM:SS.xxx format- or in seconds (s.msec). "
+      },
+      "date": 1509383173819
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "markdown",
+        "id": "aa3cae943a20588e",
+        "text": "You can use two different time unit formats: -\n sexagesimal HH:MM:SS.xxx format- or in seconds (s.msec). "
+      },
+      "date": 1509383175210
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "markdown",
+        "id": "aa3cae943a20588e",
+        "text": "You can use two different time unit formats: \n\n- sexagesimal HH:MM:SS.xxx format\n- seconds (s.msec). "
+      },
+      "date": 1509383192484
+    },
+    {
+      "type": "edit",
+      "id": "aa3cae943a20588e",
+      "item": {
+        "type": "markdown",
+        "id": "aa3cae943a20588e",
+        "text": "When working with ffmpeg, you can use two different time unit formats: \n\n- sexagesimal HH:MM:SS.xxx format\n- seconds (s.msec). "
+      },
+      "date": 1509383213381
+    },
+    {
+      "type": "edit",
+      "id": "56e44fb940eb44df",
+      "item": {
+        "type": "paragraph",
+        "id": "56e44fb940eb44df",
+        "text": "(HOURS:MM:SS.MICROSECONDS, as in 01:23:45.678)"
+      },
+      "date": 1509383221087
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7b21084e9081abc2"
+      },
+      "id": "7b21084e9081abc2",
+      "type": "add",
+      "after": "a0b16febfc72ffb9",
+      "date": 1509383232455
+    },
+    {
+      "type": "add",
+      "id": "6cbdc716058c9040",
+      "item": {
+        "type": "paragraph",
+        "id": "6cbdc716058c9040",
+        "text": "If a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. "
+      },
+      "after": "56e44fb940eb44df",
+      "date": 1509383240760
+    },
+    {
+      "type": "remove",
+      "id": "56e44fb940eb44df",
+      "date": 1509383242902
+    },
+    {
+      "type": "edit",
+      "id": "7b21084e9081abc2",
+      "item": {
+        "type": "code",
+        "id": "7b21084e9081abc2",
+        "text": "01:23:45.678 (HOURS:MM:SS.MICROSECONDS)\n\n1 hour\n23 minutes\n45 seconds\n678 microseconds (hundredths of a second)"
+      },
+      "date": 1509383318123
+    },
+    {
+      "type": "edit",
+      "id": "6cbdc716058c9040",
+      "item": {
+        "type": "paragraph",
+        "id": "6cbdc716058c9040",
+        "text": "So if a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. "
+      },
+      "date": 1509383322027
+    }
+  ]
+}

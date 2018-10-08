@@ -1,0 +1,477 @@
+{
+  "title": "RESTBase",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "4ef9ccecb7a14184",
+      "text": "RESTBase is a caching / storing API proxy. Its configuration is based on [[Swagger]] specs, and its primary storage backend is using [[Cassandra]]."
+    },
+    {
+      "type": "reference",
+      "id": "84931534c615489a",
+      "site": "c0de.academy",
+      "slug": "mediawiki-api",
+      "title": "MediaWiki API",
+      "text": "The MediaWiki web API is a web service that provides convenient access to wiki features, data, and meta-data over HTTP. - [https://www.mediawiki.org/wiki/API:Main_page mediawiki.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "a8640087b49970f8",
+      "text": "# Wikimedia REST API"
+    },
+    {
+      "type": "paragraph",
+      "id": "ff43e81f4e2ef2df",
+      "text": "This API aims to provide coherent and low-latency access to Wikimedia content and services. It is currently in beta testing, so things aren't completely locked down yet. "
+    },
+    {
+      "type": "markdown",
+      "id": "6eaeacef7ea4ad12",
+      "text": "* [https://rest.wikimedia.org/en.wikipedia.org/v1/?doc rest.wikimedia.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8e9c8ed0922b9756",
+      "text": "Each entry point has explicit stability markers to inform you about development status and change policy, according to our API version policy."
+    },
+    {
+      "type": "markdown",
+      "id": "dade230570aa651a",
+      "text": "* Don't perform more than 200 requests/s to this API.\n* Set a unique User-Agent header that allows us to contact you quickly. Email addresses or URLs of contact pages work well."
+    },
+    {
+      "type": "paragraph",
+      "id": "17a28005fc4d0c06",
+      "text": "RESTBase powers \"rest_v1\", the Wikimedia REST content API used by VisualEditor to retrieve page HTML for editing. For performance (T95229) some service endpoints are also available on each wiki, e.g. [https://www.mediawiki.org/api/rest_v1/page/html/MediaWiki mediawiki.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "437d43c6cf0425cf",
+      "text": "# Performance"
+    },
+    {
+      "type": "paragraph",
+      "id": "f0c19d3f6e203968",
+      "text": "As a proxy, RESTBase does not perform any significant content processing itself. Instead, it requests content transformations from backend services when needed, and typically (depending on configuration) stores it back for later retrieval. For high-volume static end points most requests will be satisfied directly from storage."
+    },
+    {
+      "type": "paragraph",
+      "id": "a2e12e26ffa2f6a9",
+      "text": "Its storage backends expose a [[RESTful]] storage API similar to [[Amazon DynamoDB]] and [[Google DataStore]]. The primary implementation uses [[Apache Cassandra]]. Notable features include automatically maintained secondary indexes and some lightweight transaction support. A SQLite backend is under development."
+    },
+    {
+      "type": "paragraph",
+      "id": "7e04a4b60b2826a1",
+      "text": "RESTBase automatically emits statsd metrics about all storage and backend requests. This provides a good baseline level of performance and error instrumentation in a micro-service architecture."
+    },
+    {
+      "type": "markdown",
+      "id": "9c4e13e7d4f5f20a",
+      "text": "# Use cases"
+    },
+    {
+      "type": "paragraph",
+      "id": "357de27053d95dbc",
+      "text": "Our first use case is speeding up VisualEditor by reducing HTML size, and eliminating Varnish cache misses. "
+    },
+    {
+      "type": "paragraph",
+      "id": "c6644cc0f7b7ac4d",
+      "text": "RESTBase stores Parsoid metadata separately from the HTML of the page, which reduces the size of the latter by about 40%. RESTBase provides only this HTML to VE, which reduces network transfer and processing latency significantly. "
+    },
+    {
+      "type": "paragraph",
+      "id": "93d2fa8d0685d1dc",
+      "text": "In the longer term, we are aiming to bring down the size of the HTML to that of current PHP parser output to make it suitable for regular page views. This has the potential to make switching to visual editing instantaneous and free of any scrolling."
+    },
+    {
+      "type": "paragraph",
+      "id": "68e0e8b8ab23cf02",
+      "text": "If parse time is not a pressing concern for your wiki (for example it does not have complex templates or large transclusion counts), then accessing Parsoid directly may make more sense than introducing a dependency on RESTBase."
+    },
+    {
+      "type": "paragraph",
+      "id": "3c2249f8fb9a2c5d",
+      "text": "Another use case we are strongly interested in is providing a section-level editing API for micro-contributions and extremely fast VisualEditor saves, even faster than wikitext."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "RESTBase",
+        "story": []
+      },
+      "date": 1455620657112
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4ef9ccecb7a14184"
+      },
+      "id": "4ef9ccecb7a14184",
+      "type": "add",
+      "date": 1455620658722
+    },
+    {
+      "type": "edit",
+      "id": "4ef9ccecb7a14184",
+      "item": {
+        "type": "paragraph",
+        "id": "4ef9ccecb7a14184",
+        "text": "RESTBase is a caching / storing API proxy. Its configuration is based on [[Swagger]] specs, and its primary storage backend is using [[Cassandra]]. It powers \"rest_v1\", the Wikimedia REST content API used by VisualEditor to retrieve page HTML for editing. For performance (T95229) some service endpoints are also available on each wiki, e.g. [https://www.mediawiki.org/api/rest_v1/page/html/MediaWiki mediawiki.org]]"
+      },
+      "date": 1455621858609
+    },
+    {
+      "type": "add",
+      "id": "f0c19d3f6e203968",
+      "item": {
+        "type": "paragraph",
+        "id": "f0c19d3f6e203968",
+        "text": "\nAs a proxy, RESTBase does not perform any significant content processing itself. Instead, it requests content transformations from backend services when needed, and typically (depending on configuration) stores it back for later retrieval. For high-volume static end points most requests will be satisfied directly from storage.\n\nIts storage backends expose a RESTful storage API similar to Amazon DynamoDB and Google DataStore. The primary implementation uses Apache Cassandra. Notable features include automatically maintained secondary indexes and some lightweight transaction support. A SQLite backend is under development.\n\nRESTBase automatically emits statsd metrics about all storage and backend requests. This provides a good baseline level of performance and error instrumentation in a micro-service architecture.\n\nContents  [hide] \n1\tUse cases\n2\tDocumentation\n3\tSee also\n4\tReferences\nUse cases[edit | edit source]\nOur first use case is speeding up VisualEditor by reducing HTML size, and eliminating Varnish cache misses. RESTBase stores Parsoid metadata separately from the HTML of the page, which reduces the size of the latter by about 40%. RESTBase provides only this HTML to VE, which reduces network transfer and processing latency significantly. In the longer term, we are aiming to bring down the size of the HTML to that of current PHP parser output to make it suitable for regular page views. This has the potential to make switching to visual editing instantaneous and free of any scrolling.\n\nIf parse time is not a pressing concern for your wiki (for example it does not have complex templates or large transclusion counts), then accessing Parsoid directly may make more sense than introducing a dependency on RESTBase.\n\nAnother use case we are strongly interested in is providing a section-level editing API for micro-contributions and extremely fast VisualEditor saves, even faster than wikitext."
+      },
+      "after": "4ef9ccecb7a14184",
+      "date": 1455621866043
+    },
+    {
+      "type": "edit",
+      "id": "4ef9ccecb7a14184",
+      "item": {
+        "type": "paragraph",
+        "id": "4ef9ccecb7a14184",
+        "text": "RESTBase is a caching / storing API proxy. Its configuration is based on [[Swagger]] specs, and its primary storage backend is using [[Cassandra]]. "
+      },
+      "date": 1455621874209
+    },
+    {
+      "type": "add",
+      "id": "17a28005fc4d0c06",
+      "item": {
+        "type": "paragraph",
+        "id": "17a28005fc4d0c06",
+        "text": "RESTBase powers \"rest_v1\", the Wikimedia REST content API used by VisualEditor to retrieve page HTML for editing. For performance (T95229) some service endpoints are also available on each wiki, e.g. [https://www.mediawiki.org/api/rest_v1/page/html/MediaWiki mediawiki.org]]"
+      },
+      "after": "4ef9ccecb7a14184",
+      "date": 1455621879555
+    },
+    {
+      "type": "edit",
+      "id": "f0c19d3f6e203968",
+      "item": {
+        "type": "paragraph",
+        "id": "f0c19d3f6e203968",
+        "text": "As a proxy, RESTBase does not perform any significant content processing itself. Instead, it requests content transformations from backend services when needed, and typically (depending on configuration) stores it back for later retrieval. For high-volume static end points most requests will be satisfied directly from storage."
+      },
+      "date": 1455621899481
+    },
+    {
+      "type": "add",
+      "id": "a2e12e26ffa2f6a9",
+      "item": {
+        "type": "paragraph",
+        "id": "a2e12e26ffa2f6a9",
+        "text": "Its storage backends expose a [[RESTful]] storage API similar to [[Amazon DynamoDB]] and [[Google DataStore]]. The primary implementation uses [[Apache Cassandra]]. Notable features include automatically maintained secondary indexes and some lightweight transaction support. A SQLite backend is under development."
+      },
+      "after": "f0c19d3f6e203968",
+      "date": 1455621931787
+    },
+    {
+      "type": "add",
+      "id": "7e04a4b60b2826a1",
+      "item": {
+        "type": "paragraph",
+        "id": "7e04a4b60b2826a1",
+        "text": "RESTBase automatically emits statsd metrics about all storage and backend requests. This provides a good baseline level of performance and error instrumentation in a micro-service architecture."
+      },
+      "after": "a2e12e26ffa2f6a9",
+      "date": 1455621942316
+    },
+    {
+      "type": "add",
+      "id": "9c4e13e7d4f5f20a",
+      "item": {
+        "type": "paragraph",
+        "id": "9c4e13e7d4f5f20a",
+        "text": "# Use cases"
+      },
+      "after": "7e04a4b60b2826a1",
+      "date": 1455621953428
+    },
+    {
+      "type": "add",
+      "id": "357de27053d95dbc",
+      "item": {
+        "type": "paragraph",
+        "id": "357de27053d95dbc",
+        "text": "Our first use case is speeding up VisualEditor by reducing HTML size, and eliminating Varnish cache misses. RESTBase stores Parsoid metadata separately from the HTML of the page, which reduces the size of the latter by about 40%. RESTBase provides only this HTML to VE, which reduces network transfer and processing latency significantly. In the longer term, we are aiming to bring down the size of the HTML to that of current PHP parser output to make it suitable for regular page views. This has the potential to make switching to visual editing instantaneous and free of any scrolling."
+      },
+      "after": "9c4e13e7d4f5f20a",
+      "date": 1455621961765
+    },
+    {
+      "type": "edit",
+      "id": "9c4e13e7d4f5f20a",
+      "item": {
+        "type": "markdown",
+        "id": "9c4e13e7d4f5f20a",
+        "text": "# Use cases"
+      },
+      "date": 1455621964325
+    },
+    {
+      "type": "add",
+      "id": "68e0e8b8ab23cf02",
+      "item": {
+        "type": "paragraph",
+        "id": "68e0e8b8ab23cf02",
+        "text": "If parse time is not a pressing concern for your wiki (for example it does not have complex templates or large transclusion counts), then accessing Parsoid directly may make more sense than introducing a dependency on RESTBase."
+      },
+      "after": "357de27053d95dbc",
+      "date": 1455621975861
+    },
+    {
+      "type": "add",
+      "id": "3c2249f8fb9a2c5d",
+      "item": {
+        "type": "paragraph",
+        "id": "3c2249f8fb9a2c5d",
+        "text": "Another use case we are strongly interested in is providing a section-level editing API for micro-contributions and extremely fast VisualEditor saves, even faster than wikitext."
+      },
+      "after": "68e0e8b8ab23cf02",
+      "date": 1455621989365
+    },
+    {
+      "type": "edit",
+      "id": "357de27053d95dbc",
+      "item": {
+        "type": "paragraph",
+        "id": "357de27053d95dbc",
+        "text": "Our first use case is speeding up VisualEditor by reducing HTML size, and eliminating Varnish cache misses. "
+      },
+      "date": 1455621998067
+    },
+    {
+      "type": "add",
+      "id": "c6644cc0f7b7ac4d",
+      "item": {
+        "type": "paragraph",
+        "id": "c6644cc0f7b7ac4d",
+        "text": "RESTBase stores Parsoid metadata separately from the HTML of the page, which reduces the size of the latter by about 40%. RESTBase provides only this HTML to VE, which reduces network transfer and processing latency significantly. "
+      },
+      "after": "357de27053d95dbc",
+      "date": 1455622004301
+    },
+    {
+      "type": "add",
+      "id": "93d2fa8d0685d1dc",
+      "item": {
+        "type": "paragraph",
+        "id": "93d2fa8d0685d1dc",
+        "text": "In the longer term, we are aiming to bring down the size of the HTML to that of current PHP parser output to make it suitable for regular page views. This has the potential to make switching to visual editing instantaneous and free of any scrolling."
+      },
+      "after": "c6644cc0f7b7ac4d",
+      "date": 1455622006230
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "84931534c615489a"
+      },
+      "id": "84931534c615489a",
+      "type": "add",
+      "after": "3c2249f8fb9a2c5d",
+      "date": 1455622011908
+    },
+    {
+      "type": "edit",
+      "id": "84931534c615489a",
+      "item": {
+        "type": "reference",
+        "id": "84931534c615489a",
+        "site": "c0de.academy",
+        "slug": "mediawiki-api",
+        "title": "MediaWiki API",
+        "text": "The MediaWiki web API is a web service that provides convenient access to wiki features, data, and meta-data over HTTP. - [https://www.mediawiki.org/wiki/API:Main_page mediawiki.org]"
+      },
+      "date": 1455622015739
+    },
+    {
+      "type": "move",
+      "order": [
+        "4ef9ccecb7a14184",
+        "17a28005fc4d0c06",
+        "84931534c615489a",
+        "f0c19d3f6e203968",
+        "a2e12e26ffa2f6a9",
+        "7e04a4b60b2826a1",
+        "9c4e13e7d4f5f20a",
+        "357de27053d95dbc",
+        "c6644cc0f7b7ac4d",
+        "93d2fa8d0685d1dc",
+        "68e0e8b8ab23cf02",
+        "3c2249f8fb9a2c5d"
+      ],
+      "id": "84931534c615489a",
+      "date": 1455622021117
+    },
+    {
+      "type": "edit",
+      "id": "4ef9ccecb7a14184",
+      "item": {
+        "type": "paragraph",
+        "id": "4ef9ccecb7a14184",
+        "text": "RESTBase is a caching / storing API proxy. Its configuration is based on [[Swagger]] specs, and its primary storage backend is using [[Cassandra]]."
+      },
+      "date": 1455622081827
+    },
+    {
+      "type": "add",
+      "id": "a8640087b49970f8",
+      "item": {
+        "type": "paragraph",
+        "id": "a8640087b49970f8",
+        "text": "# Wikimedia REST API"
+      },
+      "after": "4ef9ccecb7a14184",
+      "date": 1455622090324
+    },
+    {
+      "type": "add",
+      "id": "ff43e81f4e2ef2df",
+      "item": {
+        "type": "paragraph",
+        "id": "ff43e81f4e2ef2df",
+        "text": "This API aims to provide coherent and low-latency access to Wikimedia content and services. It is currently in beta testing, so things aren't completely locked down yet. Each entry point has explicit stability markers to inform you about development status and change policy, according to our API version policy."
+      },
+      "after": "a8640087b49970f8",
+      "date": 1455622098956
+    },
+    {
+      "type": "edit",
+      "id": "a8640087b49970f8",
+      "item": {
+        "type": "markdown",
+        "id": "a8640087b49970f8",
+        "text": "# Wikimedia REST API"
+      },
+      "date": 1455622101435
+    },
+    {
+      "type": "add",
+      "id": "dade230570aa651a",
+      "item": {
+        "type": "paragraph",
+        "id": "dade230570aa651a",
+        "text": "* Don't perform more than 200 requests/s to this API.\n* Set a unique User-Agent header that allows us to contact you quickly. Email addresses or URLs of contact pages work well."
+      },
+      "after": "ff43e81f4e2ef2df",
+      "date": 1455622118015
+    },
+    {
+      "type": "edit",
+      "id": "dade230570aa651a",
+      "item": {
+        "type": "markdown",
+        "id": "dade230570aa651a",
+        "text": "* Don't perform more than 200 requests/s to this API.\n* Set a unique User-Agent header that allows us to contact you quickly. Email addresses or URLs of contact pages work well."
+      },
+      "date": 1455622118986
+    },
+    {
+      "type": "move",
+      "order": [
+        "4ef9ccecb7a14184",
+        "84931534c615489a",
+        "a8640087b49970f8",
+        "ff43e81f4e2ef2df",
+        "dade230570aa651a",
+        "17a28005fc4d0c06",
+        "f0c19d3f6e203968",
+        "a2e12e26ffa2f6a9",
+        "7e04a4b60b2826a1",
+        "9c4e13e7d4f5f20a",
+        "357de27053d95dbc",
+        "c6644cc0f7b7ac4d",
+        "93d2fa8d0685d1dc",
+        "68e0e8b8ab23cf02",
+        "3c2249f8fb9a2c5d"
+      ],
+      "id": "84931534c615489a",
+      "date": 1455622130547
+    },
+    {
+      "type": "edit",
+      "id": "17a28005fc4d0c06",
+      "item": {
+        "type": "paragraph",
+        "id": "17a28005fc4d0c06",
+        "text": "RESTBase powers \"rest_v1\", the Wikimedia REST content API used by VisualEditor to retrieve page HTML for editing. For performance (T95229) some service endpoints are also available on each wiki, e.g. [https://www.mediawiki.org/api/rest_v1/page/html/MediaWiki mediawiki.org]"
+      },
+      "date": 1455622138112
+    },
+    {
+      "type": "add",
+      "id": "437d43c6cf0425cf",
+      "item": {
+        "type": "paragraph",
+        "id": "437d43c6cf0425cf",
+        "text": "# Performance"
+      },
+      "after": "17a28005fc4d0c06",
+      "date": 1455622144043
+    },
+    {
+      "type": "edit",
+      "id": "437d43c6cf0425cf",
+      "item": {
+        "type": "markdown",
+        "id": "437d43c6cf0425cf",
+        "text": "# Performance"
+      },
+      "date": 1455622145068
+    },
+    {
+      "type": "edit",
+      "id": "ff43e81f4e2ef2df",
+      "item": {
+        "type": "paragraph",
+        "id": "ff43e81f4e2ef2df",
+        "text": "This API aims to provide coherent and low-latency access to Wikimedia content and services. It is currently in beta testing, so things aren't completely locked down yet. "
+      },
+      "date": 1455622166474
+    },
+    {
+      "type": "add",
+      "id": "8e9c8ed0922b9756",
+      "item": {
+        "type": "paragraph",
+        "id": "8e9c8ed0922b9756",
+        "text": "Each entry point has explicit stability markers to inform you about development status and change policy, according to our API version policy."
+      },
+      "after": "ff43e81f4e2ef2df",
+      "date": 1455622173531
+    },
+    {
+      "type": "add",
+      "id": "6eaeacef7ea4ad12",
+      "item": {
+        "type": "paragraph",
+        "id": "6eaeacef7ea4ad12",
+        "text": "* [https://rest.wikimedia.org/en.wikipedia.org/v1/?doc rest.wikimedia.org]"
+      },
+      "after": "ff43e81f4e2ef2df",
+      "date": 1455622208845
+    },
+    {
+      "type": "edit",
+      "id": "6eaeacef7ea4ad12",
+      "item": {
+        "type": "markdown",
+        "id": "6eaeacef7ea4ad12",
+        "text": "* [https://rest.wikimedia.org/en.wikipedia.org/v1/?doc rest.wikimedia.org]"
+      },
+      "date": 1455622211932
+    }
+  ]
+}

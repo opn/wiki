@@ -1,0 +1,849 @@
+{
+  "title": "Update",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "607520f25b3e3490",
+      "text": "The wiki is built from components developed in the open source and regularly improved based on user experience and available contributors. Here we consider when and how a server should be upgraded to use newer component versions."
+    },
+    {
+      "type": "paragraph",
+      "id": "0eadd1aacea7e622",
+      "text": "The server software evolves slowly since there are many copies deployed and other components are programmed to work with all versions. Expect improvements here several times a year."
+    },
+    {
+      "type": "paragraph",
+      "id": "030781baf0a20ac5",
+      "text": "The core client code evolves with new features added every month or so. One might update the server just to get a new version of the client code."
+    },
+    {
+      "type": "paragraph",
+      "id": "1cc8922efc752021",
+      "text": "The core wiki software is extended with plugins that can come from various sources and installed and updated individually. The bundle that comes with the default server install updates every couple of weeks. "
+    },
+    {
+      "type": "paragraph",
+      "id": "d70b8b7fd766f82c",
+      "text": "Improvements to independently maintained plugins could be much faster. A server operator must decide which independent plugins they will support and how current they will be kept."
+    },
+    {
+      "type": "markdown",
+      "id": "e5a56a6449db55f1",
+      "text": "# Server"
+    },
+    {
+      "type": "paragraph",
+      "id": "3b9996f5cde4d369",
+      "text": "A server and the components bundled with it can be updated by simply reinstalling it."
+    },
+    {
+      "type": "code",
+      "id": "7e8056b9396bc9b7",
+      "text": "npm install -g --unsafe-perm wiki\nrestart wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "d9bfeec5350346a7",
+      "text": "Choosing install over other npm options insures that the preferred versions of all the components are installed. Some options just update the server code leaving client and plugins as is."
+    },
+    {
+      "type": "paragraph",
+      "id": "279f4fdd55cabda5",
+      "text": "Reinstalling the server does not seem to interfere with independently developed and installed plugins. Double check this for your installation."
+    },
+    {
+      "type": "paragraph",
+      "id": "93395721092e131d",
+      "text": "Wiki will report the installed version of all components."
+    },
+    {
+      "type": "code",
+      "id": "f73c4e897020ed37",
+      "text": "wiki -v"
+    },
+    {
+      "type": "code",
+      "id": "1a4b22f77f57e4a6",
+      "text": "wiki: 0.7.0\nwiki-server: 0.6.0\nwiki-client: 0.5.1\nwiki-plugin-activity: 0.2.4\nwiki-plugin-audio: 0.1.4\nwiki-plugin-bars: 0.3.0\nwiki-plugin-bytebeat: 0.2.3\n..."
+    },
+    {
+      "type": "markdown",
+      "id": "1c09bb012fb0b40a",
+      "text": "# Plugins"
+    },
+    {
+      "type": "paragraph",
+      "id": "addf9e72cf7a2337",
+      "text": "The bundled core client code and plugins are best updated by updating the server. Independently maintained plugins can be installed or updated by invoking npm from within the installed wiki module."
+    },
+    {
+      "type": "paragraph",
+      "id": "5a30843db6137b8b",
+      "text": "One must first locate the installed wiki module then change to that directory."
+    },
+    {
+      "type": "code",
+      "id": "89aad414eab830db",
+      "text": "cd /usr/local/lib/node_modules/wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "485aa2a911eb14d3",
+      "text": "Double check that the node_modules directory within this directory contains the expected components."
+    },
+    {
+      "type": "code",
+      "id": "5eb1b402bb3106a6",
+      "text": "ls node_modules"
+    },
+    {
+      "type": "code",
+      "id": "2a8a6848105d2f5f",
+      "text": "wiki-client\nwiki-plugin-activity\nwiki-plugin-audio\nwiki-plugin-bars\nwiki-plugin-bytebeat\n...\nwiki-server"
+    },
+    {
+      "type": "paragraph",
+      "id": "9c4564e5b9249556",
+      "text": "Install or update the desired independent plugin with npm and restart the server."
+    },
+    {
+      "type": "code",
+      "id": "4de3e5c902203a1b",
+      "text": "npm install wiki-plugin- ...\nrestart wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "c0cd7f7528554b12",
+      "text": "Note: We are not using the -g global install flag here. A global install of a plugin would make it a peer of wiki, not a component of wiki."
+    },
+    {
+      "type": "paragraph",
+      "id": "2ab72effa2e45ced",
+      "text": "See [[Maintaining a Custom Wiki]] for more detailed suggestions for those responsible for multiple servers, and [[Installation DAQ]] for any questions you may have!"
+    },
+    {
+      "type": "markdown",
+      "id": "ee75d0eebad0ca22",
+      "text": "# Errors"
+    },
+    {
+      "type": "paragraph",
+      "id": "9a7e485ad516294b",
+      "text": "I get the following errors when updating my Digital Ocean installation:"
+    },
+    {
+      "type": "code",
+      "id": "929e0a98fd915ce2",
+      "text": "# npm install -g wiki\n \n> utf-8-validate@1.2.1 install /usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate\n> node-gyp rebuild\n\ngyp WARN EACCES user \"root\" does not have permission to access the dev dir \"/root/.node-gyp/0.10.38\"\ngyp WARN EACCES attempting to reinstall using temporary dev dir \"/usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate/.node-gyp\"\ngyp ERR! build error \ngyp ERR! stack Error: not found: make\n...."
+    },
+    {
+      "type": "paragraph",
+      "id": "9c2d60ace4391fdd",
+      "text": "There are two errors there, `gyn WARN EACCES…` can be removed by running the install with:"
+    },
+    {
+      "type": "code",
+      "id": "9741338c5a795941",
+      "text": "--unsafe-perm"
+    },
+    {
+      "type": "paragraph",
+      "id": "778711a494f44479",
+      "text": "added as an option to the install. See [https://github.com/nodejs/node-gyp/issues/454 gitbub]"
+    },
+    {
+      "type": "paragraph",
+      "id": "e3ae140550fd9f5f",
+      "text": "TLDR; when run as root the install will be run as nobody rather than root, adding `--unsafe-perm` prevents that from happening. \n\nFor make not being found, - just need to remove an re-install make, if that’s what fixed it last time. See [https://github.com/fedwiki/wiki/issues/46 github]\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Update",
+        "story": []
+      },
+      "date": 1440353861277
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "607520f25b3e3490",
+        "text": "The wiki is built from components developed in the open source and regularly improved based on user experience and available contributors. Here we consider when and how a server should be upgraded to use newer component versions."
+      },
+      "id": "607520f25b3e3490",
+      "date": 1440353865742
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0eadd1aacea7e622",
+        "text": "The server software evolves slowly since there are many copies deployed and other components are programmed to work with all versions. Expect improvements here several times a year."
+      },
+      "after": "607520f25b3e3490",
+      "id": "0eadd1aacea7e622",
+      "date": 1440353869402
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "030781baf0a20ac5",
+        "text": "The core client code evolves with new features added every month or so. One might update the server just to get a new version of the client code."
+      },
+      "after": "0eadd1aacea7e622",
+      "id": "030781baf0a20ac5",
+      "date": 1440353872979
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1cc8922efc752021",
+        "text": "The core wiki software is extended with plugins that can come from various sources and installed and updated individually. The bundle that comes with the default server install updates every couple of weeks. "
+      },
+      "after": "030781baf0a20ac5",
+      "id": "1cc8922efc752021",
+      "date": 1440353876684
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d70b8b7fd766f82c",
+        "text": "Improvements to independently maintained plugins could be much faster. A server operator must decide which independent plugins they will support and how current they will be kept."
+      },
+      "after": "1cc8922efc752021",
+      "id": "d70b8b7fd766f82c",
+      "date": 1440353891543
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "e5a56a6449db55f1",
+        "text": "# Server"
+      },
+      "after": "d70b8b7fd766f82c",
+      "id": "e5a56a6449db55f1",
+      "date": 1440353895364
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3b9996f5cde4d369",
+        "text": "A server and the components bundled with it can be updated by simply reinstalling it."
+      },
+      "after": "e5a56a6449db55f1",
+      "id": "3b9996f5cde4d369",
+      "date": 1440353899907
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7e8056b9396bc9b7",
+        "text": "npm install -g wiki\nwiki restart"
+      },
+      "after": "3b9996f5cde4d369",
+      "id": "7e8056b9396bc9b7",
+      "date": 1440353903635
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d9bfeec5350346a7",
+        "text": "Choosing install over other npm options insures that the preferred versions of all the components are installed. Some options just update the server code leaving client and plugins as is."
+      },
+      "after": "7e8056b9396bc9b7",
+      "id": "d9bfeec5350346a7",
+      "date": 1440353912683
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "279f4fdd55cabda5",
+        "text": "Reinstalling the server does not seem to interfere with independently developed and installed plugins. Double check this for your installation."
+      },
+      "after": "d9bfeec5350346a7",
+      "id": "279f4fdd55cabda5",
+      "date": 1440353916262
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "93395721092e131d",
+        "text": "Wiki will report the installed version of all components."
+      },
+      "after": "279f4fdd55cabda5",
+      "id": "93395721092e131d",
+      "date": 1440353920974
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "f73c4e897020ed37",
+        "text": "wiki -v"
+      },
+      "after": "93395721092e131d",
+      "id": "f73c4e897020ed37",
+      "date": 1440353924549
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "1a4b22f77f57e4a6",
+        "text": "wiki: 0.7.0\nwiki-server: 0.6.0\nwiki-client: 0.5.1\nwiki-plugin-activity: 0.2.4\nwiki-plugin-audio: 0.1.4\nwiki-plugin-bars: 0.3.0\nwiki-plugin-bytebeat: 0.2.3\n..."
+      },
+      "after": "93395721092e131d",
+      "id": "1a4b22f77f57e4a6",
+      "date": 1440353929496
+    },
+    {
+      "type": "move",
+      "order": [
+        "607520f25b3e3490",
+        "0eadd1aacea7e622",
+        "030781baf0a20ac5",
+        "1cc8922efc752021",
+        "d70b8b7fd766f82c",
+        "e5a56a6449db55f1",
+        "3b9996f5cde4d369",
+        "7e8056b9396bc9b7",
+        "d9bfeec5350346a7",
+        "279f4fdd55cabda5",
+        "93395721092e131d",
+        "f73c4e897020ed37",
+        "1a4b22f77f57e4a6"
+      ],
+      "id": "1a4b22f77f57e4a6",
+      "date": 1440353934537
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1c09bb012fb0b40a"
+      },
+      "id": "1c09bb012fb0b40a",
+      "type": "add",
+      "after": "1a4b22f77f57e4a6",
+      "date": 1440353952161
+    },
+    {
+      "type": "edit",
+      "id": "1c09bb012fb0b40a",
+      "item": {
+        "type": "markdown",
+        "id": "1c09bb012fb0b40a",
+        "text": "# Plugins"
+      },
+      "date": 1440354070889
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "addf9e72cf7a2337"
+      },
+      "id": "addf9e72cf7a2337",
+      "type": "add",
+      "after": "1c09bb012fb0b40a",
+      "date": 1440354095532
+    },
+    {
+      "type": "edit",
+      "id": "addf9e72cf7a2337",
+      "item": {
+        "type": "paragraph",
+        "id": "addf9e72cf7a2337",
+        "text": "The bundled core client code and plugins are best updated by updating the server. Independently maintained plugins can be installed or updated by invoking npm from within the installed wiki module."
+      },
+      "date": 1440354331283
+    },
+    {
+      "type": "add",
+      "id": "5a30843db6137b8b",
+      "item": {
+        "type": "paragraph",
+        "id": "5a30843db6137b8b",
+        "text": "One must first locate the installed wiki module."
+      },
+      "after": "addf9e72cf7a2337",
+      "date": 1440354520370
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "89aad414eab830db"
+      },
+      "id": "89aad414eab830db",
+      "type": "add",
+      "after": "5a30843db6137b8b",
+      "date": 1440354522419
+    },
+    {
+      "type": "edit",
+      "id": "89aad414eab830db",
+      "item": {
+        "type": "code",
+        "id": "89aad414eab830db",
+        "text": "cd /usr/local/lib/node_modules/wiki"
+      },
+      "date": 1440354532738
+    },
+    {
+      "type": "edit",
+      "id": "5a30843db6137b8b",
+      "item": {
+        "type": "paragraph",
+        "id": "5a30843db6137b8b",
+        "text": "One must first locate the installed wiki module then change to that directory."
+      },
+      "date": 1440354559605
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "485aa2a911eb14d3"
+      },
+      "id": "485aa2a911eb14d3",
+      "type": "add",
+      "after": "89aad414eab830db",
+      "date": 1440354574836
+    },
+    {
+      "type": "edit",
+      "id": "485aa2a911eb14d3",
+      "item": {
+        "type": "paragraph",
+        "id": "485aa2a911eb14d3",
+        "text": "Double check that the node_modules directory within this directory contains the expected components."
+      },
+      "date": 1440354645488
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2a8a6848105d2f5f"
+      },
+      "id": "2a8a6848105d2f5f",
+      "type": "add",
+      "after": "485aa2a911eb14d3",
+      "date": 1440354739692
+    },
+    {
+      "type": "edit",
+      "id": "2a8a6848105d2f5f",
+      "item": {
+        "type": "code",
+        "id": "2a8a6848105d2f5f",
+        "text": "wiki-client\nwiki-plugin-activity\nwiki-plugin-audio\nwiki-plugin-bars\nwiki-plugin-bytebeat\n...\nwiki-server"
+      },
+      "date": 1440354759859
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5eb1b402bb3106a6"
+      },
+      "id": "5eb1b402bb3106a6",
+      "type": "add",
+      "after": "2a8a6848105d2f5f",
+      "date": 1440354771370
+    },
+    {
+      "type": "edit",
+      "id": "5eb1b402bb3106a6",
+      "item": {
+        "type": "code",
+        "id": "5eb1b402bb3106a6",
+        "text": "ls node_modules"
+      },
+      "date": 1440354780107
+    },
+    {
+      "type": "move",
+      "order": [
+        "607520f25b3e3490",
+        "0eadd1aacea7e622",
+        "030781baf0a20ac5",
+        "1cc8922efc752021",
+        "d70b8b7fd766f82c",
+        "e5a56a6449db55f1",
+        "3b9996f5cde4d369",
+        "7e8056b9396bc9b7",
+        "d9bfeec5350346a7",
+        "279f4fdd55cabda5",
+        "93395721092e131d",
+        "f73c4e897020ed37",
+        "1a4b22f77f57e4a6",
+        "1c09bb012fb0b40a",
+        "addf9e72cf7a2337",
+        "5a30843db6137b8b",
+        "89aad414eab830db",
+        "485aa2a911eb14d3",
+        "5eb1b402bb3106a6",
+        "2a8a6848105d2f5f"
+      ],
+      "id": "5eb1b402bb3106a6",
+      "date": 1440354783406
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9c4564e5b9249556"
+      },
+      "id": "9c4564e5b9249556",
+      "type": "add",
+      "after": "2a8a6848105d2f5f",
+      "date": 1440354798015
+    },
+    {
+      "type": "edit",
+      "id": "9c4564e5b9249556",
+      "item": {
+        "type": "paragraph",
+        "id": "9c4564e5b9249556",
+        "text": "Install or update the desired independent plugin with npm and restart the server."
+      },
+      "date": 1440354841481
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4de3e5c902203a1b"
+      },
+      "id": "4de3e5c902203a1b",
+      "type": "add",
+      "after": "9c4564e5b9249556",
+      "date": 1440354844193
+    },
+    {
+      "type": "edit",
+      "id": "4de3e5c902203a1b",
+      "item": {
+        "type": "code",
+        "id": "4de3e5c902203a1b",
+        "text": "npm install wiki-plugin- ...\nwiki restart"
+      },
+      "date": 1440354913416
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c0cd7f7528554b12"
+      },
+      "id": "c0cd7f7528554b12",
+      "type": "add",
+      "after": "4de3e5c902203a1b",
+      "date": 1440355059934
+    },
+    {
+      "type": "edit",
+      "id": "c0cd7f7528554b12",
+      "item": {
+        "type": "paragraph",
+        "id": "c0cd7f7528554b12",
+        "text": "Note: We are not using the -g global install flag here. A global install of a plugin would make that a peer of wiki, not a component of wiki."
+      },
+      "date": 1440355185274
+    },
+    {
+      "type": "edit",
+      "id": "c0cd7f7528554b12",
+      "item": {
+        "type": "paragraph",
+        "id": "c0cd7f7528554b12",
+        "text": "Note: We are not using the -g global install flag here. A global install of a plugin would make it a peer of wiki, not a component of wiki."
+      },
+      "date": 1440355204280
+    },
+    {
+      "type": "edit",
+      "id": "7e8056b9396bc9b7",
+      "item": {
+        "type": "code",
+        "id": "7e8056b9396bc9b7",
+        "text": "npm install -g wiki\nrestart wiki"
+      },
+      "date": 1445111784688
+    },
+    {
+      "type": "edit",
+      "id": "4de3e5c902203a1b",
+      "item": {
+        "type": "code",
+        "id": "4de3e5c902203a1b",
+        "text": "npm install wiki-plugin- ...\nrestart wiki"
+      },
+      "date": 1445111846949
+    },
+    {
+      "type": "add",
+      "id": "2ab72effa2e45ced",
+      "item": {
+        "type": "paragraph",
+        "id": "2ab72effa2e45ced",
+        "text": "See [[Maintaining a Custom Wiki]] for more detailed suggestions for those responsible for multiple servers."
+      },
+      "after": "c0cd7f7528554b12",
+      "date": 1445112078349
+    },
+    {
+      "type": "fork",
+      "site": "admin.asia.wiki.org",
+      "date": 1446737103662
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ee75d0eebad0ca22"
+      },
+      "id": "ee75d0eebad0ca22",
+      "type": "add",
+      "after": "2ab72effa2e45ced",
+      "date": 1446749635264
+    },
+    {
+      "type": "edit",
+      "id": "ee75d0eebad0ca22",
+      "item": {
+        "type": "paragraph",
+        "id": "ee75d0eebad0ca22",
+        "text": "# Errors"
+      },
+      "date": 1446749643411
+    },
+    {
+      "type": "add",
+      "id": "9a7e485ad516294b",
+      "item": {
+        "type": "paragraph",
+        "id": "9a7e485ad516294b",
+        "text": "I get the following errors when updating my Digital Ocean installation:"
+      },
+      "after": "ee75d0eebad0ca22",
+      "date": 1446749666933
+    },
+    {
+      "type": "edit",
+      "id": "ee75d0eebad0ca22",
+      "item": {
+        "type": "markdown",
+        "id": "ee75d0eebad0ca22",
+        "text": "# Errors"
+      },
+      "date": 1446749668650
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "929e0a98fd915ce2"
+      },
+      "id": "929e0a98fd915ce2",
+      "type": "add",
+      "after": "9a7e485ad516294b",
+      "date": 1446749670675
+    },
+    {
+      "type": "edit",
+      "id": "929e0a98fd915ce2",
+      "item": {
+        "type": "code",
+        "id": "929e0a98fd915ce2",
+        "text": "# npm install -g wiki\n \n> utf-8-validate@1.2.1 install /usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate\n> node-gyp rebuild\n\ngyp WARN EACCES user \"root\" does not have permission to access the dev dir \"/root/.node-gyp/0.10.38\"\ngyp WARN EACCES attempting to reinstall using temporary dev dir \"/usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate/.node-gyp\"\ngyp ERR! build error \ngyp ERR! stack Error: not found: make\ngyp ERR! stack     at F (/usr/local/lib/node_modules/npm/node_modules/which/which.js:43:28)\ngyp ERR! stack     at E (/usr/local/lib/node_modules/npm/node_modules/which/which.js:46:29)\ngyp ERR! stack     at /usr/local/lib/node_modules/npm/node_modules/which/which.js:57:16\ngyp ERR! stack     at Object.oncomplete (evalmachine.<anonymous>:108:15)\ngyp ERR! System Linux 3.13.0-43-generic\ngyp ERR! command \"node\" \"/usr/local/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js\" \"rebuild\"\ngyp ERR! cwd /usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate\ngyp ERR! node -v v0.10.38\ngyp ERR! node-gyp -v v1.0.1\ngyp ERR! not ok \nnpm WARN optional dep failed, continuing utf-8-validate@1.2.1\n\n> utf-8-validate@1.2.1 install /usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-txtzyme/node_modules/ws/node_modules/utf-8-validate\n> node-gyp rebuild\n\ngyp WARN EACCES user \"root\" does not have permission to access the dev dir \"/root/.node-gyp/0.10.38\"\ngyp WARN EACCES attempting to reinstall using temporary dev dir \"/usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-txtzyme/node_modules/ws/node_modules/utf-8-validate/.node-gyp\"\ngyp ERR! build error "
+      },
+      "date": 1446749674051
+    },
+    {
+      "type": "edit",
+      "id": "929e0a98fd915ce2",
+      "item": {
+        "type": "code",
+        "id": "929e0a98fd915ce2",
+        "text": "# npm install -g wiki\n \n> utf-8-validate@1.2.1 install /usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate\n> node-gyp rebuild\n\ngyp WARN EACCES user \"root\" does not have permission to access the dev dir \"/root/.node-gyp/0.10.38\"\ngyp WARN EACCES attempting to reinstall using temporary dev dir \"/usr/local/lib/node_modules/wiki/node_modules/wiki-plugin-parse/node_modules/ws/node_modules/utf-8-validate/.node-gyp\"\ngyp ERR! build error \ngyp ERR! stack Error: not found: make\n...."
+      },
+      "date": 1446806427194
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9c2d60ace4391fdd"
+      },
+      "id": "9c2d60ace4391fdd",
+      "type": "add",
+      "after": "929e0a98fd915ce2",
+      "date": 1446806435038
+    },
+    {
+      "type": "edit",
+      "id": "9c2d60ace4391fdd",
+      "item": {
+        "type": "paragraph",
+        "id": "9c2d60ace4391fdd",
+        "text": "There are two errors there, `gyn WARN EACCES…` can be removed by running the install with `--unsafe-perm` added as an option to the install. See [https://github.com/nodejs/node-gyp/issues/454 gitbub]"
+      },
+      "date": 1446806461506
+    },
+    {
+      "type": "add",
+      "id": "e3ae140550fd9f5f",
+      "item": {
+        "type": "paragraph",
+        "id": "e3ae140550fd9f5f",
+        "text": "TLDR; when run as root the install will be run as nobody rather than root, adding `--unsafe-perm` prevents that from happening. \n\nFor make not being found, - just need to remove an re-install make, if that’s what fixed it last time. See [https://github.com/fedwiki/wiki/issues/46 github]\n"
+      },
+      "after": "9c2d60ace4391fdd",
+      "date": 1446806500251
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "40853643351e151a"
+      },
+      "id": "40853643351e151a",
+      "type": "add",
+      "after": "e3ae140550fd9f5f",
+      "date": 1446806524785
+    },
+    {
+      "type": "remove",
+      "id": "40853643351e151a",
+      "date": 1446806528702
+    },
+    {
+      "type": "edit",
+      "id": "9c2d60ace4391fdd",
+      "item": {
+        "type": "paragraph",
+        "id": "9c2d60ace4391fdd",
+        "text": "There are two errors there, `gyn WARN EACCES…` can be removed by running the install with:"
+      },
+      "date": 1446810806409
+    },
+    {
+      "type": "add",
+      "id": "9edeae603ebb0319",
+      "item": {
+        "type": "paragraph",
+        "id": "9edeae603ebb0319",
+        "text": "--unsafe-perm"
+      },
+      "after": "9c2d60ace4391fdd",
+      "date": 1446810812031
+    },
+    {
+      "type": "add",
+      "id": "778711a494f44479",
+      "item": {
+        "type": "paragraph",
+        "id": "778711a494f44479",
+        "text": "added as an option to the install. See [https://github.com/nodejs/node-gyp/issues/454 gitbub]"
+      },
+      "after": "9edeae603ebb0319",
+      "date": 1446810817199
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9741338c5a795941"
+      },
+      "id": "9741338c5a795941",
+      "type": "add",
+      "after": "e3ae140550fd9f5f",
+      "date": 1446810819212
+    },
+    {
+      "type": "edit",
+      "id": "9741338c5a795941",
+      "item": {
+        "type": "code",
+        "id": "9741338c5a795941",
+        "text": "sdaf"
+      },
+      "date": 1446810824236
+    },
+    {
+      "type": "move",
+      "order": [
+        "607520f25b3e3490",
+        "0eadd1aacea7e622",
+        "030781baf0a20ac5",
+        "1cc8922efc752021",
+        "d70b8b7fd766f82c",
+        "e5a56a6449db55f1",
+        "3b9996f5cde4d369",
+        "7e8056b9396bc9b7",
+        "d9bfeec5350346a7",
+        "279f4fdd55cabda5",
+        "93395721092e131d",
+        "f73c4e897020ed37",
+        "1a4b22f77f57e4a6",
+        "1c09bb012fb0b40a",
+        "addf9e72cf7a2337",
+        "5a30843db6137b8b",
+        "89aad414eab830db",
+        "485aa2a911eb14d3",
+        "5eb1b402bb3106a6",
+        "2a8a6848105d2f5f",
+        "9c4564e5b9249556",
+        "4de3e5c902203a1b",
+        "c0cd7f7528554b12",
+        "2ab72effa2e45ced",
+        "ee75d0eebad0ca22",
+        "9a7e485ad516294b",
+        "929e0a98fd915ce2",
+        "9c2d60ace4391fdd",
+        "9edeae603ebb0319",
+        "9741338c5a795941",
+        "778711a494f44479",
+        "e3ae140550fd9f5f"
+      ],
+      "id": "9741338c5a795941",
+      "date": 1446810826451
+    },
+    {
+      "type": "remove",
+      "id": "9edeae603ebb0319",
+      "date": 1446810829706
+    },
+    {
+      "type": "edit",
+      "id": "9741338c5a795941",
+      "item": {
+        "type": "code",
+        "id": "9741338c5a795941",
+        "text": "--unsafe-perm"
+      },
+      "date": 1446810833813
+    },
+    {
+      "type": "edit",
+      "id": "7e8056b9396bc9b7",
+      "item": {
+        "type": "code",
+        "id": "7e8056b9396bc9b7",
+        "text": "npm install -g --unsafe-perm wiki\nrestart wiki"
+      },
+      "date": 1447683713835
+    },
+    {
+      "type": "edit",
+      "id": "2ab72effa2e45ced",
+      "item": {
+        "type": "paragraph",
+        "id": "2ab72effa2e45ced",
+        "text": "See [[Maintaining a Custom Wiki]] for more detailed suggestions for those responsible for multiple servers, and [[Installation DAQ]] for any questions you may have!"
+      },
+      "date": 1447683834403
+    }
+  ]
+}

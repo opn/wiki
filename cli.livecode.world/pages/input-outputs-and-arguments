@@ -1,0 +1,75 @@
+{
+  "title": "Input, outputs and arguments",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d68832d10856d348",
+      "text": "Here we take a discussion a rewrite it as documentation. The original discussion was here - on [http://stackoverflow.com/questions/3437514/bash-how-to-pipe-result-from-the-which-command-to-cd stackoverflow]"
+    },
+    {
+      "type": "paragraph",
+      "id": "46383150ca336db8",
+      "text": "\"Input\" and \"command line arguments\" are different things.\n\nrm removes the files provided as arguments.\n\nA pipe redirects the output of the left-hand command to the input of the right-hand command. It does not affect the command line arguments of the program on the right.\n\nTo do what you're trying to do, try using xargs to convert standard input to command-line arguments for executing a program. That's its job.\n\nwhich gem | xargs rm, for example, will remove the gem in your PATH.\n\nshareimprove this answer\nanswered Aug 21 '10 at 3:00\n\nBorealid\n1,058810\nadd a comment\n\nup vote\n8\ndown vote\nrm doesn't take input, it takes arguments. These are different. Arguments are the switches and filenames and so forth that you give to a program on the command line to affect its behavior. Input is the data that the program works on. For example, grep takes both input and arguments:\n\n grep \"foo\" file.txt\nThere are two arguments there \"foo\" and file.txt. The input is the contents of file.txt, not the string file.txt itself. Since grep takes input, you can use it with pipes:\n\n cat file.txt | grep \"foo\"\nproduces the same output, since cat is taking file.txt as an argument, and producing the contents of file.txt as output. That output is then piped in to grep, giving the same effect as having grep open the file itself, as in the first example.\n\nIf you want to use the output of one program as the argument to another, you use backticks:\n\n rm `which gem`\nor this alternative (bash-specific) syntax:\n\n rm $(which gem)\nEdit: or xargs as another answerer points out. Many ways to skin a cat with a command line."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Input, outputs and arguments",
+        "story": []
+      },
+      "date": 1466510742900
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d68832d10856d348"
+      },
+      "id": "d68832d10856d348",
+      "type": "add",
+      "date": 1466510744218
+    },
+    {
+      "type": "edit",
+      "id": "d68832d10856d348",
+      "item": {
+        "type": "paragraph",
+        "id": "d68832d10856d348",
+        "text": "\"Input\" and \"command line arguments\" are different things.\n\nrm removes the files provided as arguments.\n\nA pipe redirects the output of the left-hand command to the input of the right-hand command. It does not affect the command line arguments of the program on the right.\n\nTo do what you're trying to do, try using xargs to convert standard input to command-line arguments for executing a program. That's its job.\n\nwhich gem | xargs rm, for example, will remove the gem in your PATH.\n\nshareimprove this answer\nanswered Aug 21 '10 at 3:00\n\nBorealid\n1,058810\nadd a comment\n\nup vote\n8\ndown vote\nrm doesn't take input, it takes arguments. These are different. Arguments are the switches and filenames and so forth that you give to a program on the command line to affect its behavior. Input is the data that the program works on. For example, grep takes both input and arguments:\n\n grep \"foo\" file.txt\nThere are two arguments there \"foo\" and file.txt. The input is the contents of file.txt, not the string file.txt itself. Since grep takes input, you can use it with pipes:\n\n cat file.txt | grep \"foo\"\nproduces the same output, since cat is taking file.txt as an argument, and producing the contents of file.txt as output. That output is then piped in to grep, giving the same effect as having grep open the file itself, as in the first example.\n\nIf you want to use the output of one program as the argument to another, you use backticks:\n\n rm `which gem`\nor this alternative (bash-specific) syntax:\n\n rm $(which gem)\nEdit: or xargs as another answerer points out. Many ways to skin a cat with a command line."
+      },
+      "date": 1466510751564
+    },
+    {
+      "type": "edit",
+      "id": "d68832d10856d348",
+      "item": {
+        "type": "paragraph",
+        "id": "d68832d10856d348",
+        "text": "Here we take a discussion a rewrite it as documentation. The original discussion was here - http://stackoverflow.com/questions/3437514/bash-how-to-pipe-result-from-the-which-command-to-cd fdas]"
+      },
+      "date": 1466510822123
+    },
+    {
+      "type": "add",
+      "id": "46383150ca336db8",
+      "item": {
+        "type": "paragraph",
+        "id": "46383150ca336db8",
+        "text": "\"Input\" and \"command line arguments\" are different things.\n\nrm removes the files provided as arguments.\n\nA pipe redirects the output of the left-hand command to the input of the right-hand command. It does not affect the command line arguments of the program on the right.\n\nTo do what you're trying to do, try using xargs to convert standard input to command-line arguments for executing a program. That's its job.\n\nwhich gem | xargs rm, for example, will remove the gem in your PATH.\n\nshareimprove this answer\nanswered Aug 21 '10 at 3:00\n\nBorealid\n1,058810\nadd a comment\n\nup vote\n8\ndown vote\nrm doesn't take input, it takes arguments. These are different. Arguments are the switches and filenames and so forth that you give to a program on the command line to affect its behavior. Input is the data that the program works on. For example, grep takes both input and arguments:\n\n grep \"foo\" file.txt\nThere are two arguments there \"foo\" and file.txt. The input is the contents of file.txt, not the string file.txt itself. Since grep takes input, you can use it with pipes:\n\n cat file.txt | grep \"foo\"\nproduces the same output, since cat is taking file.txt as an argument, and producing the contents of file.txt as output. That output is then piped in to grep, giving the same effect as having grep open the file itself, as in the first example.\n\nIf you want to use the output of one program as the argument to another, you use backticks:\n\n rm `which gem`\nor this alternative (bash-specific) syntax:\n\n rm $(which gem)\nEdit: or xargs as another answerer points out. Many ways to skin a cat with a command line."
+      },
+      "after": "d68832d10856d348",
+      "date": 1466510823542
+    },
+    {
+      "type": "edit",
+      "id": "d68832d10856d348",
+      "item": {
+        "type": "paragraph",
+        "id": "d68832d10856d348",
+        "text": "Here we take a discussion a rewrite it as documentation. The original discussion was here - on [http://stackoverflow.com/questions/3437514/bash-how-to-pipe-result-from-the-which-command-to-cd stackoverflow]"
+      },
+      "date": 1466510835457
+    }
+  ]
+}

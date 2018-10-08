@@ -1,0 +1,395 @@
+{
+  "title": "ECDSA Signature",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b7cebb94fe809d50",
+      "text": "[[Elliptic Curve]] Digital Signature Algorithm (ECSDA) is a cryptographic algorithm used by [[Bitcoin]] to ensure funds can only be spent by their rightful owners - [https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm bitcoin.it]"
+    },
+    {
+      "type": "reference",
+      "id": "d0377c6ddd402a7b",
+      "site": "cryptoacademy.org",
+      "slug": "private-key",
+      "title": "Private Key",
+      "text": "A [[Private Key]] is a secret number, known only to the person that generated it. "
+    },
+    {
+      "type": "reference",
+      "id": "928e9f189e90b56d",
+      "site": "cryptoacademy.org",
+      "slug": "public-key",
+      "title": "Public Key",
+      "text": "[[Public Key]]: A number that corresponds to a private key, but does not need to be kept secret. A public key can be calculated from a private key, but not vice versa. "
+    },
+    {
+      "type": "reference",
+      "id": "a70aa384fd28b098",
+      "site": "cryptoacademy.org",
+      "slug": "signature",
+      "title": "Signature",
+      "text": "A [[Digital Signature]] is a number that proves that a signing operation took place. "
+    },
+    {
+      "type": "html",
+      "id": "b3e0bd27bd22ae67",
+      "text": "<H3>Security"
+    },
+    {
+      "type": "paragraph",
+      "id": "d86d471d93dfc0c4",
+      "text": "In December 2010, a group calling itself fail0verflow announced recovery of the ECDSA private key used by Sony to sign software for the PlayStation 3 game console. However, this attack only worked because Sony did not properly implement the algorithm, because k was static instead of random. As pointed out in the Signature generation algorithm Section above, this makes d_A solvable and the entire algorithm useless -- [https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm wikipedia]\n\nOn March 29, 2011, two researchers published an IACR paper demonstrating that it is possible to retrieve a TLS private key of a server using OpenSSL that authenticates with Elliptic Curves DSA over a binary field via a timing attack. The vulnerability was fixed in OpenSSL 1.0.0e.\n\nIn August 2013, it was revealed that bugs in some implementations of the Java class SecureRandom sometimes generated collisions in the k value. As discussed above, this allowed solution of the private key, in turn allowing stealing bitcoins from the containing wallet on Android app implementations, which use Java and rely on ECDSA to authenticate transactions.\n\nThis issue can be prevented by deterministic generation of k, as described by RFC 6979."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "ECDSA Signature",
+        "story": []
+      },
+      "date": 1438005006124
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b7cebb94fe809d50"
+      },
+      "id": "b7cebb94fe809d50",
+      "type": "add",
+      "date": 1438005007496
+    },
+    {
+      "type": "edit",
+      "id": "b7cebb94fe809d50",
+      "item": {
+        "type": "paragraph",
+        "id": "b7cebb94fe809d50",
+        "text": "[[Elliptic Curve]] Digital Signature Algorithm or ECDSA is a cryptographic algorithm used by [[Bitcoin]] to ensure that funds can only be spent by their rightful owners."
+      },
+      "date": 1438005033637
+    },
+    {
+      "type": "add",
+      "id": "396eaffa73c33d7c",
+      "item": {
+        "type": "paragraph",
+        "id": "396eaffa73c33d7c",
+        "text": "[[Private Key]]: A secret number, known only to the person that generated it. A private key is essentially a randomly generated number. In Bitcoin, someone with the private key that corresponds to funds on the public ledger can spend the funds. In Bitcoin, a private key is a single unsigned 256 bit integer (32 bytes)."
+      },
+      "after": "b7cebb94fe809d50",
+      "date": 1438005065168
+    },
+    {
+      "type": "add",
+      "id": "c4b1d0befc230c8a",
+      "item": {
+        "type": "paragraph",
+        "id": "c4b1d0befc230c8a",
+        "text": "[[Public Key]]: A number that corresponds to a private key, but does not need to be kept secret. A public key can be calculated from a private key, but not vice versa. A public key can be used to determine if a signature is genuine (in other words, produced with the proper key) without requiring the private key to be divulged. In Bitcoin, public key are either compressed or uncompressed. Compressed public keys are 33 bytes, consisting of a prefix either 0x02 or 0x03, and a 256-bit integer called x. The older uncompressed keys are 65 bytes, consisting of constant prefix (0x04), followed by two 256-bit integers called x and y (2 * 32 bytes). The prefix of a compressed key allows for the y value to be derived from the x value.\nsignature: A number that proves that a signing operation took place. A signature is mathematically generated from a hash of something to be signed, plus a private key. The signature itself is two numbers known as r and s. With the public key, a mathematical algorithm can be used on the signature to determine that it was originally produced from the hash and the private key, without needing to know the private key. Signatures are either 73, 72, or 71 bytes long, with probabilities approximately 25%, 50% and 25% respectively, although sizes even smaller than that are possible with exponentially decreasing probability."
+      },
+      "after": "396eaffa73c33d7c",
+      "date": 1438005083344
+    },
+    {
+      "type": "edit",
+      "id": "c4b1d0befc230c8a",
+      "item": {
+        "type": "paragraph",
+        "id": "c4b1d0befc230c8a",
+        "text": "[[Public Key]]: A number that corresponds to a private key, but does not need to be kept secret. A public key can be calculated from a private key, but not vice versa. A public key can be used to determine if a signature is genuine (in other words, produced with the proper key) without requiring the private key to be divulged. In Bitcoin, public key are either compressed or uncompressed. Compressed public keys are 33 bytes, consisting of a prefix either 0x02 or 0x03, and a 256-bit integer called x. The older uncompressed keys are 65 bytes, consisting of constant prefix (0x04), followed by two 256-bit integers called x and y (2 * 32 bytes). The prefix of a compressed key allows for the y value to be derived from the x value.\n"
+      },
+      "date": 1438005101865
+    },
+    {
+      "type": "add",
+      "id": "d21fda090b22e475",
+      "item": {
+        "type": "paragraph",
+        "id": "d21fda090b22e475",
+        "text": "[[Signature]]: A number that proves that a signing operation took place. A signature is mathematically generated from a hash of something to be signed, plus a private key. The signature itself is two numbers known as r and s. With the public key, a mathematical algorithm can be used on the signature to determine that it was originally produced from the hash and the private key, without needing to know the private key. Signatures are either 73, 72, or 71 bytes long, with probabilities approximately 25%, 50% and 25% respectively, although sizes even smaller than that are possible with exponentially decreasing probability."
+      },
+      "after": "c4b1d0befc230c8a",
+      "date": 1438005108433
+    },
+    {
+      "type": "edit",
+      "id": "c4b1d0befc230c8a",
+      "item": {
+        "type": "paragraph",
+        "id": "c4b1d0befc230c8a",
+        "text": "[[Public Key]]: A number that corresponds to a private key, but does not need to be kept secret. A public key can be calculated from a private key, but not vice versa. "
+      },
+      "date": 1438005116351
+    },
+    {
+      "type": "add",
+      "id": "1f41b1b523c95001",
+      "item": {
+        "type": "paragraph",
+        "id": "1f41b1b523c95001",
+        "text": "A public key can be used to determine if a signature is genuine (in other words, produced with the proper key) without requiring the private key to be divulged. "
+      },
+      "after": "c4b1d0befc230c8a",
+      "date": 1438005121609
+    },
+    {
+      "type": "add",
+      "id": "03f8df59ffaf6efd",
+      "item": {
+        "type": "paragraph",
+        "id": "03f8df59ffaf6efd",
+        "text": "In Bitcoin, public key are either compressed or uncompressed. Compressed public keys are 33 bytes, consisting of a prefix either 0x02 or 0x03, and a 256-bit integer called x. "
+      },
+      "after": "1f41b1b523c95001",
+      "date": 1438005125283
+    },
+    {
+      "type": "add",
+      "id": "688be31955c144e9",
+      "item": {
+        "type": "paragraph",
+        "id": "688be31955c144e9",
+        "text": "The older uncompressed keys are 65 bytes, consisting of constant prefix (0x04), followed by two 256-bit integers called x and y (2 * 32 bytes). "
+      },
+      "after": "03f8df59ffaf6efd",
+      "date": 1438005129039
+    },
+    {
+      "type": "add",
+      "id": "9ba2f6eec5391eba",
+      "item": {
+        "type": "paragraph",
+        "id": "9ba2f6eec5391eba",
+        "text": "The prefix of a compressed key allows for the y value to be derived from the x value.\n"
+      },
+      "after": "688be31955c144e9",
+      "date": 1438005129793
+    },
+    {
+      "type": "remove",
+      "id": "396eaffa73c33d7c",
+      "date": 1438005145188
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d0377c6ddd402a7b"
+      },
+      "id": "d0377c6ddd402a7b",
+      "type": "add",
+      "after": "d21fda090b22e475",
+      "date": 1438005182805
+    },
+    {
+      "type": "edit",
+      "id": "d0377c6ddd402a7b",
+      "item": {
+        "type": "reference",
+        "id": "d0377c6ddd402a7b",
+        "site": "cryptoacademy.org",
+        "slug": "private-key",
+        "title": "Private Key",
+        "text": "A [[Private Key]] is a secret number, known only to the person that generated it. "
+      },
+      "date": 1438005184760
+    },
+    {
+      "type": "move",
+      "order": [
+        "b7cebb94fe809d50",
+        "d0377c6ddd402a7b",
+        "c4b1d0befc230c8a",
+        "1f41b1b523c95001",
+        "03f8df59ffaf6efd",
+        "688be31955c144e9",
+        "9ba2f6eec5391eba",
+        "d21fda090b22e475"
+      ],
+      "id": "d0377c6ddd402a7b",
+      "date": 1438005187182
+    },
+    {
+      "type": "remove",
+      "id": "c4b1d0befc230c8a",
+      "date": 1438005198321
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "928e9f189e90b56d"
+      },
+      "id": "928e9f189e90b56d",
+      "type": "add",
+      "after": "d21fda090b22e475",
+      "date": 1438005200913
+    },
+    {
+      "type": "move",
+      "order": [
+        "b7cebb94fe809d50",
+        "d0377c6ddd402a7b",
+        "928e9f189e90b56d",
+        "1f41b1b523c95001",
+        "03f8df59ffaf6efd",
+        "688be31955c144e9",
+        "9ba2f6eec5391eba",
+        "d21fda090b22e475"
+      ],
+      "id": "928e9f189e90b56d",
+      "date": 1438005202731
+    },
+    {
+      "type": "edit",
+      "id": "928e9f189e90b56d",
+      "item": {
+        "type": "reference",
+        "id": "928e9f189e90b56d",
+        "site": "cryptoacademy.org",
+        "slug": "public-key",
+        "title": "Public Key",
+        "text": "[[Public Key]]: A number that corresponds to a private key, but does not need to be kept secret. A public key can be calculated from a private key, but not vice versa. "
+      },
+      "date": 1438005204808
+    },
+    {
+      "type": "remove",
+      "id": "1f41b1b523c95001",
+      "date": 1438005208509
+    },
+    {
+      "type": "remove",
+      "id": "03f8df59ffaf6efd",
+      "date": 1438005210299
+    },
+    {
+      "type": "remove",
+      "id": "688be31955c144e9",
+      "date": 1438005213164
+    },
+    {
+      "type": "remove",
+      "id": "9ba2f6eec5391eba",
+      "date": 1438005215434
+    },
+    {
+      "type": "remove",
+      "id": "d21fda090b22e475",
+      "date": 1438005228059
+    },
+    {
+      "type": "edit",
+      "id": "b7cebb94fe809d50",
+      "item": {
+        "type": "paragraph",
+        "id": "b7cebb94fe809d50",
+        "text": "[[Elliptic Curve]] Digital Signature Algorithm or ECDSA is a cryptographic algorithm used by [[Bitcoin]] to ensure that funds can only be spent by their rightful owners - [https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm bitcoin.it]"
+      },
+      "date": 1438005416907
+    },
+    {
+      "type": "edit",
+      "id": "b7cebb94fe809d50",
+      "item": {
+        "type": "paragraph",
+        "id": "b7cebb94fe809d50",
+        "text": "[[Elliptic Curve]] Digital Signature Algorithm is a cryptographic algorithm used by [[Bitcoin]] to ensure that funds can only be spent by their rightful owners - [https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm bitcoin.it]"
+      },
+      "date": 1438005468084
+    },
+    {
+      "type": "edit",
+      "id": "b7cebb94fe809d50",
+      "item": {
+        "type": "paragraph",
+        "id": "b7cebb94fe809d50",
+        "text": "[[Elliptic Curve]] Digital Signature Algorithm is a cryptographic algorithm used by [[Bitcoin]] to ensure funds can only be spent by their rightful owners - [https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm bitcoin.it]"
+      },
+      "date": 1438005483350
+    },
+    {
+      "type": "edit",
+      "id": "b7cebb94fe809d50",
+      "item": {
+        "type": "paragraph",
+        "id": "b7cebb94fe809d50",
+        "text": "[[Elliptic Curve]] Digital Signature Algorithm (ECSDA) is a cryptographic algorithm used by [[Bitcoin]] to ensure funds can only be spent by their rightful owners - [https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm bitcoin.it]"
+      },
+      "date": 1438005498069
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a70aa384fd28b098"
+      },
+      "id": "a70aa384fd28b098",
+      "type": "add",
+      "after": "928e9f189e90b56d",
+      "date": 1438005504213
+    },
+    {
+      "type": "edit",
+      "id": "a70aa384fd28b098",
+      "item": {
+        "type": "reference",
+        "id": "a70aa384fd28b098",
+        "site": "cryptoacademy.org",
+        "slug": "signature",
+        "title": "Signature",
+        "text": "A [[Digital Signature]] is a number that proves that a signing operation took place. "
+      },
+      "date": 1438005506344
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b3e0bd27bd22ae67"
+      },
+      "id": "b3e0bd27bd22ae67",
+      "type": "add",
+      "after": "a70aa384fd28b098",
+      "date": 1438007159040
+    },
+    {
+      "type": "edit",
+      "id": "b3e0bd27bd22ae67",
+      "item": {
+        "type": "paragraph",
+        "id": "b3e0bd27bd22ae67",
+        "text": "- [https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm wikipedia]"
+      },
+      "date": 1438007164975
+    },
+    {
+      "type": "edit",
+      "id": "b3e0bd27bd22ae67",
+      "item": {
+        "type": "paragraph",
+        "id": "b3e0bd27bd22ae67",
+        "text": "<H3>Security"
+      },
+      "date": 1438007278480
+    },
+    {
+      "type": "add",
+      "id": "d86d471d93dfc0c4",
+      "item": {
+        "type": "paragraph",
+        "id": "d86d471d93dfc0c4",
+        "text": "In December 2010, a group calling itself fail0verflow announced recovery of the ECDSA private key used by Sony to sign software for the PlayStation 3 game console. However, this attack only worked because Sony did not properly implement the algorithm, because k was static instead of random. As pointed out in the Signature generation algorithm Section above, this makes d_A solvable and the entire algorithm useless -- [https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm wikipedia]\n\nOn March 29, 2011, two researchers published an IACR paper demonstrating that it is possible to retrieve a TLS private key of a server using OpenSSL that authenticates with Elliptic Curves DSA over a binary field via a timing attack. The vulnerability was fixed in OpenSSL 1.0.0e.\n\nIn August 2013, it was revealed that bugs in some implementations of the Java class SecureRandom sometimes generated collisions in the k value. As discussed above, this allowed solution of the private key, in turn allowing stealing bitcoins from the containing wallet on Android app implementations, which use Java and rely on ECDSA to authenticate transactions.\n\nThis issue can be prevented by deterministic generation of k, as described by RFC 6979."
+      },
+      "after": "b3e0bd27bd22ae67",
+      "date": 1438007291468
+    },
+    {
+      "type": "edit",
+      "id": "b3e0bd27bd22ae67",
+      "item": {
+        "type": "html",
+        "id": "b3e0bd27bd22ae67",
+        "text": "<H3>Security"
+      },
+      "date": 1438007293188
+    }
+  ]
+}

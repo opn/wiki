@@ -1,0 +1,1572 @@
+{
+  "title": "JSON-LD for Markup",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3e13d9dce2b5649a",
+      "text": "Here we experiment with a simple example (below) of embedding [[JSON-LD]] in an HTML item in Fedwiki."
+    },
+    {
+      "type": "html",
+      "id": "dff6b0fcc0244d13",
+      "text": "Here is some JSON-LD:\n\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"TVSeries\",\n  \"containsSeason\": {\n    \"@type\": \"TVSeason\",\n    \"episode\": {\n      \"@type\": \"TVEpisode\",\n      \"position\": \"8\",\n      \"publication\": [\n        {\n          \"@type\": \"BroadcastEvent\",\n          \"publishedOn\": {\n            \"@type\": \"BroadcastService\",\n            \"url\": \"http://www.bbc.co.uk/bbcone\"\n          },\n          \"startDate\": \"18:15, 22nd of May 2010\"\n        },\n        {\n          \"@type\": \"OnDemandEvent\",\n          \"endDate\": \"9th\",\n          \"startDate\": \"19:45 on the 2nd of June\"\n        }\n      ],\n      \"url\": \"http://www.bbc.co.uk/programmes/b00sj9sq\",\n      \"video\": {\n        \"@type\": \"VideoObject\",\n        \"url\": \"http://www.bbc.co.uk/iplayer/episode/b00sj9sq\"\n      }\n    },\n    \"url\": \"http://www.bbc.co.uk/programmes/b00rs69w\"\n  },\n  \"url\": \"http://www.bbc.co.uk/programmes/b006q2x0\"\n}\n</script>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "867c5eb4d9798c08",
+      "text": "The json-ld (above) is invisible as it is wrapped in a script element and the only text that we can see is the text at the start \"Here is some JSON_LD...\"."
+    },
+    {
+      "type": "markdown",
+      "id": "8dca4e5e3dc70724",
+      "text": "# Naming of item ids"
+    },
+    {
+      "type": "paragraph",
+      "id": "8f61e10c66c45da8",
+      "text": "We use some custom id naming for elements to make these easier and quicker to find. So the rule is an id that begins with the chars:"
+    },
+    {
+      "type": "code",
+      "id": "32908a8dd5516629",
+      "text": "json-ld:"
+    },
+    {
+      "type": "paragraph",
+      "id": "f3bd7e642010c603",
+      "text": "will contain json-ld. "
+    },
+    {
+      "type": "markdown",
+      "id": "d5b71eb451cf4990",
+      "text": "# Easy Extraction"
+    },
+    {
+      "type": "paragraph",
+      "id": "9f869608b3b9aee8",
+      "text": "In the longer term we want to use a specific [[Fedwiki JSON Data Item]] - see [[Using the Data Plugin]]. But for now we can use a [[Fedwiki HTML Item]] in the markup."
+    },
+    {
+      "type": "paragraph",
+      "id": "cd87f8a7e4d775ec",
+      "text": "If it is an HTML element then we allow some introductory HTML:"
+    },
+    {
+      "type": "code",
+      "id": "bba6984a818bf255",
+      "text": "Here is some JSON-LD:\n\n<script type=\"application/ld+json\">"
+    },
+    {
+      "type": "paragraph",
+      "id": "cf59792e75c97b0c",
+      "text": "basically anything that does not contain a \"{\" character - as we look for the first \"{\" and strip out everything before."
+    },
+    {
+      "type": "paragraph",
+      "id": "72cc6960fb54966b",
+      "text": "We also assume that the HTML terminates with:"
+    },
+    {
+      "type": "code",
+      "id": "48872b97a272c7c7",
+      "text": "</script>"
+    },
+    {
+      "type": "paragraph",
+      "id": "8a324a8d6e309ad4",
+      "text": "and we remove that to obtain the [[JSON-LD]] fragment quickly."
+    },
+    {
+      "type": "paragraph",
+      "id": "01b5d2965b614467",
+      "text": "For now we look to not be concerned about the item type. We can achieve this by looking at the item ids for a custom naming. "
+    },
+    {
+      "type": "markdown",
+      "id": "fea6665595611d31",
+      "text": "- [ ] If all else fails => examine every elements content ?\n- [ ] Or look at every [[Fedwiki Code Item]] ?\n- [ ] Check out the [[Fedwiki Data Item]] and [[About Data Plugin]]"
+    },
+    {
+      "type": "markdown",
+      "id": "13fb9959dd44594f",
+      "text": "# Fedwiki HTML"
+    },
+    {
+      "type": "paragraph",
+      "id": "4fdca0ad086372c1",
+      "text": "Unfortunately the Fedwiki HTML that is rendered removes the HTML element that contains the '<script> tag. It renders the JSON-LD like this:"
+    },
+    {
+      "type": "code",
+      "id": "b1b646b538b14d4d",
+      "text": "<div class=\"item html\"><p>Here is some JSON-LD:\n\n\n</p></div>"
+    },
+    {
+      "type": "reference",
+      "id": "f030229b35b5fd74",
+      "site": "c0de.academy",
+      "slug": "json-ld",
+      "title": "JSON-LD",
+      "text": "JSON-LD, or JavaScript Object Notation for Linked Data, is a method of transporting [[Linked Data]] using [[JSON]] - [https://en.wikipedia.org/wiki/JSON-LD wikipedia]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "JSON-LD for Markup",
+        "story": []
+      },
+      "date": 1458034336866
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3e13d9dce2b5649a",
+        "text": "Here we experiment with a simple example (below) of embedding [[JSON-LD]] in an HTML item in Fedwiki."
+      },
+      "id": "3e13d9dce2b5649a",
+      "type": "add",
+      "date": 1458034338882
+    },
+    {
+      "type": "edit",
+      "id": "3e13d9dce2b5649a",
+      "item": {
+        "type": "paragraph",
+        "id": "3e13d9dce2b5649a",
+        "text": "Here we experiment with a simple example (below) of embedding [[JSON-LD]] in an HTML item in Fedwiki."
+      },
+      "date": 1458034461486
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bdc345c1277b8c04"
+      },
+      "id": "bdc345c1277b8c04",
+      "type": "add",
+      "after": "867c5eb4d9798c08",
+      "date": 1458034527188
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "bdc345c1277b8c04",
+        "867c5eb4d9798c08"
+      ],
+      "id": "bdc345c1277b8c04",
+      "date": 1458034532520,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "add",
+      "id": "867c5eb4d9798c08",
+      "item": {
+        "type": "paragraph",
+        "id": "867c5eb4d9798c08",
+        "text": "The json-ld (above) is invisible as it is wrapped in a script element and the only text that we can see is the line at the end \"Here is some JSON_LD:\""
+      },
+      "after": "3e13d9dce2b5649a",
+      "date": 1458034535432
+    },
+    {
+      "type": "fork",
+      "date": 1458034537570
+    },
+    {
+      "type": "edit",
+      "id": "bdc345c1277b8c04",
+      "item": {
+        "type": "html",
+        "id": "bdc345c1277b8c04",
+        "text": "{\n  \"@context\": {\n    \"name\": \"http://xmlns.com/foaf/0.1/name\",\n    \"homepage\": {\n      \"@id\": \"http://xmlns.com/foaf/0.1/workplaceHomepage\",\n      \"@type\": \"@id\"\n    },\n    \"Person\": \"http://xmlns.com/foaf/0.1/Person\"\n  },\n  \"@id\": \"http://me.markus-lanthaler.com\",\n  \"@type\": \"Person\",\n  \"name\": \"Markus Lanthaler\",\n  \"homepage\": \"http://www.tugraz.at/\"\n}\nHere is some JSON-LD:"
+      },
+      "date": 1458034582708
+    },
+    {
+      "type": "remove",
+      "id": "bdc345c1277b8c04",
+      "date": 1458034587969
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dff6b0fcc0244d13"
+      },
+      "id": "dff6b0fcc0244d13",
+      "type": "add",
+      "after": "867c5eb4d9798c08",
+      "date": 1458034589677
+    },
+    {
+      "type": "edit",
+      "id": "dff6b0fcc0244d13",
+      "item": {
+        "type": "html",
+        "id": "dff6b0fcc0244d13",
+        "text": "{\n  \"@context\": {\n    \"name\": \"http://xmlns.com/foaf/0.1/name\",\n    \"homepage\": {\n      \"@id\": \"http://xmlns.com/foaf/0.1/workplaceHomepage\",\n      \"@type\": \"@id\"\n    },\n    \"Person\": \"http://xmlns.com/foaf/0.1/Person\"\n  },\n  \"@id\": \"http://me.markus-lanthaler.com\",\n  \"@type\": \"Person\",\n  \"name\": \"Markus Lanthaler\",\n  \"homepage\": \"http://www.tugraz.at/\"\n}\nHere is some JSON-LD:"
+      },
+      "date": 1458034595618
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08"
+      ],
+      "id": "dff6b0fcc0244d13",
+      "date": 1458034597978
+    },
+    {
+      "type": "edit",
+      "id": "dff6b0fcc0244d13",
+      "item": {
+        "type": "html",
+        "id": "dff6b0fcc0244d13",
+        "text": "<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"TVSeries\",\n  \"containsSeason\": {\n    \"@type\": \"TVSeason\",\n    \"episode\": {\n      \"@type\": \"TVEpisode\",\n      \"position\": \"8\",\n      \"publication\": [\n        {\n          \"@type\": \"BroadcastEvent\",\n          \"publishedOn\": {\n            \"@type\": \"BroadcastService\",\n            \"url\": \"http://www.bbc.co.uk/bbcone\"\n          },\n          \"startDate\": \"18:15, 22nd of May 2010\"\n        },\n        {\n          \"@type\": \"OnDemandEvent\",\n          \"endDate\": \"9th\",\n          \"startDate\": \"19:45 on the 2nd of June\"\n        }\n      ],\n      \"url\": \"http://www.bbc.co.uk/programmes/b00sj9sq\",\n      \"video\": {\n        \"@type\": \"VideoObject\",\n        \"url\": \"http://www.bbc.co.uk/iplayer/episode/b00sj9sq\"\n      }\n    },\n    \"url\": \"http://www.bbc.co.uk/programmes/b00rs69w\"\n  },\n  \"url\": \"http://www.bbc.co.uk/programmes/b006q2x0\"\n}\n</script>\nHere is some JSON-LD:"
+      },
+      "date": 1458034638293
+    },
+    {
+      "type": "edit",
+      "id": "dff6b0fcc0244d13",
+      "item": {
+        "type": "html",
+        "id": "dff6b0fcc0244d13",
+        "text": "Here is some JSON-LD:\n\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"http://schema.org\",\n  \"@type\": \"TVSeries\",\n  \"containsSeason\": {\n    \"@type\": \"TVSeason\",\n    \"episode\": {\n      \"@type\": \"TVEpisode\",\n      \"position\": \"8\",\n      \"publication\": [\n        {\n          \"@type\": \"BroadcastEvent\",\n          \"publishedOn\": {\n            \"@type\": \"BroadcastService\",\n            \"url\": \"http://www.bbc.co.uk/bbcone\"\n          },\n          \"startDate\": \"18:15, 22nd of May 2010\"\n        },\n        {\n          \"@type\": \"OnDemandEvent\",\n          \"endDate\": \"9th\",\n          \"startDate\": \"19:45 on the 2nd of June\"\n        }\n      ],\n      \"url\": \"http://www.bbc.co.uk/programmes/b00sj9sq\",\n      \"video\": {\n        \"@type\": \"VideoObject\",\n        \"url\": \"http://www.bbc.co.uk/iplayer/episode/b00sj9sq\"\n      }\n    },\n    \"url\": \"http://www.bbc.co.uk/programmes/b00rs69w\"\n  },\n  \"url\": \"http://www.bbc.co.uk/programmes/b006q2x0\"\n}\n</script>\n"
+      },
+      "date": 1458035320591
+    },
+    {
+      "type": "edit",
+      "id": "867c5eb4d9798c08",
+      "item": {
+        "type": "paragraph",
+        "id": "867c5eb4d9798c08",
+        "text": "The json-ld (above) is invisible as it is wrapped in a script element and the only text that we can see is the text at the start \"Here is some JSON_LD...\"."
+      },
+      "date": 1458035356102
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "32908a8dd5516629"
+      },
+      "id": "32908a8dd5516629",
+      "type": "add",
+      "after": "8f61e10c66c45da8",
+      "date": 1458035430253
+    },
+    {
+      "type": "add",
+      "id": "8f61e10c66c45da8",
+      "item": {
+        "type": "paragraph",
+        "id": "8f61e10c66c45da8",
+        "text": "We use some custom id naming for elements to make these easier and quicker to find. So the rule is an id that begins with:"
+      },
+      "after": "867c5eb4d9798c08",
+      "date": 1458035431505
+    },
+    {
+      "type": "edit",
+      "id": "32908a8dd5516629",
+      "item": {
+        "type": "code",
+        "id": "32908a8dd5516629",
+        "text": "json-ld:"
+      },
+      "date": 1458035446723
+    },
+    {
+      "type": "edit",
+      "id": "8f61e10c66c45da8",
+      "item": {
+        "type": "paragraph",
+        "id": "8f61e10c66c45da8",
+        "text": "We use some custom id naming for elements to make these easier and quicker to find. So the rule is an id that begins with the chars:"
+      },
+      "date": 1458035458432
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f3bd7e642010c603"
+      },
+      "id": "f3bd7e642010c603",
+      "type": "add",
+      "after": "32908a8dd5516629",
+      "date": 1458035462506
+    },
+    {
+      "type": "edit",
+      "id": "f3bd7e642010c603",
+      "item": {
+        "type": "paragraph",
+        "id": "f3bd7e642010c603",
+        "text": "will contain json-ld. If it is an HTML element then we allow some introductory HTML:"
+      },
+      "date": 1458035535385
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bba6984a818bf255"
+      },
+      "id": "bba6984a818bf255",
+      "type": "add",
+      "after": "f3bd7e642010c603",
+      "date": 1458035564730
+    },
+    {
+      "type": "edit",
+      "id": "bba6984a818bf255",
+      "item": {
+        "type": "code",
+        "id": "bba6984a818bf255",
+        "text": "Here is some JSON-LD:\n\n<script type=\"application/ld+json\">"
+      },
+      "date": 1458035573148
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cf59792e75c97b0c"
+      },
+      "id": "cf59792e75c97b0c",
+      "type": "add",
+      "after": "bba6984a818bf255",
+      "date": 1458035575605
+    },
+    {
+      "type": "edit",
+      "id": "cf59792e75c97b0c",
+      "item": {
+        "type": "paragraph",
+        "id": "cf59792e75c97b0c",
+        "text": "basically anything that does not contain a \"{\" character - as we look for the first \"{\" and strip out everything before."
+      },
+      "date": 1458035663757
+    },
+    {
+      "type": "add",
+      "id": "72cc6960fb54966b",
+      "item": {
+        "type": "paragraph",
+        "id": "72cc6960fb54966b",
+        "text": "We also assume that the HTML terminates with:"
+      },
+      "after": "cf59792e75c97b0c",
+      "date": 1458035681575
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "48872b97a272c7c7"
+      },
+      "id": "48872b97a272c7c7",
+      "type": "add",
+      "after": "72cc6960fb54966b",
+      "date": 1458035695889
+    },
+    {
+      "type": "edit",
+      "id": "48872b97a272c7c7",
+      "item": {
+        "type": "code",
+        "id": "48872b97a272c7c7",
+        "text": "</script>"
+      },
+      "date": 1458035702234
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8a324a8d6e309ad4"
+      },
+      "id": "8a324a8d6e309ad4",
+      "type": "add",
+      "after": "48872b97a272c7c7",
+      "date": 1458035704411
+    },
+    {
+      "type": "edit",
+      "id": "8a324a8d6e309ad4",
+      "item": {
+        "type": "paragraph",
+        "id": "8a324a8d6e309ad4",
+        "text": "and we remove that to obtain the [[JSON-LD]] fragment quickly:"
+      },
+      "date": 1458035729289
+    },
+    {
+      "type": "edit",
+      "id": "8a324a8d6e309ad4",
+      "item": {
+        "type": "paragraph",
+        "id": "8a324a8d6e309ad4",
+        "text": "and we remove that to obtain the [[JSON-LD]] fragment quickly."
+      },
+      "date": 1458035988019
+    },
+    {
+      "type": "add",
+      "id": "13fb9959dd44594f",
+      "item": {
+        "type": "paragraph",
+        "id": "13fb9959dd44594f",
+        "text": "# Fedwiki HTML"
+      },
+      "after": "8a324a8d6e309ad4",
+      "date": 1458035999923
+    },
+    {
+      "type": "add",
+      "id": "4fdca0ad086372c1",
+      "item": {
+        "type": "paragraph",
+        "id": "4fdca0ad086372c1",
+        "text": "Unfortunately the Fedwiki HTML that is rendered removes the HTML element that contains the '<script> tag."
+      },
+      "after": "13fb9959dd44594f",
+      "date": 1458036038526
+    },
+    {
+      "type": "edit",
+      "id": "13fb9959dd44594f",
+      "item": {
+        "type": "markdown",
+        "id": "13fb9959dd44594f",
+        "text": "# Fedwiki HTML"
+      },
+      "date": 1458036039515
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8f61e10c66c45da8"
+      ],
+      "id": "3e13d9dce2b5649a",
+      "date": 1458036175568
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "867c5eb4d9798c08",
+        "8f61e10c66c45da8"
+      ],
+      "id": "dff6b0fcc0244d13",
+      "date": 1458036180817
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "8f61e10c66c45da8"
+      ],
+      "id": "867c5eb4d9798c08",
+      "date": 1458036185211
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1"
+      ],
+      "id": "8f61e10c66c45da8",
+      "date": 1458036193259
+    },
+    {
+      "type": "add",
+      "id": "8dca4e5e3dc70724",
+      "item": {
+        "type": "paragraph",
+        "id": "8dca4e5e3dc70724",
+        "text": "# Naming of item ids"
+      },
+      "after": "867c5eb4d9798c08",
+      "date": 1458036219584
+    },
+    {
+      "type": "edit",
+      "id": "8dca4e5e3dc70724",
+      "item": {
+        "type": "markdown",
+        "id": "8dca4e5e3dc70724",
+        "text": "# Naming of item ids"
+      },
+      "date": 1458036221089
+    },
+    {
+      "type": "edit",
+      "id": "f3bd7e642010c603",
+      "item": {
+        "type": "paragraph",
+        "id": "f3bd7e642010c603",
+        "text": "will contain json-ld. "
+      },
+      "date": 1458036240294
+    },
+    {
+      "type": "add",
+      "id": "d5b71eb451cf4990",
+      "item": {
+        "type": "paragraph",
+        "id": "d5b71eb451cf4990",
+        "text": "# Easyextraction of the JSON-LD"
+      },
+      "after": "f3bd7e642010c603",
+      "date": 1458036269311
+    },
+    {
+      "type": "add",
+      "id": "9f869608b3b9aee8",
+      "item": {
+        "type": "paragraph",
+        "id": "9f869608b3b9aee8",
+        "text": "If it is an HTML element then we allow some introductory HTML:"
+      },
+      "after": "d5b71eb451cf4990",
+      "date": 1458036275376
+    },
+    {
+      "type": "edit",
+      "id": "d5b71eb451cf4990",
+      "item": {
+        "type": "paragraph",
+        "id": "d5b71eb451cf4990",
+        "text": "# Easy extraction of the JSON-LD"
+      },
+      "date": 1458036277841
+    },
+    {
+      "type": "edit",
+      "id": "d5b71eb451cf4990",
+      "item": {
+        "type": "markdown",
+        "id": "d5b71eb451cf4990",
+        "text": "# Easy extraction of the JSON-LD"
+      },
+      "date": 1458036278695
+    },
+    {
+      "type": "edit",
+      "id": "9f869608b3b9aee8",
+      "item": {
+        "type": "paragraph",
+        "id": "9f869608b3b9aee8",
+        "text": "In the longer term we want to use a specific [[Fedwiki JSON Data Item]]. But for now we can use a [[Fedwiki HTML Item]] in the markup."
+      },
+      "date": 1458036363226
+    },
+    {
+      "type": "add",
+      "id": "01b5d2965b614467",
+      "item": {
+        "type": "paragraph",
+        "id": "01b5d2965b614467",
+        "text": "For now we look to not be concerened about the item type. We can acheive this by looking at the item ids for a custom naming. If all else fails we can examine every elements content."
+      },
+      "after": "9f869608b3b9aee8",
+      "date": 1458036422524
+    },
+    {
+      "type": "add",
+      "id": "cd87f8a7e4d775ec",
+      "item": {
+        "type": "paragraph",
+        "id": "cd87f8a7e4d775ec",
+        "text": "If it is an HTML element then we allow some introductory HTML:"
+      },
+      "after": "01b5d2965b614467",
+      "date": 1458036424151
+    },
+    {
+      "type": "edit",
+      "id": "01b5d2965b614467",
+      "item": {
+        "type": "paragraph",
+        "id": "01b5d2965b614467",
+        "text": "For now we look to not be concerened about the item type. We can acheive this by looking at the item ids for a custom naming. "
+      },
+      "date": 1458036429093
+    },
+    {
+      "type": "add",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "paragraph",
+        "id": "fea6665595611d31",
+        "text": "If all else fails we can examine every elements content."
+      },
+      "after": "01b5d2965b614467",
+      "date": 1458036430518
+    },
+    {
+      "type": "edit",
+      "id": "01b5d2965b614467",
+      "item": {
+        "type": "paragraph",
+        "id": "01b5d2965b614467",
+        "text": "For now we look to not be concerned about the item type. We can achieve this by looking at the item ids for a custom naming. "
+      },
+      "date": 1458036440629
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "fea6665595611d31",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1"
+      ],
+      "id": "01b5d2965b614467",
+      "date": 1458036450732
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1"
+      ],
+      "id": "fea6665595611d31",
+      "date": 1458036455567
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "paragraph",
+        "id": "fea6665595611d31",
+        "text": "* If all else fails we can examine every elements content???"
+      },
+      "date": 1458036472496
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "* If all else fails we can examine every elements content???"
+      },
+      "date": 1458036473850
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "* If all else fails we can examine every elements content ???"
+      },
+      "date": 1458036480247
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "_ [ ] If all else fails we can examine every elements content ???"
+      },
+      "date": 1458036488585
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "- [ ] If all else fails we can examine every elements content ???"
+      },
+      "date": 1458036496025
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "- [ ] If all else fails => examine every elements content ???"
+      },
+      "date": 1458036506721
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "- [ ] If all else fails => examine every elements content ?"
+      },
+      "date": 1458036512554
+    },
+    {
+      "type": "edit",
+      "id": "fea6665595611d31",
+      "item": {
+        "type": "markdown",
+        "id": "fea6665595611d31",
+        "text": "- [ ] If all else fails => examine every elements content ?\n- [ ] Or look at every [[Fedwiki Code Item]] ?\n- [ ] Check out the [[Fedwiki Data Item]] and [[About Data Plugin]]"
+      },
+      "date": 1458036617390
+    },
+    {
+      "type": "add",
+      "id": "989932ce7d3d0511",
+      "item": {
+        "type": "paragraph",
+        "id": "989932ce7d3d0511",
+        "text": "# Using the Data Plugin"
+      },
+      "after": "01b5d2965b614467",
+      "date": 1458037015812
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "989932ce7d3d0511",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1"
+      ],
+      "id": "989932ce7d3d0511",
+      "date": 1458037017835
+    },
+    {
+      "type": "add",
+      "id": "bae957ea1dd287e0",
+      "item": {
+        "type": "paragraph",
+        "id": "bae957ea1dd287e0",
+        "text": "Here we test using some data stored with the [[About Data Plugin]]."
+      },
+      "after": "989932ce7d3d0511",
+      "date": 1458037049877
+    },
+    {
+      "type": "edit",
+      "id": "989932ce7d3d0511",
+      "item": {
+        "type": "markdown",
+        "id": "989932ce7d3d0511",
+        "text": "# Using the Data Plugin"
+      },
+      "date": 1458037051345
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "Materials Summary",
+        "id": "157e6139dfcb0c70",
+        "data": [
+          {
+            "Material name": "Cotton fabric",
+            "Carcinogenicity": "3.0",
+            "Acute Toxicity": "2.1",
+            "Chronic Toxicity": "2.1",
+            "Reproductive/Endocrine Disrupter Toxicity": "2.2",
+            "Chemistry Total": "9.4",
+            "Energy Intensity": "2.5",
+            "GHG Emissions Intensity": "3.8",
+            "Energy/GHG Emissions Total": "6.3",
+            "Water Intensity": "0.0",
+            "Land Use Intensity": "5.3",
+            "Water/ Land Use Total": "5.3",
+            "Hazardous Waste": "10.0",
+            "MSW": "5.0",
+            "Industrial waste": "4.0",
+            "Recyclable/ Compostable waste": "0.0",
+            "Mineral waste": "1.3",
+            "Physical Waste Total": "20.3",
+            "Total score": "41.2"
+          },
+          {
+            "Material name": "Polyester fabric",
+            "Carcinogenicity": "2.7",
+            "Acute Toxicity": "2.5",
+            "Chronic Toxicity": "1.6",
+            "Reproductive/Endocrine Disrupter Toxicity": "2.0",
+            "Chemistry Total": "8.8",
+            "Energy Intensity": "5.0",
+            "GHG Emissions Intensity": "3.8",
+            "Energy/GHG Emissions Total": "8.8",
+            "Water Intensity": "9.0",
+            "Land Use Intensity": "0.0",
+            "Water/ Land Use Total": "9.0",
+            "Hazardous Waste": "8.0",
+            "MSW": "3.8",
+            "Industrial waste": "4.0",
+            "Recyclable/ Compostable waste": "2.0",
+            "Mineral waste": "0.8",
+            "Physical Waste Total": "18.5",
+            "Total score": "45.1"
+          }
+        ],
+        "columns": [
+          "Material name",
+          "Carcinogenicity",
+          "Acute Toxicity",
+          "Chronic Toxicity",
+          "Reproductive/Endocrine Disrupter Toxicity",
+          "Chemistry Total",
+          "Energy Intensity",
+          "GHG Emissions Intensity",
+          "Energy/GHG Emissions Total",
+          "Water Intensity",
+          "Land Use Intensity",
+          "Water/ Land Use Total",
+          "Hazardous Waste",
+          "MSW",
+          "Industrial waste",
+          "Recyclable/ Compostable waste",
+          "Mineral waste",
+          "Physical Waste Total",
+          "Total score"
+        ],
+        "type": "data"
+      },
+      "after": "bae957ea1dd287e0",
+      "id": "157e6139dfcb0c70",
+      "date": 1458037056067
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "989932ce7d3d0511",
+        "157e6139dfcb0c70",
+        "bae957ea1dd287e0",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1"
+      ],
+      "id": "157e6139dfcb0c70",
+      "date": 1458037070500
+    },
+    {
+      "type": "add",
+      "id": "80680d0346b8138d",
+      "item": {
+        "type": "paragraph",
+        "id": "80680d0346b8138d",
+        "text": "Te idea is to see how it is exposed as a [[RESTful]] service."
+      },
+      "after": "bae957ea1dd287e0",
+      "date": 1458037099000
+    },
+    {
+      "type": "add",
+      "id": "eae7896f7f2714cb",
+      "item": {
+        "type": "paragraph",
+        "id": "eae7896f7f2714cb",
+        "text": "The first thing to note is that the data is clearly exposed as part of the [[Wiki Page JSON Feed]]."
+      },
+      "after": "80680d0346b8138d",
+      "date": 1458037230986
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b1b646b538b14d4d"
+      },
+      "id": "b1b646b538b14d4d",
+      "type": "add",
+      "after": "4fdca0ad086372c1",
+      "date": 1458037327593
+    },
+    {
+      "type": "edit",
+      "id": "b1b646b538b14d4d",
+      "item": {
+        "type": "code",
+        "id": "b1b646b538b14d4d",
+        "text": "<div class=\"item html\"><p>Here is some JSON-LD:\n\n\n</p></div>"
+      },
+      "date": 1458037332562
+    },
+    {
+      "type": "edit",
+      "id": "4fdca0ad086372c1",
+      "item": {
+        "type": "paragraph",
+        "id": "4fdca0ad086372c1",
+        "text": "Unfortunately the Fedwiki HTML that is rendered removes the HTML element that contains the '<script> tag. It renders the JSON-LD like this:"
+      },
+      "date": 1458037356407
+    },
+    {
+      "type": "edit",
+      "id": "80680d0346b8138d",
+      "item": {
+        "type": "paragraph",
+        "id": "80680d0346b8138d",
+        "text": "The idea is to see how it is exposed as a [[RESTful]] service."
+      },
+      "date": 1458038339153
+    },
+    {
+      "type": "edit",
+      "id": "eae7896f7f2714cb",
+      "item": {
+        "type": "paragraph",
+        "id": "eae7896f7f2714cb",
+        "text": "The first thing to note is that the data is clearly exposed as part of the [[Wiki Page JSON Feed]]. However again the HTMl does not seem to render the data, showing only:"
+      },
+      "date": 1458038410180
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a20a34fb46c15210"
+      },
+      "id": "a20a34fb46c15210",
+      "type": "add",
+      "after": "b1b646b538b14d4d",
+      "date": 1458038412519
+    },
+    {
+      "type": "edit",
+      "id": "a20a34fb46c15210",
+      "item": {
+        "type": "code",
+        "id": "a20a34fb46c15210",
+        "text": "<div class=\"item\"><p>Materials Summary</p></div>"
+      },
+      "date": 1458038416469
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "989932ce7d3d0511",
+        "157e6139dfcb0c70",
+        "bae957ea1dd287e0",
+        "80680d0346b8138d",
+        "eae7896f7f2714cb",
+        "a20a34fb46c15210",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "b1b646b538b14d4d"
+      ],
+      "id": "a20a34fb46c15210",
+      "date": 1458038418721
+    },
+    {
+      "type": "add",
+      "id": "ad3b0f069240a155",
+      "item": {
+        "type": "paragraph",
+        "id": "ad3b0f069240a155",
+        "text": "which it the caption"
+      },
+      "after": "eae7896f7f2714cb",
+      "date": 1458038435907
+    },
+    {
+      "type": "edit",
+      "id": "ad3b0f069240a155",
+      "item": {
+        "type": "paragraph",
+        "id": "ad3b0f069240a155",
+        "text": "which it the caption of the data plugin (marked up as \"text\": \"Materials Summary\" in the page item JSON).\n"
+      },
+      "date": 1458038511430
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "989932ce7d3d0511",
+        "157e6139dfcb0c70",
+        "bae957ea1dd287e0",
+        "80680d0346b8138d",
+        "eae7896f7f2714cb",
+        "a20a34fb46c15210",
+        "ad3b0f069240a155",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "b1b646b538b14d4d"
+      ],
+      "id": "ad3b0f069240a155",
+      "date": 1458038515454
+    },
+    {
+      "type": "edit",
+      "id": "ad3b0f069240a155",
+      "item": {
+        "type": "paragraph",
+        "id": "ad3b0f069240a155",
+        "text": "which it the caption of the data plugin (marked up as \"text\": \"Materials Summary\" in the page item JSON)"
+      },
+      "date": 1458038667772
+    },
+    {
+      "type": "edit",
+      "id": "ad3b0f069240a155",
+      "item": {
+        "type": "paragraph",
+        "id": "ad3b0f069240a155",
+        "text": "which it the caption of the data plugin (marked up as \"text\": \"Materials Summary\" in the page item JSON). It appears xxposed in the DOM as:"
+      },
+      "date": 1458038689662
+    },
+    {
+      "type": "edit",
+      "id": "ad3b0f069240a155",
+      "item": {
+        "type": "paragraph",
+        "id": "ad3b0f069240a155",
+        "text": "which it the caption of the data plugin (marked up as \"text\": \"Materials Summary\" in the page item JSON). It appears exposed in the DOM as:"
+      },
+      "date": 1458038696398
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cb334415344d3861"
+      },
+      "id": "cb334415344d3861",
+      "type": "add",
+      "after": "b1b646b538b14d4d",
+      "date": 1458038698372
+    },
+    {
+      "type": "edit",
+      "id": "cb334415344d3861",
+      "item": {
+        "type": "code",
+        "id": "cb334415344d3861",
+        "text": "<div class=\"item data\" data-id=\"157e6139dfcb0c70\"><p class=\"readout\">19.40</p><p class=\"label\">Averaged:<br>Physical Waste Total</p></div>"
+      },
+      "date": 1458038701153
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "989932ce7d3d0511",
+        "157e6139dfcb0c70",
+        "bae957ea1dd287e0",
+        "80680d0346b8138d",
+        "eae7896f7f2714cb",
+        "a20a34fb46c15210",
+        "ad3b0f069240a155",
+        "cb334415344d3861",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "b1b646b538b14d4d"
+      ],
+      "id": "cb334415344d3861",
+      "date": 1458038712532
+    },
+    {
+      "type": "add",
+      "id": "996ffe7e0cb60940",
+      "item": {
+        "type": "paragraph",
+        "id": "996ffe7e0cb60940",
+        "text": "but I don't actually see where the data is \"stored\" - in the json I expect?"
+      },
+      "after": "ad3b0f069240a155",
+      "date": 1458038758656
+    },
+    {
+      "type": "edit",
+      "id": "157e6139dfcb0c70",
+      "item": {
+        "text": "[[Materials Summary]]",
+        "id": "157e6139dfcb0c70",
+        "data": [
+          {
+            "Material name": "Cotton fabric",
+            "Carcinogenicity": "3.0",
+            "Acute Toxicity": "2.1",
+            "Chronic Toxicity": "2.1",
+            "Reproductive/Endocrine Disrupter Toxicity": "2.2",
+            "Chemistry Total": "9.4",
+            "Energy Intensity": "2.5",
+            "GHG Emissions Intensity": "3.8",
+            "Energy/GHG Emissions Total": "6.3",
+            "Water Intensity": "0.0",
+            "Land Use Intensity": "5.3",
+            "Water/ Land Use Total": "5.3",
+            "Hazardous Waste": "10.0",
+            "MSW": "5.0",
+            "Industrial waste": "4.0",
+            "Recyclable/ Compostable waste": "0.0",
+            "Mineral waste": "1.3",
+            "Physical Waste Total": "20.3",
+            "Total score": "41.2"
+          },
+          {
+            "Material name": "Polyester fabric",
+            "Carcinogenicity": "2.7",
+            "Acute Toxicity": "2.5",
+            "Chronic Toxicity": "1.6",
+            "Reproductive/Endocrine Disrupter Toxicity": "2.0",
+            "Chemistry Total": "8.8",
+            "Energy Intensity": "5.0",
+            "GHG Emissions Intensity": "3.8",
+            "Energy/GHG Emissions Total": "8.8",
+            "Water Intensity": "9.0",
+            "Land Use Intensity": "0.0",
+            "Water/ Land Use Total": "9.0",
+            "Hazardous Waste": "8.0",
+            "MSW": "3.8",
+            "Industrial waste": "4.0",
+            "Recyclable/ Compostable waste": "2.0",
+            "Mineral waste": "0.8",
+            "Physical Waste Total": "18.5",
+            "Total score": "45.1"
+          }
+        ],
+        "columns": [
+          "Material name",
+          "Carcinogenicity",
+          "Acute Toxicity",
+          "Chronic Toxicity",
+          "Reproductive/Endocrine Disrupter Toxicity",
+          "Chemistry Total",
+          "Energy Intensity",
+          "GHG Emissions Intensity",
+          "Energy/GHG Emissions Total",
+          "Water Intensity",
+          "Land Use Intensity",
+          "Water/ Land Use Total",
+          "Hazardous Waste",
+          "MSW",
+          "Industrial waste",
+          "Recyclable/ Compostable waste",
+          "Mineral waste",
+          "Physical Waste Total",
+          "Total score"
+        ],
+        "type": "data"
+      },
+      "date": 1458039238049
+    },
+    {
+      "type": "add",
+      "id": "e3c26fba13f9a821",
+      "item": {
+        "type": "paragraph",
+        "id": "e3c26fba13f9a821",
+        "text": "Now how about using [[Lots of Data]]"
+      },
+      "after": "996ffe7e0cb60940",
+      "date": 1458039327282
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e13d9dce2b5649a",
+        "dff6b0fcc0244d13",
+        "867c5eb4d9798c08",
+        "8dca4e5e3dc70724",
+        "8f61e10c66c45da8",
+        "32908a8dd5516629",
+        "f3bd7e642010c603",
+        "d5b71eb451cf4990",
+        "9f869608b3b9aee8",
+        "cd87f8a7e4d775ec",
+        "bba6984a818bf255",
+        "cf59792e75c97b0c",
+        "72cc6960fb54966b",
+        "48872b97a272c7c7",
+        "8a324a8d6e309ad4",
+        "01b5d2965b614467",
+        "fea6665595611d31",
+        "989932ce7d3d0511",
+        "157e6139dfcb0c70",
+        "bae957ea1dd287e0",
+        "80680d0346b8138d",
+        "eae7896f7f2714cb",
+        "a20a34fb46c15210",
+        "ad3b0f069240a155",
+        "996ffe7e0cb60940",
+        "cb334415344d3861",
+        "e3c26fba13f9a821",
+        "13fb9959dd44594f",
+        "4fdca0ad086372c1",
+        "b1b646b538b14d4d"
+      ],
+      "id": "e3c26fba13f9a821",
+      "date": 1458039330592
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f030229b35b5fd74"
+      },
+      "id": "f030229b35b5fd74",
+      "type": "add",
+      "after": "b1b646b538b14d4d",
+      "date": 1458040420101
+    },
+    {
+      "type": "edit",
+      "id": "f030229b35b5fd74",
+      "item": {
+        "type": "reference",
+        "id": "f030229b35b5fd74",
+        "site": "c0de.academy",
+        "slug": "json-ld",
+        "title": "JSON-LD",
+        "text": "JSON-LD, or JavaScript Object Notation for Linked Data, is a method of transporting [[Linked Data]] using [[JSON]] - [https://en.wikipedia.org/wiki/JSON-LD wikipedia]"
+      },
+      "date": 1458040426422
+    },
+    {
+      "type": "edit",
+      "id": "d5b71eb451cf4990",
+      "item": {
+        "type": "markdown",
+        "id": "d5b71eb451cf4990",
+        "text": "# Easy Extraction"
+      },
+      "date": 1458105123780
+    },
+    {
+      "type": "edit",
+      "id": "eae7896f7f2714cb",
+      "item": {
+        "type": "paragraph",
+        "id": "eae7896f7f2714cb",
+        "text": "The first thing to note is that the data is clearly exposed as part of the [[Wiki Page JSON Feed]]. However again the HTML does not seem to render the data, showing only:"
+      },
+      "date": 1458105149901
+    },
+    {
+      "type": "edit",
+      "id": "996ffe7e0cb60940",
+      "item": {
+        "type": "paragraph",
+        "id": "996ffe7e0cb60940",
+        "text": "** Question for Hangout:**  where the data \"stored\" in the [[DOM]] or in the [[JSON]] I expect?"
+      },
+      "date": 1458105291521
+    },
+    {
+      "type": "edit",
+      "id": "996ffe7e0cb60940",
+      "item": {
+        "type": "markdown",
+        "id": "996ffe7e0cb60940",
+        "text": "** Question for Hangout:**  where the data \"stored\" in the [[DOM]] or in the [[JSON]] I expect?"
+      },
+      "date": 1458105292919
+    },
+    {
+      "type": "edit",
+      "id": "996ffe7e0cb60940",
+      "item": {
+        "type": "markdown",
+        "id": "996ffe7e0cb60940",
+        "text": "**Question for Hangout:**  where the data \"stored\" in the [[DOM]] or in the [[JSON]] I expect?"
+      },
+      "date": 1458105311419
+    },
+    {
+      "type": "edit",
+      "id": "996ffe7e0cb60940",
+      "item": {
+        "type": "markdown",
+        "id": "996ffe7e0cb60940",
+        "text": "[[Question for Hangout:]]  where the data \"stored\" in the [[DOM]] or in the [[JSON]] I expect?"
+      },
+      "date": 1458105333284
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "6341a0c9b4c23be3"
+      },
+      "after": "ad3b0f069240a155",
+      "id": "6341a0c9b4c23be3",
+      "date": 1458105407296
+    },
+    {
+      "type": "remove",
+      "id": "996ffe7e0cb60940",
+      "date": 1458105411665
+    },
+    {
+      "type": "edit",
+      "id": "6341a0c9b4c23be3",
+      "item": {
+        "type": "reference",
+        "id": "6341a0c9b4c23be3",
+        "site": "future.fedwiki.org",
+        "slug": "question-for-hangout",
+        "title": "Question for Hangout:",
+        "text": "[[Question for Hangout:]]  where the data \"stored\" in the [[DOM]] or in the [[JSON]] I expect?"
+      },
+      "date": 1458105428296
+    },
+    {
+      "type": "edit",
+      "id": "989932ce7d3d0511",
+      "item": {
+        "type": "markdown",
+        "id": "989932ce7d3d0511",
+        "text": "# [[Using the Data Plugin]]"
+      },
+      "date": 1458105489185
+    },
+    {
+      "type": "remove",
+      "id": "bae957ea1dd287e0",
+      "date": 1458105501642
+    },
+    {
+      "type": "remove",
+      "id": "80680d0346b8138d",
+      "date": 1458105504834
+    },
+    {
+      "type": "remove",
+      "id": "157e6139dfcb0c70",
+      "date": 1458105508302
+    },
+    {
+      "type": "remove",
+      "id": "eae7896f7f2714cb",
+      "date": 1458105511695
+    },
+    {
+      "type": "remove",
+      "id": "a20a34fb46c15210",
+      "date": 1458105514813
+    },
+    {
+      "type": "remove",
+      "id": "ad3b0f069240a155",
+      "date": 1458105517917
+    },
+    {
+      "type": "remove",
+      "id": "cb334415344d3861",
+      "date": 1458105523695
+    },
+    {
+      "type": "remove",
+      "id": "6341a0c9b4c23be3",
+      "date": 1458105530534
+    },
+    {
+      "type": "remove",
+      "id": "e3c26fba13f9a821",
+      "date": 1458105534696
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "431f5408424040e0"
+      },
+      "after": "fea6665595611d31",
+      "id": "431f5408424040e0",
+      "date": 1458105539473
+    },
+    {
+      "type": "edit",
+      "id": "431f5408424040e0",
+      "item": {
+        "type": "reference",
+        "id": "431f5408424040e0",
+        "site": "future.fedwiki.org",
+        "slug": "using-the-data-plugin",
+        "title": "Using the Data Plugin",
+        "text": "Here we test using some data stored with the [[About Data Plugin]]."
+      },
+      "date": 1458105542668
+    },
+    {
+      "type": "remove",
+      "id": "989932ce7d3d0511",
+      "date": 1458105565276
+    },
+    {
+      "type": "edit",
+      "id": "9f869608b3b9aee8",
+      "item": {
+        "type": "paragraph",
+        "id": "9f869608b3b9aee8",
+        "text": "In the longer term we want to use a specific [[Fedwiki JSON Data Item]] - see [[Using the Data Plugin]]. But for now we can use a [[Fedwiki HTML Item]] in the markup."
+      },
+      "date": 1458105594654
+    },
+    {
+      "type": "remove",
+      "id": "431f5408424040e0",
+      "date": 1458105603277
+    }
+  ]
+}

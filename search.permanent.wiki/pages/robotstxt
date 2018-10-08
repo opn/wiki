@@ -1,0 +1,1422 @@
+{
+  "title": "robots.txt",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "99143bc234f7d0e3",
+      "text": "The robots exclusion standard, also known as the robots exclusion protocol or simply robots.txt, is a standard used by websites to communicate with [[Web Crawlers]] and other web robots - [https://en.wikipedia.org/wiki/Robots_exclusion_standard wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3166e949ebfa0472",
+      "text": "Web site owners use the /robots.txt file to give instructions about their site to web robots; this is called The Robots Exclusion Protocol."
+    },
+    {
+      "type": "paragraph",
+      "id": "fb448f4eda72d42a",
+      "text": "For a database of [[Web Crawler]]s see: [http://www.robotstxt.org/db.html robotstxt.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "9a1cc8fba7bb76bb",
+      "text": "# How it works"
+    },
+    {
+      "type": "paragraph",
+      "id": "1a9fd134cb6da5f2",
+      "text": "It works likes this: a robot wants to visits a Web site URL, say http://www.example.com/welcome.html. Before it does so, it first checks for:"
+    },
+    {
+      "type": "code",
+      "id": "0095fa33c67fdfa3",
+      "text": "http://www.example.com/robots.txt"
+    },
+    {
+      "type": "paragraph",
+      "id": "aeb06466fdd6365b",
+      "text": "and finds:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "52e29b654169d2a1",
+      "text": "User-agent: *\nDisallow: /"
+    },
+    {
+      "type": "paragraph",
+      "id": "955b91302b9907fe",
+      "text": "The \"User-agent: *\" means this section applies to all robots. The \"Disallow: /\" tells the robot that it should not visit any pages on the site."
+    },
+    {
+      "type": "markdown",
+      "id": "6b728c4746aa575b",
+      "text": "There are two important considerations when using /robots.txt:\n* robots can ignore your /robots.txt. Especially malware robots that scan the web for security vulnerabilities, and email address harvesters used by spammers will pay no attention.\n* the /robots.txt file is a publicly available file. Anyone can see what sections of your server you don't want robots to use."
+    },
+    {
+      "type": "paragraph",
+      "id": "e256d96fe3e27499",
+      "text": "So don't try to use /robots.txt to hide information."
+    },
+    {
+      "type": "paragraph",
+      "id": "ce6788dbf911c898",
+      "text": "A robots.txt file covers one origin. For websites with multiple subdomains, each subdomain must have its own robots.txt file. In addition, each protocol and port needs its own robots.txt file; http://example.com/robots.txt does not apply to pages under https://example.com:8080/ or https://example.com/."
+    },
+    {
+      "type": "paragraph",
+      "id": "6d0c48161c3367ec",
+      "text": "The standard is different from, but can be used in conjunction with [[Sitemaps]], a robot inclusion standard for websites."
+    },
+    {
+      "type": "markdown",
+      "id": "755f8db642d80949",
+      "text": "# Examples"
+    },
+    {
+      "type": "paragraph",
+      "id": "8c196b7c39944a0f",
+      "text": "This example tells all robots that they can visit all files because the wildcard * specifies all robots:"
+    },
+    {
+      "type": "code",
+      "id": "22c87dc5a32c5f2b",
+      "text": "User-agent: *\nAllow:"
+    },
+    {
+      "type": "paragraph",
+      "id": "0b90a9828b0f422a",
+      "text": "The same result can be accomplished with an empty or missing robots.txt file.\n\nThis example tells all robots to stay out of a website:"
+    },
+    {
+      "type": "code",
+      "id": "d885e108b20a939f",
+      "text": "User-agent: *\nDisallow: /"
+    },
+    {
+      "type": "paragraph",
+      "id": "d1a4d44830362294",
+      "text": "This example tells all robots not to enter three directories:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "2924acbe9a279a26",
+      "text": "User-agent: *\nDisallow: /cgi-bin/\nDisallow: /tmp/\nDisallow: /junk/"
+    },
+    {
+      "type": "paragraph",
+      "id": "e75e03d120594d2d",
+      "text": "This example tells all robots to stay away from one specific file:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "6f51e3c68c3848b8",
+      "text": "User-agent: *\nDisallow: /directory/file.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "9a178385ca15ea1a",
+      "text": "Note that all other files in the specified directory will be processed.\n\nThis example tells a specific robot to stay out of a website:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "3409d3a09d789ce6",
+      "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nDisallow: /"
+    },
+    {
+      "type": "paragraph",
+      "id": "2c4823517ec1be27",
+      "text": "This example tells two specific robots not to enter one specific directory:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "f0c15df26d01c8db",
+      "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nUser-agent: Googlebot\nDisallow: /private/"
+    },
+    {
+      "type": "paragraph",
+      "id": "e2c0eec964f41764",
+      "text": "Example demonstrating how comments can be used:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "fbaf04869092a58a",
+      "text": "# Comments appear after the \"#\" symbol at the start of a line, or after a directive\nUser-agent: * # match all bots\nDisallow: / # keep them out"
+    },
+    {
+      "type": "paragraph",
+      "id": "c1cb752559aa9e39",
+      "text": "It is also possible to list multiple robots with their own rules. The actual robot string is defined by the crawler. A few sites, such as Google, support several user-agent strings that allow the operator to deny access to a subset of their services by using specific user-agent strings.\n\nExample demonstrating multiple user-agents:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "7730c38c210cccaa",
+      "text": "User-agent: googlebot        # all Google services\nDisallow: /private/          # disallow this directory\n\nUser-agent: googlebot-news   # only the news service\nDisallow: /                  # disallow everything\n\nUser-agent: *                # any robot\nDisallow: /something/        # disallow this directory"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "robots.txt",
+        "story": []
+      },
+      "date": 1448783867941
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "99143bc234f7d0e3"
+      },
+      "id": "99143bc234f7d0e3",
+      "type": "add",
+      "date": 1448783869448
+    },
+    {
+      "type": "edit",
+      "id": "99143bc234f7d0e3",
+      "item": {
+        "type": "paragraph",
+        "id": "99143bc234f7d0e3",
+        "text": "The robots exclusion standard, also known as the robots exclusion protocol or simply robots.txt, is a standard used by websites to communicate with web crawlers and other web robots. The standard specifies how to inform the web robot about which areas of the website should not be processed or scanned. Robots are often used by search engines to categorize web sites. Not all robots cooperate with the standard; email harvesters, spambots and malware robots that scan for security vulnerabilities may even start with the portions of the website that they have been told to stay out of. The standard is different from, but can be used in conjunction with Sitemaps, a robot inclusion standard for websites."
+      },
+      "date": 1448783931946
+    },
+    {
+      "type": "edit",
+      "id": "99143bc234f7d0e3",
+      "item": {
+        "type": "paragraph",
+        "id": "99143bc234f7d0e3",
+        "text": "The robots exclusion standard, also known as the robots exclusion protocol or simply robots.txt, is a standard used by websites to communicate with web crawlers and other web robots. "
+      },
+      "date": 1448783945154
+    },
+    {
+      "type": "add",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "The standard specifies how to inform the web robot about which areas of the website should not be processed or scanned. "
+      },
+      "after": "99143bc234f7d0e3",
+      "date": 1448783950865
+    },
+    {
+      "type": "add",
+      "id": "a0f743350db28d5a",
+      "item": {
+        "type": "paragraph",
+        "id": "a0f743350db28d5a",
+        "text": "Robots are often used by search engines to categorize web sites. "
+      },
+      "after": "3166e949ebfa0472",
+      "date": 1448783960481
+    },
+    {
+      "type": "add",
+      "id": "8a748a9a6b09c80a",
+      "item": {
+        "type": "paragraph",
+        "id": "8a748a9a6b09c80a",
+        "text": "Not all robots cooperate with the standard; email harvesters, spambots and malware robots that scan for security vulnerabilities may even start with the portions of the website that they have been told to stay out of. "
+      },
+      "after": "a0f743350db28d5a",
+      "date": 1448783965897
+    },
+    {
+      "type": "add",
+      "id": "6d0c48161c3367ec",
+      "item": {
+        "type": "paragraph",
+        "id": "6d0c48161c3367ec",
+        "text": "The standard is different from, but can be used in conjunction with Sitemaps, a robot inclusion standard for websites."
+      },
+      "after": "8a748a9a6b09c80a",
+      "date": 1448783967420
+    },
+    {
+      "type": "remove",
+      "id": "a0f743350db28d5a",
+      "date": 1448783969482
+    },
+    {
+      "type": "edit",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "The standard specifies how to inform the web robot about which areas of the website should not be processed or scanned. Robots are often used by search engines to categorise web sites. "
+      },
+      "date": 1448783986827
+    },
+    {
+      "type": "edit",
+      "id": "99143bc234f7d0e3",
+      "item": {
+        "type": "paragraph",
+        "id": "99143bc234f7d0e3",
+        "text": "The robots exclusion standard, also known as the robots exclusion protocol or simply robots.txt, is a standard used by websites to communicate with [[Web Crawlers]] and other web robots. "
+      },
+      "date": 1448784004476
+    },
+    {
+      "type": "edit",
+      "id": "8a748a9a6b09c80a",
+      "item": {
+        "type": "paragraph",
+        "id": "8a748a9a6b09c80a",
+        "text": "Not all robots cooperate with the standard; email harvesters, [[Spambots]] and [[Malware]] robots that scan for security vulnerabilities may even start with the portions of the website that they have been told to stay out of. "
+      },
+      "date": 1448784031811
+    },
+    {
+      "type": "edit",
+      "id": "6d0c48161c3367ec",
+      "item": {
+        "type": "paragraph",
+        "id": "6d0c48161c3367ec",
+        "text": "The standard is different from, but can be used in conjunction with [[Sitemaps]], a robot inclusion standard for websites."
+      },
+      "date": 1448784037348
+    },
+    {
+      "type": "edit",
+      "id": "99143bc234f7d0e3",
+      "item": {
+        "type": "paragraph",
+        "id": "99143bc234f7d0e3",
+        "text": "The robots exclusion standard, also known as the robots exclusion protocol or simply robots.txt, is a standard used by websites to communicate with [[Web Crawlers]] and other web robots - [https://en.wikipedia.org/wiki/Robots_exclusion_standard wikipedia]"
+      },
+      "date": 1448784053644
+    },
+    {
+      "type": "edit",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "When a site owner wishes to give instructions to web robots they place a text file called robots.txt in the root of the web site hierarchy (e.g. https://www.example.com/robots.txt). This text file contains the instructions in a specific format (see examples below). Robots that choose to follow the instructions try to fetch this file and read the instructions before fetching any other file from the web site. If this file doesn't exist, web robots assume that the web owner wishes to provide no specific instructions, and crawl the entire site."
+      },
+      "date": 1448784539928
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "6d0c48161c3367ec"
+      ],
+      "id": "8a748a9a6b09c80a",
+      "date": 1448784544358
+    },
+    {
+      "type": "edit",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "When a site owner wishes to give instructions to web robots they place a text file called robots.txt in the root of the web site hierarchy (e.g. https://www.example.com/robots.txt). "
+      },
+      "date": 1448784555632
+    },
+    {
+      "type": "add",
+      "id": "3a11df844ac058ad",
+      "item": {
+        "type": "paragraph",
+        "id": "3a11df844ac058ad",
+        "text": "This text file contains the instructions in a specific format (see examples below). Robots that choose to follow the instructions try to fetch this file and read the instructions before fetching any other file from the web site. If this file doesn't exist, web robots assume that the web owner wishes to provide no specific instructions, and crawl the entire site."
+      },
+      "after": "3166e949ebfa0472",
+      "date": 1448784561877
+    },
+    {
+      "type": "edit",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "When a site owner wishes to give instructions to web robots they place a text file called robots.txt in the root of the web site hierarchy (e.g. www.example.com/robots.txt). "
+      },
+      "date": 1448784628154
+    },
+    {
+      "type": "edit",
+      "id": "3a11df844ac058ad",
+      "item": {
+        "type": "paragraph",
+        "id": "3a11df844ac058ad",
+        "text": "Robots that choose to follow the instructions try to fetch this file and read the instructions before fetching any other file from the web site. If this file doesn't exist, web robots assume that the web owner wishes to provide no specific instructions, and crawl the entire site."
+      },
+      "date": 1448784658523
+    },
+    {
+      "type": "add",
+      "id": "ce6788dbf911c898",
+      "item": {
+        "type": "paragraph",
+        "id": "ce6788dbf911c898",
+        "text": "A robots.txt file covers one origin. For websites with multiple subdomains, each subdomain must have its own robots.txt file. If example.com had a robots.txt file but a.example.com did not, the rules that would apply for example.com would not apply to a.example.com. In addition, each protocol and port needs its own robots.txt file; http://example.com/robots.txt does not apply to pages under https://example.com:8080/ or https://example.com/."
+      },
+      "after": "3a11df844ac058ad",
+      "date": 1448784685347
+    },
+    {
+      "type": "edit",
+      "id": "ce6788dbf911c898",
+      "item": {
+        "type": "paragraph",
+        "id": "ce6788dbf911c898",
+        "text": "A robots.txt file covers one origin. For websites with multiple subdomains, each subdomain must have its own robots.txt file. In addition, each protocol and port needs its own robots.txt file; http://example.com/robots.txt does not apply to pages under https://example.com:8080/ or https://example.com/."
+      },
+      "date": 1448784723420
+    },
+    {
+      "type": "add",
+      "id": "755f8db642d80949",
+      "item": {
+        "type": "paragraph",
+        "id": "755f8db642d80949",
+        "text": "# Examples"
+      },
+      "after": "6d0c48161c3367ec",
+      "date": 1448784758890
+    },
+    {
+      "type": "edit",
+      "id": "755f8db642d80949",
+      "item": {
+        "type": "markdown",
+        "id": "755f8db642d80949",
+        "text": "# Examples"
+      },
+      "date": 1448784761660
+    },
+    {
+      "type": "add",
+      "id": "8c196b7c39944a0f",
+      "item": {
+        "type": "paragraph",
+        "id": "8c196b7c39944a0f",
+        "text": "This example tells all robots that they can visit all files because the wildcard * specifies all robots:"
+      },
+      "after": "755f8db642d80949",
+      "date": 1448784767972
+    },
+    {
+      "type": "add",
+      "id": "0b90a9828b0f422a",
+      "item": {
+        "type": "paragraph",
+        "id": "0b90a9828b0f422a",
+        "text": "The same result can be accomplished with an empty or missing robots.txt file.\n\nThis example tells all robots to stay out of a website:"
+      },
+      "after": "8c196b7c39944a0f",
+      "date": 1448784783565
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "22c87dc5a32c5f2b"
+      },
+      "id": "22c87dc5a32c5f2b",
+      "type": "add",
+      "after": "d1a4d44830362294",
+      "date": 1448784790617
+    },
+    {
+      "type": "add",
+      "id": "d1a4d44830362294",
+      "item": {
+        "type": "paragraph",
+        "id": "d1a4d44830362294",
+        "text": "User-agent: *\nDisallow: /\nThis example tells all robots not to enter three directories:\n\nUser-agent: *\nDisallow: /cgi-bin/\nDisallow: /tmp/\nDisallow: /junk/\nThis example tells all robots to stay away from one specific file:\n\nUser-agent: *\nDisallow: /directory/file.html\nNote that all other files in the specified directory will be processed.\n\nThis example tells a specific robot to stay out of a website:\n\nUser-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nDisallow: /\nThis example tells two specific robots not to enter one specific directory:\n\nUser-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nUser-agent: Googlebot\nDisallow: /private/\nExample demonstrating how comments can be used:\n\n# Comments appear after the \"#\" symbol at the start of a line, or after a directive\nUser-agent: * # match all bots\nDisallow: / # keep them out\nIt is also possible to list multiple robots with their own rules. The actual robot string is defined by the crawler. A few sites, such as Google, support several user-agent strings that allow the operator to deny access to a subset of their services by using specific user-agent strings.[12]\n\nExample demonstrating multiple user-agents:\n\nUser-agent: googlebot        # all Google services\nDisallow: /private/          # disallow this directory\n\nUser-agent: googlebot-news   # only the news service\nDisallow: /                  # disallow everything\n\nUser-agent: *                # any robot\nDisallow: /something/        # disallow this directory"
+      },
+      "after": "0b90a9828b0f422a",
+      "date": 1448784791908
+    },
+    {
+      "type": "edit",
+      "id": "22c87dc5a32c5f2b",
+      "item": {
+        "type": "code",
+        "id": "22c87dc5a32c5f2b",
+        "text": "User-agent: *\nAllow:"
+      },
+      "date": 1448784794031
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d1a4d44830362294"
+      ],
+      "id": "22c87dc5a32c5f2b",
+      "date": 1448784803824
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "172e1d6c9ccc36fd"
+      },
+      "id": "172e1d6c9ccc36fd",
+      "type": "add",
+      "after": "d1a4d44830362294",
+      "date": 1448784813796
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d1a4d44830362294"
+      ],
+      "id": "172e1d6c9ccc36fd",
+      "date": 1448784815997
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d885e108b20a939f"
+      },
+      "id": "d885e108b20a939f",
+      "type": "add",
+      "after": "d1a4d44830362294",
+      "date": 1448784818144
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "d885e108b20a939f",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d1a4d44830362294"
+      ],
+      "id": "d885e108b20a939f",
+      "date": 1448784821923
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2924acbe9a279a26"
+      },
+      "id": "2924acbe9a279a26",
+      "type": "add",
+      "after": "d1a4d44830362294",
+      "date": 1448784823924
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "d885e108b20a939f",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "2924acbe9a279a26",
+        "0b90a9828b0f422a",
+        "d1a4d44830362294"
+      ],
+      "id": "2924acbe9a279a26",
+      "date": 1448784828587
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "d885e108b20a939f",
+        "2924acbe9a279a26",
+        "0b90a9828b0f422a",
+        "d1a4d44830362294"
+      ],
+      "id": "d885e108b20a939f",
+      "date": 1448784847511
+    },
+    {
+      "type": "edit",
+      "id": "d1a4d44830362294",
+      "item": {
+        "type": "paragraph",
+        "id": "d1a4d44830362294",
+        "text": "This example tells all robots not to enter three directories:\n\n"
+      },
+      "date": 1448784868831
+    },
+    {
+      "type": "add",
+      "id": "e75e03d120594d2d",
+      "item": {
+        "type": "paragraph",
+        "id": "e75e03d120594d2d",
+        "text": "User-agent: *\nDisallow: /cgi-bin/\nDisallow: /tmp/\nDisallow: /junk/\nThis example tells all robots to stay away from one specific file:\n\n"
+      },
+      "after": "d1a4d44830362294",
+      "date": 1448784873488
+    },
+    {
+      "type": "add",
+      "id": "37f63edc8a2877c0",
+      "item": {
+        "type": "paragraph",
+        "id": "37f63edc8a2877c0",
+        "text": "User-agent: *\nDisallow: /directory/file.html\n"
+      },
+      "after": "e75e03d120594d2d",
+      "date": 1448784878863
+    },
+    {
+      "type": "add",
+      "id": "9a178385ca15ea1a",
+      "item": {
+        "type": "paragraph",
+        "id": "9a178385ca15ea1a",
+        "text": "Note that all other files in the specified directory will be processed.\n\nThis example tells a specific robot to stay out of a website:\n\n"
+      },
+      "after": "37f63edc8a2877c0",
+      "date": 1448784883496
+    },
+    {
+      "type": "add",
+      "id": "e9528c59d5caa401",
+      "item": {
+        "type": "paragraph",
+        "id": "e9528c59d5caa401",
+        "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nDisallow: /\nThis example tells two specific robots not to enter one specific directory:\n\nUser-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nUser-agent: Googlebot\nDisallow: /private/\nExample demonstrating how comments can be used:\n\n# Comments appear after the \"#\" symbol at the start of a line, or after a directive\nUser-agent: * # match all bots\nDisallow: / # keep them out\nIt is also possible to list multiple robots with their own rules. The actual robot string is defined by the crawler. A few sites, such as Google, support several user-agent strings that allow the operator to deny access to a subset of their services by using specific user-agent strings.[12]\n\nExample demonstrating multiple user-agents:\n\nUser-agent: googlebot        # all Google services\nDisallow: /private/          # disallow this directory\n\nUser-agent: googlebot-news   # only the news service\nDisallow: /                  # disallow everything\n\nUser-agent: *                # any robot\nDisallow: /something/        # disallow this directory"
+      },
+      "after": "9a178385ca15ea1a",
+      "date": 1448784885130
+    },
+    {
+      "type": "edit",
+      "id": "d885e108b20a939f",
+      "item": {
+        "type": "code",
+        "id": "d885e108b20a939f",
+        "text": "User-agent: *\nDisallow: /"
+      },
+      "date": 1448784889314
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "2924acbe9a279a26",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "e75e03d120594d2d",
+        "37f63edc8a2877c0",
+        "9a178385ca15ea1a",
+        "e9528c59d5caa401"
+      ],
+      "id": "d885e108b20a939f",
+      "date": 1448784894595
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "37f63edc8a2877c0",
+        "9a178385ca15ea1a",
+        "e9528c59d5caa401"
+      ],
+      "id": "2924acbe9a279a26",
+      "date": 1448784905820
+    },
+    {
+      "type": "edit",
+      "id": "e75e03d120594d2d",
+      "item": {
+        "type": "paragraph",
+        "id": "e75e03d120594d2d",
+        "text": "This example tells all robots to stay away from one specific file:\n\n"
+      },
+      "date": 1448784914921
+    },
+    {
+      "type": "edit",
+      "id": "2924acbe9a279a26",
+      "item": {
+        "type": "code",
+        "id": "2924acbe9a279a26",
+        "text": "User-agent: *\nDisallow: /cgi-bin/\nDisallow: /tmp/\nDisallow: /junk/"
+      },
+      "date": 1448784918386
+    },
+    {
+      "type": "edit",
+      "id": "37f63edc8a2877c0",
+      "item": {
+        "type": "paragraph",
+        "id": "37f63edc8a2877c0",
+        "text": "User-agent: *\nDisallow: /directory/file.html"
+      },
+      "date": 1448784931121
+    },
+    {
+      "type": "edit",
+      "id": "e9528c59d5caa401",
+      "item": {
+        "type": "paragraph",
+        "id": "e9528c59d5caa401",
+        "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nDisallow: /\n"
+      },
+      "date": 1448784954521
+    },
+    {
+      "type": "add",
+      "id": "2c4823517ec1be27",
+      "item": {
+        "type": "paragraph",
+        "id": "2c4823517ec1be27",
+        "text": "This example tells two specific robots not to enter one specific directory:\n\n"
+      },
+      "after": "e9528c59d5caa401",
+      "date": 1448784957961
+    },
+    {
+      "type": "add",
+      "id": "26bd2d8e299ce120",
+      "item": {
+        "type": "paragraph",
+        "id": "26bd2d8e299ce120",
+        "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nUser-agent: Googlebot\nDisallow: /private/\n"
+      },
+      "after": "2c4823517ec1be27",
+      "date": 1448784965408
+    },
+    {
+      "type": "add",
+      "id": "e2c0eec964f41764",
+      "item": {
+        "type": "paragraph",
+        "id": "e2c0eec964f41764",
+        "text": "Example demonstrating how comments can be used:\n\n"
+      },
+      "after": "26bd2d8e299ce120",
+      "date": 1448784970386
+    },
+    {
+      "type": "add",
+      "id": "33336ecbdac508a3",
+      "item": {
+        "type": "paragraph",
+        "id": "33336ecbdac508a3",
+        "text": "# Comments appear after the \"#\" symbol at the start of a line, or after a directive\nUser-agent: * # match all bots\nDisallow: / # keep them out\n"
+      },
+      "after": "e2c0eec964f41764",
+      "date": 1448784975098
+    },
+    {
+      "type": "add",
+      "id": "c1cb752559aa9e39",
+      "item": {
+        "type": "paragraph",
+        "id": "c1cb752559aa9e39",
+        "text": "It is also possible to list multiple robots with their own rules. The actual robot string is defined by the crawler. A few sites, such as Google, support several user-agent strings that allow the operator to deny access to a subset of their services by using specific user-agent strings.\n\nExample demonstrating multiple user-agents:\n\n"
+      },
+      "after": "33336ecbdac508a3",
+      "date": 1448784986906
+    },
+    {
+      "type": "add",
+      "id": "4660b5540a0c65f6",
+      "item": {
+        "type": "paragraph",
+        "id": "4660b5540a0c65f6",
+        "text": "User-agent: googlebot        # all Google services\nDisallow: /private/          # disallow this directory\n\nUser-agent: googlebot-news   # only the news service\nDisallow: /                  # disallow everything\n\nUser-agent: *                # any robot\nDisallow: /something/        # disallow this directory"
+      },
+      "after": "c1cb752559aa9e39",
+      "date": 1448784999779
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7730c38c210cccaa"
+      },
+      "id": "7730c38c210cccaa",
+      "type": "add",
+      "after": "4660b5540a0c65f6",
+      "date": 1448785001231
+    },
+    {
+      "type": "remove",
+      "id": "4660b5540a0c65f6",
+      "date": 1448785006143
+    },
+    {
+      "type": "edit",
+      "id": "7730c38c210cccaa",
+      "item": {
+        "type": "code",
+        "id": "7730c38c210cccaa",
+        "text": "User-agent: googlebot        # all Google services\nDisallow: /private/          # disallow this directory\n\nUser-agent: googlebot-news   # only the news service\nDisallow: /                  # disallow everything\n\nUser-agent: *                # any robot\nDisallow: /something/        # disallow this directory"
+      },
+      "date": 1448785008821
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fbaf04869092a58a"
+      },
+      "id": "fbaf04869092a58a",
+      "type": "add",
+      "after": "7730c38c210cccaa",
+      "date": 1448785012168
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "37f63edc8a2877c0",
+        "9a178385ca15ea1a",
+        "e9528c59d5caa401",
+        "2c4823517ec1be27",
+        "26bd2d8e299ce120",
+        "e2c0eec964f41764",
+        "33336ecbdac508a3",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "fbaf04869092a58a",
+      "date": 1448785014984
+    },
+    {
+      "type": "remove",
+      "id": "33336ecbdac508a3",
+      "date": 1448785020039
+    },
+    {
+      "type": "edit",
+      "id": "fbaf04869092a58a",
+      "item": {
+        "type": "code",
+        "id": "fbaf04869092a58a",
+        "text": "# Comments appear after the \"#\" symbol at the start of a line, or after a directive\nUser-agent: * # match all bots\nDisallow: / # keep them out"
+      },
+      "date": 1448785022092
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f0c15df26d01c8db"
+      },
+      "id": "f0c15df26d01c8db",
+      "type": "add",
+      "after": "7730c38c210cccaa",
+      "date": 1448785031051
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "37f63edc8a2877c0",
+        "9a178385ca15ea1a",
+        "e9528c59d5caa401",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "26bd2d8e299ce120",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "f0c15df26d01c8db",
+      "date": 1448785035966
+    },
+    {
+      "type": "remove",
+      "id": "26bd2d8e299ce120",
+      "date": 1448785040440
+    },
+    {
+      "type": "edit",
+      "id": "f0c15df26d01c8db",
+      "item": {
+        "type": "code",
+        "id": "f0c15df26d01c8db",
+        "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nUser-agent: Googlebot\nDisallow: /private/"
+      },
+      "date": 1448785042525
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3409d3a09d789ce6"
+      },
+      "id": "3409d3a09d789ce6",
+      "type": "add",
+      "after": "7730c38c210cccaa",
+      "date": 1448785045494
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "37f63edc8a2877c0",
+        "9a178385ca15ea1a",
+        "3409d3a09d789ce6",
+        "e9528c59d5caa401",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "3409d3a09d789ce6",
+      "date": 1448785049209
+    },
+    {
+      "type": "remove",
+      "id": "e9528c59d5caa401",
+      "date": 1448785053541
+    },
+    {
+      "type": "edit",
+      "id": "3409d3a09d789ce6",
+      "item": {
+        "type": "code",
+        "id": "3409d3a09d789ce6",
+        "text": "User-agent: BadBot # replace 'BadBot' with the actual user-agent of the bot\nDisallow: /"
+      },
+      "date": 1448785055453
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6f51e3c68c3848b8"
+      },
+      "id": "6f51e3c68c3848b8",
+      "type": "add",
+      "after": "7730c38c210cccaa",
+      "date": 1448785059688
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "3a11df844ac058ad",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "172e1d6c9ccc36fd",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "37f63edc8a2877c0",
+        "6f51e3c68c3848b8",
+        "9a178385ca15ea1a",
+        "3409d3a09d789ce6",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "6f51e3c68c3848b8",
+      "date": 1448785062224
+    },
+    {
+      "type": "remove",
+      "id": "37f63edc8a2877c0",
+      "date": 1448785068604
+    },
+    {
+      "type": "edit",
+      "id": "6f51e3c68c3848b8",
+      "item": {
+        "type": "code",
+        "id": "6f51e3c68c3848b8",
+        "text": "User-agent: *\nDisallow: /directory/file.html"
+      },
+      "date": 1448785071853
+    },
+    {
+      "type": "remove",
+      "id": "172e1d6c9ccc36fd",
+      "date": 1448785275528
+    },
+    {
+      "type": "edit",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "Web site owners use the /robots.txt file to give instructions about their site to web robots; this is called The Robots Exclusion Protocol.\n\nIt works likes this: a robot wants to vists a Web site URL, say http://www.example.com/welcome.html. Before it does so, it firsts checks for http://www.example.com/robots.txt, and finds:\n\nUser-agent: *\nDisallow: /\nThe \"User-agent: *\" means this section applies to all robots. The \"Disallow: /\" tells the robot that it should not visit any pages on the site.\n\nThere are two important considerations when using /robots.txt:\n\nrobots can ignore your /robots.txt. Especially malware robots that scan the web for security vulnerabilities, and email address harvesters used by spammers will pay no attention.\nthe /robots.txt file is a publicly available file. Anyone can see what sections of your server you don't want robots to use.\nSo don't try to use /robots.txt to hide information."
+      },
+      "date": 1448785972931
+    },
+    {
+      "type": "remove",
+      "id": "3a11df844ac058ad",
+      "date": 1448785979952
+    },
+    {
+      "type": "edit",
+      "id": "3166e949ebfa0472",
+      "item": {
+        "type": "paragraph",
+        "id": "3166e949ebfa0472",
+        "text": "Web site owners use the /robots.txt file to give instructions about their site to web robots; this is called The Robots Exclusion Protocol."
+      },
+      "date": 1448785992816
+    },
+    {
+      "type": "add",
+      "id": "1a9fd134cb6da5f2",
+      "item": {
+        "type": "paragraph",
+        "id": "1a9fd134cb6da5f2",
+        "text": "It works likes this: a robot wants to visits a Web site URL, say http://www.example.com/welcome.html. Before it does so, it first checks for http://www.example.com/robots.txt, and finds:\n\n"
+      },
+      "after": "3166e949ebfa0472",
+      "date": 1448786021849
+    },
+    {
+      "type": "add",
+      "id": "ff4257ca47d227bb",
+      "item": {
+        "type": "paragraph",
+        "id": "ff4257ca47d227bb",
+        "text": "User-agent: *\nDisallow: /"
+      },
+      "after": "1a9fd134cb6da5f2",
+      "date": 1448786024721
+    },
+    {
+      "type": "add",
+      "id": "955b91302b9907fe",
+      "item": {
+        "type": "paragraph",
+        "id": "955b91302b9907fe",
+        "text": "The \"User-agent: *\" means this section applies to all robots. The \"Disallow: /\" tells the robot that it should not visit any pages on the site."
+      },
+      "after": "ff4257ca47d227bb",
+      "date": 1448786028337
+    },
+    {
+      "type": "add",
+      "id": "6b728c4746aa575b",
+      "item": {
+        "type": "paragraph",
+        "id": "6b728c4746aa575b",
+        "text": "There are two important considerations when using /robots.txt:\n* robots can ignore your /robots.txt. Especially malware robots that scan the web for security vulnerabilities, and email address harvesters used by spammers will pay no attention.\n* the /robots.txt file is a publicly available file. Anyone can see what sections of your server you don't want robots to use."
+      },
+      "after": "955b91302b9907fe",
+      "date": 1448786046770
+    },
+    {
+      "type": "add",
+      "id": "e256d96fe3e27499",
+      "item": {
+        "type": "paragraph",
+        "id": "e256d96fe3e27499",
+        "text": "So don't try to use /robots.txt to hide information."
+      },
+      "after": "6b728c4746aa575b",
+      "date": 1448786048163
+    },
+    {
+      "type": "edit",
+      "id": "6b728c4746aa575b",
+      "item": {
+        "type": "markdown",
+        "id": "6b728c4746aa575b",
+        "text": "There are two important considerations when using /robots.txt:\n* robots can ignore your /robots.txt. Especially malware robots that scan the web for security vulnerabilities, and email address harvesters used by spammers will pay no attention.\n* the /robots.txt file is a publicly available file. Anyone can see what sections of your server you don't want robots to use."
+      },
+      "date": 1448786049161
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "52e29b654169d2a1"
+      },
+      "id": "52e29b654169d2a1",
+      "type": "add",
+      "after": "7730c38c210cccaa",
+      "date": 1448786054955
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "8a748a9a6b09c80a",
+        "3166e949ebfa0472",
+        "1a9fd134cb6da5f2",
+        "52e29b654169d2a1",
+        "ff4257ca47d227bb",
+        "955b91302b9907fe",
+        "6b728c4746aa575b",
+        "e256d96fe3e27499",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "6f51e3c68c3848b8",
+        "9a178385ca15ea1a",
+        "3409d3a09d789ce6",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "52e29b654169d2a1",
+      "date": 1448786061643
+    },
+    {
+      "type": "remove",
+      "id": "ff4257ca47d227bb",
+      "date": 1448786066842
+    },
+    {
+      "type": "edit",
+      "id": "52e29b654169d2a1",
+      "item": {
+        "type": "code",
+        "id": "52e29b654169d2a1",
+        "text": "User-agent: *\nDisallow: /"
+      },
+      "date": 1448786069836
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "3166e949ebfa0472",
+        "1a9fd134cb6da5f2",
+        "52e29b654169d2a1",
+        "955b91302b9907fe",
+        "6b728c4746aa575b",
+        "e256d96fe3e27499",
+        "8a748a9a6b09c80a",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "6f51e3c68c3848b8",
+        "9a178385ca15ea1a",
+        "3409d3a09d789ce6",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "8a748a9a6b09c80a",
+      "date": 1448786090426
+    },
+    {
+      "type": "remove",
+      "id": "8a748a9a6b09c80a",
+      "date": 1448786115059
+    },
+    {
+      "type": "add",
+      "id": "9a1cc8fba7bb76bb",
+      "item": {
+        "type": "paragraph",
+        "id": "9a1cc8fba7bb76bb",
+        "text": "# How it works"
+      },
+      "after": "3166e949ebfa0472",
+      "date": 1448786166485
+    },
+    {
+      "type": "edit",
+      "id": "9a1cc8fba7bb76bb",
+      "item": {
+        "type": "markdown",
+        "id": "9a1cc8fba7bb76bb",
+        "text": "# How it works"
+      },
+      "date": 1448786167852
+    },
+    {
+      "type": "add",
+      "id": "fb448f4eda72d42a",
+      "item": {
+        "type": "paragraph",
+        "id": "fb448f4eda72d42a",
+        "text": "For a database of [[Web Crawler]]s (robots) see: [http://www.robotstxt.org/db.html robotstxt.org]"
+      },
+      "after": "3166e949ebfa0472",
+      "date": 1448808011304
+    },
+    {
+      "type": "edit",
+      "id": "fb448f4eda72d42a",
+      "item": {
+        "type": "paragraph",
+        "id": "fb448f4eda72d42a",
+        "text": "For a database of [[Web Crawler]]s see: [http://www.robotstxt.org/db.html robotstxt.org]"
+      },
+      "date": 1448808021247
+    },
+    {
+      "type": "fork",
+      "site": "c0de.academy",
+      "date": 1503058469494
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0095fa33c67fdfa3"
+      },
+      "id": "0095fa33c67fdfa3",
+      "type": "add",
+      "after": "7730c38c210cccaa",
+      "date": 1503058529781
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "3166e949ebfa0472",
+        "fb448f4eda72d42a",
+        "9a1cc8fba7bb76bb",
+        "1a9fd134cb6da5f2",
+        "0095fa33c67fdfa3",
+        "52e29b654169d2a1",
+        "955b91302b9907fe",
+        "6b728c4746aa575b",
+        "e256d96fe3e27499",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "6f51e3c68c3848b8",
+        "9a178385ca15ea1a",
+        "3409d3a09d789ce6",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "0095fa33c67fdfa3",
+      "date": 1503058536828
+    },
+    {
+      "type": "edit",
+      "id": "1a9fd134cb6da5f2",
+      "item": {
+        "type": "paragraph",
+        "id": "1a9fd134cb6da5f2",
+        "text": "It works likes this: a robot wants to visits a Web site URL, say http://www.example.com/welcome.html. Before it does so, it first checks for: http://www.example.com/robots.txt"
+      },
+      "date": 1503058552259
+    },
+    {
+      "type": "add",
+      "id": "aeb06466fdd6365b",
+      "item": {
+        "type": "paragraph",
+        "id": "aeb06466fdd6365b",
+        "text": "and finds:\n\n"
+      },
+      "after": "1a9fd134cb6da5f2",
+      "date": 1503058554776
+    },
+    {
+      "type": "edit",
+      "id": "1a9fd134cb6da5f2",
+      "item": {
+        "type": "paragraph",
+        "id": "1a9fd134cb6da5f2",
+        "text": "It works likes this: a robot wants to visits a Web site URL, say http://www.example.com/welcome.html. Before it does so, it first checks for:"
+      },
+      "date": 1503058561571
+    },
+    {
+      "type": "edit",
+      "id": "0095fa33c67fdfa3",
+      "item": {
+        "type": "code",
+        "id": "0095fa33c67fdfa3",
+        "text": "http://www.example.com/robots.txt"
+      },
+      "date": 1503058563747
+    },
+    {
+      "type": "move",
+      "order": [
+        "99143bc234f7d0e3",
+        "3166e949ebfa0472",
+        "fb448f4eda72d42a",
+        "9a1cc8fba7bb76bb",
+        "1a9fd134cb6da5f2",
+        "0095fa33c67fdfa3",
+        "aeb06466fdd6365b",
+        "52e29b654169d2a1",
+        "955b91302b9907fe",
+        "6b728c4746aa575b",
+        "e256d96fe3e27499",
+        "ce6788dbf911c898",
+        "6d0c48161c3367ec",
+        "755f8db642d80949",
+        "8c196b7c39944a0f",
+        "22c87dc5a32c5f2b",
+        "0b90a9828b0f422a",
+        "d885e108b20a939f",
+        "d1a4d44830362294",
+        "2924acbe9a279a26",
+        "e75e03d120594d2d",
+        "6f51e3c68c3848b8",
+        "9a178385ca15ea1a",
+        "3409d3a09d789ce6",
+        "2c4823517ec1be27",
+        "f0c15df26d01c8db",
+        "e2c0eec964f41764",
+        "fbaf04869092a58a",
+        "c1cb752559aa9e39",
+        "7730c38c210cccaa"
+      ],
+      "id": "0095fa33c67fdfa3",
+      "date": 1503058566025
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1512315970501
+    }
+  ]
+}

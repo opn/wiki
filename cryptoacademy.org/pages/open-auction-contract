@@ -1,0 +1,94 @@
+{
+  "title": "Open Auction Contract",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "67f787629bdbf4de",
+      "text": "The general idea of the following simple auction contract is that everyone can send their bids during a bidding period. The bids already include sending money / ether in order to bind the bidders to their bid. If the highest bid is raised, the previously highest bidder gets her money back. After the end of the bidding period, the contract has to be called manually for the beneficiary to receive his money - contracts cannot activate themselves - [https://ethereum.github.io/solidity//docs/blind-auction/ Blind Auction and Open Auction on GitHub]"
+    },
+    {
+      "type": "code",
+      "id": "44bc4910d75c81f8",
+      "text": "contract SimpleAuction {\n    // Parameters of the auction. Times are either\n    // absolute unix timestamps (seconds since 1970-01-01)\n    // ore time periods in seconds.\n    address public beneficiary;\n    uint public auctionStart;\n    uint public biddingTime;\n\n    // Current state of the auction.\n    address public highestBidder;\n    uint public highestBid;\n\n    // Set to true at the end, disallows any change\n    bool ended;\n\n    // Events that will be fired on changes.\n    event HighestBidIncreased(address bidder, uint amount);\n    event AuctionEnded(address winner, uint amount);\n\n    // The following is a so-called natspec comment,\n    // recognizable by the three slashes.\n    // It will be shown when the user is asked to\n    // confirm a transaction.\n\n    /// Create a simple auction with `_biddingTime`\n    /// seconds bidding time on behalf of the\n    /// beneficiary address `_beneficiary`.\n    function SimpleAuction(uint _biddingTime,\n                           address _beneficiary) {\n        beneficiary = _beneficiary;\n        auctionStart = now;\n        biddingTime = _biddingTime;\n    }\n\n    /// Bid on the auction with the value sent\n    /// together with this transaction.\n    /// The value will only be refunded if the\n    /// auction is not won.\n    function bid() {\n        // No arguments are necessary, all\n        // information is already part of\n        // the transaction.\n        if (now > auctionStart + biddingTime)\n            // Revert the call if the bidding\n            // period is over.\n            throw;\n        if (msg.value <= highestBid)\n            // If the bid is not higher, send the\n            // money back.\n            throw;\n        if (highestBidder != 0)\n            highestBidder.send(highestBid);\n        highestBidder = msg.sender;\n        highestBid = msg.value;\n        HighestBidIncreased(msg.sender, msg.value);\n    }\n\n    /// End the auction and send the highest bid\n    /// to the beneficiary.\n    function auctionEnd() {\n        if (now <= auctionStart + biddingTime)\n            throw; // auction did not yet end\n        if (ended)\n            throw; // this function has already been called\n        AuctionEnded(highestBidder, highestBid);\n        // We send all the money we have, because some\n        // of the refunds might have failed.\n        beneficiary.send(this.balance);\n        ended = true;\n    }\n\n    function () {\n        // This function gets executed if a\n        // transaction with invalid data is sent to\n        // the contract or just ether without data.\n        // We revert the send so that no-one\n        // accidentally loses money when using the\n        // contract.\n        throw;\n    }\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Open Auction Contract",
+        "story": []
+      },
+      "date": 1448992558696
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "67f787629bdbf4de"
+      },
+      "id": "67f787629bdbf4de",
+      "type": "add",
+      "date": 1448992559974
+    },
+    {
+      "type": "edit",
+      "id": "67f787629bdbf4de",
+      "item": {
+        "type": "paragraph",
+        "id": "67f787629bdbf4de",
+        "text": "The general idea of the following simple auction contract is that everyone can send their bids during a bidding period. The bids already include sending money / ether in order to bind the bidders to their bid. If the highest bid is raised, the previously highest bidder gets her money back. After the end of the bidding period, the contract has to be called manually for the beneficiary to receive his money - contracts cannot activate themselves."
+      },
+      "date": 1448992579198
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ae571cedfe5b358a"
+      },
+      "id": "ae571cedfe5b358a",
+      "type": "add",
+      "after": "67f787629bdbf4de",
+      "date": 1448992580326
+    },
+    {
+      "type": "remove",
+      "id": "ae571cedfe5b358a",
+      "date": 1448992583572
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "44bc4910d75c81f8"
+      },
+      "id": "44bc4910d75c81f8",
+      "type": "add",
+      "after": "67f787629bdbf4de",
+      "date": 1448992594793
+    },
+    {
+      "type": "edit",
+      "id": "44bc4910d75c81f8",
+      "item": {
+        "type": "code",
+        "id": "44bc4910d75c81f8",
+        "text": "contract SimpleAuction {\n    // Parameters of the auction. Times are either\n    // absolute unix timestamps (seconds since 1970-01-01)\n    // ore time periods in seconds.\n    address public beneficiary;\n    uint public auctionStart;\n    uint public biddingTime;\n\n    // Current state of the auction.\n    address public highestBidder;\n    uint public highestBid;\n\n    // Set to true at the end, disallows any change\n    bool ended;\n\n    // Events that will be fired on changes.\n    event HighestBidIncreased(address bidder, uint amount);\n    event AuctionEnded(address winner, uint amount);\n\n    // The following is a so-called natspec comment,\n    // recognizable by the three slashes.\n    // It will be shown when the user is asked to\n    // confirm a transaction.\n\n    /// Create a simple auction with `_biddingTime`\n    /// seconds bidding time on behalf of the\n    /// beneficiary address `_beneficiary`.\n    function SimpleAuction(uint _biddingTime,\n                           address _beneficiary) {\n        beneficiary = _beneficiary;\n        auctionStart = now;\n        biddingTime = _biddingTime;\n    }\n\n    /// Bid on the auction with the value sent\n    /// together with this transaction.\n    /// The value will only be refunded if the\n    /// auction is not won.\n    function bid() {\n        // No arguments are necessary, all\n        // information is already part of\n        // the transaction.\n        if (now > auctionStart + biddingTime)\n            // Revert the call if the bidding\n            // period is over.\n            throw;\n        if (msg.value <= highestBid)\n            // If the bid is not higher, send the\n            // money back.\n            throw;\n        if (highestBidder != 0)\n            highestBidder.send(highestBid);\n        highestBidder = msg.sender;\n        highestBid = msg.value;\n        HighestBidIncreased(msg.sender, msg.value);\n    }\n\n    /// End the auction and send the highest bid\n    /// to the beneficiary.\n    function auctionEnd() {\n        if (now <= auctionStart + biddingTime)\n            throw; // auction did not yet end\n        if (ended)\n            throw; // this function has already been called\n        AuctionEnded(highestBidder, highestBid);\n        // We send all the money we have, because some\n        // of the refunds might have failed.\n        beneficiary.send(this.balance);\n        ended = true;\n    }\n\n    function () {\n        // This function gets executed if a\n        // transaction with invalid data is sent to\n        // the contract or just ether without data.\n        // We revert the send so that no-one\n        // accidentally loses money when using the\n        // contract.\n        throw;\n    }\n}"
+      },
+      "date": 1448992597927
+    },
+    {
+      "type": "edit",
+      "id": "67f787629bdbf4de",
+      "item": {
+        "type": "paragraph",
+        "id": "67f787629bdbf4de",
+        "text": "The general idea of the following simple auction contract is that everyone can send their bids during a bidding period. The bids already include sending money / ether in order to bind the bidders to their bid. If the highest bid is raised, the previously highest bidder gets her money back. After the end of the bidding period, the contract has to be called manually for the beneficiary to receive his money - contracts cannot activate themselves - [https://ethereum.github.io/solidity//docs/blind-auction/ Blind Auction and Open Auction on GitHub]"
+      },
+      "date": 1448992631819
+    },
+    {
+      "type": "fork",
+      "site": "ksenya.cryptoacademy.org",
+      "date": 1450794735082
+    }
+  ]
+}

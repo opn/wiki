@@ -1,0 +1,1243 @@
+{
+  "title": "ExifTool",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "9f43389538d3b81e",
+      "text": "ExifTool is a platform-independent [[Perl]] library plus a [[command-line]] application for reading, writing and editing meta information in a wide variety of files - [http://www.sno.phy.queensu.ca/~phil/exiftool/ queensu.ca]"
+    },
+    {
+      "type": "paragraph",
+      "id": "6e81aaffcb46c60f",
+      "text": "ExifTool supports many different [[Metadata]] formats including [[EXIF]], GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3."
+    },
+    {
+      "type": "html",
+      "id": "428464ccb3c58c8c",
+      "text": "<H3>Useage"
+    },
+    {
+      "type": "paragraph",
+      "id": "05a40ce94915121a",
+      "text": "Using ExifTool, setting copyright and licensing information is simple:"
+    },
+    {
+      "type": "code",
+      "id": "1cb311da03eeb257",
+      "text": "./exiftool -ImageDescription=\"This is an example image\" -Artist=\"Artist's name\" \\\n-Copyright=\"This work is licensed under the Creative Commons Attribution 3.0 Unported License. \\\nTo view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a \\\nletter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.\" \\\n-XMP-cc:License=\"http://creativecommons.org/licenses/by/3.0/\" ImageToModify.jpg"
+    },
+    {
+      "type": "paragraph",
+      "id": "b978f5cb63a71f21",
+      "text": "This will add three tags: Artist, Copyright, and XMP-cc:License (unported cc-by-3.0 license is used as an example)."
+    },
+    {
+      "type": "paragraph",
+      "id": "b3bf4801363b9f13",
+      "text": "Another example:"
+    },
+    {
+      "type": "code",
+      "id": "20f2bdebd7467f0d",
+      "text": "./exiftool -ImageDescription=\"1988 company picnic\" \\\n-Artist=\"Camera owner, John Smith; Photographer, Michael Brown; Image creator, Ken James\" \\\n-Copyright=\"Copyright, John Smith, 19xx. All rights reserved.\" Picnic1988.jpg\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "baeccfbee6578b00",
+      "text": "Note that ImageDescription and Artist are in ASCII format. For 2-byte character sets, UserComment can be used instead of ImageDescription."
+    },
+    {
+      "type": "paragraph",
+      "id": "d9de7b92b5b83081",
+      "text": "To view all tags from Exif group with their current values:"
+    },
+    {
+      "type": "code",
+      "id": "87110eaa9f438bb0",
+      "text": "./exiftool -a -exif:all ExampleImage.jpg"
+    },
+    {
+      "type": "code",
+      "id": "4c9913871ba66d4b",
+      "text": "# shows all the EXIF metadata of image\nexiftool photo.jpg\n"
+    },
+    {
+      "type": "html",
+      "id": "404bd944dd9aa207",
+      "text": "<H3>Installation"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f59dab4c680e010",
+      "text": "ExifTool is available and easily installed on most platforms - [http://www.sno.phy.queensu.ca/~phil/exiftool/install.html queensu.ca]"
+    },
+    {
+      "type": "paragraph",
+      "id": "9b51b23bb11f5863",
+      "text": "On OSX it can be installed using [[brew]]:"
+    },
+    {
+      "type": "code",
+      "id": "49d5022a67a6b76f",
+      "text": "brew install exiftool"
+    },
+    {
+      "type": "reference",
+      "id": "6cc9fa0a88a941de",
+      "site": "c0de.academy",
+      "slug": "png-textualdata",
+      "title": "PNG TextualData",
+      "text": "The [[PNG TextualData]] format allows arbitrary tag names to be used - [http://www.libpng.org/pub/png/spec/1.2/ libpng.org] "
+    },
+    {
+      "type": "html",
+      "id": "50e88cf5084c3000",
+      "text": "<H3>Further Examples"
+    },
+    {
+      "type": "paragraph",
+      "id": "df0b38c17d497c5d",
+      "text": "You can find a number of detailed examples including flexile file and metadat renaming here - [http://sourceforge.net/projects/exiftool1line/?source=typ_redirect sourceforge.net]"
+    },
+    {
+      "type": "paragraph",
+      "id": "14427f55b8b10d83",
+      "text": "Some examples are given below:"
+    },
+    {
+      "type": "code",
+      "id": "e0111321b30c6359",
+      "text": "# shows only selected EXIF metadata\n# Here is a complete list of metadata TAGS (depending on file format):\n# http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/index.html\nexiftool -Model -ImageSize photo.jpg"
+    },
+    {
+      "type": "code",
+      "id": "99bfd02993fff20f",
+      "text": "# process all files of specified file type (case insensitive extension)\nexiftool -Model -ImageSize -ext jpg /home/ebah/photo/"
+    },
+    {
+      "type": "code",
+      "id": "3dcdc8717042f35a",
+      "text": "# recursively process all jpg files under specified directory and\n# sub-directory\nexiftool -r -Model -ImageSize -ext jpg /home/ebah/photo/"
+    },
+    {
+      "type": "code",
+      "id": "6a31b6cc19eddd67",
+      "text": "# Export all metadata of specified file into a csv file (headers are included)\nexiftool -csv photo.jpg"
+    },
+    {
+      "type": "code",
+      "id": "291d076e78aa8a9c",
+      "text": "# Export all metadata of all jpg file into a csv file (headers are included)\nexiftool -csv -ext jpg /home/ebah/photo/"
+    },
+    {
+      "type": "code",
+      "id": "91325311b9dbdf84",
+      "text": "# Rename using fixed string and same file extension as original\nexiftool \"-FileName<HELLOWORLD.%e\" photo.JPG\n >  HELLOWORLD.JPG"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "ExifTool",
+        "story": []
+      },
+      "date": 1434900129254
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9f43389538d3b81e"
+      },
+      "id": "9f43389538d3b81e",
+      "type": "add",
+      "date": 1434900149854
+    },
+    {
+      "type": "edit",
+      "id": "9f43389538d3b81e",
+      "item": {
+        "type": "paragraph",
+        "id": "9f43389538d3b81e",
+        "text": "ExifTool is a platform-independent [[Perl]] library plus a [[command-line]] application for reading, writing and editing meta information in a wide variety of files. "
+      },
+      "date": 1434900178181
+    },
+    {
+      "type": "add",
+      "id": "6e81aaffcb46c60f",
+      "item": {
+        "type": "paragraph",
+        "id": "6e81aaffcb46c60f",
+        "text": "ExifTool supports many different metadata formats including [[EXIF]], GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3."
+      },
+      "after": "9f43389538d3b81e",
+      "date": 1434900193077
+    },
+    {
+      "type": "edit",
+      "id": "9f43389538d3b81e",
+      "item": {
+        "type": "paragraph",
+        "id": "9f43389538d3b81e",
+        "text": "ExifTool is a platform-independent [[Perl]] library plus a [[command-line]] application for reading, writing and editing meta information in a wide variety of files - [http://www.sno.phy.queensu.ca/~phil/exiftool/ sno.phy.queensu.ca]"
+      },
+      "date": 1434900223710
+    },
+    {
+      "type": "edit",
+      "id": "9f43389538d3b81e",
+      "item": {
+        "type": "paragraph",
+        "id": "9f43389538d3b81e",
+        "text": "ExifTool is a platform-independent [[Perl]] library plus a [[command-line]] application for reading, writing and editing meta information in a wide variety of files - [http://www.sno.phy.queensu.ca/~phil/exiftool/ queensu.ca]"
+      },
+      "date": 1434900230776
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1f59dab4c680e010"
+      },
+      "id": "1f59dab4c680e010",
+      "type": "add",
+      "after": "6e81aaffcb46c60f",
+      "date": 1434900260963
+    },
+    {
+      "type": "edit",
+      "id": "1f59dab4c680e010",
+      "item": {
+        "type": "paragraph",
+        "id": "1f59dab4c680e010",
+        "text": "ExifTool is available and easily installed on most platforms - [www.sno.phy.queensu.ca/~phil/exiftool/install.html queensu.ca]"
+      },
+      "date": 1434900304896
+    },
+    {
+      "type": "edit",
+      "id": "1f59dab4c680e010",
+      "item": {
+        "type": "paragraph",
+        "id": "1f59dab4c680e010",
+        "text": "ExifTool is available and easily installed on most platforms - [http://www.sno.phy.queensu.ca/~phil/exiftool/install.html queensu.ca]"
+      },
+      "date": 1434900322270
+    },
+    {
+      "type": "add",
+      "id": "9b51b23bb11f5863",
+      "item": {
+        "type": "paragraph",
+        "id": "9b51b23bb11f5863",
+        "text": "On OSX it can be installed using [[brew]]:"
+      },
+      "after": "1f59dab4c680e010",
+      "date": 1434900343809
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "49d5022a67a6b76f"
+      },
+      "id": "49d5022a67a6b76f",
+      "type": "add",
+      "after": "9b51b23bb11f5863",
+      "date": 1434900345365
+    },
+    {
+      "type": "edit",
+      "id": "49d5022a67a6b76f",
+      "item": {
+        "type": "code",
+        "id": "49d5022a67a6b76f",
+        "text": "brew install exiftool"
+      },
+      "date": 1434900353020
+    },
+    {
+      "type": "add",
+      "id": "404bd944dd9aa207",
+      "item": {
+        "type": "paragraph",
+        "id": "404bd944dd9aa207",
+        "text": "<H3>Installation"
+      },
+      "after": "6e81aaffcb46c60f",
+      "date": 1434900371618
+    },
+    {
+      "type": "edit",
+      "id": "404bd944dd9aa207",
+      "item": {
+        "type": "html",
+        "id": "404bd944dd9aa207",
+        "text": "<H3>Installation"
+      },
+      "date": 1434900372950
+    },
+    {
+      "type": "add",
+      "id": "5d5f0b7ac21d2078",
+      "item": {
+        "type": "paragraph",
+        "id": "5d5f0b7ac21d2078",
+        "text": "<H3>PNG Textual Tags"
+      },
+      "after": "6e81aaffcb46c60f",
+      "date": 1434900433748
+    },
+    {
+      "type": "edit",
+      "id": "5d5f0b7ac21d2078",
+      "item": {
+        "type": "html",
+        "id": "5d5f0b7ac21d2078",
+        "text": "<H3>PNG Textual Tags"
+      },
+      "date": 1434900438707
+    },
+    {
+      "type": "add",
+      "id": "55a2b1036804a52a",
+      "item": {
+        "type": "paragraph",
+        "id": "55a2b1036804a52a",
+        "text": "http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/PNG.html#TextualData"
+      },
+      "after": "5d5f0b7ac21d2078",
+      "date": 1434900440064
+    },
+    {
+      "type": "edit",
+      "id": "55a2b1036804a52a",
+      "item": {
+        "type": "paragraph",
+        "id": "55a2b1036804a52a",
+        "text": "The PNG TextualData format allows arbitrary tag names to be used. The tags listed below are the only ones that can be written (unless new user-defined tags are added via the configuration file), however ExifTool will extract any other TextualData tags that are found. All TextualData tags (including tags not listed below) are removed when deleting all PNG tags.\n\nThese tags may be stored as tEXt, zTXt or iTXt chunks in the PNG image. By default ExifTool writes new string-value tags as as uncompressed tEXt, or compressed zTXt if the Compress (-z) option is used and Compress::Zlib is available. Alternate language tags and values containing special characters (unless the Latin character set is used) are written as iTXt, and compressed if the Compress option is used and Compress::Zlib is available. Raw profile information is always created as compressed zTXt if Compress::Zlib is available, or tEXt otherwise. Standard XMP is written as uncompressed iTXt - [http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/PNG.html#TextualData queensu.ca]"
+      },
+      "date": 1434900479859
+    },
+    {
+      "type": "edit",
+      "id": "55a2b1036804a52a",
+      "item": {
+        "type": "paragraph",
+        "id": "55a2b1036804a52a",
+        "text": "The PNG TextualData format allows arbitrary tag names to be used. The tags listed below are the only ones that can be written (unless new user-defined tags are added via the configuration file), however ExifTool will extract any other TextualData tags that are found. All TextualData tags (including tags not listed below) are removed when deleting all PNG tags."
+      },
+      "date": 1434900493802
+    },
+    {
+      "type": "add",
+      "id": "81e4aa894d5ef66f",
+      "item": {
+        "type": "paragraph",
+        "id": "81e4aa894d5ef66f",
+        "text": "These tags may be stored as tEXt, zTXt or iTXt chunks in the PNG image. By default ExifTool writes new string-value tags as as uncompressed tEXt, or compressed zTXt if the Compress (-z) option is used and Compress::Zlib is available - [http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/PNG.html#TextualData queensu.ca]"
+      },
+      "after": "55a2b1036804a52a",
+      "date": 1434900521046
+    },
+    {
+      "type": "edit",
+      "id": "55a2b1036804a52a",
+      "item": {
+        "type": "paragraph",
+        "id": "55a2b1036804a52a",
+        "text": "The PNG TextualData format allows arbitrary tag names to be used. "
+      },
+      "date": 1434900529107
+    },
+    {
+      "type": "add",
+      "id": "88163d36053cef24",
+      "item": {
+        "type": "paragraph",
+        "id": "88163d36053cef24",
+        "text": "The tags listed below are the only ones that can be written (unless new user-defined tags are added via the configuration file), however ExifTool will extract any other TextualData tags that are found. All TextualData tags (including tags not listed below) are removed when deleting all PNG tags."
+      },
+      "after": "55a2b1036804a52a",
+      "date": 1434900545861
+    },
+    {
+      "type": "edit",
+      "id": "55a2b1036804a52a",
+      "item": {
+        "type": "paragraph",
+        "id": "55a2b1036804a52a",
+        "text": "The PNG TextualData format allows arbitrary tag names to be used - [http://www.libpng.org/pub/png/spec/1.2/ libpng.org] "
+      },
+      "date": 1434900601600
+    },
+    {
+      "type": "edit",
+      "id": "88163d36053cef24",
+      "item": {
+        "type": "paragraph",
+        "id": "88163d36053cef24",
+        "text": "The tags listed below are the only ones that can be written (unless new user-defined tags are added via the configuration file), however ExifTool will extract any other TextualData tags that are found. All TextualData tags (including tags not listed below) are removed when deleting all [[PNG]] tags."
+      },
+      "date": 1434900643226
+    },
+    {
+      "type": "edit",
+      "id": "6e81aaffcb46c60f",
+      "item": {
+        "type": "paragraph",
+        "id": "6e81aaffcb46c60f",
+        "text": "ExifTool supports many different [[Metadata]] formats including [[EXIF]], GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3."
+      },
+      "date": 1434900727616
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "87110eaa9f438bb0"
+      },
+      "id": "87110eaa9f438bb0",
+      "type": "add",
+      "after": "49d5022a67a6b76f",
+      "date": 1434900835605
+    },
+    {
+      "type": "add",
+      "id": "05a40ce94915121a",
+      "item": {
+        "type": "paragraph",
+        "id": "05a40ce94915121a",
+        "text": "Using ExifTool, setting copyright and licensing information is simple:\n\n$ ./exiftool -ImageDescription=\"This is an example image\" -Artist=\"Artist's name\" \\\n-Copyright=\"This work is licensed under the Creative Commons Attribution 3.0 Unported License. \\\nTo view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a \\\nletter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.\" \\\n-XMP-cc:License=\"http://creativecommons.org/licenses/by/3.0/\" ImageToModify.jpg\n\nThis will add three tags: Artist, Copyright, and XMP-cc:License (unported cc-by-3.0 license is used as an example).\n\nAnother example:\n\n$ ./exiftool -ImageDescription=\"1988 company picnic\" \\\n-Artist=\"Camera owner, John Smith; Photographer, Michael Brown; Image creator, Ken James\" \\\n-Copyright=\"Copyright, John Smith, 19xx. All rights reserved.\" Picnic1988.jpg\n\nNote that ImageDescription and Artist are in ASCII format. For 2-byte character sets, UserComment can be used instead of ImageDescription.\n\nTo view all tags from Exif group with their current values:"
+      },
+      "after": "6e81aaffcb46c60f",
+      "date": 1434900837844
+    },
+    {
+      "type": "edit",
+      "id": "87110eaa9f438bb0",
+      "item": {
+        "type": "code",
+        "id": "87110eaa9f438bb0",
+        "text": "./exiftool -a -exif:all ExampleImage.jpg"
+      },
+      "date": 1434900840114
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "05a40ce94915121a",
+        "87110eaa9f438bb0",
+        "5d5f0b7ac21d2078",
+        "55a2b1036804a52a",
+        "88163d36053cef24",
+        "81e4aa894d5ef66f",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f"
+      ],
+      "id": "87110eaa9f438bb0",
+      "date": 1434900845999
+    },
+    {
+      "type": "edit",
+      "id": "05a40ce94915121a",
+      "item": {
+        "type": "paragraph",
+        "id": "05a40ce94915121a",
+        "text": "Using ExifTool, setting copyright and licensing information is simple:\n\n$ ./exiftool -ImageDescription=\"This is an example image\" -Artist=\"Artist's name\" \\\n-Copyright=\"This work is licensed under the Creative Commons Attribution 3.0 Unported License. \\\nTo view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a \\\nletter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.\" \\\n-XMP-cc:License=\"http://creativecommons.org/licenses/by/3.0/\" ImageToModify.jpg\n\nThis will add three tags: Artist, Copyright, and XMP-cc:License (unported cc-by-3.0 license is used as an example).\n\nAnother example:"
+      },
+      "date": 1434900858865
+    },
+    {
+      "type": "add",
+      "id": "baeccfbee6578b00",
+      "item": {
+        "type": "paragraph",
+        "id": "baeccfbee6578b00",
+        "text": "Note that ImageDescription and Artist are in ASCII format. For 2-byte character sets, UserComment can be used instead of ImageDescription."
+      },
+      "after": "05a40ce94915121a",
+      "date": 1434900863166
+    },
+    {
+      "type": "add",
+      "id": "d9de7b92b5b83081",
+      "item": {
+        "type": "paragraph",
+        "id": "d9de7b92b5b83081",
+        "text": "To view all tags from Exif group with their current values:"
+      },
+      "after": "baeccfbee6578b00",
+      "date": 1434900868604
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "20f2bdebd7467f0d"
+      },
+      "id": "20f2bdebd7467f0d",
+      "type": "add",
+      "after": "49d5022a67a6b76f",
+      "date": 1434900871994
+    },
+    {
+      "type": "edit",
+      "id": "20f2bdebd7467f0d",
+      "item": {
+        "type": "code",
+        "id": "20f2bdebd7467f0d",
+        "text": "./exiftool -ImageDescription=\"1988 company picnic\" \\\n-Artist=\"Camera owner, John Smith; Photographer, Michael Brown; Image creator, Ken James\" \\\n-Copyright=\"Copyright, John Smith, 19xx. All rights reserved.\" Picnic1988.jpg\n"
+      },
+      "date": 1434900878250
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "05a40ce94915121a",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "5d5f0b7ac21d2078",
+        "55a2b1036804a52a",
+        "88163d36053cef24",
+        "81e4aa894d5ef66f",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f"
+      ],
+      "id": "20f2bdebd7467f0d",
+      "date": 1434900884830
+    },
+    {
+      "type": "edit",
+      "id": "55a2b1036804a52a",
+      "item": {
+        "type": "paragraph",
+        "id": "55a2b1036804a52a",
+        "text": "The [[PNG TextualData]] format allows arbitrary tag names to be used - [http://www.libpng.org/pub/png/spec/1.2/ libpng.org] "
+      },
+      "date": 1434900923012
+    },
+    {
+      "type": "remove",
+      "id": "55a2b1036804a52a",
+      "date": 1434900939659
+    },
+    {
+      "type": "remove",
+      "id": "88163d36053cef24",
+      "date": 1434900943833
+    },
+    {
+      "type": "remove",
+      "id": "81e4aa894d5ef66f",
+      "date": 1434900951784
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6cc9fa0a88a941de"
+      },
+      "id": "6cc9fa0a88a941de",
+      "type": "add",
+      "after": "49d5022a67a6b76f",
+      "date": 1434900967496
+    },
+    {
+      "type": "edit",
+      "id": "6cc9fa0a88a941de",
+      "item": {
+        "type": "reference",
+        "id": "6cc9fa0a88a941de",
+        "site": "c0de.academy",
+        "slug": "png-textualdata",
+        "title": "PNG TextualData",
+        "text": "The [[PNG TextualData]] format allows arbitrary tag names to be used - [http://www.libpng.org/pub/png/spec/1.2/ libpng.org] "
+      },
+      "date": 1434900970029
+    },
+    {
+      "type": "remove",
+      "id": "5d5f0b7ac21d2078",
+      "date": 1434900973015
+    },
+    {
+      "type": "edit",
+      "id": "05a40ce94915121a",
+      "item": {
+        "type": "paragraph",
+        "id": "05a40ce94915121a",
+        "text": "Using ExifTool, setting copyright and licensing information is simple:\n\n$ ./exiftool -ImageDescription=\"This is an example image\" -Artist=\"Artist's name\" \\\n-Copyright=\"This work is licensed under the Creative Commons Attribution 3.0 Unported License. \\\nTo view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a \\\nletter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.\" \\\n-XMP-cc:License=\"http://creativecommons.org/licenses/by/3.0/\" ImageToModify.jpg\n\nThis will add three tags: Artist, Copyright, and XMP-cc:License (unported cc-by-3.0 license is used as an example)."
+      },
+      "date": 1434901012371
+    },
+    {
+      "type": "add",
+      "id": "b3bf4801363b9f13",
+      "item": {
+        "type": "paragraph",
+        "id": "b3bf4801363b9f13",
+        "text": "Another example:"
+      },
+      "after": "05a40ce94915121a",
+      "date": 1434901017734
+    },
+    {
+      "type": "edit",
+      "id": "05a40ce94915121a",
+      "item": {
+        "type": "paragraph",
+        "id": "05a40ce94915121a",
+        "text": "Using ExifTool, setting copyright and licensing information is simple:\n\n$ ./exiftool -ImageDescription=\"This is an example image\" -Artist=\"Artist's name\" \\\n-Copyright=\"This work is licensed under the Creative Commons Attribution 3.0 Unported License. \\\nTo view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a \\\nletter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.\" \\\n-XMP-cc:License=\"http://creativecommons.org/licenses/by/3.0/\" ImageToModify.jpg"
+      },
+      "date": 1434901022701
+    },
+    {
+      "type": "add",
+      "id": "b978f5cb63a71f21",
+      "item": {
+        "type": "paragraph",
+        "id": "b978f5cb63a71f21",
+        "text": "This will add three tags: Artist, Copyright, and XMP-cc:License (unported cc-by-3.0 license is used as an example)."
+      },
+      "after": "05a40ce94915121a",
+      "date": 1434901026263
+    },
+    {
+      "type": "edit",
+      "id": "05a40ce94915121a",
+      "item": {
+        "type": "paragraph",
+        "id": "05a40ce94915121a",
+        "text": "Using ExifTool, setting copyright and licensing information is simple:"
+      },
+      "date": 1434901033849
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1cb311da03eeb257"
+      },
+      "id": "1cb311da03eeb257",
+      "type": "add",
+      "after": "6cc9fa0a88a941de",
+      "date": 1434901037603
+    },
+    {
+      "type": "edit",
+      "id": "1cb311da03eeb257",
+      "item": {
+        "type": "code",
+        "id": "1cb311da03eeb257",
+        "text": "./exiftool -ImageDescription=\"This is an example image\" -Artist=\"Artist's name\" \\\n-Copyright=\"This work is licensed under the Creative Commons Attribution 3.0 Unported License. \\\nTo view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a \\\nletter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.\" \\\n-XMP-cc:License=\"http://creativecommons.org/licenses/by/3.0/\" ImageToModify.jpg"
+      },
+      "date": 1434901043306
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "05a40ce94915121a",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "1cb311da03eeb257",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de"
+      ],
+      "id": "1cb311da03eeb257",
+      "date": 1434901051675
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de"
+      ],
+      "id": "1cb311da03eeb257",
+      "date": 1434901058389
+    },
+    {
+      "type": "add",
+      "id": "428464ccb3c58c8c",
+      "item": {
+        "type": "paragraph",
+        "id": "428464ccb3c58c8c",
+        "text": "<H3>Useage"
+      },
+      "after": "6e81aaffcb46c60f",
+      "date": 1434901076281
+    },
+    {
+      "type": "edit",
+      "id": "428464ccb3c58c8c",
+      "item": {
+        "type": "html",
+        "id": "428464ccb3c58c8c",
+        "text": "<H3>Useage"
+      },
+      "date": 1434901078421
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "50e88cf5084c3000"
+      },
+      "id": "50e88cf5084c3000",
+      "type": "add",
+      "after": "6cc9fa0a88a941de",
+      "date": 1434901963574
+    },
+    {
+      "type": "edit",
+      "id": "50e88cf5084c3000",
+      "item": {
+        "type": "paragraph",
+        "id": "50e88cf5084c3000",
+        "text": "<H3>Examples"
+      },
+      "date": 1434901979392
+    },
+    {
+      "type": "edit",
+      "id": "50e88cf5084c3000",
+      "item": {
+        "type": "html",
+        "id": "50e88cf5084c3000",
+        "text": "<H3>Examples"
+      },
+      "date": 1434901985020
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4c9913871ba66d4b"
+      },
+      "id": "4c9913871ba66d4b",
+      "type": "add",
+      "after": "a41326714faf87c5",
+      "date": 1434902042323
+    },
+    {
+      "type": "add",
+      "id": "a41326714faf87c5",
+      "item": {
+        "type": "paragraph",
+        "id": "a41326714faf87c5",
+        "text": "\n # shows only selected EXIF metadata\n # Here is a complete list of metadata TAGS (depending on file format):\n # http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/index.html\n exiftool -Model -ImageSize photo.jpg\n\n # process all files of specified file type (case insensitive extension)\n exiftool -Model -ImageSize -ext jpg /home/ebah/photo/\n \n # recursively process all jpg files under specified directory and\n # sub-directory\n exiftool -r -Model -ImageSize -ext jpg /home/ebah/photo/\n \nDEBUGGING:\n\n # When a command is not working you can launch it in verbose mode, there\n # are 5 different levels of verbosity, level 0 means no verbosity\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n exiftool -v0 {cmd}\n exiftool -v1 {cmd}\n [...]\n exiftool -v5 {cmd}\n\nMETADATA EXPORT:\n\n # Export all metadata of specified file into a csv file (headers are\n # included)\n exiftool -csv photo.jpg\n\n # Export all metadata of all jpg file into a csv file (headers are\n # included)\n exiftool -csv -ext jpg /home/ebah/photo/\n\n # Export selected metadata of all jpg file into a csv file (headers are\n # included)\n exiftool -Make -Model -DateTimeOriginal -csv -ext jpg /home/ebah/photo/\n\nFILE RENAMING:\n\n # Rename using fixed string and same file extension as original\n exiftool \"-FileName<HELLOWORLD.%e\" photo.JPG\n >  HELLOWORLD.JPG\n\n # Rename using fixed string and same *lowercase* file extension as\n # original\n exiftool \"-FileName<HELLOWORLD.%le\" photo.jpg\n >  HELLOWORLD.jpg\n\n # Rename based on date (for the format see: )\n exiftool \"-FileName<DateTimeOriginal\" -d \"%Y%m%dT%H%M%S.%%le\" photo.jpg\n > 20130914T170119.jpg\n\n # Prevent illegal characters to be written in filename (unpredictable\n # results)\n exiftool '-filename<${make;}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n\n # Replace spaces in tag string\n exiftool -Make photo.jpg\n > Make                            : NIKON CORPORATION\n exiftool '-filename<${make;tr/ /_/;s/__+/_/g}.%le' photo.jpg\n > NIKON_CORPORATION.jpg\n\n # Composite rename: DateTimeOriginal + Make tags\n exiftool '-filename<${DateTimeOriginal}_${make;tr/ /_/;s/__+/_/g}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n > 20130914T210246_Canon.jpg\n\n # Add a counter for duplicate images\n exiftool '-FileName<${DateTimeOriginal}_${Model;tr/ /_/;s/__+/_/g}.%e' -d \"%Y%m%dT%H%M%S%%-.c\" 20130914T074335_Canon.jpg\n > 20130914T171112-0_NIKON_D40.jpg\n > 20130914T171112-1_NIKON_D40.jpg\n\nCONDITIONAL EXPRESSION\n\n # If condition matches then the file is processed otherwise skipped\n exiftool -shutterspeed -if '$make eq \"Canon\"'\n\n # Rename files only from Canon Camera\n exiftool '-filename<CANON.%le' -if '$make eq \"Canon\"' photo.jpg\n\nTIME SHIFT\n\n # Time shift is very handy when camera's clock is misaligned from\n # real time (say because you are abroad on holiday and forgot to adjust\n # camera's clock)\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n\n # Add 1 hour to the DateTimeOriginal's value\n exiftool \"-DateTimeOriginal+=0:0:0 1:0:0\" photo.jpg"
+      },
+      "after": "50e88cf5084c3000",
+      "date": 1434902044139
+    },
+    {
+      "type": "edit",
+      "id": "4c9913871ba66d4b",
+      "item": {
+        "type": "code",
+        "id": "4c9913871ba66d4b",
+        "text": "# shows all the EXIF metadata of image\nexiftool photo.jpg\n"
+      },
+      "date": 1434902055584
+    },
+    {
+      "type": "edit",
+      "id": "a41326714faf87c5",
+      "item": {
+        "type": "paragraph",
+        "id": "a41326714faf87c5",
+        "text": "# process all files of specified file type (case insensitive extension)\nexiftool -Model -ImageSize -ext jpg /home/ebah/photo/\n \n # recursively process all jpg files under specified directory and\n # sub-directory\n exiftool -r -Model -ImageSize -ext jpg /home/ebah/photo/\n \nDEBUGGING:\n\n # When a command is not working you can launch it in verbose mode, there\n # are 5 different levels of verbosity, level 0 means no verbosity\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n exiftool -v0 {cmd}\n exiftool -v1 {cmd}\n [...]\n exiftool -v5 {cmd}\n\nMETADATA EXPORT:\n\n # Export all metadata of specified file into a csv file (headers are\n # included)\n exiftool -csv photo.jpg\n\n # Export all metadata of all jpg file into a csv file (headers are\n # included)\n exiftool -csv -ext jpg /home/ebah/photo/\n\n # Export selected metadata of all jpg file into a csv file (headers are\n # included)\n exiftool -Make -Model -DateTimeOriginal -csv -ext jpg /home/ebah/photo/\n\nFILE RENAMING:\n\n # Rename using fixed string and same file extension as original\n exiftool \"-FileName<HELLOWORLD.%e\" photo.JPG\n >  HELLOWORLD.JPG\n\n # Rename using fixed string and same *lowercase* file extension as\n # original\n exiftool \"-FileName<HELLOWORLD.%le\" photo.jpg\n >  HELLOWORLD.jpg\n\n # Rename based on date (for the format see: )\n exiftool \"-FileName<DateTimeOriginal\" -d \"%Y%m%dT%H%M%S.%%le\" photo.jpg\n > 20130914T170119.jpg\n\n # Prevent illegal characters to be written in filename (unpredictable\n # results)\n exiftool '-filename<${make;}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n\n # Replace spaces in tag string\n exiftool -Make photo.jpg\n > Make                            : NIKON CORPORATION\n exiftool '-filename<${make;tr/ /_/;s/__+/_/g}.%le' photo.jpg\n > NIKON_CORPORATION.jpg\n\n # Composite rename: DateTimeOriginal + Make tags\n exiftool '-filename<${DateTimeOriginal}_${make;tr/ /_/;s/__+/_/g}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n > 20130914T210246_Canon.jpg\n\n # Add a counter for duplicate images\n exiftool '-FileName<${DateTimeOriginal}_${Model;tr/ /_/;s/__+/_/g}.%e' -d \"%Y%m%dT%H%M%S%%-.c\" 20130914T074335_Canon.jpg\n > 20130914T171112-0_NIKON_D40.jpg\n > 20130914T171112-1_NIKON_D40.jpg\n\nCONDITIONAL EXPRESSION\n\n # If condition matches then the file is processed otherwise skipped\n exiftool -shutterspeed -if '$make eq \"Canon\"'\n\n # Rename files only from Canon Camera\n exiftool '-filename<CANON.%le' -if '$make eq \"Canon\"' photo.jpg\n\nTIME SHIFT\n\n # Time shift is very handy when camera's clock is misaligned from\n # real time (say because you are abroad on holiday and forgot to adjust\n # camera's clock)\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n\n # Add 1 hour to the DateTimeOriginal's value\n exiftool \"-DateTimeOriginal+=0:0:0 1:0:0\" photo.jpg"
+      },
+      "date": 1434902099589
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e0111321b30c6359"
+      },
+      "id": "e0111321b30c6359",
+      "type": "add",
+      "after": "a41326714faf87c5",
+      "date": 1434902102234
+    },
+    {
+      "type": "edit",
+      "id": "e0111321b30c6359",
+      "item": {
+        "type": "code",
+        "id": "e0111321b30c6359",
+        "text": " # shows only selected EXIF metadata\n # Here is a complete list of metadata TAGS (depending on file format):\n # http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/index.html\nexiftool -Model -ImageSize photo.jpg"
+      },
+      "date": 1434902110734
+    },
+    {
+      "type": "edit",
+      "id": "e0111321b30c6359",
+      "item": {
+        "type": "code",
+        "id": "e0111321b30c6359",
+        "text": "# shows only selected EXIF metadata\n# Here is a complete list of metadata TAGS (depending on file format):\n# http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/index.html\nexiftool -Model -ImageSize photo.jpg"
+      },
+      "date": 1434902121349
+    },
+    {
+      "type": "move",
+      "order": [
+        "4c9913871ba66d4b",
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "e0111321b30c6359",
+        "a41326714faf87c5"
+      ],
+      "id": "e0111321b30c6359",
+      "date": 1434902132714
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "4c9913871ba66d4b",
+        "e0111321b30c6359",
+        "a41326714faf87c5"
+      ],
+      "id": "4c9913871ba66d4b",
+      "date": 1434902143390
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "4c9913871ba66d4b",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "e0111321b30c6359",
+        "a41326714faf87c5"
+      ],
+      "id": "4c9913871ba66d4b",
+      "date": 1434902169176
+    },
+    {
+      "type": "edit",
+      "id": "a41326714faf87c5",
+      "item": {
+        "type": "paragraph",
+        "id": "a41326714faf87c5",
+        "text": "# recursively process all jpg files under specified directory and\n# sub-directory\nexiftool -r -Model -ImageSize -ext jpg /home/ebah/photo/"
+      },
+      "date": 1434902208702
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "99bfd02993fff20f"
+      },
+      "id": "99bfd02993fff20f",
+      "type": "add",
+      "after": "fd7b35ea101aa888",
+      "date": 1434902211838
+    },
+    {
+      "type": "add",
+      "id": "fd7b35ea101aa888",
+      "item": {
+        "type": "paragraph",
+        "id": "fd7b35ea101aa888",
+        "text": " \nDEBUGGING:\n\n # When a command is not working you can launch it in verbose mode, there\n # are 5 different levels of verbosity, level 0 means no verbosity\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n exiftool -v0 {cmd}\n exiftool -v1 {cmd}\n [...]\n exiftool -v5 {cmd}\n\nMETADATA EXPORT:\n\n # Export all metadata of specified file into a csv file (headers are\n # included)\n exiftool -csv photo.jpg\n\n # Export all metadata of all jpg file into a csv file (headers are\n # included)\n exiftool -csv -ext jpg /home/ebah/photo/\n\n # Export selected metadata of all jpg file into a csv file (headers are\n # included)\n exiftool -Make -Model -DateTimeOriginal -csv -ext jpg /home/ebah/photo/\n\nFILE RENAMING:\n\n # Rename using fixed string and same file extension as original\n exiftool \"-FileName<HELLOWORLD.%e\" photo.JPG\n >  HELLOWORLD.JPG\n\n # Rename using fixed string and same *lowercase* file extension as\n # original\n exiftool \"-FileName<HELLOWORLD.%le\" photo.jpg\n >  HELLOWORLD.jpg\n\n # Rename based on date (for the format see: )\n exiftool \"-FileName<DateTimeOriginal\" -d \"%Y%m%dT%H%M%S.%%le\" photo.jpg\n > 20130914T170119.jpg\n\n # Prevent illegal characters to be written in filename (unpredictable\n # results)\n exiftool '-filename<${make;}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n\n # Replace spaces in tag string\n exiftool -Make photo.jpg\n > Make                            : NIKON CORPORATION\n exiftool '-filename<${make;tr/ /_/;s/__+/_/g}.%le' photo.jpg\n > NIKON_CORPORATION.jpg\n\n # Composite rename: DateTimeOriginal + Make tags\n exiftool '-filename<${DateTimeOriginal}_${make;tr/ /_/;s/__+/_/g}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n > 20130914T210246_Canon.jpg\n\n # Add a counter for duplicate images\n exiftool '-FileName<${DateTimeOriginal}_${Model;tr/ /_/;s/__+/_/g}.%e' -d \"%Y%m%dT%H%M%S%%-.c\" 20130914T074335_Canon.jpg\n > 20130914T171112-0_NIKON_D40.jpg\n > 20130914T171112-1_NIKON_D40.jpg\n\nCONDITIONAL EXPRESSION\n\n # If condition matches then the file is processed otherwise skipped\n exiftool -shutterspeed -if '$make eq \"Canon\"'\n\n # Rename files only from Canon Camera\n exiftool '-filename<CANON.%le' -if '$make eq \"Canon\"' photo.jpg\n\nTIME SHIFT\n\n # Time shift is very handy when camera's clock is misaligned from\n # real time (say because you are abroad on holiday and forgot to adjust\n # camera's clock)\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n\n # Add 1 hour to the DateTimeOriginal's value\n exiftool \"-DateTimeOriginal+=0:0:0 1:0:0\" photo.jpg"
+      },
+      "after": "a41326714faf87c5",
+      "date": 1434902213045
+    },
+    {
+      "type": "edit",
+      "id": "99bfd02993fff20f",
+      "item": {
+        "type": "code",
+        "id": "99bfd02993fff20f",
+        "text": "# process all files of specified file type (case insensitive extension)\nexiftool -Model -ImageSize -ext jpg /home/ebah/photo/"
+      },
+      "date": 1434902216524
+    },
+    {
+      "type": "edit",
+      "id": "fd7b35ea101aa888",
+      "item": {
+        "type": "paragraph",
+        "id": "fd7b35ea101aa888",
+        "text": "# Export all metadata of all jpg file into a csv file (headers are included)\nexiftool -csv -ext jpg /home/ebah/photo/"
+      },
+      "date": 1434902278590
+    },
+    {
+      "type": "add",
+      "id": "72d84456f6503df6",
+      "item": {
+        "type": "paragraph",
+        "id": "72d84456f6503df6",
+        "text": "# Export selected metadata of all jpg file into a csv file (headers are included)\nexiftool -Make -Model -DateTimeOriginal -csv -ext jpg /home/ebah/photo/"
+      },
+      "after": "fd7b35ea101aa888",
+      "date": 1434902289536
+    },
+    {
+      "type": "add",
+      "id": "272cb6bf433371fb",
+      "item": {
+        "type": "paragraph",
+        "id": "272cb6bf433371fb",
+        "text": "# Rename using fixed string and same file extension as original\nexiftool \"-FileName<HELLOWORLD.%e\" photo.JPG\n >  HELLOWORLD.JPG"
+      },
+      "after": "72d84456f6503df6",
+      "date": 1434902302356
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6a31b6cc19eddd67"
+      },
+      "id": "6a31b6cc19eddd67",
+      "type": "add",
+      "after": "99bfd02993fff20f",
+      "date": 1434902307758
+    },
+    {
+      "type": "add",
+      "id": "a6cf251f162a2a2b",
+      "item": {
+        "type": "paragraph",
+        "id": "a6cf251f162a2a2b",
+        "text": "\n # Rename using fixed string and same *lowercase* file extension as\n # original\n exiftool \"-FileName<HELLOWORLD.%le\" photo.jpg\n >  HELLOWORLD.jpg\n\n # Rename based on date (for the format see: )\n exiftool \"-FileName<DateTimeOriginal\" -d \"%Y%m%dT%H%M%S.%%le\" photo.jpg\n > 20130914T170119.jpg\n\n # Prevent illegal characters to be written in filename (unpredictable\n # results)\n exiftool '-filename<${make;}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n\n # Replace spaces in tag string\n exiftool -Make photo.jpg\n > Make                            : NIKON CORPORATION\n exiftool '-filename<${make;tr/ /_/;s/__+/_/g}.%le' photo.jpg\n > NIKON_CORPORATION.jpg\n\n # Composite rename: DateTimeOriginal + Make tags\n exiftool '-filename<${DateTimeOriginal}_${make;tr/ /_/;s/__+/_/g}.%le' -d \"%Y%m%dT%H%M%S\" photo.jpg\n > 20130914T210246_Canon.jpg\n\n # Add a counter for duplicate images\n exiftool '-FileName<${DateTimeOriginal}_${Model;tr/ /_/;s/__+/_/g}.%e' -d \"%Y%m%dT%H%M%S%%-.c\" 20130914T074335_Canon.jpg\n > 20130914T171112-0_NIKON_D40.jpg\n > 20130914T171112-1_NIKON_D40.jpg\n\nCONDITIONAL EXPRESSION\n\n # If condition matches then the file is processed otherwise skipped\n exiftool -shutterspeed -if '$make eq \"Canon\"'\n\n # Rename files only from Canon Camera\n exiftool '-filename<CANON.%le' -if '$make eq \"Canon\"' photo.jpg\n\nTIME SHIFT\n\n # Time shift is very handy when camera's clock is misaligned from\n # real time (say because you are abroad on holiday and forgot to adjust\n # camera's clock)\n # For more: http://www.sno.phy.queensu.ca/~phil/exiftool/Shift.html\n\n # Add 1 hour to the DateTimeOriginal's value\n exiftool \"-DateTimeOriginal+=0:0:0 1:0:0\" photo.jpg"
+      },
+      "after": "272cb6bf433371fb",
+      "date": 1434902309611
+    },
+    {
+      "type": "edit",
+      "id": "6a31b6cc19eddd67",
+      "item": {
+        "type": "code",
+        "id": "6a31b6cc19eddd67",
+        "text": "# Export all metadata of specified file into a csv file (headers are included)\nexiftool -csv photo.jpg"
+      },
+      "date": 1434902311984
+    },
+    {
+      "type": "remove",
+      "id": "a41326714faf87c5",
+      "date": 1434902320041
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3dcdc8717042f35a"
+      },
+      "id": "3dcdc8717042f35a",
+      "type": "add",
+      "after": "6a31b6cc19eddd67",
+      "date": 1434902323200
+    },
+    {
+      "type": "edit",
+      "id": "3dcdc8717042f35a",
+      "item": {
+        "type": "code",
+        "id": "3dcdc8717042f35a",
+        "text": "# recursively process all jpg files under specified directory and\n# sub-directory\nexiftool -r -Model -ImageSize -ext jpg /home/ebah/photo/"
+      },
+      "date": 1434902325773
+    },
+    {
+      "type": "remove",
+      "id": "fd7b35ea101aa888",
+      "date": 1434902334005
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "291d076e78aa8a9c"
+      },
+      "id": "291d076e78aa8a9c",
+      "type": "add",
+      "after": "3dcdc8717042f35a",
+      "date": 1434902337186
+    },
+    {
+      "type": "edit",
+      "id": "291d076e78aa8a9c",
+      "item": {
+        "type": "code",
+        "id": "291d076e78aa8a9c",
+        "text": "# Export all metadata of all jpg file into a csv file (headers are included)\nexiftool -csv -ext jpg /home/ebah/photo/"
+      },
+      "date": 1434902339951
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "4c9913871ba66d4b",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "e0111321b30c6359",
+        "72d84456f6503df6",
+        "272cb6bf433371fb",
+        "a6cf251f162a2a2b",
+        "3dcdc8717042f35a",
+        "99bfd02993fff20f",
+        "6a31b6cc19eddd67",
+        "291d076e78aa8a9c"
+      ],
+      "id": "3dcdc8717042f35a",
+      "date": 1434902356904
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "4c9913871ba66d4b",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "e0111321b30c6359",
+        "72d84456f6503df6",
+        "272cb6bf433371fb",
+        "a6cf251f162a2a2b",
+        "99bfd02993fff20f",
+        "3dcdc8717042f35a",
+        "6a31b6cc19eddd67",
+        "291d076e78aa8a9c"
+      ],
+      "id": "99bfd02993fff20f",
+      "date": 1434902361481
+    },
+    {
+      "type": "remove",
+      "id": "72d84456f6503df6",
+      "date": 1434902395709
+    },
+    {
+      "type": "remove",
+      "id": "272cb6bf433371fb",
+      "date": 1434902402330
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "91325311b9dbdf84"
+      },
+      "id": "91325311b9dbdf84",
+      "type": "add",
+      "after": "291d076e78aa8a9c",
+      "date": 1434902405264
+    },
+    {
+      "type": "edit",
+      "id": "91325311b9dbdf84",
+      "item": {
+        "type": "code",
+        "id": "91325311b9dbdf84",
+        "text": "# Rename using fixed string and same file extension as original\nexiftool \"-FileName<HELLOWORLD.%e\" photo.JPG\n >  HELLOWORLD.JPG"
+      },
+      "date": 1434902408222
+    },
+    {
+      "type": "remove",
+      "id": "a6cf251f162a2a2b",
+      "date": 1434902454865
+    },
+    {
+      "type": "edit",
+      "id": "50e88cf5084c3000",
+      "item": {
+        "type": "html",
+        "id": "50e88cf5084c3000",
+        "text": "<H3>Further Examples"
+      },
+      "date": 1434902464689
+    },
+    {
+      "type": "add",
+      "id": "df0b38c17d497c5d",
+      "item": {
+        "type": "paragraph",
+        "id": "df0b38c17d497c5d",
+        "text": "You can find a number of detailed examples including flexile file and metadat renaming here - [http://sourceforge.net/projects/exiftool1line/?source=typ_redirect sourceforge.net]"
+      },
+      "after": "9b51b23bb11f5863",
+      "date": 1434902550301
+    },
+    {
+      "type": "add",
+      "id": "14427f55b8b10d83",
+      "item": {
+        "type": "paragraph",
+        "id": "14427f55b8b10d83",
+        "text": "Some examples are given below:"
+      },
+      "after": "df0b38c17d497c5d",
+      "date": 1434902557383
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "4c9913871ba66d4b",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "14427f55b8b10d83",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "df0b38c17d497c5d",
+        "e0111321b30c6359",
+        "99bfd02993fff20f",
+        "3dcdc8717042f35a",
+        "6a31b6cc19eddd67",
+        "291d076e78aa8a9c",
+        "91325311b9dbdf84"
+      ],
+      "id": "df0b38c17d497c5d",
+      "date": 1434902559886
+    },
+    {
+      "type": "move",
+      "order": [
+        "9f43389538d3b81e",
+        "6e81aaffcb46c60f",
+        "428464ccb3c58c8c",
+        "05a40ce94915121a",
+        "1cb311da03eeb257",
+        "b978f5cb63a71f21",
+        "b3bf4801363b9f13",
+        "20f2bdebd7467f0d",
+        "baeccfbee6578b00",
+        "d9de7b92b5b83081",
+        "87110eaa9f438bb0",
+        "4c9913871ba66d4b",
+        "404bd944dd9aa207",
+        "1f59dab4c680e010",
+        "9b51b23bb11f5863",
+        "49d5022a67a6b76f",
+        "6cc9fa0a88a941de",
+        "50e88cf5084c3000",
+        "df0b38c17d497c5d",
+        "14427f55b8b10d83",
+        "e0111321b30c6359",
+        "99bfd02993fff20f",
+        "3dcdc8717042f35a",
+        "6a31b6cc19eddd67",
+        "291d076e78aa8a9c",
+        "91325311b9dbdf84"
+      ],
+      "id": "14427f55b8b10d83",
+      "date": 1434902562743
+    }
+  ]
+}

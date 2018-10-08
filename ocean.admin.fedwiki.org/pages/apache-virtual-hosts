@@ -1,0 +1,1260 @@
+{
+  "title": "Apache Virtual Hosts",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "061eded961f1fe85",
+      "text": "Here we explore how to create multiple domains on an [[Apache Server]] on - [https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-14-04-lts digitalocean.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "ce527e474637d54b",
+      "text": "# Create the Directory Structure"
+    },
+    {
+      "type": "paragraph",
+      "id": "e9f14af3e6d069b7",
+      "text": "The first step that we are going to take is to make a directory structure that will hold the site data that we will be serving to visitors."
+    },
+    {
+      "type": "paragraph",
+      "id": "52786a11646574ed",
+      "text": "Our document root (the top-level directory that Apache looks at to find content to serve) will be set to individual directories under the /var/www directory. We will create a directory here for both of the virtual hosts we plan on making."
+    },
+    {
+      "type": "paragraph",
+      "id": "98027479e5f97b14",
+      "text": "Within each of these directories, we will create a public_html folder that will hold our actual files. This gives us some flexibility in our hosting."
+    },
+    {
+      "type": "paragraph",
+      "id": "3563450dbd0e7d35",
+      "text": "For instance, for our sites, we're going to make our directories like this:"
+    },
+    {
+      "type": "code",
+      "id": "657f58cc9d83aa2b",
+      "text": "sudo mkdir -p /var/www/example.com/public_html\nsudo mkdir -p /var/www/test.com/public_html"
+    },
+    {
+      "type": "markdown",
+      "id": "3bcc23d81ca5e69e",
+      "text": "# Grant Permissions"
+    },
+    {
+      "type": "paragraph",
+      "id": "3d3486ff63226c28",
+      "text": "Now we have the directory structure for our files, but they are owned by our root user. If we want our regular user to be able to modify files in our web directories, we can change the ownership by doing this:"
+    },
+    {
+      "type": "code",
+      "id": "64229a55ef6c5784",
+      "text": "sudo chown -R $USER:$USER /var/www/example.com/public_html\nsudo chown -R $USER:$USER /var/www/test.com/public_html"
+    },
+    {
+      "type": "paragraph",
+      "id": "ddc1927e3efcb62f",
+      "text": "The $USER variable will take the value of the user you are currently logged in as when you press \"ENTER\". By doing this, our regular user now owns the public_html subdirectories where we will be storing our content."
+    },
+    {
+      "type": "paragraph",
+      "id": "915c8079a9884509",
+      "text": "\nWe should also modify our permissions a little bit to ensure that read access is permitted to the general web directory and all of the files and folders it contains so that pages can be served correctly:"
+    },
+    {
+      "type": "code",
+      "id": "6b371ac210282830",
+      "text": "sudo chmod -R 755 /var/www"
+    },
+    {
+      "type": "paragraph",
+      "id": "7b94a4c69bddd351",
+      "text": "Your web server should now have the permissions it needs to serve content, and your user should be able to create content within the necessary folders."
+    },
+    {
+      "type": "markdown",
+      "id": "69a9dec85d38f1db",
+      "text": "# Create Demo Pages for Each Virtual Host"
+    },
+    {
+      "type": "paragraph",
+      "id": "3fc5368340327376",
+      "text": "We have our directory structure in place. Let's create some content to serve.\n\nWe're just going for a demonstration, so our pages will be very simple. We're just going to make an index.html page for each site.\n\nLet's start with example.com. We can open up an index.html file in our editor by typing:"
+    },
+    {
+      "type": "code",
+      "id": "54c8bafeef0d38e8",
+      "text": "nano /var/www/example.com/public_html/index.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "028d07e68dee8785",
+      "text": "In this file, create a simple HTML document that indicates the site it is connected to. My file looks like this:"
+    },
+    {
+      "type": "code",
+      "id": "8494320044b99cf7",
+      "text": "<html>\n  <head>\n    <title>Welcome to Example.com!</title>\n  </head>\n  <body>\n    <h1>Success!  The example.com virtual host is working!</h1>\n  </body>\n</html>"
+    },
+    {
+      "type": "paragraph",
+      "id": "3edb5d6b53de25b2",
+      "text": "Save and close the file when you are finished.\n\nWe can copy this file to use as the basis for our second site by typing:"
+    },
+    {
+      "type": "code",
+      "id": "9d96b5310dbc09f5",
+      "text": "cp /var/www/example.com/public_html/index.html /var/www/test.com/public_html/index.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "577911514b249ad9",
+      "text": "We can then open the file and modify the relevant pieces of information:"
+    },
+    {
+      "type": "code",
+      "id": "d4b167e252d94efa",
+      "text": "nano /var/www/test.com/public_html/index.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "c8264c1823f467c3",
+      "text": "Then copy and paste this HTML into the editor:"
+    },
+    {
+      "type": "code",
+      "id": "020c28a6b07c57e0",
+      "text": "<html>\n  <head>\n    <title>Welcome to Test.com!</title>\n  </head>\n  <body>\n    <h1>Success!  The test.com virtual host is working!</h1>\n  </body>\n</html>"
+    },
+    {
+      "type": "paragraph",
+      "id": "a600261f9b26e8f3",
+      "text": "Save and close this file as well. You now have the pages necessary to test the virtual host configuration."
+    },
+    {
+      "type": "markdown",
+      "id": "7417ac722247b41a",
+      "text": "# Create New Virtual Host Files"
+    },
+    {
+      "type": "paragraph",
+      "id": "282d0479e4e1cf0e",
+      "text": "Virtual host files are the files that specify the actual configuration of our virtual hosts and dictate how the Apache web server will respond to various domain requests.\n\nApache comes with a default virtual host file called 000-default.conf that we can use as a jumping off point. We are going to copy it over to create a virtual host file for each of our domains.\n\nWe will start with one domain, configure it, copy it for our second domain, and then make the few further adjustments needed. The default Ubuntu configuration requires that each virtual host file end in .conf.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "29018f44f4daf9c4",
+      "text": "# Create the First Virtual Host File"
+    },
+    {
+      "type": "paragraph",
+      "id": "f68e0f3a81343472",
+      "text": "Start by copying the file for the first domain:\n\nsudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf\nOpen the new file in your editor with root privileges:\n\nsudo nano /etc/apache2/sites-available/example.com.conf\nThe file will look something like this (I've removed the comments here to make the file more approachable):\n\n<VirtualHost *:80>\n    ServerAdmin webmaster@localhost\n    DocumentRoot /var/www/html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nAs you can see, there's not much here. We will customize the items here for our first domain and add some additional directives. This virtual host section matches any requests that are made on port 80, the default HTTP port.\n\nFirst, we need to change the ServerAdmin directive to an email that the site administrator can receive emails through.\n\nServerAdmin admin@example.com\nAfter this, we need to add two directives. The first, called ServerName, establishes the base domain that should match for this virtual host definition. This will most likely be your domain. The second, called ServerAlias, defines further names that should match as if they were the base name. This is useful for matching hosts you defined, like www:\n\nServerName example.com\nServerAlias www.example.com\nThe only other thing we need to change for a basic virtual host file is the location of the document root for this domain. We already created the directory we need, so we just need to alter the DocumentRoot directive to reflect the directory we created:\n\nDocumentRoot /var/www/example.com/public_html\nIn total, our virtualhost file should look like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@example.com\n    ServerName example.com\n    ServerAlias www.example.com\n    DocumentRoot /var/www/example.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "4026c60b747a7aea",
+      "text": "# Copy First Virtual Host and Customize for Second Domain"
+    },
+    {
+      "type": "paragraph",
+      "id": "8d25e4942528c013",
+      "text": "Now that we have our first virtual host file established, we can create our second one by copying that file and adjusting it as needed.\n\nStart by copying it:\n\nsudo cp /etc/apache2/sites-available/example.com.conf /etc/apache2/sites-available/test.com.conf\nOpen the new file with root privileges in your editor:\n\nsudo nano /etc/apache2/sites-available/test.com.conf\nYou now need to modify all of the pieces of information to reference your second domain. When you are finished, it may look something like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@test.com\n    ServerName test.com\n    ServerAlias www.test.com\n    DocumentRoot /var/www/test.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file when you are finished.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "843d8d1451111eda",
+      "text": "# Enable the New Virtual Host Files"
+    },
+    {
+      "type": "paragraph",
+      "id": "f35128b4c5739f5c",
+      "text": "Now that we have created our virtual host files, we must enable them. Apache includes some tools that allow us to do this.\n\nWe can use the a2ensite tool to enable each of our sites like this:\n\nsudo a2ensite example.com.conf\nsudo a2ensite test.com.conf\nWhen you are finished, you need to restart Apache to make these changes take effect:\n\nsudo service apache2 restart\nYou will most likely receive a message saying something similar to:\n\n * Restarting web server apache2\n AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.0.1. Set the 'ServerName' directive globally to suppress this message\nThis is a harmless message that does not affect our site.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "0d68c2fb48b5b0ac",
+      "text": "# Set Up Local Hosts File (Optional)"
+    },
+    {
+      "type": "paragraph",
+      "id": "a15dd065bdf30c09",
+      "text": "If you haven't been using actual domain names that you own to test this procedure and have been using some example domains instead, you can at least test the functionality of this process by temporarily modifying the hosts file on your local computer.\n\nThis will intercept any requests for the domains that you configured and point them to your VPS server, just as the DNS system would do if you were using registered domains. This will only work from your computer though, and is simply useful for testing purposes.\n\nMake sure you are operating on your local computer for these steps and not your VPS server. You will need to know the computer's administrative password or otherwise be a member of the administrative group.\n\nIf you are on a Mac or Linux computer, edit your local file with administrative privileges by typing:\n\nsudo nano /etc/hosts\nIf you are on a Windows machine, you can find instructions on altering your hosts file here.\n\nThe details that you need to add are the public IP address of your VPS server followed by the domain you want to use to reach that VPS.\n\nFor the domains that I used in this guide, assuming that my VPS IP address is 111.111.111.111, I could add the following lines to the bottom of my hosts file:\n\n127.0.0.1   localhost\n127.0.1.1   guest-desktop\n111.111.111.111 example.com\n111.111.111.111 test.com\nThis will direct any requests for example.com and test.com on our computer and send them to our server at 111.111.111.111. This is what we want if we are not actually the owners of these domains in order to test our virtual hosts.\n\nSave and close the file."
+    },
+    {
+      "type": "paragraph",
+      "id": "99325768c3f6d3b7",
+      "text": "Step Seven — Test your Results\nNow that you have your virtual hosts configured, you can test your setup easily by going to the domains that you configured in your web browser:\n\nhttp://example.com\nYou should see a page that looks like this:\n\nApache virt host example\n\nLikewise, if you can visit your second page:\n\nhttp://test.com\nYou will see the file you created for your second site:"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Apache Virtual Hosts",
+        "story": []
+      },
+      "date": 1491989242973
+    },
+    {
+      "item": {
+        "type": "markdown",
+        "id": "ce527e474637d54b",
+        "text": "# Create the Directory Structure"
+      },
+      "id": "ce527e474637d54b",
+      "type": "add",
+      "date": 1491989244043
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "061eded961f1fe85"
+      },
+      "id": "061eded961f1fe85",
+      "type": "add",
+      "after": "ce527e474637d54b",
+      "date": 1491989245239
+    },
+    {
+      "type": "edit",
+      "id": "ce527e474637d54b",
+      "item": {
+        "type": "markdown",
+        "id": "ce527e474637d54b",
+        "text": "# Create the Directory Structure"
+      },
+      "date": 1491989297939
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "657f58cc9d83aa2b",
+        "text": "sudo mkdir -p /var/www/example.com/public_html\nsudo mkdir -p /var/www/test.com/public_html"
+      },
+      "id": "657f58cc9d83aa2b",
+      "type": "add",
+      "after": "061eded961f1fe85",
+      "date": 1491989300554
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "657f58cc9d83aa2b"
+      ],
+      "id": "061eded961f1fe85",
+      "date": 1491989302803,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "edit",
+      "id": "ce527e474637d54b",
+      "item": {
+        "type": "markdown",
+        "id": "ce527e474637d54b",
+        "text": "# Create the Directory Structure"
+      },
+      "date": 1491989305949
+    },
+    {
+      "type": "add",
+      "id": "e9f14af3e6d069b7",
+      "item": {
+        "type": "paragraph",
+        "id": "e9f14af3e6d069b7",
+        "text": "The first step that we are going to take is to make a directory structure that will hold the site data that we will be serving to visitors."
+      },
+      "after": "ce527e474637d54b",
+      "date": 1491989308803
+    },
+    {
+      "type": "add",
+      "id": "52786a11646574ed",
+      "item": {
+        "type": "paragraph",
+        "id": "52786a11646574ed",
+        "text": "Our document root (the top-level directory that Apache looks at to find content to serve) will be set to individual directories under the /var/www directory. We will create a directory here for both of the virtual hosts we plan on making."
+      },
+      "after": "e9f14af3e6d069b7",
+      "date": 1491989312634
+    },
+    {
+      "type": "add",
+      "id": "98027479e5f97b14",
+      "item": {
+        "type": "paragraph",
+        "id": "98027479e5f97b14",
+        "text": "Within each of these directories, we will create a public_html folder that will hold our actual files. This gives us some flexibility in our hosting."
+      },
+      "after": "52786a11646574ed",
+      "date": 1491989316795
+    },
+    {
+      "type": "add",
+      "id": "3563450dbd0e7d35",
+      "item": {
+        "type": "paragraph",
+        "id": "3563450dbd0e7d35",
+        "text": "For instance, for our sites, we're going to make our directories like this:"
+      },
+      "after": "98027479e5f97b14",
+      "date": 1491989320282
+    },
+    {
+      "type": "add",
+      "id": "dca0fbedab601416",
+      "item": {
+        "type": "paragraph",
+        "id": "dca0fbedab601416",
+        "text": ""
+      },
+      "after": "3563450dbd0e7d35",
+      "date": 1491989324028
+    },
+    {
+      "type": "remove",
+      "id": "dca0fbedab601416",
+      "date": 1491989327516
+    },
+    {
+      "type": "edit",
+      "id": "657f58cc9d83aa2b",
+      "item": {
+        "type": "code",
+        "id": "657f58cc9d83aa2b",
+        "text": "sudo mkdir -p /var/www/example.com/public_html\nsudo mkdir -p /var/www/test.com/public_html"
+      },
+      "date": 1491989330183
+    },
+    {
+      "type": "fork",
+      "date": 1491989349686
+    },
+    {
+      "type": "edit",
+      "id": "061eded961f1fe85",
+      "item": {
+        "type": "paragraph",
+        "id": "061eded961f1fe85",
+        "text": "Here we explore how to create multiple domains on an [[Apache Server]] on [[DigitalOcean]]."
+      },
+      "date": 1491989386192
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3bcc23d81ca5e69e"
+      },
+      "id": "3bcc23d81ca5e69e",
+      "type": "add",
+      "after": "657f58cc9d83aa2b",
+      "date": 1491989396845
+    },
+    {
+      "type": "edit",
+      "id": "3bcc23d81ca5e69e",
+      "item": {
+        "type": "paragraph",
+        "id": "3bcc23d81ca5e69e",
+        "text": "# Grant Permissions"
+      },
+      "date": 1491989422470
+    },
+    {
+      "type": "add",
+      "id": "3d3486ff63226c28",
+      "item": {
+        "type": "paragraph",
+        "id": "3d3486ff63226c28",
+        "text": "Now we have the directory structure for our files, but they are owned by our root user. If we want our regular user to be able to modify files in our web directories, we can change the ownership by doing this:"
+      },
+      "after": "3bcc23d81ca5e69e",
+      "date": 1491989425390
+    },
+    {
+      "type": "add",
+      "id": "137244cb8d791c91",
+      "item": {
+        "type": "paragraph",
+        "id": "137244cb8d791c91",
+        "text": "\nsudo chown -R $USER:$USER /var/www/example.com/public_html\nsudo chown -R $USER:$USER /var/www/test.com/public_html"
+      },
+      "after": "3d3486ff63226c28",
+      "date": 1491989429344
+    },
+    {
+      "type": "add",
+      "id": "ddc1927e3efcb62f",
+      "item": {
+        "type": "paragraph",
+        "id": "ddc1927e3efcb62f",
+        "text": "The $USER variable will take the value of the user you are currently logged in as when you press \"ENTER\". By doing this, our regular user now owns the public_html subdirectories where we will be storing our content."
+      },
+      "after": "137244cb8d791c91",
+      "date": 1491989433447
+    },
+    {
+      "type": "add",
+      "id": "915c8079a9884509",
+      "item": {
+        "type": "paragraph",
+        "id": "915c8079a9884509",
+        "text": "\nWe should also modify our permissions a little bit to ensure that read access is permitted to the general web directory and all of the files and folders it contains so that pages can be served correctly:"
+      },
+      "after": "ddc1927e3efcb62f",
+      "date": 1491989435959
+    },
+    {
+      "type": "add",
+      "id": "29cdf0f363aff559",
+      "item": {
+        "type": "paragraph",
+        "id": "29cdf0f363aff559",
+        "text": "\nsudo chmod -R 755 /var/www"
+      },
+      "after": "915c8079a9884509",
+      "date": 1491989438015
+    },
+    {
+      "type": "add",
+      "id": "7b94a4c69bddd351",
+      "item": {
+        "type": "paragraph",
+        "id": "7b94a4c69bddd351",
+        "text": "Your web server should now have the permissions it needs to serve content, and your user should be able to create content within the necessary folders."
+      },
+      "after": "29cdf0f363aff559",
+      "date": 1491989440009
+    },
+    {
+      "type": "edit",
+      "id": "3bcc23d81ca5e69e",
+      "item": {
+        "type": "markdown",
+        "id": "3bcc23d81ca5e69e",
+        "text": "# Grant Permissions"
+      },
+      "date": 1491989441952
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "64229a55ef6c5784"
+      },
+      "id": "64229a55ef6c5784",
+      "type": "add",
+      "after": "7b94a4c69bddd351",
+      "date": 1491989443936
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "137244cb8d791c91",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "29cdf0f363aff559",
+        "7b94a4c69bddd351"
+      ],
+      "id": "64229a55ef6c5784",
+      "date": 1491989445552
+    },
+    {
+      "type": "remove",
+      "id": "137244cb8d791c91",
+      "date": 1491989451881
+    },
+    {
+      "type": "edit",
+      "id": "64229a55ef6c5784",
+      "item": {
+        "type": "code",
+        "id": "64229a55ef6c5784",
+        "text": "sudo chown -R $USER:$USER /var/www/example.com/public_html\nsudo chown -R $USER:$USER /var/www/test.com/public_html"
+      },
+      "date": 1491989454691
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6b371ac210282830"
+      },
+      "id": "6b371ac210282830",
+      "type": "add",
+      "after": "7b94a4c69bddd351",
+      "date": 1491989471503
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "29cdf0f363aff559",
+        "6b371ac210282830",
+        "7b94a4c69bddd351"
+      ],
+      "id": "6b371ac210282830",
+      "date": 1491989472997
+    },
+    {
+      "type": "remove",
+      "id": "29cdf0f363aff559",
+      "date": 1491989475433
+    },
+    {
+      "type": "edit",
+      "id": "6b371ac210282830",
+      "item": {
+        "type": "code",
+        "id": "6b371ac210282830",
+        "text": "sudo chmod -R 755 /var/www"
+      },
+      "date": 1491989478307
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "69a9dec85d38f1db"
+      },
+      "id": "69a9dec85d38f1db",
+      "type": "add",
+      "after": "7b94a4c69bddd351",
+      "date": 1491989481278
+    },
+    {
+      "type": "edit",
+      "id": "061eded961f1fe85",
+      "item": {
+        "type": "paragraph",
+        "id": "061eded961f1fe85",
+        "text": "Here we explore how to create multiple domains on an [[Apache Server]] on - [https://www.digitalocean.com/community/tutorials/how-to-set-up-apache-virtual-hosts-on-ubuntu-14-04-lts digitalocean.com]"
+      },
+      "date": 1491989513868
+    },
+    {
+      "type": "edit",
+      "id": "69a9dec85d38f1db",
+      "item": {
+        "type": "paragraph",
+        "id": "69a9dec85d38f1db",
+        "text": "# Create Demo Pages for Each Virtual Host"
+      },
+      "date": 1491989548235
+    },
+    {
+      "type": "edit",
+      "id": "69a9dec85d38f1db",
+      "item": {
+        "type": "markdown",
+        "id": "69a9dec85d38f1db",
+        "text": "# Create Demo Pages for Each Virtual Host"
+      },
+      "date": 1491989549345
+    },
+    {
+      "type": "add",
+      "id": "3fc5368340327376",
+      "item": {
+        "type": "paragraph",
+        "id": "3fc5368340327376",
+        "text": "We have our directory structure in place. Let's create some content to serve.\n\nWe're just going for a demonstration, so our pages will be very simple. We're just going to make an index.html page for each site.\n\nLet's start with example.com. We can open up an index.html file in our editor by typing:"
+      },
+      "after": "69a9dec85d38f1db",
+      "date": 1491989555804
+    },
+    {
+      "type": "add",
+      "id": "38628f12393663ea",
+      "item": {
+        "type": "paragraph",
+        "id": "38628f12393663ea",
+        "text": "nano /var/www/example.com/public_html/index.html"
+      },
+      "after": "3fc5368340327376",
+      "date": 1491989566189
+    },
+    {
+      "type": "add",
+      "id": "028d07e68dee8785",
+      "item": {
+        "type": "paragraph",
+        "id": "028d07e68dee8785",
+        "text": "In this file, create a simple HTML document that indicates the site it is connected to. My file looks like this:"
+      },
+      "after": "38628f12393663ea",
+      "date": 1491989568108
+    },
+    {
+      "type": "add",
+      "id": "ede80e3169e75fee",
+      "item": {
+        "type": "paragraph",
+        "id": "ede80e3169e75fee",
+        "text": "<html>\n  <head>\n    <title>Welcome to Example.com!</title>\n  </head>\n  <body>\n    <h1>Success!  The example.com virtual host is working!</h1>\n  </body>\n</html>"
+      },
+      "after": "028d07e68dee8785",
+      "date": 1491989573949
+    },
+    {
+      "type": "add",
+      "id": "3edb5d6b53de25b2",
+      "item": {
+        "type": "paragraph",
+        "id": "3edb5d6b53de25b2",
+        "text": "Save and close the file when you are finished.\n\nWe can copy this file to use as the basis for our second site by typing:"
+      },
+      "after": "ede80e3169e75fee",
+      "date": 1491989577021
+    },
+    {
+      "type": "add",
+      "id": "f8bceebcc61f6845",
+      "item": {
+        "type": "paragraph",
+        "id": "f8bceebcc61f6845",
+        "text": "cp /var/www/example.com/public_html/index.html /var/www/test.com/public_html/index.html"
+      },
+      "after": "3edb5d6b53de25b2",
+      "date": 1491989583213
+    },
+    {
+      "type": "add",
+      "id": "577911514b249ad9",
+      "item": {
+        "type": "paragraph",
+        "id": "577911514b249ad9",
+        "text": "We can then open the file and modify the relevant pieces of information:"
+      },
+      "after": "f8bceebcc61f6845",
+      "date": 1491989585181
+    },
+    {
+      "type": "add",
+      "id": "6224395f8e88b592",
+      "item": {
+        "type": "paragraph",
+        "id": "6224395f8e88b592",
+        "text": "\nnano /var/www/test.com/public_html/index.html"
+      },
+      "after": "577911514b249ad9",
+      "date": 1491989597774
+    },
+    {
+      "type": "add",
+      "id": "597ed2d17a675c41",
+      "item": {
+        "type": "paragraph",
+        "id": "597ed2d17a675c41",
+        "text": "<html>\n  <head>\n    <title>Welcome to Test.com!</title>\n  </head>\n  <body>\n    <h1>Success!  The test.com virtual host is working!</h1>\n  </body>\n</html>"
+      },
+      "after": "6224395f8e88b592",
+      "date": 1491989600694
+    },
+    {
+      "type": "add",
+      "id": "c8264c1823f467c3",
+      "item": {
+        "type": "paragraph",
+        "id": "c8264c1823f467c3",
+        "text": "Save and close this file as well. You now have the pages necessary to test the virtual host configuration."
+      },
+      "after": "597ed2d17a675c41",
+      "date": 1491989603965
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "54c8bafeef0d38e8"
+      },
+      "id": "54c8bafeef0d38e8",
+      "type": "add",
+      "after": "c8264c1823f467c3",
+      "date": 1491989612221
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "6b371ac210282830",
+        "7b94a4c69bddd351",
+        "69a9dec85d38f1db",
+        "3fc5368340327376",
+        "54c8bafeef0d38e8",
+        "38628f12393663ea",
+        "028d07e68dee8785",
+        "ede80e3169e75fee",
+        "3edb5d6b53de25b2",
+        "f8bceebcc61f6845",
+        "577911514b249ad9",
+        "6224395f8e88b592",
+        "597ed2d17a675c41",
+        "c8264c1823f467c3"
+      ],
+      "id": "54c8bafeef0d38e8",
+      "date": 1491989614838
+    },
+    {
+      "type": "remove",
+      "id": "38628f12393663ea",
+      "date": 1491989618135
+    },
+    {
+      "type": "edit",
+      "id": "54c8bafeef0d38e8",
+      "item": {
+        "type": "code",
+        "id": "54c8bafeef0d38e8",
+        "text": "nano /var/www/example.com/public_html/index.html"
+      },
+      "date": 1491989620769
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8494320044b99cf7"
+      },
+      "id": "8494320044b99cf7",
+      "type": "add",
+      "after": "c8264c1823f467c3",
+      "date": 1491989622854
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "6b371ac210282830",
+        "7b94a4c69bddd351",
+        "69a9dec85d38f1db",
+        "3fc5368340327376",
+        "54c8bafeef0d38e8",
+        "028d07e68dee8785",
+        "ede80e3169e75fee",
+        "8494320044b99cf7",
+        "3edb5d6b53de25b2",
+        "f8bceebcc61f6845",
+        "577911514b249ad9",
+        "6224395f8e88b592",
+        "597ed2d17a675c41",
+        "c8264c1823f467c3"
+      ],
+      "id": "8494320044b99cf7",
+      "date": 1491989625214
+    },
+    {
+      "type": "remove",
+      "id": "ede80e3169e75fee",
+      "date": 1491989628583
+    },
+    {
+      "type": "edit",
+      "id": "8494320044b99cf7",
+      "item": {
+        "type": "code",
+        "id": "8494320044b99cf7",
+        "text": "<html>\n  <head>\n    <title>Welcome to Example.com!</title>\n  </head>\n  <body>\n    <h1>Success!  The example.com virtual host is working!</h1>\n  </body>\n</html>"
+      },
+      "date": 1491989631571
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9d96b5310dbc09f5"
+      },
+      "id": "9d96b5310dbc09f5",
+      "type": "add",
+      "after": "c8264c1823f467c3",
+      "date": 1491989634230
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "6b371ac210282830",
+        "7b94a4c69bddd351",
+        "69a9dec85d38f1db",
+        "3fc5368340327376",
+        "54c8bafeef0d38e8",
+        "028d07e68dee8785",
+        "8494320044b99cf7",
+        "3edb5d6b53de25b2",
+        "f8bceebcc61f6845",
+        "9d96b5310dbc09f5",
+        "577911514b249ad9",
+        "6224395f8e88b592",
+        "597ed2d17a675c41",
+        "c8264c1823f467c3"
+      ],
+      "id": "9d96b5310dbc09f5",
+      "date": 1491989636341
+    },
+    {
+      "type": "remove",
+      "id": "f8bceebcc61f6845",
+      "date": 1491989639120
+    },
+    {
+      "type": "edit",
+      "id": "9d96b5310dbc09f5",
+      "item": {
+        "type": "code",
+        "id": "9d96b5310dbc09f5",
+        "text": "cp /var/www/example.com/public_html/index.html /var/www/test.com/public_html/index.html"
+      },
+      "date": 1491989641985
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d4b167e252d94efa"
+      },
+      "id": "d4b167e252d94efa",
+      "type": "add",
+      "after": "c8264c1823f467c3",
+      "date": 1491989643804
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "6b371ac210282830",
+        "7b94a4c69bddd351",
+        "69a9dec85d38f1db",
+        "3fc5368340327376",
+        "54c8bafeef0d38e8",
+        "028d07e68dee8785",
+        "8494320044b99cf7",
+        "3edb5d6b53de25b2",
+        "9d96b5310dbc09f5",
+        "577911514b249ad9",
+        "6224395f8e88b592",
+        "d4b167e252d94efa",
+        "597ed2d17a675c41",
+        "c8264c1823f467c3"
+      ],
+      "id": "d4b167e252d94efa",
+      "date": 1491989645516
+    },
+    {
+      "type": "remove",
+      "id": "6224395f8e88b592",
+      "date": 1491989648281
+    },
+    {
+      "type": "edit",
+      "id": "d4b167e252d94efa",
+      "item": {
+        "type": "code",
+        "id": "d4b167e252d94efa",
+        "text": "nano /var/www/test.com/public_html/index.html"
+      },
+      "date": 1491989650922
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1ffdf74ff2f8a9e9"
+      },
+      "id": "1ffdf74ff2f8a9e9",
+      "type": "add",
+      "after": "c8264c1823f467c3",
+      "date": 1491989652948
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "6b371ac210282830",
+        "7b94a4c69bddd351",
+        "69a9dec85d38f1db",
+        "3fc5368340327376",
+        "54c8bafeef0d38e8",
+        "028d07e68dee8785",
+        "8494320044b99cf7",
+        "3edb5d6b53de25b2",
+        "9d96b5310dbc09f5",
+        "577911514b249ad9",
+        "d4b167e252d94efa",
+        "597ed2d17a675c41",
+        "1ffdf74ff2f8a9e9",
+        "c8264c1823f467c3"
+      ],
+      "id": "1ffdf74ff2f8a9e9",
+      "date": 1491989655790
+    },
+    {
+      "type": "remove",
+      "id": "597ed2d17a675c41",
+      "date": 1491989658857
+    },
+    {
+      "type": "remove",
+      "id": "1ffdf74ff2f8a9e9",
+      "date": 1491989664209
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "020c28a6b07c57e0"
+      },
+      "id": "020c28a6b07c57e0",
+      "type": "add",
+      "after": "c8264c1823f467c3",
+      "date": 1491989665531
+    },
+    {
+      "type": "edit",
+      "id": "020c28a6b07c57e0",
+      "item": {
+        "type": "code",
+        "id": "020c28a6b07c57e0",
+        "text": "<html>\n  <head>\n    <title>Welcome to Test.com!</title>\n  </head>\n  <body>\n    <h1>Success!  The test.com virtual host is working!</h1>\n  </body>\n</html>"
+      },
+      "date": 1491989668292
+    },
+    {
+      "type": "edit",
+      "id": "c8264c1823f467c3",
+      "item": {
+        "type": "paragraph",
+        "id": "c8264c1823f467c3",
+        "text": "Then copy and paste this HTML into the editor:Save and close this file as well. You now have the pages necessary to test the virtual host configuration."
+      },
+      "date": 1491989689203
+    },
+    {
+      "type": "edit",
+      "id": "c8264c1823f467c3",
+      "item": {
+        "type": "paragraph",
+        "id": "c8264c1823f467c3",
+        "text": "Then copy and paste this HTML into the editor:"
+      },
+      "date": 1491989695208
+    },
+    {
+      "type": "add",
+      "id": "a600261f9b26e8f3",
+      "item": {
+        "type": "paragraph",
+        "id": "a600261f9b26e8f3",
+        "text": "Save and close this file as well. You now have the pages necessary to test the virtual host configuration."
+      },
+      "after": "c8264c1823f467c3",
+      "date": 1491989697019
+    },
+    {
+      "type": "move",
+      "order": [
+        "061eded961f1fe85",
+        "ce527e474637d54b",
+        "e9f14af3e6d069b7",
+        "52786a11646574ed",
+        "98027479e5f97b14",
+        "3563450dbd0e7d35",
+        "657f58cc9d83aa2b",
+        "3bcc23d81ca5e69e",
+        "3d3486ff63226c28",
+        "64229a55ef6c5784",
+        "ddc1927e3efcb62f",
+        "915c8079a9884509",
+        "6b371ac210282830",
+        "7b94a4c69bddd351",
+        "69a9dec85d38f1db",
+        "3fc5368340327376",
+        "54c8bafeef0d38e8",
+        "028d07e68dee8785",
+        "8494320044b99cf7",
+        "3edb5d6b53de25b2",
+        "9d96b5310dbc09f5",
+        "577911514b249ad9",
+        "d4b167e252d94efa",
+        "c8264c1823f467c3",
+        "020c28a6b07c57e0",
+        "a600261f9b26e8f3"
+      ],
+      "id": "020c28a6b07c57e0",
+      "date": 1491989700341
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7417ac722247b41a"
+      },
+      "id": "7417ac722247b41a",
+      "type": "add",
+      "after": "a600261f9b26e8f3",
+      "date": 1491989706017
+    },
+    {
+      "type": "edit",
+      "id": "7417ac722247b41a",
+      "item": {
+        "type": "paragraph",
+        "id": "7417ac722247b41a",
+        "text": "# Create New Virtual Host Files"
+      },
+      "date": 1491989757244
+    },
+    {
+      "type": "edit",
+      "id": "7417ac722247b41a",
+      "item": {
+        "type": "markdown",
+        "id": "7417ac722247b41a",
+        "text": "# Create New Virtual Host Files"
+      },
+      "date": 1491989758311
+    },
+    {
+      "type": "add",
+      "id": "282d0479e4e1cf0e",
+      "item": {
+        "type": "paragraph",
+        "id": "282d0479e4e1cf0e",
+        "text": "Virtual host files are the files that specify the actual configuration of our virtual hosts and dictate how the Apache web server will respond to various domain requests.\n\nApache comes with a default virtual host file called 000-default.conf that we can use as a jumping off point. We are going to copy it over to create a virtual host file for each of our domains.\n\nWe will start with one domain, configure it, copy it for our second domain, and then make the few further adjustments needed. The default Ubuntu configuration requires that each virtual host file end in .conf.\n\n"
+      },
+      "after": "7417ac722247b41a",
+      "date": 1491989763358
+    },
+    {
+      "type": "add",
+      "id": "29018f44f4daf9c4",
+      "item": {
+        "type": "paragraph",
+        "id": "29018f44f4daf9c4",
+        "text": "# Create the First Virtual Host File"
+      },
+      "after": "282d0479e4e1cf0e",
+      "date": 1491989766589
+    },
+    {
+      "type": "edit",
+      "id": "29018f44f4daf9c4",
+      "item": {
+        "type": "markdown",
+        "id": "29018f44f4daf9c4",
+        "text": "# Create the First Virtual Host File"
+      },
+      "date": 1491989767810
+    },
+    {
+      "type": "add",
+      "id": "f68e0f3a81343472",
+      "item": {
+        "type": "paragraph",
+        "id": "f68e0f3a81343472",
+        "text": "\nStart by copying the file for the first domain:\n\nsudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf\nOpen the new file in your editor with root privileges:\n\nsudo nano /etc/apache2/sites-available/example.com.conf\nThe file will look something like this (I've removed the comments here to make the file more approachable):\n\n<VirtualHost *:80>\n    ServerAdmin webmaster@localhost\n    DocumentRoot /var/www/html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nAs you can see, there's not much here. We will customize the items here for our first domain and add some additional directives. This virtual host section matches any requests that are made on port 80, the default HTTP port.\n\nFirst, we need to change the ServerAdmin directive to an email that the site administrator can receive emails through.\n\nServerAdmin admin@example.com\nAfter this, we need to add two directives. The first, called ServerName, establishes the base domain that should match for this virtual host definition. This will most likely be your domain. The second, called ServerAlias, defines further names that should match as if they were the base name. This is useful for matching hosts you defined, like www:\n\nServerName example.com\nServerAlias www.example.com\nThe only other thing we need to change for a basic virtual host file is the location of the document root for this domain. We already created the directory we need, so we just need to alter the DocumentRoot directive to reflect the directory we created:\n\nDocumentRoot /var/www/example.com/public_html\nIn total, our virtualhost file should look like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@example.com\n    ServerName example.com\n    ServerAlias www.example.com\n    DocumentRoot /var/www/example.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file.\n\nCopy First Virtual Host and Customize for Second Domain\n\nNow that we have our first virtual host file established, we can create our second one by copying that file and adjusting it as needed.\n\nStart by copying it:\n\nsudo cp /etc/apache2/sites-available/example.com.conf /etc/apache2/sites-available/test.com.conf\nOpen the new file with root privileges in your editor:\n\nsudo nano /etc/apache2/sites-available/test.com.conf\nYou now need to modify all of the pieces of information to reference your second domain. When you are finished, it may look something like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@test.com\n    ServerName test.com\n    ServerAlias www.test.com\n    DocumentRoot /var/www/test.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file when you are finished.\n\nStep Five — Enable the New Virtual Host Files\nNow that we have created our virtual host files, we must enable them. Apache includes some tools that allow us to do this.\n\nWe can use the a2ensite tool to enable each of our sites like this:\n\nsudo a2ensite example.com.conf\nsudo a2ensite test.com.conf\nWhen you are finished, you need to restart Apache to make these changes take effect:\n\nsudo service apache2 restart\nYou will most likely receive a message saying something similar to:\n\n * Restarting web server apache2\n AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.0.1. Set the 'ServerName' directive globally to suppress this message\nThis is a harmless message that does not affect our site.\n\nStep Six — Set Up Local Hosts File (Optional)\nIf you haven't been using actual domain names that you own to test this procedure and have been using some example domains instead, you can at least test the functionality of this process by temporarily modifying the hosts file on your local computer.\n\nThis will intercept any requests for the domains that you configured and point them to your VPS server, just as the DNS system would do if you were using registered domains. This will only work from your computer though, and is simply useful for testing purposes.\n\nMake sure you are operating on your local computer for these steps and not your VPS server. You will need to know the computer's administrative password or otherwise be a member of the administrative group.\n\nIf you are on a Mac or Linux computer, edit your local file with administrative privileges by typing:\n\nsudo nano /etc/hosts\nIf you are on a Windows machine, you can find instructions on altering your hosts file here.\n\nThe details that you need to add are the public IP address of your VPS server followed by the domain you want to use to reach that VPS.\n\nFor the domains that I used in this guide, assuming that my VPS IP address is 111.111.111.111, I could add the following lines to the bottom of my hosts file:\n\n127.0.0.1   localhost\n127.0.1.1   guest-desktop\n111.111.111.111 example.com\n111.111.111.111 test.com\nThis will direct any requests for example.com and test.com on our computer and send them to our server at 111.111.111.111. This is what we want if we are not actually the owners of these domains in order to test our virtual hosts.\n\nSave and close the file.\n\nStep Seven — Test your Results\nNow that you have your virtual hosts configured, you can test your setup easily by going to the domains that you configured in your web browser:\n\nhttp://example.com\nYou should see a page that looks like this:\n\nApache virt host example\n\nLikewise, if you can visit your second page:\n\nhttp://test.com\nYou will see the file you created for your second site:"
+      },
+      "after": "29018f44f4daf9c4",
+      "date": 1491989788667
+    },
+    {
+      "type": "edit",
+      "id": "f68e0f3a81343472",
+      "item": {
+        "type": "paragraph",
+        "id": "f68e0f3a81343472",
+        "text": "Start by copying the file for the first domain:\n\nsudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf\nOpen the new file in your editor with root privileges:\n\nsudo nano /etc/apache2/sites-available/example.com.conf\nThe file will look something like this (I've removed the comments here to make the file more approachable):\n\n<VirtualHost *:80>\n    ServerAdmin webmaster@localhost\n    DocumentRoot /var/www/html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nAs you can see, there's not much here. We will customize the items here for our first domain and add some additional directives. This virtual host section matches any requests that are made on port 80, the default HTTP port.\n\nFirst, we need to change the ServerAdmin directive to an email that the site administrator can receive emails through.\n\nServerAdmin admin@example.com\nAfter this, we need to add two directives. The first, called ServerName, establishes the base domain that should match for this virtual host definition. This will most likely be your domain. The second, called ServerAlias, defines further names that should match as if they were the base name. This is useful for matching hosts you defined, like www:\n\nServerName example.com\nServerAlias www.example.com\nThe only other thing we need to change for a basic virtual host file is the location of the document root for this domain. We already created the directory we need, so we just need to alter the DocumentRoot directive to reflect the directory we created:\n\nDocumentRoot /var/www/example.com/public_html\nIn total, our virtualhost file should look like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@example.com\n    ServerName example.com\n    ServerAlias www.example.com\n    DocumentRoot /var/www/example.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file.\n\nCopy First Virtual Host and Customize for Second Domain\n\nNow that we have our first virtual host file established, we can create our second one by copying that file and adjusting it as needed.\n\nStart by copying it:\n\nsudo cp /etc/apache2/sites-available/example.com.conf /etc/apache2/sites-available/test.com.conf\nOpen the new file with root privileges in your editor:\n\nsudo nano /etc/apache2/sites-available/test.com.conf\nYou now need to modify all of the pieces of information to reference your second domain. When you are finished, it may look something like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@test.com\n    ServerName test.com\n    ServerAlias www.test.com\n    DocumentRoot /var/www/test.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file when you are finished.\n\nStep Five — Enable the New Virtual Host Files\nNow that we have created our virtual host files, we must enable them. Apache includes some tools that allow us to do this.\n\nWe can use the a2ensite tool to enable each of our sites like this:\n\nsudo a2ensite example.com.conf\nsudo a2ensite test.com.conf\nWhen you are finished, you need to restart Apache to make these changes take effect:\n\nsudo service apache2 restart\nYou will most likely receive a message saying something similar to:\n\n * Restarting web server apache2\n AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.0.1. Set the 'ServerName' directive globally to suppress this message\nThis is a harmless message that does not affect our site.\n\nStep Six — Set Up Local Hosts File (Optional)\nIf you haven't been using actual domain names that you own to test this procedure and have been using some example domains instead, you can at least test the functionality of this process by temporarily modifying the hosts file on your local computer.\n\nThis will intercept any requests for the domains that you configured and point them to your VPS server, just as the DNS system would do if you were using registered domains. This will only work from your computer though, and is simply useful for testing purposes.\n\nMake sure you are operating on your local computer for these steps and not your VPS server. You will need to know the computer's administrative password or otherwise be a member of the administrative group.\n\nIf you are on a Mac or Linux computer, edit your local file with administrative privileges by typing:\n\nsudo nano /etc/hosts\nIf you are on a Windows machine, you can find instructions on altering your hosts file here.\n\nThe details that you need to add are the public IP address of your VPS server followed by the domain you want to use to reach that VPS.\n\nFor the domains that I used in this guide, assuming that my VPS IP address is 111.111.111.111, I could add the following lines to the bottom of my hosts file:\n\n127.0.0.1   localhost\n127.0.1.1   guest-desktop\n111.111.111.111 example.com\n111.111.111.111 test.com\nThis will direct any requests for example.com and test.com on our computer and send them to our server at 111.111.111.111. This is what we want if we are not actually the owners of these domains in order to test our virtual hosts.\n\nSave and close the file.\n\n"
+      },
+      "date": 1491989804228
+    },
+    {
+      "type": "add",
+      "id": "99325768c3f6d3b7",
+      "item": {
+        "type": "paragraph",
+        "id": "99325768c3f6d3b7",
+        "text": "Step Seven — Test your Results\nNow that you have your virtual hosts configured, you can test your setup easily by going to the domains that you configured in your web browser:\n\nhttp://example.com\nYou should see a page that looks like this:\n\nApache virt host example\n\nLikewise, if you can visit your second page:\n\nhttp://test.com\nYou will see the file you created for your second site:"
+      },
+      "after": "f68e0f3a81343472",
+      "date": 1491989813025
+    },
+    {
+      "type": "edit",
+      "id": "f68e0f3a81343472",
+      "item": {
+        "type": "paragraph",
+        "id": "f68e0f3a81343472",
+        "text": "Start by copying the file for the first domain:\n\nsudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf\nOpen the new file in your editor with root privileges:\n\nsudo nano /etc/apache2/sites-available/example.com.conf\nThe file will look something like this (I've removed the comments here to make the file more approachable):\n\n<VirtualHost *:80>\n    ServerAdmin webmaster@localhost\n    DocumentRoot /var/www/html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nAs you can see, there's not much here. We will customize the items here for our first domain and add some additional directives. This virtual host section matches any requests that are made on port 80, the default HTTP port.\n\nFirst, we need to change the ServerAdmin directive to an email that the site administrator can receive emails through.\n\nServerAdmin admin@example.com\nAfter this, we need to add two directives. The first, called ServerName, establishes the base domain that should match for this virtual host definition. This will most likely be your domain. The second, called ServerAlias, defines further names that should match as if they were the base name. This is useful for matching hosts you defined, like www:\n\nServerName example.com\nServerAlias www.example.com\nThe only other thing we need to change for a basic virtual host file is the location of the document root for this domain. We already created the directory we need, so we just need to alter the DocumentRoot directive to reflect the directory we created:\n\nDocumentRoot /var/www/example.com/public_html\nIn total, our virtualhost file should look like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@example.com\n    ServerName example.com\n    ServerAlias www.example.com\n    DocumentRoot /var/www/example.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file.\n\n"
+      },
+      "date": 1491989827818
+    },
+    {
+      "type": "add",
+      "id": "4026c60b747a7aea",
+      "item": {
+        "type": "paragraph",
+        "id": "4026c60b747a7aea",
+        "text": "# Copy First Virtual Host and Customize for Second Domain"
+      },
+      "after": "f68e0f3a81343472",
+      "date": 1491989833432
+    },
+    {
+      "type": "add",
+      "id": "8d25e4942528c013",
+      "item": {
+        "type": "paragraph",
+        "id": "8d25e4942528c013",
+        "text": "Now that we have our first virtual host file established, we can create our second one by copying that file and adjusting it as needed.\n\nStart by copying it:\n\nsudo cp /etc/apache2/sites-available/example.com.conf /etc/apache2/sites-available/test.com.conf\nOpen the new file with root privileges in your editor:\n\nsudo nano /etc/apache2/sites-available/test.com.conf\nYou now need to modify all of the pieces of information to reference your second domain. When you are finished, it may look something like this:\n\n<VirtualHost *:80>\n    ServerAdmin admin@test.com\n    ServerName test.com\n    ServerAlias www.test.com\n    DocumentRoot /var/www/test.com/public_html\n    ErrorLog ${APACHE_LOG_DIR}/error.log\n    CustomLog ${APACHE_LOG_DIR}/access.log combined\n</VirtualHost>\nSave and close the file when you are finished.\n"
+      },
+      "after": "4026c60b747a7aea",
+      "date": 1491989844522
+    },
+    {
+      "type": "add",
+      "id": "843d8d1451111eda",
+      "item": {
+        "type": "paragraph",
+        "id": "843d8d1451111eda",
+        "text": "# Enable the New Virtual Host Files"
+      },
+      "after": "8d25e4942528c013",
+      "date": 1491989847800
+    },
+    {
+      "type": "add",
+      "id": "f35128b4c5739f5c",
+      "item": {
+        "type": "paragraph",
+        "id": "f35128b4c5739f5c",
+        "text": "Now that we have created our virtual host files, we must enable them. Apache includes some tools that allow us to do this.\n\nWe can use the a2ensite tool to enable each of our sites like this:\n\nsudo a2ensite example.com.conf\nsudo a2ensite test.com.conf\nWhen you are finished, you need to restart Apache to make these changes take effect:\n\nsudo service apache2 restart\nYou will most likely receive a message saying something similar to:\n\n * Restarting web server apache2\n AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.0.1. Set the 'ServerName' directive globally to suppress this message\nThis is a harmless message that does not affect our site.\n\n"
+      },
+      "after": "843d8d1451111eda",
+      "date": 1491989858314
+    },
+    {
+      "type": "add",
+      "id": "0d68c2fb48b5b0ac",
+      "item": {
+        "type": "paragraph",
+        "id": "0d68c2fb48b5b0ac",
+        "text": "# Set Up Local Hosts File (Optional)"
+      },
+      "after": "f35128b4c5739f5c",
+      "date": 1491989862785
+    },
+    {
+      "type": "add",
+      "id": "a15dd065bdf30c09",
+      "item": {
+        "type": "paragraph",
+        "id": "a15dd065bdf30c09",
+        "text": "If you haven't been using actual domain names that you own to test this procedure and have been using some example domains instead, you can at least test the functionality of this process by temporarily modifying the hosts file on your local computer.\n\nThis will intercept any requests for the domains that you configured and point them to your VPS server, just as the DNS system would do if you were using registered domains. This will only work from your computer though, and is simply useful for testing purposes.\n\nMake sure you are operating on your local computer for these steps and not your VPS server. You will need to know the computer's administrative password or otherwise be a member of the administrative group.\n\nIf you are on a Mac or Linux computer, edit your local file with administrative privileges by typing:\n\nsudo nano /etc/hosts\nIf you are on a Windows machine, you can find instructions on altering your hosts file here.\n\nThe details that you need to add are the public IP address of your VPS server followed by the domain you want to use to reach that VPS.\n\nFor the domains that I used in this guide, assuming that my VPS IP address is 111.111.111.111, I could add the following lines to the bottom of my hosts file:\n\n127.0.0.1   localhost\n127.0.1.1   guest-desktop\n111.111.111.111 example.com\n111.111.111.111 test.com\nThis will direct any requests for example.com and test.com on our computer and send them to our server at 111.111.111.111. This is what we want if we are not actually the owners of these domains in order to test our virtual hosts.\n\nSave and close the file."
+      },
+      "after": "0d68c2fb48b5b0ac",
+      "date": 1491989863491
+    },
+    {
+      "type": "edit",
+      "id": "0d68c2fb48b5b0ac",
+      "item": {
+        "type": "markdown",
+        "id": "0d68c2fb48b5b0ac",
+        "text": "# Set Up Local Hosts File (Optional)"
+      },
+      "date": 1491989864935
+    },
+    {
+      "type": "edit",
+      "id": "843d8d1451111eda",
+      "item": {
+        "type": "markdown",
+        "id": "843d8d1451111eda",
+        "text": "# Enable the New Virtual Host Files"
+      },
+      "date": 1491989866415
+    },
+    {
+      "type": "edit",
+      "id": "4026c60b747a7aea",
+      "item": {
+        "type": "markdown",
+        "id": "4026c60b747a7aea",
+        "text": "# Copy First Virtual Host and Customize for Second Domain"
+      },
+      "date": 1491989868658
+    }
+  ]
+}

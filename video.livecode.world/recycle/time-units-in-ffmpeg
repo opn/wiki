@@ -1,0 +1,523 @@
+{
+  "title": "Time units in ffmpeg",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "4b64a58d13fcfcfe",
+      "text": "#  Time unit syntax\n\n[[Time units in ffmpeg]] are tricky. It is important to use microseconds and not frames, in the fourth item of HH:MM:SS:FF where \"FF\" refers to frames of video. Ffmpeg uses microseconds for the fourth parameter, and to convert between frames and microseconds yo need to know the framerate of the video."
+    },
+    {
+      "type": "markdown",
+      "id": "aa3cae943a20588e",
+      "text": "When working with ffmpeg, you can use two different time unit formats: \n\n- sexagesimal HH:MM:SS.xxx format\n- seconds (s.msec). "
+    },
+    {
+      "type": "code",
+      "id": "7b21084e9081abc2",
+      "text": "01:23:45.678 (HOURS:MM:SS.MICROSECONDS)\n\n1 hour\n23 minutes\n45 seconds\n678 microseconds (hundredths of a second)"
+    },
+    {
+      "type": "paragraph",
+      "id": "6cbdc716058c9040",
+      "text": "So if a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. "
+    },
+    {
+      "type": "paragraph",
+      "id": "b7fd796b5ba0c58b",
+      "text": "For instance, 02:30.5 would be 2 minutes, 30 seconds, and a half a second, which would be the same as using 150.5 in seconds."
+    },
+    {
+      "type": "paragraph",
+      "id": "e24dbb9a7c642522",
+      "text": "This means that you must not use the HMSF format that is used for instances in [[EDL]]s."
+    },
+    {
+      "type": "paragraph",
+      "id": "6cd571a8d5566b37",
+      "text": "Therefore a time code from an [[EDL]] like this:"
+    },
+    {
+      "type": "code",
+      "id": "cd86ee0185a92941",
+      "text": "01:39:15:30"
+    },
+    {
+      "type": "paragraph",
+      "id": "278dfb8b818dbe98",
+      "text": "Needs to be translated to:"
+    },
+    {
+      "type": "code",
+      "id": "204529b13804921f",
+      "text": "01:39:15.5"
+    },
+    {
+      "type": "markdown",
+      "id": "0d04a38ef4e78ab7",
+      "text": "# Conversion from SMPTE"
+    },
+    {
+      "type": "paragraph",
+      "id": "8631c42acaae4510",
+      "text": "While non-drop timecode is displayed with colons separating the digit pairs—\"HH:MM:SS:FF\"—drop frame is usually represented with a semi-colon (;) or period (.) as the divider between all the digit pairs—\"HH;MM;SS;FF\", \"HH.MM.SS.FF\"—or just between the seconds and frames—\"HH:MM:SS;FF\" or \"HH:MM:SS.FF\"."
+    },
+    {
+      "type": "paragraph",
+      "id": "8b8a01161037f225",
+      "text": "The period is usually used on VTRs and other devices that don't have the ability to display a semi-colon - [http://edlmax.com/SMPTETimeCodeConversion.htm edlmax.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2d908528a9901b35",
+      "text": "Drop frame timecode is typically abbreviated as DF and non-drop as NDF."
+    },
+    {
+      "type": "markdown",
+      "id": "7b48e3d0-776e-45b0-8a7b-8d1bdae88e62",
+      "text": "# Video Timecode"
+    },
+    {
+      "type": "paragraph",
+      "id": "0078a1e5-9b25-4fea-b1f1-de77b96c1247",
+      "text": "Below are a collection of links imported from [[OneTab]]. You can view these links here - [https://www.one-tab.com/page/LCdpOoEGR4iGi-_fXYoCMA one-tab.com]:"
+    },
+    {
+      "type": "html",
+      "id": "9e04f743-2280-4045-8065-7675dd35b87e",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://edlmax.com/SMPTETimeCodeConversion.htm'>EdlMax - Convessssiiiooonnn of Audio Samples</a>"
+    },
+    {
+      "type": "html",
+      "id": "a2db9f29-bb8e-4bc5-a93c-cc53136afdb2",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=www.edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.edlmax.com/MAXGUIDE.HTML#timecode%'>Guide to EDL Management</a>"
+    },
+    {
+      "type": "html",
+      "id": "5c46d297-f406-471e-aa5f-b2ce6512a6f3",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=www.codecogs.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.codecogs.com/library/units/time/timehms.php'>time HMS - Time - Units in C, C++</a>"
+    },
+    {
+      "type": "html",
+      "id": "ea4d3870-049a-4d96-93eb-0ab1ef7f30a0",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/Seeking#Timeunitsyntax'>Seeking &ndash; FFmpeg</a>"
+    },
+    {
+      "type": "html",
+      "id": "9eb21129-3c6a-49f4-a9f3-f971ec5d86cb",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=en.wikipedia.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://en.wikipedia.org/wiki/Burnt-in_timecode'>Burnt-in timecode - Wikipedia</a>"
+    },
+    {
+      "type": "html",
+      "id": "9e64814f-4dde-4258-89cc-0921566ea739",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/FFprobeTips'>FFprobeTips &ndash; FFmpeg</a>"
+    },
+    {
+      "type": "html",
+      "id": "3e16c1e1-7024-471b-9e82-f07a36b35817",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=superuser.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video'>command line - Using ffmpeg to cut up video - Super User</a>"
+    },
+    {
+      "type": "reference",
+      "id": "578973d2e2081290",
+      "site": "video.livecode.world",
+      "slug": "ffmpeg",
+      "title": "FFmpeg",
+      "text": "FFmpeg is a free software project that produces libraries and programs for handling multimedia data - [https://en.wikipedia.org/wiki/FFmpeg wikipedia]"
+    },
+    {
+      "type": "reference",
+      "id": "d9c28b86b39af9ae",
+      "site": "video.livecode.world",
+      "slug": "splitting-video-using-ffmpeg",
+      "title": "Splitting video using ffmpeg",
+      "text": "Ffmpeg is an excellent and flexible tool for chopping up video - [https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video superuser.com]"
+    },
+    {
+      "type": "reference",
+      "id": "be89ae912c2a7e5f",
+      "site": "video.livecode.world",
+      "slug": "edl",
+      "title": "EDL",
+      "text": "An edit decision list or [[EDL]] is used in the post-production process of film editing and video editing. The list contains an ordered list of reel and timecode data representing where each video clip can be obtained in order to conform the final cut - [https://en.wikipedia.org/wiki/Edit_decision_list wikipedia]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Time units in ffmpeg",
+        "story": []
+      },
+      "date": 1509383376443
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "aa3cae943a20588e",
+        "text": "When working with ffmpeg, you can use two different time unit formats: \n\n- sexagesimal HH:MM:SS.xxx format\n- seconds (s.msec). "
+      },
+      "id": "aa3cae943a20588e",
+      "date": 1509383379351
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7b21084e9081abc2",
+        "text": "01:23:45.678 (HOURS:MM:SS.MICROSECONDS)\n\n1 hour\n23 minutes\n45 seconds\n678 microseconds (hundredths of a second)"
+      },
+      "after": "aa3cae943a20588e",
+      "id": "7b21084e9081abc2",
+      "date": 1509383383349
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "6cbdc716058c9040",
+        "text": "So if a fraction is used, such as 02:30.05, this is interpreted as \"5 100ths of a second\", not as frame 5. "
+      },
+      "after": "7b21084e9081abc2",
+      "id": "6cbdc716058c9040",
+      "date": 1509383386501
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b7fd796b5ba0c58b",
+        "text": "For instance, 02:30.5 would be 2 minutes, 30 seconds, and a half a second, which would be the same as using 150.5 in seconds."
+      },
+      "after": "6cbdc716058c9040",
+      "id": "b7fd796b5ba0c58b",
+      "date": 1509383388225
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e24dbb9a7c642522",
+        "text": "This means that you must not use the HMSF format that is used for instances in [[EDL]]s."
+      },
+      "after": "b7fd796b5ba0c58b",
+      "id": "e24dbb9a7c642522",
+      "date": 1509383395944
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "6cd571a8d5566b37",
+        "text": "Therefore a time code from an [[EDL]] like this:"
+      },
+      "after": "e24dbb9a7c642522",
+      "id": "6cd571a8d5566b37",
+      "date": 1509383400008
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "cd86ee0185a92941",
+        "text": "01:39:15:30"
+      },
+      "after": "6cd571a8d5566b37",
+      "id": "cd86ee0185a92941",
+      "date": 1509383402295
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "278dfb8b818dbe98",
+        "text": "Needs to be translated to:"
+      },
+      "after": "cd86ee0185a92941",
+      "id": "278dfb8b818dbe98",
+      "date": 1509383404290
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "204529b13804921f",
+        "text": "01:39:15.5"
+      },
+      "after": "278dfb8b818dbe98",
+      "id": "204529b13804921f",
+      "date": 1509383407138
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0d04a38ef4e78ab7"
+      },
+      "id": "0d04a38ef4e78ab7",
+      "type": "add",
+      "after": "204529b13804921f",
+      "date": 1509384712309
+    },
+    {
+      "type": "edit",
+      "id": "0d04a38ef4e78ab7",
+      "item": {
+        "type": "paragraph",
+        "id": "0d04a38ef4e78ab7",
+        "text": "# Conversion from SMPTE"
+      },
+      "date": 1509384730160
+    },
+    {
+      "type": "add",
+      "id": "8631c42acaae4510",
+      "item": {
+        "type": "paragraph",
+        "id": "8631c42acaae4510",
+        "text": "While non-drop timecode is displayed with colons separating the digit pairs—\"HH:MM:SS:FF\"—drop frame is usually represented with a semi-colon (;) or period (.) as the divider between all the digit pairs—\"HH;MM;SS;FF\", \"HH.MM.SS.FF\"—or just between the seconds and frames—\"HH:MM:SS;FF\" or \"HH:MM:SS.FF\". The period is usually used on VTRs and other devices that don't have the ability to display a semi-colon.\n\nDrop frame timecode is typically abbreviated as DF and non-drop as NDF."
+      },
+      "after": "0d04a38ef4e78ab7",
+      "date": 1509384733214
+    },
+    {
+      "type": "edit",
+      "id": "0d04a38ef4e78ab7",
+      "item": {
+        "type": "markdown",
+        "id": "0d04a38ef4e78ab7",
+        "text": "# Conversion from SMPTE"
+      },
+      "date": 1509384739609
+    },
+    {
+      "type": "edit",
+      "id": "8631c42acaae4510",
+      "item": {
+        "type": "paragraph",
+        "id": "8631c42acaae4510",
+        "text": "While non-drop timecode is displayed with colons separating the digit pairs—\"HH:MM:SS:FF\"—drop frame is usually represented with a semi-colon (;) or period (.) as the divider between all the digit pairs—\"HH;MM;SS;FF\", \"HH.MM.SS.FF\"—or just between the seconds and frames—\"HH:MM:SS;FF\" or \"HH:MM:SS.FF\". "
+      },
+      "date": 1509384757735
+    },
+    {
+      "type": "add",
+      "id": "8b8a01161037f225",
+      "item": {
+        "type": "paragraph",
+        "id": "8b8a01161037f225",
+        "text": "The period is usually used on VTRs and other devices that don't have the ability to display a semi-colon.\n\nDrop frame timecode is typically abbreviated as DF and non-drop as NDF."
+      },
+      "after": "8631c42acaae4510",
+      "date": 1509384771455
+    },
+    {
+      "type": "edit",
+      "id": "8631c42acaae4510",
+      "item": {
+        "type": "paragraph",
+        "id": "8631c42acaae4510",
+        "text": "While non-drop timecode is displayed with colons separating the digit pairs—\"HH:MM:SS:FF\"—drop frame is usually represented with a semi-colon (;) or period (.) as the divider between all the digit pairs—\"HH;MM;SS;FF\", \"HH.MM.SS.FF\"—or just between the seconds and frames—\"HH:MM:SS;FF\" or \"HH:MM:SS.FF\"."
+      },
+      "date": 1509384777366
+    },
+    {
+      "type": "edit",
+      "id": "8b8a01161037f225",
+      "item": {
+        "type": "paragraph",
+        "id": "8b8a01161037f225",
+        "text": "The period is usually used on VTRs and other devices that don't have the ability to display a semi-colon - [http://edlmax.com/SMPTETimeCodeConversion.htm edlmax.com]"
+      },
+      "date": 1509384791937
+    },
+    {
+      "type": "add",
+      "id": "2d908528a9901b35",
+      "item": {
+        "type": "paragraph",
+        "id": "2d908528a9901b35",
+        "text": "Drop frame timecode is typically abbreviated as DF and non-drop as NDF."
+      },
+      "after": "8b8a01161037f225",
+      "date": 1509384794127
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "4b64a58d13fcfcfe",
+        "text": "#  Time unit syntax\n\n[[Time units in ffmpeg]] are tricky. It is important to use microseconds and not frames, in the fourth item of HH:MM:SS:FF where \"FF\" refers to frames of video. Ffmpeg uses microseconds for the fourth parameter, and to convert between frames and microseconds yo need to know the framerate of the video."
+      },
+      "id": "4b64a58d13fcfcfe",
+      "date": 1509396062300
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "7b48e3d0-776e-45b0-8a7b-8d1bdae88e62",
+        "text": "# Video Timecode"
+      },
+      "after": "2d908528a9901b35",
+      "id": "7b48e3d0-776e-45b0-8a7b-8d1bdae88e62",
+      "date": 1509396093799
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "9e04f743-2280-4045-8065-7675dd35b87e",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://edlmax.com/SMPTETimeCodeConversion.htm'>EdlMax - Convessssiiiooonnn of Audio Samples</a>"
+      },
+      "after": "7b48e3d0-776e-45b0-8a7b-8d1bdae88e62",
+      "id": "9e04f743-2280-4045-8065-7675dd35b87e",
+      "date": 1509396096779
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "a2db9f29-bb8e-4bc5-a93c-cc53136afdb2",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=www.edlmax.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.edlmax.com/MAXGUIDE.HTML#timecode%'>Guide to EDL Management</a>"
+      },
+      "after": "9e04f743-2280-4045-8065-7675dd35b87e",
+      "id": "a2db9f29-bb8e-4bc5-a93c-cc53136afdb2",
+      "date": 1509396099540
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0078a1e5-9b25-4fea-b1f1-de77b96c1247",
+        "text": "Below are a collection of links imported from [[OneTab]]. You can view these links here - [https://www.one-tab.com/page/LCdpOoEGR4iGi-_fXYoCMA one-tab.com]:"
+      },
+      "after": "7b48e3d0-776e-45b0-8a7b-8d1bdae88e62",
+      "id": "0078a1e5-9b25-4fea-b1f1-de77b96c1247",
+      "date": 1509396102022
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "5c46d297-f406-471e-aa5f-b2ce6512a6f3",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=www.codecogs.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://www.codecogs.com/library/units/time/timehms.php'>time HMS - Time - Units in C, C++</a>"
+      },
+      "after": "a2db9f29-bb8e-4bc5-a93c-cc53136afdb2",
+      "id": "5c46d297-f406-471e-aa5f-b2ce6512a6f3",
+      "date": 1509396105493
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "ea4d3870-049a-4d96-93eb-0ab1ef7f30a0",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/Seeking#Timeunitsyntax'>Seeking &ndash; FFmpeg</a>"
+      },
+      "after": "5c46d297-f406-471e-aa5f-b2ce6512a6f3",
+      "id": "ea4d3870-049a-4d96-93eb-0ab1ef7f30a0",
+      "date": 1509396108816
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "9eb21129-3c6a-49f4-a9f3-f971ec5d86cb",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=en.wikipedia.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://en.wikipedia.org/wiki/Burnt-in_timecode'>Burnt-in timecode - Wikipedia</a>"
+      },
+      "after": "ea4d3870-049a-4d96-93eb-0ab1ef7f30a0",
+      "id": "9eb21129-3c6a-49f4-a9f3-f971ec5d86cb",
+      "date": 1509396113525
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "9e64814f-4dde-4258-89cc-0921566ea739",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=trac.ffmpeg.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://trac.ffmpeg.org/wiki/FFprobeTips'>FFprobeTips &ndash; FFmpeg</a>"
+      },
+      "after": "9eb21129-3c6a-49f4-a9f3-f971ec5d86cb",
+      "id": "9e64814f-4dde-4258-89cc-0921566ea739",
+      "date": 1509396117053
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "3e16c1e1-7024-471b-9e82-f07a36b35817",
+        "text": "<img src='https://www.google.com/s2/favicons?domain=superuser.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video'>command line - Using ffmpeg to cut up video - Super User</a>"
+      },
+      "after": "9e64814f-4dde-4258-89cc-0921566ea739",
+      "id": "3e16c1e1-7024-471b-9e82-f07a36b35817",
+      "date": 1509396120780
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "578973d2e2081290"
+      },
+      "id": "578973d2e2081290",
+      "type": "add",
+      "after": "3e16c1e1-7024-471b-9e82-f07a36b35817",
+      "date": 1509396183079
+    },
+    {
+      "type": "edit",
+      "id": "578973d2e2081290",
+      "item": {
+        "type": "reference",
+        "id": "578973d2e2081290",
+        "site": "video.livecode.world",
+        "slug": "ffmpeg",
+        "title": "FFmpeg",
+        "text": "FFmpeg is a free software project that produces libraries and programs for handling multimedia data - [https://en.wikipedia.org/wiki/FFmpeg wikipedia]"
+      },
+      "date": 1509396188132
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d9c28b86b39af9ae"
+      },
+      "id": "d9c28b86b39af9ae",
+      "type": "add",
+      "after": "578973d2e2081290",
+      "date": 1509396189571
+    },
+    {
+      "type": "edit",
+      "id": "d9c28b86b39af9ae",
+      "item": {
+        "type": "reference",
+        "id": "d9c28b86b39af9ae",
+        "site": "video.livecode.world",
+        "slug": "splitting-video-using-ffmpeg",
+        "title": "Splitting video using ffmpeg",
+        "text": "Ffmpeg is an excellent and flexible tool for chopping up video - [https://superuser.com/questions/138331/using-ffmpeg-to-cut-up-video superuser.com]"
+      },
+      "date": 1509396194920
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "be89ae912c2a7e5f"
+      },
+      "id": "be89ae912c2a7e5f",
+      "type": "add",
+      "after": "d9c28b86b39af9ae",
+      "date": 1509396204628
+    },
+    {
+      "type": "edit",
+      "id": "be89ae912c2a7e5f",
+      "item": {
+        "type": "reference",
+        "id": "be89ae912c2a7e5f",
+        "site": "video.livecode.world",
+        "slug": "edl",
+        "title": "EDL",
+        "text": "An edit decision list or [[EDL]] is used in the post-production process of film editing and video editing. The list contains an ordered list of reel and timecode data representing where each video clip can be obtained in order to conform the final cut - [https://en.wikipedia.org/wiki/Edit_decision_list wikipedia]"
+      },
+      "date": 1509396209611
+    }
+  ]
+}

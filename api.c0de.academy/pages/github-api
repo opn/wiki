@@ -1,0 +1,583 @@
+{
+  "title": "Github API",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "2ce767fd7c92e723",
+      "text": "All API access is over HTTPS, and all data is sent and received as JSON. The api endpoint is:"
+    },
+    {
+      "type": "code",
+      "id": "fc47130ee7ea113f",
+      "text": "https://api.github.com"
+    },
+    {
+      "type": "paragraph",
+      "id": "d7e534e9cf86a768",
+      "text": "By default, all requests receive the v3 version of the API. We encourage you to explicitly request this version via the Accept header."
+    },
+    {
+      "type": "code",
+      "id": "945e7cdd0c5d4a6f",
+      "text": "Accept: application/vnd.github.v3+json"
+    },
+    {
+      "type": "code",
+      "id": "127925e9509a9cc5",
+      "text": "curl -i https://api.github.com/users/octocat/orgs\n\nHTTP/1.1 200 OK\nServer: nginx\nDate: Fri, 12 Oct 2012 23:33:14 GMT\nContent-Type: application/json; charset=utf-8\nConnection: keep-alive\nStatus: 200 OK\nETag: \"a00049ba79152d03380c34652f2cb612\"\nX-GitHub-Media-Type: github.v3\nX-RateLimit-Limit: 5000\nX-RateLimit-Remaining: 4987\nX-RateLimit-Reset: 1350085394\nContent-Length: 5\nCache-Control: max-age=0, private, must-revalidate\nX-Content-Type-Options: nosniff"
+    },
+    {
+      "type": "paragraph",
+      "id": "424601ece266d846",
+      "text": "Blank fields are included as null instead of being omitted. All timestamps are returned in ISO 8601 format:"
+    },
+    {
+      "type": "code",
+      "id": "133e986f1c2e4b99",
+      "text": "YYYY-MM-DDTHH:MM:SSZ"
+    },
+    {
+      "type": "markdown",
+      "id": "271c2f5bc68df22b",
+      "text": "# Authentication"
+    },
+    {
+      "type": "paragraph",
+      "id": "155cf9e96ec75e53",
+      "text": "The access token allows you to make requests to the API on a behalf of a user."
+    },
+    {
+      "type": "code",
+      "id": "9695555a170a9777",
+      "text": "GET https://api.github.com/user?access_token=..."
+    },
+    {
+      "type": "paragraph",
+      "id": "c6f93d0bfe3cf42e",
+      "text": "You can pass the token in the query params like shown above, but a cleaner approach is to include it in the Authorization header"
+    },
+    {
+      "type": "code",
+      "id": "37094d86d78ebcc6",
+      "text": "Authorization: token OAUTH-TOKEN\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "e80673016a662499",
+      "text": "For example, in curl you can set the Authorization header like this:"
+    },
+    {
+      "type": "paragraph",
+      "id": "59b9f6dae6dd72f6",
+      "text": "\n"
+    },
+    {
+      "type": "code",
+      "id": "5ad636908c2053c5",
+      "text": "curl -H \"Authorization: token OAUTH-TOKEN\" https://api.github.com/user"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Github API",
+        "story": []
+      },
+      "date": 1458166197358
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2ce767fd7c92e723",
+        "text": "All API access is over HTTPS, and accessed from the https://api.github.com. All data is sent and received as JSON."
+      },
+      "id": "2ce767fd7c92e723",
+      "type": "add",
+      "date": 1458166198487
+    },
+    {
+      "type": "edit",
+      "id": "2ce767fd7c92e723",
+      "item": {
+        "type": "paragraph",
+        "id": "2ce767fd7c92e723",
+        "text": "All API access is over HTTPS, and accessed from the https://api.github.com. All data is sent and received as JSON."
+      },
+      "date": 1458166206964
+    },
+    {
+      "type": "add",
+      "id": "85f7927fc1a5de70",
+      "item": {
+        "type": "paragraph",
+        "id": "85f7927fc1a5de70",
+        "text": ""
+      },
+      "after": "2ce767fd7c92e723",
+      "date": 1458166210364
+    },
+    {
+      "type": "add",
+      "id": "bda24a1c09fefea0",
+      "item": {
+        "type": "paragraph",
+        "id": "bda24a1c09fefea0",
+        "text": "\nHTTP/1.1 200 OK\nServer: nginx\nDate: Fri, 12 Oct 2012 23:33:14 GMT\nContent-Type: application/json; charset=utf-8\nConnection: keep-alive\nStatus: 200 OK\nETag: \"a00049ba79152d03380c34652f2cb612\"\nX-GitHub-Media-Type: github.v3\nX-RateLimit-Limit: 5000\nX-RateLimit-Remaining: 4987\nX-RateLimit-Reset: 1350085394\nContent-Length: 5\nCache-Control: max-age=0, private, must-revalidate\nX-Content-Type-Options: nosniff\nBlank fields are included as null instead of being omitted."
+      },
+      "after": "85f7927fc1a5de70",
+      "date": 1458166221438
+    },
+    {
+      "type": "add",
+      "id": "424601ece266d846",
+      "item": {
+        "type": "paragraph",
+        "id": "424601ece266d846",
+        "text": "All timestamps are returned in ISO 8601 format:"
+      },
+      "after": "bda24a1c09fefea0",
+      "date": 1458166224837
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "127925e9509a9cc5",
+        "text": "curl -i https://api.github.com/users/octocat/orgs"
+      },
+      "id": "127925e9509a9cc5",
+      "type": "add",
+      "after": "8b4cf0bf656831b5",
+      "date": 1458166226443
+    },
+    {
+      "type": "move",
+      "order": [
+        "2ce767fd7c92e723",
+        "85f7927fc1a5de70",
+        "127925e9509a9cc5",
+        "bda24a1c09fefea0",
+        "424601ece266d846",
+        "8b4cf0bf656831b5"
+      ],
+      "id": "127925e9509a9cc5",
+      "date": 1458166229036,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "add",
+      "id": "8b4cf0bf656831b5",
+      "item": {
+        "type": "paragraph",
+        "id": "8b4cf0bf656831b5",
+        "text": "\nYYYY-MM-DDTHH:MM:SSZ"
+      },
+      "after": "424601ece266d846",
+      "date": 1458166231771
+    },
+    {
+      "type": "remove",
+      "id": "85f7927fc1a5de70",
+      "date": 1458166236614
+    },
+    {
+      "type": "edit",
+      "id": "127925e9509a9cc5",
+      "item": {
+        "type": "code",
+        "id": "127925e9509a9cc5",
+        "text": "curl -i https://api.github.com/users/octocat/orgs"
+      },
+      "date": 1458166238063
+    },
+    {
+      "type": "fork",
+      "date": 1458166240670
+    },
+    {
+      "type": "remove",
+      "id": "bda24a1c09fefea0",
+      "date": 1458166251504
+    },
+    {
+      "type": "edit",
+      "id": "127925e9509a9cc5",
+      "item": {
+        "type": "code",
+        "id": "127925e9509a9cc5",
+        "text": "curl -i https://api.github.com/users/octocat/orgs\n\nHTTP/1.1 200 OK\nServer: nginx\nDate: Fri, 12 Oct 2012 23:33:14 GMT\nContent-Type: application/json; charset=utf-8\nConnection: keep-alive\nStatus: 200 OK\nETag: \"a00049ba79152d03380c34652f2cb612\"\nX-GitHub-Media-Type: github.v3\nX-RateLimit-Limit: 5000\nX-RateLimit-Remaining: 4987\nX-RateLimit-Reset: 1350085394\nContent-Length: 5\nCache-Control: max-age=0, private, must-revalidate\nX-Content-Type-Options: nosniff"
+      },
+      "date": 1458166266278
+    },
+    {
+      "type": "edit",
+      "id": "424601ece266d846",
+      "item": {
+        "type": "paragraph",
+        "id": "424601ece266d846",
+        "text": "Blank fields are included as null instead of being omitted. All timestamps are returned in ISO 8601 format:"
+      },
+      "date": 1458166273919
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "133e986f1c2e4b99"
+      },
+      "id": "133e986f1c2e4b99",
+      "type": "add",
+      "after": "8b4cf0bf656831b5",
+      "date": 1458166275851
+    },
+    {
+      "type": "edit",
+      "id": "133e986f1c2e4b99",
+      "item": {
+        "type": "code",
+        "id": "133e986f1c2e4b99",
+        "text": "adsf"
+      },
+      "date": 1458166279216
+    },
+    {
+      "type": "remove",
+      "id": "8b4cf0bf656831b5",
+      "date": 1458166283303
+    },
+    {
+      "type": "edit",
+      "id": "133e986f1c2e4b99",
+      "item": {
+        "type": "code",
+        "id": "133e986f1c2e4b99",
+        "text": "YYYY-MM-DDTHH:MM:SSZ"
+      },
+      "date": 1458166286248
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d7e534e9cf86a768"
+      },
+      "id": "d7e534e9cf86a768",
+      "type": "add",
+      "after": "133e986f1c2e4b99",
+      "date": 1458166313610
+    },
+    {
+      "type": "edit",
+      "id": "d7e534e9cf86a768",
+      "item": {
+        "type": "paragraph",
+        "id": "d7e534e9cf86a768",
+        "text": "By default, all requests receive the v3 version of the API. We encourage you to explicitly request this version via the Accept header."
+      },
+      "date": 1458166319353
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "945e7cdd0c5d4a6f"
+      },
+      "id": "945e7cdd0c5d4a6f",
+      "type": "add",
+      "after": "d7e534e9cf86a768",
+      "date": 1458166320741
+    },
+    {
+      "type": "edit",
+      "id": "945e7cdd0c5d4a6f",
+      "item": {
+        "type": "code",
+        "id": "945e7cdd0c5d4a6f",
+        "text": "Accept: application/vnd.github.v3+json"
+      },
+      "date": 1458166323914
+    },
+    {
+      "type": "move",
+      "order": [
+        "2ce767fd7c92e723",
+        "d7e534e9cf86a768",
+        "127925e9509a9cc5",
+        "424601ece266d846",
+        "133e986f1c2e4b99",
+        "945e7cdd0c5d4a6f"
+      ],
+      "id": "d7e534e9cf86a768",
+      "date": 1458166335165
+    },
+    {
+      "type": "move",
+      "order": [
+        "2ce767fd7c92e723",
+        "d7e534e9cf86a768",
+        "945e7cdd0c5d4a6f",
+        "127925e9509a9cc5",
+        "424601ece266d846",
+        "133e986f1c2e4b99"
+      ],
+      "id": "945e7cdd0c5d4a6f",
+      "date": 1458166338282
+    },
+    {
+      "type": "edit",
+      "id": "2ce767fd7c92e723",
+      "item": {
+        "type": "paragraph",
+        "id": "2ce767fd7c92e723",
+        "text": "All API access is over HTTPS, and all data is sent and received as JSON. The api endpoint is:"
+      },
+      "date": 1458166371898
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fc47130ee7ea113f"
+      },
+      "id": "fc47130ee7ea113f",
+      "type": "add",
+      "after": "133e986f1c2e4b99",
+      "date": 1458166378049
+    },
+    {
+      "type": "edit",
+      "id": "fc47130ee7ea113f",
+      "item": {
+        "type": "code",
+        "id": "fc47130ee7ea113f",
+        "text": "https://api.github.com"
+      },
+      "date": 1458166383355
+    },
+    {
+      "type": "move",
+      "order": [
+        "2ce767fd7c92e723",
+        "fc47130ee7ea113f",
+        "d7e534e9cf86a768",
+        "945e7cdd0c5d4a6f",
+        "127925e9509a9cc5",
+        "424601ece266d846",
+        "133e986f1c2e4b99"
+      ],
+      "id": "fc47130ee7ea113f",
+      "date": 1458166386304
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "271c2f5bc68df22b"
+      },
+      "id": "271c2f5bc68df22b",
+      "type": "add",
+      "after": "133e986f1c2e4b99",
+      "date": 1458166672203
+    },
+    {
+      "type": "edit",
+      "id": "271c2f5bc68df22b",
+      "item": {
+        "type": "markdown",
+        "id": "271c2f5bc68df22b",
+        "text": "# Authentication"
+      },
+      "date": 1458166680303
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "155cf9e96ec75e53"
+      },
+      "id": "155cf9e96ec75e53",
+      "type": "add",
+      "after": "271c2f5bc68df22b",
+      "date": 1458166682147
+    },
+    {
+      "type": "edit",
+      "id": "155cf9e96ec75e53",
+      "item": {
+        "type": "paragraph",
+        "id": "155cf9e96ec75e53",
+        "text": "The access token allows you to make requests to the API on a behalf of a user."
+      },
+      "date": 1458166694351
+    },
+    {
+      "type": "add",
+      "id": "669dc8c22bf36c11",
+      "item": {
+        "type": "paragraph",
+        "id": "669dc8c22bf36c11",
+        "text": "GET https://api.github.com/user?access_token=..."
+      },
+      "after": "155cf9e96ec75e53",
+      "date": 1458166702377
+    },
+    {
+      "type": "add",
+      "id": "c6f93d0bfe3cf42e",
+      "item": {
+        "type": "paragraph",
+        "id": "c6f93d0bfe3cf42e",
+        "text": "You can pass the token in the query params like shown above, but a cleaner approach is to include it in the Authorization header"
+      },
+      "after": "669dc8c22bf36c11",
+      "date": 1458166704567
+    },
+    {
+      "type": "add",
+      "id": "1db1339502862f3b",
+      "item": {
+        "type": "paragraph",
+        "id": "1db1339502862f3b",
+        "text": "Authorization: token OAUTH-TOKEN\n"
+      },
+      "after": "c6f93d0bfe3cf42e",
+      "date": 1458166721226
+    },
+    {
+      "type": "add",
+      "id": "e80673016a662499",
+      "item": {
+        "type": "paragraph",
+        "id": "e80673016a662499",
+        "text": "For example, in curl you can set the Authorization header like this:"
+      },
+      "after": "1db1339502862f3b",
+      "date": 1458166722663
+    },
+    {
+      "type": "add",
+      "id": "59b9f6dae6dd72f6",
+      "item": {
+        "type": "paragraph",
+        "id": "59b9f6dae6dd72f6",
+        "text": "\n"
+      },
+      "after": "e80673016a662499",
+      "date": 1458166724842
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5ad636908c2053c5"
+      },
+      "id": "5ad636908c2053c5",
+      "type": "add",
+      "after": "59b9f6dae6dd72f6",
+      "date": 1458166729274
+    },
+    {
+      "type": "edit",
+      "id": "5ad636908c2053c5",
+      "item": {
+        "type": "code",
+        "id": "5ad636908c2053c5",
+        "text": "curl -H \"Authorization: token OAUTH-TOKEN\" https://api.github.com/user"
+      },
+      "date": 1458166732077
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "37094d86d78ebcc6"
+      },
+      "id": "37094d86d78ebcc6",
+      "type": "add",
+      "after": "5ad636908c2053c5",
+      "date": 1458166733518
+    },
+    {
+      "type": "move",
+      "order": [
+        "2ce767fd7c92e723",
+        "fc47130ee7ea113f",
+        "d7e534e9cf86a768",
+        "945e7cdd0c5d4a6f",
+        "127925e9509a9cc5",
+        "424601ece266d846",
+        "133e986f1c2e4b99",
+        "271c2f5bc68df22b",
+        "155cf9e96ec75e53",
+        "669dc8c22bf36c11",
+        "c6f93d0bfe3cf42e",
+        "37094d86d78ebcc6",
+        "1db1339502862f3b",
+        "e80673016a662499",
+        "59b9f6dae6dd72f6",
+        "5ad636908c2053c5"
+      ],
+      "id": "37094d86d78ebcc6",
+      "date": 1458166735845
+    },
+    {
+      "type": "remove",
+      "id": "1db1339502862f3b",
+      "date": 1458166740152
+    },
+    {
+      "type": "edit",
+      "id": "37094d86d78ebcc6",
+      "item": {
+        "type": "code",
+        "id": "37094d86d78ebcc6",
+        "text": "Authorization: token OAUTH-TOKEN\n"
+      },
+      "date": 1458166744490
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9695555a170a9777"
+      },
+      "id": "9695555a170a9777",
+      "type": "add",
+      "after": "5ad636908c2053c5",
+      "date": 1458166745854
+    },
+    {
+      "type": "move",
+      "order": [
+        "2ce767fd7c92e723",
+        "fc47130ee7ea113f",
+        "d7e534e9cf86a768",
+        "945e7cdd0c5d4a6f",
+        "127925e9509a9cc5",
+        "424601ece266d846",
+        "133e986f1c2e4b99",
+        "271c2f5bc68df22b",
+        "155cf9e96ec75e53",
+        "9695555a170a9777",
+        "669dc8c22bf36c11",
+        "c6f93d0bfe3cf42e",
+        "37094d86d78ebcc6",
+        "e80673016a662499",
+        "59b9f6dae6dd72f6",
+        "5ad636908c2053c5"
+      ],
+      "id": "9695555a170a9777",
+      "date": 1458166748254
+    },
+    {
+      "type": "remove",
+      "id": "669dc8c22bf36c11",
+      "date": 1458166752761
+    },
+    {
+      "type": "edit",
+      "id": "9695555a170a9777",
+      "item": {
+        "type": "code",
+        "id": "9695555a170a9777",
+        "text": "GET https://api.github.com/user?access_token=..."
+      },
+      "date": 1458166754938
+    }
+  ]
+}

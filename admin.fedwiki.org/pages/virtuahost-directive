@@ -1,0 +1,429 @@
+{
+  "title": "VirtuaHost Directive",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "034e7d238d1e1895",
+      "text": "<VirtualHost> and </VirtualHost> are used to enclose a group of directives that will apply only to a particular virtual host - [https://httpd.apache.org/docs/current/mod/core.html#virtualhost httpd.apache.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4be1cd9cb0bf4eb8",
+      "text": "If you are trying to debug your virtual host configuration, you may find the -S command line switch useful:"
+    },
+    {
+      "type": "code",
+      "id": "f735041b55c35923",
+      "text": "apachectl -S"
+    },
+    {
+      "type": "paragraph",
+      "id": "899d1c7bd56b5417",
+      "text": "This command will dump out a description of how Apache parsed the configuration file."
+    },
+    {
+      "type": "paragraph",
+      "id": "983fd2a4818a3f96",
+      "text": "Whenever you add a new [[Apache Virtualhost]] file you should let Apache know to watch / index this file using:"
+    },
+    {
+      "type": "code",
+      "id": "1d62139a110a47b1",
+      "text": "a2ensite mypage1"
+    },
+    {
+      "type": "paragraph",
+      "id": "ac25034d58f619df",
+      "text": "where mypage1 is the path to the file you want to index. Finally always remember to:"
+    },
+    {
+      "type": "code",
+      "id": "7b6ab61efb8cee72",
+      "text": "service apache2 reload"
+    },
+    {
+      "type": "markdown",
+      "id": "95b17906a275ee85",
+      "text": "# Description"
+    },
+    {
+      "type": "paragraph",
+      "id": "6b6443364bb55b10",
+      "text": "Any directive that is allowed in a virtual host context may be used. When the server receives a request for a document on a particular virtual host, it uses the configuration directives enclosed in the <VirtualHost> section. "
+    },
+    {
+      "type": "markdown",
+      "id": "506b7a0da95e43db",
+      "text": "Addr can be any of the following, optionally followed by a colon and a port number (or *):\n\n- The IP address of the virtual host;\n- A fully qualified domain name for the IP address of the virtual host (not recommended);\n- The character *, which acts as a wildcard and matches any IP address.\n- The string _default_, which is an alias for *\n"
+    },
+    {
+      "type": "code",
+      "id": "49fe9e2829572feb",
+      "text": "<VirtualHost 10.1.2.3:80>\n  ServerAdmin webmaster@host.example.com\n  DocumentRoot \"/www/docs/host.example.com\"\n  ServerName host.example.com\n  ErrorLog \"logs/host.example.com-error_log\"\n  TransferLog \"logs/host.example.com-access_log\"\n</VirtualHost>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "10d7a5f96034eae7",
+      "text": "Each Virtual Host must correspond to a different IP address, different port number, or a different host name for the server, in the former case the server machine must be configured to accept IP packets for multiple addresses. (If the machine does not have multiple network interfaces, then this can be accomplished with the ifconfig alias command.\n\nA ServerName should be specified inside each <VirtualHost> block. If it is absent, the ServerName from the \"main\" server configuration will be inherited.\n\nWhen a request is received, the server first maps it to the best matching <VirtualHost> based on the local IP address and port combination only. Non-wildcards have a higher precedence. If no match based on IP and port occurs at all, the \"main\" server configuration is used.\n\nIf multiple virtual hosts contain the best matching IP address and port, the server selects from these virtual hosts the best match based on the requested hostname. If no matching name-based virtual host is found, then the first listed virtual host that matched the IP address will be used. As a consequence, the first listed virtual host for a given IP address and port combination is the default virtual host for that IP and port combination.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "6ec4bca4f1bb01ba",
+      "text": "# See also\n\n- [[Apache VirtualHost]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "VirtuaHost Directive",
+        "story": []
+      },
+      "date": 1497959353084
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "034e7d238d1e1895"
+      },
+      "id": "034e7d238d1e1895",
+      "type": "add",
+      "date": 1497959353975
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "49fe9e2829572feb"
+      },
+      "id": "49fe9e2829572feb",
+      "type": "add",
+      "after": "034e7d238d1e1895",
+      "date": 1497959362201
+    },
+    {
+      "type": "edit",
+      "id": "034e7d238d1e1895",
+      "item": {
+        "type": "paragraph",
+        "id": "034e7d238d1e1895",
+        "text": "<VirtualHost> and </VirtualHost> are used to enclose a group of directives that will apply only to a particular virtual host. Any directive that is allowed in a virtual host context may be used. When the server receives a request for a document on a particular virtual host, it uses the configuration directives enclosed in the <VirtualHost> section. Addr can be any of the following, optionally followed by a colon and a port number (or *):\n\nThe IP address of the virtual host;\nA fully qualified domain name for the IP address of the virtual host (not recommended);\nThe character *, which acts as a wildcard and matches any IP address.\nThe string _default_, which is an alias for *\n"
+      },
+      "date": 1497959363824
+    },
+    {
+      "type": "edit",
+      "id": "49fe9e2829572feb",
+      "item": {
+        "type": "code",
+        "id": "49fe9e2829572feb",
+        "text": "<VirtualHost 10.1.2.3:80>\n  ServerAdmin webmaster@host.example.com\n  DocumentRoot \"/www/docs/host.example.com\"\n  ServerName host.example.com\n  ErrorLog \"logs/host.example.com-error_log\"\n  TransferLog \"logs/host.example.com-access_log\"\n</VirtualHost>\n"
+      },
+      "date": 1497959365823
+    },
+    {
+      "type": "edit",
+      "id": "034e7d238d1e1895",
+      "item": {
+        "type": "paragraph",
+        "id": "034e7d238d1e1895",
+        "text": "<VirtualHost> and </VirtualHost> are used to enclose a group of directives that will apply only to a particular virtual host. "
+      },
+      "date": 1497959376639
+    },
+    {
+      "type": "add",
+      "id": "95b17906a275ee85",
+      "item": {
+        "type": "paragraph",
+        "id": "95b17906a275ee85",
+        "text": "Any directive that is allowed in a virtual host context may be used. When the server receives a request for a document on a particular virtual host, it uses the configuration directives enclosed in the <VirtualHost> section. Addr can be any of the following, optionally followed by a colon and a port number (or *):"
+      },
+      "after": "034e7d238d1e1895",
+      "date": 1497959383893
+    },
+    {
+      "type": "add",
+      "id": "506b7a0da95e43db",
+      "item": {
+        "type": "paragraph",
+        "id": "506b7a0da95e43db",
+        "text": "- The IP address of the virtual host;\n- A fully qualified domain name for the IP address of the virtual host (not recommended);\n- The character *, which acts as a wildcard and matches any IP address.\n- The string _default_, which is an alias for *\n"
+      },
+      "after": "95b17906a275ee85",
+      "date": 1497959399344
+    },
+    {
+      "type": "edit",
+      "id": "506b7a0da95e43db",
+      "item": {
+        "type": "markdown",
+        "id": "506b7a0da95e43db",
+        "text": "- The IP address of the virtual host;\n- A fully qualified domain name for the IP address of the virtual host (not recommended);\n- The character *, which acts as a wildcard and matches any IP address.\n- The string _default_, which is an alias for *\n"
+      },
+      "date": 1497959400295
+    },
+    {
+      "type": "edit",
+      "id": "95b17906a275ee85",
+      "item": {
+        "type": "paragraph",
+        "id": "95b17906a275ee85",
+        "text": "Any directive that is allowed in a virtual host context may be used. When the server receives a request for a document on a particular virtual host, it uses the configuration directives enclosed in the <VirtualHost> section. "
+      },
+      "date": 1497959408998
+    },
+    {
+      "type": "edit",
+      "id": "506b7a0da95e43db",
+      "item": {
+        "type": "markdown",
+        "id": "506b7a0da95e43db",
+        "text": "Addr can be any of the following, optionally followed by a colon and a port number (or *):\n\n- The IP address of the virtual host;\n- A fully qualified domain name for the IP address of the virtual host (not recommended);\n- The character *, which acts as a wildcard and matches any IP address.\n- The string _default_, which is an alias for *\n"
+      },
+      "date": 1497959416801
+    },
+    {
+      "type": "edit",
+      "id": "034e7d238d1e1895",
+      "item": {
+        "type": "paragraph",
+        "id": "034e7d238d1e1895",
+        "text": "<VirtualHost> and </VirtualHost> are used to enclose a group of directives that will apply only to a particular virtual host - [https://httpd.apache.org/docs/current/mod/core.html#virtualhost httpd.apache.org]"
+      },
+      "date": 1497959438594
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "10d7a5f96034eae7"
+      },
+      "id": "10d7a5f96034eae7",
+      "type": "add",
+      "after": "49fe9e2829572feb",
+      "date": 1497959521765
+    },
+    {
+      "type": "edit",
+      "id": "10d7a5f96034eae7",
+      "item": {
+        "type": "paragraph",
+        "id": "10d7a5f96034eae7",
+        "text": "Each Virtual Host must correspond to a different IP address, different port number, or a different host name for the server, in the former case the server machine must be configured to accept IP packets for multiple addresses. (If the machine does not have multiple network interfaces, then this can be accomplished with the ifconfig alias command -- if your OS supports it).\n\nNote\n\nThe use of <VirtualHost> does not affect what addresses Apache httpd listens on. You may need to ensure that Apache httpd is listening on the correct addresses using Listen.\nA ServerName should be specified inside each <VirtualHost> block. If it is absent, the ServerName from the \"main\" server configuration will be inherited.\n\nWhen a request is received, the server first maps it to the best matching <VirtualHost> based on the local IP address and port combination only. Non-wildcards have a higher precedence. If no match based on IP and port occurs at all, the \"main\" server configuration is used.\n\nIf multiple virtual hosts contain the best matching IP address and port, the server selects from these virtual hosts the best match based on the requested hostname. If no matching name-based virtual host is found, then the first listed virtual host that matched the IP address will be used. As a consequence, the first listed virtual host for a given IP address and port combination is the default virtual host for that IP and port combination.\n\n"
+      },
+      "date": 1497959524209
+    },
+    {
+      "type": "edit",
+      "id": "10d7a5f96034eae7",
+      "item": {
+        "type": "paragraph",
+        "id": "10d7a5f96034eae7",
+        "text": "Each Virtual Host must correspond to a different IP address, different port number, or a different host name for the server, in the former case the server machine must be configured to accept IP packets for multiple addresses. (If the machine does not have multiple network interfaces, then this can be accomplished with the ifconfig alias command.\n\nA ServerName should be specified inside each <VirtualHost> block. If it is absent, the ServerName from the \"main\" server configuration will be inherited.\n\nWhen a request is received, the server first maps it to the best matching <VirtualHost> based on the local IP address and port combination only. Non-wildcards have a higher precedence. If no match based on IP and port occurs at all, the \"main\" server configuration is used.\n\nIf multiple virtual hosts contain the best matching IP address and port, the server selects from these virtual hosts the best match based on the requested hostname. If no matching name-based virtual host is found, then the first listed virtual host that matched the IP address will be used. As a consequence, the first listed virtual host for a given IP address and port combination is the default virtual host for that IP and port combination.\n\n"
+      },
+      "date": 1497959574957
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "f735041b55c35923"
+      },
+      "after": "4be1cd9cb0bf4eb8",
+      "id": "f735041b55c35923",
+      "date": 1497959647786
+    },
+    {
+      "type": "add",
+      "id": "4be1cd9cb0bf4eb8",
+      "item": {
+        "type": "paragraph",
+        "id": "4be1cd9cb0bf4eb8",
+        "text": "If you are trying to debug your virtual host configuration, you may find the -S command line switch useful:\n"
+      },
+      "after": "034e7d238d1e1895",
+      "date": 1497959649315
+    },
+    {
+      "type": "edit",
+      "id": "f735041b55c35923",
+      "item": {
+        "type": "code",
+        "id": "f735041b55c35923",
+        "text": "apachectl -S"
+      },
+      "date": 1497959655499
+    },
+    {
+      "type": "edit",
+      "id": "95b17906a275ee85",
+      "item": {
+        "type": "paragraph",
+        "id": "95b17906a275ee85",
+        "text": "# Description"
+      },
+      "date": 1497959663690
+    },
+    {
+      "type": "add",
+      "id": "6b6443364bb55b10",
+      "item": {
+        "type": "paragraph",
+        "id": "6b6443364bb55b10",
+        "text": "Any directive that is allowed in a virtual host context may be used. When the server receives a request for a document on a particular virtual host, it uses the configuration directives enclosed in the <VirtualHost> section. "
+      },
+      "after": "95b17906a275ee85",
+      "date": 1497959664235
+    },
+    {
+      "type": "edit",
+      "id": "95b17906a275ee85",
+      "item": {
+        "type": "markdown",
+        "id": "95b17906a275ee85",
+        "text": "# Description"
+      },
+      "date": 1497959665457
+    },
+    {
+      "type": "edit",
+      "id": "4be1cd9cb0bf4eb8",
+      "item": {
+        "type": "paragraph",
+        "id": "4be1cd9cb0bf4eb8",
+        "text": "If you are trying to debug your virtual host configuration, you may find the -S command line switch useful:"
+      },
+      "date": 1497959689590
+    },
+    {
+      "type": "add",
+      "id": "899d1c7bd56b5417",
+      "item": {
+        "type": "paragraph",
+        "id": "899d1c7bd56b5417",
+        "text": "This command will dump out a description of how Apache parsed the configuration file."
+      },
+      "after": "4be1cd9cb0bf4eb8",
+      "date": 1497959690463
+    },
+    {
+      "type": "move",
+      "order": [
+        "034e7d238d1e1895",
+        "4be1cd9cb0bf4eb8",
+        "f735041b55c35923",
+        "899d1c7bd56b5417",
+        "95b17906a275ee85",
+        "6b6443364bb55b10",
+        "506b7a0da95e43db",
+        "49fe9e2829572feb",
+        "10d7a5f96034eae7"
+      ],
+      "id": "899d1c7bd56b5417",
+      "date": 1497959692119
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6ec4bca4f1bb01ba"
+      },
+      "id": "6ec4bca4f1bb01ba",
+      "type": "add",
+      "after": "10d7a5f96034eae7",
+      "date": 1497983089481
+    },
+    {
+      "type": "edit",
+      "id": "6ec4bca4f1bb01ba",
+      "item": {
+        "type": "markdown",
+        "id": "6ec4bca4f1bb01ba",
+        "text": "# See also\n\n- [[Apache VirtualHost]]"
+      },
+      "date": 1497983111176
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "1d62139a110a47b1",
+        "text": "a2ensite mypage1"
+      },
+      "after": "899d1c7bd56b5417",
+      "id": "1d62139a110a47b1",
+      "date": 1497983123361
+    },
+    {
+      "type": "add",
+      "id": "983fd2a4818a3f96",
+      "item": {
+        "type": "paragraph",
+        "id": "983fd2a4818a3f96",
+        "text": "Whenever you add a new [[Apache Virtualhost]] file you should let Apache know to watch / index this file using:"
+      },
+      "after": "899d1c7bd56b5417",
+      "date": 1497983171133
+    },
+    {
+      "type": "add",
+      "id": "ac25034d58f619df",
+      "item": {
+        "type": "paragraph",
+        "id": "ac25034d58f619df",
+        "text": "where mypage1 is the path to the file you want to index."
+      },
+      "after": "983fd2a4818a3f96",
+      "date": 1497983196431
+    },
+    {
+      "type": "move",
+      "order": [
+        "034e7d238d1e1895",
+        "4be1cd9cb0bf4eb8",
+        "f735041b55c35923",
+        "899d1c7bd56b5417",
+        "983fd2a4818a3f96",
+        "1d62139a110a47b1",
+        "ac25034d58f619df",
+        "95b17906a275ee85",
+        "6b6443364bb55b10",
+        "506b7a0da95e43db",
+        "49fe9e2829572feb",
+        "10d7a5f96034eae7",
+        "6ec4bca4f1bb01ba"
+      ],
+      "id": "ac25034d58f619df",
+      "date": 1497983198282
+    },
+    {
+      "type": "edit",
+      "id": "ac25034d58f619df",
+      "item": {
+        "type": "paragraph",
+        "id": "ac25034d58f619df",
+        "text": "where mypage1 is the path to the file you want to index. Finally always remember to:"
+      },
+      "date": 1497983335723
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7b6ab61efb8cee72",
+        "text": "etc/apache2/sites-enabled"
+      },
+      "after": "ac25034d58f619df",
+      "id": "7b6ab61efb8cee72",
+      "date": 1497983340566
+    },
+    {
+      "type": "edit",
+      "id": "7b6ab61efb8cee72",
+      "item": {
+        "type": "code",
+        "id": "7b6ab61efb8cee72",
+        "text": "service apache2 reload"
+      },
+      "date": 1497983367252
+    }
+  ]
+}

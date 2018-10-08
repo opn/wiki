@@ -1,0 +1,855 @@
+{
+  "title": "Apache Tweaks",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "1dc89fbba2d19ad1",
+      "text": "Here we list some minor things that improve your Apache setup:"
+    },
+    {
+      "type": "markdown",
+      "id": "2a1a58ea61203a28",
+      "text": "# Setting the default ServerName"
+    },
+    {
+      "type": "paragraph",
+      "id": "0e062d3c54661c97",
+      "text": "If you get a warning like this:"
+    },
+    {
+      "type": "code",
+      "id": "1ec967262e9ff5f1",
+      "text": "Could not reliably determine the server's fully qualified domain name"
+    },
+    {
+      "type": "paragraph",
+      "id": "26163dbd329c0fd0",
+      "text": "then you may wish to configure it. With multiple VHosts which one do you choose? Howabout localhost?"
+    },
+    {
+      "type": "paragraph",
+      "id": "0e883357ca142246",
+      "text": "To prevent this message from appearing, clarify that you want to serve from localhost (127.0.0.1) by adding the following line into your /etc/apache2/apache2.conf file:"
+    },
+    {
+      "type": "paragraph",
+      "id": "6af2848664c18991",
+      "text": "This no longer seems to work for me on Ubuntu14.04.  - [https://stackoverflow.com/questions/9445772/how-do-i-set-up-the-servers-fully-qualified-domain-name stackoverflow] But this does - [https://askubuntu.com/questions/329323/problem-with-restarting-apache-2 stackoverflow]"
+    },
+    {
+      "type": "code",
+      "id": "0048e44a5ec9d65c",
+      "text": "sudo nano /etc/apache2/apache2.conf "
+    },
+    {
+      "type": "paragraph",
+      "id": "8f8364fd0e157784",
+      "text": "Add the line:"
+    },
+    {
+      "type": "code",
+      "id": "ed938bd6e31768ff",
+      "text": "ServerName localhost"
+    },
+    {
+      "type": "paragraph",
+      "id": "01077e28822f8dd8",
+      "text": "Save and quit. You may want to test:"
+    },
+    {
+      "type": "code",
+      "id": "025445d85e02e7f3",
+      "text": "apachectl configtest"
+    },
+    {
+      "type": "paragraph",
+      "id": "e4a59e7bd9e58916",
+      "text": "Then finally if everything is OK, [[Restart Apache]]:\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "f1f127e8bb0133d0",
+      "text": "\n"
+    },
+    {
+      "type": "markdown",
+      "id": "a81d402f216756b1",
+      "text": "# Document Root"
+    },
+    {
+      "type": "paragraph",
+      "id": "595fe761408339b6",
+      "text": "This directive sets the directory from which Apache will serve files. Unless matched by a directive like Alias, the server appends the path from the requested URL to the document root to make the path to the document. Example:"
+    },
+    {
+      "type": "code",
+      "id": "92dca46b4dfc4b75",
+      "text": "DocumentRoot /home/www/theos.in"
+    },
+    {
+      "type": "paragraph",
+      "id": "4657ef814f4c4c5c",
+      "text": "\nthen an access to http://www.theos.in/index.html refers to /home/www/theos.in/index.html."
+    },
+    {
+      "type": "paragraph",
+      "id": "e4e5de7be29cd851",
+      "text": "To find the Apache [[Document Root]] use grep command as follows:\n"
+    },
+    {
+      "type": "code",
+      "id": "38ec757b32ae29ba",
+      "text": "# grep -i 'DocumentRoot' httpd.conf"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Apache Tweaks",
+        "story": []
+      },
+      "date": 1498037052896
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6af2848664c18991"
+      },
+      "id": "6af2848664c18991",
+      "type": "add",
+      "date": 1498037053892
+    },
+    {
+      "type": "edit",
+      "id": "6af2848664c18991",
+      "item": {
+        "type": "paragraph",
+        "id": "6af2848664c18991",
+        "text": "Just edit the blank httpd.conf for Apache with the following:\n\nsudo gedit /etc/apache2/httpd.conf\nAdd the line:\n\nServerName localhost\nSave and quit and restart Apache:\n\nsudo /etc/init.d/apache2 restart\nThat will take care of it.\n\n"
+      },
+      "date": 1498037056663
+    },
+    {
+      "type": "edit",
+      "id": "6af2848664c18991",
+      "item": {
+        "type": "paragraph",
+        "id": "6af2848664c18991",
+        "text": "Just edit the blank httpd.conf for Apache with the following - [https://stackoverflow.com/questions/9445772/how-do-i-set-up-the-servers-fully-qualified-domain-name stackoverflow]"
+      },
+      "date": 1498037076399
+    },
+    {
+      "type": "add",
+      "id": "2637aa61206f7d3d",
+      "item": {
+        "type": "paragraph",
+        "id": "2637aa61206f7d3d",
+        "text": "sudo nano /etc/apache2/httpd.conf"
+      },
+      "after": "6af2848664c18991",
+      "date": 1498037091379
+    },
+    {
+      "type": "add",
+      "id": "8f8364fd0e157784",
+      "item": {
+        "type": "paragraph",
+        "id": "8f8364fd0e157784",
+        "text": "Add the line:"
+      },
+      "after": "2637aa61206f7d3d",
+      "date": 1498037095050
+    },
+    {
+      "type": "add",
+      "id": "4ee49b3c1bb7a8d6",
+      "item": {
+        "type": "paragraph",
+        "id": "4ee49b3c1bb7a8d6",
+        "text": "ServerName localhost"
+      },
+      "after": "8f8364fd0e157784",
+      "date": 1498037096841
+    },
+    {
+      "type": "add",
+      "id": "01077e28822f8dd8",
+      "item": {
+        "type": "paragraph",
+        "id": "01077e28822f8dd8",
+        "text": "Save and quit and [[Restart Apache]]:\n"
+      },
+      "after": "4ee49b3c1bb7a8d6",
+      "date": 1498037115306
+    },
+    {
+      "type": "add",
+      "id": "9505da84be6bccbb",
+      "item": {
+        "type": "paragraph",
+        "id": "9505da84be6bccbb",
+        "text": "sudo /etc/init.d/apache2 restart"
+      },
+      "after": "01077e28822f8dd8",
+      "date": 1498037117474
+    },
+    {
+      "type": "add",
+      "id": "f1f127e8bb0133d0",
+      "item": {
+        "type": "paragraph",
+        "id": "f1f127e8bb0133d0",
+        "text": "That will take care of it.\n\n"
+      },
+      "after": "9505da84be6bccbb",
+      "date": 1498037118276
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1dc89fbba2d19ad1"
+      },
+      "id": "1dc89fbba2d19ad1",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498037119710
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "6af2848664c18991",
+        "2637aa61206f7d3d",
+        "8f8364fd0e157784",
+        "4ee49b3c1bb7a8d6",
+        "01077e28822f8dd8",
+        "9505da84be6bccbb",
+        "f1f127e8bb0133d0"
+      ],
+      "id": "1dc89fbba2d19ad1",
+      "date": 1498037121079
+    },
+    {
+      "type": "edit",
+      "id": "1dc89fbba2d19ad1",
+      "item": {
+        "type": "paragraph",
+        "id": "1dc89fbba2d19ad1",
+        "text": "Here we list some minor things that improve your Apache setup:"
+      },
+      "date": 1498037142907
+    },
+    {
+      "type": "add",
+      "id": "2a1a58ea61203a28",
+      "item": {
+        "type": "paragraph",
+        "id": "2a1a58ea61203a28",
+        "text": "# "
+      },
+      "after": "1dc89fbba2d19ad1",
+      "date": 1498037153817
+    },
+    {
+      "type": "add",
+      "id": "0e062d3c54661c97",
+      "item": {
+        "type": "paragraph",
+        "id": "0e062d3c54661c97",
+        "text": "If you get:"
+      },
+      "after": "2a1a58ea61203a28",
+      "date": 1498037168565
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1ec967262e9ff5f1"
+      },
+      "id": "1ec967262e9ff5f1",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498037172318
+    },
+    {
+      "type": "add",
+      "id": "26163dbd329c0fd0",
+      "item": {
+        "type": "paragraph",
+        "id": "26163dbd329c0fd0",
+        "text": "Could not reliably determine the server's fully qualified domain name"
+      },
+      "after": "0e062d3c54661c97",
+      "date": 1498037173343
+    },
+    {
+      "type": "edit",
+      "id": "1ec967262e9ff5f1",
+      "item": {
+        "type": "code",
+        "id": "1ec967262e9ff5f1",
+        "text": "Could not reliably determine the server's fully qualified domain name"
+      },
+      "date": 1498037174657
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "6af2848664c18991",
+        "2637aa61206f7d3d",
+        "8f8364fd0e157784",
+        "4ee49b3c1bb7a8d6",
+        "01077e28822f8dd8",
+        "9505da84be6bccbb",
+        "f1f127e8bb0133d0"
+      ],
+      "id": "1ec967262e9ff5f1",
+      "date": 1498037177349
+    },
+    {
+      "type": "edit",
+      "id": "26163dbd329c0fd0",
+      "item": {
+        "type": "paragraph",
+        "id": "26163dbd329c0fd0",
+        "text": "then you may wish to configure it. With multiple VHosts which one do you choose? Howabout localhost?"
+      },
+      "date": 1498037208794
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0048e44a5ec9d65c"
+      },
+      "id": "0048e44a5ec9d65c",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498037210119
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "6af2848664c18991",
+        "2637aa61206f7d3d",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "4ee49b3c1bb7a8d6",
+        "01077e28822f8dd8",
+        "9505da84be6bccbb",
+        "f1f127e8bb0133d0"
+      ],
+      "id": "0048e44a5ec9d65c",
+      "date": 1498037211601
+    },
+    {
+      "type": "remove",
+      "id": "2637aa61206f7d3d",
+      "date": 1498037216109
+    },
+    {
+      "type": "edit",
+      "id": "0048e44a5ec9d65c",
+      "item": {
+        "type": "code",
+        "id": "0048e44a5ec9d65c",
+        "text": "sudo nano /etc/apache2/httpd.conf"
+      },
+      "date": 1498037217876
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b7d216c90b722c30"
+      },
+      "id": "b7d216c90b722c30",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498037219064
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "4ee49b3c1bb7a8d6",
+        "01077e28822f8dd8",
+        "b7d216c90b722c30",
+        "9505da84be6bccbb",
+        "f1f127e8bb0133d0"
+      ],
+      "id": "b7d216c90b722c30",
+      "date": 1498037220994
+    },
+    {
+      "type": "remove",
+      "id": "9505da84be6bccbb",
+      "date": 1498037227999
+    },
+    {
+      "type": "edit",
+      "id": "b7d216c90b722c30",
+      "item": {
+        "type": "code",
+        "id": "b7d216c90b722c30",
+        "text": "sudo /etc/init.d/apache2 restart"
+      },
+      "date": 1498037229989
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ed938bd6e31768ff"
+      },
+      "id": "ed938bd6e31768ff",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498037344837
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "ed938bd6e31768ff",
+        "4ee49b3c1bb7a8d6",
+        "01077e28822f8dd8",
+        "f1f127e8bb0133d0"
+      ],
+      "id": "ed938bd6e31768ff",
+      "date": 1498037346495
+    },
+    {
+      "type": "remove",
+      "id": "4ee49b3c1bb7a8d6",
+      "date": 1498037351053
+    },
+    {
+      "type": "edit",
+      "id": "ed938bd6e31768ff",
+      "item": {
+        "type": "code",
+        "id": "ed938bd6e31768ff",
+        "text": "ServerName localhost"
+      },
+      "date": 1498037354078
+    },
+    {
+      "type": "add",
+      "id": "0e883357ca142246",
+      "item": {
+        "type": "paragraph",
+        "id": "0e883357ca142246",
+        "text": "To prevent this message from appearing, clarify that you want to serve from localhost (127.0.0.1) by adding the following line into your /etc/apache2/apache2.conf file:"
+      },
+      "after": "26163dbd329c0fd0",
+      "date": 1498037730883
+    },
+    {
+      "type": "edit",
+      "id": "6af2848664c18991",
+      "item": {
+        "type": "paragraph",
+        "id": "6af2848664c18991",
+        "text": "This no longer seems to work for me on Ubuntu14.04.  - [https://stackoverflow.com/questions/9445772/how-do-i-set-up-the-servers-fully-qualified-domain-name stackoverflow]"
+      },
+      "date": 1498037761245
+    },
+    {
+      "type": "edit",
+      "id": "0048e44a5ec9d65c",
+      "item": {
+        "type": "code",
+        "id": "0048e44a5ec9d65c",
+        "text": "sudo nano /etc/apache2/apache2.conf "
+      },
+      "date": 1498037772246
+    },
+    {
+      "type": "edit",
+      "id": "2a1a58ea61203a28",
+      "item": {
+        "type": "paragraph",
+        "id": "2a1a58ea61203a28",
+        "text": "# Setting the default ServerName"
+      },
+      "date": 1498038105904
+    },
+    {
+      "type": "edit",
+      "id": "2a1a58ea61203a28",
+      "item": {
+        "type": "markdown",
+        "id": "2a1a58ea61203a28",
+        "text": "# Setting the default ServerName"
+      },
+      "date": 1498038106918
+    },
+    {
+      "type": "edit",
+      "id": "01077e28822f8dd8",
+      "item": {
+        "type": "paragraph",
+        "id": "01077e28822f8dd8",
+        "text": "Save and quit. You may want to test:"
+      },
+      "date": 1498038125312
+    },
+    {
+      "type": "add",
+      "id": "e4a59e7bd9e58916",
+      "item": {
+        "type": "paragraph",
+        "id": "e4a59e7bd9e58916",
+        "text": "Then finally if everything is OK, [[Restart Apache]]:\n"
+      },
+      "after": "01077e28822f8dd8",
+      "date": 1498038138490
+    },
+    {
+      "type": "edit",
+      "id": "f1f127e8bb0133d0",
+      "item": {
+        "type": "paragraph",
+        "id": "f1f127e8bb0133d0",
+        "text": "\n"
+      },
+      "date": 1498038141282
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "025445d85e02e7f3"
+      },
+      "id": "025445d85e02e7f3",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498038143040
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "0e883357ca142246",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "ed938bd6e31768ff",
+        "01077e28822f8dd8",
+        "025445d85e02e7f3",
+        "e4a59e7bd9e58916",
+        "f1f127e8bb0133d0"
+      ],
+      "id": "025445d85e02e7f3",
+      "date": 1498038144287
+    },
+    {
+      "type": "edit",
+      "id": "025445d85e02e7f3",
+      "item": {
+        "type": "code",
+        "id": "025445d85e02e7f3",
+        "text": "apachectl configtest"
+      },
+      "date": 1498038146355
+    },
+    {
+      "type": "edit",
+      "id": "6af2848664c18991",
+      "item": {
+        "type": "paragraph",
+        "id": "6af2848664c18991",
+        "text": "This no longer seems to work for me on Ubuntu14.04.  - [https://stackoverflow.com/questions/9445772/how-do-i-set-up-the-servers-fully-qualified-domain-name stackoverflow] But this does - [https://askubuntu.com/questions/329323/problem-with-restarting-apache-2 stackoverflow]"
+      },
+      "date": 1498038838545
+    },
+    {
+      "type": "edit",
+      "id": "0e062d3c54661c97",
+      "item": {
+        "type": "paragraph",
+        "id": "0e062d3c54661c97",
+        "text": "If you get a warning like this:"
+      },
+      "date": 1498038851153
+    },
+    {
+      "type": "fork",
+      "site": "admin.fedwiki.org",
+      "date": 1498296059864
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a81d402f216756b1"
+      },
+      "id": "a81d402f216756b1",
+      "type": "add",
+      "after": "f1f127e8bb0133d0",
+      "date": 1498309290465
+    },
+    {
+      "type": "edit",
+      "id": "a81d402f216756b1",
+      "item": {
+        "type": "markdown",
+        "id": "a81d402f216756b1",
+        "text": "# [[DocumentRoot]]"
+      },
+      "date": 1498309310259
+    },
+    {
+      "type": "edit",
+      "id": "a81d402f216756b1",
+      "item": {
+        "type": "markdown",
+        "id": "a81d402f216756b1",
+        "text": "# Document Root"
+      },
+      "date": 1498309367318
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e4e5de7be29cd851"
+      },
+      "id": "e4e5de7be29cd851",
+      "type": "add",
+      "after": "a81d402f216756b1",
+      "date": 1498309368334
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "38ec757b32ae29ba"
+      },
+      "id": "38ec757b32ae29ba",
+      "type": "add",
+      "after": "e4e5de7be29cd851",
+      "date": 1498309400929
+    },
+    {
+      "type": "edit",
+      "id": "e4e5de7be29cd851",
+      "item": {
+        "type": "paragraph",
+        "id": "e4e5de7be29cd851",
+        "text": "To find the Apache [[Document Root]] use grep command as follows:\n"
+      },
+      "date": 1498309402268
+    },
+    {
+      "type": "edit",
+      "id": "38ec757b32ae29ba",
+      "item": {
+        "type": "code",
+        "id": "38ec757b32ae29ba",
+        "text": "# grep -i 'DocumentRoot' httpd.conf"
+      },
+      "date": 1498309403259
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "595fe761408339b6"
+      },
+      "id": "595fe761408339b6",
+      "type": "add",
+      "after": "38ec757b32ae29ba",
+      "date": 1498309447119
+    },
+    {
+      "type": "edit",
+      "id": "595fe761408339b6",
+      "item": {
+        "type": "paragraph",
+        "id": "595fe761408339b6",
+        "text": "This directive sets the directory from which Apache will serve files. Unless matched by a directive like Alias, the server appends the path from the requested URL to the document root to make the path to the document. Example:"
+      },
+      "date": 1498309454188
+    },
+    {
+      "type": "add",
+      "id": "22308b726fd129cc",
+      "item": {
+        "type": "paragraph",
+        "id": "22308b726fd129cc",
+        "text": "\nDocumentRoot /home/www/theos.in"
+      },
+      "after": "595fe761408339b6",
+      "date": 1498309456043
+    },
+    {
+      "type": "add",
+      "id": "4657ef814f4c4c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "4657ef814f4c4c5c",
+        "text": "\nthen an access to http://www.theos.in/index.html refers to /home/www/theos.in/index.html."
+      },
+      "after": "22308b726fd129cc",
+      "date": 1498309457814
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "92dca46b4dfc4b75"
+      },
+      "id": "92dca46b4dfc4b75",
+      "type": "add",
+      "after": "4657ef814f4c4c5c",
+      "date": 1498309459033
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "0e883357ca142246",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "ed938bd6e31768ff",
+        "01077e28822f8dd8",
+        "025445d85e02e7f3",
+        "e4a59e7bd9e58916",
+        "f1f127e8bb0133d0",
+        "a81d402f216756b1",
+        "e4e5de7be29cd851",
+        "38ec757b32ae29ba",
+        "595fe761408339b6",
+        "92dca46b4dfc4b75",
+        "22308b726fd129cc",
+        "4657ef814f4c4c5c"
+      ],
+      "id": "92dca46b4dfc4b75",
+      "date": 1498309460718
+    },
+    {
+      "type": "remove",
+      "id": "22308b726fd129cc",
+      "date": 1498309464029
+    },
+    {
+      "type": "edit",
+      "id": "92dca46b4dfc4b75",
+      "item": {
+        "type": "code",
+        "id": "92dca46b4dfc4b75",
+        "text": "DocumentRoot /home/www/theos.in"
+      },
+      "date": 1498309467399
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "0e883357ca142246",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "ed938bd6e31768ff",
+        "01077e28822f8dd8",
+        "025445d85e02e7f3",
+        "e4a59e7bd9e58916",
+        "f1f127e8bb0133d0",
+        "a81d402f216756b1",
+        "595fe761408339b6",
+        "e4e5de7be29cd851",
+        "38ec757b32ae29ba",
+        "92dca46b4dfc4b75",
+        "4657ef814f4c4c5c"
+      ],
+      "id": "595fe761408339b6",
+      "date": 1498309474181
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "0e883357ca142246",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "ed938bd6e31768ff",
+        "01077e28822f8dd8",
+        "025445d85e02e7f3",
+        "e4a59e7bd9e58916",
+        "f1f127e8bb0133d0",
+        "a81d402f216756b1",
+        "595fe761408339b6",
+        "92dca46b4dfc4b75",
+        "e4e5de7be29cd851",
+        "38ec757b32ae29ba",
+        "4657ef814f4c4c5c"
+      ],
+      "id": "92dca46b4dfc4b75",
+      "date": 1498309478232
+    },
+    {
+      "type": "move",
+      "order": [
+        "1dc89fbba2d19ad1",
+        "2a1a58ea61203a28",
+        "0e062d3c54661c97",
+        "1ec967262e9ff5f1",
+        "26163dbd329c0fd0",
+        "0e883357ca142246",
+        "6af2848664c18991",
+        "0048e44a5ec9d65c",
+        "8f8364fd0e157784",
+        "ed938bd6e31768ff",
+        "01077e28822f8dd8",
+        "025445d85e02e7f3",
+        "e4a59e7bd9e58916",
+        "f1f127e8bb0133d0",
+        "a81d402f216756b1",
+        "595fe761408339b6",
+        "92dca46b4dfc4b75",
+        "4657ef814f4c4c5c",
+        "e4e5de7be29cd851",
+        "38ec757b32ae29ba"
+      ],
+      "id": "4657ef814f4c4c5c",
+      "date": 1498309482322
+    }
+  ]
+}

@@ -1,0 +1,507 @@
+{
+  "title": "Wiki on IPFS",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5e1fc9473c7dd928",
+      "text": "We imagine how wiki client code might maintain its permanent state in IPFS. We suggest an integration with the journal as currently implemented to create [[Fedwiki on IPFS]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "b95613b641c74d93",
+      "text": "IPFS provides global persistent storage indexed by hashes returned when bytes are saved as immutable blocks."
+    },
+    {
+      "type": "paragraph",
+      "id": "05138438c4da44f2",
+      "text": "Wiki provides a mutable view into a collection of pages where each page knows and can recapitulate its history."
+    },
+    {
+      "type": "markdown",
+      "id": "0c30565fd4728cc7",
+      "text": "# State"
+    },
+    {
+      "type": "paragraph",
+      "id": "34614fdab303ed1c",
+      "text": "We suggest Wiki on IPFS write a complete copy of a page with every edit. The wiki journal will then contain both the Action as observed while editing and the IPFS hash for the page after the Action has been applied."
+    },
+    {
+      "type": "paragraph",
+      "id": "feee93397c3ffcef",
+      "text": "Note: An Action contains more information than can be reconstructed by comparing two Stories."
+    },
+    {
+      "type": "paragraph",
+      "id": "0065ec1c526506b2",
+      "text": "We further suggest that Wiki on IPFS write an \"export\" of a whole site as a collection of page slugs and their most recent IPFS hash. The hash returned from this write can be saved in IPNS as it now represents the complete and current state of the site."
+    },
+    {
+      "type": "paragraph",
+      "id": "fedee2b5973a9043",
+      "text": "Note: An IPFS \"export\" amounts to publishing a collection of changes as it makes access to new content available. A user that maintains a private wiki could publish on a schedule that meets their needs."
+    },
+    {
+      "type": "markdown",
+      "id": "3199cbf857955cfe",
+      "text": "# Fork"
+    },
+    {
+      "type": "paragraph",
+      "id": "3ccdb1a41ba28101",
+      "text": "A Wiki on IPFS could fork content from non-IPFS sites and would expect these pages to not have Journal Actions annotated with hashes."
+    },
+    {
+      "type": "paragraph",
+      "id": "d53433859284b468",
+      "text": "A Wiki on IPFS site could fork content from other IPFS sites by finding them through IPFS mechanisms and copying the pages. A fork Action would include the IPNS source to be consulted for updates."
+    },
+    {
+      "type": "paragraph",
+      "id": "99b0537a1581d294",
+      "text": "A non-IPFS wiki would not have access to Wiki on IPFS content unless it was also published on the open internet by the usual means. When the open internet falls into disuse then this case doesn't matter."
+    },
+    {
+      "type": "paragraph",
+      "id": "d851e71357fabeeb",
+      "text": "A Wiki on IPFS site can exploit the reliable storage of page content for pages that are traveling into and off of the open internet but only those revisions written by Wiki on IPFS sites will have exact copies of pages in IPFS as they were written."
+    },
+    {
+      "type": "paragraph",
+      "id": "490d0dad8083fad5",
+      "text": "If IPFS were to fall into disuse then page history can still be reconstructed for pages within an individual's possession by replaying the Actions of the Journal."
+    },
+    {
+      "type": "markdown",
+      "id": "19ea3a913331f441",
+      "text": "# Evolution"
+    },
+    {
+      "type": "paragraph",
+      "id": "d4e8c0c14a7a6193",
+      "text": "In this proposal we imagine two systems, the open internet and the IPFS, coexisting without presuming which system will outlive the other. We aspire to use each system as intended so that our content can outlive either system's demise."
+    },
+    {
+      "type": "paragraph",
+      "id": "3e77da684f2770b3",
+      "text": "See [[Computational Habitat]] where we consider the changes in landscape we have experienced and how we are preparing wiki to persist as a symbiont to whatever hosts survive."
+    },
+    {
+      "type": "paragraph",
+      "id": "26137ed854ad2b35",
+      "text": "See [[Open Junta]] for a related opportunity."
+    },
+    {
+      "type": "markdown",
+      "id": "122894e4b3014093",
+      "text": "# Coding Example"
+    },
+    {
+      "type": "paragraph",
+      "id": "de7157d68b851573",
+      "text": "An example of how to use ipfs to store assets exists in the wiki-client repo on [https://github.com/fedwiki/wiki-client/pull/130 github]."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki on IPFS",
+        "story": []
+      },
+      "date": 1449676822032
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5e1fc9473c7dd928"
+      },
+      "id": "5e1fc9473c7dd928",
+      "type": "add",
+      "date": 1449676824467
+    },
+    {
+      "type": "edit",
+      "id": "5e1fc9473c7dd928",
+      "item": {
+        "type": "paragraph",
+        "id": "5e1fc9473c7dd928",
+        "text": "We imagine how wiki client code might maintain its permanent state in IPFS. We suggest an integration with the journal as currently implemented."
+      },
+      "date": 1449676954673
+    },
+    {
+      "type": "add",
+      "id": "b95613b641c74d93",
+      "item": {
+        "type": "paragraph",
+        "id": "b95613b641c74d93",
+        "text": "IPFS provides global persistent storage indexed by hashes returned when bytes are saved as immutable blocks."
+      },
+      "after": "5e1fc9473c7dd928",
+      "date": 1449677036709
+    },
+    {
+      "type": "add",
+      "id": "05138438c4da44f2",
+      "item": {
+        "type": "paragraph",
+        "id": "05138438c4da44f2",
+        "text": "Wiki provides a mutable view into a collection of pages where each page knows and can recapitulate its history."
+      },
+      "after": "b95613b641c74d93",
+      "date": 1449677111502
+    },
+    {
+      "type": "add",
+      "id": "34614fdab303ed1c",
+      "item": {
+        "type": "paragraph",
+        "id": "34614fdab303ed1c",
+        "text": "We suggest Wiki on IPFS write a complete copy of a page with every edit. The wiki journal will then contain both the delta as observed while editing and the IPFS hash for the page after the delta has been applied."
+      },
+      "after": "05138438c4da44f2",
+      "date": 1449677336043
+    },
+    {
+      "type": "edit",
+      "id": "34614fdab303ed1c",
+      "item": {
+        "type": "paragraph",
+        "id": "34614fdab303ed1c",
+        "text": "We suggest Wiki on IPFS write a complete copy of a page with every edit. The wiki journal will then contain both the Action as observed while editing and the IPFS hash for the page after the Action has been applied."
+      },
+      "date": 1449677480611
+    },
+    {
+      "type": "add",
+      "id": "feee93397c3ffcef",
+      "item": {
+        "type": "paragraph",
+        "id": "feee93397c3ffcef",
+        "text": "Note: An Action contains more information than can be reconstructed by comparing two Stories."
+      },
+      "after": "34614fdab303ed1c",
+      "date": 1449677578476
+    },
+    {
+      "type": "add",
+      "id": "0065ec1c526506b2",
+      "item": {
+        "type": "paragraph",
+        "id": "0065ec1c526506b2",
+        "text": "We further suggest that Wiki on IPFS write an \"export\" of a whole site as a collection of page slugs and their most recent IPFS hash. The hash returned from this write can be saved in IPNS as it now represents the complete and current state of the site."
+      },
+      "after": "feee93397c3ffcef",
+      "date": 1449677827845
+    },
+    {
+      "type": "add",
+      "id": "0c30565fd4728cc7",
+      "item": {
+        "type": "paragraph",
+        "id": "0c30565fd4728cc7",
+        "text": "# State"
+      },
+      "after": "05138438c4da44f2",
+      "date": 1449677883101
+    },
+    {
+      "type": "edit",
+      "id": "0c30565fd4728cc7",
+      "item": {
+        "type": "markdown",
+        "id": "0c30565fd4728cc7",
+        "text": "# State"
+      },
+      "date": 1449677886101
+    },
+    {
+      "type": "add",
+      "id": "3199cbf857955cfe",
+      "item": {
+        "type": "paragraph",
+        "id": "3199cbf857955cfe",
+        "text": "# Fork"
+      },
+      "after": "0065ec1c526506b2",
+      "date": 1449677901887
+    },
+    {
+      "type": "add",
+      "id": "3ccdb1a41ba28101",
+      "item": {
+        "type": "paragraph",
+        "id": "3ccdb1a41ba28101",
+        "text": "A Wiki on IPFS could fork content from non-IPFS sites and would expect these pages to not have Journal Actions annotated with hashes."
+      },
+      "after": "3199cbf857955cfe",
+      "date": 1449677986168
+    },
+    {
+      "type": "add",
+      "id": "d53433859284b468",
+      "item": {
+        "type": "paragraph",
+        "id": "d53433859284b468",
+        "text": "A Wiki on IPFS site could fork content from other IPFS sites by finding them through IPFS mechanisms and copying the pages."
+      },
+      "after": "3ccdb1a41ba28101",
+      "date": 1449678078894
+    },
+    {
+      "type": "add",
+      "id": "99b0537a1581d294",
+      "item": {
+        "type": "paragraph",
+        "id": "99b0537a1581d294",
+        "text": "A non-IPFS wiki would not have access to Wiki on IPFS content unless it was also published on the open internet by the usual means. "
+      },
+      "after": "d53433859284b468",
+      "date": 1449678192255
+    },
+    {
+      "type": "add",
+      "id": "5a370391ebd432f6",
+      "item": {
+        "type": "paragraph",
+        "id": "5a370391ebd432f6",
+        "text": "When the open internet falls into disuse then this case doesn't matter."
+      },
+      "after": "99b0537a1581d294",
+      "date": 1449678199254
+    },
+    {
+      "type": "edit",
+      "id": "99b0537a1581d294",
+      "item": {
+        "type": "paragraph",
+        "id": "99b0537a1581d294",
+        "text": "A non-IPFS wiki would not have access to Wiki on IPFS content unless it was also published on the open internet by the usual means."
+      },
+      "date": 1449678214423
+    },
+    {
+      "type": "remove",
+      "id": "5a370391ebd432f6",
+      "date": 1449678221523
+    },
+    {
+      "type": "edit",
+      "id": "99b0537a1581d294",
+      "item": {
+        "type": "paragraph",
+        "id": "99b0537a1581d294",
+        "text": "A non-IPFS wiki would not have access to Wiki on IPFS content unless it was also published on the open internet by the usual means. When the open internet falls into disuse then this case doesn't matter."
+      },
+      "date": 1449678223559
+    },
+    {
+      "type": "add",
+      "id": "d851e71357fabeeb",
+      "item": {
+        "type": "paragraph",
+        "id": "d851e71357fabeeb",
+        "text": "A Wiki on IPFS site can exploit the reliable storage of page content for pages that are traveling into and off of the open internet but only those revisions written by Wiki on IPFS sites will have exact copies of pages in IPFS as they were written."
+      },
+      "after": "99b0537a1581d294",
+      "date": 1449678366665
+    },
+    {
+      "type": "edit",
+      "id": "3199cbf857955cfe",
+      "item": {
+        "type": "markdown",
+        "id": "3199cbf857955cfe",
+        "text": "# Fork"
+      },
+      "date": 1449678371143
+    },
+    {
+      "type": "add",
+      "id": "490d0dad8083fad5",
+      "item": {
+        "type": "paragraph",
+        "id": "490d0dad8083fad5",
+        "text": "If IPFS were to fall into disuse then page history can still be reconstructed for pages within an individual's possession by replaying the Actions of the Journal."
+      },
+      "after": "d851e71357fabeeb",
+      "date": 1449678444401
+    },
+    {
+      "type": "add",
+      "id": "fedee2b5973a9043",
+      "item": {
+        "type": "paragraph",
+        "id": "fedee2b5973a9043",
+        "text": "Note: An IPFS export amounts to publishing a collection of changes as it makes access to new content available. A user that maintains a private wiki could publish on a schedule that meets their needs."
+      },
+      "after": "0065ec1c526506b2",
+      "date": 1449678637508
+    },
+    {
+      "type": "edit",
+      "id": "fedee2b5973a9043",
+      "item": {
+        "type": "paragraph",
+        "id": "fedee2b5973a9043",
+        "text": "Note: An IPFS \"export\" amounts to publishing a collection of changes as it makes access to new content available. A user that maintains a private wiki could publish on a schedule that meets their needs."
+      },
+      "date": 1449678649841
+    },
+    {
+      "type": "edit",
+      "id": "d53433859284b468",
+      "item": {
+        "type": "paragraph",
+        "id": "d53433859284b468",
+        "text": "A Wiki on IPFS site could fork content from other IPFS sites by finding them through IPFS mechanisms and copying the pages. A fork Action would include the IPNS source to be consulted for updates."
+      },
+      "date": 1449679832266
+    },
+    {
+      "type": "add",
+      "id": "19ea3a913331f441",
+      "item": {
+        "type": "paragraph",
+        "id": "19ea3a913331f441",
+        "text": "# Evolution"
+      },
+      "after": "490d0dad8083fad5",
+      "date": 1449679965108
+    },
+    {
+      "type": "add",
+      "id": "d4e8c0c14a7a6193",
+      "item": {
+        "type": "paragraph",
+        "id": "d4e8c0c14a7a6193",
+        "text": "In this proposal we imagine two systems, the open internet and the IPFS, coexisting without presuming which system will outlive the other. We aspire to use each system as intended so that our content can outlive either system's demise."
+      },
+      "after": "19ea3a913331f441",
+      "date": 1449680099618
+    },
+    {
+      "type": "edit",
+      "id": "19ea3a913331f441",
+      "item": {
+        "type": "markdown",
+        "id": "19ea3a913331f441",
+        "text": "# Evolution"
+      },
+      "date": 1449680101844
+    },
+    {
+      "type": "add",
+      "id": "3e77da684f2770b3",
+      "item": {
+        "type": "paragraph",
+        "id": "3e77da684f2770b3",
+        "text": "See [[Computational Habitat]] where we consider the changes in landscape we have experienced and how we are preparing wiki to persist as a symbiont to whatever hosts survive."
+      },
+      "after": "d4e8c0c14a7a6193",
+      "date": 1449680283920
+    },
+    {
+      "type": "add",
+      "id": "26137ed854ad2b35",
+      "item": {
+        "type": "paragraph",
+        "id": "26137ed854ad2b35",
+        "text": "See [[Open Junta]] for another possible application of IPFS."
+      },
+      "after": "3e77da684f2770b3",
+      "date": 1459176632054
+    },
+    {
+      "type": "edit",
+      "id": "26137ed854ad2b35",
+      "item": {
+        "type": "paragraph",
+        "id": "26137ed854ad2b35",
+        "text": "See [[Open Junta]] for a related opportunity."
+      },
+      "date": 1459176668167
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org"
+    },
+    {
+      "type": "edit",
+      "id": "5e1fc9473c7dd928",
+      "item": {
+        "type": "paragraph",
+        "id": "5e1fc9473c7dd928",
+        "text": "We imagine how wiki client code might maintain its permanent state in IPFS. We suggest an integration with the journal as currently implemented to create [[Fedwiki on IPFS]]."
+      },
+      "date": 1459634025563
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1468924407402
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "122894e4b3014093"
+      },
+      "id": "122894e4b3014093",
+      "type": "add",
+      "after": "26137ed854ad2b35",
+      "date": 1468924449826
+    },
+    {
+      "type": "edit",
+      "id": "122894e4b3014093",
+      "item": {
+        "type": "paragraph",
+        "id": "122894e4b3014093",
+        "text": "# Coding Example"
+      },
+      "date": 1468924469025
+    },
+    {
+      "type": "add",
+      "id": "de7157d68b851573",
+      "item": {
+        "type": "paragraph",
+        "id": "de7157d68b851573",
+        "text": "An example of how to use ipfs to store assets exists in the wiki-client repo on github."
+      },
+      "after": "122894e4b3014093",
+      "date": 1468924541264
+    },
+    {
+      "type": "edit",
+      "id": "de7157d68b851573",
+      "item": {
+        "type": "paragraph",
+        "id": "de7157d68b851573",
+        "text": "An example of how to use ipfs to store assets exists in the wiki-client repo on [https://github.com/fedwiki/wiki-client/pull/130 github]."
+      },
+      "date": 1468924554550
+    },
+    {
+      "type": "edit",
+      "id": "122894e4b3014093",
+      "item": {
+        "type": "markdown",
+        "id": "122894e4b3014093",
+        "text": "# Coding Example"
+      },
+      "date": 1468924557965
+    },
+    {
+      "type": "fork",
+      "site": "goals.pod.rodwell.me",
+      "date": 1471685932403
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1502437761032
+    }
+  ]
+}

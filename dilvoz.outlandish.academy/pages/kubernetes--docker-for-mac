@@ -1,0 +1,635 @@
+{
+  "title": "Kubernetes & Docker for Mac",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "384bdf35283f27ed",
+      "text": "Alex Ellis, creator of OpenFaaS, takes new kubernetes features for a spin in Docker for Mac by installing OpenFaaS and Helm.  It happens I'm interested in experimenting with all three of Kubernetes, OpenFaaS, and Helm.  Handy.  (Also covers some of the docker swarm integration... click the link if you wanna see that) [https://blog.alexellis.io/docker-for-mac-with-kubernetes/ link]"
+    },
+    {
+      "type": "code",
+      "id": "9d4fe4b3fb8b369b",
+      "text": "# git clone & kubectl apply to install OpenFaaS\n\nmkdir -p go/src/github.com/openfaas/ && \\\n cd go/src/github.com/openfaas/ && \\\n git clone https://github.com/openfaas/faas-netes && \\\n cd faas-netes && \\\n kubectl apply -f ./namespaces.yml && \\\n kubectl apply -f ./yaml"
+    },
+    {
+      "type": "markdown",
+      "id": "3a35662300f3ac5c",
+      "text": "Then point your browser here: [http://localhost:31112 localhost:31112]\n\nHelm installation: [https://docs.helm.sh/using_helm/ docs]\n"
+    },
+    {
+      "type": "code",
+      "id": "3105a7f19d3e45b6",
+      "text": "# homebrew to install helm\n\nbrew install kubernetes-helm\nhelm init\n"
+    },
+    {
+      "type": "pagefold",
+      "id": "3dc976ad0b4d0e03",
+      "text": "."
+    },
+    {
+      "type": "markdown",
+      "id": "304863b5c62830ca",
+      "text": "homebrew's helm installation needed a little more help\n[https://github.com/kubernetes/helm/issues/3055#issuecomment-385439879 comment on helm/issue]"
+    },
+    {
+      "type": "code",
+      "id": "6c2ad468e200cf2f",
+      "text": "kubectl delete deployment \\\n  tiller-deploy --namespace kube-system\nhelm init --upgrade --service-account default"
+    },
+    {
+      "type": "markdown",
+      "id": "c8ffa56119dd41d9",
+      "text": "Kubernetes support is only available in the docker-for-mac `edge` releases, not in `stable` (as of this writing).  **Make backups before switching.**  Switching between `stable` and `edge` warns about loosing all the existing containers.  We also loose the named volumes.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "a882e01990517469",
+      "text": "Happily, the simplicity of wiki's data lends itself to trustworthy backup and restore.  See [https://github.com/dobbs/wiki-tls#other-admin-tricks Other Admin Tricks in wiki-tls/README]"
+    },
+    {
+      "type": "pagefold",
+      "id": "7ebb7e034225886c",
+      "text": "."
+    },
+    {
+      "type": "markdown",
+      "id": "9037dc54a81a3cae",
+      "text": "# Giving up on k8s experiments for now!\n"
+    },
+    {
+      "type": "markdown",
+      "id": "7b24c4e059af66f3",
+      "text": "2018-05-10\n"
+    },
+    {
+      "type": "markdown",
+      "id": "c930bdb3abe272bb",
+      "text": "As a test of helm, I tried installing neo4j.  After a couple attempts I did get the community edition installed.  However, educated guess that defaults assume more resources than my laptop offers.  Several symptoms of insufficient resources appeared.\n\n* `kubectl` was unable to connect to the api\n* `helm ls` was similarly unable to find a tiller\n* restarting docker helped for a moment, and then the same symptoms re-appeared after one or two commands\n* even `docker-compose` commands became unresponsive\n"
+    },
+    {
+      "type": "markdown",
+      "id": "97966460a3e7619f",
+      "text": "I have switched back to `stable`, giving up on k8s for now.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "2e70b7422326ed49",
+      "text": "This experience confirms my suspicion that k8s is more than wiki should take on, at least in the immediate future.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "c62f8b3f50ee91e0",
+      "text": "I have no doubt that sufficient time would allow one to discover invocations of `helm install` with appropriate resource limits suitable for laptop development.  But it's also just a bit too easy at the moment to get wedged locally."
+    },
+    {
+      "type": "paragraph",
+      "id": "a6878310255e3244",
+      "text": "Sadly this also puts a hold on experimentation with several function services which build on Kubernetes: Kubeless, Riff, and OpenFaaS"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Kubernetes & Docker for Mac",
+        "story": []
+      },
+      "date": 1525821819548
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "384bdf35283f27ed"
+      },
+      "id": "384bdf35283f27ed",
+      "type": "add",
+      "date": 1525821821136
+    },
+    {
+      "type": "edit",
+      "id": "384bdf35283f27ed",
+      "item": {
+        "type": "factory",
+        "id": "384bdf35283f27ed",
+        "text": "Creator of OpenFaaS takes new kubernetes features for a spin.  It happens I'm interested in experimenting with both Kubernetes _and_ [https://blog.alexellis.io/docker-for-mac-with-kubernetes/ link]"
+      },
+      "date": 1525821892106
+    },
+    {
+      "type": "edit",
+      "id": "384bdf35283f27ed",
+      "item": {
+        "type": "markdown",
+        "id": "384bdf35283f27ed",
+        "text": "Creator of OpenFaaS takes new kubernetes features for a spin by installing OpenFaaS and Helm.  It happens I'm interested in experimenting with all three of Kubernetes, OpenFaaS, and Helm.  Handy. [https://blog.alexellis.io/docker-for-mac-with-kubernetes/ link]"
+      },
+      "date": 1525821958554
+    },
+    {
+      "type": "edit",
+      "id": "384bdf35283f27ed",
+      "item": {
+        "type": "markdown",
+        "id": "384bdf35283f27ed",
+        "text": "Alex Ellis, creator of OpenFaaS, takes new kubernetes features for a spin in Docker for Mac by installing OpenFaaS and Helm.  It happens I'm interested in experimenting with all three of Kubernetes, OpenFaaS, and Helm.  Handy. [https://blog.alexellis.io/docker-for-mac-with-kubernetes/ link]"
+      },
+      "date": 1525822160436
+    },
+    {
+      "type": "edit",
+      "id": "384bdf35283f27ed",
+      "item": {
+        "type": "markdown",
+        "id": "384bdf35283f27ed",
+        "text": "Alex Ellis, creator of OpenFaaS, takes new kubernetes features for a spin in Docker for Mac by installing OpenFaaS and Helm.  It happens I'm interested in experimenting with all three of Kubernetes, OpenFaaS, and Helm.  Handy.  (Also covers some of the docker swarm integration... click the link if you wanna see that) [https://blog.alexellis.io/docker-for-mac-with-kubernetes/ link]"
+      },
+      "date": 1525822267584
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9d4fe4b3fb8b369b"
+      },
+      "id": "9d4fe4b3fb8b369b",
+      "type": "add",
+      "after": "384bdf35283f27ed",
+      "date": 1525822292886
+    },
+    {
+      "type": "edit",
+      "id": "9d4fe4b3fb8b369b",
+      "item": {
+        "type": "code",
+        "id": "9d4fe4b3fb8b369b",
+        "text": "mkdir -p go/src/github.com/openfaas/ && \\\n cd go/src/github.com/openfaas/ && \\\n git clone https://github.com/openfaas/faas-netes && \\\n cd faas-netes && \\\n kubectl apply -f ./yaml"
+      },
+      "date": 1525822327624
+    },
+    {
+      "type": "edit",
+      "id": "9d4fe4b3fb8b369b",
+      "item": {
+        "type": "code",
+        "id": "9d4fe4b3fb8b369b",
+        "text": "mkdir -p go/src/github.com/openfaas/ && \\\n cd go/src/github.com/openfaas/ && \\\n git clone https://github.com/openfaas/faas-netes && \\\n cd faas-netes && \\\n kubectl apply -f ./namespaces.yml && \\\n kubectl apply -f ./yaml"
+      },
+      "date": 1525822407526
+    },
+    {
+      "type": "edit",
+      "id": "9d4fe4b3fb8b369b",
+      "item": {
+        "type": "code",
+        "id": "9d4fe4b3fb8b369b",
+        "text": "# git clone & kubectl apply to install OpenFaaS\n\nmkdir -p go/src/github.com/openfaas/ && \\\n cd go/src/github.com/openfaas/ && \\\n git clone https://github.com/openfaas/faas-netes && \\\n cd faas-netes && \\\n kubectl apply -f ./namespaces.yml && \\\n kubectl apply -f ./yaml"
+      },
+      "date": 1525822589622
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3a35662300f3ac5c"
+      },
+      "id": "3a35662300f3ac5c",
+      "type": "add",
+      "after": "9d4fe4b3fb8b369b",
+      "date": 1525822594120
+    },
+    {
+      "type": "edit",
+      "id": "3a35662300f3ac5c",
+      "item": {
+        "type": "markdown",
+        "id": "3a35662300f3ac5c",
+        "text": "Then point your browser here: [http://localhost:31112 localhost:31112]\n"
+      },
+      "date": 1525822631454
+    },
+    {
+      "type": "edit",
+      "id": "3a35662300f3ac5c",
+      "item": {
+        "type": "markdown",
+        "id": "3a35662300f3ac5c",
+        "text": "Then point your browser here: [http://localhost:31112 localhost:31112]\n\nHelm installation: [https://docs.helm.sh/using_helm/ docs]"
+      },
+      "date": 1525822919334
+    },
+    {
+      "type": "edit",
+      "id": "3a35662300f3ac5c",
+      "item": {
+        "type": "markdown",
+        "id": "3a35662300f3ac5c",
+        "text": "Then point your browser here: [http://localhost:31112 localhost:31112]\n\nHelm installation: [https://docs.helm.sh/using_helm/ docs]\n"
+      },
+      "date": 1525822978562
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3105a7f19d3e45b6"
+      },
+      "id": "3105a7f19d3e45b6",
+      "type": "add",
+      "after": "3a35662300f3ac5c",
+      "date": 1525822982148
+    },
+    {
+      "type": "edit",
+      "id": "3105a7f19d3e45b6",
+      "item": {
+        "type": "code",
+        "id": "3105a7f19d3e45b6",
+        "text": "# homebrew to install helm\n\nbrew install kubernetes-helm\nhelm init\n"
+      },
+      "date": 1525823010282
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3dc976ad0b4d0e03"
+      },
+      "id": "3dc976ad0b4d0e03",
+      "type": "add",
+      "after": "3105a7f19d3e45b6",
+      "date": 1525823108844
+    },
+    {
+      "type": "edit",
+      "id": "3dc976ad0b4d0e03",
+      "item": {
+        "type": "pagefold",
+        "id": "3dc976ad0b4d0e03",
+        "text": "."
+      },
+      "date": 1525823117850
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8ffa56119dd41d9"
+      },
+      "id": "c8ffa56119dd41d9",
+      "type": "add",
+      "after": "3dc976ad0b4d0e03",
+      "date": 1525823119442
+    },
+    {
+      "type": "edit",
+      "id": "c8ffa56119dd41d9",
+      "item": {
+        "type": "markdown",
+        "id": "c8ffa56119dd41d9",
+        "text": "Kubernetes support is only available in the docker-for-mac edge releases, not in stable (as of this writing).  Switching from `stable` to `edge` warned about loosing all the existing containers.  For good measure I followed my own backup instructions.  And glad I did.\n"
+      },
+      "date": 1525823240556
+    },
+    {
+      "type": "add",
+      "id": "138b87926620d272",
+      "item": {
+        "type": "markdown",
+        "id": "138b87926620d272",
+        "text": "Also very glad that wiki has such an incredibly simple data structure.  I was able to `docker-compose up` and then follow my own restore instructions and had my local farm running again."
+      },
+      "after": "c8ffa56119dd41d9",
+      "date": 1525823314864
+    },
+    {
+      "type": "edit",
+      "id": "138b87926620d272",
+      "item": {
+        "type": "markdown",
+        "id": "138b87926620d272",
+        "text": "Also very glad that wiki has such an incredibly simple data structure.  I was able to `docker-compose up` and then follow my own restore instructions and had my local farm running again.\n"
+      },
+      "date": 1525823350884
+    },
+    {
+      "type": "add",
+      "id": "260f00a6f899fcaf",
+      "item": {
+        "type": "markdown",
+        "id": "260f00a6f899fcaf",
+        "text": "See [https://github.com/dobbs/wiki-tls#other-admin-tricks Other Admin Tricks in wiki-tls/README]"
+      },
+      "after": "138b87926620d272",
+      "date": 1525823375362
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c4cc9b43e0da999f"
+      },
+      "id": "c4cc9b43e0da999f",
+      "type": "add",
+      "after": "260f00a6f899fcaf",
+      "date": 1525885851730
+    },
+    {
+      "type": "remove",
+      "id": "c4cc9b43e0da999f",
+      "date": 1525885854886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6c2ad468e200cf2f"
+      },
+      "id": "6c2ad468e200cf2f",
+      "type": "add",
+      "after": "260f00a6f899fcaf",
+      "date": 1525885858436
+    },
+    {
+      "type": "edit",
+      "id": "6c2ad468e200cf2f",
+      "item": {
+        "type": "code",
+        "id": "6c2ad468e200cf2f",
+        "text": "# brew install needed a little help\n# \n\nkubectl delete deployment \\\n  tiller-deploy --namespace kube-system\nhelm init --upgrade --service-account default"
+      },
+      "date": 1525885967050
+    },
+    {
+      "type": "edit",
+      "id": "6c2ad468e200cf2f",
+      "item": {
+        "type": "code",
+        "id": "6c2ad468e200cf2f",
+        "text": "# brew install needed a little help\n# https://github.com/kubernetes/helm/issues/3055#issuecomment-385439879\n\nkubectl delete deployment \\\n  tiller-deploy --namespace kube-system\nhelm init --upgrade --service-account default"
+      },
+      "date": 1525886002510
+    },
+    {
+      "type": "move",
+      "order": [
+        "384bdf35283f27ed",
+        "9d4fe4b3fb8b369b",
+        "3a35662300f3ac5c",
+        "3105a7f19d3e45b6",
+        "3dc976ad0b4d0e03",
+        "6c2ad468e200cf2f",
+        "c8ffa56119dd41d9",
+        "138b87926620d272",
+        "260f00a6f899fcaf"
+      ],
+      "id": "6c2ad468e200cf2f",
+      "date": 1525886146010
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "304863b5c62830ca"
+      },
+      "id": "304863b5c62830ca",
+      "type": "add",
+      "after": "260f00a6f899fcaf",
+      "date": 1525886168274
+    },
+    {
+      "type": "edit",
+      "id": "304863b5c62830ca",
+      "item": {
+        "type": "markdown",
+        "id": "304863b5c62830ca",
+        "text": "homebrew's helm installation needed a little more help"
+      },
+      "date": 1525886198916
+    },
+    {
+      "type": "move",
+      "order": [
+        "384bdf35283f27ed",
+        "9d4fe4b3fb8b369b",
+        "3a35662300f3ac5c",
+        "3105a7f19d3e45b6",
+        "3dc976ad0b4d0e03",
+        "304863b5c62830ca",
+        "6c2ad468e200cf2f",
+        "c8ffa56119dd41d9",
+        "138b87926620d272",
+        "260f00a6f899fcaf"
+      ],
+      "id": "304863b5c62830ca",
+      "date": 1525886201962
+    },
+    {
+      "type": "edit",
+      "id": "6c2ad468e200cf2f",
+      "item": {
+        "type": "code",
+        "id": "6c2ad468e200cf2f",
+        "text": "kubectl delete deployment \\\n  tiller-deploy --namespace kube-system\nhelm init --upgrade --service-account default"
+      },
+      "date": 1525886210700
+    },
+    {
+      "type": "edit",
+      "id": "304863b5c62830ca",
+      "item": {
+        "type": "markdown",
+        "id": "304863b5c62830ca",
+        "text": "homebrew's helm installation needed a little more help\n[https://github.com/kubernetes/helm/issues/3055#issuecomment-385439879 comment on helm/issue]"
+      },
+      "date": 1525886235574
+    },
+    {
+      "type": "edit",
+      "id": "c8ffa56119dd41d9",
+      "item": {
+        "type": "markdown",
+        "id": "c8ffa56119dd41d9",
+        "text": "Kubernetes support is only available in the docker-for-mac `edge` releases, not in `stable` (as of this writing).  **Make backups before switching.**  Switching between `stable` and `edge` warns about loosing all the existing containers.  We also loose the named volumes.\n"
+      },
+      "date": 1525963488666
+    },
+    {
+      "type": "add",
+      "id": "a882e01990517469",
+      "item": {
+        "type": "markdown",
+        "id": "a882e01990517469",
+        "text": "Happily, the simplicity of wiki's data lends itself to trustworthy backup and restore."
+      },
+      "after": "c8ffa56119dd41d9",
+      "date": 1525963599390
+    },
+    {
+      "type": "remove",
+      "id": "138b87926620d272",
+      "date": 1525963604224
+    },
+    {
+      "type": "remove",
+      "id": "260f00a6f899fcaf",
+      "date": 1525963610990
+    },
+    {
+      "type": "edit",
+      "id": "a882e01990517469",
+      "item": {
+        "type": "markdown",
+        "id": "a882e01990517469",
+        "text": "Happily, the simplicity of wiki's data lends itself to trustworthy backup and restore.  See [https://github.com/dobbs/wiki-tls#other-admin-tricks Other Admin Tricks in wiki-tls/README]"
+      },
+      "date": 1525963620408
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7ebb7e034225886c"
+      },
+      "id": "7ebb7e034225886c",
+      "type": "add",
+      "after": "a882e01990517469",
+      "date": 1525963623104
+    },
+    {
+      "type": "edit",
+      "id": "7ebb7e034225886c",
+      "item": {
+        "type": "pagefold",
+        "id": "7ebb7e034225886c",
+        "text": "."
+      },
+      "date": 1525963634272
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9037dc54a81a3cae"
+      },
+      "id": "9037dc54a81a3cae",
+      "type": "add",
+      "after": "7ebb7e034225886c",
+      "date": 1525963635796
+    },
+    {
+      "type": "edit",
+      "id": "9037dc54a81a3cae",
+      "item": {
+        "type": "markdown",
+        "id": "9037dc54a81a3cae",
+        "text": "# Giving up on k8s experiments for now\n"
+      },
+      "date": 1525963670328
+    },
+    {
+      "type": "edit",
+      "id": "9037dc54a81a3cae",
+      "item": {
+        "type": "markdown",
+        "id": "9037dc54a81a3cae",
+        "text": "# Giving up on k8s experiments for now!\n"
+      },
+      "date": 1525963677954
+    },
+    {
+      "type": "add",
+      "id": "7b24c4e059af66f3",
+      "item": {
+        "type": "markdown",
+        "id": "7b24c4e059af66f3",
+        "text": "As a test of helm, I tried installing neo4j.  After a couple attempts I did get the community edition installed.  However, educated guess that defaults assume more resources than my laptop offers.  Several symptoms of insufficient resources appeared.\n\n* `kubectl` was unable to connect to the api\n* `helm ls` was similarly unable to find a tiller\n* restarting docker helped for a moment, and then the same symptoms re-appeared after one or two commands\n* even `docker-compose` commands became unresponsive\n"
+      },
+      "after": "9037dc54a81a3cae",
+      "date": 1525964163584
+    },
+    {
+      "type": "add",
+      "id": "97966460a3e7619f",
+      "item": {
+        "type": "markdown",
+        "id": "97966460a3e7619f",
+        "text": "I have switched back to `stable`, giving up on k8s for now.\n"
+      },
+      "after": "7b24c4e059af66f3",
+      "date": 1525964199022
+    },
+    {
+      "type": "add",
+      "id": "2e70b7422326ed49",
+      "item": {
+        "type": "markdown",
+        "id": "2e70b7422326ed49",
+        "text": "This experience confirms my suspicion that k8s is more than wiki should take on, at least in the immediate future.\n"
+      },
+      "after": "97966460a3e7619f",
+      "date": 1525964299786
+    },
+    {
+      "type": "add",
+      "id": "c62f8b3f50ee91e0",
+      "item": {
+        "type": "markdown",
+        "id": "c62f8b3f50ee91e0",
+        "text": "I have no doubt that sufficient time would allow one to discover invocations of `helm install` with appropriate resource limits suitable for laptop development.  But it's also just a bit too easy at the moment to get wedged locally."
+      },
+      "after": "2e70b7422326ed49",
+      "date": 1525964723954
+    },
+    {
+      "type": "edit",
+      "id": "7b24c4e059af66f3",
+      "item": {
+        "type": "markdown",
+        "id": "7b24c4e059af66f3",
+        "text": "2018-05-10\n"
+      },
+      "date": 1525964758270
+    },
+    {
+      "type": "add",
+      "id": "c930bdb3abe272bb",
+      "item": {
+        "type": "markdown",
+        "id": "c930bdb3abe272bb",
+        "text": "As a test of helm, I tried installing neo4j.  After a couple attempts I did get the community edition installed.  However, educated guess that defaults assume more resources than my laptop offers.  Several symptoms of insufficient resources appeared.\n\n* `kubectl` was unable to connect to the api\n* `helm ls` was similarly unable to find a tiller\n* restarting docker helped for a moment, and then the same symptoms re-appeared after one or two commands\n* even `docker-compose` commands became unresponsive\n"
+      },
+      "after": "7b24c4e059af66f3",
+      "date": 1525964759254
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a6878310255e3244"
+      },
+      "id": "a6878310255e3244",
+      "type": "add",
+      "after": "c62f8b3f50ee91e0",
+      "date": 1525965010016
+    },
+    {
+      "type": "edit",
+      "id": "a6878310255e3244",
+      "item": {
+        "type": "paragraph",
+        "id": "a6878310255e3244",
+        "text": "Sadly this also puts a hold on experimentation with several function services which build on Kubernetes:"
+      },
+      "date": 1525965099976
+    },
+    {
+      "type": "edit",
+      "id": "a6878310255e3244",
+      "item": {
+        "type": "paragraph",
+        "id": "a6878310255e3244",
+        "text": "Sadly this also puts a hold on experimentation with several function services which build on Kubernetes: Kubeless, Riff, and OpenFaaS"
+      },
+      "date": 1525965111620
+    },
+    {
+      "type": "fork",
+      "site": "wiki.dbbs.co",
+      "date": 1525965141096
+    },
+    {
+      "type": "fork",
+      "site": "earth.wiki.dbbs.co",
+      "date": 1526041733729
+    }
+  ]
+}

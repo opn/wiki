@@ -1,0 +1,897 @@
+{
+  "title": "Explore Transport Proxy",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5dbb326a2d3a6277",
+      "text": "Can we transport a page that will proxy back to the transporter for more pages?"
+    },
+    {
+      "type": "markdown",
+      "id": "b5b4c6464f7a2863",
+      "text": "# See also\n* [[Topic Based Subsets]]\n* [[Transcluded Hypertext]]\n* [[Wikipedia Links]]\n* [[Federating Foreign Servers]]\n* [[Transport Plugin]]\n* [[Transporting Hypertex]]\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "973e6699c10883bc",
+      "text": "We launch our first image transporter on localhost:4010 and then link to it here with surgery to the page json."
+    },
+    {
+      "type": "reference",
+      "id": "a0f36b8586b64a0f",
+      "site": "localhost:4010",
+      "slug": "welcome-visitors",
+      "title": "Welcome Visitors",
+      "text": "We list several transporters offered by this foreign server. This is a static list maintained while constructing the transport endpoints."
+    },
+    {
+      "type": "paragraph",
+      "id": "3d6a268e6871e716",
+      "text": "We skip this step by bootstrapping into federated wiki with a remote link to this same page on the minimal foreign home page. [http://localhost:4010 localhost] [https://github.com/WardCunningham/image-transporter/commit/b5dbe37b5db05c8ec9f4664f2ae4147e5af63d0d github]"
+    },
+    {
+      "type": "code",
+      "id": "33d7fda4099a7b17",
+      "text": "<p><a id=link target=\"_blank\" href=\"http://ward.asia.wiki.org/\">details</a></p>\n<script>\n  link.href += location.host + \"/welcome-visitors\"\n</script>\n"
+    },
+    {
+      "type": "markdown",
+      "id": "d9a355c19fb63708",
+      "text": "# Provenance"
+    },
+    {
+      "type": "paragraph",
+      "id": "a123789c971461d3",
+      "text": "Can we keep transporter information in a transported page such that an eventual Future plugin can offer to perform further transports? We experiment with a wikipedia link transporter which we will return to as a proxy. [https://github.com/WardCunningham/transport-proxy github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "952bde18ca8d4ae5",
+      "text": "Transporter ⇒ Create ⇒ Refresh"
+    },
+    {
+      "type": "paragraph",
+      "id": "2548914c33312089",
+      "text": "Click ⇒ Search ⇒ Future ⇒ Transporter"
+    },
+    {
+      "type": "paragraph",
+      "id": "c316272d5587bf5e",
+      "text": "We handle the first part of this two step process in the transporter itself. The click handling logic in core-javascript handles the second by searching the dom for the page with the clicked link. From this the Create action is found and forwarded to the Future plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "56b67c8ee9f3ef77",
+      "text": "See [[Provenance at Creation]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5b847b1c6b2853e7",
+      "text": "The search mimics the logic used to discover proper capitalization which is known to fail on occasion. Can we take into account all of the link paths present in the core javascript. See [[Render and Follow Links]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8ad2a7bb52097041",
+      "text": "We've duplicated code from the Transport plugin and more from the Template machinery to prototype an extension to the Future plugin that could (but doesn't yet) exploit information we leave in the Journal. [https://github.com/fedwiki/wiki-client/commit/83df4356e35f4bf27794d3c8f1bc1abdb139986f github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "9a81a147673535c2",
+      "text": "To participate as a proxy a transporter would have to handle link titles as well as dropped urls. We've expanded the transporter post payload accordingly. [https://github.com/WardCunningham/transport-proxy/commit/a8409972ed88877176892a1e43cab7e5933de11b github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8eca1ff425bbfb6d",
+      "text": "We've further extended the proxy payload with the Create action from the previous transport. This can contain arbitrary information that supports complex navigation within a family of transporters."
+    },
+    {
+      "type": "paragraph",
+      "id": "e5f7753986cee9e5",
+      "text": "We see problems when wikipedia returns redirects. We don't have and don't want similar centralized functionality."
+    },
+    {
+      "type": "markdown",
+      "id": "8a458147c8676945",
+      "text": "# Importer"
+    },
+    {
+      "type": "paragraph",
+      "id": "0e75b92868b7ab9e",
+      "text": "We experimented briefly with transporting a collection of pages and returning them through the latter half of the export-import mechanism. [https://github.com/fedwiki/wiki-client/blob/master/lib/importer.coffee github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "34d078446919319d",
+      "text": "Importer plugins can be saved so long as the page doesn't exceeds the 5MB capacity of a server PUT."
+    },
+    {
+      "type": "paragraph",
+      "id": "6f7e9a968710636d",
+      "text": "The importer's rendering includes each page's age which is often just milliseconds having been just then constructed."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Explore Transport Proxy",
+        "story": []
+      },
+      "date": 1457977029889
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5dbb326a2d3a6277"
+      },
+      "id": "5dbb326a2d3a6277",
+      "type": "add",
+      "date": 1457977040634
+    },
+    {
+      "type": "edit",
+      "id": "5dbb326a2d3a6277",
+      "item": {
+        "type": "paragraph",
+        "id": "5dbb326a2d3a6277",
+        "text": "Can we transport a page that will proxy back to the transporter for more pages?"
+      },
+      "date": 1457977105779
+    },
+    {
+      "type": "add",
+      "id": "01e425b655c95347",
+      "item": {
+        "type": "paragraph",
+        "id": "01e425b655c95347",
+        "text": "See [[Federating Foreign Servers]]"
+      },
+      "after": "5dbb326a2d3a6277",
+      "date": 1457977174411
+    },
+    {
+      "type": "edit",
+      "id": "01e425b655c95347",
+      "item": {
+        "type": "paragraph",
+        "id": "01e425b655c95347",
+        "text": "See [[Transport Plugin]], [[Federating Foreign Servers]]"
+      },
+      "date": 1457977225128
+    },
+    {
+      "type": "add",
+      "id": "973e6699c10883bc",
+      "item": {
+        "type": "paragraph",
+        "id": "973e6699c10883bc",
+        "text": "We launch our first image transporter on localhost:4010 and then link to it here with surgery to the page json."
+      },
+      "after": "01e425b655c95347",
+      "date": 1457977306463
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a0f36b8586b64a0f"
+      },
+      "id": "a0f36b8586b64a0f",
+      "type": "add",
+      "after": "973e6699c10883bc",
+      "date": 1457977308642
+    },
+    {
+      "type": "edit",
+      "id": "a0f36b8586b64a0f",
+      "item": {
+        "type": "reference",
+        "id": "a0f36b8586b64a0f",
+        "site": "localhost:4010",
+        "slug": "welcome-visitors",
+        "title": "Welcome Visitors",
+        "text": "The Transport Plugin is the name given to the plugin idea initially described here: "
+      },
+      "date": 1457977327767
+    },
+    {
+      "type": "edit",
+      "id": "a0f36b8586b64a0f",
+      "item": {
+        "type": "reference",
+        "id": "a0f36b8586b64a0f",
+        "site": "localhost:4010",
+        "slug": "welcome-visitors",
+        "title": "Welcome Visitors",
+        "text": "Here we list several transporters offered by this foreign server."
+      },
+      "date": 1457977819588
+    },
+    {
+      "type": "edit",
+      "id": "a0f36b8586b64a0f",
+      "item": {
+        "type": "reference",
+        "id": "a0f36b8586b64a0f",
+        "site": "localhost:4010",
+        "slug": "welcome-visitors",
+        "title": "Welcome Visitors",
+        "text": "We list several transporters offered by this foreign server. This is a static list maintained while constructing the transport endpoints."
+      },
+      "date": 1457977876567
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3d6a268e6871e716"
+      },
+      "id": "3d6a268e6871e716",
+      "type": "add",
+      "after": "a0f36b8586b64a0f",
+      "date": 1457979381085
+    },
+    {
+      "type": "edit",
+      "id": "3d6a268e6871e716",
+      "item": {
+        "type": "paragraph",
+        "id": "3d6a268e6871e716",
+        "text": "We skip this step by bootstrapping into federated wiki with a remote link to this same page on the minimal foreign home page."
+      },
+      "date": 1457979505794
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "33d7fda4099a7b17"
+      },
+      "id": "33d7fda4099a7b17",
+      "type": "add",
+      "after": "3d6a268e6871e716",
+      "date": 1457979508266
+    },
+    {
+      "type": "edit",
+      "id": "33d7fda4099a7b17",
+      "item": {
+        "type": "code",
+        "id": "33d7fda4099a7b17",
+        "text": "<p><a id=link target=\"_blank\" href=\"http://ward.asia.wiki.org/\">details</a></p>\n<script>\n  link.href += location.host + \"/welcome-visitors\"\n</script>\n"
+      },
+      "date": 1457979513187
+    },
+    {
+      "type": "edit",
+      "id": "3d6a268e6871e716",
+      "item": {
+        "type": "paragraph",
+        "id": "3d6a268e6871e716",
+        "text": "We skip this step by bootstrapping into federated wiki with a remote link to this same page on the minimal foreign home page. [http://localhost:4010 localhost]"
+      },
+      "date": 1457979576182
+    },
+    {
+      "type": "edit",
+      "id": "3d6a268e6871e716",
+      "item": {
+        "type": "paragraph",
+        "id": "3d6a268e6871e716",
+        "text": "We skip this step by bootstrapping into federated wiki with a remote link to this same page on the minimal foreign home page. [http://localhost:4010 localhost] [https://github.com/WardCunningham/image-transporter/commit/b5dbe37b5db05c8ec9f4664f2ae4147e5af63d0d github]"
+      },
+      "date": 1457980991775
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d9a355c19fb63708"
+      },
+      "id": "d9a355c19fb63708",
+      "type": "add",
+      "after": "33d7fda4099a7b17",
+      "date": 1458066398150
+    },
+    {
+      "type": "edit",
+      "id": "d9a355c19fb63708",
+      "item": {
+        "type": "paragraph",
+        "id": "d9a355c19fb63708",
+        "text": "# Provenence"
+      },
+      "date": 1458066467777
+    },
+    {
+      "type": "edit",
+      "id": "d9a355c19fb63708",
+      "item": {
+        "type": "paragraph",
+        "id": "d9a355c19fb63708",
+        "text": "# Provenance"
+      },
+      "date": 1458066489927
+    },
+    {
+      "type": "add",
+      "id": "a123789c971461d3",
+      "item": {
+        "type": "paragraph",
+        "id": "a123789c971461d3",
+        "text": "Can we keep transporter information in a transported page such that an eventual Future plugin can offer to perform further transports."
+      },
+      "after": "d9a355c19fb63708",
+      "date": 1458066570497
+    },
+    {
+      "type": "edit",
+      "id": "d9a355c19fb63708",
+      "item": {
+        "type": "markdown",
+        "id": "d9a355c19fb63708",
+        "text": "# Provenance"
+      },
+      "date": 1458066579860
+    },
+    {
+      "type": "add",
+      "id": "952bde18ca8d4ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "952bde18ca8d4ae5",
+        "text": "Transport ⇒ JSON"
+      },
+      "after": "a123789c971461d3",
+      "date": 1458066644437
+    },
+    {
+      "type": "edit",
+      "id": "952bde18ca8d4ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "952bde18ca8d4ae5",
+        "text": "Transporter ⇒ Create ⇒ Refresh ⇒ Context "
+      },
+      "date": 1458068360325
+    },
+    {
+      "type": "edit",
+      "id": "952bde18ca8d4ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "952bde18ca8d4ae5",
+        "text": "Transporter ⇒ Create ⇒ Refresh ⇒ Future ⇒ Transporter "
+      },
+      "date": 1458068449763
+    },
+    {
+      "type": "edit",
+      "id": "952bde18ca8d4ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "952bde18ca8d4ae5",
+        "text": "Transporter ⇒ Create ⇒ Refresh ⇒ Context ⇒ Link ⇒ Future ⇒ Transporter "
+      },
+      "date": 1458068564267
+    },
+    {
+      "type": "edit",
+      "id": "952bde18ca8d4ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "952bde18ca8d4ae5",
+        "text": "Transporter ⇒ Create ⇒ Refresh ⇒ Context"
+      },
+      "date": 1458129214152
+    },
+    {
+      "type": "add",
+      "id": "2548914c33312089",
+      "item": {
+        "type": "paragraph",
+        "id": "2548914c33312089",
+        "text": "Click ⇒ Link ⇒ Future ⇒ Transporter "
+      },
+      "after": "952bde18ca8d4ae5",
+      "date": 1458129227334
+    },
+    {
+      "type": "edit",
+      "id": "2548914c33312089",
+      "item": {
+        "type": "paragraph",
+        "id": "2548914c33312089",
+        "text": "Click ⇒ Link ⇒ Future ⇒ Transporter"
+      },
+      "date": 1458129309732
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3030",
+      "date": 1458129355111
+    },
+    {
+      "type": "edit",
+      "id": "01e425b655c95347",
+      "item": {
+        "type": "paragraph",
+        "id": "01e425b655c95347",
+        "text": "See [[Transporting Hypertext]], [[Federating Foreign Servers]]"
+      },
+      "date": 1458129380654
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1458133984999
+    },
+    {
+      "type": "edit",
+      "id": "a123789c971461d3",
+      "item": {
+        "type": "paragraph",
+        "id": "a123789c971461d3",
+        "text": "Can we keep transporter information in a transported page such that an eventual Future plugin can offer to perform further transports? We experiment with a wikipedia link transporter which we will return to as a proxy. [https://github.com/WardCunningham/transport-proxy github]"
+      },
+      "date": 1458134012393
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c316272d5587bf5e",
+        "text": "We handle the first part of this two step process in the transporter itself. We check from the chrome inspector."
+      },
+      "after": "2548914c33312089",
+      "id": "c316272d5587bf5e",
+      "date": 1458134027687
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "e2d208d301797e0f",
+        "text": "$('.page:last').data('data').journal[0]"
+      },
+      "after": "c316272d5587bf5e",
+      "id": "e2d208d301797e0f",
+      "date": 1458134030777
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "67cdad908e3345e9",
+        "text": "{type: \"create\",\nid: \"36c2c6fc08a6efba\",\ndate: 1458131019000,\ntransport: \"http://localhost:4020/proxy\",\nitem: Object}"
+      },
+      "after": "e2d208d301797e0f",
+      "id": "67cdad908e3345e9",
+      "date": 1458134034305
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5b847b1c6b2853e7",
+        "text": "We might hope that the Future plugin that creates new pages could reach into the journal to find previous transport details. A robust implementation will take into account all of the link paths present in the core javascript. "
+      },
+      "after": "67cdad908e3345e9",
+      "id": "5b847b1c6b2853e7",
+      "date": 1458134037812
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3030",
+      "date": 1458134387850
+    },
+    {
+      "type": "edit",
+      "id": "5b847b1c6b2853e7",
+      "item": {
+        "type": "paragraph",
+        "id": "5b847b1c6b2853e7",
+        "text": "We might hope that the Future plugin that creates new pages could reach into the journal to find previous transport details. A robust implementation will take into account all of the link paths present in the core javascript."
+      },
+      "date": 1458134410355
+    },
+    {
+      "type": "edit",
+      "id": "5b847b1c6b2853e7",
+      "item": {
+        "type": "paragraph",
+        "id": "5b847b1c6b2853e7",
+        "text": "We might hope that the Future plugin that creates new pages could reach into the journal to find previous transport details. A robust implementation will take into account all of the link paths present in the core javascript. See [[Render and Follow Links]]"
+      },
+      "date": 1458134438703
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1458134625515
+    },
+    {
+      "type": "add",
+      "id": "7657be86b83a5127",
+      "item": {
+        "type": "paragraph",
+        "id": "7657be86b83a5127",
+        "text": "We'll dodge the necessary core enhancements by hacking some code into Future that will work for at least this one page, [[Literary Machines]]"
+      },
+      "after": "5b847b1c6b2853e7",
+      "date": 1458137340188
+    },
+    {
+      "type": "add",
+      "id": "8ad2a7bb52097041",
+      "item": {
+        "type": "paragraph",
+        "id": "8ad2a7bb52097041",
+        "text": "We've duplicated code from the Transport plugin and more from the Template machinery to prototype an extension to the Future plugin that could (but doesn't yet) exploit information we leave in the Journal. [https://github.com/fedwiki/wiki-client/compare/ward/transport-proxy github]"
+      },
+      "after": "7657be86b83a5127",
+      "date": 1458143788428
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3030",
+      "date": 1458143828252
+    },
+    {
+      "type": "add",
+      "id": "9a81a147673535c2",
+      "item": {
+        "type": "paragraph",
+        "id": "9a81a147673535c2",
+        "text": "In order to participate as a proxy a transporter would have to handle link titles as well as dropped urls. We've expanded the api expected of a transporter accordingly. [https://github.com/WardCunningham/transport-proxy/commit/a8409972ed88877176892a1e43cab7e5933de11b github]"
+      },
+      "after": "8ad2a7bb52097041",
+      "date": 1458144297398
+    },
+    {
+      "type": "edit",
+      "id": "9a81a147673535c2",
+      "item": {
+        "type": "paragraph",
+        "id": "9a81a147673535c2",
+        "text": "In order to participate as a proxy a transporter would have to handle link titles as well as dropped urls. We've expanded the api expected of a transporter accordingly and implemented this in our test transporter. [https://github.com/WardCunningham/transport-proxy/commit/a8409972ed88877176892a1e43cab7e5933de11b github]"
+      },
+      "date": 1458144335268
+    },
+    {
+      "type": "edit",
+      "id": "9a81a147673535c2",
+      "item": {
+        "type": "paragraph",
+        "id": "9a81a147673535c2",
+        "text": "In order to participate as a proxy a transporter would have to handle link titles as well as dropped urls. We've expanded the transporter post payload accordingly. [https://github.com/WardCunningham/transport-proxy/commit/a8409972ed88877176892a1e43cab7e5933de11b github]"
+      },
+      "date": 1458144378251
+    },
+    {
+      "type": "edit",
+      "id": "9a81a147673535c2",
+      "item": {
+        "type": "paragraph",
+        "id": "9a81a147673535c2",
+        "text": "To participate as a proxy a transporter would have to handle link titles as well as dropped urls. We've expanded the transporter post payload accordingly. [https://github.com/WardCunningham/transport-proxy/commit/a8409972ed88877176892a1e43cab7e5933de11b github]"
+      },
+      "date": 1458144394992
+    },
+    {
+      "type": "edit",
+      "id": "8ad2a7bb52097041",
+      "item": {
+        "type": "paragraph",
+        "id": "8ad2a7bb52097041",
+        "text": "We've duplicated code from the Transport plugin and more from the Template machinery to prototype an extension to the Future plugin that could (but doesn't yet) exploit information we leave in the Journal. [https://github.com/fedwiki/wiki-client/commit/83df4356e35f4bf27794d3c8f1bc1abdb139986f github]"
+      },
+      "date": 1458144533144
+    },
+    {
+      "type": "add",
+      "id": "e5f7753986cee9e5",
+      "item": {
+        "type": "paragraph",
+        "id": "e5f7753986cee9e5",
+        "text": "We see problems when wikipedia returns redirects. We don't have and don't want similar centralized functionality."
+      },
+      "after": "9a81a147673535c2",
+      "date": 1458145254708
+    },
+    {
+      "type": "add",
+      "id": "303d0efb85feecfe",
+      "item": {
+        "type": "paragraph",
+        "id": "303d0efb85feecfe",
+        "text": "Become needs to preserve Journal. Templates should construct a proper Create before calling become."
+      },
+      "after": "e5f7753986cee9e5",
+      "date": 1458252327265,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1458252341996
+    },
+    {
+      "type": "add",
+      "id": "8a458147c8676945",
+      "item": {
+        "type": "paragraph",
+        "id": "8a458147c8676945",
+        "text": "# Importer"
+      },
+      "after": "303d0efb85feecfe",
+      "date": 1458495564630
+    },
+    {
+      "type": "add",
+      "id": "0e75b92868b7ab9e",
+      "item": {
+        "type": "paragraph",
+        "id": "0e75b92868b7ab9e",
+        "text": "We experimented briefly with transporting a collection of pages and returning them through the latter half of the export-import mechanism. See [[About Importer Plugin]]"
+      },
+      "after": "8a458147c8676945",
+      "date": 1458495676822
+    },
+    {
+      "type": "edit",
+      "id": "0e75b92868b7ab9e",
+      "item": {
+        "type": "paragraph",
+        "id": "0e75b92868b7ab9e",
+        "text": "We experimented briefly with transporting a collection of pages and returning them through the latter half of the export-import mechanism."
+      },
+      "date": 1458495690666
+    },
+    {
+      "type": "edit",
+      "id": "8a458147c8676945",
+      "item": {
+        "type": "markdown",
+        "id": "8a458147c8676945",
+        "text": "# Importer"
+      },
+      "date": 1458495694308
+    },
+    {
+      "type": "edit",
+      "id": "0e75b92868b7ab9e",
+      "item": {
+        "type": "paragraph",
+        "id": "0e75b92868b7ab9e",
+        "text": "We experimented briefly with transporting a collection of pages and returning them through the latter half of the export-import mechanism. [https://github.com/fedwiki/wiki-client/blob/master/lib/importer.coffee github]"
+      },
+      "date": 1458495758677
+    },
+    {
+      "type": "add",
+      "id": "34d078446919319d",
+      "item": {
+        "type": "paragraph",
+        "id": "34d078446919319d",
+        "text": "Importer plugins can be saved so long as the page doesn't exceeds the 5MB capacity of a server PUT."
+      },
+      "after": "0e75b92868b7ab9e",
+      "date": 1458495969906
+    },
+    {
+      "type": "add",
+      "id": "6f7e9a968710636d",
+      "item": {
+        "type": "paragraph",
+        "id": "6f7e9a968710636d",
+        "text": "The importer's rendering includes each page's age which is often just milliseconds having been just then constructed."
+      },
+      "after": "34d078446919319d",
+      "date": 1458496069253
+    },
+    {
+      "type": "add",
+      "id": "56b67c8ee9f3ef77",
+      "item": {
+        "type": "paragraph",
+        "id": "56b67c8ee9f3ef77",
+        "text": "See [[Provenance at Creation]]"
+      },
+      "after": "303d0efb85feecfe",
+      "date": 1458500638785
+    },
+    {
+      "type": "edit",
+      "id": "303d0efb85feecfe",
+      "item": {
+        "type": "paragraph",
+        "id": "303d0efb85feecfe",
+        "text": "Become needs to preserve Journal. Templates should construct a proper Create before calling become. done."
+      },
+      "date": 1458515225542
+    },
+    {
+      "type": "remove",
+      "id": "303d0efb85feecfe",
+      "date": 1458515242598
+    },
+    {
+      "type": "edit",
+      "id": "5b847b1c6b2853e7",
+      "item": {
+        "type": "paragraph",
+        "id": "5b847b1c6b2853e7",
+        "text": "The Future plugin is handed a create action that may have source information from a previous transport. A robust implementation will take into account all of the link paths present in the core javascript. See [[Render and Follow Links]]"
+      },
+      "date": 1458515643645
+    },
+    {
+      "type": "edit",
+      "id": "952bde18ca8d4ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "952bde18ca8d4ae5",
+        "text": "Transporter ⇒ Create ⇒ Refresh"
+      },
+      "date": 1458515697847
+    },
+    {
+      "type": "edit",
+      "id": "2548914c33312089",
+      "item": {
+        "type": "paragraph",
+        "id": "2548914c33312089",
+        "text": "Click ⇒ Search ⇒ Future ⇒ Transporter"
+      },
+      "date": 1458515727539
+    },
+    {
+      "type": "edit",
+      "id": "c316272d5587bf5e",
+      "item": {
+        "type": "paragraph",
+        "id": "c316272d5587bf5e",
+        "text": "We handle the first part of this two step process in the transporter itself."
+      },
+      "date": 1458515738641
+    },
+    {
+      "type": "edit",
+      "id": "c316272d5587bf5e",
+      "item": {
+        "type": "paragraph",
+        "id": "c316272d5587bf5e",
+        "text": "We handle the first part of this two step process in the transporter itself. The click handling logic in core-javascript handles the second by searching the dom for the page with the clicked link. From this the Create action is found and forwarded to the Future"
+      },
+      "date": 1458515937627
+    },
+    {
+      "type": "edit",
+      "id": "c316272d5587bf5e",
+      "item": {
+        "type": "paragraph",
+        "id": "c316272d5587bf5e",
+        "text": "We handle the first part of this two step process in the transporter itself. The click handling logic in core-javascript handles the second by searching the dom for the page with the clicked link. From this the Create action is found and forwarded to the Future plugin."
+      },
+      "date": 1458515947996
+    },
+    {
+      "type": "add",
+      "id": "5cb5f8228d68e948",
+      "item": {
+        "type": "paragraph",
+        "id": "5cb5f8228d68e948",
+        "text": "See [[Provenance at Creation]]"
+      },
+      "after": "c316272d5587bf5e",
+      "date": 1458516022592
+    },
+    {
+      "type": "remove",
+      "id": "5cb5f8228d68e948",
+      "date": 1458516038369
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dbb326a2d3a6277",
+        "01e425b655c95347",
+        "973e6699c10883bc",
+        "a0f36b8586b64a0f",
+        "3d6a268e6871e716",
+        "33d7fda4099a7b17",
+        "d9a355c19fb63708",
+        "a123789c971461d3",
+        "952bde18ca8d4ae5",
+        "2548914c33312089",
+        "c316272d5587bf5e",
+        "56b67c8ee9f3ef77",
+        "e2d208d301797e0f",
+        "67cdad908e3345e9",
+        "5b847b1c6b2853e7",
+        "7657be86b83a5127",
+        "8ad2a7bb52097041",
+        "9a81a147673535c2",
+        "e5f7753986cee9e5",
+        "8a458147c8676945",
+        "0e75b92868b7ab9e",
+        "34d078446919319d",
+        "6f7e9a968710636d"
+      ],
+      "id": "56b67c8ee9f3ef77",
+      "date": 1458516045898
+    },
+    {
+      "type": "remove",
+      "id": "67cdad908e3345e9",
+      "date": 1458516084408
+    },
+    {
+      "type": "remove",
+      "id": "e2d208d301797e0f",
+      "date": 1458516088095
+    },
+    {
+      "type": "edit",
+      "id": "5b847b1c6b2853e7",
+      "item": {
+        "type": "paragraph",
+        "id": "5b847b1c6b2853e7",
+        "text": "A robust implementation will take into account all of the link paths present in the core javascript. See [[Render and Follow Links]]"
+      },
+      "date": 1458516119690
+    },
+    {
+      "type": "edit",
+      "id": "5b847b1c6b2853e7",
+      "item": {
+        "type": "paragraph",
+        "id": "5b847b1c6b2853e7",
+        "text": "The search mimics the logic used to discover proper capitalization which is known to fail on occasion. Can we take into account all of the link paths present in the core javascript. See [[Render and Follow Links]]"
+      },
+      "date": 1458516188143
+    },
+    {
+      "type": "remove",
+      "id": "7657be86b83a5127",
+      "date": 1458516200607
+    },
+    {
+      "type": "add",
+      "id": "8eca1ff425bbfb6d",
+      "item": {
+        "type": "paragraph",
+        "id": "8eca1ff425bbfb6d",
+        "text": "We've further extended the proxy payload with the Create action from the previous transport. This can contain arbitrary information that supports complex navigation within a family of transporters."
+      },
+      "after": "9a81a147673535c2",
+      "date": 1458516421163
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1459634270528
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "b5b4c6464f7a2863",
+        "text": "# See also\n* [[Topic Based Subsets]]\n* [[Transcluded Hypertext]]\n* [[Wikipedia Links]]\n* [[Federating Foreign Servers]]\n* [[Transport Plugin]]\n* [[Transporting Hypertex]]\n"
+      },
+      "after": "5dbb326a2d3a6277",
+      "id": "b5b4c6464f7a2863",
+      "date": 1459634289766
+    },
+    {
+      "type": "remove",
+      "id": "01e425b655c95347",
+      "date": 1459634292952
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1511369254267
+    }
+  ]
+}

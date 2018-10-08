@@ -1,0 +1,777 @@
+{
+  "title": "Lexon",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "de0e94a5c930b623",
+      "text": "Lexon is a contract programming language for lawyers.\nLexon scripts are compiled, in parallel, into legal English language contracts and blockchain smart contracts."
+    },
+    {
+      "type": "video",
+      "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+      "text": "YOUTUBE XOd3skg-gT4\n[[A Programming Language That Lawyers Understand | Cédric Waldburger]] with [[Henning Diedrich]]. Broadcast on 7 Jun 2018  - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "33e8336df05822e5",
+      "text": "[[Smart contract]]s are programs that can move money and resolve automatically. They don't need notaries, judges or attorneys, neither on the happy path nor to resolve edge cases or when the parties disagree about what should happen."
+    },
+    {
+      "type": "paragraph",
+      "id": "060e81b0ca7824cb",
+      "text": "The English text describes precisely what the blockchain contract does. It allows for the smart contract program to be understable by non-programmers and to reason about whether it is legal. These are major roadblocks for the adoption of smart contracts."
+    },
+    {
+      "type": "paragraph",
+      "id": "0cc51fa8be75e770",
+      "text": "The English text also serves as description how to use the smart contract that might be an offer for anyone to enter into, for example a crowd funding offer. The blockchain makes sure that the letters of the contract are exactly fulfilled."
+    },
+    {
+      "type": "markdown",
+      "id": "db4269f84f9cb923",
+      "text": "# Lexys"
+    },
+    {
+      "type": "paragraph",
+      "id": "5d226d077850bc9b",
+      "text": "The Computational Law Firm (Berlin)"
+    },
+    {
+      "type": "markdown",
+      "id": "f37cf4cabb5f27df",
+      "text": "- http://lexys.org   \n- mail@lexys.org\n- https://github.com/lexys\n- https://claryon.github.io/lexon"
+    },
+    {
+      "type": "markdown",
+      "id": "acc93d7702c384b5",
+      "text": "# Example"
+    },
+    {
+      "type": "paragraph",
+      "id": "ffa2e34109c96c21",
+      "text": "This is a partial example for a crowdfunding contract. The contract allows a benificiary to set a funding goal and deadline. When after the deadline the funding goal is met, the beneficiary will collect the money. Otherwise the funders can withdraw it. This example shows the withdrawal part."
+    },
+    {
+      "type": "markdown",
+      "id": "a06d8f9f43cc4e0a",
+      "text": "# Lexon Script\n"
+    },
+    {
+      "type": "markdown",
+      "id": "98c9fcca2c55eb05",
+      "text": "Here is the code not available (yet?)"
+    },
+    {
+      "type": "code",
+      "id": "78336bcf785be088",
+      "text": "ARTICLE: WITHDRAWAL.\nComment: This article describes how collected funds can be withdrawn.\n\nSECTION 1: a funder wants to withdraw. \nIF WITHDRAWAL BY FUNDERS ALLOWED AND\n   REQUESTER'S BALANCE GREATER THAN 0, THEN:\n        TRANSFER REQUESTER'S BALANCE TO REQUESTER; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', REQUESTER, BALANCE; AND\n                SET REQUESTER'S BALANCE 0.\n\nSECTION 2: the beneficiary wants to pick up the funds.\nIF REQUESTER IS BENEFICIARY, AND\n   SUM OF FUNDS GREATER OR EQUAL FUNDING GOAL, AND\n   FUNDING DEADLINE PAST, THEN:\n        TRANSFER AMOUNT RAISED TO BENEFICIARY; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', BENEFICIARY, AMOUNT RAISED; \n        OR ELSE\n                ALLOW WITHDRAWAL BY FUNDERS."
+    },
+    {
+      "type": "markdown",
+      "id": "e3791536218f5563",
+      "text": "# Legal English"
+    },
+    {
+      "type": "paragraph",
+      "id": "0057d9823fa295d4",
+      "text": "ARTICLE: WITHDRAWAL.\n\nA PARTY CAN MAKE A WITHDRAWAL AS FOLLOWS.\n\nON THE ETHEREUM MAINNET THE PARTY MAY INITIATE A DIGITALLY SIGNED 'CALL' FROM THE PARTY'S ETHEREUM MAINNET ACCOUNT, FOR A FEE, TO THIS CONTRACT'S SMART CONTRACT INSTANCE ON THE ETHEREUM MAINNET, SPECIFICALLY ITS FUNCTION 'withdrawal'.  \n\nSECTION 1: a funder wants to withdraw.\n\nIF AT THE TIME WITHDRAWALS ARE ALLOWED AND\nIF THE REQUESTER'S BALANCE IS GREATER THAN ZERO, THEN\nTHE REQUESTER'S BALANCE SHALL BE TRANSFERRED TO THE ACCOUNT OF THE REQUESTER ON THE ETHEREUM MAINNET IN THE CRYPTOCURRENCY ETHER.\n\nIF THIS TRANSFER SUCCEEDS, THEN:\nA PUBLIC 'FUND TRANSFER' ENTRY SHALL BE RECORDED ON THE ETHEREUM MAINNET RECEIPT LOG, RECORDING THE REQUESTER'S ACCOUNT NUMBER, AND THE BALANCE; AND\nTHE REQUESTER'S BALANCE IS SET TO ZERO.\n\nSECTION 2: the beneficiary wants to pick up the funds.\n\nIF THE REQUESTER IS THE BENEFICIARY AND\nAND THE FUNDING GOAL HAS BEEN REACHED, THEN\nTHE AMOUNT RAISED SHALL BE TRANSFERRED TO THE ACCOUNT OF THE BENEFICIARY ON THE ETHEREUM MAINNET, IN THE CRYPTOCURRENCY ETHER,\n\nIF THIS TRANSFER SUCCEEDS, THEN:\nA PUBLIC 'FUND TRANSFER' ENTRY SHALL BE RECORDED ON THE ETHEREUM MAINNET RECEIPT LOG, RECORDING THE BENEFICIARY'S ACCOUNT NUMBER, AND THE AMOUNT RAISED; \nOR ELSE, THE WITHDRAWAL BY FUNDERS IS ALLOWED FROM THEN ON."
+    },
+    {
+      "type": "paragraph",
+      "id": "3785eb8390afbbe5",
+      "text": "And this is the smart contract to be executed on the blockchain, namely Solidity code for Ethereum.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "d85a48380663626b",
+      "text": "# Smart Contract"
+    },
+    {
+      "type": "code",
+      "id": "31362b268c56ac88",
+      "text": "function withdrawal() {\n\n if (funderWithdrawalsAllowed \n  && balanceOf[msg.sender] > 0) {\n   bool ok = msg.sender.send(balanceOf[msg.sender]);\n   if (ok) {\n    FundTransfer(msg.sender, balanceOf[msg.sender], false);\n    balanceOf[msg.sender] = 0;\n   }\n  }\n\n  if (beneficiary == msg.sender \n   && amountRaised >= fundingGoal \n   && now >= deadline) {\n    bool ok = beneficiary.send(amountRaised);\n    if (ok) {\n     FundTransfer(beneficiary, amountRaised, false);\n    } else {\n     funderWithdrawalsAllowed = true;\n    }\n   }\n}"
+    },
+    {
+      "type": "markdown",
+      "id": "9d8822c8d5899a2d",
+      "text": "# See also\n"
+    },
+    {
+      "type": "markdown",
+      "id": "110b2f30bd5a8dbf",
+      "text": "- [[Polycentric law]]\n- [[Lexon]]\n- [[Ulex]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Lexon",
+        "story": []
+      },
+      "date": 1536661498470
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "de0e94a5c930b623"
+      },
+      "id": "de0e94a5c930b623",
+      "type": "add",
+      "date": 1536661499448
+    },
+    {
+      "type": "edit",
+      "id": "de0e94a5c930b623",
+      "item": {
+        "type": "paragraph",
+        "id": "de0e94a5c930b623",
+        "text": "Lexon is a contract programming language for lawyers.\nLexon scripts are compiled, in parallel, into legal English language contracts and blockchain smart contracts."
+      },
+      "date": 1536661538301
+    },
+    {
+      "type": "add",
+      "id": "33e8336df05822e5",
+      "item": {
+        "type": "paragraph",
+        "id": "33e8336df05822e5",
+        "text": "[[Smart contract]]s are programs that can move money and resolve automatically. They don't need notaries, judges or attorneys, neither on the happy path nor to resolve edge cases or when the parties disagree about what should happen."
+      },
+      "after": "de0e94a5c930b623",
+      "date": 1536661545797
+    },
+    {
+      "type": "add",
+      "id": "060e81b0ca7824cb",
+      "item": {
+        "type": "paragraph",
+        "id": "060e81b0ca7824cb",
+        "text": "The English text describes precisely what the blockchain contract does. It allows for the smart contract program to be understable by non-programmers and to reason about whether it is legal. These are major roadblocks for the adoption of smart contracts."
+      },
+      "after": "33e8336df05822e5",
+      "date": 1536661549149
+    },
+    {
+      "type": "add",
+      "id": "0cc51fa8be75e770",
+      "item": {
+        "type": "paragraph",
+        "id": "0cc51fa8be75e770",
+        "text": "The English text also serves as description how to use the smart contract that might be an offer for anyone to enter into, for example a crowd funding offer. The blockchain makes sure that the letters of the contract are exactly fulfilled."
+      },
+      "after": "060e81b0ca7824cb",
+      "date": 1536661552469
+    },
+    {
+      "type": "add",
+      "id": "acc93d7702c384b5",
+      "item": {
+        "type": "paragraph",
+        "id": "acc93d7702c384b5",
+        "text": "# Example"
+      },
+      "after": "0cc51fa8be75e770",
+      "date": 1536661556622
+    },
+    {
+      "type": "add",
+      "id": "ffa2e34109c96c21",
+      "item": {
+        "type": "paragraph",
+        "id": "ffa2e34109c96c21",
+        "text": "This is a partial example for a crowdfunding contract. The contract allows a benificiary to set a funding goal and deadline. When after the deadline the funding goal is met, the beneficiary will collect the money. Otherwise the funders can withdraw it. This example shows the withdrawal part.\n\n\nLexon Script\n \nARTICLE: WITHDRAWAL.\nComment: This article describes how collected funds can be withdrawn.\n\nSECTION 1: a funder wants to withdraw. \nIF WITHDRAWAL BY FUNDERS ALLOWED AND\n   REQUESTER'S BALANCE GREATER THAN 0, THEN:\n        TRANSFER REQUESTER'S BALANCE TO REQUESTER; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', REQUESTER, BALANCE; AND\n                SET REQUESTER'S BALANCE 0.\n\nSECTION 2: the beneficiary wants to pick up the funds.\nIF REQUESTER IS BENEFICIARY, AND\n   SUM OF FUNDS GREATER OR EQUAL FUNDING GOAL, AND\n   FUNDING DEADLINE PAST, THEN:\n        TRANSFER AMOUNT RAISED TO BENEFICIARY; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', BENEFICIARY, AMOUNT RAISED; \n        OR ELSE\n                ALLOW WITHDRAWAL BY FUNDERS."
+      },
+      "after": "acc93d7702c384b5",
+      "date": 1536661557393
+    },
+    {
+      "type": "edit",
+      "id": "acc93d7702c384b5",
+      "item": {
+        "type": "markdown",
+        "id": "acc93d7702c384b5",
+        "text": "# Example"
+      },
+      "date": 1536661558635
+    },
+    {
+      "type": "edit",
+      "id": "ffa2e34109c96c21",
+      "item": {
+        "type": "paragraph",
+        "id": "ffa2e34109c96c21",
+        "text": "This is a partial example for a crowdfunding contract. The contract allows a benificiary to set a funding goal and deadline. When after the deadline the funding goal is met, the beneficiary will collect the money. Otherwise the funders can withdraw it. This example shows the withdrawal part."
+      },
+      "date": 1536661562258
+    },
+    {
+      "type": "add",
+      "id": "a06d8f9f43cc4e0a",
+      "item": {
+        "type": "paragraph",
+        "id": "a06d8f9f43cc4e0a",
+        "text": "# Lexon Script"
+      },
+      "after": "ffa2e34109c96c21",
+      "date": 1536661572681
+    },
+    {
+      "type": "add",
+      "id": "3ee25e25cfed71bf",
+      "item": {
+        "type": "factory",
+        "id": "3ee25e25cfed71bf",
+        "text": "ARTICLE: WITHDRAWAL.\nComment: This article describes how collected funds can be withdrawn.\n\nSECTION 1: a funder wants to withdraw. \nIF WITHDRAWAL BY FUNDERS ALLOWED AND\n   REQUESTER'S BALANCE GREATER THAN 0, THEN:\n        TRANSFER REQUESTER'S BALANCE TO REQUESTER; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', REQUESTER, BALANCE; AND\n                SET REQUESTER'S BALANCE 0.\n\nSECTION 2: the beneficiary wants to pick up the funds.\nIF REQUESTER IS BENEFICIARY, AND\n   SUM OF FUNDS GREATER OR EQUAL FUNDING GOAL, AND\n   FUNDING DEADLINE PAST, THEN:\n        TRANSFER AMOUNT RAISED TO BENEFICIARY; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', BENEFICIARY, AMOUNT RAISED; \n        OR ELSE\n                ALLOW WITHDRAWAL BY FUNDERS."
+      },
+      "after": "a06d8f9f43cc4e0a",
+      "date": 1536661577406
+    },
+    {
+      "type": "edit",
+      "id": "a06d8f9f43cc4e0a",
+      "item": {
+        "type": "markdown",
+        "id": "a06d8f9f43cc4e0a",
+        "text": "# Lexon Script"
+      },
+      "date": 1536661601741
+    },
+    {
+      "type": "edit",
+      "id": "a06d8f9f43cc4e0a",
+      "item": {
+        "type": "markdown",
+        "id": "a06d8f9f43cc4e0a",
+        "text": "# Lexon Script\n"
+      },
+      "date": 1536661606291
+    },
+    {
+      "type": "add",
+      "id": "98c9fcca2c55eb05",
+      "item": {
+        "type": "markdown",
+        "id": "98c9fcca2c55eb05",
+        "text": "Here is the code on - [https://claryon.github.io/lexon/ gitbub]"
+      },
+      "after": "a06d8f9f43cc4e0a",
+      "date": 1536661619050
+    },
+    {
+      "type": "add",
+      "id": "db4269f84f9cb923",
+      "item": {
+        "type": "paragraph",
+        "id": "db4269f84f9cb923",
+        "text": "# Lexys"
+      },
+      "after": "0cc51fa8be75e770",
+      "date": 1536661762245
+    },
+    {
+      "type": "edit",
+      "id": "db4269f84f9cb923",
+      "item": {
+        "type": "markdown",
+        "id": "db4269f84f9cb923",
+        "text": "# Lexys"
+      },
+      "date": 1536661766338
+    },
+    {
+      "type": "add",
+      "id": "5d226d077850bc9b",
+      "item": {
+        "type": "paragraph",
+        "id": "5d226d077850bc9b",
+        "text": "https://github.com/lexys"
+      },
+      "after": "db4269f84f9cb923",
+      "date": 1536661768460
+    },
+    {
+      "type": "edit",
+      "id": "5d226d077850bc9b",
+      "item": {
+        "type": "paragraph",
+        "id": "5d226d077850bc9b",
+        "text": "The Computational Law Firm\nBerlin   - http://lexys.org   mail@lexys.org"
+      },
+      "date": 1536661806269
+    },
+    {
+      "type": "add",
+      "id": "a721dba4002a81c0",
+      "item": {
+        "type": "paragraph",
+        "id": "a721dba4002a81c0",
+        "text": "https://github.com/lexys"
+      },
+      "after": "5d226d077850bc9b",
+      "date": 1536661806763
+    },
+    {
+      "type": "edit",
+      "id": "5d226d077850bc9b",
+      "item": {
+        "type": "paragraph",
+        "id": "5d226d077850bc9b",
+        "text": "The Computational Law Firm\nBerlin   "
+      },
+      "date": 1536661812180
+    },
+    {
+      "type": "add",
+      "id": "f37cf4cabb5f27df",
+      "item": {
+        "type": "paragraph",
+        "id": "f37cf4cabb5f27df",
+        "text": "- http://lexys.org   "
+      },
+      "after": "5d226d077850bc9b",
+      "date": 1536661814229
+    },
+    {
+      "type": "add",
+      "id": "472f0d6041946013",
+      "item": {
+        "type": "paragraph",
+        "id": "472f0d6041946013",
+        "text": "- mail@lexys.org"
+      },
+      "after": "f37cf4cabb5f27df",
+      "date": 1536661815754
+    },
+    {
+      "type": "edit",
+      "id": "f37cf4cabb5f27df",
+      "item": {
+        "type": "markdown",
+        "id": "f37cf4cabb5f27df",
+        "text": "- http://lexys.org   "
+      },
+      "date": 1536661817363
+    },
+    {
+      "type": "edit",
+      "id": "472f0d6041946013",
+      "item": {
+        "type": "markdown",
+        "id": "472f0d6041946013",
+        "text": "- mail@lexys.org"
+      },
+      "date": 1536661818447
+    },
+    {
+      "type": "remove",
+      "id": "472f0d6041946013",
+      "date": 1536661821925
+    },
+    {
+      "type": "edit",
+      "id": "f37cf4cabb5f27df",
+      "item": {
+        "type": "markdown",
+        "id": "f37cf4cabb5f27df",
+        "text": "- http://lexys.org   \n- mail@lexys.org"
+      },
+      "date": 1536661824188
+    },
+    {
+      "type": "edit",
+      "id": "a721dba4002a81c0",
+      "item": {
+        "type": "paragraph",
+        "id": "a721dba4002a81c0",
+        "text": "- https://github.com/lexys"
+      },
+      "date": 1536661828692
+    },
+    {
+      "type": "edit",
+      "id": "a721dba4002a81c0",
+      "item": {
+        "type": "markdown",
+        "id": "a721dba4002a81c0",
+        "text": "- https://github.com/lexys"
+      },
+      "date": 1536661829704
+    },
+    {
+      "type": "remove",
+      "id": "a721dba4002a81c0",
+      "date": 1536661831883
+    },
+    {
+      "type": "edit",
+      "id": "f37cf4cabb5f27df",
+      "item": {
+        "type": "markdown",
+        "id": "f37cf4cabb5f27df",
+        "text": "- http://lexys.org   \n- mail@lexys.org\n- https://github.com/lexys"
+      },
+      "date": 1536661833756
+    },
+    {
+      "type": "edit",
+      "id": "5d226d077850bc9b",
+      "item": {
+        "type": "paragraph",
+        "id": "5d226d077850bc9b",
+        "text": "The Computational Law Firm (Berlin)"
+      },
+      "date": 1536661847211
+    },
+    {
+      "type": "edit",
+      "id": "98c9fcca2c55eb05",
+      "item": {
+        "type": "markdown",
+        "id": "98c9fcca2c55eb05",
+        "text": "Here is the code not available (yet?)"
+      },
+      "date": 1536661883461
+    },
+    {
+      "type": "edit",
+      "id": "f37cf4cabb5f27df",
+      "item": {
+        "type": "markdown",
+        "id": "f37cf4cabb5f27df",
+        "text": "- http://lexys.org   \n- mail@lexys.org\n- https://github.com/lexys\n- https://claryon.github.io/lexon"
+      },
+      "date": 1536661893685
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "09cec508b4daf45f"
+      },
+      "id": "09cec508b4daf45f",
+      "type": "add",
+      "after": "3ee25e25cfed71bf",
+      "date": 1536661912509
+    },
+    {
+      "type": "add",
+      "id": "937dbd9188f051ee",
+      "item": {
+        "type": "paragraph",
+        "id": "937dbd9188f051ee",
+        "text": "- Interview with Henning - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+      },
+      "after": "de0e94a5c930b623",
+      "date": 1536661942078
+    },
+    {
+      "type": "edit",
+      "id": "937dbd9188f051ee",
+      "item": {
+        "type": "markdown",
+        "id": "937dbd9188f051ee",
+        "text": "- Interview with Henning - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+      },
+      "date": 1536661953601
+    },
+    {
+      "type": "edit",
+      "id": "937dbd9188f051ee",
+      "item": {
+        "type": "markdown",
+        "id": "937dbd9188f051ee",
+        "text": "- Interview with [[Henning Diedrich]] - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+      },
+      "date": 1536661973080
+    },
+    {
+      "type": "edit",
+      "id": "937dbd9188f051ee",
+      "item": {
+        "type": "markdown",
+        "id": "937dbd9188f051ee",
+        "text": "- [[Henning Diedrich]] inteview - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+      },
+      "date": 1536661987113
+    },
+    {
+      "type": "edit",
+      "id": "09cec508b4daf45f",
+      "item": {
+        "type": "video",
+        "id": "09cec508b4daf45f",
+        "text": "YOUTUBE XOd3skg-gT4\n(double-click to edit caption)\n"
+      },
+      "date": 1536662010180
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "video",
+        "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+        "text": "YOUTUBE XOd3skg-gT4\n[[A Programming Language That Lawyers Understand | Cédric Waldburger]]. Broadcast on 7 Jun 2018."
+      },
+      "after": "937dbd9188f051ee",
+      "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+      "date": 1536662048510
+    },
+    {
+      "type": "remove",
+      "id": "09cec508b4daf45f",
+      "date": 1536662087835
+    },
+    {
+      "type": "remove",
+      "id": "937dbd9188f051ee",
+      "date": 1536662094771
+    },
+    {
+      "type": "edit",
+      "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+      "item": {
+        "type": "video",
+        "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+        "text": "YOUTUBE XOd3skg-gT4\n[[A Programming Language That Lawyers Understand | Cédric Waldburger]]. Broadcast on 7 Jun 2018  - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+      },
+      "date": 1536662108983
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e3791536218f5563"
+      },
+      "id": "e3791536218f5563",
+      "type": "add",
+      "after": "3ee25e25cfed71bf",
+      "date": 1536662555662
+    },
+    {
+      "type": "edit",
+      "id": "e3791536218f5563",
+      "item": {
+        "type": "paragraph",
+        "id": "e3791536218f5563",
+        "text": "# Legal English"
+      },
+      "date": 1536662569753
+    },
+    {
+      "type": "edit",
+      "id": "e3791536218f5563",
+      "item": {
+        "type": "markdown",
+        "id": "e3791536218f5563",
+        "text": "# Legal English"
+      },
+      "date": 1536662570974
+    },
+    {
+      "type": "add",
+      "id": "0057d9823fa295d4",
+      "item": {
+        "type": "paragraph",
+        "id": "0057d9823fa295d4",
+        "text": "ARTICLE: WITHDRAWAL.\n\nA PARTY CAN MAKE A WITHDRAWAL AS FOLLOWS.\n\nON THE ETHEREUM MAINNET THE PARTY MAY INITIATE A DIGITALLY SIGNED 'CALL' FROM THE PARTY'S ETHEREUM MAINNET ACCOUNT, FOR A FEE, TO THIS CONTRACT'S SMART CONTRACT INSTANCE ON THE ETHEREUM MAINNET, SPECIFICALLY ITS FUNCTION 'withdrawal'.  \n\nSECTION 1: a funder wants to withdraw.\n\nIF AT THE TIME WITHDRAWALS ARE ALLOWED AND\nIF THE REQUESTER'S BALANCE IS GREATER THAN ZERO, THEN\nTHE REQUESTER'S BALANCE SHALL BE TRANSFERRED TO THE ACCOUNT OF THE REQUESTER ON THE ETHEREUM MAINNET IN THE CRYPTOCURRENCY ETHER.\n\nIF THIS TRANSFER SUCCEEDS, THEN:\nA PUBLIC 'FUND TRANSFER' ENTRY SHALL BE RECORDED ON THE ETHEREUM MAINNET RECEIPT LOG, RECORDING THE REQUESTER'S ACCOUNT NUMBER, AND THE BALANCE; AND\nTHE REQUESTER'S BALANCE IS SET TO ZERO.\n\nSECTION 2: the beneficiary wants to pick up the funds.\n\nIF THE REQUESTER IS THE BENEFICIARY AND\nAND THE FUNDING GOAL HAS BEEN REACHED, THEN\nTHE AMOUNT RAISED SHALL BE TRANSFERRED TO THE ACCOUNT OF THE BENEFICIARY ON THE ETHEREUM MAINNET, IN THE CRYPTOCURRENCY ETHER,\n\nIF THIS TRANSFER SUCCEEDS, THEN:\nA PUBLIC 'FUND TRANSFER' ENTRY SHALL BE RECORDED ON THE ETHEREUM MAINNET RECEIPT LOG, RECORDING THE BENEFICIARY'S ACCOUNT NUMBER, AND THE AMOUNT RAISED; \nOR ELSE, THE WITHDRAWAL BY FUNDERS IS ALLOWED FROM THEN ON."
+      },
+      "after": "e3791536218f5563",
+      "date": 1536662581331
+    },
+    {
+      "type": "add",
+      "id": "3785eb8390afbbe5",
+      "item": {
+        "type": "paragraph",
+        "id": "3785eb8390afbbe5",
+        "text": "And this is the smart contract to be executed on the blockchain, namely Solidity code for Ethereum.\n\n"
+      },
+      "after": "0057d9823fa295d4",
+      "date": 1536662587842
+    },
+    {
+      "type": "add",
+      "id": "d85a48380663626b",
+      "item": {
+        "type": "paragraph",
+        "id": "d85a48380663626b",
+        "text": "# Smart Contract"
+      },
+      "after": "3785eb8390afbbe5",
+      "date": 1536662591171
+    },
+    {
+      "type": "add",
+      "id": "31362b268c56ac88",
+      "item": {
+        "type": "factory",
+        "id": "31362b268c56ac88",
+        "text": "function withdrawal() {\n\n        if (funderWithdrawalsAllowed \n                && balanceOf[msg.sender] > 0) {\n                bool ok = msg.sender.send(balanceOf[msg.sender]);\n                if (ok) {\n                        FundTransfer(msg.sender, balanceOf[msg.sender], false);\n                        balanceOf[msg.sender] = 0;\n                }\n        }\n\n        if (beneficiary == msg.sender \n                && amountRaised >= fundingGoal \n                && now >= deadline) {\n                bool ok = beneficiary.send(amountRaised);\n                if (ok) {\n                        FundTransfer(beneficiary, amountRaised, false);\n             } else {\n                        funderWithdrawalsAllowed = true;\n                }\n        }\n}"
+      },
+      "after": "d85a48380663626b",
+      "date": 1536662596466
+    },
+    {
+      "type": "edit",
+      "id": "d85a48380663626b",
+      "item": {
+        "type": "markdown",
+        "id": "d85a48380663626b",
+        "text": "# Smart Contract"
+      },
+      "date": 1536662600311
+    },
+    {
+      "type": "edit",
+      "id": "31362b268c56ac88",
+      "item": {
+        "type": "code",
+        "id": "31362b268c56ac88",
+        "text": "function withdrawal() {\n\n if (funderWithdrawalsAllowed \n  && balanceOf[msg.sender] > 0) {\n   bool ok = msg.sender.send(balanceOf[msg.sender]);\n   if (ok) {\n                        FundTransfer(msg.sender, balanceOf[msg.sender], false);\n                        balanceOf[msg.sender] = 0;\n                }\n        }\n\n        if (beneficiary == msg.sender \n                && amountRaised >= fundingGoal \n                && now >= deadline) {\n                bool ok = beneficiary.send(amountRaised);\n                if (ok) {\n                        FundTransfer(beneficiary, amountRaised, false);\n             } else {\n                        funderWithdrawalsAllowed = true;\n                }\n        }\n}"
+      },
+      "date": 1536662623587
+    },
+    {
+      "type": "edit",
+      "id": "31362b268c56ac88",
+      "item": {
+        "type": "code",
+        "id": "31362b268c56ac88",
+        "text": "function withdrawal() {\n\n if (funderWithdrawalsAllowed \n  && balanceOf[msg.sender] > 0) {\n   bool ok = msg.sender.send(balanceOf[msg.sender]);\n   if (ok) {\n    FundTransfer(msg.sender, balanceOf[msg.sender], false);\n    balanceOf[msg.sender] = 0;\n   }\n        }\n\n        if (beneficiary == msg.sender \n                && amountRaised >= fundingGoal \n                && now >= deadline) {\n                bool ok = beneficiary.send(amountRaised);\n                if (ok) {\n                        FundTransfer(beneficiary, amountRaised, false);\n             } else {\n                        funderWithdrawalsAllowed = true;\n                }\n        }\n}"
+      },
+      "date": 1536662639033
+    },
+    {
+      "type": "edit",
+      "id": "31362b268c56ac88",
+      "item": {
+        "type": "code",
+        "id": "31362b268c56ac88",
+        "text": "function withdrawal() {\n\n if (funderWithdrawalsAllowed \n  && balanceOf[msg.sender] > 0) {\n   bool ok = msg.sender.send(balanceOf[msg.sender]);\n   if (ok) {\n    FundTransfer(msg.sender, balanceOf[msg.sender], false);\n    balanceOf[msg.sender] = 0;\n   }\n  }\n\n  if (beneficiary == msg.sender \n   && amountRaised >= fundingGoal \n   && now >= deadline) {\n    bool ok = beneficiary.send(amountRaised);\n    if (ok) {\n     FundTransfer(beneficiary, amountRaised, false);\n    } else {\n     funderWithdrawalsAllowed = true;\n    }\n   }\n}"
+      },
+      "date": 1536662696565
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9d8822c8d5899a2d"
+      },
+      "id": "9d8822c8d5899a2d",
+      "type": "add",
+      "after": "31362b268c56ac88",
+      "date": 1536663027822
+    },
+    {
+      "type": "edit",
+      "id": "9d8822c8d5899a2d",
+      "item": {
+        "type": "markdown",
+        "id": "9d8822c8d5899a2d",
+        "text": "# See also\n"
+      },
+      "date": 1536663032941
+    },
+    {
+      "type": "add",
+      "id": "110b2f30bd5a8dbf",
+      "item": {
+        "type": "markdown",
+        "id": "110b2f30bd5a8dbf",
+        "text": "- [[dfsa]]"
+      },
+      "after": "9d8822c8d5899a2d",
+      "date": 1536663039875
+    },
+    {
+      "type": "edit",
+      "id": "110b2f30bd5a8dbf",
+      "item": {
+        "type": "markdown",
+        "id": "110b2f30bd5a8dbf",
+        "text": "- [[Polycentric law]]"
+      },
+      "date": 1536663046276
+    },
+    {
+      "type": "edit",
+      "id": "110b2f30bd5a8dbf",
+      "item": {
+        "type": "markdown",
+        "id": "110b2f30bd5a8dbf",
+        "text": "- [[Polycentric law]]\n- [[Lexon]]"
+      },
+      "date": 1536663054788
+    },
+    {
+      "type": "edit",
+      "id": "110b2f30bd5a8dbf",
+      "item": {
+        "type": "markdown",
+        "id": "110b2f30bd5a8dbf",
+        "text": "- [[Polycentric law]]\n- [[Lexon]]\n- [[Ulex]]"
+      },
+      "date": 1536663072237
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "78336bcf785be088"
+      },
+      "id": "78336bcf785be088",
+      "type": "add",
+      "after": "110b2f30bd5a8dbf",
+      "date": 1536665286126
+    },
+    {
+      "type": "edit",
+      "id": "78336bcf785be088",
+      "item": {
+        "type": "code",
+        "id": "78336bcf785be088",
+        "text": "ARTICLE: WITHDRAWAL.\nComment: This article describes how collected funds can be withdrawn.\n\nSECTION 1: a funder wants to withdraw. \nIF WITHDRAWAL BY FUNDERS ALLOWED AND\n   REQUESTER'S BALANCE GREATER THAN 0, THEN:\n        TRANSFER REQUESTER'S BALANCE TO REQUESTER; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', REQUESTER, BALANCE; AND\n                SET REQUESTER'S BALANCE 0.\n\nSECTION 2: the beneficiary wants to pick up the funds.\nIF REQUESTER IS BENEFICIARY, AND\n   SUM OF FUNDS GREATER OR EQUAL FUNDING GOAL, AND\n   FUNDING DEADLINE PAST, THEN:\n        TRANSFER AMOUNT RAISED TO BENEFICIARY; AND\n        IF THIS TRANSFER SUCCEEDS, THEN:\n                RECORD: 'FUND TRANSFER', BENEFICIARY, AMOUNT RAISED; \n        OR ELSE\n                ALLOW WITHDRAWAL BY FUNDERS."
+      },
+      "date": 1536665288154
+    },
+    {
+      "type": "move",
+      "order": [
+        "de0e94a5c930b623",
+        "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+        "33e8336df05822e5",
+        "060e81b0ca7824cb",
+        "0cc51fa8be75e770",
+        "db4269f84f9cb923",
+        "5d226d077850bc9b",
+        "f37cf4cabb5f27df",
+        "acc93d7702c384b5",
+        "ffa2e34109c96c21",
+        "a06d8f9f43cc4e0a",
+        "98c9fcca2c55eb05",
+        "78336bcf785be088",
+        "3ee25e25cfed71bf",
+        "e3791536218f5563",
+        "0057d9823fa295d4",
+        "3785eb8390afbbe5",
+        "d85a48380663626b",
+        "31362b268c56ac88",
+        "9d8822c8d5899a2d",
+        "110b2f30bd5a8dbf"
+      ],
+      "id": "78336bcf785be088",
+      "date": 1536665293674
+    },
+    {
+      "type": "remove",
+      "id": "3ee25e25cfed71bf",
+      "date": 1536665297320
+    },
+    {
+      "type": "edit",
+      "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+      "item": {
+        "type": "video",
+        "id": "bc649d4b-10e8-430f-8ec3-dac55eb099da",
+        "text": "YOUTUBE XOd3skg-gT4\n[[A Programming Language That Lawyers Understand | Cédric Waldburger]] with [[Henning Diedrich]]. Broadcast on 7 Jun 2018  - [https://cedricwaldburger.com/2018/06/27/lexon/ cedricwaldburger.com]"
+      },
+      "date": 1536665449481
+    }
+  ]
+}

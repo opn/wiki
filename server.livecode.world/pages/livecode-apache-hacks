@@ -1,0 +1,465 @@
+{
+  "title": "Livecode Apache Hacks",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "7c1cf7f6455a6ba2",
+      "text": "Here we look at some hacks which you may wish to try, but that have security implications and should not be used in a production setup."
+    },
+    {
+      "type": "paragraph",
+      "id": "d251176311fde0d0",
+      "text": "Here we look at giving your Livecode Apache CGI's the ability to modify HTML files, and access to shell commands such as [[git]]:"
+    },
+    {
+      "type": "markdown",
+      "id": "417b3793c2e9e1b0",
+      "text": "# Add www-data to group\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "25c0ae33d1e731ca",
+      "text": "\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "cb0d264e51ba71b4",
+      "text": "Now I want www-data (Apache daemon) to have an access to this directory, so in my mind I am planning to add www-data to group devs. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f99bb30aba67f66d",
+      "text": "However I fear that I would cause wreckage if I execute this:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "dfc9944e5aa63e22",
+      "text": "usermod -a -G devs www-data"
+    },
+    {
+      "type": "paragraph",
+      "id": "0967173aa16c9063",
+      "text": "This won't break anything, but might cause a security issue, since anyone accessing the www-data account (php scripts, unpatched, hacked pages, etc.) will get read/write access to everything that the 'devs' group has."
+    },
+    {
+      "type": "paragraph",
+      "id": "c343b8c424014f3c",
+      "text": "\"www-data\" already has read access to that folder, try limiting the write access to just the files it really really needs to write to."
+    },
+    {
+      "type": "markdown",
+      "id": "91530ea4040db4f8",
+      "text": "# See also\n\n- [[Apache Tweaks]]\n- [[Apache Permissions]]\n- [[Configure new git user]]\n- [[Link to GitHub with SSH Keys]]\n- [[Apache Web Directory Owners]]\n- [[Link to GitHub with SSH Keys]]\n\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Livecode Apache Hacks",
+        "story": []
+      },
+      "date": 1498296112401
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "25c0ae33d1e731ca"
+      },
+      "id": "25c0ae33d1e731ca",
+      "type": "add",
+      "date": 1498296113318
+    },
+    {
+      "type": "edit",
+      "id": "25c0ae33d1e731ca",
+      "item": {
+        "type": "paragraph",
+        "id": "25c0ae33d1e731ca",
+        "text": "You won't break anything, but you might cause a security issue, since anyone accessing the www-data account (php scripts, unpatched, hacked pages, etc.) will get read/write access to everything that the 'devs' group has.\n\n\"www-data\" already has read access to that folder, try limiting the write access to just the files it really really needs to write to."
+      },
+      "date": 1498296116879
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7c1cf7f6455a6ba2"
+      },
+      "id": "7c1cf7f6455a6ba2",
+      "type": "add",
+      "after": "25c0ae33d1e731ca",
+      "date": 1498296118180
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c1cf7f6455a6ba2",
+        "25c0ae33d1e731ca"
+      ],
+      "id": "7c1cf7f6455a6ba2",
+      "date": 1498296119502
+    },
+    {
+      "type": "edit",
+      "id": "7c1cf7f6455a6ba2",
+      "item": {
+        "type": "paragraph",
+        "id": "7c1cf7f6455a6ba2",
+        "text": "Here we look at some hacks which you may wish to try, but that have security implications and should not be used in a production setup:"
+      },
+      "date": 1498296159338
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "417b3793c2e9e1b0"
+      },
+      "id": "417b3793c2e9e1b0",
+      "type": "add",
+      "after": "25c0ae33d1e731ca",
+      "date": 1498296161138
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c1cf7f6455a6ba2",
+        "417b3793c2e9e1b0",
+        "25c0ae33d1e731ca"
+      ],
+      "id": "417b3793c2e9e1b0",
+      "date": 1498296162657
+    },
+    {
+      "type": "edit",
+      "id": "417b3793c2e9e1b0",
+      "item": {
+        "type": "markdown",
+        "id": "417b3793c2e9e1b0",
+        "text": "# dsaf"
+      },
+      "date": 1498296169699
+    },
+    {
+      "type": "edit",
+      "id": "25c0ae33d1e731ca",
+      "item": {
+        "type": "paragraph",
+        "id": "25c0ae33d1e731ca",
+        "text": "Add www-data to group\n\n\nup vote\n2\ndown vote\nfavorite\nI have a directory with the following details:\n\ndrwxrwxr-x 6 root devs 4.0K Sep  9 14:57 project_dev\nNow I want www-data (Apache daemon) to have an access to this directory, so in my mind I am planning to add www-data to group devs. However I fear that I would cause wreckage if I execute this:\n\nusermod -a -G devs www-data"
+      },
+      "date": 1498296209495
+    },
+    {
+      "type": "add",
+      "id": "0967173aa16c9063",
+      "item": {
+        "type": "paragraph",
+        "id": "0967173aa16c9063",
+        "text": "You won't break anything, but you might cause a security issue, since anyone accessing the www-data account (php scripts, unpatched, hacked pages, etc.) will get read/write access to everything that the 'devs' group has.\n\n\"www-data\" already has read access to that folder, try limiting the write access to just the files it really really needs to write to."
+      },
+      "after": "25c0ae33d1e731ca",
+      "date": 1498296214240
+    },
+    {
+      "type": "edit",
+      "id": "25c0ae33d1e731ca",
+      "item": {
+        "type": "paragraph",
+        "id": "25c0ae33d1e731ca",
+        "text": "I have a directory with the following details:\n\n"
+      },
+      "date": 1498296236992
+    },
+    {
+      "type": "add",
+      "id": "aef096def961a02a",
+      "item": {
+        "type": "paragraph",
+        "id": "aef096def961a02a",
+        "text": "drwxrwxr-x 6 root devs 4.0K Sep  9 14:57 project_dev\n"
+      },
+      "after": "25c0ae33d1e731ca",
+      "date": 1498296239120
+    },
+    {
+      "type": "add",
+      "id": "cb0d264e51ba71b4",
+      "item": {
+        "type": "paragraph",
+        "id": "cb0d264e51ba71b4",
+        "text": "Now I want www-data (Apache daemon) to have an access to this directory, so in my mind I am planning to add www-data to group devs. However I fear that I would cause wreckage if I execute this:\n\n"
+      },
+      "after": "aef096def961a02a",
+      "date": 1498296240880
+    },
+    {
+      "type": "add",
+      "id": "9c3e878f1ce73e5f",
+      "item": {
+        "type": "paragraph",
+        "id": "9c3e878f1ce73e5f",
+        "text": "usermod -a -G devs www-data"
+      },
+      "after": "cb0d264e51ba71b4",
+      "date": 1498296242836
+    },
+    {
+      "type": "edit",
+      "id": "417b3793c2e9e1b0",
+      "item": {
+        "type": "markdown",
+        "id": "417b3793c2e9e1b0",
+        "text": "# Add www-data to group\n"
+      },
+      "date": 1498296257835
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a6ba8c1f7905639a"
+      },
+      "id": "a6ba8c1f7905639a",
+      "type": "add",
+      "after": "0967173aa16c9063",
+      "date": 1498296261036
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c1cf7f6455a6ba2",
+        "417b3793c2e9e1b0",
+        "25c0ae33d1e731ca",
+        "aef096def961a02a",
+        "a6ba8c1f7905639a",
+        "cb0d264e51ba71b4",
+        "9c3e878f1ce73e5f",
+        "0967173aa16c9063"
+      ],
+      "id": "a6ba8c1f7905639a",
+      "date": 1498296262541
+    },
+    {
+      "type": "remove",
+      "id": "aef096def961a02a",
+      "date": 1498296267050
+    },
+    {
+      "type": "edit",
+      "id": "a6ba8c1f7905639a",
+      "item": {
+        "type": "html",
+        "id": "a6ba8c1f7905639a",
+        "text": "drwxrwxr-x 6 root devs 4.0K Sep  9 14:57 project_dev\n"
+      },
+      "date": 1498296268879
+    },
+    {
+      "type": "edit",
+      "id": "25c0ae33d1e731ca",
+      "item": {
+        "type": "paragraph",
+        "id": "25c0ae33d1e731ca",
+        "text": "\n"
+      },
+      "date": 1498296278165
+    },
+    {
+      "type": "remove",
+      "id": "a6ba8c1f7905639a",
+      "date": 1498296280260
+    },
+    {
+      "type": "edit",
+      "id": "cb0d264e51ba71b4",
+      "item": {
+        "type": "paragraph",
+        "id": "cb0d264e51ba71b4",
+        "text": "Now I want www-data (Apache daemon) to have an access to this directory, so in my mind I am planning to add www-data to group devs. "
+      },
+      "date": 1498296285955
+    },
+    {
+      "type": "add",
+      "id": "f99bb30aba67f66d",
+      "item": {
+        "type": "paragraph",
+        "id": "f99bb30aba67f66d",
+        "text": "However I fear that I would cause wreckage if I execute this:\n\n"
+      },
+      "after": "cb0d264e51ba71b4",
+      "date": 1498296286372
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dfc9944e5aa63e22"
+      },
+      "id": "dfc9944e5aa63e22",
+      "type": "add",
+      "after": "0967173aa16c9063",
+      "date": 1498296288342
+    },
+    {
+      "type": "move",
+      "order": [
+        "7c1cf7f6455a6ba2",
+        "417b3793c2e9e1b0",
+        "25c0ae33d1e731ca",
+        "cb0d264e51ba71b4",
+        "f99bb30aba67f66d",
+        "9c3e878f1ce73e5f",
+        "dfc9944e5aa63e22",
+        "0967173aa16c9063"
+      ],
+      "id": "dfc9944e5aa63e22",
+      "date": 1498296289504
+    },
+    {
+      "type": "remove",
+      "id": "9c3e878f1ce73e5f",
+      "date": 1498296292716
+    },
+    {
+      "type": "edit",
+      "id": "dfc9944e5aa63e22",
+      "item": {
+        "type": "code",
+        "id": "dfc9944e5aa63e22",
+        "text": "usermod -a -G devs www-data"
+      },
+      "date": 1498296305642
+    },
+    {
+      "type": "edit",
+      "id": "0967173aa16c9063",
+      "item": {
+        "type": "paragraph",
+        "id": "0967173aa16c9063",
+        "text": "This won't break anything, but might cause a security issue, since anyone accessing the www-data account (php scripts, unpatched, hacked pages, etc.) will get read/write access to everything that the 'devs' group has."
+      },
+      "date": 1498296326759
+    },
+    {
+      "type": "add",
+      "id": "c343b8c424014f3c",
+      "item": {
+        "type": "paragraph",
+        "id": "c343b8c424014f3c",
+        "text": "\"www-data\" already has read access to that folder, try limiting the write access to just the files it really really needs to write to."
+      },
+      "after": "0967173aa16c9063",
+      "date": 1498296334912
+    },
+    {
+      "type": "add",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "paragraph",
+        "id": "91530ea4040db4f8",
+        "text": "# See also"
+      },
+      "after": "c343b8c424014f3c",
+      "date": 1498296385755
+    },
+    {
+      "type": "edit",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "markdown",
+        "id": "91530ea4040db4f8",
+        "text": "# See also"
+      },
+      "date": 1498296386786
+    },
+    {
+      "type": "edit",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "markdown",
+        "id": "91530ea4040db4f8",
+        "text": "# See also\n\n- [[Apache Tweaks]]\n- [[Configure new git user]]"
+      },
+      "date": 1498296412350
+    },
+    {
+      "type": "edit",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "markdown",
+        "id": "91530ea4040db4f8",
+        "text": "# See also\n\n- [[Apache Tweaks]]\n- [[Configure new git user]]\n- [[Link to GitHub with SSH Keys]]"
+      },
+      "date": 1498296446473
+    },
+    {
+      "type": "edit",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "markdown",
+        "id": "91530ea4040db4f8",
+        "text": "# See also\n\n- [[Apache Tweaks]]\n- [[Configure new git user]]\n- [[Link to GitHub with SSH Keys]]\n- [[Apache Web Directory Owners]]\n"
+      },
+      "date": 1498296467951
+    },
+    {
+      "type": "edit",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "markdown",
+        "id": "91530ea4040db4f8",
+        "text": "# See also\n\n- [[Apache Tweaks]]\n- [[Configure new git user]]\n- [[Link to GitHub with SSH Keys]]\n- [[Apache Web Directory Owners]]\n- [[Link to GitHub with SSH Keys]]\n\n"
+      },
+      "date": 1498296498389
+    },
+    {
+      "type": "edit",
+      "id": "7c1cf7f6455a6ba2",
+      "item": {
+        "type": "paragraph",
+        "id": "7c1cf7f6455a6ba2",
+        "text": "Here we look at some hacks which you may wish to try, but that have security implications and should not be used in a production setup."
+      },
+      "date": 1498296515131
+    },
+    {
+      "type": "add",
+      "id": "d251176311fde0d0",
+      "item": {
+        "type": "paragraph",
+        "id": "d251176311fde0d0",
+        "text": "Here we look at giving your Livecode Apache CGI's access to shell commands such as [[git]]:"
+      },
+      "after": "7c1cf7f6455a6ba2",
+      "date": 1498296550152
+    },
+    {
+      "type": "edit",
+      "id": "d251176311fde0d0",
+      "item": {
+        "type": "paragraph",
+        "id": "d251176311fde0d0",
+        "text": "Here we look at giving your Livecode Apache CGI's the ability to modify HTML files, and access to shell commands such as [[git]]:"
+      },
+      "date": 1498296585795
+    },
+    {
+      "type": "edit",
+      "id": "91530ea4040db4f8",
+      "item": {
+        "type": "markdown",
+        "id": "91530ea4040db4f8",
+        "text": "# See also\n\n- [[Apache Tweaks]]\n- [[Apache Permissions]]\n- [[Configure new git user]]\n- [[Link to GitHub with SSH Keys]]\n- [[Apache Web Directory Owners]]\n- [[Link to GitHub with SSH Keys]]\n\n"
+      },
+      "date": 1498308797285,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1498308809611
+    }
+  ]
+}

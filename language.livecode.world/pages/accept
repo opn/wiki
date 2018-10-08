@@ -1,0 +1,712 @@
+{
+  "title": "accept",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "f801f325b63790e8",
+      "text": "Accepts an internet connection and creates a socket for that connection."
+    },
+    {
+      "type": "markdown",
+      "id": "644764c583f6d81b",
+      "text": "# Syntax"
+    },
+    {
+      "type": "code",
+      "id": "3805ebd1ee60df2a",
+      "text": "accept [datagram] connections on port portNumber with message callbackMessage"
+    },
+    {
+      "type": "markdown",
+      "id": "0a99c44502e29156",
+      "text": "# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to set\n- pValue : the new value to set the item to."
+    },
+    {
+      "type": "markdown",
+      "id": "7e4b78bc83d6e362",
+      "text": "# Examples"
+    },
+    {
+      "type": "code",
+      "id": "beec8db8b56951a8",
+      "text": "accept connections on port 80 with message \"connectionMade\""
+    },
+    {
+      "type": "code",
+      "id": "97baca8df1e68008",
+      "text": "accept datagram connections on port 80 with message \"connectionMade\""
+    },
+    {
+      "type": "code",
+      "id": "d070bf53e0b6c6f9",
+      "text": "on mouseUp\n   accept connections on port 80 with message \"connectionMade\"\nend mouseUp\n\non connectionMade pIPAddress\n   put \"Connection made:\" && pIPAddress\nend connectionMade"
+    },
+    {
+      "type": "markdown",
+      "id": "17a31a631015cf04",
+      "text": "# Related"
+    },
+    {
+      "type": "markdown",
+      "id": "0d260cc74a40fc0f",
+      "text": "* __property:__ [[HTTPProxy]], [[script]]\n* __command:__ [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\n* __function:__ [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\n* __glossary:__ [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\n* __object:__ [[object]]"
+    },
+    {
+      "type": "markdown",
+      "id": "88a0372fee5b1faf",
+      "text": "# Description"
+    },
+    {
+      "type": "markdown",
+      "id": "ba94385a74c9e9ad",
+      "text": "Use the __accept__ command when running a server, to accept TCP connections or UDP datagrams from other systems (or other processes on the same system). Use the datagram option if you want to accept UDP datagrams."
+    },
+    {
+      "type": "markdown",
+      "id": "7c6e8e39ee1893d7",
+      "text": "When a connection is made or a datagram is received, the __accept__ command creates a new socket that can be used to communicate with the other system (or process). When using the close socket, read from socket, or write to socket commands, you can refer to this socket with a socket identifier that looks like this: host:port[|connectionID] where the connectionID is a number assigned by the __accept__ command. (You only need to specify the connection number if there is more than one socket connected to a particular port and host.)"
+    },
+    {
+      "type": "paragraph",
+      "id": "93ece8ecc3c14962",
+      "text": "The callbackMessage is sent to the object whose script contains the accept command. Either one or two parameters are sent with this message. The first parameter is the IP address of the system or process making the connection. If a datagram is being accepted, the second parameter is the contents of the datagram."
+    },
+    {
+      "type": "markdown",
+      "id": "0c3e33de0c97b4d8",
+      "text": "\n\nFor technical information about sockets, see RFC 147 at http://www.ietf.org/rfc/rfc147.txt. For technical information about UDP datagrams, see RFC 768 at http://www.ietf.org/rfc/rfc0768.txt. For technical information about the numbers used to designate standard ports, see the list of port numbers at http://www.iana.org/assignments/port-numbers, in particular the section entitled \"Well Known Port Numbers\"."
+    },
+    {
+      "type": "markdown",
+      "id": "2bf9b49abbd0e95b",
+      "text": "* Type: command\n* Introduced: 1.0\n* OS: mac,windows,linux,ios,android\n* Platforms: desktop,server,web,mobile"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "accept",
+        "story": []
+      },
+      "date": 1458395949355
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f801f325b63790e8"
+      },
+      "id": "f801f325b63790e8",
+      "type": "add",
+      "date": 1458395950825
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "0a99c44502e29156",
+        "text": "# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to set\n- pValue : the new value to set the item to."
+      },
+      "after": "f801f325b63790e8",
+      "id": "0a99c44502e29156",
+      "date": 1458395969402
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "7275e9fbb2d09fa4",
+        "text": "# Handler"
+      },
+      "after": "0a99c44502e29156",
+      "id": "7275e9fbb2d09fa4",
+      "date": 1458395972175
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "39e7dd9a1560241a",
+        "text": "command revMetadataSet pObject, pType, pTag, pValue\n   if pType is not among the items of metadataTypes() then\n      throw \"invalid_type: \" & pType\n   end if\n   \n   local tPropertyName\n   put metadataPropertySetFromTypeName(pType) & \"[\" & pTag & \"]\" into tPropertyName\n   \n   # Lock messages around this for now to ensure that revCommon does not interfere with this..\n   lock messages\n   set the tPropertyName of pObject to pValue\n   unlock messages\nend revMetadataSet"
+      },
+      "after": "0a99c44502e29156",
+      "id": "39e7dd9a1560241a",
+      "date": 1458395974423
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "0a99c44502e29156",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a"
+      ],
+      "id": "7275e9fbb2d09fa4",
+      "date": 1458395976482
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "2bf9b49abbd0e95b",
+        "text": "* Type: command\n* Where: Toolset/libraries/revMetadataSet"
+      },
+      "after": "39e7dd9a1560241a",
+      "id": "2bf9b49abbd0e95b",
+      "date": 1458395983062
+    },
+    {
+      "type": "edit",
+      "id": "f801f325b63790e8",
+      "item": {
+        "type": "paragraph",
+        "id": "f801f325b63790e8",
+        "text": "Accepts an internet connection and creates a socket for that connection."
+      },
+      "date": 1458395996013
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7e4b78bc83d6e362"
+      },
+      "id": "7e4b78bc83d6e362",
+      "type": "add",
+      "after": "2bf9b49abbd0e95b",
+      "date": 1458396006885
+    },
+    {
+      "type": "edit",
+      "id": "7e4b78bc83d6e362",
+      "item": {
+        "type": "markdown",
+        "id": "7e4b78bc83d6e362",
+        "text": "# Examples"
+      },
+      "date": 1458396018614
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "644764c583f6d81b"
+      },
+      "id": "644764c583f6d81b",
+      "type": "add",
+      "after": "7e4b78bc83d6e362",
+      "date": 1458396031014
+    },
+    {
+      "type": "edit",
+      "id": "644764c583f6d81b",
+      "item": {
+        "type": "markdown",
+        "id": "644764c583f6d81b",
+        "text": "# Syntax"
+      },
+      "date": 1458396039303
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "0a99c44502e29156",
+        "644764c583f6d81b",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a",
+        "2bf9b49abbd0e95b",
+        "7e4b78bc83d6e362"
+      ],
+      "id": "644764c583f6d81b",
+      "date": 1458396042044
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3805ebd1ee60df2a"
+      },
+      "id": "3805ebd1ee60df2a",
+      "type": "add",
+      "after": "7e4b78bc83d6e362",
+      "date": 1458396043544
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "0a99c44502e29156",
+        "644764c583f6d81b",
+        "3805ebd1ee60df2a",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a",
+        "2bf9b49abbd0e95b",
+        "7e4b78bc83d6e362"
+      ],
+      "id": "3805ebd1ee60df2a",
+      "date": 1458396045599
+    },
+    {
+      "type": "edit",
+      "id": "3805ebd1ee60df2a",
+      "item": {
+        "type": "code",
+        "id": "3805ebd1ee60df2a",
+        "text": "accept [datagram] connections on port portNumber with message callbackMessage"
+      },
+      "date": 1458396062111
+    },
+    {
+      "type": "edit",
+      "id": "2bf9b49abbd0e95b",
+      "item": {
+        "type": "markdown",
+        "id": "2bf9b49abbd0e95b",
+        "text": "* Type: command\n* Introduced: 1.0\n* OS: \n* Where: Toolset/libraries/revMetadataSet"
+      },
+      "date": 1458396116591
+    },
+    {
+      "type": "edit",
+      "id": "2bf9b49abbd0e95b",
+      "item": {
+        "type": "markdown",
+        "id": "2bf9b49abbd0e95b",
+        "text": "* Type: command\n* Introduced: 1.0\n* OS: mac,windows,linux,ios,android\n* Platforms: desktop,server,web,mobile\n* Where: Toolset/libraries/revMetadataSet"
+      },
+      "date": 1458396146394
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "beec8db8b56951a8"
+      },
+      "id": "beec8db8b56951a8",
+      "type": "add",
+      "after": "7e4b78bc83d6e362",
+      "date": 1458396156664
+    },
+    {
+      "type": "edit",
+      "id": "beec8db8b56951a8",
+      "item": {
+        "type": "code",
+        "id": "beec8db8b56951a8",
+        "text": "accept connections on port 80 with message \"connectionMade\""
+      },
+      "date": 1458396160437
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "97baca8df1e68008"
+      },
+      "id": "97baca8df1e68008",
+      "type": "add",
+      "after": "beec8db8b56951a8",
+      "date": 1458396162780
+    },
+    {
+      "type": "edit",
+      "id": "97baca8df1e68008",
+      "item": {
+        "type": "code",
+        "id": "97baca8df1e68008",
+        "text": "accept datagram connections on port 80 with message \"connectionMade\""
+      },
+      "date": 1458396173901
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17a31a631015cf04"
+      },
+      "id": "17a31a631015cf04",
+      "type": "add",
+      "after": "97baca8df1e68008",
+      "date": 1458396193507
+    },
+    {
+      "type": "edit",
+      "id": "17a31a631015cf04",
+      "item": {
+        "type": "paragraph",
+        "id": "17a31a631015cf04",
+        "text": "on mouseUp\n   accept connections on port 80 with message \"connectionMade\"\nend mouseUp\n\non connectionMade pIPAddress\n   put \"Connection made:\" && pIPAddress\nend connectionMade"
+      },
+      "date": 1458396195732
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d070bf53e0b6c6f9"
+      },
+      "id": "d070bf53e0b6c6f9",
+      "type": "add",
+      "after": "17a31a631015cf04",
+      "date": 1458396201565
+    },
+    {
+      "type": "edit",
+      "id": "d070bf53e0b6c6f9",
+      "item": {
+        "type": "code",
+        "id": "d070bf53e0b6c6f9",
+        "text": "on mouseUp\n   accept connections on port 80 with message \"connectionMade\"\nend mouseUp\n\non connectionMade pIPAddress\n   put \"Connection made:\" && pIPAddress\nend connectionMade"
+      },
+      "date": 1458396204861
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "0a99c44502e29156",
+        "644764c583f6d81b",
+        "3805ebd1ee60df2a",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a",
+        "2bf9b49abbd0e95b",
+        "7e4b78bc83d6e362",
+        "beec8db8b56951a8",
+        "97baca8df1e68008",
+        "d070bf53e0b6c6f9",
+        "17a31a631015cf04"
+      ],
+      "id": "d070bf53e0b6c6f9",
+      "date": 1458396208358
+    },
+    {
+      "type": "edit",
+      "id": "17a31a631015cf04",
+      "item": {
+        "type": "paragraph",
+        "id": "17a31a631015cf04",
+        "text": "# Related"
+      },
+      "date": 1458396218795
+    },
+    {
+      "type": "add",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "paragraph",
+        "id": "0d260cc74a40fc0f",
+        "text": "afds"
+      },
+      "after": "17a31a631015cf04",
+      "date": 1458396224053
+    },
+    {
+      "type": "edit",
+      "id": "17a31a631015cf04",
+      "item": {
+        "type": "markdown",
+        "id": "17a31a631015cf04",
+        "text": "# Related"
+      },
+      "date": 1458396225550
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "2bf9b49abbd0e95b",
+        "0a99c44502e29156",
+        "644764c583f6d81b",
+        "3805ebd1ee60df2a",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a",
+        "7e4b78bc83d6e362",
+        "beec8db8b56951a8",
+        "97baca8df1e68008",
+        "d070bf53e0b6c6f9",
+        "17a31a631015cf04",
+        "0d260cc74a40fc0f"
+      ],
+      "id": "2bf9b49abbd0e95b",
+      "date": 1458396233863
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "2bf9b49abbd0e95b",
+        "644764c583f6d81b",
+        "0a99c44502e29156",
+        "3805ebd1ee60df2a",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a",
+        "7e4b78bc83d6e362",
+        "beec8db8b56951a8",
+        "97baca8df1e68008",
+        "d070bf53e0b6c6f9",
+        "17a31a631015cf04",
+        "0d260cc74a40fc0f"
+      ],
+      "id": "644764c583f6d81b",
+      "date": 1458396237415
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "2bf9b49abbd0e95b",
+        "644764c583f6d81b",
+        "3805ebd1ee60df2a",
+        "0a99c44502e29156",
+        "7275e9fbb2d09fa4",
+        "39e7dd9a1560241a",
+        "7e4b78bc83d6e362",
+        "beec8db8b56951a8",
+        "97baca8df1e68008",
+        "d070bf53e0b6c6f9",
+        "17a31a631015cf04",
+        "0d260cc74a40fc0f"
+      ],
+      "id": "3805ebd1ee60df2a",
+      "date": 1458396239637
+    },
+    {
+      "type": "remove",
+      "id": "39e7dd9a1560241a",
+      "date": 1458396261622
+    },
+    {
+      "type": "remove",
+      "id": "7275e9fbb2d09fa4",
+      "date": 1458396263982
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "paragraph",
+        "id": "0d260cc74a40fc0f",
+        "text": "property: [[HTTPProxy]], [[script]]\ncommand: [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\nfunction: [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\nglossary: [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\nobject: [[object]]"
+      },
+      "date": 1458396432205
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "paragraph",
+        "id": "0d260cc74a40fc0f",
+        "text": "__property__: [[HTTPProxy]], [[script]]\ncommand: [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\nfunction: [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\nglossary: [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\nobject: [[object]]"
+      },
+      "date": 1458396478776
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "markdown",
+        "id": "0d260cc74a40fc0f",
+        "text": "__property__: [[HTTPProxy]], [[script]]\ncommand: [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\nfunction: [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\nglossary: [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\nobject: [[object]]"
+      },
+      "date": 1458396480234
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "markdown",
+        "id": "0d260cc74a40fc0f",
+        "text": "__property__: [[HTTPProxy]], [[script]]\n__command__: [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\nfunction: [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\nglossary: [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\nobject: [[object]]"
+      },
+      "date": 1458396495072
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "88a0372fee5b1faf"
+      },
+      "id": "88a0372fee5b1faf",
+      "type": "add",
+      "after": "0d260cc74a40fc0f",
+      "date": 1458396571896
+    },
+    {
+      "type": "edit",
+      "id": "88a0372fee5b1faf",
+      "item": {
+        "type": "paragraph",
+        "id": "88a0372fee5b1faf",
+        "text": "# Description"
+      },
+      "date": 1458396580888
+    },
+    {
+      "type": "edit",
+      "id": "88a0372fee5b1faf",
+      "item": {
+        "type": "markdown",
+        "id": "88a0372fee5b1faf",
+        "text": "# Description"
+      },
+      "date": 1458396583545
+    },
+    {
+      "type": "add",
+      "id": "ba94385a74c9e9ad",
+      "item": {
+        "type": "paragraph",
+        "id": "ba94385a74c9e9ad",
+        "text": "fdas"
+      },
+      "after": "88a0372fee5b1faf",
+      "date": 1458396586423
+    },
+    {
+      "type": "edit",
+      "id": "ba94385a74c9e9ad",
+      "item": {
+        "type": "paragraph",
+        "id": "ba94385a74c9e9ad",
+        "text": "Use the __accept__ command when running a server, to accept TCP connections or UDP datagrams from other systems (or other processes on the same system). Use the datagram option if you want to accept UDP datagrams.\n\nWhen a connection is made or a datagram is received, the __accept__ command creates a new socket that can be used to communicate with the other system (or process). When using the close socket, read from socket, or write to socket commands, you can refer to this socket with a socket identifier that looks like this: host:port[|connectionID] where the connectionID is a number assigned by the __accept__ command. (You only need to specify the connection number if there is more than one socket connected to a particular port and host.)\n\nThe callbackMessage is sent to the object whose script contains the accept command. Either one or two parameters are sent with this message. The first parameter is the IP address of the system or process making the connection. If a datagram is being accepted, the second parameter is the contents of the datagram.\n\nFor technical information about sockets, see RFC 147 at http://www.ietf.org/rfc/rfc147.txt. For technical information about UDP datagrams, see RFC 768 at http://www.ietf.org/rfc/rfc0768.txt. For technical information about the numbers used to designate standard ports, see the list of port numbers at http://www.iana.org/assignments/port-numbers, in particular the section entitled \"Well Known Port Numbers\"."
+      },
+      "date": 1458396688367
+    },
+    {
+      "type": "edit",
+      "id": "ba94385a74c9e9ad",
+      "item": {
+        "type": "markdown",
+        "id": "ba94385a74c9e9ad",
+        "text": "Use the __accept__ command when running a server, to accept TCP connections or UDP datagrams from other systems (or other processes on the same system). Use the datagram option if you want to accept UDP datagrams.\n\nWhen a connection is made or a datagram is received, the __accept__ command creates a new socket that can be used to communicate with the other system (or process). When using the close socket, read from socket, or write to socket commands, you can refer to this socket with a socket identifier that looks like this: host:port[|connectionID] where the connectionID is a number assigned by the __accept__ command. (You only need to specify the connection number if there is more than one socket connected to a particular port and host.)\n\nThe callbackMessage is sent to the object whose script contains the accept command. Either one or two parameters are sent with this message. The first parameter is the IP address of the system or process making the connection. If a datagram is being accepted, the second parameter is the contents of the datagram.\n\nFor technical information about sockets, see RFC 147 at http://www.ietf.org/rfc/rfc147.txt. For technical information about UDP datagrams, see RFC 768 at http://www.ietf.org/rfc/rfc0768.txt. For technical information about the numbers used to designate standard ports, see the list of port numbers at http://www.iana.org/assignments/port-numbers, in particular the section entitled \"Well Known Port Numbers\"."
+      },
+      "date": 1458396689639
+    },
+    {
+      "type": "edit",
+      "id": "ba94385a74c9e9ad",
+      "item": {
+        "type": "markdown",
+        "id": "ba94385a74c9e9ad",
+        "text": "Use the __accept__ command when running a server, to accept TCP connections or UDP datagrams from other systems (or other processes on the same system). Use the datagram option if you want to accept UDP datagrams."
+      },
+      "date": 1458396739304
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7c6e8e39ee1893d7"
+      },
+      "id": "7c6e8e39ee1893d7",
+      "type": "add",
+      "after": "ba94385a74c9e9ad",
+      "date": 1458396741337
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "93ece8ecc3c14962"
+      },
+      "id": "93ece8ecc3c14962",
+      "type": "add",
+      "after": "7c6e8e39ee1893d7",
+      "date": 1458396751116
+    },
+    {
+      "type": "edit",
+      "id": "7c6e8e39ee1893d7",
+      "item": {
+        "type": "markdown",
+        "id": "7c6e8e39ee1893d7",
+        "text": "When a connection is made or a datagram is received, the __accept__ command creates a new socket that can be used to communicate with the other system (or process). When using the close socket, read from socket, or write to socket commands, you can refer to this socket with a socket identifier that looks like this: host:port[|connectionID] where the connectionID is a number assigned by the __accept__ command. (You only need to specify the connection number if there is more than one socket connected to a particular port and host.)"
+      },
+      "date": 1458396752121
+    },
+    {
+      "type": "edit",
+      "id": "93ece8ecc3c14962",
+      "item": {
+        "type": "paragraph",
+        "id": "93ece8ecc3c14962",
+        "text": "The callbackMessage is sent to the object whose script contains the accept command. Either one or two parameters are sent with this message. The first parameter is the IP address of the system or process making the connection. If a datagram is being accepted, the second parameter is the contents of the datagram."
+      },
+      "date": 1458396764873
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0c3e33de0c97b4d8"
+      },
+      "id": "0c3e33de0c97b4d8",
+      "type": "add",
+      "after": "93ece8ecc3c14962",
+      "date": 1458396766234
+    },
+    {
+      "type": "edit",
+      "id": "0c3e33de0c97b4d8",
+      "item": {
+        "type": "markdown",
+        "id": "0c3e33de0c97b4d8",
+        "text": "\n\nFor technical information about sockets, see RFC 147 at http://www.ietf.org/rfc/rfc147.txt. For technical information about UDP datagrams, see RFC 768 at http://www.ietf.org/rfc/rfc0768.txt. For technical information about the numbers used to designate standard ports, see the list of port numbers at http://www.iana.org/assignments/port-numbers, in particular the section entitled \"Well Known Port Numbers\"."
+      },
+      "date": 1458396769362
+    },
+    {
+      "type": "edit",
+      "id": "2bf9b49abbd0e95b",
+      "item": {
+        "type": "markdown",
+        "id": "2bf9b49abbd0e95b",
+        "text": "* Type: command\n* Introduced: 1.0\n* OS: mac,windows,linux,ios,android\n* Platforms: desktop,server,web,mobile"
+      },
+      "date": 1458396954657
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "markdown",
+        "id": "0d260cc74a40fc0f",
+        "text": "* __property__: [[HTTPProxy]], [[script]]\n* __command__: [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\nfunction: [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\n* __glossary__: [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\n* __object__: [[object]]"
+      },
+      "date": 1458397050708
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "markdown",
+        "id": "0d260cc74a40fc0f",
+        "text": "* __property:__ [[HTTPProxy]], [[script]]\n* __command:__ [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\nfunction: [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\n* __glossary:__ [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\n* __object:__ [[object]]"
+      },
+      "date": 1458397074709
+    },
+    {
+      "type": "edit",
+      "id": "0d260cc74a40fc0f",
+      "item": {
+        "type": "markdown",
+        "id": "0d260cc74a40fc0f",
+        "text": "* __property:__ [[HTTPProxy]], [[script]]\n* __command:__ [[read from socket]], [[write to socket]], [[close socket]], [[open socket]]\n* __function:__ [[openSockets]], [[hostAddressToName]], [[hostName]], [[hostAddress]], [[peerAddress]], [[hostNameToAddress]]\n* __glossary:__ [[datagram]], [[IP address]], [[TCP, port]], [[command]], [[socket]], [[UDP]], [[host, server]], [[message]], [[parameter]], [[process]]\n* __object:__ [[object]]"
+      },
+      "date": 1458397089646
+    },
+    {
+      "type": "move",
+      "order": [
+        "f801f325b63790e8",
+        "644764c583f6d81b",
+        "3805ebd1ee60df2a",
+        "0a99c44502e29156",
+        "7e4b78bc83d6e362",
+        "beec8db8b56951a8",
+        "97baca8df1e68008",
+        "d070bf53e0b6c6f9",
+        "17a31a631015cf04",
+        "0d260cc74a40fc0f",
+        "88a0372fee5b1faf",
+        "ba94385a74c9e9ad",
+        "7c6e8e39ee1893d7",
+        "93ece8ecc3c14962",
+        "0c3e33de0c97b4d8",
+        "2bf9b49abbd0e95b"
+      ],
+      "id": "2bf9b49abbd0e95b",
+      "date": 1458397118816
+    }
+  ]
+}

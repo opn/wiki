@@ -1,0 +1,532 @@
+{
+  "title": "Custom Search XML Annotations",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3ea43fd201c94fcc",
+      "text": "You can create refinement labels and tag sites with them in the [[Refinements Tab]] of the control panel, but you can have greater control over the ranking if you are using the [[Search Annotations File]] - [https://developers.google.com/custom-search/docs/basics#contextxml developers.google.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a5a558a74b22a145",
+      "text": "As with the search engine labels, you define [[refinement]] labels in the context file and apply them to sites in the [[Search Annotations File]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "f74bb5da09b85511",
+      "text": "This page describes how to programatically add or remove annotations from the [[Annotations XML File]] stored by the Custom Search server - [https://developers.google.com/custom-search/docs/api#creating-and-updating-annotations developers.google.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "c819c11c9787c5ed",
+      "text": "# Why"
+    },
+    {
+      "type": "paragraph",
+      "id": "91a300a1f0819437",
+      "text": "Adding sites individually using the [[Custom Search Control Panel]] can be tedious if you're building a large search engine. In addition, managing a large collection of sites in the Control Panel isn't fun either. "
+    },
+    {
+      "type": "paragraph",
+      "id": "4bed8bb4e3e637b9",
+      "text": "Instead, you can add and manage a lot of sites by listing them in an annotations file and uploading it. In addition, annotations files—particularly XML ones—give you far greater control over the ranking of search results."
+    },
+    {
+      "type": "markdown",
+      "id": "692c3417ac035c15",
+      "text": "An annotations file is simply a list of annotations. Each annotation has two components:\n* the site\n* associated labels. "
+    },
+    {
+      "type": "paragraph",
+      "id": "4dc4baeb426f895b",
+      "text": "The label tells Custom Search how to handle a site; that is, whether a site should be included, excluded, promoted, or demoted. In the context file, you define labels; in the annotations file, you tag sites with the appropriate labels."
+    },
+    {
+      "type": "markdown",
+      "id": "a662d22116430c8d",
+      "text": "[[Search Annotations File]]s can be in any of the following formats:\n* Outline Processor Markup Language (OPML)\n* Text files with tab-separated values (TSV)\n* Custom Search XML"
+    },
+    {
+      "type": "reference",
+      "id": "b4aac4163e3cc646",
+      "site": "dev.himalayan.academy",
+      "slug": "editing-custom-search-files",
+      "title": "Editing Custom Search Files",
+      "text": "To work on an XML file, download the [[Annotations XML File]] from Advanced tab of the Control Panel. Don't start a file from scratch. "
+    },
+    {
+      "type": "reference",
+      "id": "2820917d8a9baf63",
+      "site": "dev.himalayan.academy",
+      "slug": "search-annotations-file",
+      "title": "Search Annotations File",
+      "text": "To work on an XML file, download the XML specification from Advanced tab of the Control Panel. Don't start a file from scratch. Do the following:"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Custom Search XML Annotations",
+        "story": []
+      },
+      "date": 1459421479910
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "91a300a1f0819437"
+      },
+      "id": "91a300a1f0819437",
+      "type": "add",
+      "date": 1459421487203
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3ea43fd201c94fcc",
+        "text": "You can create refinement labels and tag sites with them in the [[Refinements Tab]] of the control panel, but you can have greater control over the ranking if you are using the [[Custom Search XML Annotations]] file. "
+      },
+      "id": "3ea43fd201c94fcc",
+      "date": 1459421488881
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a5a558a74b22a145",
+        "text": "As with the search engine labels, you define refinement labels in the context file and apply them to sites in the annotations file."
+      },
+      "after": "3ea43fd201c94fcc",
+      "id": "a5a558a74b22a145",
+      "date": 1459421490293
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2b3ee304d4f14b79",
+        "text": "As the following example shows, refinement labels are defined using Facet elements within the Context section."
+      },
+      "after": "a5a558a74b22a145",
+      "id": "2b3ee304d4f14b79",
+      "date": 1459421493445
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "5573d603d4d8400c",
+        "text": "<CustomSearchEngine>\n  <Title>Universities</Title>\n    <Context>\n      <Facet>\n        <FacetItem title=\"Lectures\">\n           <Label name=\"lectures\" mode=\"BOOST\" weight=\"0.8\">\n              <Rewrite>lecture OR lectures</Rewrite>\n           </Label>\n        </FacetItem>\n      </Facet>\n      <Facet>\n        <FacetItem title=\"Assignments\">\n          <Label name=\"assignments\" mode=\"BOOST\" weight=\"0.8\">\n            <Rewrite>homework OR assignment OR assignments</Rewrite>\n          </Label>\n        </FacetItem>\n     </Facet>\n     <Facet>\n       <FacetItem title=\"Reference\">\n         <Label name=\"reference\" mode=\"FILTER\">\n            <IgnoreBackgroundLabels>true</IgnoreBackgroundLabels>\n         </Label>\n       </FacetItem>\n     </Facet>\n     <Facet>\n        <FacetItem title=\"Papers\">\n          <Label name=\"papers\" mode=\"FILTER\"/>\n          <Redirect url=\"http://scholar.google.com/scholar?q=$q\"/>\n        </FacetItem>\n      </Facet>\n      <BackgroundLabels>\n        <Label name=\"_cse_omuauf_lfve\" mode=\"FILTER\"/>\n        <Label name=\"_cse_exclude_omuauf_lfve\" mode=\"ELIMINATE\"/>\n      </BackgroundLabels>\n    </Context>\n  </CustomSearchEngine>"
+      },
+      "after": "2b3ee304d4f14b79",
+      "id": "5573d603d4d8400c",
+      "date": 1459421495796
+    },
+    {
+      "type": "edit",
+      "id": "a5a558a74b22a145",
+      "item": {
+        "type": "paragraph",
+        "id": "a5a558a74b22a145",
+        "text": "As with the search engine labels, you define [[refinement]] labels in the context file and apply them to sites in the [[Search Annotations File]]."
+      },
+      "date": 1460190560362
+    },
+    {
+      "type": "edit",
+      "id": "91a300a1f0819437",
+      "item": {
+        "type": "paragraph",
+        "id": "91a300a1f0819437",
+        "text": "Adding sites individually using the [[Custom Search Control Panel]] can be tedious if you're building a large search engine. In addition, managing a large collection of sites in the Control Panel isn't fun either. "
+      },
+      "date": 1460190609929
+    },
+    {
+      "type": "add",
+      "id": "4bed8bb4e3e637b9",
+      "item": {
+        "type": "paragraph",
+        "id": "4bed8bb4e3e637b9",
+        "text": "Instead, you can add and manage a lot of sites by listing them in an annotations file and uploading it. In addition, annotations files—particularly XML ones—give you far greater control over the ranking of search results."
+      },
+      "after": "91a300a1f0819437",
+      "date": 1460190619665
+    },
+    {
+      "type": "add",
+      "id": "692c3417ac035c15",
+      "item": {
+        "type": "paragraph",
+        "id": "692c3417ac035c15",
+        "text": "An annotations file is simply a list of annotations. Each annotation has two components: the site and its associated labels. "
+      },
+      "after": "4bed8bb4e3e637b9",
+      "date": 1460190631969
+    },
+    {
+      "type": "add",
+      "id": "4dc4baeb426f895b",
+      "item": {
+        "type": "paragraph",
+        "id": "4dc4baeb426f895b",
+        "text": "The label tells Custom Search how to handle a site; that is, whether a site should be included, excluded, promoted, or demoted. In the context file, you define labels; in the annotations file, you tag sites with the appropriate labels."
+      },
+      "after": "692c3417ac035c15",
+      "date": 1460190640450
+    },
+    {
+      "type": "add",
+      "id": "a662d22116430c8d",
+      "item": {
+        "type": "paragraph",
+        "id": "a662d22116430c8d",
+        "text": "Annotations files can be in any of the following formats:\n* Outline Processor Markup Language (OPML)\n* Text files with tab-separated values (TSV)\n* Custom Search XML"
+      },
+      "after": "4dc4baeb426f895b",
+      "date": 1460190653418
+    },
+    {
+      "type": "edit",
+      "id": "a662d22116430c8d",
+      "item": {
+        "type": "markdown",
+        "id": "a662d22116430c8d",
+        "text": "Annotations files can be in any of the following formats:\n* Outline Processor Markup Language (OPML)\n* Text files with tab-separated values (TSV)\n* Custom Search XML"
+      },
+      "date": 1460190654743
+    },
+    {
+      "type": "add",
+      "id": "b5fb16619ce692fa",
+      "item": {
+        "type": "paragraph",
+        "id": "b5fb16619ce692fa",
+        "text": "When you start editing your annotations file, start out with a small number of annotations, and then test some search queries in the Preview tab of the Control Panel. It's easier to test and troubleshoot your search engine with a handful of annotations. When you get the results that you expect, incrementally add more annotations."
+      },
+      "after": "a662d22116430c8d",
+      "date": 1460190658482
+    },
+    {
+      "type": "add",
+      "id": "3e9e2850d06a5bc3",
+      "item": {
+        "type": "paragraph",
+        "id": "3e9e2850d06a5bc3",
+        "text": "You can either upload the annotations file to the Control Panel or host it in your own website. For details about file limits, see the Annotations Limits section."
+      },
+      "after": "b5fb16619ce692fa",
+      "date": 1460190661458
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "30cf57febad9d877"
+      },
+      "id": "30cf57febad9d877",
+      "type": "add",
+      "after": "3e9e2850d06a5bc3",
+      "date": 1460190747568
+    },
+    {
+      "type": "edit",
+      "id": "30cf57febad9d877",
+      "item": {
+        "type": "paragraph",
+        "id": "30cf57febad9d877",
+        "text": "# Editing the Custom Search Files"
+      },
+      "date": 1460190757510
+    },
+    {
+      "type": "add",
+      "id": "081159b997aa1e6b",
+      "item": {
+        "type": "paragraph",
+        "id": "081159b997aa1e6b",
+        "text": "To work on an XML file, download the XML specification from Advanced tab of the Control Panel. Don't start a file from scratch. Do the following:"
+      },
+      "after": "30cf57febad9d877",
+      "date": 1460190772225
+    },
+    {
+      "type": "add",
+      "id": "71c7160e90b9a8a5",
+      "item": {
+        "type": "paragraph",
+        "id": "71c7160e90b9a8a5",
+        "text": "* Download the context file or annotations file from the Advanced tab of the Control Panel. Click the Download button in the appropriate section.\nYou can choose to download the files to your hard drive or view them in another browser window or tab window.\n* Use your browser to save the XML file, or copy the XML text from the webpage and paste it to your favorite text editor. Use a text editor that can handle UNIX-style line endings (WordPad, Emacs, and TextMate works; NotePad doesn't). It does not matter what you name the file, so long as you save it with the file extension .xml (for example, cx_global.xml)\n* Make a backup copy of the downloaded file in case your edited version does not work as expected, and you have to revert to the previous version.\nIf you do not make a copy and the version that you edited does not work properly, you will need to debug your file or recreate your search engine all over again. Not fun.\n* Edit the XML file and save it. Make sure that your text editor is saving the file as a Unicode text document and not some other file format.\n* Upload the file under the correct section in the Advanced tab."
+      },
+      "after": "081159b997aa1e6b",
+      "date": 1460190809390
+    },
+    {
+      "type": "edit",
+      "id": "71c7160e90b9a8a5",
+      "item": {
+        "type": "markdown",
+        "id": "71c7160e90b9a8a5",
+        "text": "* Download the context file or annotations file from the Advanced tab of the Control Panel. Click the Download button in the appropriate section.\nYou can choose to download the files to your hard drive or view them in another browser window or tab window.\n* Use your browser to save the XML file, or copy the XML text from the webpage and paste it to your favorite text editor. Use a text editor that can handle UNIX-style line endings (WordPad, Emacs, and TextMate works; NotePad doesn't). It does not matter what you name the file, so long as you save it with the file extension .xml (for example, cx_global.xml)\n* Make a backup copy of the downloaded file in case your edited version does not work as expected, and you have to revert to the previous version.\nIf you do not make a copy and the version that you edited does not work properly, you will need to debug your file or recreate your search engine all over again. Not fun.\n* Edit the XML file and save it. Make sure that your text editor is saving the file as a Unicode text document and not some other file format.\n* Upload the file under the correct section in the Advanced tab."
+      },
+      "date": 1460190810424
+    },
+    {
+      "type": "edit",
+      "id": "71c7160e90b9a8a5",
+      "item": {
+        "type": "markdown",
+        "id": "71c7160e90b9a8a5",
+        "text": "* Download the context file or annotations file from the Advanced tab of the Control Panel. Click the Download button in the appropriate section.\nYou can choose to download the files to your hard drive or view them in another browser window or tab window.\n* Use your browser to save the XML file, or copy the XML text from the webpage and paste it to your favorite text editor. Use a text editor that can handle UNIX-style line endings (WordPad, Emacs, and TextMate works; NotePad doesn't). It does not matter what you name the file, so long as you save it with the file extension .xml (for example, cx_global.xml)\n* Make a backup copy of the downloaded file in case your edited version does not work as expected, and you have to revert to the previous version.\n* If you do not make a copy and the version that you edited does not work properly, you will need to debug your file or recreate your search engine all over again. Not fun.\n* Edit the XML file and save it. Make sure that your text editor is saving the file as a Unicode text document and not some other file format.\n* Upload the file under the correct section in the Advanced tab."
+      },
+      "date": 1460190827200
+    },
+    {
+      "type": "edit",
+      "id": "30cf57febad9d877",
+      "item": {
+        "type": "markdown",
+        "id": "30cf57febad9d877",
+        "text": "# Editing the Custom Search Files"
+      },
+      "date": 1460190830210
+    },
+    {
+      "type": "edit",
+      "id": "3ea43fd201c94fcc",
+      "item": {
+        "type": "paragraph",
+        "id": "3ea43fd201c94fcc",
+        "text": "You can create refinement labels and tag sites with them in the [[Refinements Tab]] of the control panel, but you can have greater control over the ranking if you are using the [[Custom Search XML Annotations]] file - [https://developers.google.com/custom-search/docs/basics#contextxml developers.google.com]"
+      },
+      "date": 1460190866049
+    },
+    {
+      "type": "edit",
+      "id": "3ea43fd201c94fcc",
+      "item": {
+        "type": "paragraph",
+        "id": "3ea43fd201c94fcc",
+        "text": "You can create refinement labels and tag sites with them in the [[Refinements Tab]] of the control panel, but you can have greater control over the ranking if you are using the [[Search Annotations File]] - [https://developers.google.com/custom-search/docs/basics#contextxml developers.google.com]"
+      },
+      "date": 1460190904033
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2820917d8a9baf63"
+      },
+      "id": "2820917d8a9baf63",
+      "type": "add",
+      "after": "71c7160e90b9a8a5",
+      "date": 1460190919904
+    },
+    {
+      "type": "edit",
+      "id": "2820917d8a9baf63",
+      "item": {
+        "type": "reference",
+        "id": "2820917d8a9baf63",
+        "site": "dev.himalayan.academy",
+        "slug": "search-annotations-file",
+        "title": "Search Annotations File",
+        "text": "To work on an XML file, download the XML specification from Advanced tab of the Control Panel. Don't start a file from scratch. Do the following:"
+      },
+      "date": 1460190923751
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ea43fd201c94fcc",
+        "a5a558a74b22a145",
+        "91a300a1f0819437",
+        "4bed8bb4e3e637b9",
+        "692c3417ac035c15",
+        "4dc4baeb426f895b",
+        "a662d22116430c8d",
+        "b5fb16619ce692fa",
+        "3e9e2850d06a5bc3",
+        "30cf57febad9d877",
+        "2820917d8a9baf63",
+        "71c7160e90b9a8a5"
+      ],
+      "id": "2820917d8a9baf63",
+      "date": 1460190928640
+    },
+    {
+      "type": "edit",
+      "id": "a662d22116430c8d",
+      "item": {
+        "type": "markdown",
+        "id": "a662d22116430c8d",
+        "text": "[[Search Annotations File]]s can be in any of the following formats:\n* Outline Processor Markup Language (OPML)\n* Text files with tab-separated values (TSV)\n* Custom Search XML"
+      },
+      "date": 1460190952628
+    },
+    {
+      "type": "add",
+      "id": "c819c11c9787c5ed",
+      "item": {
+        "type": "paragraph",
+        "id": "c819c11c9787c5ed",
+        "text": "# Why"
+      },
+      "after": "a5a558a74b22a145",
+      "date": 1460190973499
+    },
+    {
+      "type": "edit",
+      "id": "c819c11c9787c5ed",
+      "item": {
+        "type": "markdown",
+        "id": "c819c11c9787c5ed",
+        "text": "# Why"
+      },
+      "date": 1460190974901
+    },
+    {
+      "type": "edit",
+      "id": "692c3417ac035c15",
+      "item": {
+        "type": "paragraph",
+        "id": "692c3417ac035c15",
+        "text": "An annotations file is simply a list of annotations. Each annotation has two components:* the site* associated labels. "
+      },
+      "date": 1460190997316
+    },
+    {
+      "type": "edit",
+      "id": "692c3417ac035c15",
+      "item": {
+        "type": "markdown",
+        "id": "692c3417ac035c15",
+        "text": "An annotations file is simply a list of annotations. Each annotation has two components:* the site* associated labels. "
+      },
+      "date": 1460190998627
+    },
+    {
+      "type": "edit",
+      "id": "692c3417ac035c15",
+      "item": {
+        "type": "markdown",
+        "id": "692c3417ac035c15",
+        "text": "An annotations file is simply a list of annotations. Each annotation has two components:\n* the site\n* associated labels. "
+      },
+      "date": 1460191006780
+    },
+    {
+      "type": "remove",
+      "id": "b5fb16619ce692fa",
+      "date": 1460191042072
+    },
+    {
+      "type": "remove",
+      "id": "3e9e2850d06a5bc3",
+      "date": 1460191052975
+    },
+    {
+      "type": "edit",
+      "id": "30cf57febad9d877",
+      "item": {
+        "type": "markdown",
+        "id": "30cf57febad9d877",
+        "text": "# [[Editing Custom Search Files]]"
+      },
+      "date": 1460197920278
+    },
+    {
+      "type": "remove",
+      "id": "71c7160e90b9a8a5",
+      "date": 1460197945230
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b4aac4163e3cc646"
+      },
+      "id": "b4aac4163e3cc646",
+      "type": "add",
+      "after": "2820917d8a9baf63",
+      "date": 1460198021307
+    },
+    {
+      "type": "edit",
+      "id": "b4aac4163e3cc646",
+      "item": {
+        "type": "reference",
+        "id": "b4aac4163e3cc646",
+        "site": "dev.himalayan.academy",
+        "slug": "editing-custom-search-files",
+        "title": "Editing Custom Search Files",
+        "text": "To work on an XML file, download the XML specification from Advanced tab of the Control Panel. Don't start a file from scratch. "
+      },
+      "date": 1460198024157
+    },
+    {
+      "type": "move",
+      "order": [
+        "3ea43fd201c94fcc",
+        "a5a558a74b22a145",
+        "c819c11c9787c5ed",
+        "91a300a1f0819437",
+        "4bed8bb4e3e637b9",
+        "692c3417ac035c15",
+        "4dc4baeb426f895b",
+        "a662d22116430c8d",
+        "30cf57febad9d877",
+        "b4aac4163e3cc646",
+        "2820917d8a9baf63"
+      ],
+      "id": "b4aac4163e3cc646",
+      "date": 1460199388979
+    },
+    {
+      "type": "edit",
+      "id": "b4aac4163e3cc646",
+      "item": {
+        "type": "reference",
+        "id": "b4aac4163e3cc646",
+        "site": "dev.himalayan.academy",
+        "slug": "editing-custom-search-files",
+        "title": "Editing Custom Search Files",
+        "text": "To work on an XML file, download the [[Annotation XML File]] specification from Advanced tab of the Control Panel. Don't start a file from scratch. "
+      },
+      "date": 1460199429393
+    },
+    {
+      "type": "edit",
+      "id": "b4aac4163e3cc646",
+      "item": {
+        "type": "reference",
+        "id": "b4aac4163e3cc646",
+        "site": "dev.himalayan.academy",
+        "slug": "editing-custom-search-files",
+        "title": "Editing Custom Search Files",
+        "text": "To work on an XML file, download the [[Annotations XML File]] from Advanced tab of the Control Panel. Don't start a file from scratch. "
+      },
+      "date": 1460199451209
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f74bb5da09b85511",
+        "text": "This page describes how to programatically add or remove annotations from the [[Annotations XML File]] stored by the Custom Search server - [https://developers.google.com/custom-search/docs/api#creating-and-updating-annotations developers.google.com]"
+      },
+      "after": "a5a558a74b22a145",
+      "id": "f74bb5da09b85511",
+      "date": 1491572264677
+    },
+    {
+      "type": "fork",
+      "site": "dev.himalayan.academy",
+      "date": 1512316133454
+    },
+    {
+      "type": "remove",
+      "id": "30cf57febad9d877",
+      "date": 1512316152286
+    }
+  ]
+}

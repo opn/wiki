@@ -1,0 +1,339 @@
+{
+  "title": "Basic Authentication",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "26257ad1-da05-469f-8386-a253a458030a",
+      "text": "In the context of a HTTP transaction, [[basic access authentication]] is a method for a HTTP user agent to provide a user name and password when making a request - [https://en.wikipedia.org/wiki/Basic_access_authentication wikipedia]"
+    },
+    {
+      "type": "markdown",
+      "id": "32a60a6796986de6",
+      "text": "# Protocol\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "a692dd40-7acc-48da-b19c-5a13a6790f64",
+      "text": "When the server wants the user agent to authenticate itself towards the server, it must respond appropriately to unauthenticated requests."
+    },
+    {
+      "type": "markdown",
+      "id": "65c78ff3-6d2e-41cc-b76c-0943cfa90ab5",
+      "text": "# Server side"
+    },
+    {
+      "type": "markdown",
+      "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+      "text": "Unauthenticated requests should return a response whose header contains a `HTTP 401 Unauthorized` status and a `WWW-Authenticate` field - [https://tools.ietf.org/html/rfc1945#section-11 RFC ietf.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+      "text": "The `WWW-Authenticate` field for basic authentication (used most often) is constructed as following:"
+    },
+    {
+      "type": "code",
+      "id": "c06e5735241f485b",
+      "text": "WWW-Authenticate: Basic realm=\"User Visible Realm\""
+    },
+    {
+      "type": "markdown",
+      "id": "96f1579f-0f43-4f1d-9ff0-209b0deec2a9",
+      "text": "# Client side"
+    },
+    {
+      "type": "paragraph",
+      "id": "e1a8e98d-87a6-4346-8323-da361ce7dabc",
+      "text": "When the user agent wants to send the server authentication credentials it may use the ''Authorization'' field."
+    },
+    {
+      "type": "markdown",
+      "id": "682b8f09-e8f4-4449-bb9c-b4084070fcdc",
+      "text": "The ''Authorization'' field is constructed as follows:\n\n- The username and password are combined with a single colon. (:)\n\n- The resulting string is encoded into an octet sequence- The resulting string is encoded using a variant of [[Base64]]\n\n- The authorization method and a space is then prepended to the encoded string, separated with a space"
+    },
+    {
+      "type": "markdown",
+      "id": "627558da1b9cb2bb",
+      "text": "For example, if the browser uses `Aladdin` as the username and `OpenSesame` as the password, then the field's value is the base64-encoding of:"
+    },
+    {
+      "type": "code",
+      "id": "3f586025f6166d72",
+      "text": "Aladdin:OpenSesame"
+    },
+    {
+      "type": "paragraph",
+      "id": "44813fdc1c0f2dfd",
+      "text": "will result in an Authorization header of:"
+    },
+    {
+      "type": "code",
+      "id": "b5f785c980d5d5d2",
+      "text": "Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l"
+    },
+    {
+      "type": "reference",
+      "id": "f59457bad7a4c497",
+      "site": "hosting.permanent.wiki",
+      "slug": "basic-access-authentication",
+      "title": "Basic access authentication",
+      "text": "In the context of a HTTP transaction, basic access authentication is a method for a HTTP user agent to provide a user name and password when making a request - [https://en.wikipedia.org/wiki/Basic_access_authentication wikipedia]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Basic Authentication",
+        "story": []
+      },
+      "date": 1502263973689
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "26257ad1-da05-469f-8386-a253a458030a",
+        "text": "In the context of a HTTP transaction, basic access authentication is a method for a HTTP user agent to provide a user name and password when making a request - [https://en.wikipedia.org/wiki/Basic_access_authentication wikipedia]"
+      },
+      "id": "26257ad1-da05-469f-8386-a253a458030a",
+      "date": 1502263990362
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "32a60a6796986de6",
+        "text": "# Protocol\n"
+      },
+      "after": "26257ad1-da05-469f-8386-a253a458030a",
+      "id": "32a60a6796986de6",
+      "date": 1502263994967
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a692dd40-7acc-48da-b19c-5a13a6790f64",
+        "text": "When the server wants the user agent to authenticate itself towards the server, it must respond appropriately to unauthenticated requests."
+      },
+      "after": "32a60a6796986de6",
+      "id": "a692dd40-7acc-48da-b19c-5a13a6790f64",
+      "date": 1502263998234
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "65c78ff3-6d2e-41cc-b76c-0943cfa90ab5",
+        "text": "# Server side"
+      },
+      "after": "a692dd40-7acc-48da-b19c-5a13a6790f64",
+      "id": "65c78ff3-6d2e-41cc-b76c-0943cfa90ab5",
+      "date": 1502264000584
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+        "text": "Unauthenticated requests should return a response whose header contains a ''HTTP 401 Unauthorized'' status[https://tools.ietf.org/html/rfc1945#section-11 RFC 1945 Section 11.  Access Authentication] and a ''WWW-Authenticate'' field."
+      },
+      "after": "65c78ff3-6d2e-41cc-b76c-0943cfa90ab5",
+      "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+      "date": 1502264003768
+    },
+    {
+      "type": "edit",
+      "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+      "item": {
+        "type": "paragraph",
+        "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+        "text": "Unauthenticated requests should return a response whose header contains a ''HTTP 401 Unauthorized'' status and a ''WWW-Authenticate'' field - [https://tools.ietf.org/html/rfc1945#section-11 RFC ietf.org]"
+      },
+      "date": 1502264058662
+    },
+    {
+      "type": "edit",
+      "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+      "item": {
+        "type": "paragraph",
+        "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+        "text": "Unauthenticated requests should return a response whose header contains a `HTTP 401 Unauthorized` status and a `WWW-Authenticate` field - [https://tools.ietf.org/html/rfc1945#section-11 RFC ietf.org]"
+      },
+      "date": 1502264089903
+    },
+    {
+      "type": "edit",
+      "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+      "item": {
+        "type": "markdown",
+        "id": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+        "text": "Unauthenticated requests should return a response whose header contains a `HTTP 401 Unauthorized` status and a `WWW-Authenticate` field - [https://tools.ietf.org/html/rfc1945#section-11 RFC ietf.org]"
+      },
+      "date": 1502264090978
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+        "text": "The ''WWW-Authenticate'' field for basic authentication (used most often) is constructed as following:"
+      },
+      "after": "530080e9-8ffc-49f9-b330-4e0f4735d32f",
+      "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+      "date": 1502264103147
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "c06e5735241f485b",
+        "text": "WWW-Authenticate: Basic realm=\"User Visible Realm\""
+      },
+      "after": "8886f406-cbc5-48ca-9400-4942b9557ada",
+      "id": "c06e5735241f485b",
+      "date": 1502264105906
+    },
+    {
+      "type": "edit",
+      "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+      "item": {
+        "type": "paragraph",
+        "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+        "text": "The `WWW-Authenticate` field for basic authentication (used most often) is constructed as following:"
+      },
+      "date": 1502264115190
+    },
+    {
+      "type": "edit",
+      "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+      "item": {
+        "type": "markdown",
+        "id": "8886f406-cbc5-48ca-9400-4942b9557ada",
+        "text": "The `WWW-Authenticate` field for basic authentication (used most often) is constructed as following:"
+      },
+      "date": 1502264116398
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "96f1579f-0f43-4f1d-9ff0-209b0deec2a9",
+        "text": "# Client side"
+      },
+      "after": "c06e5735241f485b",
+      "id": "96f1579f-0f43-4f1d-9ff0-209b0deec2a9",
+      "date": 1502264122121
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e1a8e98d-87a6-4346-8323-da361ce7dabc",
+        "text": "When the user agent wants to send the server authentication credentials it may use the ''Authorization'' field."
+      },
+      "after": "96f1579f-0f43-4f1d-9ff0-209b0deec2a9",
+      "id": "e1a8e98d-87a6-4346-8323-da361ce7dabc",
+      "date": 1502264125040
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "682b8f09-e8f4-4449-bb9c-b4084070fcdc",
+        "text": "The ''Authorization'' field is constructed as follows:\n\n- The username and password are combined with a single colon. (:)\n\n- The resulting string is encoded into an octet sequence- The resulting string is encoded using a variant of [[Base64]]\n\n- The authorization method and a space is then prepended to the encoded string, separated with a space (e.g. \"Basic \")."
+      },
+      "after": "e1a8e98d-87a6-4346-8323-da361ce7dabc",
+      "id": "682b8f09-e8f4-4449-bb9c-b4084070fcdc",
+      "date": 1502264128572
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "627558da1b9cb2bb",
+        "text": "For example, if the browser uses `Aladdin` as the username and `OpenSesame` as the password, then the field's value is the base64-encoding of:"
+      },
+      "after": "682b8f09-e8f4-4449-bb9c-b4084070fcdc",
+      "id": "627558da1b9cb2bb",
+      "date": 1502264136328
+    },
+    {
+      "type": "edit",
+      "id": "682b8f09-e8f4-4449-bb9c-b4084070fcdc",
+      "item": {
+        "type": "markdown",
+        "id": "682b8f09-e8f4-4449-bb9c-b4084070fcdc",
+        "text": "The ''Authorization'' field is constructed as follows:\n\n- The username and password are combined with a single colon. (:)\n\n- The resulting string is encoded into an octet sequence- The resulting string is encoded using a variant of [[Base64]]\n\n- The authorization method and a space is then prepended to the encoded string, separated with a space"
+      },
+      "date": 1502264153024
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "3f586025f6166d72",
+        "text": "Aladdin:OpenSesame"
+      },
+      "after": "627558da1b9cb2bb",
+      "id": "3f586025f6166d72",
+      "date": 1502264214894
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "44813fdc1c0f2dfd",
+        "text": "will result in an Authorization header of:"
+      },
+      "after": "3f586025f6166d72",
+      "id": "44813fdc1c0f2dfd",
+      "date": 1502264218160
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "b5f785c980d5d5d2",
+        "text": "Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l"
+      },
+      "after": "44813fdc1c0f2dfd",
+      "id": "b5f785c980d5d5d2",
+      "date": 1502264221334
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f59457bad7a4c497"
+      },
+      "id": "f59457bad7a4c497",
+      "type": "add",
+      "after": "b5f785c980d5d5d2",
+      "date": 1502264224593
+    },
+    {
+      "type": "edit",
+      "id": "f59457bad7a4c497",
+      "item": {
+        "type": "reference",
+        "id": "f59457bad7a4c497",
+        "site": "hosting.permanent.wiki",
+        "slug": "basic-access-authentication",
+        "title": "Basic access authentication",
+        "text": "In the context of a HTTP transaction, basic access authentication is a method for a HTTP user agent to provide a user name and password when making a request - [https://en.wikipedia.org/wiki/Basic_access_authentication wikipedia]"
+      },
+      "date": 1502264226956
+    },
+    {
+      "type": "edit",
+      "id": "26257ad1-da05-469f-8386-a253a458030a",
+      "item": {
+        "type": "paragraph",
+        "id": "26257ad1-da05-469f-8386-a253a458030a",
+        "text": "In the context of a HTTP transaction, [[basic access authentication]] is a method for a HTTP user agent to provide a user name and password when making a request - [https://en.wikipedia.org/wiki/Basic_access_authentication wikipedia]"
+      },
+      "date": 1502264268098
+    }
+  ]
+}

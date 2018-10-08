@@ -1,0 +1,160 @@
+{
+  "title": "Human Ecosystems API",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "7af6d69b0c6e8538",
+      "text": "The [[Human ecosystems]] API is fairly comprehensive but does not seem to include methods for adding data feeds from other sources which would seem to require php coding to extend."
+    },
+    {
+      "type": "paragraph",
+      "id": "717a49e683447748",
+      "text": "Below is the full list of restful endpoints for the API described here - [https://github.com/xdxdVSxdxd/HumanEcosystems/blob/master/HE_v2/API.txt gitbub]"
+    },
+    {
+      "type": "html",
+      "id": "86ffbbecff8dfffd",
+      "text": "<UL><LI>\n  countMessages</LI><LI>\n  getAllCoordsForResearch</LI><LI>\n  getAllRelations</LI><LI>\n  getAllUsers</LI><LI>\n  [[getContentForWords]]</LI><LI>\n  getFirstOSMAVizData</LI><LI>\n  getLanguages</LI><LI>\n  getLatestEmotions</LI><LI>\n  getLatestLanguages</LI><LI>\n  getLatestRelations</LI><LI>\n  getPrediction</LI><LI>\n  pattern_graphic</LI><LI>\n  pattern_place_mono</LI><LI>\n  pattern_place_multi</LI><LI>\n  pattern_word_mono</LI><LI>\n  getRandomMessage</LI><LI>\n  getRelations</LI><LI>\n  getRelationsBetweenTwoUsers</LI><LI>\n  getUserProfile</LI><LI>\n  getUsers</LI><LI>\n  getClasses</LI><LI>\n  getContentForMap</LI><LI>\n  getContentUpdateForMap</LI><LI>\n  getContentNearby</LI><LI>\n  getContentRecentNearby</LI><LI>\n  getContentUpdate</LI><LI>\n  getTimelineData</LI><LI>\n  getTimelineDataForClasses</LI><LI>\n  tools-getEmotionTotalsForWords</LI><LI>\n  tools-getForDistribution</LI><LI>\n  tools-getForDistributionTimeOfDay</LI><LI>\n  tools-getForDistributionUsers</LI><LI>\n  tools-getProjectStatistics</LI><LI>\n  tools-getRelations</LI><LI>\n  tools-getRelationsWithEmotions</LI><LI>\n  tools-getWordTimelines\n</LI></UL>\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Human Ecosystems API",
+        "story": []
+      },
+      "date": 1433702158246
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "86ffbbecff8dfffd"
+      },
+      "id": "86ffbbecff8dfffd",
+      "type": "add",
+      "date": 1433702159598
+    },
+    {
+      "type": "edit",
+      "id": "86ffbbecff8dfffd",
+      "item": {
+        "type": "paragraph",
+        "id": "86ffbbecff8dfffd",
+        "text": "countMessages.php?w=[research-code]\nReturns the number of captured messages for [research-code]\n\n\n-----------\ngetAllCoordsForResearch.php?w=[research-code]\nReturn all of the locations for [research-code], together with the number of messages generated in them.\n\n\n-----------\ngetAllRelations.php?w=[research-code]\nReturns all of the [nick1,nick2] relations for [research-code], together with a measure of their strength.\n\n\n-----------\ngetAllUsers.php?w=[research-code]\nReturns the list of all the users for [research-code].\n\n\n-----------\ngetContentForWords.php?w=[research-code]&words=word1 word2 word3 ...\nReturns all of the content for [research-code] which match ALL of the listed words.\nCase insensitive.\n\n\n-----------\ngetFirstOSMAVizData.php?w=[research-code]\nDeveloped for OSMA. Return all of the locations for [research-code], together with the number of messages generated in them.\n\n\n-----------\ngetLanguages.php?w=[research-code]\nGet the languages used in [research-code], and the number of messages for each.\nUses ISO country codes, and 'und' for unidentified messages\n\n\n-----------\ngetLatestEmotions.php?w=[research-code]\nGets emotions expressed in the latest 1000 messages captured in [research-code], and for each the number of messages expressing them.\n\n\n-----------\ngetLatestLanguages.php?w=[research-code]\nGets languages used in the latest 1000 messages captured in [research-code], and for each the number of messages using them.\nUses ISO country codes, and 'und' for unidentified messages\n\n-----------\ngetLatestRelations.php?w=[research-code]\nGets latest 1000 relations added in [research-code] under the form (nick1,nick2,c) where 'c' is their strength.\n\n\n-----------\ngetPrediction.php?w=[research-code]\nGets a random prediction for [research-code]. See prediction types in this file.\n\n\n\n-----------\npattern_graphic.php\nPrediction types. Get a neat little random ASCII graphic pattern.\n\n\n-----------\npattern_place_mono.php?w=[research-code]\nPrediction types. Get a prediction of likely places a certain random user of [research-code] will be in.\nPredictions come under the form:\n\"[nick] will be within 1 mile of the following coordinates ([lat],[lon]) in the next [days] days\"\nOr \"The future geographical position of [nick] is unforeseeable, as of now.\" if there are no discernable patterns in the user's position.\n\n\n-----------\npattern_place_multi.php?w=[research-code]\nPrediction types. Get a prediction of how correlated the locations of some random users of [research-code] will be.\nPredictions come under the form:\n\"These users [[nicks]] will find themselves within 1 mile of each other around the following coordinates ([lat],[lon]) in the next [days] days.\"\nOr \"The future geographical positions these users [[nicks]] are not correlated.\" if there are no discernable patterns in the users' positions.\n\n\n-----------\npattern_word_mono.php?w=[research-code]\nPrediction types. Get a prediction of what a random user of [research-code] will be talking about in the following period of time.\nPredictions come under the form:\n\"[nick] will be dealing with [subject1] and [subject2] within 1 mile of the following coordinates ([lat],[lon]) in the next [days] days\"\nOR\n\"[nick] will be dealing with [subject1] and [subject2] in the next [days] days\"\nOr\n\"The future interests of [nick] are unforeseeable, as of now.\" if there are no recognizable patterns.\nOR\n\"Nothing can be foreseen about the future interests of [nick], as of now.\" if there are no recognizable patterns.\n\n\n\n-----------\ngetRandomMessage.php?w=[research-code]\nGets a random message (txt) and user information (nick,imageurl) from [research-code].\n\n\n-----------\ngetRelations.php?w=[research-code]\nGets ALL relations added in [research-code] under the form (nick1,nick2,c) where 'c' is their strength.\n\n\n-----------\ngetRelationsBetweenTwoUsers.php?w=[research-code]&n1=[nickname 1]&n2=[nickname 2]\nWithin [research-code], searches if there is a relation between [nickname 1] and [nickname 2].\nIf it is present, it returns its strength (c).\nIf it is not present, it returns and empty array.\n\n\n<UL><LI>\n  getUserProfile.php?n=[nickname]</LI><LI>\n  getUsers.php?w=[research-code]&fromID=[id]</LI><LI>\n  getClasses.php?w=[research-code]</LI><LI>\n  getContentForMap.php?w=[research-code]</LI><LI>\n  getContentUpdateForMap.php?w=[research-code]</LI><LI>\n  getContentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentRecentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentUpdate.php?w=[research-code]</LI><LI>\n  getTimelineData.php?w=[research-code]</LI><LI>\n  getTimelineDataForClasses.php?w=[research-code]&c=[class-ID]</LI><LI>\n  tools-getEmotionTotalsForWords.php?w=[research-code]</LI><LI>\n  tools-getForDistribution.php?w=[research-code]</LI><LI>\n  tools-getForDistributionTimeOfDay.php?w=[research-code]</LI><LI>\n  tools-getForDistributionUsers.php?w=[research-code]</LI><LI>\n  tools-getProjectStatistics.php?w=[research-code]</LI><LI>\n  tools-getRelations.php?w=[research-code]</LI><LI>\n  tools-getRelationsWithEmotions.php?w=[research-code]</LI><LI>\n  tools-getWordTimelines.php?w=[research-code]</LI><LI>\n"
+      },
+      "date": 1433702498041
+    },
+    {
+      "type": "edit",
+      "id": "86ffbbecff8dfffd",
+      "item": {
+        "type": "html",
+        "id": "86ffbbecff8dfffd",
+        "text": "countMessages.php?w=[research-code]\nReturns the number of captured messages for [research-code]\n\n\n-----------\ngetAllCoordsForResearch.php?w=[research-code]\nReturn all of the locations for [research-code], together with the number of messages generated in them.\n\n\n-----------\ngetAllRelations.php?w=[research-code]\nReturns all of the [nick1,nick2] relations for [research-code], together with a measure of their strength.\n\n\n-----------\ngetAllUsers.php?w=[research-code]\nReturns the list of all the users for [research-code].\n\n\n-----------\ngetContentForWords.php?w=[research-code]&words=word1 word2 word3 ...\nReturns all of the content for [research-code] which match ALL of the listed words.\nCase insensitive.\n\n\n-----------\ngetFirstOSMAVizData.php?w=[research-code]\nDeveloped for OSMA. Return all of the locations for [research-code], together with the number of messages generated in them.\n\n\n-----------\ngetLanguages.php?w=[research-code]\nGet the languages used in [research-code], and the number of messages for each.\nUses ISO country codes, and 'und' for unidentified messages\n\n\n-----------\ngetLatestEmotions.php?w=[research-code]\nGets emotions expressed in the latest 1000 messages captured in [research-code], and for each the number of messages expressing them.\n\n\n-----------\ngetLatestLanguages.php?w=[research-code]\nGets languages used in the latest 1000 messages captured in [research-code], and for each the number of messages using them.\nUses ISO country codes, and 'und' for unidentified messages\n\n-----------\ngetLatestRelations.php?w=[research-code]\nGets latest 1000 relations added in [research-code] under the form (nick1,nick2,c) where 'c' is their strength.\n\n\n-----------\ngetPrediction.php?w=[research-code]\nGets a random prediction for [research-code]. See prediction types in this file.\n\n\n\n-----------\npattern_graphic.php\nPrediction types. Get a neat little random ASCII graphic pattern.\n\n\n-----------\npattern_place_mono.php?w=[research-code]\nPrediction types. Get a prediction of likely places a certain random user of [research-code] will be in.\nPredictions come under the form:\n\"[nick] will be within 1 mile of the following coordinates ([lat],[lon]) in the next [days] days\"\nOr \"The future geographical position of [nick] is unforeseeable, as of now.\" if there are no discernable patterns in the user's position.\n\n\n-----------\npattern_place_multi.php?w=[research-code]\nPrediction types. Get a prediction of how correlated the locations of some random users of [research-code] will be.\nPredictions come under the form:\n\"These users [[nicks]] will find themselves within 1 mile of each other around the following coordinates ([lat],[lon]) in the next [days] days.\"\nOr \"The future geographical positions these users [[nicks]] are not correlated.\" if there are no discernable patterns in the users' positions.\n\n\n-----------\npattern_word_mono.php?w=[research-code]\nPrediction types. Get a prediction of what a random user of [research-code] will be talking about in the following period of time.\nPredictions come under the form:\n\"[nick] will be dealing with [subject1] and [subject2] within 1 mile of the following coordinates ([lat],[lon]) in the next [days] days\"\nOR\n\"[nick] will be dealing with [subject1] and [subject2] in the next [days] days\"\nOr\n\"The future interests of [nick] are unforeseeable, as of now.\" if there are no recognizable patterns.\nOR\n\"Nothing can be foreseen about the future interests of [nick], as of now.\" if there are no recognizable patterns.\n\n\n\n-----------\ngetRandomMessage.php?w=[research-code]\nGets a random message (txt) and user information (nick,imageurl) from [research-code].\n\n\n-----------\ngetRelations.php?w=[research-code]\nGets ALL relations added in [research-code] under the form (nick1,nick2,c) where 'c' is their strength.\n\n\n-----------\ngetRelationsBetweenTwoUsers.php?w=[research-code]&n1=[nickname 1]&n2=[nickname 2]\nWithin [research-code], searches if there is a relation between [nickname 1] and [nickname 2].\nIf it is present, it returns its strength (c).\nIf it is not present, it returns and empty array.\n\n\n<UL><LI>\n  getUserProfile.php?n=[nickname]</LI><LI>\n  getUsers.php?w=[research-code]&fromID=[id]</LI><LI>\n  getClasses.php?w=[research-code]</LI><LI>\n  getContentForMap.php?w=[research-code]</LI><LI>\n  getContentUpdateForMap.php?w=[research-code]</LI><LI>\n  getContentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentRecentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentUpdate.php?w=[research-code]</LI><LI>\n  getTimelineData.php?w=[research-code]</LI><LI>\n  getTimelineDataForClasses.php?w=[research-code]&c=[class-ID]</LI><LI>\n  tools-getEmotionTotalsForWords.php?w=[research-code]</LI><LI>\n  tools-getForDistribution.php?w=[research-code]</LI><LI>\n  tools-getForDistributionTimeOfDay.php?w=[research-code]</LI><LI>\n  tools-getForDistributionUsers.php?w=[research-code]</LI><LI>\n  tools-getProjectStatistics.php?w=[research-code]</LI><LI>\n  tools-getRelations.php?w=[research-code]</LI><LI>\n  tools-getRelationsWithEmotions.php?w=[research-code]</LI><LI>\n  tools-getWordTimelines.php?w=[research-code]</LI><LI>\n"
+      },
+      "date": 1433702499562
+    },
+    {
+      "type": "edit",
+      "id": "86ffbbecff8dfffd",
+      "item": {
+        "type": "html",
+        "id": "86ffbbecff8dfffd",
+        "text": "<UL><LI>\n  countMessages.php?w=[research-code]</LI><LI>\n  getAllCoordsForResearch.php?w=[research-code]</LI><LI>\n  getAllRelations.php?w=[research-code]</LI><LI>\n  getAllUsers.php?w=[research-code]</LI><LI>\n  getContentForWords.php?w=[research-code]&words=word1 word2 word3 ...</LI><LI>\n  getFirstOSMAVizData.php?w=[research-code]</LI><LI>\n  getLanguages.php?w=[research-code]</LI><LI>\n  getLatestEmotions.php?w=[research-code]</LI><LI>\n  getLatestLanguages.php?w=[research-code]</LI><LI>\n  getLatestRelations.php?w=[research-code]</LI><LI>\n  getPrediction.php?w=[research-code]</LI><LI>\n  pattern_graphic.php</LI><LI>\n  pattern_place_mono.php?w=[research-code]</LI><LI>\n  pattern_place_multi.php?w=[research-code]</LI><LI>\n  pattern_word_mono.php?w=[research-code]</LI><LI>\n  getRandomMessage.php?w=[research-code]</LI><LI>\n  getRelations.php?w=[research-code]</LI><LI>\n  getRelationsBetweenTwoUsers.php?w=[research-code]&n1=[nickname 1]&n2=[nickname 2]</LI><LI>\n  getUserProfile.php?n=[nickname]</LI><LI>\n  getUsers.php?w=[research-code]&fromID=[id]</LI><LI>\n  getClasses.php?w=[research-code]</LI><LI>\n  getContentForMap.php?w=[research-code]</LI><LI>\n  getContentUpdateForMap.php?w=[research-code]</LI><LI>\n  getContentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentRecentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentUpdate.php?w=[research-code]</LI><LI>\n  getTimelineData.php?w=[research-code]</LI><LI>\n  getTimelineDataForClasses.php?w=[research-code]&c=[class-ID]</LI><LI>\n  tools-getEmotionTotalsForWords.php?w=[research-code]</LI><LI>\n  tools-getForDistribution.php?w=[research-code]</LI><LI>\n  tools-getForDistributionTimeOfDay.php?w=[research-code]</LI><LI>\n  tools-getForDistributionUsers.php?w=[research-code]</LI><LI>\n  tools-getProjectStatistics.php?w=[research-code]</LI><LI>\n  tools-getRelations.php?w=[research-code]</LI><LI>\n  tools-getRelationsWithEmotions.php?w=[research-code]</LI><LI>\n  tools-getWordTimelines.php?w=[research-code]</LI><LI>\n"
+      },
+      "date": 1433702735795
+    },
+    {
+      "type": "edit",
+      "id": "86ffbbecff8dfffd",
+      "item": {
+        "type": "html",
+        "id": "86ffbbecff8dfffd",
+        "text": "<UL><LI>\n  countMessages.php?w=[research-code]</LI><LI>\n  getAllCoordsForResearch.php?w=[research-code]</LI><LI>\n  getAllRelations.php?w=[research-code]</LI><LI>\n  getAllUsers.php?w=[research-code]</LI><LI>\n  getContentForWords.php?w=[research-code]&words=word1 word2 word3 ...</LI><LI>\n  getFirstOSMAVizData.php?w=[research-code]</LI><LI>\n  getLanguages.php?w=[research-code]</LI><LI>\n  getLatestEmotions.php?w=[research-code]</LI><LI>\n  getLatestLanguages.php?w=[research-code]</LI><LI>\n  getLatestRelations.php?w=[research-code]</LI><LI>\n  getPrediction.php?w=[research-code]</LI><LI>\n  pattern_graphic.php</LI><LI>\n  pattern_place_mono.php?w=[research-code]</LI><LI>\n  pattern_place_multi.php?w=[research-code]</LI><LI>\n  pattern_word_mono.php?w=[research-code]</LI><LI>\n  getRandomMessage.php?w=[research-code]</LI><LI>\n  getRelations.php?w=[research-code]</LI><LI>\n  getRelationsBetweenTwoUsers.php?w=[research-code]&n1=[nickname 1]&n2=[nickname 2]</LI><LI>\n  getUserProfile.php?n=[nickname]</LI><LI>\n  getUsers.php?w=[research-code]&fromID=[id]</LI><LI>\n  getClasses.php?w=[research-code]</LI><LI>\n  getContentForMap.php?w=[research-code]</LI><LI>\n  getContentUpdateForMap.php?w=[research-code]</LI><LI>\n  getContentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentRecentNearby.php?w=[research-code]&lat=[center-latitude]&lng=[center-longitude]&rad=[bounding-box-radius]</LI><LI>\n  getContentUpdate.php?w=[research-code]</LI><LI>\n  getTimelineData.php?w=[research-code]</LI><LI>\n  getTimelineDataForClasses.php?w=[research-code]&c=[class-ID]</LI><LI>\n  tools-getEmotionTotalsForWords.php?w=[research-code]</LI><LI>\n  tools-getForDistribution.php?w=[research-code]</LI><LI>\n  tools-getForDistributionTimeOfDay.php?w=[research-code]</LI><LI>\n  tools-getForDistributionUsers.php?w=[research-code]</LI><LI>\n  tools-getProjectStatistics.php?w=[research-code]</LI><LI>\n  tools-getRelations.php?w=[research-code]</LI><LI>\n  tools-getRelationsWithEmotions.php?w=[research-code]</LI><LI>\n  tools-getWordTimelines.php?w=[research-code]\n</LI></UL>\n"
+      },
+      "date": 1433702763844
+    },
+    {
+      "type": "fork",
+      "site": "c0de.academy",
+      "date": 1433945798990
+    },
+    {
+      "type": "edit",
+      "id": "86ffbbecff8dfffd",
+      "item": {
+        "type": "html",
+        "id": "86ffbbecff8dfffd",
+        "text": "<UL><LI>\n  countMessages</LI><LI>\n  getAllCoordsForResearch</LI><LI>\n  getAllRelations</LI><LI>\n  getAllUsers</LI><LI>\n  [[getContentForWords]]</LI><LI>\n  getFirstOSMAVizData</LI><LI>\n  getLanguages</LI><LI>\n  getLatestEmotions</LI><LI>\n  getLatestLanguages</LI><LI>\n  getLatestRelations</LI><LI>\n  getPrediction</LI><LI>\n  pattern_graphic</LI><LI>\n  pattern_place_mono</LI><LI>\n  pattern_place_multi</LI><LI>\n  pattern_word_mono</LI><LI>\n  getRandomMessage</LI><LI>\n  getRelations</LI><LI>\n  getRelationsBetweenTwoUsers</LI><LI>\n  getUserProfile</LI><LI>\n  getUsers</LI><LI>\n  getClasses</LI><LI>\n  getContentForMap</LI><LI>\n  getContentUpdateForMap</LI><LI>\n  getContentNearby</LI><LI>\n  getContentRecentNearby</LI><LI>\n  getContentUpdate</LI><LI>\n  getTimelineData</LI><LI>\n  getTimelineDataForClasses</LI><LI>\n  tools-getEmotionTotalsForWords</LI><LI>\n  tools-getForDistribution</LI><LI>\n  tools-getForDistributionTimeOfDay</LI><LI>\n  tools-getForDistributionUsers</LI><LI>\n  tools-getProjectStatistics</LI><LI>\n  tools-getRelations</LI><LI>\n  tools-getRelationsWithEmotions</LI><LI>\n  tools-getWordTimelines\n</LI></UL>\n"
+      },
+      "site": "c0de.academy",
+      "date": 1433945798984
+    },
+    {
+      "type": "fork",
+      "date": 1433945830665
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7af6d69b0c6e8538"
+      },
+      "id": "7af6d69b0c6e8538",
+      "type": "add",
+      "after": "86ffbbecff8dfffd",
+      "date": 1433945846316
+    },
+    {
+      "type": "edit",
+      "id": "7af6d69b0c6e8538",
+      "item": {
+        "type": "paragraph",
+        "id": "7af6d69b0c6e8538",
+        "text": "The [[Human ecosystems]] API is fairly comprehensive but does not seem to include methods for adding data feeds from other sources which would seem to require php coding to extend."
+      },
+      "date": 1433945920707
+    },
+    {
+      "type": "add",
+      "id": "717a49e683447748",
+      "item": {
+        "type": "paragraph",
+        "id": "717a49e683447748",
+        "text": "Below is the full list of restful endpoints for the API described here - [afsd adsf]"
+      },
+      "after": "7af6d69b0c6e8538",
+      "date": 1433945964394
+    },
+    {
+      "type": "edit",
+      "id": "717a49e683447748",
+      "item": {
+        "type": "paragraph",
+        "id": "717a49e683447748",
+        "text": "Below is the full list of restful endpoints for the API described here - [https://github.com/xdxdVSxdxd/HumanEcosystems/blob/master/HE_v2/API.txt gitbub]"
+      },
+      "date": 1433946178258
+    },
+    {
+      "type": "move",
+      "order": [
+        "717a49e683447748",
+        "86ffbbecff8dfffd",
+        "7af6d69b0c6e8538"
+      ],
+      "id": "717a49e683447748",
+      "date": 1433946183991
+    },
+    {
+      "type": "move",
+      "order": [
+        "7af6d69b0c6e8538",
+        "717a49e683447748",
+        "86ffbbecff8dfffd"
+      ],
+      "id": "7af6d69b0c6e8538",
+      "date": 1433946188396
+    }
+  ]
+}

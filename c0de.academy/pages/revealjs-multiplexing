@@ -1,0 +1,792 @@
+{
+  "title": "Reveal.js Multiplexing",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5510cacbc4b2f8a3",
+      "text": "The multiplex plugin allows your audience to view the slides of the [[reveal.js]] presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time."
+    },
+    {
+      "type": "markdown",
+      "id": "a98545ce7bffa61b",
+      "text": "The multiplex plugin needs the following 3 things to operate:\n\n* Master presentation that has control\n* Client presentations that follow the master\n* Socket.io server to broadcast events from the master to the clients\n"
+    },
+    {
+      "type": "markdown",
+      "id": "842c87722f0db372",
+      "text": "# Master presentation"
+    },
+    {
+      "type": "paragraph",
+      "id": "d25dc39a9fcb0dd1",
+      "text": "Served from a static file server accessible (preferably) only to the presenter. This need only be on your (the presenter's) computer. (It's safer to run the master presentation from your own computer, so if the venue's Internet goes down it doesn't stop the show.) An example would be to execute the following commands in the directory of your master presentation:"
+    },
+    {
+      "type": "code",
+      "id": "34449500b55327a4",
+      "text": "npm install node-static\nstatic"
+    },
+    {
+      "type": "paragraph",
+      "id": "fb1c2d1ab2355547",
+      "text": "If you want to use the speaker notes plugin with your master presentation then make sure you have the speaker notes plugin configured correctly along with the configuration shown below, then execute node plugin/notes-server in the directory of your master presentation. The configuration below will cause it to connect to the socket.io server as a master, as well as launch your speaker-notes/static-file server."
+    },
+    {
+      "type": "paragraph",
+      "id": "6317764b3916d1ff",
+      "text": "You can then access your master presentation at http://localhost:1947\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "cfc4ae84741eeec6",
+      "text": "# Example configuration:"
+    },
+    {
+      "type": "code",
+      "id": "174bad58e3e11bdf",
+      "text": "Reveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n\n        // and if you want speaker notes\n        { src: 'plugin/notes-server/client.js', async: true }\n\n        // other dependencies...\n    ]\n});"
+    },
+    {
+      "type": "markdown",
+      "id": "4b1264017335ad99",
+      "text": "# Client presentation"
+    },
+    {
+      "type": "paragraph",
+      "id": "16f47d516eb26d05",
+      "text": "Served from a publicly accessible static file server. Examples include: GitHub Pages, Amazon S3, Dreamhost, Akamai, etc. The more reliable, the better. Your audience can then access the client presentation via http://example.com/path/to/presentation/client/index.html, with the configuration below causing them to connect to the socket.io server as clients."
+    },
+    {
+      "type": "markdown",
+      "id": "1f05a0bef9e300cc",
+      "text": "# Example configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\n"
+    },
+    {
+      "type": "markdown",
+      "id": "e2e395a02d10aad6",
+      "text": "# Socket.io server"
+    },
+    {
+      "type": "paragraph",
+      "id": "4901f0d5a85e9590",
+      "text": "Server that receives the slideChanged events from the master presentation and broadcasts them out to the connected client presentations. This needs to be publicly accessible. You can run your own socket.io server with the commands:"
+    },
+    {
+      "type": "paragraph",
+      "id": "ca0c52172c6c620f",
+      "text": "npm install\nnode plugin/multiplex"
+    },
+    {
+      "type": "paragraph",
+      "id": "59d0ec54cec513ac",
+      "text": "Or you use the socket.io server at http://revealjs-51546.onmodulus.net/."
+    },
+    {
+      "type": "paragraph",
+      "id": "9970981a7ae4df7f",
+      "text": "You'll need to generate a unique secret and token pair for your master and client presentations. To do so, visit http://example.com/token, where http://example.com is the location of your socket.io server. Or if you're going to use the socket.io server at http://revealjs-51546.onmodulus.net/, visit http://revealjs-51546.onmodulus.net/token."
+    },
+    {
+      "type": "paragraph",
+      "id": "784f00a83e3b7bfb",
+      "text": "You are very welcome to point your presentations at the Socket.io server running at http://revealjs-51546.onmodulus.net/, but availability and stability are not guaranteed. For anything mission critical I recommend you run your own server. It is simple to deploy to nodejitsu, heroku, your own environment, etc."
+    },
+    {
+      "type": "markdown",
+      "id": "ab11768fbef905b1",
+      "text": "# socket.io server as file static server"
+    },
+    {
+      "type": "paragraph",
+      "id": "3bb5534410d64e75",
+      "text": "The socket.io server can play the role of static file server for your client presentation, as in the example at http://revealjs-51546.onmodulus.net/. (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match.)"
+    },
+    {
+      "type": "markdown",
+      "id": "61c86ae80f5a553e",
+      "text": "# Example configuration:"
+    },
+    {
+      "type": "paragraph",
+      "id": "1c5dc1d18756a212",
+      "text": "It can also play the role of static file server for your master presentation and client presentations at the same time (as long as you don't want to use speaker notes). (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match. Navigate through the slides on the second, and the first will update to match.) This is probably not desirable, because you don't want your audience to mess with your slides while you're presenting. ;)"
+    },
+    {
+      "type": "markdown",
+      "id": "b69e9e909d49fc29",
+      "text": "# Example configuration:"
+    },
+    {
+      "type": "code",
+      "id": "ddcf3757add505e7",
+      "text": "Reveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Reveal.js Multiplexing",
+        "story": []
+      },
+      "date": 1459377924819
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8fa31a662c43a8a6"
+      },
+      "id": "8fa31a662c43a8a6",
+      "type": "add",
+      "date": 1459377926376
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5510cacbc4b2f8a3",
+        "text": "[[Reveal.js Multiplexing]]\n\nThe multiplex plugin allows your audience to view the slides of the presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time. See a demo at http://revealjs-51546.onmodulus.net/.\n\nThe multiplex plugin needs the following 3 things to operate:\n\nMaster presentation that has control\nClient presentations that follow the master\nSocket.io server to broadcast events from the master to the clients\nMore details:\n\nMaster presentation\n\nServed from a static file server accessible (preferably) only to the presenter. This need only be on your (the presenter's) computer. (It's safer to run the master presentation from your own computer, so if the venue's Internet goes down it doesn't stop the show.) An example would be to execute the following commands in the directory of your master presentation:\n\nnpm install node-static\nstatic\nIf you want to use the speaker notes plugin with your master presentation then make sure you have the speaker notes plugin configured correctly along with the configuration shown below, then execute node plugin/notes-server in the directory of your master presentation. The configuration below will cause it to connect to the socket.io server as a master, as well as launch your speaker-notes/static-file server.\n\nYou can then access your master presentation at http://localhost:1947\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n\n        // and if you want speaker notes\n        { src: 'plugin/notes-server/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\nClient presentation\n\nServed from a publicly accessible static file server. Examples include: GitHub Pages, Amazon S3, Dreamhost, Akamai, etc. The more reliable, the better. Your audience can then access the client presentation via http://example.com/path/to/presentation/client/index.html, with the configuration below causing them to connect to the socket.io server as clients.\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\nSocket.io server\n\nServer that receives the slideChanged events from the master presentation and broadcasts them out to the connected client presentations. This needs to be publicly accessible. You can run your own socket.io server with the commands:\n\nnpm install\nnode plugin/multiplex\nOr you use the socket.io server at http://revealjs-51546.onmodulus.net/.\n\nYou'll need to generate a unique secret and token pair for your master and client presentations. To do so, visit http://example.com/token, where http://example.com is the location of your socket.io server. Or if you're going to use the socket.io server at http://revealjs-51546.onmodulus.net/, visit http://revealjs-51546.onmodulus.net/token.\n\nYou are very welcome to point your presentations at the Socket.io server running at http://revealjs-51546.onmodulus.net/, but availability and stability are not guaranteed. For anything mission critical I recommend you run your own server. It is simple to deploy to nodejitsu, heroku, your own environment, etc.\n\nsocket.io server as file static server\n\nThe socket.io server can play the role of static file server for your client presentation, as in the example at http://revealjs-51546.onmodulus.net/. (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match.)\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\nIt can also play the role of static file server for your master presentation and client presentations at the same time (as long as you don't want to use speaker notes). (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match. Navigate through the slides on the second, and the first will update to match.) This is probably not desirable, because you don't want your audience to mess with your slides while you're presenting. ;)\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});"
+      },
+      "id": "5510cacbc4b2f8a3",
+      "date": 1459377928642
+    },
+    {
+      "type": "remove",
+      "id": "8fa31a662c43a8a6",
+      "date": 1459377934438
+    },
+    {
+      "type": "edit",
+      "id": "5510cacbc4b2f8a3",
+      "item": {
+        "type": "paragraph",
+        "id": "5510cacbc4b2f8a3",
+        "text": "[[Reveal.js Multiplexing]]\n\nThe multiplex plugin allows your audience to view the slides of the presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time. See a demo at http://revealjs-51546.onmodulus.net/.\n\nThe multiplex plugin needs the following 3 things to operate:\n\nMaster presentation that has control\nClient presentations that follow the master\nSocket.io server to broadcast events from the master to the clients\nMore details:\n\nMaster presentation\n\nServed from a static file server accessible (preferably) only to the presenter. This need only be on your (the presenter's) computer. (It's safer to run the master presentation from your own computer, so if the venue's Internet goes down it doesn't stop the show.) An example would be to execute the following commands in the directory of your master presentation:\n\nnpm install node-static\nstatic\nIf you want to use the speaker notes plugin with your master presentation then make sure you have the speaker notes plugin configured correctly along with the configuration shown below, then execute node plugin/notes-server in the directory of your master presentation. The configuration below will cause it to connect to the socket.io server as a master, as well as launch your speaker-notes/static-file server.\n\nYou can then access your master presentation at http://localhost:1947\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n\n        // and if you want speaker notes\n        { src: 'plugin/notes-server/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\nClient presentation\n\nServed from a publicly accessible static file server. Examples include: GitHub Pages, Amazon S3, Dreamhost, Akamai, etc. The more reliable, the better. Your audience can then access the client presentation via http://example.com/path/to/presentation/client/index.html, with the configuration below causing them to connect to the socket.io server as clients.\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\nSocket.io server\n\nServer that receives the slideChanged events from the master presentation and broadcasts them out to the connected client presentations. This needs to be publicly accessible. You can run your own socket.io server with the commands:\n\nnpm install\nnode plugin/multiplex\nOr you use the socket.io server at http://revealjs-51546.onmodulus.net/.\n\nYou'll need to generate a unique secret and token pair for your master and client presentations. To do so, visit http://example.com/token, where http://example.com is the location of your socket.io server. Or if you're going to use the socket.io server at http://revealjs-51546.onmodulus.net/, visit http://revealjs-51546.onmodulus.net/token.\n\nYou are very welcome to point your presentations at the Socket.io server running at http://revealjs-51546.onmodulus.net/, but availability and stability are not guaranteed. For anything mission critical I recommend you run your own server. It is simple to deploy to nodejitsu, heroku, your own environment, etc.\n\nsocket.io server as file static server\n\nThe socket.io server can play the role of static file server for your client presentation, as in the example at http://revealjs-51546.onmodulus.net/. (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match.)\n\nExample configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\nIt can also play the role of static file server for your master presentation and client presentations at the same time (as long as you don't want to use speaker notes). (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match. Navigate through the slides on the second, and the first will update to match.) This is probably not desirable, because you don't want your audience to mess with your slides while you're presenting. ;)\n\nExample configuration:"
+      },
+      "date": 1459377950963
+    },
+    {
+      "type": "edit",
+      "id": "8fa31a662c43a8a6",
+      "item": {
+        "type": "code",
+        "id": "8fa31a662c43a8a6",
+        "text": "Reveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});"
+      },
+      "date": 1459377952444
+    },
+    {
+      "type": "edit",
+      "id": "5510cacbc4b2f8a3",
+      "item": {
+        "type": "paragraph",
+        "id": "5510cacbc4b2f8a3",
+        "text": "The multiplex plugin allows your audience to view the slides of the presentation you are controlling on their own phone, tablet or laptop. "
+      },
+      "date": 1459377980353
+    },
+    {
+      "type": "add",
+      "id": "b3ac4e53e73cb07c",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ac4e53e73cb07c",
+        "text": "As the master presentation navigates the slides, all client presentations will update in real time. See a demo at [http://revealjs-51546.onmodulus.net/ onmodulus.net]"
+      },
+      "after": "5510cacbc4b2f8a3",
+      "date": 1459378010401
+    },
+    {
+      "type": "add",
+      "id": "a98545ce7bffa61b",
+      "item": {
+        "type": "paragraph",
+        "id": "a98545ce7bffa61b",
+        "text": "The multiplex plugin needs the following 3 things to operate:\n\n* Master presentation that has control\n* Client presentations that follow the master\n* Socket.io server to broadcast events from the master to the clients\n"
+      },
+      "after": "b3ac4e53e73cb07c",
+      "date": 1459378027417
+    },
+    {
+      "type": "add",
+      "id": "842c87722f0db372",
+      "item": {
+        "type": "paragraph",
+        "id": "842c87722f0db372",
+        "text": "# Master presentation"
+      },
+      "after": "a98545ce7bffa61b",
+      "date": 1459378039152
+    },
+    {
+      "type": "add",
+      "id": "d25dc39a9fcb0dd1",
+      "item": {
+        "type": "paragraph",
+        "id": "d25dc39a9fcb0dd1",
+        "text": "Served from a static file server accessible (preferably) only to the presenter. This need only be on your (the presenter's) computer. (It's safer to run the master presentation from your own computer, so if the venue's Internet goes down it doesn't stop the show.) An example would be to execute the following commands in the directory of your master presentation:"
+      },
+      "after": "842c87722f0db372",
+      "date": 1459378044841
+    },
+    {
+      "type": "add",
+      "id": "3186446c85a10532",
+      "item": {
+        "type": "paragraph",
+        "id": "3186446c85a10532",
+        "text": "\nnpm install node-static\nstatic\n"
+      },
+      "after": "d25dc39a9fcb0dd1",
+      "date": 1459378050553
+    },
+    {
+      "type": "add",
+      "id": "fb1c2d1ab2355547",
+      "item": {
+        "type": "paragraph",
+        "id": "fb1c2d1ab2355547",
+        "text": "If you want to use the speaker notes plugin with your master presentation then make sure you have the speaker notes plugin configured correctly along with the configuration shown below, then execute node plugin/notes-server in the directory of your master presentation. The configuration below will cause it to connect to the socket.io server as a master, as well as launch your speaker-notes/static-file server."
+      },
+      "after": "3186446c85a10532",
+      "date": 1459378054720
+    },
+    {
+      "type": "add",
+      "id": "6317764b3916d1ff",
+      "item": {
+        "type": "paragraph",
+        "id": "6317764b3916d1ff",
+        "text": "You can then access your master presentation at http://localhost:1947\n\n"
+      },
+      "after": "fb1c2d1ab2355547",
+      "date": 1459378065168
+    },
+    {
+      "type": "add",
+      "id": "cfc4ae84741eeec6",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc4ae84741eeec6",
+        "text": "# Example configuration:"
+      },
+      "after": "6317764b3916d1ff",
+      "date": 1459378068018
+    },
+    {
+      "type": "add",
+      "id": "54d89ed76b10ac90",
+      "item": {
+        "type": "paragraph",
+        "id": "54d89ed76b10ac90",
+        "text": "\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n\n        // and if you want speaker notes\n        { src: 'plugin/notes-server/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\n"
+      },
+      "after": "cfc4ae84741eeec6",
+      "date": 1459378075328
+    },
+    {
+      "type": "add",
+      "id": "4b1264017335ad99",
+      "item": {
+        "type": "paragraph",
+        "id": "4b1264017335ad99",
+        "text": "# Client presentation"
+      },
+      "after": "54d89ed76b10ac90",
+      "date": 1459378079472
+    },
+    {
+      "type": "add",
+      "id": "16f47d516eb26d05",
+      "item": {
+        "type": "paragraph",
+        "id": "16f47d516eb26d05",
+        "text": "Served from a publicly accessible static file server. Examples include: GitHub Pages, Amazon S3, Dreamhost, Akamai, etc. The more reliable, the better. Your audience can then access the client presentation via http://example.com/path/to/presentation/client/index.html, with the configuration below causing them to connect to the socket.io server as clients."
+      },
+      "after": "4b1264017335ad99",
+      "date": 1459378091080
+    },
+    {
+      "type": "add",
+      "id": "1f05a0bef9e300cc",
+      "item": {
+        "type": "paragraph",
+        "id": "1f05a0bef9e300cc",
+        "text": "# Example configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\n"
+      },
+      "after": "16f47d516eb26d05",
+      "date": 1459378105625
+    },
+    {
+      "type": "add",
+      "id": "e2e395a02d10aad6",
+      "item": {
+        "type": "paragraph",
+        "id": "e2e395a02d10aad6",
+        "text": "# Socket.io server"
+      },
+      "after": "1f05a0bef9e300cc",
+      "date": 1459378108839
+    },
+    {
+      "type": "add",
+      "id": "4901f0d5a85e9590",
+      "item": {
+        "type": "paragraph",
+        "id": "4901f0d5a85e9590",
+        "text": "Server that receives the slideChanged events from the master presentation and broadcasts them out to the connected client presentations. This needs to be publicly accessible. You can run your own socket.io server with the commands:"
+      },
+      "after": "e2e395a02d10aad6",
+      "date": 1459378112103
+    },
+    {
+      "type": "add",
+      "id": "ca0c52172c6c620f",
+      "item": {
+        "type": "paragraph",
+        "id": "ca0c52172c6c620f",
+        "text": "npm install\nnode plugin/multiplex"
+      },
+      "after": "4901f0d5a85e9590",
+      "date": 1459378118152
+    },
+    {
+      "type": "add",
+      "id": "59d0ec54cec513ac",
+      "item": {
+        "type": "paragraph",
+        "id": "59d0ec54cec513ac",
+        "text": "Or you use the socket.io server at http://revealjs-51546.onmodulus.net/."
+      },
+      "after": "ca0c52172c6c620f",
+      "date": 1459378122608
+    },
+    {
+      "type": "add",
+      "id": "9970981a7ae4df7f",
+      "item": {
+        "type": "paragraph",
+        "id": "9970981a7ae4df7f",
+        "text": "You'll need to generate a unique secret and token pair for your master and client presentations. To do so, visit http://example.com/token, where http://example.com is the location of your socket.io server. Or if you're going to use the socket.io server at http://revealjs-51546.onmodulus.net/, visit http://revealjs-51546.onmodulus.net/token."
+      },
+      "after": "59d0ec54cec513ac",
+      "date": 1459378130792
+    },
+    {
+      "type": "add",
+      "id": "784f00a83e3b7bfb",
+      "item": {
+        "type": "paragraph",
+        "id": "784f00a83e3b7bfb",
+        "text": "You are very welcome to point your presentations at the Socket.io server running at http://revealjs-51546.onmodulus.net/, but availability and stability are not guaranteed. For anything mission critical I recommend you run your own server. It is simple to deploy to nodejitsu, heroku, your own environment, etc."
+      },
+      "after": "9970981a7ae4df7f",
+      "date": 1459378151288
+    },
+    {
+      "type": "add",
+      "id": "ab11768fbef905b1",
+      "item": {
+        "type": "paragraph",
+        "id": "ab11768fbef905b1",
+        "text": "# socket.io server as file static server"
+      },
+      "after": "784f00a83e3b7bfb",
+      "date": 1459378164287
+    },
+    {
+      "type": "add",
+      "id": "3bb5534410d64e75",
+      "item": {
+        "type": "paragraph",
+        "id": "3bb5534410d64e75",
+        "text": "The socket.io server can play the role of static file server for your client presentation, as in the example at http://revealjs-51546.onmodulus.net/. (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match.)"
+      },
+      "after": "ab11768fbef905b1",
+      "date": 1459378170760
+    },
+    {
+      "type": "add",
+      "id": "61c86ae80f5a553e",
+      "item": {
+        "type": "paragraph",
+        "id": "61c86ae80f5a553e",
+        "text": "Example configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n"
+      },
+      "after": "3bb5534410d64e75",
+      "date": 1459378179161
+    },
+    {
+      "type": "add",
+      "id": "1c5dc1d18756a212",
+      "item": {
+        "type": "paragraph",
+        "id": "1c5dc1d18756a212",
+        "text": "It can also play the role of static file server for your master presentation and client presentations at the same time (as long as you don't want to use speaker notes). (Open http://revealjs-51546.onmodulus.net/ in two browsers. Navigate through the slides on one, and the other will update to match. Navigate through the slides on the second, and the first will update to match.) This is probably not desirable, because you don't want your audience to mess with your slides while you're presenting. ;)"
+      },
+      "after": "61c86ae80f5a553e",
+      "date": 1459378186192
+    },
+    {
+      "type": "add",
+      "id": "b69e9e909d49fc29",
+      "item": {
+        "type": "paragraph",
+        "id": "b69e9e909d49fc29",
+        "text": "# Example configuration:"
+      },
+      "after": "1c5dc1d18756a212",
+      "date": 1459378191600
+    },
+    {
+      "type": "edit",
+      "id": "b69e9e909d49fc29",
+      "item": {
+        "type": "markdown",
+        "id": "b69e9e909d49fc29",
+        "text": "# Example configuration:"
+      },
+      "date": 1459378192845
+    },
+    {
+      "type": "edit",
+      "id": "61c86ae80f5a553e",
+      "item": {
+        "type": "markdown",
+        "id": "61c86ae80f5a553e",
+        "text": "Example configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n"
+      },
+      "date": 1459378197519
+    },
+    {
+      "type": "edit",
+      "id": "61c86ae80f5a553e",
+      "item": {
+        "type": "markdown",
+        "id": "61c86ae80f5a553e",
+        "text": "# Example configuration:"
+      },
+      "date": 1459378208761
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ddcf3757add505e7"
+      },
+      "id": "ddcf3757add505e7",
+      "type": "add",
+      "after": "b69e9e909d49fc29",
+      "date": 1459378227972
+    },
+    {
+      "type": "edit",
+      "id": "ddcf3757add505e7",
+      "item": {
+        "type": "code",
+        "id": "ddcf3757add505e7",
+        "text": "Reveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'example.com:80' // Location of your socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]"
+      },
+      "date": 1459378236602
+    },
+    {
+      "type": "edit",
+      "id": "842c87722f0db372",
+      "item": {
+        "type": "markdown",
+        "id": "842c87722f0db372",
+        "text": "# Master presentation"
+      },
+      "date": 1459378264486
+    },
+    {
+      "type": "edit",
+      "id": "a98545ce7bffa61b",
+      "item": {
+        "type": "markdown",
+        "id": "a98545ce7bffa61b",
+        "text": "The multiplex plugin needs the following 3 things to operate:\n\n* Master presentation that has control\n* Client presentations that follow the master\n* Socket.io server to broadcast events from the master to the clients\n"
+      },
+      "date": 1459378268097
+    },
+    {
+      "type": "edit",
+      "id": "cfc4ae84741eeec6",
+      "item": {
+        "type": "markdown",
+        "id": "cfc4ae84741eeec6",
+        "text": "# Example configuration:"
+      },
+      "date": 1459378275595
+    },
+    {
+      "type": "edit",
+      "id": "4b1264017335ad99",
+      "item": {
+        "type": "markdown",
+        "id": "4b1264017335ad99",
+        "text": "# Client presentation"
+      },
+      "date": 1459378283909
+    },
+    {
+      "type": "edit",
+      "id": "1f05a0bef9e300cc",
+      "item": {
+        "type": "markdown",
+        "id": "1f05a0bef9e300cc",
+        "text": "# Example configuration:\n\nReveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: null, // null so the clients do not have control of the master presentation\n        id: '1ea875674b17ca76', // id, obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/client.js', async: true }\n\n        // other dependencies...\n    ]\n});\n"
+      },
+      "date": 1459378285921
+    },
+    {
+      "type": "edit",
+      "id": "e2e395a02d10aad6",
+      "item": {
+        "type": "markdown",
+        "id": "e2e395a02d10aad6",
+        "text": "# Socket.io server"
+      },
+      "date": 1459378289306
+    },
+    {
+      "type": "edit",
+      "id": "ab11768fbef905b1",
+      "item": {
+        "type": "markdown",
+        "id": "ab11768fbef905b1",
+        "text": "# socket.io server as file static server"
+      },
+      "date": 1459378294357
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f8e02a13cd72b7c1"
+      },
+      "id": "f8e02a13cd72b7c1",
+      "type": "add",
+      "after": "ddcf3757add505e7",
+      "date": 1459378326503
+    },
+    {
+      "type": "move",
+      "order": [
+        "5510cacbc4b2f8a3",
+        "b3ac4e53e73cb07c",
+        "a98545ce7bffa61b",
+        "842c87722f0db372",
+        "d25dc39a9fcb0dd1",
+        "f8e02a13cd72b7c1",
+        "3186446c85a10532",
+        "fb1c2d1ab2355547",
+        "6317764b3916d1ff",
+        "cfc4ae84741eeec6",
+        "54d89ed76b10ac90",
+        "4b1264017335ad99",
+        "16f47d516eb26d05",
+        "1f05a0bef9e300cc",
+        "e2e395a02d10aad6",
+        "4901f0d5a85e9590",
+        "ca0c52172c6c620f",
+        "59d0ec54cec513ac",
+        "9970981a7ae4df7f",
+        "784f00a83e3b7bfb",
+        "ab11768fbef905b1",
+        "3bb5534410d64e75",
+        "61c86ae80f5a553e",
+        "1c5dc1d18756a212",
+        "b69e9e909d49fc29",
+        "ddcf3757add505e7"
+      ],
+      "id": "f8e02a13cd72b7c1",
+      "date": 1459378335059
+    },
+    {
+      "type": "remove",
+      "id": "3186446c85a10532",
+      "date": 1459378340270
+    },
+    {
+      "type": "remove",
+      "id": "f8e02a13cd72b7c1",
+      "date": 1459378346192
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "34449500b55327a4"
+      },
+      "id": "34449500b55327a4",
+      "type": "add",
+      "after": "ddcf3757add505e7",
+      "date": 1459378350149
+    },
+    {
+      "type": "edit",
+      "id": "34449500b55327a4",
+      "item": {
+        "type": "code",
+        "id": "34449500b55327a4",
+        "text": "npm install node-static\nstatic"
+      },
+      "date": 1459378353458
+    },
+    {
+      "type": "move",
+      "order": [
+        "5510cacbc4b2f8a3",
+        "b3ac4e53e73cb07c",
+        "a98545ce7bffa61b",
+        "842c87722f0db372",
+        "d25dc39a9fcb0dd1",
+        "fb1c2d1ab2355547",
+        "34449500b55327a4",
+        "6317764b3916d1ff",
+        "cfc4ae84741eeec6",
+        "54d89ed76b10ac90",
+        "4b1264017335ad99",
+        "16f47d516eb26d05",
+        "1f05a0bef9e300cc",
+        "e2e395a02d10aad6",
+        "4901f0d5a85e9590",
+        "ca0c52172c6c620f",
+        "59d0ec54cec513ac",
+        "9970981a7ae4df7f",
+        "784f00a83e3b7bfb",
+        "ab11768fbef905b1",
+        "3bb5534410d64e75",
+        "61c86ae80f5a553e",
+        "1c5dc1d18756a212",
+        "b69e9e909d49fc29",
+        "ddcf3757add505e7"
+      ],
+      "id": "34449500b55327a4",
+      "date": 1459378367538
+    },
+    {
+      "type": "move",
+      "order": [
+        "5510cacbc4b2f8a3",
+        "b3ac4e53e73cb07c",
+        "a98545ce7bffa61b",
+        "842c87722f0db372",
+        "d25dc39a9fcb0dd1",
+        "34449500b55327a4",
+        "fb1c2d1ab2355547",
+        "6317764b3916d1ff",
+        "cfc4ae84741eeec6",
+        "54d89ed76b10ac90",
+        "4b1264017335ad99",
+        "16f47d516eb26d05",
+        "1f05a0bef9e300cc",
+        "e2e395a02d10aad6",
+        "4901f0d5a85e9590",
+        "ca0c52172c6c620f",
+        "59d0ec54cec513ac",
+        "9970981a7ae4df7f",
+        "784f00a83e3b7bfb",
+        "ab11768fbef905b1",
+        "3bb5534410d64e75",
+        "61c86ae80f5a553e",
+        "1c5dc1d18756a212",
+        "b69e9e909d49fc29",
+        "ddcf3757add505e7"
+      ],
+      "id": "34449500b55327a4",
+      "date": 1459378408198
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "174bad58e3e11bdf"
+      },
+      "id": "174bad58e3e11bdf",
+      "type": "add",
+      "after": "ddcf3757add505e7",
+      "date": 1459378493136
+    },
+    {
+      "type": "move",
+      "order": [
+        "5510cacbc4b2f8a3",
+        "b3ac4e53e73cb07c",
+        "a98545ce7bffa61b",
+        "842c87722f0db372",
+        "d25dc39a9fcb0dd1",
+        "34449500b55327a4",
+        "fb1c2d1ab2355547",
+        "6317764b3916d1ff",
+        "cfc4ae84741eeec6",
+        "174bad58e3e11bdf",
+        "54d89ed76b10ac90",
+        "4b1264017335ad99",
+        "16f47d516eb26d05",
+        "1f05a0bef9e300cc",
+        "e2e395a02d10aad6",
+        "4901f0d5a85e9590",
+        "ca0c52172c6c620f",
+        "59d0ec54cec513ac",
+        "9970981a7ae4df7f",
+        "784f00a83e3b7bfb",
+        "ab11768fbef905b1",
+        "3bb5534410d64e75",
+        "61c86ae80f5a553e",
+        "1c5dc1d18756a212",
+        "b69e9e909d49fc29",
+        "ddcf3757add505e7"
+      ],
+      "id": "174bad58e3e11bdf",
+      "date": 1459378501458
+    },
+    {
+      "type": "remove",
+      "id": "54d89ed76b10ac90",
+      "date": 1459378515638
+    },
+    {
+      "type": "edit",
+      "id": "174bad58e3e11bdf",
+      "item": {
+        "type": "code",
+        "id": "174bad58e3e11bdf",
+        "text": "Reveal.initialize({\n    // other options...\n\n    multiplex: {\n        // Example values. To generate your own, see the socket.io server instructions.\n        secret: '13652805320794272084', // Obtained from the socket.io server. Gives this (the master) control of the presentation\n        id: '1ea875674b17ca76', // Obtained from socket.io server\n        url: 'revealjs-51546.onmodulus.net:80' // Location of socket.io server\n    },\n\n    // Don't forget to add the dependencies\n    dependencies: [\n        { src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },\n        { src: 'plugin/multiplex/master.js', async: true },\n\n        // and if you want speaker notes\n        { src: 'plugin/notes-server/client.js', async: true }\n\n        // other dependencies...\n    ]\n});"
+      },
+      "date": 1459378517810
+    },
+    {
+      "type": "edit",
+      "id": "5510cacbc4b2f8a3",
+      "item": {
+        "type": "paragraph",
+        "id": "5510cacbc4b2f8a3",
+        "text": "The multiplex plugin allows your audience to view the slides of the [[reveal.js]] presentation you are controlling on their own phone, tablet or laptop. "
+      },
+      "date": 1459378547736
+    },
+    {
+      "type": "edit",
+      "id": "b3ac4e53e73cb07c",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ac4e53e73cb07c",
+        "text": "As the master presentation navigates the slides, all client presentations will update in real time."
+      },
+      "date": 1459378907924
+    },
+    {
+      "type": "remove",
+      "id": "b3ac4e53e73cb07c",
+      "date": 1459378925649
+    },
+    {
+      "type": "edit",
+      "id": "5510cacbc4b2f8a3",
+      "item": {
+        "type": "paragraph",
+        "id": "5510cacbc4b2f8a3",
+        "text": "The multiplex plugin allows your audience to view the slides of the [[reveal.js]] presentation you are controlling on their own phone, tablet or laptop. As the master presentation navigates the slides, all client presentations will update in real time."
+      },
+      "date": 1459378928617
+    }
+  ]
+}

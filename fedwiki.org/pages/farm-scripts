@@ -1,0 +1,762 @@
+{
+  "title": "Farm Scripts",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d37ec9b2644beb7a",
+      "text": "An operator of a wiki farm may assume responsibilities that are not directly supported by mechanisms in the server. However, with flat-file storage, simple scripts can automate tasks for dozens or even hundreds of sites."
+    },
+    {
+      "type": "html",
+      "id": "35643670aa00736e",
+      "text": "<h3> Backups"
+    },
+    {
+      "type": "paragraph",
+      "id": "4141032afbcf25be",
+      "text": "I make off-site backups of fed.wiki.org with a shell script run nightly on the off-site server from a cron job. "
+    },
+    {
+      "type": "code",
+      "id": "a930599ad7b9659c",
+      "text": "# nightly backup of fed.wiki.org sites\n20 4 * * * (cd wiki/fed; sh backup.sh)\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "5ede90a359adb8c7",
+      "text": "The script, backup.sh, saves compressed archives of every page and keeps them for a week."
+    },
+    {
+      "type": "code",
+      "id": "191e0e962dac0a6a",
+      "text": "when=`date +%a`\nhow='tar --exclude openid/nonces -chz farm'\nssh fed.wiki.org $how > store/$when.tgz\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "982437d49588a5b6",
+      "text": "This script depends on having ssh access to the tar archive program on both computers. The store it creates looks like this."
+    },
+    {
+      "type": "code",
+      "id": "cf2cc48f88b22691",
+      "text": "$ ls -lh store\ntotal 1.6G\n-rw-r--r--  1 ward ward 226M Aug 29 04:26 Fri.tgz\n-rw-r--r--  1 ward ward 226M Sep  1 04:26 Mon.tgz\n-rw-r--r--  1 ward ward 226M Aug 30 04:26 Sat.tgz\n-rw-r--r--  1 ward ward 226M Aug 31 04:26 Sun.tgz\n-rw-rw-r--  1 ward ward 226M Aug 28 04:26 Thu.tgz\n-rw-r--r--  1 ward ward 226M Aug 26 04:26 Tue.tgz\n-rw-r--r--  1 ward ward 226M Aug 27 04:26 Wed.tgz\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "a4e776f64c15b3f3",
+      "text": "To extract a page from the archive."
+    },
+    {
+      "type": "code",
+      "id": "53e3d797aab59a36",
+      "text": "tar -xzf Wed.tgz farm/video.fed.wiki.org/pages/ward-cunningham"
+    },
+    {
+      "type": "paragraph",
+      "id": "615f1b576052c038",
+      "text": "To extract a whole site."
+    },
+    {
+      "type": "code",
+      "id": "8983689b04eaf98d",
+      "text": "tar -xzf Wed.tgz farm/video.fed.wiki.org"
+    },
+    {
+      "type": "html",
+      "id": "4d833f0954092e5e",
+      "text": "<h3> Activity"
+    },
+    {
+      "type": "paragraph",
+      "id": "4e3bc883fa197144",
+      "text": "I monitor activity in fed.wiki.org with a shell script run every 10 minutes on the wiki server from a cron job."
+    },
+    {
+      "type": "code",
+      "id": "2ab12faef57aca1a",
+      "text": "# rebuild the recent-farm-activity page\n*/10 * * * * (cd farm-scripts; ruby build.rb)"
+    },
+    {
+      "type": "paragraph",
+      "id": "dd00c8bd9e63a1fc",
+      "text": "The build.rb script reads through the farm's flat-file database looking for recently modified page files. It constructs a new page with references to each site with new activity."
+    },
+    {
+      "type": "paragraph",
+      "id": "bf0fc5520d791782",
+      "text": "The farm-scripts can be downloaded from a github repository. It writes the page it builds to ../pages in a wiki site of your choice."
+    },
+    {
+      "type": "code",
+      "id": "1d7c0fae91b05fed",
+      "text": "git clone https://github.com/WardCunningham/farm-scripts.git"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Farm Scripts",
+        "story": []
+      },
+      "date": 1409598550435
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d37ec9b2644beb7a"
+      },
+      "id": "d37ec9b2644beb7a",
+      "type": "add",
+      "date": 1409598580182
+    },
+    {
+      "type": "edit",
+      "id": "d37ec9b2644beb7a",
+      "item": {
+        "type": "paragraph",
+        "id": "d37ec9b2644beb7a",
+        "text": "Wiki can use [["
+      },
+      "date": 1409598684515
+    },
+    {
+      "type": "edit",
+      "id": "d37ec9b2644beb7a",
+      "item": {
+        "type": "paragraph",
+        "id": "d37ec9b2644beb7a",
+        "text": "An operator of a wiki farm may assume responsibilities that are not directly supported by mechanisms in the server. However, with flat-file storage simple scripts can automate tasks for dozens or even hundreds of sites."
+      },
+      "date": 1409598995812
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8e920ab400ad7d89",
+        "text": ""
+      },
+      "id": "8e920ab400ad7d89",
+      "type": "add",
+      "after": "d37ec9b2644beb7a",
+      "date": 1409598995827
+    },
+    {
+      "type": "remove",
+      "id": "8e920ab400ad7d89",
+      "date": 1409599008001
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "35643670aa00736e"
+      },
+      "id": "35643670aa00736e",
+      "type": "add",
+      "after": "d37ec9b2644beb7a",
+      "date": 1409599707087
+    },
+    {
+      "type": "edit",
+      "id": "35643670aa00736e",
+      "item": {
+        "type": "paragraph",
+        "id": "35643670aa00736e",
+        "text": "<h3> Backups"
+      },
+      "date": 1409599719565
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4141032afbcf25be",
+        "text": ""
+      },
+      "id": "4141032afbcf25be",
+      "type": "add",
+      "after": "35643670aa00736e",
+      "date": 1409599719576
+    },
+    {
+      "type": "edit",
+      "id": "4141032afbcf25be",
+      "item": {
+        "type": "paragraph",
+        "id": "4141032afbcf25be",
+        "text": "I make off-site backups of fed.wiki.org with a shell script run with a cron job."
+      },
+      "date": 1409599779137
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "09303bd802496139",
+        "text": ""
+      },
+      "id": "09303bd802496139",
+      "type": "add",
+      "after": "4141032afbcf25be",
+      "date": 1409599779154
+    },
+    {
+      "type": "remove",
+      "id": "09303bd802496139",
+      "date": 1409599782519
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f8c94405a9d11086"
+      },
+      "id": "f8c94405a9d11086",
+      "type": "add",
+      "after": "4141032afbcf25be",
+      "date": 1409599784520
+    },
+    {
+      "type": "edit",
+      "id": "f8c94405a9d11086",
+      "item": {
+        "type": "paragraph",
+        "id": "f8c94405a9d11086",
+        "text": "# nightly backup of fed.wiki.org sites\n20 4 * * * (cd wiki/fed; sh backup.sh)\n"
+      },
+      "date": 1409599820598
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a930599ad7b9659c"
+      },
+      "id": "a930599ad7b9659c",
+      "type": "add",
+      "after": "f8c94405a9d11086",
+      "date": 1409599826790
+    },
+    {
+      "type": "edit",
+      "id": "a930599ad7b9659c",
+      "item": {
+        "type": "code",
+        "id": "a930599ad7b9659c",
+        "text": "# nightly backup of fed.wiki.org sites\n20 4 * * * (cd wiki/fed; sh backup.sh)\n"
+      },
+      "date": 1409599835682
+    },
+    {
+      "type": "remove",
+      "id": "f8c94405a9d11086",
+      "date": 1409599847184
+    },
+    {
+      "type": "edit",
+      "id": "4141032afbcf25be",
+      "item": {
+        "type": "paragraph",
+        "id": "4141032afbcf25be",
+        "text": "I make off-site backups of fed.wiki.org with a shell script run nightly with a cron job. "
+      },
+      "date": 1409599889357
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5ede90a359adb8c7"
+      },
+      "id": "5ede90a359adb8c7",
+      "type": "add",
+      "after": "a930599ad7b9659c",
+      "date": 1409599901306
+    },
+    {
+      "type": "edit",
+      "id": "5ede90a359adb8c7",
+      "item": {
+        "type": "paragraph",
+        "id": "5ede90a359adb8c7",
+        "text": "The script, backup.sh, saves compressed archives of every page and saves them for a week."
+      },
+      "date": 1409600017525
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "191e0e962dac0a6a"
+      },
+      "id": "191e0e962dac0a6a",
+      "type": "add",
+      "after": "5ede90a359adb8c7",
+      "date": 1409600021408
+    },
+    {
+      "type": "edit",
+      "id": "191e0e962dac0a6a",
+      "item": {
+        "type": "code",
+        "id": "191e0e962dac0a6a",
+        "text": "when=`date +%a`\nhow='tar --exclude openid/nonces -chz farm'\nssh fed.wiki.org $how > store/$when.tgz\n"
+      },
+      "date": 1409600051822
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cf2cc48f88b22691"
+      },
+      "id": "cf2cc48f88b22691",
+      "type": "add",
+      "after": "191e0e962dac0a6a",
+      "date": 1409600134179
+    },
+    {
+      "type": "edit",
+      "id": "cf2cc48f88b22691",
+      "item": {
+        "type": "code",
+        "id": "cf2cc48f88b22691",
+        "text": "$ ls -lh store\ntotal 1.6G\n-rw-r--r--  1 ward ward 226M Aug 29 04:26 Fri.tgz\n-rw-r--r--  1 ward ward 226M Sep  1 04:26 Mon.tgz\n-rw-r--r--  1 ward ward 226M Aug 30 04:26 Sat.tgz\n-rw-r--r--  1 ward ward 226M Aug 31 04:26 Sun.tgz\n-rw-rw-r--  1 ward ward 226M Aug 28 04:26 Thu.tgz\n-rw-r--r--  1 ward ward 226M Aug 26 04:26 Tue.tgz\n-rw-r--r--  1 ward ward 226M Aug 27 04:26 Wed.tgz\n"
+      },
+      "date": 1409600166526
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "982437d49588a5b6"
+      },
+      "id": "982437d49588a5b6",
+      "type": "add",
+      "after": "cf2cc48f88b22691",
+      "date": 1409600221129
+    },
+    {
+      "type": "edit",
+      "id": "982437d49588a5b6",
+      "item": {
+        "type": "paragraph",
+        "id": "982437d49588a5b6",
+        "text": "This script depends on having ssh access to the tar archive program on both computers. The store it creates looks like this."
+      },
+      "date": 1409600291651
+    },
+    {
+      "type": "move",
+      "order": [
+        "d37ec9b2644beb7a",
+        "35643670aa00736e",
+        "4141032afbcf25be",
+        "a930599ad7b9659c",
+        "5ede90a359adb8c7",
+        "191e0e962dac0a6a",
+        "982437d49588a5b6",
+        "cf2cc48f88b22691"
+      ],
+      "id": "982437d49588a5b6",
+      "date": 1409600295699
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a4e776f64c15b3f3"
+      },
+      "id": "a4e776f64c15b3f3",
+      "type": "add",
+      "after": "cf2cc48f88b22691",
+      "date": 1409600359683
+    },
+    {
+      "type": "edit",
+      "id": "a4e776f64c15b3f3",
+      "item": {
+        "type": "paragraph",
+        "id": "a4e776f64c15b3f3",
+        "text": "To extract a page from the archive."
+      },
+      "date": 1409600377673
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "615f1b576052c038",
+        "text": ""
+      },
+      "id": "615f1b576052c038",
+      "type": "add",
+      "after": "a4e776f64c15b3f3",
+      "date": 1409600377688
+    },
+    {
+      "type": "edit",
+      "id": "615f1b576052c038",
+      "item": {
+        "type": "paragraph",
+        "id": "615f1b576052c038",
+        "text": "To extract a whole site."
+      },
+      "date": 1409600396487
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "71f5fdd8f8679f07"
+      },
+      "id": "71f5fdd8f8679f07",
+      "type": "add",
+      "after": "615f1b576052c038",
+      "date": 1409600400699
+    },
+    {
+      "type": "move",
+      "order": [
+        "d37ec9b2644beb7a",
+        "35643670aa00736e",
+        "4141032afbcf25be",
+        "a930599ad7b9659c",
+        "5ede90a359adb8c7",
+        "191e0e962dac0a6a",
+        "982437d49588a5b6",
+        "cf2cc48f88b22691",
+        "a4e776f64c15b3f3",
+        "71f5fdd8f8679f07",
+        "615f1b576052c038"
+      ],
+      "id": "615f1b576052c038",
+      "date": 1409600409024
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "25fb6a1c793e06d3"
+      },
+      "id": "25fb6a1c793e06d3",
+      "type": "add",
+      "after": "615f1b576052c038",
+      "date": 1409600419581
+    },
+    {
+      "type": "edit",
+      "id": "71f5fdd8f8679f07",
+      "item": {
+        "type": "paragraph",
+        "id": "71f5fdd8f8679f07",
+        "text": "tar -xzf Wed.tgz farm/video.fed.wiki.org/pages/ward-cunningham"
+      },
+      "date": 1409600431975
+    },
+    {
+      "type": "remove",
+      "id": "71f5fdd8f8679f07",
+      "date": 1409600437500
+    },
+    {
+      "type": "remove",
+      "id": "25fb6a1c793e06d3",
+      "date": 1409600446109
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "53e3d797aab59a36"
+      },
+      "id": "53e3d797aab59a36",
+      "type": "add",
+      "after": "615f1b576052c038",
+      "date": 1409600450327
+    },
+    {
+      "type": "edit",
+      "id": "53e3d797aab59a36",
+      "item": {
+        "type": "code",
+        "id": "53e3d797aab59a36",
+        "text": "tar -xzf Wed.tgz farm/video.fed.wiki.org/pages/ward-cunningham"
+      },
+      "date": 1409600455260
+    },
+    {
+      "type": "move",
+      "order": [
+        "d37ec9b2644beb7a",
+        "35643670aa00736e",
+        "4141032afbcf25be",
+        "a930599ad7b9659c",
+        "5ede90a359adb8c7",
+        "191e0e962dac0a6a",
+        "982437d49588a5b6",
+        "cf2cc48f88b22691",
+        "a4e776f64c15b3f3",
+        "53e3d797aab59a36",
+        "615f1b576052c038"
+      ],
+      "id": "53e3d797aab59a36",
+      "date": 1409600462173
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8983689b04eaf98d"
+      },
+      "id": "8983689b04eaf98d",
+      "type": "add",
+      "after": "615f1b576052c038",
+      "date": 1409600487592
+    },
+    {
+      "type": "edit",
+      "id": "8983689b04eaf98d",
+      "item": {
+        "type": "code",
+        "id": "8983689b04eaf98d",
+        "text": "tar -xzf Wed.tgz farm/video.fed.wiki.org"
+      },
+      "date": 1409600501030
+    },
+    {
+      "type": "edit",
+      "id": "4141032afbcf25be",
+      "item": {
+        "type": "paragraph",
+        "id": "4141032afbcf25be",
+        "text": "I make off-site backups of fed.wiki.org with a shell script run nightly on the off-site server from a cron job. "
+      },
+      "date": 1409600650144
+    },
+    {
+      "type": "edit",
+      "id": "5ede90a359adb8c7",
+      "item": {
+        "type": "paragraph",
+        "id": "5ede90a359adb8c7",
+        "text": "The script, backup.sh, saves compressed archives of every page and keeps them for a week."
+      },
+      "date": 1409600686279
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4d833f0954092e5e"
+      },
+      "id": "4d833f0954092e5e",
+      "type": "add",
+      "after": "8983689b04eaf98d",
+      "date": 1409600806805
+    },
+    {
+      "type": "edit",
+      "id": "4d833f0954092e5e",
+      "item": {
+        "type": "paragraph",
+        "id": "4d833f0954092e5e",
+        "text": "<h3> Activity"
+      },
+      "date": 1409600817885
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4e3bc883fa197144"
+      },
+      "id": "4e3bc883fa197144",
+      "type": "add",
+      "after": "4d833f0954092e5e",
+      "date": 1409600853551
+    },
+    {
+      "type": "edit",
+      "id": "4e3bc883fa197144",
+      "item": {
+        "type": "paragraph",
+        "id": "4e3bc883fa197144",
+        "text": "I monitor activity in fed.wiki.org with a shell script run nightly on the wiki server from a cron job."
+      },
+      "date": 1409601018955
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2ab12faef57aca1a"
+      },
+      "id": "2ab12faef57aca1a",
+      "type": "add",
+      "after": "4e3bc883fa197144",
+      "date": 1409601072188
+    },
+    {
+      "type": "edit",
+      "id": "2ab12faef57aca1a",
+      "item": {
+        "type": "code",
+        "id": "2ab12faef57aca1a",
+        "text": "# rebuild the recent-farm-activity page\n*/10 * * * * (cd farm/farm.fed.wiki.org/scripts; ruby build.rb)"
+      },
+      "date": 1409601103401
+    },
+    {
+      "type": "edit",
+      "id": "2ab12faef57aca1a",
+      "item": {
+        "type": "code",
+        "id": "2ab12faef57aca1a",
+        "text": "# rebuild the recent-farm-activity page\n*/10 * * * * (cd fed.wiki.org/scripts; ruby build.rb)"
+      },
+      "date": 1409601146973
+    },
+    {
+      "type": "edit",
+      "id": "2ab12faef57aca1a",
+      "item": {
+        "type": "code",
+        "id": "2ab12faef57aca1a",
+        "text": "# rebuild the recent-farm-activity page\n*/10 * * * * (cd scripts; ruby build.rb)"
+      },
+      "date": 1409601160068
+    },
+    {
+      "type": "edit",
+      "id": "2ab12faef57aca1a",
+      "item": {
+        "type": "code",
+        "id": "2ab12faef57aca1a",
+        "text": "# rebuild the recent-farm-activity page\n*/10 * * * * (cd farm-scripts; ruby build.rb)"
+      },
+      "date": 1409601195089
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dd00c8bd9e63a1fc"
+      },
+      "id": "dd00c8bd9e63a1fc",
+      "type": "add",
+      "after": "2ab12faef57aca1a",
+      "date": 1409601259654
+    },
+    {
+      "type": "edit",
+      "id": "dd00c8bd9e63a1fc",
+      "item": {
+        "type": "paragraph",
+        "id": "dd00c8bd9e63a1fc",
+        "text": "The build.rb script reads through the farm's flat-file database looking for recently modified page files. It constructs a new page with references to each site with new activity."
+      },
+      "date": 1409601364437
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0d1e28568309feef",
+        "text": ""
+      },
+      "id": "0d1e28568309feef",
+      "type": "add",
+      "after": "dd00c8bd9e63a1fc",
+      "date": 1409601364453
+    },
+    {
+      "type": "remove",
+      "id": "0d1e28568309feef",
+      "date": 1409601378886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1d7c0fae91b05fed"
+      },
+      "id": "1d7c0fae91b05fed",
+      "type": "add",
+      "after": "dd00c8bd9e63a1fc",
+      "date": 1409601425558
+    },
+    {
+      "type": "edit",
+      "id": "1d7c0fae91b05fed",
+      "item": {
+        "type": "code",
+        "id": "1d7c0fae91b05fed",
+        "text": "git clone https://github.com/WardCunningham/farm-scripts.git"
+      },
+      "date": 1409601432900
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "bf0fc5520d791782",
+        "text": ""
+      },
+      "id": "bf0fc5520d791782",
+      "type": "add",
+      "after": "dd00c8bd9e63a1fc",
+      "date": 1409601454438
+    },
+    {
+      "type": "edit",
+      "id": "bf0fc5520d791782",
+      "item": {
+        "type": "paragraph",
+        "id": "bf0fc5520d791782",
+        "text": "The farm-scripts can be downloaded from a github repository. It writes the page it builds to ../pages in a wiki site of your choice."
+      },
+      "date": 1409601684813
+    },
+    {
+      "type": "edit",
+      "id": "d37ec9b2644beb7a",
+      "item": {
+        "type": "paragraph",
+        "id": "d37ec9b2644beb7a",
+        "text": "An operator of a wiki farm may assume responsibilities that are not directly supported by mechanisms in the server. However, with flat-file storage, simple scripts can automate tasks for dozens or even hundreds of sites."
+      },
+      "date": 1409601771137
+    },
+    {
+      "type": "edit",
+      "id": "4e3bc883fa197144",
+      "item": {
+        "type": "paragraph",
+        "id": "4e3bc883fa197144",
+        "text": "I monitor activity in fed.wiki.org with a shell script run every 10 minutes on the wiki server from a cron job."
+      },
+      "date": 1409601902040
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1c4c07b8ce38ab0d",
+        "text": ""
+      },
+      "id": "1c4c07b8ce38ab0d",
+      "type": "add",
+      "after": "d37ec9b2644beb7a",
+      "date": 1409605268482
+    },
+    {
+      "type": "remove",
+      "id": "1c4c07b8ce38ab0d",
+      "date": 1409605303079
+    },
+    {
+      "type": "edit",
+      "id": "35643670aa00736e",
+      "item": {
+        "type": "html",
+        "id": "35643670aa00736e",
+        "text": "<h3> Backups"
+      },
+      "date": 1420345900303
+    },
+    {
+      "type": "edit",
+      "id": "4d833f0954092e5e",
+      "item": {
+        "type": "html",
+        "id": "4d833f0954092e5e",
+        "text": "<h3> Activity"
+      },
+      "date": 1420345904158
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1435492299219
+    }
+  ]
+}

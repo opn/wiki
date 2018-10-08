@@ -1,0 +1,2958 @@
+{
+  "title": "Anatomy of a Server",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "48770ef70e22645f",
+      "text": "Here we describe the essential elements that make up a [[Wiki Node Server]]:\n"
+    },
+    {
+      "type": "html",
+      "id": "6862c9e9b9e1c3f3",
+      "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves:\n<ul>\n<li>  What does a Federated Wiki server need to support?\n<li>  Are there any aspects of the server that would more rightly belong as part of the client?\n</ul>"
+    },
+    {
+      "type": "html",
+      "id": "00ffa61427b207d5",
+      "text": "First we will look at the routes, and supporting functions, <i>also see [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee source code as at July 2014]</i>"
+    },
+    {
+      "type": "html",
+      "id": "f139bd5fb2f82e51",
+      "text": "<h3>Routes</h3>"
+    },
+    {
+      "type": "code",
+      "id": "22d0c87870c6d02b",
+      "text": "app.get ///^((/[a-zA-Z0-9:.-]+/[a-z0-9-]+(_rev\\d+)?)+)/?$///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "db02b1e3c1d2ea78",
+      "text": "This is the main route for initial contact, allowing links to a specific set of pages."
+    },
+    {
+      "type": "paragraph",
+      "id": "5f57fce4efc3dfbe",
+      "text": "N.B. Only renders the framework, individual pages (json) are fetched and rendered by the client code."
+    },
+    {
+      "type": "code",
+      "id": "ed78024db874b5ca",
+      "text": "app.get ///([a-z0-9-]+)\\.html$///, (req, res, next) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "98ba6818dc3f0c9a",
+      "text": "Returns a page with the requested fedwiki page rendered on the server. Server rendering does not include the page journal."
+    },
+    {
+      "type": "paragraph",
+      "id": "3ad263b775439467",
+      "text": "Essential for clients that do not support JavaScript, but also for search engines. Those clients that support Javascript will re-render the page, adding the journal."
+    },
+    {
+      "type": "code",
+      "id": "55ff6245b8564af9",
+      "text": "app.get ///system/factories.json///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "982455947020b7a1",
+      "text": "Returns a JSON structure detailing available plugins (name, title, and category). Used to build the plugin list shown with 'add paragraph'."
+    },
+    {
+      "type": "code",
+      "id": "7847852789076866",
+      "text": "app.get ///^/([a-z0-9-]+)\\.json$///, cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "044a2e76d1a9512a",
+      "text": "Returns the JSON for an individual page."
+    },
+    {
+      "type": "code",
+      "id": "6b9a66acfd3aeb54",
+      "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+)/([a-z0-9-]+)\\.json$///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "a0ba60d78821eb63",
+      "text": "Fetches a page JSON for a remote page."
+    },
+    {
+      "type": "code",
+      "id": "e504cbcf3d77c09d",
+      "text": "app.get '/favicon.png', cors, (req,res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "d7120bdb6b720eb2",
+      "text": "Gets a site's favicon."
+    },
+    {
+      "type": "code",
+      "id": "542150c33771bcea",
+      "text": "app.post '/favicon.png', authenticated, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "a3c2041cab472182",
+      "text": "Used to save a client created favicon."
+    },
+    {
+      "type": "code",
+      "id": "c26642e89d99a582",
+      "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+/favicon.png)$///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "30adc32626cec318",
+      "text": "Fetches the favicon for a remote site."
+    },
+    {
+      "type": "code",
+      "id": "5d4b9257ad4151b4",
+      "text": "app.get '/system/slugs.json', cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "27acfb96a430e259",
+      "text": "Returns a list of pages available on server."
+    },
+    {
+      "type": "code",
+      "id": "b24b37a441212132",
+      "text": "app.get '/system/plugins.json', cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "76d3ce848ddb4388",
+      "text": "Returns a list of installed plugins."
+    },
+    {
+      "type": "code",
+      "id": "25c11cc9b5a9e311",
+      "text": "app.get '/system/sitemap.json', cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "06e79e7bbfc92b71",
+      "text": "Returns a sitemap, used by the client for amongst other things searching."
+    },
+    {
+      "type": "code",
+      "id": "64e618bedcb839d4",
+      "text": "app.put /^\\/page\\/([a-z0-9-]+)\\/action$/i, authenticated, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "70844a6d9390527b",
+      "text": "perform an edit action on a page – apply a 'add', 'move', 'edit' or 'remove' on page item. Also create a new page, or fork from elsewhere."
+    },
+    {
+      "type": "html",
+      "id": "0b47abea075e752c",
+      "text": "<h3>Supporting Functions"
+    },
+    {
+      "type": "code",
+      "id": "6524afda03f262eb",
+      "text": "render = (page) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "b1f53a72c9682a7f",
+      "text": "Server side page rendering. "
+    },
+    {
+      "type": "code",
+      "id": "9998ee85eeb474d4",
+      "text": "  remoteGet = (remote, slug, cb) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "57f78528a3d956ed",
+      "text": "Fetches page from remote server."
+    },
+    {
+      "type": "html",
+      "id": "f2b9c4493432986b",
+      "text": "<h3>Observations</h3>"
+    },
+    {
+      "type": "paragraph",
+      "id": "28465d0da0ba0f80",
+      "text": " "
+    },
+    {
+      "type": "paragraph",
+      "id": "32c63d55900b85ff",
+      "text": "The current story serialization as a URL has been discussed in [https://github.com/WardCunningham/Smallest-Federated-Wiki/issues/412 issue 412]. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f9ffb07a7ed124e6",
+      "text": "An obvious simplification is to remove those route that are no longer used."
+    },
+    {
+      "type": "paragraph",
+      "id": "f1f9395210d10ebe",
+      "text": "The 'remote' get, both for page json and favicons should be removed. "
+    },
+    {
+      "type": "paragraph",
+      "id": "82d480d8c5a8c4e4",
+      "text": "The following system routes appear not to be used, currently, so could also be removed:"
+    },
+    {
+      "type": "code",
+      "id": "8e162244d9c7511f",
+      "text": "'/system/plugins.json'\n'/system/slugs.json'"
+    },
+    {
+      "type": "paragraph",
+      "id": "364ed9fcd45c0e67",
+      "text": "We should remember that server rendering is required for some clients. "
+    },
+    {
+      "type": "paragraph",
+      "id": "8eab58d1e16a55e9",
+      "text": "The page edit/put mechanism, is at the level of an individual edit to an item. We can't coalesce a group of edits at either the page, or site level, into a less granular change set. "
+    },
+    {
+      "type": "paragraph",
+      "id": "b53c0b19f68c7b4f",
+      "text": "The current regular expressions to identify pages, and sites, is overly restrictive. Confining us to a-z, A-Z, 0-9, and - for page names, and a similar set for site names."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Anatomy of a Server",
+        "story": []
+      },
+      "date": 1406647356936
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6862c9e9b9e1c3f3"
+      },
+      "id": "6862c9e9b9e1c3f3",
+      "type": "add",
+      "date": 1406647404670
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "paragraph",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves does a Federated Wiki server need to support. a"
+      },
+      "date": 1406647519434
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "paragraph",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves does a Federated Wiki server need to support. Are there any aspects of the server that would more rightly belong as part of the client?"
+      },
+      "date": 1406647615019
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0b47abea075e752c"
+      },
+      "id": "0b47abea075e752c",
+      "type": "add",
+      "after": "6862c9e9b9e1c3f3",
+      "date": 1406647839567
+    },
+    {
+      "type": "edit",
+      "id": "0b47abea075e752c",
+      "item": {
+        "type": "paragraph",
+        "id": "0b47abea075e752c",
+        "text": "<h3>Supporting Functions"
+      },
+      "date": 1406648362948
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6524afda03f262eb"
+      },
+      "id": "6524afda03f262eb",
+      "type": "add",
+      "after": "0b47abea075e752c",
+      "date": 1406648364229
+    },
+    {
+      "type": "edit",
+      "id": "6524afda03f262eb",
+      "item": {
+        "type": "code",
+        "id": "6524afda03f262eb",
+        "text": "render = (page) ->"
+      },
+      "date": 1406648370409
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b1f53a72c9682a7f"
+      },
+      "id": "b1f53a72c9682a7f",
+      "type": "add",
+      "after": "6524afda03f262eb",
+      "date": 1406648375149
+    },
+    {
+      "type": "edit",
+      "id": "b1f53a72c9682a7f",
+      "item": {
+        "type": "paragraph",
+        "id": "b1f53a72c9682a7f",
+        "text": "Server side page rendering. "
+      },
+      "date": 1406648397241
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f139bd5fb2f82e51"
+      },
+      "id": "f139bd5fb2f82e51",
+      "type": "add",
+      "after": "b1f53a72c9682a7f",
+      "date": 1406648439902
+    },
+    {
+      "type": "edit",
+      "id": "f139bd5fb2f82e51",
+      "item": {
+        "type": "paragraph",
+        "id": "f139bd5fb2f82e51",
+        "text": "<h2>Routes</h2>"
+      },
+      "date": 1406648466388
+    },
+    {
+      "type": "edit",
+      "id": "f139bd5fb2f82e51",
+      "item": {
+        "type": "paragraph",
+        "id": "f139bd5fb2f82e51",
+        "text": "<h3>Routes</h3>"
+      },
+      "date": 1406648479633
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9998ee85eeb474d4"
+      },
+      "id": "9998ee85eeb474d4",
+      "type": "add",
+      "after": "f139bd5fb2f82e51",
+      "date": 1406648549741
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "f139bd5fb2f82e51"
+      ],
+      "id": "9998ee85eeb474d4",
+      "date": 1406648552939
+    },
+    {
+      "type": "edit",
+      "id": "9998ee85eeb474d4",
+      "item": {
+        "type": "code",
+        "id": "9998ee85eeb474d4",
+        "text": "  remoteGet = (remote, slug, cb) ->"
+      },
+      "date": 1406648562815
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57f78528a3d956ed"
+      },
+      "id": "57f78528a3d956ed",
+      "type": "add",
+      "after": "f139bd5fb2f82e51",
+      "date": 1406648565155
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "f139bd5fb2f82e51"
+      ],
+      "id": "57f78528a3d956ed",
+      "date": 1406648567553
+    },
+    {
+      "type": "edit",
+      "id": "57f78528a3d956ed",
+      "item": {
+        "type": "paragraph",
+        "id": "57f78528a3d956ed",
+        "text": "Fetches page from remote server. No longer really belongs as a server function."
+      },
+      "date": 1406648630373
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "f139bd5fb2f82e51",
+      "date": 1406648852087
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "59225228ca108e9f"
+      },
+      "id": "59225228ca108e9f",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406648857058
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "59225228ca108e9f",
+        "f139bd5fb2f82e51",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "59225228ca108e9f",
+      "date": 1406648859398
+    },
+    {
+      "type": "remove",
+      "id": "59225228ca108e9f",
+      "date": 1406648916704
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "22d0c87870c6d02b"
+      },
+      "id": "22d0c87870c6d02b",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406648955274
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "22d0c87870c6d02b",
+      "date": 1406648957662
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "db02b1e3c1d2ea78"
+      },
+      "id": "db02b1e3c1d2ea78",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406648959454
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "db02b1e3c1d2ea78",
+      "date": 1406648961509
+    },
+    {
+      "type": "edit",
+      "id": "22d0c87870c6d02b",
+      "item": {
+        "type": "code",
+        "id": "22d0c87870c6d02b",
+        "text": "app.get ///^((/[a-zA-Z0-9:.-]+/[a-z0-9-]+(_rev\\d+)?)+)/?$///, (req, res) ->"
+      },
+      "date": 1406648968081
+    },
+    {
+      "type": "edit",
+      "id": "db02b1e3c1d2ea78",
+      "item": {
+        "type": "paragraph",
+        "id": "db02b1e3c1d2ea78",
+        "text": "This is the main route for initial contact, allowing links to a specific set of pages. "
+      },
+      "date": 1406649068666
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "563d5054c8bd86c6"
+      },
+      "id": "563d5054c8bd86c6",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406649156021
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "563d5054c8bd86c6",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "563d5054c8bd86c6",
+      "date": 1406649158188
+    },
+    {
+      "type": "edit",
+      "id": "563d5054c8bd86c6",
+      "item": {
+        "type": "calculator",
+        "id": "563d5054c8bd86c6",
+        "text": "N.B. only renders the page framework and not content."
+      },
+      "date": 1406649265908
+    },
+    {
+      "type": "edit",
+      "id": "563d5054c8bd86c6",
+      "item": {
+        "type": "calculator",
+        "id": "563d5054c8bd86c6",
+        "text": "only renders the page framework and not content.",
+        "data": []
+      },
+      "date": 1406649287208
+    },
+    {
+      "type": "edit",
+      "id": "563d5054c8bd86c6",
+      "item": {
+        "type": "calculator",
+        "id": "563d5054c8bd86c6",
+        "text": "N.B. only renders the page framework and not content.",
+        "data": []
+      },
+      "date": 1406649302856
+    },
+    {
+      "type": "remove",
+      "id": "563d5054c8bd86c6",
+      "date": 1406649323842
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5f57fce4efc3dfbe"
+      },
+      "id": "5f57fce4efc3dfbe",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406649326917
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "5f57fce4efc3dfbe",
+      "date": 1406649329363
+    },
+    {
+      "type": "edit",
+      "id": "5f57fce4efc3dfbe",
+      "item": {
+        "type": "paragraph",
+        "id": "5f57fce4efc3dfbe",
+        "text": "N.B. Only renders page framework, pages are fetched and rendered by the code."
+      },
+      "date": 1406649382142
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ed78024db874b5ca"
+      },
+      "id": "ed78024db874b5ca",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406649402861
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "ed78024db874b5ca",
+      "date": 1406649406036
+    },
+    {
+      "type": "edit",
+      "id": "ed78024db874b5ca",
+      "item": {
+        "type": "code",
+        "id": "ed78024db874b5ca",
+        "text": "app.get ///([a-z0-9-]+)\\.html$///, (req, res, next) ->"
+      },
+      "date": 1406649412492
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "98ba6818dc3f0c9a"
+      },
+      "id": "98ba6818dc3f0c9a",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406649415606
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "98ba6818dc3f0c9a",
+      "date": 1406649418110
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3ad263b775439467",
+        "text": "Essential for clients that do not support JavaScript. Those that do will rewrite the page, "
+      },
+      "id": "3ad263b775439467",
+      "type": "add",
+      "after": "98ba6818dc3f0c9a",
+      "date": 1406649542752
+    },
+    {
+      "type": "edit",
+      "id": "3ad263b775439467",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad263b775439467",
+        "text": "Essential for clients that do not support JavaScript, but also for search engines. Those client that support Javascript will rewrite the page, adding the journal."
+      },
+      "date": 1406649616698
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "00ffa61427b207d5"
+      },
+      "id": "00ffa61427b207d5",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406649637264
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "00ffa61427b207d5",
+      "date": 1406649640175
+    },
+    {
+      "type": "edit",
+      "id": "00ffa61427b207d5",
+      "item": {
+        "type": "paragraph",
+        "id": "00ffa61427b207d5",
+        "text": "First we will look at the routes, and supporting functions."
+      },
+      "date": 1406649667259
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "55ff6245b8564af9"
+      },
+      "id": "55ff6245b8564af9",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406650052028
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "55ff6245b8564af9",
+      "date": 1406650054848
+    },
+    {
+      "type": "edit",
+      "id": "55ff6245b8564af9",
+      "item": {
+        "type": "code",
+        "id": "55ff6245b8564af9",
+        "text": "  app.get ///system/factories.json///, (req, res) ->"
+      },
+      "date": 1406650061940
+    },
+    {
+      "type": "edit",
+      "id": "55ff6245b8564af9",
+      "item": {
+        "type": "code",
+        "id": "55ff6245b8564af9",
+        "text": "app.get ///system/factories.json///, (req, res) ->"
+      },
+      "date": 1406650068712
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "982455947020b7a1"
+      },
+      "id": "982455947020b7a1",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1406650154697
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "982455947020b7a1",
+      "date": 1406650157367
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "982455947020b7a1",
+        "55ff6245b8564af9",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "982455947020b7a1",
+      "date": 1406650199914
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "982455947020b7a1",
+      "date": 1406650203499
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "98ba6818dc3f0c9a",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "98ba6818dc3f0c9a",
+      "date": 1407142342492
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "98ba6818dc3f0c9a",
+      "date": 1407142364738
+    },
+    {
+      "type": "edit",
+      "id": "98ba6818dc3f0c9a",
+      "item": {
+        "type": "paragraph",
+        "id": "98ba6818dc3f0c9a",
+        "text": "Returns a page with the requested fedwiki page rendered on the server. Server rendering does not include the page journal."
+      },
+      "date": 1407142460743
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7847852789076866"
+      },
+      "id": "7847852789076866",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142646930
+    },
+    {
+      "type": "edit",
+      "id": "982455947020b7a1",
+      "item": {
+        "type": "paragraph",
+        "id": "982455947020b7a1",
+        "text": "Returns a JSON structure detailing available plugins (name, title, and category). Used to build the plugin list shown with 'add paragraph'."
+      },
+      "date": 1407142662989
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "044a2e76d1a9512a"
+      },
+      "id": "044a2e76d1a9512a",
+      "type": "add",
+      "after": "7847852789076866",
+      "date": 1407142760248
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "044a2e76d1a9512a"
+      ],
+      "id": "7847852789076866",
+      "date": 1407142764868
+    },
+    {
+      "type": "edit",
+      "id": "7847852789076866",
+      "item": {
+        "type": "code",
+        "id": "7847852789076866",
+        "text": "app.get ///^/([a-z0-9-]+)\\.json$///, cors, (req, res) ->"
+      },
+      "date": 1407142785290
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "044a2e76d1a9512a",
+      "date": 1407142789108
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6b9a66acfd3aeb54"
+      },
+      "id": "6b9a66acfd3aeb54",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142792308
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "6b9a66acfd3aeb54",
+      "date": 1407142797625
+    },
+    {
+      "type": "edit",
+      "id": "6b9a66acfd3aeb54",
+      "item": {
+        "type": "code",
+        "id": "6b9a66acfd3aeb54",
+        "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+)/([a-z0-9-]+)\\.json$///, (req, res) ->"
+      },
+      "date": 1407142817644
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a0ba60d78821eb63"
+      },
+      "id": "a0ba60d78821eb63",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142824928
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "a0ba60d78821eb63",
+      "date": 1407142827574
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e504cbcf3d77c09d"
+      },
+      "id": "e504cbcf3d77c09d",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142831063
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "e504cbcf3d77c09d",
+      "date": 1407142833665
+    },
+    {
+      "type": "edit",
+      "id": "e504cbcf3d77c09d",
+      "item": {
+        "type": "code",
+        "id": "e504cbcf3d77c09d",
+        "text": "app.get '/favicon.png', cors, (req,res) ->"
+      },
+      "date": 1407142859739
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d7120bdb6b720eb2"
+      },
+      "id": "d7120bdb6b720eb2",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142862557
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "d7120bdb6b720eb2",
+      "date": 1407142868403
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "542150c33771bcea"
+      },
+      "id": "542150c33771bcea",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142874139
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "542150c33771bcea",
+      "date": 1407142877225
+    },
+    {
+      "type": "edit",
+      "id": "542150c33771bcea",
+      "item": {
+        "type": "code",
+        "id": "542150c33771bcea",
+        "text": "app.post '/favicon.png', authenticated, (req, res) ->"
+      },
+      "date": 1407142899374
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a3c2041cab472182"
+      },
+      "id": "a3c2041cab472182",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142904885
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "a3c2041cab472182",
+      "date": 1407142907135
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c26642e89d99a582"
+      },
+      "id": "c26642e89d99a582",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142909697
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "c26642e89d99a582",
+      "date": 1407142912478
+    },
+    {
+      "type": "edit",
+      "id": "c26642e89d99a582",
+      "item": {
+        "type": "code",
+        "id": "c26642e89d99a582",
+        "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+/favicon.png)$///, (req, res) ->"
+      },
+      "date": 1407142927658
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "30adc32626cec318"
+      },
+      "id": "30adc32626cec318",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142931638
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "30adc32626cec318",
+      "date": 1407142934140
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5d4b9257ad4151b4"
+      },
+      "id": "5d4b9257ad4151b4",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142937168
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "5d4b9257ad4151b4",
+      "date": 1407142939939
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "27acfb96a430e259"
+      },
+      "id": "27acfb96a430e259",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142943532
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "27acfb96a430e259",
+      "date": 1407142945813
+    },
+    {
+      "type": "edit",
+      "id": "5d4b9257ad4151b4",
+      "item": {
+        "type": "code",
+        "id": "5d4b9257ad4151b4",
+        "text": "app.get '/system/slugs.json', cors, (req, res) ->"
+      },
+      "date": 1407142974822
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b24b37a441212132"
+      },
+      "id": "b24b37a441212132",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142978459
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "b24b37a441212132",
+      "date": 1407142981224
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "76d3ce848ddb4388"
+      },
+      "id": "76d3ce848ddb4388",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407142985681
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "76d3ce848ddb4388",
+      "date": 1407142988167
+    },
+    {
+      "type": "edit",
+      "id": "b24b37a441212132",
+      "item": {
+        "type": "code",
+        "id": "b24b37a441212132",
+        "text": "app.get '/system/plugins.json', cors, (req, res) ->"
+      },
+      "date": 1407143007495
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "25c11cc9b5a9e311"
+      },
+      "id": "25c11cc9b5a9e311",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407143037284
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "25c11cc9b5a9e311",
+      "date": 1407143039810
+    },
+    {
+      "type": "edit",
+      "id": "25c11cc9b5a9e311",
+      "item": {
+        "type": "code",
+        "id": "25c11cc9b5a9e311",
+        "text": "app.get '/system/sitemap.json', cors, (req, res) ->"
+      },
+      "date": 1407143044347
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "06e79e7bbfc92b71"
+      },
+      "id": "06e79e7bbfc92b71",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407143046520
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "06e79e7bbfc92b71",
+      "date": 1407143048562
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "64e618bedcb839d4"
+      },
+      "id": "64e618bedcb839d4",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407143073684
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "70844a6d9390527b"
+      },
+      "id": "70844a6d9390527b",
+      "type": "add",
+      "after": "64e618bedcb839d4",
+      "date": 1407143076817
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "70844a6d9390527b"
+      ],
+      "id": "64e618bedcb839d4",
+      "date": 1407143079480
+    },
+    {
+      "type": "edit",
+      "id": "64e618bedcb839d4",
+      "item": {
+        "type": "code",
+        "id": "64e618bedcb839d4",
+        "text": "app.put /^\\/page\\/([a-z0-9-]+)\\/action$/i, authenticated, (req, res) ->"
+      },
+      "date": 1407143086707
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed"
+      ],
+      "id": "70844a6d9390527b",
+      "date": 1407143089046
+    },
+    {
+      "type": "edit",
+      "id": "044a2e76d1a9512a",
+      "item": {
+        "type": "paragraph",
+        "id": "044a2e76d1a9512a",
+        "text": "Returns the JSON for an individual page."
+      },
+      "date": 1407143163393
+    },
+    {
+      "type": "edit",
+      "id": "a0ba60d78821eb63",
+      "item": {
+        "type": "paragraph",
+        "id": "a0ba60d78821eb63",
+        "text": "Fetches a page JSON for a remote page."
+      },
+      "date": 1407143218142
+    },
+    {
+      "type": "edit",
+      "id": "d7120bdb6b720eb2",
+      "item": {
+        "type": "paragraph",
+        "id": "d7120bdb6b720eb2",
+        "text": "Gets a site's favicon."
+      },
+      "date": 1407143238397
+    },
+    {
+      "type": "edit",
+      "id": "a3c2041cab472182",
+      "item": {
+        "type": "paragraph",
+        "id": "a3c2041cab472182",
+        "text": "Used to save a client created favicon."
+      },
+      "date": 1407143271426
+    },
+    {
+      "type": "edit",
+      "id": "30adc32626cec318",
+      "item": {
+        "type": "paragraph",
+        "id": "30adc32626cec318",
+        "text": "Fetches the favicon for a remote site."
+      },
+      "date": 1407143293651
+    },
+    {
+      "type": "edit",
+      "id": "27acfb96a430e259",
+      "item": {
+        "type": "paragraph",
+        "id": "27acfb96a430e259",
+        "text": "Returns a sorted list of pages available on server."
+      },
+      "date": 1407143355427
+    },
+    {
+      "type": "edit",
+      "id": "76d3ce848ddb4388",
+      "item": {
+        "type": "paragraph",
+        "id": "76d3ce848ddb4388",
+        "text": "Returns a sort"
+      },
+      "date": 1407143378128
+    },
+    {
+      "type": "edit",
+      "id": "27acfb96a430e259",
+      "item": {
+        "type": "paragraph",
+        "id": "27acfb96a430e259",
+        "text": "Returns a list of pages available on server."
+      },
+      "date": 1407143382302
+    },
+    {
+      "type": "edit",
+      "id": "76d3ce848ddb4388",
+      "item": {
+        "type": "paragraph",
+        "id": "76d3ce848ddb4388",
+        "text": "Returns a list of installed plugins."
+      },
+      "date": 1407143431783
+    },
+    {
+      "type": "edit",
+      "id": "06e79e7bbfc92b71",
+      "item": {
+        "type": "paragraph",
+        "id": "06e79e7bbfc92b71",
+        "text": "Returns a sitemap, used by the client for amongst other things searching."
+      },
+      "date": 1407317282954
+    },
+    {
+      "type": "edit",
+      "id": "70844a6d9390527b",
+      "item": {
+        "type": "paragraph",
+        "id": "70844a6d9390527b",
+        "text": "update a "
+      },
+      "date": 1407317397116
+    },
+    {
+      "type": "edit",
+      "id": "70844a6d9390527b",
+      "item": {
+        "type": "paragraph",
+        "id": "70844a6d9390527b",
+        "text": "perform an edit action on a page – "
+      },
+      "date": 1407317545447
+    },
+    {
+      "type": "edit",
+      "id": "70844a6d9390527b",
+      "item": {
+        "type": "paragraph",
+        "id": "70844a6d9390527b",
+        "text": "perform an edit action on a page – apply a 'add', 'move', 'edit' or 'remove' on page item, or create a fork."
+      },
+      "date": 1407317663769
+    },
+    {
+      "type": "edit",
+      "id": "70844a6d9390527b",
+      "item": {
+        "type": "paragraph",
+        "id": "70844a6d9390527b",
+        "text": "perform an edit action on a page – apply a 'add', 'move', 'edit' or 'remove' on page item. Also create a new page, or fork from elsewhere."
+      },
+      "date": 1407317704859
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "39b23bd8f2bb5749",
+        "text": ""
+      },
+      "id": "39b23bd8f2bb5749",
+      "type": "add",
+      "after": "70844a6d9390527b",
+      "date": 1407317704865
+    },
+    {
+      "type": "remove",
+      "id": "39b23bd8f2bb5749",
+      "date": 1407317706930
+    },
+    {
+      "type": "edit",
+      "id": "00ffa61427b207d5",
+      "item": {
+        "type": "paragraph",
+        "id": "00ffa61427b207d5",
+        "text": "First we will look at the routes, and supporting functions. <i>Also see [https://github.com/fedwiki/wiki-node-server/blob/master/lib/server.coffee server.coffee sourcecode]</i>"
+      },
+      "date": 1407317942088
+    },
+    {
+      "type": "edit",
+      "id": "00ffa61427b207d5",
+      "item": {
+        "type": "paragraph",
+        "id": "00ffa61427b207d5",
+        "text": "First we will look at the routes, and supporting functions. <i>Also see [https://github.com/fedwiki/wiki-node-server/blob/master/lib/server.coffee server.coffee source code]</i>"
+      },
+      "date": 1407317955047
+    },
+    {
+      "type": "edit",
+      "id": "00ffa61427b207d5",
+      "item": {
+        "type": "paragraph",
+        "id": "00ffa61427b207d5",
+        "text": "First we will look at the routes, and supporting functions, <i>also see [https://github.com/fedwiki/wiki-node-server/blob/master/lib/server.coffee server.coffee source code]</i>"
+      },
+      "date": 1407317971382
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc9d741f0923d99a"
+      },
+      "id": "cc9d741f0923d99a",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407318002941
+    },
+    {
+      "type": "edit",
+      "id": "cc9d741f0923d99a",
+      "item": {
+        "type": "paragraph",
+        "id": "cc9d741f0923d99a",
+        "text": "<h3></h3>"
+      },
+      "date": 1407318031960
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "839e3c0ec8cde658"
+      },
+      "id": "839e3c0ec8cde658",
+      "type": "add",
+      "after": "cc9d741f0923d99a",
+      "date": 1407318053774
+    },
+    {
+      "type": "edit",
+      "id": "839e3c0ec8cde658",
+      "item": {
+        "type": "paragraph",
+        "id": "839e3c0ec8cde658",
+        "text": "<h3>Discussion.</h3>"
+      },
+      "date": 1407318077620
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "839e3c0ec8cde658",
+        "cc9d741f0923d99a"
+      ],
+      "id": "839e3c0ec8cde658",
+      "date": 1407318099177
+    },
+    {
+      "type": "edit",
+      "id": "839e3c0ec8cde658",
+      "item": {
+        "type": "paragraph",
+        "id": "839e3c0ec8cde658",
+        "text": "<h3>Discussion</h3>"
+      },
+      "date": 1407318105530
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a101cb1f03f9377e",
+        "text": ""
+      },
+      "id": "a101cb1f03f9377e",
+      "type": "add",
+      "after": "839e3c0ec8cde658",
+      "date": 1407318105541
+    },
+    {
+      "type": "remove",
+      "id": "a101cb1f03f9377e",
+      "date": 1407318110871
+    },
+    {
+      "type": "remove",
+      "id": "839e3c0ec8cde658",
+      "date": 1407318114880
+    },
+    {
+      "type": "edit",
+      "id": "57f78528a3d956ed",
+      "item": {
+        "type": "paragraph",
+        "id": "57f78528a3d956ed",
+        "text": "Fetches page from remote server. No longer really belongs as a server function."
+      },
+      "date": 1407318118229
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f2b9c4493432986b",
+        "text": "<h3>Discussion</h3>"
+      },
+      "id": "f2b9c4493432986b",
+      "type": "add",
+      "after": "57f78528a3d956ed",
+      "date": 1407318118238
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f9ffb07a7ed124e6"
+      },
+      "id": "f9ffb07a7ed124e6",
+      "type": "add",
+      "after": "cc9d741f0923d99a",
+      "date": 1407318168604
+    },
+    {
+      "type": "edit",
+      "id": "f9ffb07a7ed124e6",
+      "item": {
+        "type": "paragraph",
+        "id": "f9ffb07a7ed124e6",
+        "text": "The routes for getting 'remote' pages "
+      },
+      "date": 1407318339037
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "f2b9c4493432986b",
+        "f9ffb07a7ed124e6",
+        "cc9d741f0923d99a"
+      ],
+      "id": "f9ffb07a7ed124e6",
+      "date": 1407318540401
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "28465d0da0ba0f80",
+        "text": " "
+      },
+      "id": "28465d0da0ba0f80",
+      "type": "add",
+      "after": "f9ffb07a7ed124e6",
+      "date": 1407318744700
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "265bbe6afb4306b5"
+      },
+      "id": "265bbe6afb4306b5",
+      "type": "add",
+      "after": "cc9d741f0923d99a",
+      "date": 1407319121728
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "265bbe6afb4306b5",
+        "f2b9c4493432986b",
+        "f9ffb07a7ed124e6",
+        "28465d0da0ba0f80",
+        "cc9d741f0923d99a"
+      ],
+      "id": "265bbe6afb4306b5",
+      "date": 1407319152906
+    },
+    {
+      "type": "remove",
+      "id": "265bbe6afb4306b5",
+      "date": 1407319160576
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "32c63d55900b85ff"
+      },
+      "id": "32c63d55900b85ff",
+      "type": "add",
+      "after": "cc9d741f0923d99a",
+      "date": 1407319162275
+    },
+    {
+      "type": "edit",
+      "id": "32c63d55900b85ff",
+      "item": {
+        "type": "paragraph",
+        "id": "32c63d55900b85ff",
+        "text": "The current story serialization as a URL has been discussed ["
+      },
+      "date": 1407319293271
+    },
+    {
+      "type": "edit",
+      "id": "32c63d55900b85ff",
+      "item": {
+        "type": "paragraph",
+        "id": "32c63d55900b85ff",
+        "text": "The current story serialization as a URL has been discussed in [https://github.com/WardCunningham/Smallest-Federated-Wiki/issues/412 issue 412]. "
+      },
+      "date": 1407319396197
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "364ed9fcd45c0e67",
+        "text": "we should remember that server rendering is re"
+      },
+      "id": "364ed9fcd45c0e67",
+      "type": "add",
+      "after": "32c63d55900b85ff",
+      "date": 1407319718880
+    },
+    {
+      "type": "edit",
+      "id": "364ed9fcd45c0e67",
+      "item": {
+        "type": "paragraph",
+        "id": "364ed9fcd45c0e67",
+        "text": "We should remember that server rendering is required for some clients. "
+      },
+      "date": 1407319785943
+    },
+    {
+      "type": "edit",
+      "id": "f9ffb07a7ed124e6",
+      "item": {
+        "type": "paragraph",
+        "id": "f9ffb07a7ed124e6",
+        "text": "An obvious simplification is to remove the 'remote' get, both for page json and favicons."
+      },
+      "date": 1407319835051
+    },
+    {
+      "type": "edit",
+      "id": "f2b9c4493432986b",
+      "item": {
+        "type": "paragraph",
+        "id": "f2b9c4493432986b",
+        "text": "<h3>Observations</h3>"
+      },
+      "date": 1407319861408
+    },
+    {
+      "type": "edit",
+      "id": "57f78528a3d956ed",
+      "item": {
+        "type": "paragraph",
+        "id": "57f78528a3d956ed",
+        "text": "Fetches page from remote server."
+      },
+      "date": 1407319873120
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "82d480d8c5a8c4e4"
+      },
+      "id": "82d480d8c5a8c4e4",
+      "type": "add",
+      "after": "364ed9fcd45c0e67",
+      "date": 1407320360047
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "f2b9c4493432986b",
+        "f9ffb07a7ed124e6",
+        "28465d0da0ba0f80",
+        "cc9d741f0923d99a",
+        "32c63d55900b85ff",
+        "82d480d8c5a8c4e4",
+        "364ed9fcd45c0e67"
+      ],
+      "id": "82d480d8c5a8c4e4",
+      "date": 1407320361763
+    },
+    {
+      "type": "edit",
+      "id": "82d480d8c5a8c4e4",
+      "item": {
+        "type": "paragraph",
+        "id": "82d480d8c5a8c4e4",
+        "text": "The following routes appear not to be used:"
+      },
+      "date": 1407320394206
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2cdc5f40f5381016",
+        "text": ""
+      },
+      "id": "2cdc5f40f5381016",
+      "type": "add",
+      "after": "82d480d8c5a8c4e4",
+      "date": 1407320394218
+    },
+    {
+      "type": "remove",
+      "id": "2cdc5f40f5381016",
+      "date": 1407320395647
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8e162244d9c7511f"
+      },
+      "id": "8e162244d9c7511f",
+      "type": "add",
+      "after": "364ed9fcd45c0e67",
+      "date": 1407320397090
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "f2b9c4493432986b",
+        "f9ffb07a7ed124e6",
+        "28465d0da0ba0f80",
+        "cc9d741f0923d99a",
+        "32c63d55900b85ff",
+        "82d480d8c5a8c4e4",
+        "8e162244d9c7511f",
+        "364ed9fcd45c0e67"
+      ],
+      "id": "8e162244d9c7511f",
+      "date": 1407320399000
+    },
+    {
+      "type": "edit",
+      "id": "8e162244d9c7511f",
+      "item": {
+        "type": "code",
+        "id": "8e162244d9c7511f",
+        "text": "'/system/plugins.json'\n"
+      },
+      "date": 1407320436530
+    },
+    {
+      "type": "edit",
+      "id": "8e162244d9c7511f",
+      "item": {
+        "type": "code",
+        "id": "8e162244d9c7511f",
+        "text": "'/system/plugins.json'\n'/system/slugs.json'"
+      },
+      "date": 1407320503136
+    },
+    {
+      "type": "edit",
+      "id": "82d480d8c5a8c4e4",
+      "item": {
+        "type": "paragraph",
+        "id": "82d480d8c5a8c4e4",
+        "text": "The following routes appear not to be used, currently, so could also be removed:"
+      },
+      "date": 1407320553169
+    },
+    {
+      "type": "move",
+      "order": [
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "f2b9c4493432986b",
+        "28465d0da0ba0f80",
+        "cc9d741f0923d99a",
+        "32c63d55900b85ff",
+        "f9ffb07a7ed124e6",
+        "82d480d8c5a8c4e4",
+        "8e162244d9c7511f",
+        "364ed9fcd45c0e67"
+      ],
+      "id": "f9ffb07a7ed124e6",
+      "date": 1407320563201
+    },
+    {
+      "type": "edit",
+      "id": "f9ffb07a7ed124e6",
+      "item": {
+        "type": "paragraph",
+        "id": "f9ffb07a7ed124e6",
+        "text": "An obvious simplification is to remove those route that are no longer used."
+      },
+      "date": 1407320633633
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f1f9395210d10ebe",
+        "text": " the 'remote' get, both for page json and favicons."
+      },
+      "id": "f1f9395210d10ebe",
+      "type": "add",
+      "after": "f9ffb07a7ed124e6",
+      "date": 1407320633645
+    },
+    {
+      "type": "edit",
+      "id": "f1f9395210d10ebe",
+      "item": {
+        "type": "paragraph",
+        "id": "f1f9395210d10ebe",
+        "text": "The 'remote' get, both for page json and favicons should be removed. "
+      },
+      "date": 1407320695135
+    },
+    {
+      "type": "edit",
+      "id": "82d480d8c5a8c4e4",
+      "item": {
+        "type": "paragraph",
+        "id": "82d480d8c5a8c4e4",
+        "text": "The following system routes appear not to be used, currently, so could also be removed:"
+      },
+      "date": 1407320705836
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8eab58d1e16a55e9"
+      },
+      "id": "8eab58d1e16a55e9",
+      "type": "add",
+      "after": "364ed9fcd45c0e67",
+      "date": 1407321067023
+    },
+    {
+      "type": "edit",
+      "id": "8eab58d1e16a55e9",
+      "item": {
+        "type": "paragraph",
+        "id": "8eab58d1e16a55e9",
+        "text": "The page edit/put mechanism, is at an  "
+      },
+      "date": 1407321123504
+    },
+    {
+      "type": "edit",
+      "id": "8eab58d1e16a55e9",
+      "item": {
+        "type": "paragraph",
+        "id": "8eab58d1e16a55e9",
+        "text": "The page edit/put mechanism, is at the level of an individual edit to an item. So, we can't coalesce a group of edits at either the page, or site level, into a meaningful change set – as we can with "
+      },
+      "date": 1407321400502
+    },
+    {
+      "type": "edit",
+      "id": "8eab58d1e16a55e9",
+      "item": {
+        "type": "paragraph",
+        "id": "8eab58d1e16a55e9",
+        "text": "The page edit/put mechanism, is at the level of an individual edit to an item. We can't coalesce a group of edits at either the page, or site level, into a meaningful change set. "
+      },
+      "date": 1407321623982
+    },
+    {
+      "type": "fork",
+      "site": "paul.local:3000",
+      "date": 1407322690872
+    },
+    {
+      "type": "edit",
+      "id": "5f57fce4efc3dfbe",
+      "item": {
+        "type": "paragraph",
+        "id": "5f57fce4efc3dfbe",
+        "text": "N.B. Only renders page framework, pages are fetched and rendered by the client code."
+      },
+      "date": 1407353049103
+    },
+    {
+      "type": "edit",
+      "id": "5f57fce4efc3dfbe",
+      "item": {
+        "type": "paragraph",
+        "id": "5f57fce4efc3dfbe",
+        "text": "N.B. Only renders the framework, individual pages (json) are fetched and rendered by the client code."
+      },
+      "date": 1407353094897
+    },
+    {
+      "type": "edit",
+      "id": "3ad263b775439467",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad263b775439467",
+        "text": "Essential for clients that do not support JavaScript, but also for search engines. Those clients that support Javascript will rewrite the page, adding the journal."
+      },
+      "date": 1407353145811
+    },
+    {
+      "type": "edit",
+      "id": "3ad263b775439467",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad263b775439467",
+        "text": "Essential for clients that do not support JavaScript, but also for search engines. Those clients that support Javascript will re-render the page, adding the journal."
+      },
+      "date": 1407353162113
+    },
+    {
+      "type": "edit",
+      "id": "8eab58d1e16a55e9",
+      "item": {
+        "type": "paragraph",
+        "id": "8eab58d1e16a55e9",
+        "text": "The page edit/put mechanism, is at the level of an individual edit to an item. We can't coalesce a group of edits at either the page, or site level, into a less granular change set. "
+      },
+      "date": 1407353331109
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b53c0b19f68c7b4f"
+      },
+      "id": "b53c0b19f68c7b4f",
+      "type": "add",
+      "after": "8eab58d1e16a55e9",
+      "date": 1407354474407
+    },
+    {
+      "type": "edit",
+      "id": "b53c0b19f68c7b4f",
+      "item": {
+        "type": "paragraph",
+        "id": "b53c0b19f68c7b4f",
+        "text": "The current code to identify pages, and sites, is overly restrictive. Confining us to a-z, A-Z, 0-9, and - for page names, and a similar set for site names."
+      },
+      "date": 1407354699919
+    },
+    {
+      "type": "edit",
+      "id": "b53c0b19f68c7b4f",
+      "item": {
+        "type": "paragraph",
+        "id": "b53c0b19f68c7b4f",
+        "text": "The current regular expressions to identify pages, and sites, is overly restrictive. Confining us to a-z, A-Z, 0-9, and - for page names, and a similar set for site names."
+      },
+      "date": 1407419023149
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "paragraph",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves <i>What does a Federated Wiki server need to support?</i>, and <i>Are there any aspects of the server that would more rightly belong as part of the client?</i>."
+      },
+      "date": 1407480828871
+    },
+    {
+      "type": "edit",
+      "id": "00ffa61427b207d5",
+      "item": {
+        "type": "paragraph",
+        "id": "00ffa61427b207d5",
+        "text": "First we will look at the routes, and supporting functions, <i>also see [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee source code as at July 2014]</i>"
+      },
+      "date": 1407482190868
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "html",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves <i>What does a Federated Wiki server need to support?</i>, and <i>Are there any aspects of the server that would more rightly belong as part of the client?</i>."
+      },
+      "date": 1421776313776
+    },
+    {
+      "type": "edit",
+      "id": "00ffa61427b207d5",
+      "item": {
+        "type": "html",
+        "id": "00ffa61427b207d5",
+        "text": "First we will look at the routes, and supporting functions, <i>also see [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee source code as at July 2014]</i>"
+      },
+      "date": 1421776315149
+    },
+    {
+      "type": "edit",
+      "id": "f139bd5fb2f82e51",
+      "item": {
+        "type": "html",
+        "id": "f139bd5fb2f82e51",
+        "text": "<h3>Routes</h3>"
+      },
+      "date": 1421776316183
+    },
+    {
+      "type": "edit",
+      "id": "0b47abea075e752c",
+      "item": {
+        "type": "html",
+        "id": "0b47abea075e752c",
+        "text": "<h3>Supporting Functions"
+      },
+      "date": 1421776325287
+    },
+    {
+      "type": "edit",
+      "id": "f2b9c4493432986b",
+      "item": {
+        "type": "html",
+        "id": "f2b9c4493432986b",
+        "text": "<h3>Observations</h3>"
+      },
+      "date": 1421776327895
+    },
+    {
+      "type": "remove",
+      "id": "cc9d741f0923d99a",
+      "date": 1421776335521
+    },
+    {
+      "type": "fork",
+      "site": "fedwiki.rodwell.me"
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "html",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves:<ul><li>\nWhat does a Federated Wiki server need to support?</i>, and <i>Are there any aspects of the server that would more rightly belong as part of the client?</i>."
+      },
+      "date": 1437492756904
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "html",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves:\n<ul>\n<li>  What does a Federated Wiki server need to support?\n<li>  Are there any aspects of the server that would more rightly belong as part of the client?\n</ul>."
+      },
+      "date": 1437492786512
+    },
+    {
+      "type": "edit",
+      "id": "6862c9e9b9e1c3f3",
+      "item": {
+        "type": "html",
+        "id": "6862c9e9b9e1c3f3",
+        "text": "Looking at moving the node server forwards from Express 3.0. We ask ourselves:\n<ul>\n<li>  What does a Federated Wiki server need to support?\n<li>  Are there any aspects of the server that would more rightly belong as part of the client?\n</ul>"
+      },
+      "date": 1437492804756
+    },
+    {
+      "type": "edit",
+      "id": "db02b1e3c1d2ea78",
+      "item": {
+        "type": "paragraph",
+        "id": "db02b1e3c1d2ea78",
+        "text": "This is the main route for initial contact, allowing links to a specific set of pages."
+      },
+      "date": 1437492839334
+    },
+    {
+      "type": "add",
+      "id": "48770ef70e22645f",
+      "item": {
+        "type": "paragraph",
+        "id": "48770ef70e22645f",
+        "text": "Here we describe the essential elements that make up a [[Fedwiki Server]]:\n"
+      },
+      "after": "db02b1e3c1d2ea78",
+      "date": 1437492850028
+    },
+    {
+      "type": "move",
+      "order": [
+        "48770ef70e22645f",
+        "6862c9e9b9e1c3f3",
+        "00ffa61427b207d5",
+        "f139bd5fb2f82e51",
+        "22d0c87870c6d02b",
+        "db02b1e3c1d2ea78",
+        "5f57fce4efc3dfbe",
+        "ed78024db874b5ca",
+        "98ba6818dc3f0c9a",
+        "3ad263b775439467",
+        "55ff6245b8564af9",
+        "982455947020b7a1",
+        "7847852789076866",
+        "044a2e76d1a9512a",
+        "6b9a66acfd3aeb54",
+        "a0ba60d78821eb63",
+        "e504cbcf3d77c09d",
+        "d7120bdb6b720eb2",
+        "542150c33771bcea",
+        "a3c2041cab472182",
+        "c26642e89d99a582",
+        "30adc32626cec318",
+        "5d4b9257ad4151b4",
+        "27acfb96a430e259",
+        "b24b37a441212132",
+        "76d3ce848ddb4388",
+        "25c11cc9b5a9e311",
+        "06e79e7bbfc92b71",
+        "64e618bedcb839d4",
+        "70844a6d9390527b",
+        "0b47abea075e752c",
+        "6524afda03f262eb",
+        "b1f53a72c9682a7f",
+        "9998ee85eeb474d4",
+        "57f78528a3d956ed",
+        "f2b9c4493432986b",
+        "28465d0da0ba0f80",
+        "32c63d55900b85ff",
+        "f9ffb07a7ed124e6",
+        "f1f9395210d10ebe",
+        "82d480d8c5a8c4e4",
+        "8e162244d9c7511f",
+        "364ed9fcd45c0e67",
+        "8eab58d1e16a55e9",
+        "b53c0b19f68c7b4f"
+      ],
+      "id": "48770ef70e22645f",
+      "date": 1437492852561
+    },
+    {
+      "type": "edit",
+      "id": "48770ef70e22645f",
+      "item": {
+        "type": "paragraph",
+        "id": "48770ef70e22645f",
+        "text": "Here we describe the essential elements that make up a [[Wiki-node Server]]:\n"
+      },
+      "date": 1437493420384
+    },
+    {
+      "type": "edit",
+      "id": "48770ef70e22645f",
+      "item": {
+        "type": "paragraph",
+        "id": "48770ef70e22645f",
+        "text": "Here we describe the essential elements that make up a [[Wiki Node Server]]:\n"
+      },
+      "date": 1437493431506
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1448809370350
+    }
+  ]
+}

@@ -1,0 +1,513 @@
+{
+  "title": "Configure Apache for Livecode",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "17c447af822c6542",
+      "text": "Below we explore the steps needed to configure an [[Apache]] web server to work with [[Livecode]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "d4f3ef404bfbc4db",
+      "text": "Not too sure where the original instructions come from - perhaps [http://activethought.net/setting-livecode-server/ activethought.net]\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "eca204be058a56f0",
+      "text": "7) Enable the actions and cgi mods:"
+    },
+    {
+      "type": "code",
+      "id": "ea47fd446133cb52",
+      "text": "a2enmod actions\na2enmod cgi"
+    },
+    {
+      "type": "paragraph",
+      "id": "094fa7c9ed1fe3a9",
+      "text": "8) Edit the [[Apache]] .conf file:"
+    },
+    {
+      "type": "code",
+      "id": "6053bd84d5ab916d",
+      "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "417371012e250583",
+      "text": "Here is the [[Apache 000-default.conf]] file."
+    },
+    {
+      "type": "paragraph",
+      "id": "dd93c8e82980b720",
+      "text": "You will also want to configure the [[Apache 000-default-le-ssl.conf]] with information from [[Let's Encrypt Livecode]] to configure secure https access to the server."
+    },
+    {
+      "type": "paragraph",
+      "id": "07e531771457df51",
+      "text": "9) In the editor I added the 2 required lines as follows right before the end </virtualhost> line:"
+    },
+    {
+      "type": "code",
+      "id": "45e1685fc33d4589",
+      "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+    },
+    {
+      "type": "paragraph",
+      "id": "d1138e365c515f45",
+      "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it). "
+    },
+    {
+      "type": "paragraph",
+      "id": "eb5751be1f85c055",
+      "text": "10) Restart your [[Apache]] server using:"
+    },
+    {
+      "type": "code",
+      "id": "0894435af481a1f7",
+      "text": "service apache2 restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "dd653d25bef94ddf",
+      "text": "or safer:"
+    },
+    {
+      "type": "code",
+      "id": "541c3e0bb109fc53",
+      "text": "service apache2 stop; service apache2 start"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f9fade8f6ddf0b9",
+      "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up."
+    },
+    {
+      "type": "markdown",
+      "id": "ebf40eab5d450092",
+      "text": "# See also\n\n- [[Let's Encrypt Livecode]]\n- [[Livecode Server on DigitalOcean]]\n- [[Livecode .htaccess]]\n- [[Nginx]]\n- [[Revigniter]]\n- [http://activethought.net/setting-livecode-server/ activethought.net]\n- HostM - [https://www.hostm.com/livecode-hosting hostm]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Configure Apache for Livecode",
+        "story": []
+      },
+      "date": 1497910312081
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "eca204be058a56f0",
+        "text": "7) Enable the actions and cgi mods:"
+      },
+      "id": "eca204be058a56f0",
+      "date": 1497910317894
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17c447af822c6542"
+      },
+      "id": "17c447af822c6542",
+      "type": "add",
+      "after": "eca204be058a56f0",
+      "date": 1497910318928
+    },
+    {
+      "type": "move",
+      "order": [
+        "17c447af822c6542",
+        "eca204be058a56f0"
+      ],
+      "id": "17c447af822c6542",
+      "date": 1497910320324
+    },
+    {
+      "type": "edit",
+      "id": "17c447af822c6542",
+      "item": {
+        "type": "paragraph",
+        "id": "17c447af822c6542",
+        "text": "Below we explore the steps needed to configure an [[Apache]] web server to work with [[Livecode]]."
+      },
+      "date": 1497910364758
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "ea47fd446133cb52",
+        "text": "a2enmod actions\na2enmod cgi"
+      },
+      "after": "eca204be058a56f0",
+      "id": "ea47fd446133cb52",
+      "date": 1497910372548
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "094fa7c9ed1fe3a9",
+        "text": "8) Edit the [[Apache]] .conf file:"
+      },
+      "after": "ea47fd446133cb52",
+      "id": "094fa7c9ed1fe3a9",
+      "date": 1497910376672
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6053bd84d5ab916d",
+        "text": "cd /etc/apache2/sites-enabled\nnano 000-default.conf"
+      },
+      "after": "094fa7c9ed1fe3a9",
+      "id": "6053bd84d5ab916d",
+      "date": 1497910382626
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "417371012e250583",
+        "text": "Here is the [[Apache 000-default.conf]] file for [[www.livecode.world]]. You will also want to configure the [[Apache 000-default-le-ssl.conf]] with information from [[Let's Encrypt Livecode]] to configure secure https access to the server."
+      },
+      "after": "094fa7c9ed1fe3a9",
+      "id": "417371012e250583",
+      "date": 1497910390289
+    },
+    {
+      "type": "move",
+      "order": [
+        "17c447af822c6542",
+        "eca204be058a56f0",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "417371012e250583"
+      ],
+      "id": "6053bd84d5ab916d",
+      "date": 1497910391947
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "07e531771457df51",
+        "text": "9) In the editor I added the 2 required lines as follows right before the end </virtualhost> line:"
+      },
+      "after": "417371012e250583",
+      "id": "07e531771457df51",
+      "date": 1497910396383
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "45e1685fc33d4589",
+        "text": "Action lc-script /cgi-bin/livecode-community-server\nAddHandler lc-script .lc"
+      },
+      "after": "07e531771457df51",
+      "id": "45e1685fc33d4589",
+      "date": 1497910400732
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d41481db39b39d87",
+        "text": "I did NOT uncomment the line that says to include the serve-cgi-bin.conf"
+      },
+      "after": "45e1685fc33d4589",
+      "id": "d41481db39b39d87",
+      "date": 1497910404690
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d1138e365c515f45",
+        "text": "ctrl-x yes to save, enter to keep the file name (make sure you don't change it). "
+      },
+      "after": "d41481db39b39d87",
+      "id": "d1138e365c515f45",
+      "date": 1497910407678
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "eb5751be1f85c055",
+        "text": "10) Restart your [[Apache]] server:"
+      },
+      "after": "d1138e365c515f45",
+      "id": "eb5751be1f85c055",
+      "date": 1497910411678
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "0894435af481a1f7",
+        "text": "service apache2 restart"
+      },
+      "after": "eb5751be1f85c055",
+      "id": "0894435af481a1f7",
+      "date": 1497910414403
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1f9fade8f6ddf0b9",
+        "text": "You may get a message on restart about not being able to reliably determine the servers domain name, depending on how things are currently set up."
+      },
+      "after": "0894435af481a1f7",
+      "id": "1f9fade8f6ddf0b9",
+      "date": 1497910417839
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "150ebeeec33f80bf",
+        "text": "11) Add a test script to see if [[Apache]] is serving up [[LiveCode]] scripts as cgi's. Create a simple file:"
+      },
+      "after": "1f9fade8f6ddf0b9",
+      "id": "150ebeeec33f80bf",
+      "date": 1497910420991
+    },
+    {
+      "type": "remove",
+      "id": "150ebeeec33f80bf",
+      "date": 1497910429467
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "b80e282ed57053a4",
+        "text": "<H3>See also"
+      },
+      "after": "1f9fade8f6ddf0b9",
+      "id": "b80e282ed57053a4",
+      "date": 1497910436440
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "401466936549d2d2"
+      },
+      "id": "401466936549d2d2",
+      "type": "add",
+      "after": "b80e282ed57053a4",
+      "date": 1497910450278
+    },
+    {
+      "type": "remove",
+      "id": "401466936549d2d2",
+      "date": 1497910457108
+    },
+    {
+      "type": "remove",
+      "id": "b80e282ed57053a4",
+      "date": 1497910460876
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ebf40eab5d450092"
+      },
+      "id": "ebf40eab5d450092",
+      "type": "add",
+      "after": "1f9fade8f6ddf0b9",
+      "date": 1497910461861
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]"
+      },
+      "date": 1497910477070
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Nginx]]"
+      },
+      "date": 1497911431961
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Nginx]]\n- [[Revigniter]]"
+      },
+      "date": 1497911473084
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Livecode .htaccess]]\n- [[Nginx]]\n- [[Revigniter]]"
+      },
+      "date": 1497914229844
+    },
+    {
+      "type": "edit",
+      "id": "417371012e250583",
+      "item": {
+        "type": "paragraph",
+        "id": "417371012e250583",
+        "text": "Here is the [[Apache 000-default.conf]] file for [[www.livecode.world]]. "
+      },
+      "date": 1497914826990
+    },
+    {
+      "type": "add",
+      "id": "dd93c8e82980b720",
+      "item": {
+        "type": "paragraph",
+        "id": "dd93c8e82980b720",
+        "text": "You will also want to configure the [[Apache 000-default-le-ssl.conf]] with information from [[Let's Encrypt Livecode]] to configure secure https access to the server."
+      },
+      "after": "417371012e250583",
+      "date": 1497914828431
+    },
+    {
+      "type": "edit",
+      "id": "417371012e250583",
+      "item": {
+        "type": "paragraph",
+        "id": "417371012e250583",
+        "text": "Here is the [[Apache 000-default.conf]] file."
+      },
+      "date": 1497914851209
+    },
+    {
+      "type": "remove",
+      "id": "d41481db39b39d87",
+      "date": 1497914905523
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Livecode .htaccess]]\n- [[Nginx]]\n- [[Revigniter]]\n- [http://activethought.net/setting-livecode-server/ activethought.net]"
+      },
+      "date": 1497943885220
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Livecode .htaccess]]\n- [[Nginx]]\n- [[Revigniter]]\n- [http://activethought.net/setting-livecode-server/ activethought.net]\n- HostM - [https://www.hostm.com/livecode-hosting hostm]"
+      },
+      "date": 1497943920638
+    },
+    {
+      "type": "add",
+      "id": "d4f3ef404bfbc4db",
+      "item": {
+        "type": "paragraph",
+        "id": "d4f3ef404bfbc4db",
+        "text": "Not too sure where the original instructions come from - perhaps [http://activethought.net/setting-livecode-server/ activethought.net]\n"
+      },
+      "after": "17c447af822c6542",
+      "date": 1497944151295
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Livecode .htaccess]]\n- [[Nginx]]\n- [[Revigniter]]\n- [http://activethought.net/setting-livecode-server/ activethought.net]\n- HostM - [https://www.hostm.com/livecode-hosting hostm]\n- [[Livecode Nginx Hosting]]"
+      },
+      "date": 1497944391243
+    },
+    {
+      "type": "edit",
+      "id": "ebf40eab5d450092",
+      "item": {
+        "type": "markdown",
+        "id": "ebf40eab5d450092",
+        "text": "# See also\n\n- [[Let's Encrypt Livecode]]\n- [[Livecode Server on DigitalOcean]]\n- [[Livecode .htaccess]]\n- [[Nginx]]\n- [[Revigniter]]\n- [http://activethought.net/setting-livecode-server/ activethought.net]\n- HostM - [https://www.hostm.com/livecode-hosting hostm]"
+      },
+      "date": 1497955198301
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "541c3e0bb109fc53",
+        "text": "service apache2 stop; service apache2 start"
+      },
+      "after": "0894435af481a1f7",
+      "id": "541c3e0bb109fc53",
+      "date": 1498036097815
+    },
+    {
+      "type": "edit",
+      "id": "eb5751be1f85c055",
+      "item": {
+        "type": "paragraph",
+        "id": "eb5751be1f85c055",
+        "text": "10) Restart your [[Apache]] server using:"
+      },
+      "date": 1498036105149
+    },
+    {
+      "type": "add",
+      "id": "dd653d25bef94ddf",
+      "item": {
+        "type": "paragraph",
+        "id": "dd653d25bef94ddf",
+        "text": "or safer:"
+      },
+      "after": "eb5751be1f85c055",
+      "date": 1498036109127
+    },
+    {
+      "type": "move",
+      "order": [
+        "17c447af822c6542",
+        "d4f3ef404bfbc4db",
+        "eca204be058a56f0",
+        "ea47fd446133cb52",
+        "094fa7c9ed1fe3a9",
+        "6053bd84d5ab916d",
+        "417371012e250583",
+        "dd93c8e82980b720",
+        "07e531771457df51",
+        "45e1685fc33d4589",
+        "d1138e365c515f45",
+        "eb5751be1f85c055",
+        "0894435af481a1f7",
+        "dd653d25bef94ddf",
+        "541c3e0bb109fc53",
+        "1f9fade8f6ddf0b9",
+        "ebf40eab5d450092"
+      ],
+      "id": "dd653d25bef94ddf",
+      "date": 1498036111169
+    }
+  ]
+}

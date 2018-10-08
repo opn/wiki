@@ -1,0 +1,319 @@
+{
+  "title": "Map Tranport",
+  "story": [],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Map Tranport",
+        "story": [
+          {
+            "type": "paragraph",
+            "id": "728921eae995ab44",
+            "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] from the data displayed on [[CCC-TV]] site - [https://media.ccc.de/v/30C3_-_5278_-_en_-_saal_6_-_201312301300_-_the_philosophy_of_hacking_-_groente#video media.ccc.de]. "
+          },
+          {
+            "type": "paragraph",
+            "id": "aa55c73a9ad4b99a",
+            "text": "Simply drag and drop a video page url from this site onto the transporter:"
+          },
+          {
+            "type": "transport",
+            "id": "10ea2af363e51a5f",
+            "text": "POST https://livecode.world/mediawiki/importpage"
+          },
+          {
+            "type": "markdown",
+            "id": "9546dbda40035b5a",
+            "text": "# About"
+          },
+          {
+            "type": "paragraph",
+            "id": "f9842d5b2be9e775",
+            "text": "This plugin is an experimental web page scraper coded in [[LiveCode]]. The web service does the following things:"
+          },
+          {
+            "type": "markdown",
+            "id": "334c2012ca8b4ccb",
+            "text": "* Fetches the HTML of the video page\n* Runs this through html-[[tidy]] using [[shell()]] to create a valid [[xml]]/[[xhtml]] document\n* Painfully steps through the xhtml to find the relevant sections\n• Constructs the [[wiki page json]]"
+          },
+          {
+            "type": "markdown",
+            "id": "d9f45aae0a436d21",
+            "text": "# Code"
+          },
+          {
+            "type": "factory",
+            "id": "8869c0772777be8e"
+          },
+          {
+            "type": "markdown",
+            "id": "5a4d4c50029ad335",
+            "text": "# To Do"
+          },
+          {
+            "type": "markdown",
+            "id": "1e7deed8de779e92",
+            "text": "It should be enhanced to:\n* Use [[XPath]] rather than relying on the order of the [[xml]] sections\n* Spit out the Fedwiki, and helper code into libraries"
+          }
+        ]
+      },
+      "date": 1466629619725
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] creates a fedwiki [[ghost page]] from a geo-located image. It uses [[exiv2]] on the server to extract the GPSInfo in the [[Exif]] headers of the image."
+      },
+      "date": 1466629727275
+    },
+    {
+      "type": "edit",
+      "id": "8869c0772777be8e",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "function exif_GpsToDegrees gpsInfo\n   switch\n      case word 1 of gpsInfo ends with \"deg\"\n         -- 2deg 55' 54.240\n         -- 2deg 55' 17.040\"\n         replace \"deg\" with empty in gpsInfo\n         put word 1 of gpsInfo into someDegrees\n         put word 2 of gpsInfo into someMinutes\n         if char -1 of someMinutes = \"'\" then delete char -1 of someMinutes\n         put word 3 of gpsInfo into someSeconds\n         if char -2 to -1 of someSeconds = \"''\" then delete char -2 to -1 of someSeconds\n         break\n      default\n         -- imageMagick exif results \n         -- 2/1, 55/1, 5424/100\n         -- 10/1 24/1 2679/100 => 10 deg 24' 26.79\" E => 10.40744\n         \n         put item 1 of gpsInfo into degreeInfo\n         put item 2 of gpsInfo into minuteInfo\n         put item 3 of gpsInfo into secondInfo\n         \n         set the itemdelimiter to slash\n         put item 1 of degreeInfo / item 2 of degreeInfo into someDegrees\n         put item 1 of minuteInfo / item 2 of minuteInfo into someMinutes\n         put item 1 of secondInfo / item 2 of secondInfo into someSeconds\n   end switch\n   \n   put someDegrees + someMinutes / 60 + someSeconds / 3600 into decValue\n   return decValue\nend exif_GpsToDegrees"
+      },
+      "date": 1466629745024
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "993211224b73bdfd"
+      },
+      "id": "993211224b73bdfd",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1466629750016
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "aa55c73a9ad4b99a",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "f9842d5b2be9e775",
+        "334c2012ca8b4ccb",
+        "d9f45aae0a436d21",
+        "993211224b73bdfd",
+        "8869c0772777be8e",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92"
+      ],
+      "id": "993211224b73bdfd",
+      "date": 1466629752046
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "27e0ffd6ff213c5d"
+      },
+      "id": "27e0ffd6ff213c5d",
+      "type": "add",
+      "after": "1e7deed8de779e92",
+      "date": 1466629796370
+    },
+    {
+      "type": "edit",
+      "id": "993211224b73bdfd",
+      "item": {
+        "type": "paragraph",
+        "id": "993211224b73bdfd",
+        "text": "Below is the code that conversts the Degrees, Minutes, Seconds info into decimal values."
+      },
+      "date": 1466629797814
+    },
+    {
+      "type": "edit",
+      "id": "27e0ffd6ff213c5d",
+      "item": {
+        "type": "paragraph",
+        "id": "27e0ffd6ff213c5d",
+        "text": "According to the [[exif]] standard, there are three \"rational\" fields for each, containing degrees, minutes, and seconds. \n"
+      },
+      "date": 1466629818386
+    },
+    {
+      "type": "add",
+      "id": "47b8a943fb5fdc08",
+      "item": {
+        "type": "paragraph",
+        "id": "47b8a943fb5fdc08",
+        "text": "exiftool normalizes imporoper decimal degrees into D,M,S while assigning these values, \n   (exiftool -GPSLongitude=\"0.5 90 63.12345\" junk.jpg\" -> GPS Longitude: 2 deg 1' 3.12\" W\") \n   So if you need decimal degrees, you do dd=x0+x1/60.+x2/3600. and could ignore the non-normalization.\n   \n   $d = $deg + ((($min/60) + ($sec/3600))/100);\n   $d = $deg + (($min/60) + ($sec/3600));\n   \n   GPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\n   GPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \n   GPS Latitude                    : 57 deg 38' 56.83\" N\n   GPS Longitude                   : 10 deg 24' 26.79\" E\n   \n   GPS Longitude                   : 10.40744\n   GPS Position                    : 57.64911 10.40744"
+      },
+      "after": "27e0ffd6ff213c5d",
+      "date": 1466629828090
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bea0b21f206f944d"
+      },
+      "id": "bea0b21f206f944d",
+      "type": "add",
+      "after": "47b8a943fb5fdc08",
+      "date": 1466629857352
+    },
+    {
+      "type": "edit",
+      "id": "47b8a943fb5fdc08",
+      "item": {
+        "type": "paragraph",
+        "id": "47b8a943fb5fdc08",
+        "text": "exiftool normalizes imporoper decimal degrees into D,M,S while assigning these values, \n   (exiftool -GPSLongitude=\"0.5 90 63.12345\" junk.jpg\" -> GPS Longitude: 2 deg 1' 3.12\" W\") \n   So if you need decimal degrees, you do dd=x0+x1/60.+x2/3600. and could ignore the non-normalization."
+      },
+      "date": 1466629858783
+    },
+    {
+      "type": "edit",
+      "id": "bea0b21f206f944d",
+      "item": {
+        "type": "code",
+        "id": "bea0b21f206f944d",
+        "text": "   $d = $deg + ((($min/60) + ($sec/3600))/100);\n   $d = $deg + (($min/60) + ($sec/3600));\n   \n   GPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\n   GPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \n   GPS Latitude                    : 57 deg 38' 56.83\" N\n   GPS Longitude                   : 10 deg 24' 26.79\" E\n   \n   GPS Longitude                   : 10.40744\n   GPS Position                    : 57.64911 10.40744"
+      },
+      "date": 1466629860163
+    },
+    {
+      "type": "edit",
+      "id": "bea0b21f206f944d",
+      "item": {
+        "type": "code",
+        "id": "bea0b21f206f944d",
+        "text": "   $d = $deg + ((($min/60) + ($sec/3600))/100);\n   $d = $deg + (($min/60) + ($sec/3600));\n   \nGPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\nGPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \nGPS Latitude: 57 deg 38' 56.83\" N\nGPS Longitude: 10 deg 24' 26.79\" E\n   \nGPS Longitude: 10.40744\nGPS Position: 57.64911 10.40744"
+      },
+      "date": 1466629910608
+    },
+    {
+      "type": "edit",
+      "id": "bea0b21f206f944d",
+      "item": {
+        "type": "code",
+        "id": "bea0b21f206f944d",
+        "text": "$d = $deg + (($min/60) + ($sec/3600));\n   \nGPSLatitude = 57 38 56.83 (57/1 38/1 5683/100)\nGPSLongitude = 10 24 26.79 (10/1 24/1 2679/100)\n   \nGPS Latitude: 57 deg 38' 56.83\" N\nGPS Longitude: 10 deg 24' 26.79\" E\n   \nGPS Longitude: 10.40744\nGPS Position: 57.64911 10.40744"
+      },
+      "date": 1466629958969
+    },
+    {
+      "type": "edit",
+      "id": "27e0ffd6ff213c5d",
+      "item": {
+        "type": "paragraph",
+        "id": "27e0ffd6ff213c5d",
+        "text": "# Exif GPS Standard"
+      },
+      "date": 1466630014154
+    },
+    {
+      "type": "edit",
+      "id": "27e0ffd6ff213c5d",
+      "item": {
+        "type": "markdown",
+        "id": "27e0ffd6ff213c5d",
+        "text": "# Exif GPS Standard"
+      },
+      "date": 1466630015863
+    },
+    {
+      "type": "add",
+      "id": "e075ccbb3c4c4220",
+      "item": {
+        "type": "paragraph",
+        "id": "e075ccbb3c4c4220",
+        "text": "According to the [[exif]] standard, there are three \"rational\" fields for each, containing degrees, minutes, and seconds. \n"
+      },
+      "after": "27e0ffd6ff213c5d",
+      "date": 1466630016876
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "It should be enhanced to:\n* Check geolocation with real examples\n"
+      },
+      "date": 1466630041164
+    },
+    {
+      "type": "remove",
+      "id": "728921eae995ab44",
+      "date": 1466686140113
+    },
+    {
+      "type": "remove",
+      "id": "aa55c73a9ad4b99a",
+      "date": 1466686142520
+    },
+    {
+      "type": "remove",
+      "id": "10ea2af363e51a5f",
+      "date": 1466686144986
+    },
+    {
+      "type": "remove",
+      "id": "9546dbda40035b5a",
+      "date": 1466686148065
+    },
+    {
+      "type": "remove",
+      "id": "f9842d5b2be9e775",
+      "date": 1466686150861
+    },
+    {
+      "type": "remove",
+      "id": "334c2012ca8b4ccb",
+      "date": 1466686153488
+    },
+    {
+      "type": "remove",
+      "id": "993211224b73bdfd",
+      "date": 1466686156770
+    },
+    {
+      "type": "remove",
+      "id": "d9f45aae0a436d21",
+      "date": 1466686161773
+    },
+    {
+      "type": "remove",
+      "id": "8869c0772777be8e",
+      "date": 1466686164274
+    },
+    {
+      "type": "remove",
+      "id": "5a4d4c50029ad335",
+      "date": 1466686168730
+    },
+    {
+      "type": "remove",
+      "id": "1e7deed8de779e92",
+      "date": 1466686173781
+    },
+    {
+      "type": "remove",
+      "id": "27e0ffd6ff213c5d",
+      "date": 1466686177029
+    },
+    {
+      "type": "remove",
+      "id": "e075ccbb3c4c4220",
+      "date": 1466686180462
+    },
+    {
+      "type": "remove",
+      "id": "47b8a943fb5fdc08",
+      "date": 1466686183672
+    },
+    {
+      "type": "remove",
+      "id": "bea0b21f206f944d",
+      "date": 1466686190097
+    }
+  ]
+}

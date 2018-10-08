@@ -1,0 +1,266 @@
+{
+  "title": "Matrix Authentication",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "599ff037891c08eb",
+      "text": "The way [[Matrix]] treats authentication is intereting, and perhaps something we can use in the Federation - [http://matrix.org/docs/spec/client_server/r0.1.0.html#user-interactive-authentication-api matrix.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4352df8e17de96fe",
+      "text": "The homeserver may provide many different ways of authenticating, such as user/password auth, login via a social network (OAuth2), login by confirming a token sent to their email address, etc. "
+    },
+    {
+      "type": "html",
+      "id": "ce6a4bd6485fce6a",
+      "text": "<blockquote>This specification does not define how homeservers should authorise their users but instead defines the standard interface which implementations should follow so that ANY client can login to ANY homeserver.</blockquote>"
+    },
+    {
+      "type": "paragraph",
+      "id": "6e272e00d66e5e6b",
+      "text": "The process takes the form of one or more stages, where at each stage the client submits a set of data for a given stage type and awaits a response from the server, which will either be a final success or a request to perform an additional stage. This exchange continues until the final success."
+    },
+    {
+      "type": "paragraph",
+      "id": "be25bdb3d3a58686",
+      "text": "Authentication works by client and server exchanging dictionaries. This specification covers how this is done over JSON HTTP POST."
+    },
+    {
+      "type": "paragraph",
+      "id": "7bed67002f962ab1",
+      "text": "For each endpoint, a server offers one of more 'flows' that the client can use to authenticate itself. Each flow comprises one or more 'stages'. "
+    },
+    {
+      "type": "paragraph",
+      "id": "ff5bafefe29c22de",
+      "text": "Flows may have more than one stage to implement n-factor auth. When all stages are complete, authentication is complete and the API call succeeds. "
+    },
+    {
+      "type": "paragraph",
+      "id": "6da8ce827752ff6a",
+      "text": "To establish what flows a server supports for an endpoint, a client sends the request with no authentication. A request to an endpoint that uses User-Interactive Authentication never succeeds without auth. "
+    },
+    {
+      "type": "paragraph",
+      "id": "c5e4298b58da0b8a",
+      "text": "Homeservers may allow requests that don't require auth by offering a stage with only the m.login.dummy auth type. The homeserver returns a response with HTTP status 401 and a JSON object as follows:"
+    },
+    {
+      "type": "code",
+      "id": "9c07fef3c43264fb",
+      "text": "{\n  \"flows\": [\n    {\n      \"stages\": [ \"example.type.foo\", \"example.type.bar\" ]\n    },\n    {\n      \"stages\": [ \"example.type.foo\", \"example.type.baz\" ]\n    }\n  ],\n  \"params\": {\n      \"example.type.baz\": {\n          \"example_key\": \"foobar\"\n      }\n  },\n  \"session\": \"xxxxxx\"\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Matrix Authentication",
+        "story": []
+      },
+      "date": 1466946262264
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "599ff037891c08eb"
+      },
+      "id": "599ff037891c08eb",
+      "type": "add",
+      "date": 1466946263254
+    },
+    {
+      "type": "edit",
+      "id": "599ff037891c08eb",
+      "item": {
+        "type": "paragraph",
+        "id": "599ff037891c08eb",
+        "text": "The way [[Matrix]] treats authentication is intereting, and perhaps something we can use in the Federation:"
+      },
+      "date": 1466946305368
+    },
+    {
+      "type": "edit",
+      "id": "599ff037891c08eb",
+      "item": {
+        "type": "paragraph",
+        "id": "599ff037891c08eb",
+        "text": "The way [[Matrix]] treats authentication is intereting, and perhaps something we can use in the Federation - [http://matrix.org/docs/spec/client_server/r0.1.0.html#user-interactive-authentication-api matrix.org]"
+      },
+      "date": 1466946331447
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4352df8e17de96fe"
+      },
+      "id": "4352df8e17de96fe",
+      "type": "add",
+      "after": "599ff037891c08eb",
+      "date": 1466946333520
+    },
+    {
+      "type": "edit",
+      "id": "4352df8e17de96fe",
+      "item": {
+        "type": "paragraph",
+        "id": "4352df8e17de96fe",
+        "text": "The homeserver may provide many different ways of authenticating, such as user/password auth, login via a social network (OAuth2), login by confirming a token sent to their email address, etc. "
+      },
+      "date": 1466946391503
+    },
+    {
+      "type": "add",
+      "id": "ce6a4bd6485fce6a",
+      "item": {
+        "type": "paragraph",
+        "id": "ce6a4bd6485fce6a",
+        "text": "This specification does not define how homeservers should authorise their users but instead defines the standard interface which implementations should follow so that ANY client can login to ANY homeserver."
+      },
+      "after": "4352df8e17de96fe",
+      "date": 1466946393810
+    },
+    {
+      "type": "add",
+      "id": "6e272e00d66e5e6b",
+      "item": {
+        "type": "paragraph",
+        "id": "6e272e00d66e5e6b",
+        "text": "The process takes the form of one or more stages, where at each stage the client submits a set of data for a given stage type and awaits a response from the server, which will either be a final success or a request to perform an additional stage. This exchange continues until the final success.\nAuthentication works by client and server exchanging dictionaries. This specification covers how this is done over JSON HTTP POST.\nFor each endpoint, a server offers one of more 'flows' that the client can use to authenticate itself. Each flow comprises one or more 'stages'. Flows may have more than one stage to implement n-factor auth. When all stages are complete, authentication is complete and the API call succeeds. To establish what flows a server supports for an endpoint, a client sends the request with no authentication. A request to an endpoint that uses User-Interactive Authentication never succeeds without auth. Homeservers may allow requests that don't require auth by offering a stage with only the m.login.dummy auth type. The homeserver returns a response with HTTP status 401 and a JSON object as follows:"
+      },
+      "after": "ce6a4bd6485fce6a",
+      "date": 1466946400408
+    },
+    {
+      "type": "edit",
+      "id": "ce6a4bd6485fce6a",
+      "item": {
+        "type": "paragraph",
+        "id": "ce6a4bd6485fce6a",
+        "text": "<blockquote>This specification does not define how homeservers should authorise their users but instead defines the standard interface which implementations should follow so that ANY client can login to ANY homeserver.</blockquote>"
+      },
+      "date": 1466946412706
+    },
+    {
+      "type": "edit",
+      "id": "ce6a4bd6485fce6a",
+      "item": {
+        "type": "html",
+        "id": "ce6a4bd6485fce6a",
+        "text": "<blockquote>This specification does not define how homeservers should authorise their users but instead defines the standard interface which implementations should follow so that ANY client can login to ANY homeserver.</blockquote>"
+      },
+      "date": 1466946413668
+    },
+    {
+      "type": "edit",
+      "id": "6e272e00d66e5e6b",
+      "item": {
+        "type": "paragraph",
+        "id": "6e272e00d66e5e6b",
+        "text": "The process takes the form of one or more stages, where at each stage the client submits a set of data for a given stage type and awaits a response from the server, which will either be a final success or a request to perform an additional stage. This exchange continues until the final success."
+      },
+      "date": 1466946425329
+    },
+    {
+      "type": "add",
+      "id": "be25bdb3d3a58686",
+      "item": {
+        "type": "paragraph",
+        "id": "be25bdb3d3a58686",
+        "text": "Authentication works by client and server exchanging dictionaries. This specification covers how this is done over JSON HTTP POST."
+      },
+      "after": "6e272e00d66e5e6b",
+      "date": 1466946426760
+    },
+    {
+      "type": "add",
+      "id": "7bed67002f962ab1",
+      "item": {
+        "type": "paragraph",
+        "id": "7bed67002f962ab1",
+        "text": "For each endpoint, a server offers one of more 'flows' that the client can use to authenticate itself. Each flow comprises one or more 'stages'. "
+      },
+      "after": "be25bdb3d3a58686",
+      "date": 1466946430169
+    },
+    {
+      "type": "add",
+      "id": "ff5bafefe29c22de",
+      "item": {
+        "type": "paragraph",
+        "id": "ff5bafefe29c22de",
+        "text": "Flows may have more than one stage to implement n-factor auth. When all stages are complete, authentication is complete and the API call succeeds. "
+      },
+      "after": "7bed67002f962ab1",
+      "date": 1466946433106
+    },
+    {
+      "type": "add",
+      "id": "6da8ce827752ff6a",
+      "item": {
+        "type": "paragraph",
+        "id": "6da8ce827752ff6a",
+        "text": "To establish what flows a server supports for an endpoint, a client sends the request with no authentication. A request to an endpoint that uses User-Interactive Authentication never succeeds without auth. "
+      },
+      "after": "ff5bafefe29c22de",
+      "date": 1466946437938
+    },
+    {
+      "type": "add",
+      "id": "c5e4298b58da0b8a",
+      "item": {
+        "type": "paragraph",
+        "id": "c5e4298b58da0b8a",
+        "text": "Homeservers may allow requests that don't require auth by offering a stage with only the m.login.dummy auth type. The homeserver returns a response with HTTP status 401 and a JSON object as follows:"
+      },
+      "after": "6da8ce827752ff6a",
+      "date": 1466946443787
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9c07fef3c43264fb"
+      },
+      "id": "9c07fef3c43264fb",
+      "type": "add",
+      "after": "c5e4298b58da0b8a",
+      "date": 1466946457249
+    },
+    {
+      "type": "edit",
+      "id": "9c07fef3c43264fb",
+      "item": {
+        "type": "code",
+        "id": "9c07fef3c43264fb",
+        "text": "{\n  \"flows\": [\n    {\n      \"stages\": [ \"example.type.foo\", \"example.type.bar\" ]\n    },\n    {\n      \"stages\": [ \"example.type.foo\", \"example.type.baz\" ]\n    }\n  ],\n  \"params\": {\n      \"example.type.baz\": {\n          \"example_key\": \"foobar\"\n      }\n  },\n  \"session\": \"xxxxxx\"\n}"
+      },
+      "date": 1466946459373
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2b25c0adceec5aed"
+      },
+      "id": "2b25c0adceec5aed",
+      "type": "add",
+      "after": "9c07fef3c43264fb",
+      "date": 1466947627256
+    },
+    {
+      "type": "edit",
+      "id": "2b25c0adceec5aed",
+      "item": {
+        "type": "code",
+        "id": "2b25c0adceec5aed",
+        "text": "\n                  How data flows between clients\n                  ==============================\n\n{ Matrix client A }                             { Matrix client B }\n    ^          |                                    ^          |\n    |  events  |  Client-Server API                 |  events  |\n    |          V                                    |          V\n+------------------+                            +------------------+\n|                  |---------( HTTPS )--------->|                  |\n|   homeserver    |                            |   homeserver    |\n|                  |<--------( HTTPS )----------|                  |\n+------------------+      Server-Server API     +------------------+\n                       History Synchronisation\n                           (Federation)"
+      },
+      "date": 1466947631105
+    },
+    {
+      "type": "remove",
+      "id": "2b25c0adceec5aed",
+      "date": 1466947642349
+    }
+  ]
+}

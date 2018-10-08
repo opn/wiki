@@ -1,0 +1,569 @@
+{
+  "title": "Zeroconf",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d722deee5396aa93",
+      "text": "Zero-configuration networking ([[Zeroconf]]) is a set of technologies that automatically creates a usable computer network based on the Internet Protocol Suite (TCP/IP) when computers or network peripherals are interconnected. It does not require manual operator intervention or special configuration servers - [https://en.wikipedia.org/wiki/Zero-configuration_networking wikipedia]"
+    },
+    {
+      "type": "html",
+      "id": "52d7d5200f0041fd",
+      "text": "Zeroconf is built on three core technologies:\n<UL>\n<LI> assignment of numeric network addresses for networked devices\n<LI> automatic distribution and resolution of computer hostnames\n<LI> automatic location of network services, such as printing devices.\n</UL>"
+    },
+    {
+      "type": "paragraph",
+      "id": "bf25aab2084df2c9",
+      "text": "Without zeroconf, a network administrator must set up services, such as Dynamic Host Configuration Protocol (DHCP) and Domain Name System (DNS), or configure each computer's network settings manually."
+    },
+    {
+      "type": "html",
+      "id": "d6fe54ce2cfa6887",
+      "text": "<H3>Registered Service Types"
+    },
+    {
+      "type": "paragraph",
+      "id": "3ad0d7912d094220",
+      "text": "Here is a list of reserved Zeroconf Service Types - [http://www.dns-sd.org/ServiceTypes.html dns-sd.org]"
+    },
+    {
+      "type": "html",
+      "id": "faf005f7dea46a53",
+      "text": "<H3>DNS-based service discovery"
+    },
+    {
+      "type": "paragraph",
+      "id": "c76ccb60536bb732",
+      "text": "DNS-SD is described in RFC 6763. This standard allows clients to discover a named list of services by type in a specified domain using standard DNS queries. "
+    },
+    {
+      "type": "paragraph",
+      "id": "fab3bce98dfacb84",
+      "text": "The service instance can be described using a DNS SRV (RFC 2782) and DNS TXT (RFC 1035) record. This specification is compatible with both Multicast DNS and with existing unicast DNS server and client software. A client discovers the list of available instances of a given service type using a query for a DNS PTR [RFC1035] record with a name of the form \"<Service>.<Domain>\", which returns a set of zero or more names, which are the names of the aforementioned DNS SRV/TXT record pairs.\n"
+    },
+    {
+      "type": "html",
+      "id": "35d0732a792f2c11",
+      "text": "<H4>Apple's multicast DNS/DNS-SD"
+    },
+    {
+      "type": "paragraph",
+      "id": "cb5a2437891bbf68",
+      "text": "Multicast DNS (mDNS) is a protocol that uses APIs similar to unicast Domain Name System but implemented over a multicast protocol. "
+    },
+    {
+      "type": "paragraph",
+      "id": "88abf8c3a8ec1c92",
+      "text": "Each computer on the LAN stores its own list of DNS resource records (e.g., A, MX, SRV) and joins the mDNS multicast group. When an mDNS client wants to know the IP address of a computer given its name, mDNS client sends a request to a well-known multicast address; the computer with the corresponding A record replies with its IP address. The mDNS multicast address is 224.0.0.251 for IPv4 and ff02::fb for IPv6 link-local addressing."
+    },
+    {
+      "type": "paragraph",
+      "id": "07b3555a26fb2ac8",
+      "text": "DNS-based service discovery (DNS-SD) is the other half of Apple's solution, built on top of the Domain Name System; see RFC 6763. "
+    },
+    {
+      "type": "paragraph",
+      "id": "5e13064aa9a082b7",
+      "text": "It is used in Apple products, many network printers and a number of third party products and applications on various operating systems. The Apple solution uses DNS messages, in contrast to Microsoft's competing technology, SSDP, which uses HTTP messages. It uses DNS SRV, TXT, and PTR records to advertise Service Instance Names. The hosts offering services publish details of available services: instance, service type, domain name and optional configuration parameters. Service types are given informally on a first-come basis. A service type registry exists, maintained and published by DNS-SD.org.\n\nMany Apple Mac OS X networking clients, such as the Safari browser and the iChat instant messaging software, use DNS-SD to locate nearby servers. On MS Windows, some instant messaging and VoIP clients support DNS-SD. Some Unix, BSD, and Linux distributions also include DNS-SD functionality.\n"
+    },
+    {
+      "type": "html",
+      "id": "81952da35f1db0d9",
+      "text": "<H3>Implementations"
+    },
+    {
+      "type": "reference",
+      "id": "8d071a8e5ed279cf",
+      "site": "osx.c0de.academy",
+      "slug": "bonjour",
+      "title": "Bonjour",
+      "text": "Bonjour is Apple's name for Zero-configuration networking."
+    },
+    {
+      "type": "paragraph",
+      "id": "791111b528f0fea0",
+      "text": "[[Avahi]] is a [[Zeroconf]] implementation for Linux and BSDs. It implements IPv4LL, mDNS and DNS-SD. It is part of most Linux distributions, and is installed by default on some. If run in conjunction with nss-mdns it also offers host name resolution."
+    },
+    {
+      "type": "paragraph",
+      "id": "4784a471231e44f3",
+      "text": "Avahi also implements binary compatibility libraries that emulate Bonjour and the historical mDNS implementation Howl, so software made to use those implementations can also utilize Avahi through the emulation interfaces."
+    },
+    {
+      "type": "html",
+      "id": "821db5cf3c9f6a2a",
+      "text": "<H3>Avahi Example Script"
+    },
+    {
+      "type": "paragraph",
+      "id": "cfefe087610edc2c",
+      "text": "This python script will register an alternate CNAME alias besides your hostname,\nwhich could be useful for ex. when serving several http virtual hosts to \nyour ffriends on the local network and you don't want to make them configure\ntheir /etc/hosts.\n - [https://gist.github.com/gdamjan/3168336 github]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Zeroconf",
+        "story": []
+      },
+      "date": 1436716572471
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f297ed8b626032f4"
+      },
+      "id": "f297ed8b626032f4",
+      "type": "add",
+      "date": 1436716575662
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d722deee5396aa93",
+        "text": "Zero-configuration networking ([[Zeroconf]]) is a set of technologies that automatically creates a usable computer network based on the Internet Protocol Suite (TCP/IP) when computers or network peripherals are interconnected. It does not require manual operator intervention or special configuration servers - [https://en.wikipedia.org/wiki/Zero-configuration_networking wikipedia]"
+      },
+      "id": "d722deee5396aa93",
+      "date": 1436716578759
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "52d7d5200f0041fd",
+        "text": "Zeroconf is built on three core technologies:\n<UL>\n<LI> assignment of numeric network addresses for networked devices\n<LI> automatic distribution and resolution of computer hostnames\n<LI> automatic location of network services, such as printing devices.\n</UL>"
+      },
+      "after": "d722deee5396aa93",
+      "id": "52d7d5200f0041fd",
+      "date": 1436716582116
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bf25aab2084df2c9",
+        "text": "Without zeroconf, a network administrator must set up services, such as Dynamic Host Configuration Protocol (DHCP) and Domain Name System (DNS), or configure each computer's network settings manually."
+      },
+      "after": "52d7d5200f0041fd",
+      "id": "bf25aab2084df2c9",
+      "date": 1436716584960
+    },
+    {
+      "type": "remove",
+      "id": "f297ed8b626032f4",
+      "date": 1436716591363
+    },
+    {
+      "type": "fork",
+      "site": "osx.c0de.academy",
+      "date": 1436716634655
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "faf005f7dea46a53"
+      },
+      "id": "faf005f7dea46a53",
+      "type": "add",
+      "after": "bf25aab2084df2c9",
+      "date": 1436717198361
+    },
+    {
+      "type": "edit",
+      "id": "faf005f7dea46a53",
+      "item": {
+        "type": "paragraph",
+        "id": "faf005f7dea46a53",
+        "text": "<H3>DNS-based service discovery"
+      },
+      "date": 1436717207537
+    },
+    {
+      "type": "add",
+      "id": "c76ccb60536bb732",
+      "item": {
+        "type": "paragraph",
+        "id": "c76ccb60536bb732",
+        "text": "DNS-SD is described in RFC 6763. This standard allows clients to discover a named list of services by type in a specified domain using standard DNS queries. "
+      },
+      "after": "faf005f7dea46a53",
+      "date": 1436717232928
+    },
+    {
+      "type": "add",
+      "id": "fab3bce98dfacb84",
+      "item": {
+        "type": "paragraph",
+        "id": "fab3bce98dfacb84",
+        "text": "The service instance can be described using a DNS SRV (RFC 2782) and DNS TXT (RFC 1035) record. This specification is compatible with both Multicast DNS and with existing unicast DNS server and client software. A client discovers the list of available instances of a given service type using a query for a DNS PTR [RFC1035] record with a name of the form \"<Service>.<Domain>\", which returns a set of zero or more names, which are the names of the aforementioned DNS SRV/TXT record pairs.\n"
+      },
+      "after": "c76ccb60536bb732",
+      "date": 1436717246631
+    },
+    {
+      "type": "edit",
+      "id": "faf005f7dea46a53",
+      "item": {
+        "type": "html",
+        "id": "faf005f7dea46a53",
+        "text": "<H3>DNS-based service discovery"
+      },
+      "date": 1436717248382
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "35d0732a792f2c11"
+      },
+      "id": "35d0732a792f2c11",
+      "type": "add",
+      "after": "fab3bce98dfacb84",
+      "date": 1436717418015
+    },
+    {
+      "type": "edit",
+      "id": "35d0732a792f2c11",
+      "item": {
+        "type": "paragraph",
+        "id": "35d0732a792f2c11",
+        "text": "Multicast DNS (mDNS) is a protocol that uses APIs similar to unicast Domain Name System but implemented over a multicast protocol. Each computer on the LAN stores its own list of DNS resource records (e.g., A, MX, SRV) and joins the mDNS multicast group. When an mDNS client wants to know the IP address of a computer given its name, mDNS client sends a request to a well-known multicast address; the computer with the corresponding A record replies with its IP address. The mDNS multicast address is 224.0.0.251 for IPv4 and ff02::fb for IPv6 link-local addressing."
+      },
+      "date": 1436717429136
+    },
+    {
+      "type": "add",
+      "id": "07b3555a26fb2ac8",
+      "item": {
+        "type": "paragraph",
+        "id": "07b3555a26fb2ac8",
+        "text": "DNS-based service discovery (DNS-SD) is the other half of Apple's solution, built on top of the Domain Name System; see RFC 6763.[15] It is used in Apple products, many network printers and a number of third party products and applications on various operating systems. The Apple solution uses DNS messages, in contrast to Microsoft's competing technology, SSDP, which uses HTTP messages. It uses DNS SRV, TXT, and PTR records to advertise Service Instance Names. The hosts offering services publish details of available services: instance, service type, domain name and optional configuration parameters. Service types are given informally on a first-come basis. A service type registry exists,[16] maintained and published by DNS-SD.org.[17]\n\nMany Apple Mac OS X networking clients, such as the Safari browser and the iChat instant messaging software, use DNS-SD to locate nearby servers. On MS Windows, some instant messaging and VoIP clients support DNS-SD. Some Unix, BSD, and Linux distributions also include DNS-SD functionality.\n"
+      },
+      "after": "35d0732a792f2c11",
+      "date": 1436717431104
+    },
+    {
+      "type": "edit",
+      "id": "07b3555a26fb2ac8",
+      "item": {
+        "type": "paragraph",
+        "id": "07b3555a26fb2ac8",
+        "text": "DNS-based service discovery (DNS-SD) is the other half of Apple's solution, built on top of the Domain Name System; see RFC 6763. "
+      },
+      "date": 1436717452870
+    },
+    {
+      "type": "add",
+      "id": "5e13064aa9a082b7",
+      "item": {
+        "type": "paragraph",
+        "id": "5e13064aa9a082b7",
+        "text": "It is used in Apple products, many network printers and a number of third party products and applications on various operating systems. The Apple solution uses DNS messages, in contrast to Microsoft's competing technology, SSDP, which uses HTTP messages. It uses DNS SRV, TXT, and PTR records to advertise Service Instance Names. The hosts offering services publish details of available services: instance, service type, domain name and optional configuration parameters. Service types are given informally on a first-come basis. A service type registry exists, maintained and published by DNS-SD.org.\n\nMany Apple Mac OS X networking clients, such as the Safari browser and the iChat instant messaging software, use DNS-SD to locate nearby servers. On MS Windows, some instant messaging and VoIP clients support DNS-SD. Some Unix, BSD, and Linux distributions also include DNS-SD functionality.\n"
+      },
+      "after": "07b3555a26fb2ac8",
+      "date": 1436717454643
+    },
+    {
+      "type": "edit",
+      "id": "35d0732a792f2c11",
+      "item": {
+        "type": "paragraph",
+        "id": "35d0732a792f2c11",
+        "text": "Apple's multicast DNS/DNS-SD"
+      },
+      "date": 1436717488882
+    },
+    {
+      "type": "add",
+      "id": "cb5a2437891bbf68",
+      "item": {
+        "type": "paragraph",
+        "id": "cb5a2437891bbf68",
+        "text": "Multicast DNS (mDNS) is a protocol that uses APIs similar to unicast Domain Name System but implemented over a multicast protocol. "
+      },
+      "after": "35d0732a792f2c11",
+      "date": 1436717498507
+    },
+    {
+      "type": "add",
+      "id": "88abf8c3a8ec1c92",
+      "item": {
+        "type": "paragraph",
+        "id": "88abf8c3a8ec1c92",
+        "text": "Each computer on the LAN stores its own list of DNS resource records (e.g., A, MX, SRV) and joins the mDNS multicast group. When an mDNS client wants to know the IP address of a computer given its name, mDNS client sends a request to a well-known multicast address; the computer with the corresponding A record replies with its IP address. The mDNS multicast address is 224.0.0.251 for IPv4 and ff02::fb for IPv6 link-local addressing."
+      },
+      "after": "cb5a2437891bbf68",
+      "date": 1436717511798
+    },
+    {
+      "type": "edit",
+      "id": "35d0732a792f2c11",
+      "item": {
+        "type": "paragraph",
+        "id": "35d0732a792f2c11",
+        "text": "<H4>Apple's multicast DNS/DNS-SD"
+      },
+      "date": 1436717521366
+    },
+    {
+      "type": "edit",
+      "id": "35d0732a792f2c11",
+      "item": {
+        "type": "html",
+        "id": "35d0732a792f2c11",
+        "text": "<H4>Apple's multicast DNS/DNS-SD"
+      },
+      "date": 1436717522785
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "81952da35f1db0d9"
+      },
+      "id": "81952da35f1db0d9",
+      "type": "add",
+      "after": "5e13064aa9a082b7",
+      "date": 1436717559337
+    },
+    {
+      "type": "edit",
+      "id": "81952da35f1db0d9",
+      "item": {
+        "type": "paragraph",
+        "id": "81952da35f1db0d9",
+        "text": "<H3>Implementations"
+      },
+      "date": 1436717566622
+    },
+    {
+      "type": "edit",
+      "id": "81952da35f1db0d9",
+      "item": {
+        "type": "html",
+        "id": "81952da35f1db0d9",
+        "text": "<H3>Implementations"
+      },
+      "date": 1436717568672
+    },
+    {
+      "type": "add",
+      "id": "c65c0468e9fea456",
+      "item": {
+        "type": "paragraph",
+        "id": "c65c0468e9fea456",
+        "text": "[[Bonjour]] (formerly known as Rendezvous) from Apple Inc., uses multicast DNS and DNS Service Discovery. Apple changed its preferred zeroconf technology from SLP to mDNS and DNS-SD between Mac OS X 10.1 and 10.2, though SLP continues to be supported by Mac OS X."
+      },
+      "after": "81952da35f1db0d9",
+      "date": 1436717596110
+    },
+    {
+      "type": "add",
+      "id": "442dfdfcfc1f48b8",
+      "item": {
+        "type": "paragraph",
+        "id": "442dfdfcfc1f48b8",
+        "text": "Apple's mDNSResponder has interfaces for C and Java[22] and is available on BSD, Apple Mac OS X, Linux, other POSIX based operating systems and MS Windows. The Windows downloads are available from Apple's website."
+      },
+      "after": "c65c0468e9fea456",
+      "date": 1436717609555
+    },
+    {
+      "type": "add",
+      "id": "791111b528f0fea0",
+      "item": {
+        "type": "paragraph",
+        "id": "791111b528f0fea0",
+        "text": "[[Avahi]] is a [[Zeroconf]] implementation for Linux and BSDs. It implements IPv4LL, mDNS and DNS-SD. It is part of most Linux distributions, and is installed by default on some. If run in conjunction with nss-mdns it also offers host name resolution."
+      },
+      "after": "442dfdfcfc1f48b8",
+      "date": 1436717623082
+    },
+    {
+      "type": "add",
+      "id": "4784a471231e44f3",
+      "item": {
+        "type": "paragraph",
+        "id": "4784a471231e44f3",
+        "text": "Avahi also implements binary compatibility libraries that emulate Bonjour and the historical mDNS implementation Howl, so software made to use those implementations can also utilize Avahi through the emulation interfaces."
+      },
+      "after": "791111b528f0fea0",
+      "date": 1436717634628
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8d071a8e5ed279cf"
+      },
+      "id": "8d071a8e5ed279cf",
+      "type": "add",
+      "after": "4784a471231e44f3",
+      "date": 1436717673776
+    },
+    {
+      "type": "edit",
+      "id": "8d071a8e5ed279cf",
+      "item": {
+        "type": "reference",
+        "id": "8d071a8e5ed279cf",
+        "site": "osx.c0de.academy",
+        "slug": "bonjour",
+        "title": "Bonjour",
+        "text": "Bonjour is Apple's name for Zero-configuration networking."
+      },
+      "date": 1436717675281
+    },
+    {
+      "type": "move",
+      "order": [
+        "d722deee5396aa93",
+        "52d7d5200f0041fd",
+        "bf25aab2084df2c9",
+        "faf005f7dea46a53",
+        "c76ccb60536bb732",
+        "fab3bce98dfacb84",
+        "35d0732a792f2c11",
+        "cb5a2437891bbf68",
+        "88abf8c3a8ec1c92",
+        "07b3555a26fb2ac8",
+        "5e13064aa9a082b7",
+        "81952da35f1db0d9",
+        "8d071a8e5ed279cf",
+        "c65c0468e9fea456",
+        "442dfdfcfc1f48b8",
+        "791111b528f0fea0",
+        "4784a471231e44f3"
+      ],
+      "id": "8d071a8e5ed279cf",
+      "date": 1436717680492
+    },
+    {
+      "type": "remove",
+      "id": "c65c0468e9fea456",
+      "date": 1436717703520
+    },
+    {
+      "type": "remove",
+      "id": "442dfdfcfc1f48b8",
+      "date": 1436717801500
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "821db5cf3c9f6a2a"
+      },
+      "id": "821db5cf3c9f6a2a",
+      "type": "add",
+      "after": "4784a471231e44f3",
+      "date": 1436718159550
+    },
+    {
+      "type": "edit",
+      "id": "821db5cf3c9f6a2a",
+      "item": {
+        "type": "paragraph",
+        "id": "821db5cf3c9f6a2a",
+        "text": "Here is a spython script to create a c-name like alias using Avahi - [https://gist.github.com/gdamjan/3168336 github]"
+      },
+      "date": 1436718198281
+    },
+    {
+      "type": "edit",
+      "id": "821db5cf3c9f6a2a",
+      "item": {
+        "type": "paragraph",
+        "id": "821db5cf3c9f6a2a",
+        "text": "This script will register an alternate CNAME alias besides your hostname,\nwhich could be useful for ex. when serving several http virtual hosts to \nyour ffriends on the local network and you don't want to make them configure\ntheir /etc/hosts.\n - [https://gist.github.com/gdamjan/3168336 github]"
+      },
+      "date": 1436718243561
+    },
+    {
+      "type": "edit",
+      "id": "821db5cf3c9f6a2a",
+      "item": {
+        "type": "paragraph",
+        "id": "821db5cf3c9f6a2a",
+        "text": "<H3>Avahi Example Script"
+      },
+      "date": 1436718275312
+    },
+    {
+      "type": "edit",
+      "id": "821db5cf3c9f6a2a",
+      "item": {
+        "type": "html",
+        "id": "821db5cf3c9f6a2a",
+        "text": "<H3>Avahi Example Script"
+      },
+      "date": 1436718276615
+    },
+    {
+      "type": "add",
+      "id": "cfefe087610edc2c",
+      "item": {
+        "type": "paragraph",
+        "id": "cfefe087610edc2c",
+        "text": "This python script will register an alternate CNAME alias besides your hostname,\nwhich could be useful for ex. when serving several http virtual hosts to \nyour ffriends on the local network and you don't want to make them configure\ntheir /etc/hosts.\n - [https://gist.github.com/gdamjan/3168336 github]"
+      },
+      "after": "821db5cf3c9f6a2a",
+      "date": 1436718279004
+    },
+    {
+      "type": "add",
+      "id": "d6fe54ce2cfa6887",
+      "item": {
+        "type": "paragraph",
+        "id": "d6fe54ce2cfa6887",
+        "text": "<H3>Registered"
+      },
+      "after": "bf25aab2084df2c9",
+      "date": 1436718326533
+    },
+    {
+      "type": "add",
+      "id": "3ad0d7912d094220",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad0d7912d094220",
+        "text": "here is a list of reserved Zeroconf names - [http://www.dns-sd.org/ServiceTypes.html dns-sd.org]"
+      },
+      "after": "d6fe54ce2cfa6887",
+      "date": 1436718353416
+    },
+    {
+      "type": "edit",
+      "id": "d6fe54ce2cfa6887",
+      "item": {
+        "type": "paragraph",
+        "id": "d6fe54ce2cfa6887",
+        "text": "<H3>Registered Service Types"
+      },
+      "date": 1436718389496
+    },
+    {
+      "type": "edit",
+      "id": "d6fe54ce2cfa6887",
+      "item": {
+        "type": "html",
+        "id": "d6fe54ce2cfa6887",
+        "text": "<H3>Registered Service Types"
+      },
+      "date": 1436718390447
+    },
+    {
+      "type": "edit",
+      "id": "3ad0d7912d094220",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad0d7912d094220",
+        "text": "Here is a list of reserved Zeroconf Service Types - [http://www.dns-sd.org/ServiceTypes.html dns-sd.org]"
+      },
+      "date": 1436718397671
+    },
+    {
+      "type": "fork",
+      "site": "c0de.academy",
+      "date": 1436723286097
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "title": "Relaxing the same-origin policy",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "af222162-c39b-4100-8b7c-00c82b1f34ce",
+      "text": "In some circumstances the same-origin policy is too restrictive, posing problems for large websites that use multiple [[subdomain]]s. Here are some techniques for relaxing it: - [https://en.wikipedia.org/wiki/Same_Origin_policy#Relaxing_the_same-origin_policy wikipedia]"
+    },
+    {
+      "type": "markdown",
+      "id": "ccb13578-7bc2-43b9-b7e0-e97abe067ac3",
+      "text": "# document.domain property"
+    },
+    {
+      "type": "paragraph",
+      "id": "244d9a2b-7074-48db-b7c2-d58139c7df6b",
+      "text": "If two windows (or frames) contain scripts that set domain to the same value, the same-origin policy is relaxed for these two windows, and each window can interact with the other. For example, cooperating scripts in documents loaded from"
+    },
+    {
+      "type": "paragraph",
+      "id": "75b131af-f608-4b94-a62c-5d830053bda3",
+      "text": "orders.example.com and catalog.example.com might set their document.domain properties to “example.com”, thereby making the documents appear to have the same origin and enabling each document to read properties of the other. This might not always work as the port stored in the internal representation can become marked as null. In other words, example.com port 80 will become example.com port null because we update document.domain. Port null might not be treated as 80 (depending on your browser) and hence might fail or succeed depending on your browser.[http://jszen.blogspot.nl/2005/03/cross-domain-security-woes.html Cross-domain security woes]"
+    },
+    {
+      "type": "markdown",
+      "id": "ac437896-ffb6-42dd-8f50-d116a0954649",
+      "text": "# Cross-Origin Resource Sharing"
+    },
+    {
+      "type": "paragraph",
+      "id": "ae58c510-4d33-49e1-af91-fef0c214a810",
+      "text": "The second technique for relaxing the same-origin policy is standardized under the name Cross-Origin Resource Sharing ([[Cross-origin resource sharing]]). This standard extends HTTP with a new Origin request header and a new Access-Control-Allow-Origin response header. It allows servers to use a header to explicitly list origins that may request a file or to use a wildcard and allow a file to be requested by any site. Browsers such as Firefox 3.5,  Safari 4 and Internet Explorer 10 use this header to allow the cross-origin HTTP requests with XMLHttpRequest that would otherwise have been forbidden by the same-origin policy."
+    },
+    {
+      "type": "markdown",
+      "id": "6134f7a5-e872-45d3-ab7e-441b8b855963",
+      "text": "# Cross-document messaging"
+    },
+    {
+      "type": "paragraph",
+      "id": "f2d4f71c-acc8-43db-be2c-2ee3e4a52ff7",
+      "text": "Another new technique, [[cross-document messaging]] allows a script from one page to pass textual messages to a script on another page regardless of the script origins. Calling the postMessage() method on a Window object asynchronously fires an \"onmessage\" event in that window, triggering any user-defined event handlers. A script in one page still cannot directly access methods or variables in the other page, but they can communicate safely through this message-passing technique."
+    },
+    {
+      "type": "markdown",
+      "id": "8b12de0d-ba3d-411e-b7ee-f18681f5185f",
+      "text": "# JSONP"
+    },
+    {
+      "type": "paragraph",
+      "id": "d98a1873-1040-4f6b-a0b6-36c770b4f09b",
+      "text": "[[JSONP]] allows a page to receive JSON data from a different domain by adding a <tt><script></tt> element to the page which loads a JSON response with a callback from different domain."
+    },
+    {
+      "type": "markdown",
+      "id": "e6c92b7d-2e19-457b-a6ff-9254b8a78cea",
+      "text": "# WebSockets"
+    },
+    {
+      "type": "paragraph",
+      "id": "03234237-18f1-43bb-8744-0f3ad64890cc",
+      "text": "Modern browsers will permit a script to connect to a [[WebSocket]] address without applying the same-origin policy.  However, these browsers recognize when a WebSocket URI is used, and insert an '''Origin:''' header into the request that indicates the origin of the script requesting the connection.  To ensure cross-site security, the WebSocket server must compare the header data against a whitelist of origins permitted to receive a reply."
+    },
+    {
+      "type": "markdown",
+      "id": "3b19fa60-c637-437f-a844-4907707e3851",
+      "text": "# See also\n* [[document.domain property]]\n* [[Cross-Origin Resource Sharing]]\n* [[Cross-document messaging]]\n* [[JSONP]]\n* [[WebSockets]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "story": "",
+        "title": "Relaxing the same-origin policy"
+      },
+      "date": 1459816039657,
+      "source": {
+        "pageTitle": "Same-origin policy",
+        "pageSlug": "Same-origin_policy",
+        "url": "https://en.wikipedia.org/wiki/Same_Origin_policy#Relaxing_the_same-origin_policy",
+        "date": 1459816039657,
+        "link_dictionary": {
+          "wiki_links": {
+            "JSONP": {
+              "section_number": 8,
+              "section_level": 3,
+              "dot_number": 4
+            },
+            "WebSockets": {
+              "section_number": 9,
+              "section_level": 3,
+              "dot_number": 5
+            },
+            "Cross-document messaging": {
+              "section_number": 7,
+              "section_level": 3,
+              "dot_number": 3
+            },
+            "Cross-Origin Resource Sharing": {
+              "section_number": 6,
+              "section_level": 3,
+              "dot_number": 2
+            },
+            "document.domain property": {
+              "section_number": 5,
+              "section_level": 3,
+              "dot_number": 1
+            }
+          },
+          "default": {
+            "transport": "https://livecode.world/mediawiki/importSection"
+          }
+        },
+        "transport": "https://livecode.world/mediawiki/transportAgain",
+        "rev": 711728145,
+        "repo": "https://github.com/LiveCodeWorld/lib_MediaWiki"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1459816047899
+    }
+  ]
+}

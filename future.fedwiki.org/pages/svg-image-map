@@ -1,0 +1,878 @@
+{
+  "title": "SVG Image Map",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e81c08585d3f585b",
+      "text": "We can now embed interactive [[svg]]s in wiki."
+    },
+    {
+      "type": "markdown",
+      "id": "e545c7ae95f8bbe9",
+      "text": "# Jquery Graphviz"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f66075aa4da4e13",
+      "text": "This is a nice simple javascript package that let's us interact with svg's - [https://github.com/goinnn/jquery.graphviz github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5bc768c5d774b2cf",
+      "text": "Take a look at [[pretty-wiki]] to see how we might want to use such a map in the background - [http://livecode.world/pretty_wiki.html pretty_wiki.html]"
+    },
+    {
+      "type": "markdown",
+      "id": "522ca3155e9c91cd",
+      "text": "# Things we can do"
+    },
+    {
+      "type": "markdown",
+      "id": "de0726ac7f0c0108",
+      "text": "[[SVG]] has a number of advantages - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial unige.ch]\n* it scales for responsive design\n* fits in with general graphic tool chains\n* takes up minimal file size for complex maps"
+    },
+    {
+      "type": "paragraph",
+      "id": "351311d6f2a8d6d1",
+      "text": "On the other hand testing has shown it is not as fast for large graphs as canvas based solutions such as [[cytoscape]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "f72c37fe2f9f3693",
+      "text": "[[Canvas]] can provide improved rendering performance and scalability: often 2-10x faster than [[SVG]] for full-component redraws (though such comparisons require nuance). "
+    },
+    {
+      "type": "html",
+      "id": "395c337487802271",
+      "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/map.svg\" width=420>"
+    },
+    {
+      "type": "html",
+      "id": "fbd381ba496ecaab",
+      "text": "While you can use a reference to an svg file with the <img> element:"
+    },
+    {
+      "type": "html",
+      "id": "f2264a317451e91a",
+      "text": "<img src=\"http://tecfa.unige.ch/guides/svg/ex/html5/green-circle.svg\" alt=\"Nice green circle\" height=\"64\">\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "8794af427477f152",
+      "text": "Emdedding svg markup directly in html, or using the object element does not work unfortunately. "
+    },
+    {
+      "type": "paragraph",
+      "id": "d91967739b81cb61",
+      "text": "We can also drag and drop svg files onto the image tag. However [[Svg Links]] do not work."
+    },
+    {
+      "type": "image",
+      "id": "a5a93510c6071cad",
+      "url": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNWNtIiBoZWlnaHQ9IjNjbSIgdmlld0JveD0iMCAwIDUgMyIgdmVyc2lvbj0iMS4xIgogICAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogIDxkZXNjPkV4YW1wbGUgbGluazAxIC0gYSBsaW5rIG9uIGFuIGVsbGlwc2UKICA8L2Rlc2M+CiAgPHJlY3QgeD0iLjAxIiB5PSIuMDEiIHdpZHRoPSI0Ljk4IiBoZWlnaHQ9IjIuOTgiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibHVlIiAgc3Ryb2tlLXdpZHRoPSIuMDMiLz4KICA8YSB4bGluazpocmVmPSJodHRwOi8vd3d3LnczLm9yZyI+CiAgICA8ZWxsaXBzZSBjeD0iMi41IiBjeT0iMS41IiByeD0iMiIgcnk9IjEiCiAgICAgICAgICAgICBmaWxsPSJyZWQiIC8+CiAgPC9hPgo8L3N2Zz4K",
+      "caption": "Uploaded image",
+      "text": "This embedded svg file contains an xlink:href element. Unfortunately the link does not work - [https://www.w3.org/TR/SVG/linking.html w3.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "d0bf94b6c79e6be2",
+      "text": "This interactive examples for instance works in plain html but not Fedwiki - [https://dl.dropboxusercontent.com/u/373931789/link01.svg file]"
+    },
+    {
+      "type": "paragraph",
+      "id": "f07b76121d6f0c1a",
+      "text": "That prevent complex interactive maps (like below) being made using single robust standardised svg files:"
+    },
+    {
+      "type": "reference",
+      "id": "7d7e5897207e7e48",
+      "site": "future.fedwiki.org",
+      "slug": "html-sanitization",
+      "title": "HTML Sanitization",
+      "text": "The [[HTML Sanitization]] that the [[About HTML Plugin]] performs removes the markup required to provide [[Internal Fedwiki Links]]."
+    },
+    {
+      "type": "html",
+      "id": "5b1f30c704b69c7d",
+      "text": "<img src=\"https://cdn.rawgit.com/mountainstorm/jquery.graphviz.svg/master/demo.svg\" width=420>"
+    },
+    {
+      "type": "reference",
+      "id": "675359ffbaa56a19",
+      "site": "future.fedwiki.org",
+      "slug": "graph-plugin",
+      "title": "Graph Plugin",
+      "text": "here we describe the results of creating a new plugin to render interactive graphs in Fedwiki. First et's [[Make a New Plugin]]. "
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "SVG Image Map",
+        "story": []
+      },
+      "date": 1429387371758
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e81c08585d3f585b"
+      },
+      "id": "e81c08585d3f585b",
+      "type": "add",
+      "date": 1429387373205
+    },
+    {
+      "type": "edit",
+      "id": "e81c08585d3f585b",
+      "item": {
+        "type": "paragraph",
+        "id": "e81c08585d3f585b",
+        "text": "The best short term solution for interactive Fedwiki maps is to use [[SVG]]."
+      },
+      "date": 1429387420732
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "971b4030da19ce35"
+      },
+      "id": "971b4030da19ce35",
+      "type": "add",
+      "after": "e81c08585d3f585b",
+      "date": 1429394321268
+    },
+    {
+      "type": "edit",
+      "id": "971b4030da19ce35",
+      "item": {
+        "type": "reference",
+        "id": "971b4030da19ce35",
+        "site": "livecode.viral.academy",
+        "slug": "svg",
+        "title": "SVG",
+        "text": "Scalable Vector Graphics (SVG) is an XML-based vector image format for two-dimensional graphics with support for interactivity and animation - [https://en.wikipedia.org/wiki/Scalable_Vector_Graphics#Functionality wikipedia]"
+      },
+      "date": 1429394325784
+    },
+    {
+      "type": "fork",
+      "site": "david.bovill.me"
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "fbd381ba496ecaab",
+        "text": "Emdedding svg directly in html, or using the object element does not waork unfortunately. However you can use the img element."
+      },
+      "after": "e81c08585d3f585b",
+      "id": "fbd381ba496ecaab",
+      "date": 1430033090873
+    },
+    {
+      "type": "move",
+      "order": [
+        "e81c08585d3f585b",
+        "971b4030da19ce35",
+        "fbd381ba496ecaab"
+      ],
+      "id": "971b4030da19ce35",
+      "date": 1430033093123
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "395c337487802271",
+        "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/map.svg\" width=420>"
+      },
+      "after": "971b4030da19ce35",
+      "id": "395c337487802271",
+      "date": 1430033102170
+    },
+    {
+      "type": "move",
+      "order": [
+        "e81c08585d3f585b",
+        "395c337487802271",
+        "971b4030da19ce35",
+        "fbd381ba496ecaab"
+      ],
+      "id": "971b4030da19ce35",
+      "date": 1430033105090
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "f2264a317451e91a",
+        "text": "<img src=\"http://tecfa.unige.ch/guides/svg/ex/html5/green-circle.svg\" alt=\"Nice green circle\" height=\"64\">\n"
+      },
+      "after": "971b4030da19ce35",
+      "id": "f2264a317451e91a",
+      "date": 1430033136530
+    },
+    {
+      "type": "edit",
+      "id": "fbd381ba496ecaab",
+      "item": {
+        "type": "html",
+        "id": "fbd381ba496ecaab",
+        "text": "Emdedding svg directly in html, or using the object element does not work unfortunately. While you can use the img element."
+      },
+      "date": 1430033138364
+    },
+    {
+      "type": "move",
+      "order": [
+        "e81c08585d3f585b",
+        "395c337487802271",
+        "971b4030da19ce35",
+        "fbd381ba496ecaab",
+        "f2264a317451e91a"
+      ],
+      "id": "fbd381ba496ecaab",
+      "date": 1430033139952
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "8794af427477f152",
+        "text": "This examples works in plain html but not Fedwiki:"
+      },
+      "after": "f2264a317451e91a",
+      "id": "8794af427477f152",
+      "date": 1430033145208
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "f5804d52b50a60f0",
+        "text": "<img src=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\" alt=\"Clickable red square\" height=\"64\">"
+      },
+      "after": "8794af427477f152",
+      "id": "f5804d52b50a60f0",
+      "date": 1430033153737
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f07b76121d6f0c1a",
+        "text": "That prevent complex interactive maps (like below) being made using single robust standardised svg files:"
+      },
+      "after": "f5804d52b50a60f0",
+      "id": "f07b76121d6f0c1a",
+      "date": 1430033159661
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "ec22e8a19224bb58",
+        "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/reduced.svg\" width = 420>"
+      },
+      "after": "f5804d52b50a60f0",
+      "id": "ec22e8a19224bb58",
+      "date": 1430033163056
+    },
+    {
+      "type": "edit",
+      "id": "e81c08585d3f585b",
+      "item": {
+        "type": "paragraph",
+        "id": "e81c08585d3f585b",
+        "text": "The best short term solution for interactive Fedwiki maps is to use standard [[HTML Image maps]] However [[SVG]] is the way to go as it scales for responsive desing and fits in with general graphic tool chains."
+      },
+      "date": 1430034050588
+    },
+    {
+      "type": "edit",
+      "id": "e81c08585d3f585b",
+      "item": {
+        "type": "paragraph",
+        "id": "e81c08585d3f585b",
+        "text": "There is currenlty no short term solution for interactive Fedwiki maps."
+      },
+      "date": 1430035586345
+    },
+    {
+      "type": "add",
+      "id": "c79a2805e55e9c81",
+      "item": {
+        "type": "paragraph",
+        "id": "c79a2805e55e9c81",
+        "text": "Both standard [[HTML Image maps]] and svg fails to work."
+      },
+      "after": "e81c08585d3f585b",
+      "date": 1430035633725
+    },
+    {
+      "type": "add",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "paragraph",
+        "id": "de0726ac7f0c0108",
+        "text": "However [[SVG]] is the way to go as it scales for responsive design and fits in with general graphic tool chains."
+      },
+      "after": "c79a2805e55e9c81",
+      "date": 1430035635628
+    },
+    {
+      "type": "remove",
+      "id": "c79a2805e55e9c81",
+      "date": 1430035637264
+    },
+    {
+      "type": "edit",
+      "id": "e81c08585d3f585b",
+      "item": {
+        "type": "paragraph",
+        "id": "e81c08585d3f585b",
+        "text": "There is currenlty no short term solution for interactive Fedwiki maps. Both standard [[HTML Image maps]] and [[SVG]] fails to work."
+      },
+      "date": 1430035650861
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "paragraph",
+        "id": "de0726ac7f0c0108",
+        "text": "However [[SVG]] is the way to go long term as it scales for responsive design, fits in with general graphic tool chains, and takes up minimal file size for complex maps."
+      },
+      "date": 1430035719055
+    },
+    {
+      "type": "edit",
+      "id": "fbd381ba496ecaab",
+      "item": {
+        "type": "html",
+        "id": "fbd381ba496ecaab",
+        "text": "Emdedding svg markup directly in html, or using the object element does not work unfortunately. While you can use the img element."
+      },
+      "date": 1430035751049
+    },
+    {
+      "type": "edit",
+      "id": "fbd381ba496ecaab",
+      "item": {
+        "type": "html",
+        "id": "fbd381ba496ecaab",
+        "text": "While you can use a reference to an svg file with the <img> element:"
+      },
+      "date": 1430035805804
+    },
+    {
+      "type": "edit",
+      "id": "8794af427477f152",
+      "item": {
+        "type": "paragraph",
+        "id": "8794af427477f152",
+        "text": "Emdedding svg markup directly in html, or using the object element does not work unfortunately. This examples works in plain html but not Fedwiki:"
+      },
+      "date": 1430035817608
+    },
+    {
+      "type": "edit",
+      "id": "8794af427477f152",
+      "item": {
+        "type": "paragraph",
+        "id": "8794af427477f152",
+        "text": "Emdedding svg markup directly in html, or using the object element does not work unfortunately. "
+      },
+      "date": 1430035828223
+    },
+    {
+      "type": "add",
+      "id": "d0bf94b6c79e6be2",
+      "item": {
+        "type": "paragraph",
+        "id": "d0bf94b6c79e6be2",
+        "text": "This interactive examples for instance works in plain html but not Fedwiki:"
+      },
+      "after": "8794af427477f152",
+      "date": 1430035857630
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "paragraph",
+        "id": "de0726ac7f0c0108",
+        "text": "However [[SVG]] is the way to go long term as it scales for responsive design, fits in with general graphic tool chains, and takes up minimal file size for complex maps - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial edutechwiki.unige.ch]"
+      },
+      "date": 1430036005437
+    },
+    {
+      "type": "edit",
+      "id": "d0bf94b6c79e6be2",
+      "item": {
+        "type": "paragraph",
+        "id": "d0bf94b6c79e6be2",
+        "text": "This interactive examples for instance works in plain html but not Fedwiki - [https://dl.dropboxusercontent.com/u/373931789/link01.svg file]"
+      },
+      "date": 1430036131472
+    },
+    {
+      "type": "move",
+      "order": [
+        "e81c08585d3f585b",
+        "de0726ac7f0c0108",
+        "395c337487802271",
+        "971b4030da19ce35",
+        "fbd381ba496ecaab",
+        "f2264a317451e91a",
+        "8794af427477f152",
+        "d0bf94b6c79e6be2",
+        "f5804d52b50a60f0",
+        "f07b76121d6f0c1a",
+        "ec22e8a19224bb58"
+      ],
+      "id": "f07b76121d6f0c1a",
+      "date": 1430036145535
+    },
+    {
+      "type": "fork",
+      "site": "graph.liquiddemocracy.org",
+      "date": 1461436162150
+    },
+    {
+      "type": "edit",
+      "id": "f5804d52b50a60f0",
+      "item": {
+        "type": "html",
+        "id": "f5804d52b50a60f0",
+        "text": "Here we use the img tag:<br>\n<img src=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\" alt=\"Clickable red square\" height=\"64\">\n<br>While Here we use the object tag:<br>\n<object type=\"image/svg+xml\" data=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\">\n  Your browser does not support SVG\n</object>"
+      },
+      "date": 1461484278952
+    },
+    {
+      "type": "edit",
+      "id": "f5804d52b50a60f0",
+      "item": {
+        "type": "html",
+        "id": "f5804d52b50a60f0",
+        "text": "Here we use the img tag:<br>\n<img src=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\" alt=\"Clickable red square\" height=\"64\">\n\n<br>While here we use the object tag:<br>\n\n<object type=\"image/svg+xml\" data=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\">\n  Your browser does not support SVG\n</object>"
+      },
+      "date": 1461484302684
+    },
+    {
+      "type": "edit",
+      "id": "f5804d52b50a60f0",
+      "item": {
+        "type": "html",
+        "id": "f5804d52b50a60f0",
+        "text": "Here we use the img tag:\n<p>\n<img src=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\" alt=\"Clickable red square\" height=\"64\">\n\n<p>\nWhile here we use the object tag:<br>\n<p>\n<object type=\"image/svg+xml\" data=\"https://dl.dropboxusercontent.com/u/373931789/link01.svg\">\n  Your browser does not support SVG\n</object>\n<p>\nWhich unfortunately does not work because it is sanitized."
+      },
+      "date": 1461484361109
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7d7e5897207e7e48"
+      },
+      "id": "7d7e5897207e7e48",
+      "type": "add",
+      "after": "f07b76121d6f0c1a",
+      "date": 1461490345621
+    },
+    {
+      "type": "edit",
+      "id": "7d7e5897207e7e48",
+      "item": {
+        "type": "reference",
+        "id": "7d7e5897207e7e48",
+        "site": "future.fedwiki.org",
+        "slug": "html-sanitization",
+        "title": "HTML Sanitization",
+        "text": "The [[HTML Sanitization]] that the [[About HTML Plugin]] performs removes the markup required to provide [[Internal Fedwiki Links]]."
+      },
+      "date": 1461490348100
+    },
+    {
+      "type": "add",
+      "id": "e545c7ae95f8bbe9",
+      "item": {
+        "type": "paragraph",
+        "id": "e545c7ae95f8bbe9",
+        "text": "# Jquery Graphviz"
+      },
+      "after": "e81c08585d3f585b",
+      "date": 1464455298338
+    },
+    {
+      "type": "add",
+      "id": "1f66075aa4da4e13",
+      "item": {
+        "type": "paragraph",
+        "id": "1f66075aa4da4e13",
+        "text": "This is a nice simple javascript package that let's us interact with svg's - [https://github.com/goinnn/jquery.graphviz github]"
+      },
+      "after": "e545c7ae95f8bbe9",
+      "date": 1464455346172
+    },
+    {
+      "type": "add",
+      "id": "522ca3155e9c91cd",
+      "item": {
+        "type": "paragraph",
+        "id": "522ca3155e9c91cd",
+        "text": "# Things we can do"
+      },
+      "after": "1f66075aa4da4e13",
+      "date": 1464455356924
+    },
+    {
+      "type": "edit",
+      "id": "e545c7ae95f8bbe9",
+      "item": {
+        "type": "markdown",
+        "id": "e545c7ae95f8bbe9",
+        "text": "# Jquery Graphviz"
+      },
+      "date": 1464455358015
+    },
+    {
+      "type": "edit",
+      "id": "522ca3155e9c91cd",
+      "item": {
+        "type": "markdown",
+        "id": "522ca3155e9c91cd",
+        "text": "# Things we can do"
+      },
+      "date": 1464455358970
+    },
+    {
+      "type": "add",
+      "id": "351311d6f2a8d6d1",
+      "item": {
+        "type": "paragraph",
+        "id": "351311d6f2a8d6d1",
+        "text": "On the other hand testing has shown it is not as fast for large graphs as canvas based solutions such as [[cytoscape]]."
+      },
+      "after": "de0726ac7f0c0108",
+      "date": 1464455397504
+    },
+    {
+      "type": "edit",
+      "id": "e81c08585d3f585b",
+      "item": {
+        "type": "paragraph",
+        "id": "e81c08585d3f585b",
+        "text": "We can now embed interactive [[svg]]s in wiki."
+      },
+      "date": 1464553725819
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "paragraph",
+        "id": "de0726ac7f0c0108",
+        "text": "[[SVG]] has a number of advantages:* it scales for responsive design* fits in with general graphic tool chains* takes up minimal file size for complex maps - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial edutechwiki.unige.ch]"
+      },
+      "date": 1464553783437
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "markdown",
+        "id": "de0726ac7f0c0108",
+        "text": "[[SVG]] has a number of advantages:* it scales for responsive design* fits in with general graphic tool chains* takes up minimal file size for complex maps - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial edutechwiki.unige.ch]"
+      },
+      "date": 1464553784880
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "markdown",
+        "id": "de0726ac7f0c0108",
+        "text": "[[SVG]] has a number of advantages:\n* it scales for responsive design\n* fits in with general graphic tool chains\n* takes up minimal file size for complex maps - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial edutechwiki.unige.ch]"
+      },
+      "date": 1464553794782
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "markdown",
+        "id": "de0726ac7f0c0108",
+        "text": "[[SVG]] has a number of advantages - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial edutechwiki.unige.ch]\n* it scales for responsive design\n* fits in with general graphic tool chains\n* takes up minimal file size for complex maps"
+      },
+      "date": 1464553813982
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "markdown",
+        "id": "de0726ac7f0c0108",
+        "text": "[[SVG]] has a number of advantages - [http://unige.ch/en/Using_SVG_with_HTML5_tutorial edutechwiki.unige.ch]\n* it scales for responsive design\n* fits in with general graphic tool chains\n* takes up minimal file size for complex maps"
+      },
+      "date": 1464553826694
+    },
+    {
+      "type": "edit",
+      "id": "de0726ac7f0c0108",
+      "item": {
+        "type": "markdown",
+        "id": "de0726ac7f0c0108",
+        "text": "[[SVG]] has a number of advantages - [http://edutechwiki.unige.ch/en/Using_SVG_with_HTML5_tutorial unige.ch]\n* it scales for responsive design\n* fits in with general graphic tool chains\n* takes up minimal file size for complex maps"
+      },
+      "date": 1464553857586
+    },
+    {
+      "type": "add",
+      "id": "5bc768c5d774b2cf",
+      "item": {
+        "type": "paragraph",
+        "id": "5bc768c5d774b2cf",
+        "text": "Take a look at [[pretty-wiki]] to see how we might want to use such a map in the background - [http://livecode.world/pretty_wiki.html pretty_wiki.html]"
+      },
+      "after": "1f66075aa4da4e13",
+      "date": 1464553966804
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ab669221a9a8909a",
+        "text": "However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. "
+      },
+      "after": "351311d6f2a8d6d1",
+      "id": "ab669221a9a8909a",
+      "date": 1464554305101
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f72c37fe2f9f3693",
+        "text": "Canvas can provide improved rendering performance and scalability: often 2-10x faster than [[SVG]] for full-component redraws (though such comparisons require nuance). "
+      },
+      "after": "ab669221a9a8909a",
+      "id": "f72c37fe2f9f3693",
+      "date": 1464554321190
+    },
+    {
+      "type": "remove",
+      "id": "ab669221a9a8909a",
+      "date": 1464554325103
+    },
+    {
+      "type": "edit",
+      "id": "f72c37fe2f9f3693",
+      "item": {
+        "type": "paragraph",
+        "id": "f72c37fe2f9f3693",
+        "text": "[[Canvas]] can provide improved rendering performance and scalability: often 2-10x faster than [[SVG]] for full-component redraws (though such comparisons require nuance). "
+      },
+      "date": 1464554349009
+    },
+    {
+      "type": "add",
+      "item": {
+        "caption": "Uploaded image",
+        "id": "284c47acd7f36d23",
+        "text": "This is exactly the same [[SVG]] file but scaled to 400x400",
+        "type": "image",
+        "url": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjAiIHk9IjAiIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwLCAwLCA0MDAsIDQwMCI+CiAgPGcgaWQ9IkxheWVyXzEiPgogICAgPGc+CiAgICAgIDxwYXRoIGQ9Ik0yNTguNjA3LDEwNi4wOSBDMjUwLjY0NCwxMDYuMDkgMjQ0LjE1OCwxMTIuNjY2IDI0NC4xNTgsMTIwLjgzMiBDMjQ0LjE1OCwxMjguOTgzIDI1MC42NDQsMTM1LjU1NiAyNTguNjA3LDEzNS41NTYgQzI2Ni41OTQsMTM1LjU1NiAyNzMuMDU1LDEyOC45ODMgMjczLjA1NSwxMjAuODMyIEMyNzMuMDU1LDExMi42NjYgMjY2LjU5NCwxMDYuMDkgMjU4LjYwNywxMDYuMDkgeiIgZmlsbD0iIzAwMDAwMCIvPgogICAgICA8cGF0aCBkPSJNMjU1LjIxLDIyNi44NDkgQzI1NS4yMSwyMzUgMjYxLjcyMSwyNDEuNTg4IDI2OS43MjMsMjQxLjU4OCBDMjc3LjY4NiwyNDEuNTg4IDI4NC4xNDcsMjM1IDI4NC4xNDcsMjI2Ljg0OSBDMjg0LjE0NywyMTguNzA1IDI3Ny42ODYsMjEyLjExOCAyNjkuNzIzLDIxMi4xMTggQzI2MS43MTgsMjEyLjExOCAyNTUuMjEsMjE4LjcwNSAyNTUuMjEsMjI2Ljg0OSB6IiBmaWxsPSIjMDAwMDAwIi8+CiAgICAgIDxwYXRoIGQ9Ik0xNDkuNDMyLDkwLjEwNCBDMTQxLjQxOSw5MC4xMDQgMTM0LjkzMiw5Ni43MDYgMTM0LjkzMiwxMDQuODY4IEMxMzQuOTMyLDExMy4wMDggMTQxLjQxOSwxMTkuNTk2IDE0OS40MzIsMTE5LjU5NiBDMTU3LjQ1OSwxMTkuNTk2IDE2My45MzQsMTEzLjAwNSAxNjMuOTM0LDEwNC44NjggQzE2My45MzQsOTYuNzA2IDE1Ny40NTksOTAuMTA0IDE0OS40MzIsOTAuMTA0IHoiIGZpbGw9IiMwMDAwMDAiLz4KICAgICAgPHBhdGggZD0iTTIxNC44MDUsMTYgQzE1Mi41MjEsMTYgOTUuMDgxLDYzLjU2IDgzLjE0MywxMTUuOTc1IEM4MC40NDEsMTI3LjYyNSA3Ny40ODIsMTU4LjA1NSA3Ny40ODIsMTU4LjA1NSBMNDguODAxLDIzMS41MTYgQzQ4LjI1MSwyMzIuODM3IDQ3Ljk3NiwyMzQuMzI3IDQ3Ljk3NiwyMzUuODkxIEM0Ny45NzYsMjQyLjA4NCA1Mi45NjUsMjQ3LjE0NCA1OS4wNzksMjQ3LjE0NCBMNzcuNDgyLDI0Ny4xNDQgTDc3LjQ4MiwyODYuMTcxIEM3Ny40ODIsMzE2LjYwNCAxMDEuNzE5LDM0MS4yNTMgMTMxLjU5NywzNDEuMjUzIEwxNTMuMTA3LDM0MS4yNTMgTDE1My4xMDcsMzg0IEwyOTkuNTY5LDM4NCBMMjk5LjU2OSwyNjUuNDgyIEMzMzEuNTEyLDIzOS45MjEgMzUyLjAyMywyMDAuMjEzIDM1Mi4wMjMsMTU1LjY2MyBDMzUyLjAyMyw3OC41MiAyOTAuNTcyLDE2IDIxNC44MDUsMTYgeiBNMTExLjE5NCwxODUuODk1IEMxMDIuNzk3LDE4NS44OTUgOTUuOTMxLDE3OC45MTQgOTUuOTMxLDE3MC4yNzcgQzk1LjkzMSwxNjEuNjkxIDEwMi43OTQsMTU0LjcyMSAxMTEuMTk0LDE1NC43MjEgQzExOS42NywxNTQuNzIxIDEyNi41NjgsMTYxLjY5MSAxMjYuNTY4LDE3MC4yNzcgQzEyNi41NjgsMTc4LjkxNyAxMTkuNjcsMTg1Ljg5NSAxMTEuMTk0LDE4NS44OTUgeiBNMzEzLjc2LDE2NC43OTcgTDI5OS40ODUsMTc5LjMyMiBMMjgyLjA3NCwxNjYuODE3IEMyNzguNzIsMTY4LjU5OSAyNzUuMTk3LDE3MC4wMTIgMjcxLjUyMSwxNzAuOTY1IEwyNjguMzA5LDE5MC4yMzMgTDI3NC45NTgsMTkwLjIzMyBMMjc2LjczNCwyMDAuNTM0IEMyNzcuNDMzLDIwMC43MjUgMjc4LjEzNCwyMDAuODI4IDI3OC44MjIsMjAxLjA4MiBDMjgwLjYwOSwyMDEuNzU1IDI4Mi4yNTgsMjAyLjYyIDI4My43OTYsMjAzLjYxNCBMMjkxLjgyMywxOTcuODc3IEwyOTguNDA3LDIwNC41NjcgTDI5Mi40OTYsMjEzLjEwMSBDMjkzLjc3MywyMTUuMzkgMjk0Ljc3MiwyMTcuODMgMjk1LjMzMiwyMjAuNDA5IEwzMDUuMDIsMjIyLjEwMiBMMzA1LjAyLDIzMS41NzggTDI5NC45MzQsMjMzLjM0NCBDMjk0LjczMiwyMzQuMDY2IDI5NC42MzQsMjM0Ljc5NCAyOTQuMzg1LDIzNS41MDUgQzI5My43MjMsMjM3LjMzNyAyOTIuODYyLDIzOS4wMyAyOTEuODYzLDI0MC42MiBMMjk3LjUzMiwyNDguNzQ1IEwyOTAuOTM3LDI1NS40NDcgTDI4Mi41OTUsMjQ5LjQxOSBDMjgwLjMzNCwyNTAuNzE4IDI3Ny45NDYsMjUxLjczMyAyNzUuMzk2LDI1Mi4zMDQgTDI3My42OTYsMjYyLjE3NCBMMjY0LjM4NCwyNjIuMTc0IEwyNjIuNzA1LDI1MS44NzMgQzI2MS45ODIsMjUxLjY2NyAyNjEuMjU4LDI1MS41NjggMjYwLjU0MiwyNTEuMjk5IEMyNTguNzU1LDI1MC42MjYgMjU3LjA5NSwyNDkuNzYxIDI1NS41NDMsMjQ4Ljc2IEwyNDcuNTA0LDI1NC41NTYgTDI0MC45NTMsMjQ3Ljg0NCBMMjQ2Ljg3OCwyMzkuMzI0IEMyNDUuNjAxLDIzNy4wMjEgMjQ0LjYwMywyMzQuNTk2IDI0NC4wNDIsMjMyLjAwMSBMMjM0LjMwNCwyMzAuMjgzIEwyMzQuMzA0LDIyMC44NDcgTDI0NC40OCwyMTkuMDgxIEMyNDQuNjc5LDIxOC4zNTYgMjQ0Ljc4LDIxNy42MjcgMjQ1LjA0MSwyMTYuOTA2IEMyNDUuNjkyLDIxNS4wOTkgMjQ2LjUzOCwyMTMuNDIxIDI0Ny41MTUsMjExLjg0MiBMMjQxLjg0MywyMDMuNjY1IEwyNDguNDE2LDE5Ni45NzUgTDI1Ni44MDUsMjAzLjAwMyBDMjU5LjA1MiwyMDEuNzE5IDI2MS40MzksMjAwLjcwMyAyNjMuOTc1LDIwMC4xMTggTDI2NS40MjYsMTkxLjU1OCBMMjQ3Ljg4OCwxOTEuNTU4IEwyNDQuMjIzLDE3MC4xODggQzI0My40MzUsMTY5LjkzNCAyNDIuNjQ2LDE2OS43MjggMjQxLjg2MSwxNjkuNDIzIEMyMzkuMDM2LDE2OC4zNjcgMjM2LjQwOSwxNjcuMDQ2IDIzMy44OTksMTY1LjU1OSBMMjE3LjA5NSwxNzcuNjA0IEwyMDIuODQ1LDE2My4wNjQgTDIxNS4xMDksMTQ1LjQxMSBDMjEzLjM0NywxNDEuOTkyIDIxMS45NTgsMTM4LjM5MyAyMTEuMDEsMTM0LjY0IEwxOTAuODA2LDEzMS4xMDMgTDE5MC44MDYsMTE0LjIyNyBMMTgwLjYzMywxMTYuMDExIEMxODAuNDcsMTE2LjUwOCAxODAuNDMxLDExNy4wMTYgMTgwLjI0NiwxMTcuNDk4IEMxNzkuNTgxLDExOS4zMzEgMTc4LjcyLDEyMS4wMDkgMTc3Ljc4MywxMjIuNjM1IEwxODUuNTgyLDEzMy44NzggTDE3Ni4xOTEsMTQzLjQwMiBMMTY0Ljc0MSwxMzUuMTg4IEMxNjIuNjE0LDEzNi4zMDcgMTYwLjQxOCwxMzcuMjIzIDE1OC4xMDMsMTM3Ljg0NSBMMTU1Ljc4OCwxNTEuMzI1IEwxNDIuNjAyLDE1MS4zMzYgTDE0MC4yLDEzNy4yNzEgQzEzOS43MzYsMTM3LjEwNSAxMzkuMjQ4LDEzNy4wNjggMTM4Ljc4NSwxMzYuODg4IEMxMzYuOTczLDEzNi4yIDEzNS4yOTgsMTM1LjMwOSAxMzMuNjg4LDEzNC4zNDUgTDEyMi42LDE0Mi4yOTQgTDExMy4yNDksMTMyLjc1NSBMMTIxLjM1OSwxMjEuMDY4IEMxMjAuMjg1LDExOC45MyAxMTkuNDQ5LDExNi42ODEgMTE4LjgzOCwxMTQuMzYzIEwxMDUuNDk2LDExMi4wMzcgTDEwNS40OTYsOTguNTQyIEwxMTkuMjQ2LDk2LjEzOSBDMTE5LjM5OCw5NS42NDMgMTE5LjUxMSw5NS4xNiAxMTkuNjg0LDk0LjY3OCBDMTIwLjM1LDkyLjgzNSAxMjEuMjI1LDkxLjE0NiAxMjIuMTYyLDg5LjUxNSBMMTE0LjM0OCw3OC4yNzMgTDEyMy42ODksNjguNzQ1IEwxMzUuMTg5LDc2Ljk3NCBDMTM3LjMxNiw3NS44NTIgMTM5LjUyNyw3NC45MjQgMTQxLjg1Myw3NC4yOTkgTDE0NC4xNjQsNjAuODA4IEwxNTcuMzU0LDYwLjgwOCBMMTU5Ljc2LDc0Ljg4IEMxNjAuMjM3LDc1LjAzNSAxNjAuNzI2LDc1LjA3MSAxNjEuMTg1LDc1LjI0OCBDMTYzLjAwMSw3NS45MzYgMTY0LjY2Miw3Ni44MyAxNjYuMjc1LDc3Ljc4IEwxNzcuMzI3LDY5Ljg1NyBMMTg2LjcxNCw3OS4zODQgTDE3OC41ODksOTEuMDU3IEMxNzkuNjkzLDkzLjIwNiAxODAuNTksOTUuNDQ0IDE4MS4xOSw5Ny43OTkgTDE5NC40NDIsMTAwLjExNCBMMTk0LjQ0MiwxMDkuOTIxIEwyMTEuNzk1LDEwNi44OTIgQzIxMi4wNDUsMTA2LjA5IDIxMi4yNDQsMTA1LjI5MiAyMTIuNTQ0LDEwNC40ODkgQzIxMy41ODIsMTAxLjYgMjE0Ljg5NSw5OC44OTIgMjE2LjM4Niw5Ni4zMjMgTDIwNC40NjIsNzkuMjk2IEwyMTguODAyLDY0Ljc0MiBMMjM2LjE5Miw3Ny4yNDYgQzIzOS41NTYsNzUuNDYxIDI0My4wOTQsNzQuMDUyIDI0Ni43ODQsNzMuMDg0IEwyNTAuMTk2LDUyLjUyIEwyNzAuNDA3LDUyLjUyIEwyNzQuMDcyLDczLjg3MiBDMjc0Ljg2LDc0LjExMSAyNzUuNjQ5LDc0LjMzMiAyNzYuNDM0LDc0LjYyMiBDMjc5LjI0NSw3NS42NzkgMjgxLjg4Niw3Ny4wMTQgMjg0LjM4Miw3OC41MDUgTDMwMS4xOTMsNjYuNDYgTDMxNS40MjEsODAuOTg1IEwzMDMuMTU3LDk4LjcwMSBDMzA0Ljg5NCwxMDIuMDk0IDMwNi4yNzksMTA1LjY4MiAzMDcuMjMxLDEwOS40MDkgTDMyNy40NzUsMTEyLjk1NyBMMzI3LjQ3NSwxMzMuNTI0IEwzMDYuNDcxLDEzNy4yMDEgQzMwNi4yMjEsMTM4LjAwMyAzMDYuMDE5LDEzOC44MDUgMzA1LjczMywxMzkuNTkzIEMzMDQuNjg0LDE0Mi40NjcgMzAzLjM3MSwxNDUuMTUgMzAxLjg5MSwxNDcuNzA3IEwzMTMuNzYsMTY0Ljc5NyB6IiBmaWxsPSIjMDAwMDAwIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+      },
+      "after": "e545c7ae95f8bbe9",
+      "id": "284c47acd7f36d23",
+      "date": 1496916411537
+    },
+    {
+      "type": "edit",
+      "id": "284c47acd7f36d23",
+      "item": {
+        "caption": "Uploaded image",
+        "id": "284c47acd7f36d23",
+        "text": "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%\" height=\"100%\" viewBox=\"-36 -96 3072 3072\">\n <title>Earth heat balance Sankey diagram</title>\n <desc>A Sankey diagram showing the Earth's energy budget by CMG Lee. Hover over a line to highlight it and show its contribution in a tooltip.</desc>\n <style type=\"text/css\">\n  #main:hover        { stroke-opacity:0.5;fill-opacity:0.5; }\n  path:hover,.nofade { stroke-opacity:1;  fill-opacity:1;   }\n </style>\n <g id=\"main\" font-family=\"Helvetica,Arial,sans-serif\" font-size=\"90\" text-anchor=\"middle\" fill=\"#000000\">\n  <circle cx=\"0\" cy=\"0\" r=\"99999\" fill=\"#ffffff\" class=\"nofade\"/>\n  <g fill=\"none\">\n   <path d=\"M  85,0 V 1800 a 1015,1015 0 0 0 1015,1015                                                               h 800 a 1015,1015 0 0 0 1015,-1015 V 0\" stroke-width=\"170\" stroke=\"#009900\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAW0lEQVR42rXO0QrAIAxD0d3k//95jD2EIbagLk+NnkKvc5FtITvR978E2BXALgCarOyB943cGJD+gIjTQGkjSONHoAaglBGksA7UABqQuQEsA1SDjLuAKVDAodzc0AT68gsgrgAAAABJRU5ErkJggg==),auto\"/>\n   <path d=\"M 200,0 V 1800 a  900,900  0 0 0  900,900 h 400 a 200,200 0 0 0 200,-200 v -800 a 200,200 0 0 1 200,-200       a  900,900  0 0 0  900,-900  V 0\" stroke-width=\"60\"  stroke=\"#009966\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAV0lEQVR42uWSMQrAMBDDKuf/f+4QcOggSkq2ajqwyB3B11EYk2hcorkbZDxAHkgHEVAhS5hgQvkqMA9QIb1AhMKbEFux8Q+/Erwwu5Xz0hYsL2heaHyUG+WzBF4yo1FvAAAAAElFTkSuQmCC),auto\"/>\n   <path d=\"M 275,0 V 1800 a  825,825  0 0 0  825,825 h 240 a 200,200 0 0 0 200,-200 v -800 a 200,200 0 0 1 200,-200 h 160 a  825,825  0 0 0  825,-825  V 0\" stroke-width=\"90\"  stroke=\"#009999\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAUUlEQVR42t2TMQ4AIAgDLfz/zw4OTSRCqkze2htKgNELfIE8phJzgjSnEQUbyAXQ3DBVcPwocPxCILWgrZM9wQ4HBOFx3XZzctJZQ3ucOGEnEyz6BGX+V2aMAAAAAElFTkSuQmCC),auto\"/>\n   <path d=\"M 415,0 V 1800 a  685,685  0 0 0  685,685       a 200,200 0 0 0 200,-200 v -800 a 200,200 0 0 1 200,-200 h 400 a  685,685  0 0 0  685,-685  V 0\" stroke-width=\"190\" stroke=\"#0099cc\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAZ0lEQVR42t3TQQ6AIAxEUae9/51dNOaDEyASVs5qAi+mxnodS2RmVFVW1N8X4BrCYVAR7VnQEfVwwNM0B0K+QDhgCAeM+StAmwCyA6gDwO5oMAPZBv65PwJfOQcEsFp7wPLHsTc8khtLNgbUqyCePwAAAABJRU5ErkJggg==),auto\"/>\n   <path d=\"M 580,0 V  600 a  520,520  0 0 0  520,520                                                                h 800 a  520,520  0 0 0  520,-520  V 0\" stroke-width=\"140\" stroke=\"#0099ff\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAYUlEQVR42tXRUQrAMAgD0Jnc/877mCEycMJaGPOrxadFe+wLkMR1DCqi5g1wA65BXgyc7kFkQwMMIMgZoIBaBL0QD1MEl4A22gI1eA/0Zy3IBisAAyh7F/kh8FROfw82xAlDJwZrvBjgAAAAAABJRU5ErkJggg==),auto\"/>\n   <path d=\"M 680,0 V  400 a  420,420  0 0 0  420,420                                                                h 800 a  420,420  0 0 0  420,-420  V 0\" stroke-width=\"60\"  stroke=\"#aaaaaa\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAV0lEQVR42uWSMQrAMBDDKuf/f+4QcOggSkq2ajqwyB3B11EYk2hcorkbZDxAHkgHEVAhS5hgQvkqMA9QIb1AhMKbEFux8Q+/Erwwu5Xz0hYsL2heaHyUG+WzBF4yo1FvAAAAAElFTkSuQmCC),auto\"/>\n   <path d=\"M 720,0 V  300 a  380,380  0 0 0  380,380                                                                h 800 a  380,380  0 0 0  380,-380  V 0\" stroke-width=\"20\"  stroke=\"#bbbbbb\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAWUlEQVR42rWSwQoAIAhD2/z/fw4i9GCyg7lTuMfMbP0V7QiFDXNB+E5kP4iy/z0wBXgd74go9wEKAGmMN8nSpwxQ+5gOoBhBNmDzjfQN55fgKv6kAqwBNLUBIi0DboT/29MAAAAASUVORK5CYII=),auto\"/>\n   <path d=\"M 865,0 V  200 a  235,235  0 0 0  235,235                                                                h 800 a  235,235  0 0 0  235,-235  V 0\" stroke-width=\"270\" stroke=\"#cccccc\" cursor=\"url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAADFBMVEUAAABVVVWqqqr////Bf2LRAAAAgElEQVR42q3QUQ7AIAwCUMH733mbMWJg6o/9avDZzpVLxdoKX486FYtFSGAJAvRAwoH2c0Say7fh6LrswGMHtNjAb8wDaE0CFeZ/pyfpnMcBa5DnZ0ADMSC+sQVKsB+QAL6SDrTALtiCvLB/E9wHyIWeiKvoI8ETqCuAJaDAjXoArp4F7UAlm4gAAAAASUVORK5CYII),auto\"/>\n  </g>\n  <g class=\"nofade\">\n   <path d=\"M 1950,-10 v 120 l 550,-110 l 550,110 v -120 z\" fill=\"#ffffff\"/>\n   <path d=\"M 1000,850 c 0,50 500,0 500,50 c 0,-50 500,0 500,-50\" stroke-width=\"5\" stroke=\"#666666\" fill=\"none\"/>\n   <text x=\"500\"  y=\"-20\">ENERGY IN (100 units)</text>\n   <text x=\"2500\" y=\"-20\">ENERGY OUT</text>\n   <text x=\"1500\" y=\"250\">Reflected by cloud tops</text>\n   <text x=\"1500\" y=\"650\">Reflected by snow &amp; ice</text>\n   <text x=\"1500\" y=\"770\">Reflected by atmosphere</text>\n   <text x=\"1500\" y=\"980\">ALBEDO</text>\n   <text x=\"900\"  y=\"1260\">Absorbed by</text>\n   <text x=\"900\"  y=\"1340\">atmosphere</text>\n   <text x=\"400\"  y=\"2950\">Absorbed by ground</text>\n   <text x=\"2600\" y=\"2950\">Radiated to space</text>\n   <text transform=\"rotate(-90) scale(0.95,1)\" x=\"-2060\" y=\"1470\">Latent heat of condensation</text>\n   <text transform=\"rotate(-90)\"               x=\"-2060\" y=\"1660\">Convection &amp; turbulence</text>\n   <text transform=\"rotate(-90)\"               x=\"-2060\" y=\"1800\">Absorbed directly</text>\n   <text transform=\"rotate(-90)\"               x=\"-2060\" y=\"1880\">by atmosphere</text>\n   <g font-weight=\"bold\">\n    <text x=\"85\"  y=\"800\">17</text>\n    <text x=\"200\" y=\"700\">6</text>\n    <text x=\"275\" y=\"650\">9</text>\n    <text x=\"415\" y=\"550\">19</text>\n    <text x=\"580\" y=\"430\">14</text>\n    <text x=\"680\" y=\"350\">6</text>\n    <text x=\"720\" y=\"270\">2</text>\n    <text x=\"865\" y=\"200\">27</text>\n    <text x=\"2915\" y=\"800\">17</text>\n    <text x=\"2800\" y=\"700\">6</text>\n    <text x=\"2725\" y=\"650\">9</text>\n    <text x=\"2585\" y=\"550\">19</text>\n    <text x=\"2420\" y=\"430\">14</text>\n    <text x=\"2320\" y=\"350\">6</text>\n    <text x=\"2280\" y=\"270\">2</text>\n    <text x=\"2135\" y=\"200\">27</text>\n   </g>\n  </g>\n </g>\n</svg>\n",
+        "type": "image",
+        "url": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjAiIHk9IjAiIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwLCAwLCA0MDAsIDQwMCI+CiAgPGcgaWQ9IkxheWVyXzEiPgogICAgPGc+CiAgICAgIDxwYXRoIGQ9Ik0yNTguNjA3LDEwNi4wOSBDMjUwLjY0NCwxMDYuMDkgMjQ0LjE1OCwxMTIuNjY2IDI0NC4xNTgsMTIwLjgzMiBDMjQ0LjE1OCwxMjguOTgzIDI1MC42NDQsMTM1LjU1NiAyNTguNjA3LDEzNS41NTYgQzI2Ni41OTQsMTM1LjU1NiAyNzMuMDU1LDEyOC45ODMgMjczLjA1NSwxMjAuODMyIEMyNzMuMDU1LDExMi42NjYgMjY2LjU5NCwxMDYuMDkgMjU4LjYwNywxMDYuMDkgeiIgZmlsbD0iIzAwMDAwMCIvPgogICAgICA8cGF0aCBkPSJNMjU1LjIxLDIyNi44NDkgQzI1NS4yMSwyMzUgMjYxLjcyMSwyNDEuNTg4IDI2OS43MjMsMjQxLjU4OCBDMjc3LjY4NiwyNDEuNTg4IDI4NC4xNDcsMjM1IDI4NC4xNDcsMjI2Ljg0OSBDMjg0LjE0NywyMTguNzA1IDI3Ny42ODYsMjEyLjExOCAyNjkuNzIzLDIxMi4xMTggQzI2MS43MTgsMjEyLjExOCAyNTUuMjEsMjE4LjcwNSAyNTUuMjEsMjI2Ljg0OSB6IiBmaWxsPSIjMDAwMDAwIi8+CiAgICAgIDxwYXRoIGQ9Ik0xNDkuNDMyLDkwLjEwNCBDMTQxLjQxOSw5MC4xMDQgMTM0LjkzMiw5Ni43MDYgMTM0LjkzMiwxMDQuODY4IEMxMzQuOTMyLDExMy4wMDggMTQxLjQxOSwxMTkuNTk2IDE0OS40MzIsMTE5LjU5NiBDMTU3LjQ1OSwxMTkuNTk2IDE2My45MzQsMTEzLjAwNSAxNjMuOTM0LDEwNC44NjggQzE2My45MzQsOTYuNzA2IDE1Ny40NTksOTAuMTA0IDE0OS40MzIsOTAuMTA0IHoiIGZpbGw9IiMwMDAwMDAiLz4KICAgICAgPHBhdGggZD0iTTIxNC44MDUsMTYgQzE1Mi41MjEsMTYgOTUuMDgxLDYzLjU2IDgzLjE0MywxMTUuOTc1IEM4MC40NDEsMTI3LjYyNSA3Ny40ODIsMTU4LjA1NSA3Ny40ODIsMTU4LjA1NSBMNDguODAxLDIzMS41MTYgQzQ4LjI1MSwyMzIuODM3IDQ3Ljk3NiwyMzQuMzI3IDQ3Ljk3NiwyMzUuODkxIEM0Ny45NzYsMjQyLjA4NCA1Mi45NjUsMjQ3LjE0NCA1OS4wNzksMjQ3LjE0NCBMNzcuNDgyLDI0Ny4xNDQgTDc3LjQ4MiwyODYuMTcxIEM3Ny40ODIsMzE2LjYwNCAxMDEuNzE5LDM0MS4yNTMgMTMxLjU5NywzNDEuMjUzIEwxNTMuMTA3LDM0MS4yNTMgTDE1My4xMDcsMzg0IEwyOTkuNTY5LDM4NCBMMjk5LjU2OSwyNjUuNDgyIEMzMzEuNTEyLDIzOS45MjEgMzUyLjAyMywyMDAuMjEzIDM1Mi4wMjMsMTU1LjY2MyBDMzUyLjAyMyw3OC41MiAyOTAuNTcyLDE2IDIxNC44MDUsMTYgeiBNMTExLjE5NCwxODUuODk1IEMxMDIuNzk3LDE4NS44OTUgOTUuOTMxLDE3OC45MTQgOTUuOTMxLDE3MC4yNzcgQzk1LjkzMSwxNjEuNjkxIDEwMi43OTQsMTU0LjcyMSAxMTEuMTk0LDE1NC43MjEgQzExOS42NywxNTQuNzIxIDEyNi41NjgsMTYxLjY5MSAxMjYuNTY4LDE3MC4yNzcgQzEyNi41NjgsMTc4LjkxNyAxMTkuNjcsMTg1Ljg5NSAxMTEuMTk0LDE4NS44OTUgeiBNMzEzLjc2LDE2NC43OTcgTDI5OS40ODUsMTc5LjMyMiBMMjgyLjA3NCwxNjYuODE3IEMyNzguNzIsMTY4LjU5OSAyNzUuMTk3LDE3MC4wMTIgMjcxLjUyMSwxNzAuOTY1IEwyNjguMzA5LDE5MC4yMzMgTDI3NC45NTgsMTkwLjIzMyBMMjc2LjczNCwyMDAuNTM0IEMyNzcuNDMzLDIwMC43MjUgMjc4LjEzNCwyMDAuODI4IDI3OC44MjIsMjAxLjA4MiBDMjgwLjYwOSwyMDEuNzU1IDI4Mi4yNTgsMjAyLjYyIDI4My43OTYsMjAzLjYxNCBMMjkxLjgyMywxOTcuODc3IEwyOTguNDA3LDIwNC41NjcgTDI5Mi40OTYsMjEzLjEwMSBDMjkzLjc3MywyMTUuMzkgMjk0Ljc3MiwyMTcuODMgMjk1LjMzMiwyMjAuNDA5IEwzMDUuMDIsMjIyLjEwMiBMMzA1LjAyLDIzMS41NzggTDI5NC45MzQsMjMzLjM0NCBDMjk0LjczMiwyMzQuMDY2IDI5NC42MzQsMjM0Ljc5NCAyOTQuMzg1LDIzNS41MDUgQzI5My43MjMsMjM3LjMzNyAyOTIuODYyLDIzOS4wMyAyOTEuODYzLDI0MC42MiBMMjk3LjUzMiwyNDguNzQ1IEwyOTAuOTM3LDI1NS40NDcgTDI4Mi41OTUsMjQ5LjQxOSBDMjgwLjMzNCwyNTAuNzE4IDI3Ny45NDYsMjUxLjczMyAyNzUuMzk2LDI1Mi4zMDQgTDI3My42OTYsMjYyLjE3NCBMMjY0LjM4NCwyNjIuMTc0IEwyNjIuNzA1LDI1MS44NzMgQzI2MS45ODIsMjUxLjY2NyAyNjEuMjU4LDI1MS41NjggMjYwLjU0MiwyNTEuMjk5IEMyNTguNzU1LDI1MC42MjYgMjU3LjA5NSwyNDkuNzYxIDI1NS41NDMsMjQ4Ljc2IEwyNDcuNTA0LDI1NC41NTYgTDI0MC45NTMsMjQ3Ljg0NCBMMjQ2Ljg3OCwyMzkuMzI0IEMyNDUuNjAxLDIzNy4wMjEgMjQ0LjYwMywyMzQuNTk2IDI0NC4wNDIsMjMyLjAwMSBMMjM0LjMwNCwyMzAuMjgzIEwyMzQuMzA0LDIyMC44NDcgTDI0NC40OCwyMTkuMDgxIEMyNDQuNjc5LDIxOC4zNTYgMjQ0Ljc4LDIxNy42MjcgMjQ1LjA0MSwyMTYuOTA2IEMyNDUuNjkyLDIxNS4wOTkgMjQ2LjUzOCwyMTMuNDIxIDI0Ny41MTUsMjExLjg0MiBMMjQxLjg0MywyMDMuNjY1IEwyNDguNDE2LDE5Ni45NzUgTDI1Ni44MDUsMjAzLjAwMyBDMjU5LjA1MiwyMDEuNzE5IDI2MS40MzksMjAwLjcwMyAyNjMuOTc1LDIwMC4xMTggTDI2NS40MjYsMTkxLjU1OCBMMjQ3Ljg4OCwxOTEuNTU4IEwyNDQuMjIzLDE3MC4xODggQzI0My40MzUsMTY5LjkzNCAyNDIuNjQ2LDE2OS43MjggMjQxLjg2MSwxNjkuNDIzIEMyMzkuMDM2LDE2OC4zNjcgMjM2LjQwOSwxNjcuMDQ2IDIzMy44OTksMTY1LjU1OSBMMjE3LjA5NSwxNzcuNjA0IEwyMDIuODQ1LDE2My4wNjQgTDIxNS4xMDksMTQ1LjQxMSBDMjEzLjM0NywxNDEuOTkyIDIxMS45NTgsMTM4LjM5MyAyMTEuMDEsMTM0LjY0IEwxOTAuODA2LDEzMS4xMDMgTDE5MC44MDYsMTE0LjIyNyBMMTgwLjYzMywxMTYuMDExIEMxODAuNDcsMTE2LjUwOCAxODAuNDMxLDExNy4wMTYgMTgwLjI0NiwxMTcuNDk4IEMxNzkuNTgxLDExOS4zMzEgMTc4LjcyLDEyMS4wMDkgMTc3Ljc4MywxMjIuNjM1IEwxODUuNTgyLDEzMy44NzggTDE3Ni4xOTEsMTQzLjQwMiBMMTY0Ljc0MSwxMzUuMTg4IEMxNjIuNjE0LDEzNi4zMDcgMTYwLjQxOCwxMzcuMjIzIDE1OC4xMDMsMTM3Ljg0NSBMMTU1Ljc4OCwxNTEuMzI1IEwxNDIuNjAyLDE1MS4zMzYgTDE0MC4yLDEzNy4yNzEgQzEzOS43MzYsMTM3LjEwNSAxMzkuMjQ4LDEzNy4wNjggMTM4Ljc4NSwxMzYuODg4IEMxMzYuOTczLDEzNi4yIDEzNS4yOTgsMTM1LjMwOSAxMzMuNjg4LDEzNC4zNDUgTDEyMi42LDE0Mi4yOTQgTDExMy4yNDksMTMyLjc1NSBMMTIxLjM1OSwxMjEuMDY4IEMxMjAuMjg1LDExOC45MyAxMTkuNDQ5LDExNi42ODEgMTE4LjgzOCwxMTQuMzYzIEwxMDUuNDk2LDExMi4wMzcgTDEwNS40OTYsOTguNTQyIEwxMTkuMjQ2LDk2LjEzOSBDMTE5LjM5OCw5NS42NDMgMTE5LjUxMSw5NS4xNiAxMTkuNjg0LDk0LjY3OCBDMTIwLjM1LDkyLjgzNSAxMjEuMjI1LDkxLjE0NiAxMjIuMTYyLDg5LjUxNSBMMTE0LjM0OCw3OC4yNzMgTDEyMy42ODksNjguNzQ1IEwxMzUuMTg5LDc2Ljk3NCBDMTM3LjMxNiw3NS44NTIgMTM5LjUyNyw3NC45MjQgMTQxLjg1Myw3NC4yOTkgTDE0NC4xNjQsNjAuODA4IEwxNTcuMzU0LDYwLjgwOCBMMTU5Ljc2LDc0Ljg4IEMxNjAuMjM3LDc1LjAzNSAxNjAuNzI2LDc1LjA3MSAxNjEuMTg1LDc1LjI0OCBDMTYzLjAwMSw3NS45MzYgMTY0LjY2Miw3Ni44MyAxNjYuMjc1LDc3Ljc4IEwxNzcuMzI3LDY5Ljg1NyBMMTg2LjcxNCw3OS4zODQgTDE3OC41ODksOTEuMDU3IEMxNzkuNjkzLDkzLjIwNiAxODAuNTksOTUuNDQ0IDE4MS4xOSw5Ny43OTkgTDE5NC40NDIsMTAwLjExNCBMMTk0LjQ0MiwxMDkuOTIxIEwyMTEuNzk1LDEwNi44OTIgQzIxMi4wNDUsMTA2LjA5IDIxMi4yNDQsMTA1LjI5MiAyMTIuNTQ0LDEwNC40ODkgQzIxMy41ODIsMTAxLjYgMjE0Ljg5NSw5OC44OTIgMjE2LjM4Niw5Ni4zMjMgTDIwNC40NjIsNzkuMjk2IEwyMTguODAyLDY0Ljc0MiBMMjM2LjE5Miw3Ny4yNDYgQzIzOS41NTYsNzUuNDYxIDI0My4wOTQsNzQuMDUyIDI0Ni43ODQsNzMuMDg0IEwyNTAuMTk2LDUyLjUyIEwyNzAuNDA3LDUyLjUyIEwyNzQuMDcyLDczLjg3MiBDMjc0Ljg2LDc0LjExMSAyNzUuNjQ5LDc0LjMzMiAyNzYuNDM0LDc0LjYyMiBDMjc5LjI0NSw3NS42NzkgMjgxLjg4Niw3Ny4wMTQgMjg0LjM4Miw3OC41MDUgTDMwMS4xOTMsNjYuNDYgTDMxNS40MjEsODAuOTg1IEwzMDMuMTU3LDk4LjcwMSBDMzA0Ljg5NCwxMDIuMDk0IDMwNi4yNzksMTA1LjY4MiAzMDcuMjMxLDEwOS40MDkgTDMyNy40NzUsMTEyLjk1NyBMMzI3LjQ3NSwxMzMuNTI0IEwzMDYuNDcxLDEzNy4yMDEgQzMwNi4yMjEsMTM4LjAwMyAzMDYuMDE5LDEzOC44MDUgMzA1LjczMywxMzkuNTkzIEMzMDQuNjg0LDE0Mi40NjcgMzAzLjM3MSwxNDUuMTUgMzAxLjg5MSwxNDcuNzA3IEwzMTMuNzYsMTY0Ljc5NyB6IiBmaWxsPSIjMDAwMDAwIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+      },
+      "date": 1496916443222
+    },
+    {
+      "type": "remove",
+      "id": "284c47acd7f36d23",
+      "date": 1496916679438
+    },
+    {
+      "type": "remove",
+      "id": "971b4030da19ce35",
+      "date": 1496916832605
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a5a93510c6071cad"
+      },
+      "id": "a5a93510c6071cad",
+      "type": "add",
+      "after": "ec22e8a19224bb58",
+      "date": 1496917516827
+    },
+    {
+      "type": "edit",
+      "id": "a5a93510c6071cad",
+      "item": {
+        "type": "image",
+        "id": "a5a93510c6071cad",
+        "url": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNWNtIiBoZWlnaHQ9IjNjbSIgdmlld0JveD0iMCAwIDUgMyIgdmVyc2lvbj0iMS4xIgogICAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogIDxkZXNjPkV4YW1wbGUgbGluazAxIC0gYSBsaW5rIG9uIGFuIGVsbGlwc2UKICA8L2Rlc2M+CiAgPHJlY3QgeD0iLjAxIiB5PSIuMDEiIHdpZHRoPSI0Ljk4IiBoZWlnaHQ9IjIuOTgiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibHVlIiAgc3Ryb2tlLXdpZHRoPSIuMDMiLz4KICA8YSB4bGluazpocmVmPSJodHRwOi8vd3d3LnczLm9yZyI+CiAgICA8ZWxsaXBzZSBjeD0iMi41IiBjeT0iMS41IiByeD0iMiIgcnk9IjEiCiAgICAgICAgICAgICBmaWxsPSJyZWQiIC8+CiAgPC9hPgo8L3N2Zz4K",
+        "caption": "Uploaded image",
+        "text": "Uploaded image"
+      },
+      "date": 1496917525500
+    },
+    {
+      "type": "edit",
+      "id": "a5a93510c6071cad",
+      "item": {
+        "type": "image",
+        "id": "a5a93510c6071cad",
+        "url": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNWNtIiBoZWlnaHQ9IjNjbSIgdmlld0JveD0iMCAwIDUgMyIgdmVyc2lvbj0iMS4xIgogICAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogIDxkZXNjPkV4YW1wbGUgbGluazAxIC0gYSBsaW5rIG9uIGFuIGVsbGlwc2UKICA8L2Rlc2M+CiAgPHJlY3QgeD0iLjAxIiB5PSIuMDEiIHdpZHRoPSI0Ljk4IiBoZWlnaHQ9IjIuOTgiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibHVlIiAgc3Ryb2tlLXdpZHRoPSIuMDMiLz4KICA8YSB4bGluazpocmVmPSJodHRwOi8vd3d3LnczLm9yZyI+CiAgICA8ZWxsaXBzZSBjeD0iMi41IiBjeT0iMS41IiByeD0iMiIgcnk9IjEiCiAgICAgICAgICAgICBmaWxsPSJyZWQiIC8+CiAgPC9hPgo8L3N2Zz4K",
+        "caption": "Uploaded image",
+        "text": "This embedded svg file contains an xlink element."
+      },
+      "date": 1496917556822
+    },
+    {
+      "type": "edit",
+      "id": "a5a93510c6071cad",
+      "item": {
+        "type": "image",
+        "id": "a5a93510c6071cad",
+        "url": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNWNtIiBoZWlnaHQ9IjNjbSIgdmlld0JveD0iMCAwIDUgMyIgdmVyc2lvbj0iMS4xIgogICAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogIDxkZXNjPkV4YW1wbGUgbGluazAxIC0gYSBsaW5rIG9uIGFuIGVsbGlwc2UKICA8L2Rlc2M+CiAgPHJlY3QgeD0iLjAxIiB5PSIuMDEiIHdpZHRoPSI0Ljk4IiBoZWlnaHQ9IjIuOTgiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibHVlIiAgc3Ryb2tlLXdpZHRoPSIuMDMiLz4KICA8YSB4bGluazpocmVmPSJodHRwOi8vd3d3LnczLm9yZyI+CiAgICA8ZWxsaXBzZSBjeD0iMi41IiBjeT0iMS41IiByeD0iMiIgcnk9IjEiCiAgICAgICAgICAgICBmaWxsPSJyZWQiIC8+CiAgPC9hPgo8L3N2Zz4K",
+        "caption": "Uploaded image",
+        "text": "This embedded svg file contains an xlink:href element - [https://www.w3.org/TR/SVG/linking.html w3.org]"
+      },
+      "date": 1496917582128
+    },
+    {
+      "type": "edit",
+      "id": "a5a93510c6071cad",
+      "item": {
+        "type": "image",
+        "id": "a5a93510c6071cad",
+        "url": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNWNtIiBoZWlnaHQ9IjNjbSIgdmlld0JveD0iMCAwIDUgMyIgdmVyc2lvbj0iMS4xIgogICAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogIDxkZXNjPkV4YW1wbGUgbGluazAxIC0gYSBsaW5rIG9uIGFuIGVsbGlwc2UKICA8L2Rlc2M+CiAgPHJlY3QgeD0iLjAxIiB5PSIuMDEiIHdpZHRoPSI0Ljk4IiBoZWlnaHQ9IjIuOTgiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibHVlIiAgc3Ryb2tlLXdpZHRoPSIuMDMiLz4KICA8YSB4bGluazpocmVmPSJodHRwOi8vd3d3LnczLm9yZyI+CiAgICA8ZWxsaXBzZSBjeD0iMi41IiBjeT0iMS41IiByeD0iMiIgcnk9IjEiCiAgICAgICAgICAgICBmaWxsPSJyZWQiIC8+CiAgPC9hPgo8L3N2Zz4K",
+        "caption": "Uploaded image",
+        "text": "This embedded svg file contains an xlink:href element. Unfortunately the link does not work - [https://www.w3.org/TR/SVG/linking.html w3.org]"
+      },
+      "date": 1496917610208
+    },
+    {
+      "type": "remove",
+      "id": "ec22e8a19224bb58",
+      "date": 1496917696568
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "5b1f30c704b69c7d",
+        "text": "<img src=\"https://cdn.rawgit.com/mountainstorm/jquery.graphviz.svg/master/demo.svg\" width=420>"
+      },
+      "after": "7d7e5897207e7e48",
+      "id": "5b1f30c704b69c7d",
+      "date": 1496917707069
+    },
+    {
+      "type": "move",
+      "order": [
+        "e81c08585d3f585b",
+        "e545c7ae95f8bbe9",
+        "1f66075aa4da4e13",
+        "5bc768c5d774b2cf",
+        "522ca3155e9c91cd",
+        "de0726ac7f0c0108",
+        "351311d6f2a8d6d1",
+        "f72c37fe2f9f3693",
+        "395c337487802271",
+        "fbd381ba496ecaab",
+        "f2264a317451e91a",
+        "8794af427477f152",
+        "d0bf94b6c79e6be2",
+        "a5a93510c6071cad",
+        "f5804d52b50a60f0",
+        "f07b76121d6f0c1a",
+        "7d7e5897207e7e48",
+        "5b1f30c704b69c7d"
+      ],
+      "id": "a5a93510c6071cad",
+      "date": 1496917711458
+    },
+    {
+      "type": "remove",
+      "id": "f5804d52b50a60f0",
+      "date": 1496917719811
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "675359ffbaa56a19"
+      },
+      "id": "675359ffbaa56a19",
+      "type": "add",
+      "after": "5b1f30c704b69c7d",
+      "date": 1496917726253
+    },
+    {
+      "type": "edit",
+      "id": "675359ffbaa56a19",
+      "item": {
+        "type": "reference",
+        "id": "675359ffbaa56a19",
+        "site": "future.fedwiki.org",
+        "slug": "graph-plugin",
+        "title": "Graph Plugin",
+        "text": "here we describe the results of creating a new plugin to render interactive graphs in Fedwiki. First et's [[Make a New Plugin]]. "
+      },
+      "date": 1496917728641
+    },
+    {
+      "type": "move",
+      "order": [
+        "e81c08585d3f585b",
+        "e545c7ae95f8bbe9",
+        "1f66075aa4da4e13",
+        "5bc768c5d774b2cf",
+        "522ca3155e9c91cd",
+        "de0726ac7f0c0108",
+        "351311d6f2a8d6d1",
+        "f72c37fe2f9f3693",
+        "395c337487802271",
+        "fbd381ba496ecaab",
+        "f2264a317451e91a",
+        "8794af427477f152",
+        "a5a93510c6071cad",
+        "d0bf94b6c79e6be2",
+        "f07b76121d6f0c1a",
+        "7d7e5897207e7e48",
+        "5b1f30c704b69c7d",
+        "675359ffbaa56a19"
+      ],
+      "id": "a5a93510c6071cad",
+      "date": 1496917779919
+    },
+    {
+      "type": "add",
+      "id": "d91967739b81cb61",
+      "item": {
+        "type": "paragraph",
+        "id": "d91967739b81cb61",
+        "text": "We can also drag and drop svg files onto the image tag. However [[Svg Links]] do not work."
+      },
+      "after": "8794af427477f152",
+      "date": 1496917828026
+    }
+  ]
+}

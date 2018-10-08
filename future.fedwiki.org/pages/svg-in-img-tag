@@ -1,0 +1,708 @@
+{
+  "title": "SVG in IMG Tag",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "bafa0095cb7aed5c",
+      "text": "We've made progress manipulating svg with jquery, particularly getting it to parse svg from javascript strings."
+    },
+    {
+      "type": "graph",
+      "id": "6982a2be8a97b9be",
+      "text": "Testing Graph Plugin --> SVG in IMG Tag\n\nSVG in IMG Tag --> Viewing Graphviz with Javascript\nDotViz --> About DotViz Plugin"
+    },
+    {
+      "type": "markdown",
+      "id": "cd9ff5267270e93a",
+      "text": "# Trouble"
+    },
+    {
+      "type": "paragraph",
+      "id": "45a6069d6b3b6359",
+      "text": "I noticed with the image transporter that svg works as well as jpg or png. Wierd."
+    },
+    {
+      "type": "html",
+      "id": "33cfcca13688f8fc",
+      "text": "<img src=\"http://c2.com/wiki/build2.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+    },
+    {
+      "type": "html",
+      "id": "ce26bd21f1bf311d",
+      "text": "<img src=\"http://c2.com/c2.gif\" width=150><p>This works for gif, why not svg?</p>"
+    },
+    {
+      "type": "html",
+      "id": "992fa2ee9b59cf42",
+      "text": "<img src=\"https://www.npmjs.com/static/images/npm-logo.svg\" width=150><p>And it works with this svg, why not my svg?</p>"
+    },
+    {
+      "type": "markdown",
+      "id": "2f8bdfb57d0e897b",
+      "text": "# SVG Issues"
+    },
+    {
+      "type": "markdown",
+      "id": "31bf5f8781901be3",
+      "text": "Some svg's work, some don't. It's a complex standard, so the secret is to use a minimal subset of svg I believe. It is also recommended to use the `<object>` rather than the `<imge>` tag - [http://www.sitepoint.com/add-svg-to-web-page/ sitepoint.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ae1bf0859a7f9d10",
+      "text": "Let's take a look at your image - [http://c2.com/wiki/build2.svg c2.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8f06a3755ff9f080",
+      "text": "The first thing to note is that you are linking to an html page and not the raw svg :)  Fixing that we have:"
+    },
+    {
+      "type": "html",
+      "id": "5a2a4a3d29b4183e",
+      "text": "<img src=\"https://livecode.world/graphs/cave.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+    },
+    {
+      "type": "paragraph",
+      "id": "b4ac52b888b5bdb6",
+      "text": "The next thing to not - is that it is a graphviz export like the one below:"
+    },
+    {
+      "type": "html",
+      "id": "ec22e8a19224bb58",
+      "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/reduced.svg\" width = 420>"
+    },
+    {
+      "type": "reference",
+      "id": "f211440f50e323f1",
+      "site": "future.fedwiki.org",
+      "slug": "graph-plugin",
+      "title": "Graph Plugin",
+      "text": "Here is a graph:"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "SVG in IMG Tag",
+        "story": []
+      },
+      "date": 1444602682258
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "45a6069d6b3b6359"
+      },
+      "id": "45a6069d6b3b6359",
+      "type": "add",
+      "date": 1444602684279
+    },
+    {
+      "type": "edit",
+      "id": "45a6069d6b3b6359",
+      "item": {
+        "type": "paragraph",
+        "id": "45a6069d6b3b6359",
+        "text": "I noticed with the image transporter that svg works as well as jpg or png. Wierd."
+      },
+      "date": 1444602723060
+    },
+    {
+      "type": "add",
+      "id": "33cfcca13688f8fc",
+      "item": {
+        "type": "paragraph",
+        "id": "33cfcca13688f8fc",
+        "text": "<img src=\"http://c2.com/wiki/build.svg\" width=420><p>some amazing svg</p>"
+      },
+      "after": "45a6069d6b3b6359",
+      "date": 1444602763719
+    },
+    {
+      "type": "edit",
+      "id": "33cfcca13688f8fc",
+      "item": {
+        "type": "html",
+        "id": "33cfcca13688f8fc",
+        "text": "<img src=\"http://c2.com/wiki/build.svg\" width=420><p>some amazing svg</p>"
+      },
+      "date": 1444602767210
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ce26bd21f1bf311d"
+      },
+      "id": "ce26bd21f1bf311d",
+      "type": "add",
+      "after": "33cfcca13688f8fc",
+      "date": 1444602972950
+    },
+    {
+      "type": "edit",
+      "id": "ce26bd21f1bf311d",
+      "item": {
+        "type": "paragraph",
+        "id": "ce26bd21f1bf311d",
+        "text": "<img src=\"http://c2.com/wiki/build.svg\" width=420><p>some amazing svg</p>"
+      },
+      "date": 1444602990086
+    },
+    {
+      "type": "edit",
+      "id": "ce26bd21f1bf311d",
+      "item": {
+        "type": "html",
+        "id": "ce26bd21f1bf311d",
+        "text": "<img src=\"http://c2.com/wiki/build.svg\" width=420><p>some amazing svg</p>"
+      },
+      "date": 1444603006256
+    },
+    {
+      "type": "edit",
+      "id": "ce26bd21f1bf311d",
+      "item": {
+        "type": "html",
+        "id": "ce26bd21f1bf311d",
+        "text": "<img src=\"http://c2.com/c2.gif\" width=420><p>some amazing svg</p>"
+      },
+      "date": 1444603014300
+    },
+    {
+      "type": "edit",
+      "id": "ce26bd21f1bf311d",
+      "item": {
+        "type": "html",
+        "id": "ce26bd21f1bf311d",
+        "text": "<img src=\"http://c2.com/c2.gif\" width=100><p>some amazing svg</p>"
+      },
+      "date": 1444603032609
+    },
+    {
+      "type": "edit",
+      "id": "ce26bd21f1bf311d",
+      "item": {
+        "type": "html",
+        "id": "ce26bd21f1bf311d",
+        "text": "<img src=\"http://c2.com/c2.gif\" width=150><p>some amazing svg</p>"
+      },
+      "date": 1444603041483
+    },
+    {
+      "type": "edit",
+      "id": "ce26bd21f1bf311d",
+      "item": {
+        "type": "html",
+        "id": "ce26bd21f1bf311d",
+        "text": "<img src=\"http://c2.com/c2.gif\" width=150><p>This works for gif, why not svg?</p>"
+      },
+      "date": 1444603061029
+    },
+    {
+      "type": "edit",
+      "id": "33cfcca13688f8fc",
+      "item": {
+        "type": "html",
+        "id": "33cfcca13688f8fc",
+        "text": "<img src=\"http://c2.com/wiki/build.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1444603102879
+    },
+    {
+      "type": "edit",
+      "id": "33cfcca13688f8fc",
+      "item": {
+        "type": "html",
+        "id": "33cfcca13688f8fc",
+        "text": "<img src=\"http://c2.com/wiki/build2.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1444603497064
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "992fa2ee9b59cf42"
+      },
+      "id": "992fa2ee9b59cf42",
+      "type": "add",
+      "after": "ce26bd21f1bf311d",
+      "date": 1444603551857
+    },
+    {
+      "type": "edit",
+      "id": "992fa2ee9b59cf42",
+      "item": {
+        "type": "html",
+        "id": "992fa2ee9b59cf42",
+        "text": "<img src=\"http://c2.com/c2.gif\" width=150><p>This works for gif, why not svg?</p>"
+      },
+      "date": 1444603572640
+    },
+    {
+      "type": "edit",
+      "id": "992fa2ee9b59cf42",
+      "item": {
+        "type": "html",
+        "id": "992fa2ee9b59cf42",
+        "text": "<img src=\"https://www.npmjs.com/static/images/npm-logo.svg\" width=150><p>This works for gif, why not svg?</p>"
+      },
+      "date": 1444603596428
+    },
+    {
+      "type": "edit",
+      "id": "992fa2ee9b59cf42",
+      "item": {
+        "type": "html",
+        "id": "992fa2ee9b59cf42",
+        "text": "<img src=\"https://www.npmjs.com/static/images/npm-logo.svg\" width=150><p>And it works with this svg, why not my svg?</p>"
+      },
+      "date": 1444603627446
+    },
+    {
+      "type": "edit",
+      "id": "33cfcca13688f8fc",
+      "item": {
+        "type": "html",
+        "id": "33cfcca13688f8fc",
+        "text": "<img src=\"http://c2.com/wiki/build2.svg\" width=3420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1444603920563
+    },
+    {
+      "type": "edit",
+      "id": "33cfcca13688f8fc",
+      "item": {
+        "type": "html",
+        "id": "33cfcca13688f8fc",
+        "text": "<img src=\"http://c2.com/wiki/build2.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1444603956745
+    },
+    {
+      "type": "fork",
+      "site": "localhost:3000",
+      "date": 1461478609037
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cd9ff5267270e93a"
+      },
+      "id": "cd9ff5267270e93a",
+      "type": "add",
+      "after": "992fa2ee9b59cf42",
+      "date": 1461478608705,
+      "error": {
+        "type": "error",
+        "msg": "Not Found",
+        "response": "Page not found"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1461478623196
+    },
+    {
+      "type": "edit",
+      "id": "cd9ff5267270e93a",
+      "item": {
+        "type": "paragraph",
+        "id": "cd9ff5267270e93a",
+        "text": "# Progress"
+      },
+      "date": 1461478640265
+    },
+    {
+      "type": "add",
+      "id": "bafa0095cb7aed5c",
+      "item": {
+        "type": "paragraph",
+        "id": "bafa0095cb7aed5c",
+        "text": "We've made progress manipulating svg with jquery, particularly getting it to parse svg from javascript strings."
+      },
+      "after": "cd9ff5267270e93a",
+      "date": 1461478741244
+    },
+    {
+      "type": "edit",
+      "id": "cd9ff5267270e93a",
+      "item": {
+        "type": "markdown",
+        "id": "cd9ff5267270e93a",
+        "text": "# Progress"
+      },
+      "date": 1461478744659
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "graph",
+        "id": "6982a2be8a97b9be",
+        "text": "Welcome Visitors\n  --> Testing Graph Plugin\n    --> About Graph Plugin\n\nTesting Graph Plugin <-- SVG in IMG Tag\n"
+      },
+      "after": "bafa0095cb7aed5c",
+      "id": "6982a2be8a97b9be",
+      "date": 1461478755892
+    },
+    {
+      "type": "edit",
+      "id": "6982a2be8a97b9be",
+      "item": {
+        "type": "graph",
+        "id": "6982a2be8a97b9be",
+        "text": "Testing Graph Plugin --> SVG in IMG Tag\n\nSVG in IMG Tag --> \n"
+      },
+      "date": 1461478816229
+    },
+    {
+      "type": "edit",
+      "id": "6982a2be8a97b9be",
+      "item": {
+        "type": "graph",
+        "id": "6982a2be8a97b9be",
+        "text": "Testing Graph Plugin --> SVG in IMG Tag\n\nSVG in IMG Tag --> Viewing Graphviz with Javascript\n"
+      },
+      "date": 1461478864981
+    },
+    {
+      "type": "edit",
+      "id": "6982a2be8a97b9be",
+      "item": {
+        "type": "graph",
+        "id": "6982a2be8a97b9be",
+        "text": "Testing Graph Plugin --> SVG in IMG Tag\n\nSVG in IMG Tag --> Viewing Graphviz with Javascript\nSVG in IMG Tag --> DotViz --> About DotViz Plugin"
+      },
+      "date": 1461478975023
+    },
+    {
+      "type": "edit",
+      "id": "6982a2be8a97b9be",
+      "item": {
+        "type": "graph",
+        "id": "6982a2be8a97b9be",
+        "text": "Testing Graph Plugin --> SVG in IMG Tag\n\nSVG in IMG Tag --> Viewing Graphviz with Javascript\nDotViz --> About DotViz Plugin"
+      },
+      "date": 1461479010264
+    },
+    {
+      "type": "move",
+      "order": [
+        "bafa0095cb7aed5c",
+        "45a6069d6b3b6359",
+        "33cfcca13688f8fc",
+        "ce26bd21f1bf311d",
+        "992fa2ee9b59cf42",
+        "cd9ff5267270e93a",
+        "6982a2be8a97b9be"
+      ],
+      "id": "bafa0095cb7aed5c",
+      "date": 1461479158988
+    },
+    {
+      "type": "move",
+      "order": [
+        "bafa0095cb7aed5c",
+        "6982a2be8a97b9be",
+        "45a6069d6b3b6359",
+        "33cfcca13688f8fc",
+        "ce26bd21f1bf311d",
+        "992fa2ee9b59cf42",
+        "cd9ff5267270e93a"
+      ],
+      "id": "6982a2be8a97b9be",
+      "date": 1461479166499
+    },
+    {
+      "type": "move",
+      "order": [
+        "bafa0095cb7aed5c",
+        "6982a2be8a97b9be",
+        "cd9ff5267270e93a",
+        "45a6069d6b3b6359",
+        "33cfcca13688f8fc",
+        "ce26bd21f1bf311d",
+        "992fa2ee9b59cf42"
+      ],
+      "id": "cd9ff5267270e93a",
+      "date": 1461479175556
+    },
+    {
+      "type": "edit",
+      "id": "cd9ff5267270e93a",
+      "item": {
+        "type": "markdown",
+        "id": "cd9ff5267270e93a",
+        "text": "# Trouble"
+      },
+      "date": 1461479183155
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1461489146656
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f211440f50e323f1"
+      },
+      "id": "f211440f50e323f1",
+      "type": "add",
+      "after": "992fa2ee9b59cf42",
+      "date": 1461489205378
+    },
+    {
+      "type": "edit",
+      "id": "f211440f50e323f1",
+      "item": {
+        "type": "reference",
+        "id": "f211440f50e323f1",
+        "site": "future.fedwiki.org",
+        "slug": "graph-plugin",
+        "title": "Graph Plugin",
+        "text": "Here is a graph:"
+      },
+      "date": 1461489207575
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2f8bdfb57d0e897b"
+      },
+      "id": "2f8bdfb57d0e897b",
+      "type": "add",
+      "after": "f211440f50e323f1",
+      "date": 1461489296995
+    },
+    {
+      "type": "move",
+      "order": [
+        "bafa0095cb7aed5c",
+        "6982a2be8a97b9be",
+        "cd9ff5267270e93a",
+        "45a6069d6b3b6359",
+        "33cfcca13688f8fc",
+        "ce26bd21f1bf311d",
+        "992fa2ee9b59cf42",
+        "2f8bdfb57d0e897b",
+        "f211440f50e323f1"
+      ],
+      "id": "2f8bdfb57d0e897b",
+      "date": 1461489298836
+    },
+    {
+      "type": "edit",
+      "id": "2f8bdfb57d0e897b",
+      "item": {
+        "type": "paragraph",
+        "id": "2f8bdfb57d0e897b",
+        "text": "# SVG Issues"
+      },
+      "date": 1461489307782
+    },
+    {
+      "type": "add",
+      "id": "31bf5f8781901be3",
+      "item": {
+        "type": "paragraph",
+        "id": "31bf5f8781901be3",
+        "text": "Some svg's work, some don't. It's a complex standard, so the secret is to use a minimal subset of svg I believe. It is also recommended to use the `<object>` rather than the `<imge>` tag."
+      },
+      "after": "2f8bdfb57d0e897b",
+      "date": 1461489432344
+    },
+    {
+      "type": "edit",
+      "id": "31bf5f8781901be3",
+      "item": {
+        "type": "markdown",
+        "id": "31bf5f8781901be3",
+        "text": "Some svg's work, some don't. It's a complex standard, so the secret is to use a minimal subset of svg I believe. It is also recommended to use the `<object>` rather than the `<imge>` tag."
+      },
+      "date": 1461489433684
+    },
+    {
+      "type": "edit",
+      "id": "2f8bdfb57d0e897b",
+      "item": {
+        "type": "markdown",
+        "id": "2f8bdfb57d0e897b",
+        "text": "# SVG Issues"
+      },
+      "date": 1461489437839
+    },
+    {
+      "type": "edit",
+      "id": "31bf5f8781901be3",
+      "item": {
+        "type": "markdown",
+        "id": "31bf5f8781901be3",
+        "text": "Some svg's work, some don't. It's a complex standard, so the secret is to use a minimal subset of svg I believe. It is also recommended to use the `<object>` rather than the `<imge>` tag - [http://www.sitepoint.com/add-svg-to-web-page/"
+      },
+      "date": 1461489470209
+    },
+    {
+      "type": "edit",
+      "id": "31bf5f8781901be3",
+      "item": {
+        "type": "markdown",
+        "id": "31bf5f8781901be3",
+        "text": "Some svg's work, some don't. It's a complex standard, so the secret is to use a minimal subset of svg I believe. It is also recommended to use the `<object>` rather than the `<imge>` tag - [http://www.sitepoint.com/add-svg-to-web-page/ sitepoint.com]"
+      },
+      "date": 1461489480986
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ae1bf0859a7f9d10"
+      },
+      "id": "ae1bf0859a7f9d10",
+      "type": "add",
+      "after": "f211440f50e323f1",
+      "date": 1461489484445
+    },
+    {
+      "type": "move",
+      "order": [
+        "bafa0095cb7aed5c",
+        "6982a2be8a97b9be",
+        "cd9ff5267270e93a",
+        "45a6069d6b3b6359",
+        "33cfcca13688f8fc",
+        "ce26bd21f1bf311d",
+        "992fa2ee9b59cf42",
+        "2f8bdfb57d0e897b",
+        "31bf5f8781901be3",
+        "ae1bf0859a7f9d10",
+        "f211440f50e323f1"
+      ],
+      "id": "ae1bf0859a7f9d10",
+      "date": 1461489486149
+    },
+    {
+      "type": "edit",
+      "id": "ae1bf0859a7f9d10",
+      "item": {
+        "type": "paragraph",
+        "id": "ae1bf0859a7f9d10",
+        "text": "Let's take a look at your image - [http://c2.com/wiki/build2.svg c2.com]"
+      },
+      "date": 1461489512707
+    },
+    {
+      "type": "add",
+      "id": "8f06a3755ff9f080",
+      "item": {
+        "type": "paragraph",
+        "id": "8f06a3755ff9f080",
+        "text": "The first thing to note is that you are linking to an html page and not the raw svg :) The next thing to not - is that it is a graphviz export like the one below:"
+      },
+      "after": "ae1bf0859a7f9d10",
+      "date": 1461489699220
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "ec22e8a19224bb58",
+        "text": "<IMG src=\"https://dl.dropboxusercontent.com/u/373931789/reduced.svg\" width = 420>"
+      },
+      "after": "8f06a3755ff9f080",
+      "id": "ec22e8a19224bb58",
+      "date": 1461489720273
+    },
+    {
+      "type": "edit",
+      "id": "8f06a3755ff9f080",
+      "item": {
+        "type": "paragraph",
+        "id": "8f06a3755ff9f080",
+        "text": "The first thing to note is that you are linking to an html page and not the raw svg :) "
+      },
+      "date": 1461490036687
+    },
+    {
+      "type": "add",
+      "id": "b4ac52b888b5bdb6",
+      "item": {
+        "type": "paragraph",
+        "id": "b4ac52b888b5bdb6",
+        "text": "The next thing to not - is that it is a graphviz export like the one below:"
+      },
+      "after": "8f06a3755ff9f080",
+      "date": 1461490038391
+    },
+    {
+      "type": "edit",
+      "id": "8f06a3755ff9f080",
+      "item": {
+        "type": "paragraph",
+        "id": "8f06a3755ff9f080",
+        "text": "The first thing to note is that you are linking to an html page and not the raw svg :)  Fixing that we have:"
+      },
+      "date": 1461490047707
+    },
+    {
+      "type": "add",
+      "id": "5a2a4a3d29b4183e",
+      "item": {
+        "type": "paragraph",
+        "id": "5a2a4a3d29b4183e",
+        "text": "https://livecode.world/graphs/cave.svg"
+      },
+      "after": "8f06a3755ff9f080",
+      "date": 1461490051765
+    },
+    {
+      "type": "edit",
+      "id": "5a2a4a3d29b4183e",
+      "item": {
+        "type": "paragraph",
+        "id": "5a2a4a3d29b4183e",
+        "text": "<img src=\"https://livecode.world/graphs/cave.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1461490080526
+    },
+    {
+      "type": "edit",
+      "id": "5a2a4a3d29b4183e",
+      "item": {
+        "type": "html",
+        "id": "5a2a4a3d29b4183e",
+        "text": "<img src=\"https://livecode.world/graphs/cave.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1461490081552
+    },
+    {
+      "type": "edit",
+      "id": "5a2a4a3d29b4183e",
+      "item": {
+        "type": "html",
+        "id": "5a2a4a3d29b4183e",
+        "text": "<img src=\"https://livecode.world/graphs/cave.svg\" width=420 height = 420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1461490147014
+    },
+    {
+      "type": "edit",
+      "id": "5a2a4a3d29b4183e",
+      "item": {
+        "type": "html",
+        "id": "5a2a4a3d29b4183e",
+        "text": "<img src=\"https://livecode.world/graphs/cave.svg\" width=420 height=300><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1461490163439
+    },
+    {
+      "type": "edit",
+      "id": "5a2a4a3d29b4183e",
+      "item": {
+        "type": "html",
+        "id": "5a2a4a3d29b4183e",
+        "text": "<img src=\"https://livecode.world/graphs/cave.svg\" width=420><p>Some amazing svg? I guess not.</p>"
+      },
+      "date": 1461490174480
+    }
+  ]
+}

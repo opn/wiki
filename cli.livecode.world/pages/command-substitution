@@ -1,0 +1,699 @@
+{
+  "title": "Command Substitution",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e89836305f23fe5c",
+      "text": "You use pipe in cases where the command expects parameters from the standard input. See [[Input, outputs and arguments]] - [http://superuser.com/questions/178796/understanding-pipe-in-bash/178798#178798 superuser]"
+    },
+    {
+      "type": "markdown",
+      "id": "dc492cedb88cbb99",
+      "text": "# Question"
+    },
+    {
+      "type": "paragraph",
+      "id": "d7f9f647a96987ac",
+      "text": "How could I pipe the result from a which command to cd? This is what I am trying to do:"
+    },
+    {
+      "type": "code",
+      "id": "4019d48da53f7ef0",
+      "text": "which oracle | cd\ncd < which oracle"
+    },
+    {
+      "type": "paragraph",
+      "id": "23781197b7a4728a",
+      "text": "which doesn;t work."
+    },
+    {
+      "type": "markdown",
+      "id": "015a06c4361e9ae1",
+      "text": "# Answer"
+    },
+    {
+      "type": "paragraph",
+      "id": "245cf5797e66a64d",
+      "text": "With cd command that is not the case. The directory is the command argument. "
+    },
+    {
+      "type": "paragraph",
+      "id": "0b4aeb4463d6732e",
+      "text": "In such case, you can use command substitution. Use backticks or $(...) to evaluate the command, store it into variable:"
+    },
+    {
+      "type": "code",
+      "id": "02e6fc828339d5cb",
+      "text": "path=`which oracle`\necho $path # just for debug\ncd $path"
+    },
+    {
+      "type": "paragraph",
+      "id": "4a21c2a49b6f85c6",
+      "text": "although it can be done in a much simpler way:"
+    },
+    {
+      "type": "code",
+      "id": "717ec4e4ad394a88",
+      "text": "cd `which oracle`"
+    },
+    {
+      "type": "paragraph",
+      "id": "d7113e3babc9fe81",
+      "text": "or"
+    },
+    {
+      "type": "code",
+      "id": "1139c5fbd7001c15",
+      "text": "cd $(which oracle)"
+    },
+    {
+      "type": "paragraph",
+      "id": "6fd35c5b62ebedfc",
+      "text": "which is equivalent to backtick notation, but is recommended (backticks can be confused with apostrophes)\n\n.. but it looks like you want:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "2f7000a56cc7076c",
+      "text": "cd $(dirname $(which oracle))"
+    },
+    {
+      "type": "paragraph",
+      "id": "5e31ff8128bd75c3",
+      "text": "(which shows you that you can use nesting easily)\n\n$(...) (as well as backticks) work also in double-quoted strings, which helps when the result may eventually contain spaces.\n\n"
+    },
+    {
+      "type": "code",
+      "id": "53ecab16655f130b",
+      "text": "cd \"$(dirname \"$(which oracle)\")\""
+    },
+    {
+      "type": "markdown",
+      "id": "d0785bd34e2a6e5e",
+      "text": "# See also"
+    },
+    {
+      "type": "reference",
+      "id": "8b4046d19ecff6c2",
+      "site": "cli.livecode.world",
+      "slug": "input-outputs-and-arguments",
+      "title": "Input, outputs and arguments",
+      "text": "Here we take a discussion a rewrite it as documentation. The original discussion was here - on [http://stackoverflow.com/questions/3437514/bash-how-to-pipe-result-from-the-which-command-to-cd stackoverflow]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Command Substitution",
+        "story": []
+      },
+      "date": 1466510530105
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e89836305f23fe5c"
+      },
+      "id": "e89836305f23fe5c",
+      "type": "add",
+      "date": 1466510531314
+    },
+    {
+      "type": "edit",
+      "id": "e89836305f23fe5c",
+      "item": {
+        "type": "paragraph",
+        "id": "e89836305f23fe5c",
+        "text": "You use pipe in cases where the command expects parameters from the standard input. ( More on this ).\n\nWith cd command that is not the case. The directory is the command argument. In such case, you can use command substitution. Use backticks or $(...) to evaluate the command, store it into variable..\n\npath=`which oracle`\necho $path # just for debug\ncd $path\nalthough it can be done in a much simpler way:\n\ncd `which oracle`\nor\n\ncd $(which oracle)\nwhich is equivalent to backtick notation, but is recommended (backticks can be confused with apostrophes)\n\n.. but it looks like you want:\n\ncd $(dirname $(which oracle))\n(which shows you that you can use nesting easily)\n\n$(...) (as well as backticks) work also in double-quoted strings, which helps when the result may eventually contain spaces..\n\ncd \"$(dirname $(which oracle))\"\nshareimprove this answer\nedited Oct 9 '14 at 17:28\n\nRaghav RV\n1,596622\nanswered Aug 9 '10 at 5:25\n\nmykhal\n8,21034468\n  \t \t\nCool. Could you please explain a bit about what is going on here? That looks like a variable dereference; is there some default temporary variable where the results of a command go? – Nate W. Aug 9 '10 at 5:26\n  \t \t\nAhhh, I forgot compelete about the backticks :( – Michael Mao Aug 9 '10 at 5:27\n2\t \t\nYou need another pair of quotes: cd \"$(dirname \"$(which oracle)\")\""
+      },
+      "date": 1466510602271
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d0785bd34e2a6e5e"
+      },
+      "id": "d0785bd34e2a6e5e",
+      "type": "add",
+      "after": "e89836305f23fe5c",
+      "date": 1466510706397
+    },
+    {
+      "type": "edit",
+      "id": "d0785bd34e2a6e5e",
+      "item": {
+        "type": "markdown",
+        "id": "d0785bd34e2a6e5e",
+        "text": "[[Input, outputs and arguments]]"
+      },
+      "date": 1466510736285
+    },
+    {
+      "type": "edit",
+      "id": "d0785bd34e2a6e5e",
+      "item": {
+        "type": "markdown",
+        "id": "d0785bd34e2a6e5e",
+        "text": "# See also"
+      },
+      "date": 1466510871646
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8b4046d19ecff6c2"
+      },
+      "id": "8b4046d19ecff6c2",
+      "type": "add",
+      "after": "d0785bd34e2a6e5e",
+      "date": 1466510873368
+    },
+    {
+      "type": "edit",
+      "id": "8b4046d19ecff6c2",
+      "item": {
+        "type": "reference",
+        "id": "8b4046d19ecff6c2",
+        "site": "cli.livecode.world",
+        "slug": "input-outputs-and-arguments",
+        "title": "Input, outputs and arguments",
+        "text": "Here we take a discussion a rewrite it as documentation. The original discussion was here - on [http://stackoverflow.com/questions/3437514/bash-how-to-pipe-result-from-the-which-command-to-cd stackoverflow]"
+      },
+      "date": 1466510875504
+    },
+    {
+      "type": "edit",
+      "id": "e89836305f23fe5c",
+      "item": {
+        "type": "paragraph",
+        "id": "e89836305f23fe5c",
+        "text": "You use pipe in cases where the command expects parameters from the standard input. See [Input, outputs and arguments]].\n\nWith cd command that is not the case. The directory is the command argument. In such case, you can use command substitution. Use backticks or $(...) to evaluate the command, store it into variable..\n\npath=`which oracle`\necho $path # just for debug\ncd $path\nalthough it can be done in a much simpler way:\n\ncd `which oracle`\nor\n\ncd $(which oracle)\nwhich is equivalent to backtick notation, but is recommended (backticks can be confused with apostrophes)\n\n.. but it looks like you want:\n\ncd $(dirname $(which oracle))\n(which shows you that you can use nesting easily)\n\n$(...) (as well as backticks) work also in double-quoted strings, which helps when the result may eventually contain spaces..\n\ncd \"$(dirname $(which oracle))\"\nshareimprove this answer\nedited Oct 9 '14 at 17:28\n\nRaghav RV\n1,596622\nanswered Aug 9 '10 at 5:25\n\nmykhal\n8,21034468\n  \t \t\nCool. Could you please explain a bit about what is going on here? That looks like a variable dereference; is there some default temporary variable where the results of a command go? – Nate W. Aug 9 '10 at 5:26\n  \t \t\nAhhh, I forgot compelete about the backticks :( – Michael Mao Aug 9 '10 at 5:27\n2\t \t\nYou need another pair of quotes: cd \"$(dirname \"$(which oracle)\")\""
+      },
+      "date": 1466510949525
+    },
+    {
+      "type": "edit",
+      "id": "e89836305f23fe5c",
+      "item": {
+        "type": "paragraph",
+        "id": "e89836305f23fe5c",
+        "text": "You use pipe in cases where the command expects parameters from the standard input. See [[Input, outputs and arguments]]."
+      },
+      "date": 1466510957499
+    },
+    {
+      "type": "add",
+      "id": "245cf5797e66a64d",
+      "item": {
+        "type": "paragraph",
+        "id": "245cf5797e66a64d",
+        "text": "With cd command that is not the case. The directory is the command argument. "
+      },
+      "after": "e89836305f23fe5c",
+      "date": 1466510971055
+    },
+    {
+      "type": "add",
+      "id": "0b4aeb4463d6732e",
+      "item": {
+        "type": "paragraph",
+        "id": "0b4aeb4463d6732e",
+        "text": "In such case, you can use command substitution. Use backticks or $(...) to evaluate the command, store it into variable:"
+      },
+      "after": "245cf5797e66a64d",
+      "date": 1466510983943
+    },
+    {
+      "type": "add",
+      "id": "a453dcc208b80d34",
+      "item": {
+        "type": "paragraph",
+        "id": "a453dcc208b80d34",
+        "text": "\npath=`which oracle`\necho $path # just for debug\ncd $path"
+      },
+      "after": "0b4aeb4463d6732e",
+      "date": 1466510988489
+    },
+    {
+      "type": "add",
+      "id": "4a21c2a49b6f85c6",
+      "item": {
+        "type": "paragraph",
+        "id": "4a21c2a49b6f85c6",
+        "text": "although it can be done in a much simpler way:"
+      },
+      "after": "a453dcc208b80d34",
+      "date": 1466510991367
+    },
+    {
+      "type": "add",
+      "id": "1c6b1e5efff945db",
+      "item": {
+        "type": "paragraph",
+        "id": "1c6b1e5efff945db",
+        "text": "\ncd `which oracle`"
+      },
+      "after": "4a21c2a49b6f85c6",
+      "date": 1466510993561
+    },
+    {
+      "type": "add",
+      "id": "d7113e3babc9fe81",
+      "item": {
+        "type": "paragraph",
+        "id": "d7113e3babc9fe81",
+        "text": "or\n\ncd $(which oracle)"
+      },
+      "after": "1c6b1e5efff945db",
+      "date": 1466510995648
+    },
+    {
+      "type": "add",
+      "id": "6fd35c5b62ebedfc",
+      "item": {
+        "type": "paragraph",
+        "id": "6fd35c5b62ebedfc",
+        "text": "which is equivalent to backtick notation, but is recommended (backticks can be confused with apostrophes)\n\n.. but it looks like you want:\n\n"
+      },
+      "after": "d7113e3babc9fe81",
+      "date": 1466511048476
+    },
+    {
+      "type": "add",
+      "id": "538c70a1da50e56b",
+      "item": {
+        "type": "paragraph",
+        "id": "538c70a1da50e56b",
+        "text": "cd $(dirname $(which oracle))"
+      },
+      "after": "6fd35c5b62ebedfc",
+      "date": 1466511050154
+    },
+    {
+      "type": "add",
+      "id": "5e31ff8128bd75c3",
+      "item": {
+        "type": "paragraph",
+        "id": "5e31ff8128bd75c3",
+        "text": "(which shows you that you can use nesting easily)\n\n$(...) (as well as backticks) work also in double-quoted strings, which helps when the result may eventually contain spaces..\n\n"
+      },
+      "after": "538c70a1da50e56b",
+      "date": 1466511059339
+    },
+    {
+      "type": "add",
+      "id": "1a5731db93f37fae",
+      "item": {
+        "type": "paragraph",
+        "id": "1a5731db93f37fae",
+        "text": "cd \"$(dirname \"$(which oracle)\")\""
+      },
+      "after": "5e31ff8128bd75c3",
+      "date": 1466511060715
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "02e6fc828339d5cb"
+      },
+      "id": "02e6fc828339d5cb",
+      "type": "add",
+      "after": "8b4046d19ecff6c2",
+      "date": 1466511063431
+    },
+    {
+      "type": "move",
+      "order": [
+        "e89836305f23fe5c",
+        "245cf5797e66a64d",
+        "0b4aeb4463d6732e",
+        "a453dcc208b80d34",
+        "02e6fc828339d5cb",
+        "4a21c2a49b6f85c6",
+        "1c6b1e5efff945db",
+        "d7113e3babc9fe81",
+        "6fd35c5b62ebedfc",
+        "538c70a1da50e56b",
+        "5e31ff8128bd75c3",
+        "1a5731db93f37fae",
+        "d0785bd34e2a6e5e",
+        "8b4046d19ecff6c2"
+      ],
+      "id": "02e6fc828339d5cb",
+      "date": 1466511067811
+    },
+    {
+      "type": "remove",
+      "id": "a453dcc208b80d34",
+      "date": 1466511071979
+    },
+    {
+      "type": "edit",
+      "id": "02e6fc828339d5cb",
+      "item": {
+        "type": "code",
+        "id": "02e6fc828339d5cb",
+        "text": "path=`which oracle`\necho $path # just for debug\ncd $path"
+      },
+      "date": 1466511074941
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "717ec4e4ad394a88"
+      },
+      "id": "717ec4e4ad394a88",
+      "type": "add",
+      "after": "8b4046d19ecff6c2",
+      "date": 1466511077596
+    },
+    {
+      "type": "move",
+      "order": [
+        "e89836305f23fe5c",
+        "245cf5797e66a64d",
+        "0b4aeb4463d6732e",
+        "02e6fc828339d5cb",
+        "4a21c2a49b6f85c6",
+        "1c6b1e5efff945db",
+        "717ec4e4ad394a88",
+        "d7113e3babc9fe81",
+        "6fd35c5b62ebedfc",
+        "538c70a1da50e56b",
+        "5e31ff8128bd75c3",
+        "1a5731db93f37fae",
+        "d0785bd34e2a6e5e",
+        "8b4046d19ecff6c2"
+      ],
+      "id": "717ec4e4ad394a88",
+      "date": 1466511079218
+    },
+    {
+      "type": "remove",
+      "id": "1c6b1e5efff945db",
+      "date": 1466511082651
+    },
+    {
+      "type": "edit",
+      "id": "717ec4e4ad394a88",
+      "item": {
+        "type": "code",
+        "id": "717ec4e4ad394a88",
+        "text": "cd `which oracle`"
+      },
+      "date": 1466511085494
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1139c5fbd7001c15"
+      },
+      "id": "1139c5fbd7001c15",
+      "type": "add",
+      "after": "8b4046d19ecff6c2",
+      "date": 1466511087333
+    },
+    {
+      "type": "move",
+      "order": [
+        "e89836305f23fe5c",
+        "245cf5797e66a64d",
+        "0b4aeb4463d6732e",
+        "02e6fc828339d5cb",
+        "4a21c2a49b6f85c6",
+        "717ec4e4ad394a88",
+        "d7113e3babc9fe81",
+        "1139c5fbd7001c15",
+        "6fd35c5b62ebedfc",
+        "538c70a1da50e56b",
+        "5e31ff8128bd75c3",
+        "1a5731db93f37fae",
+        "d0785bd34e2a6e5e",
+        "8b4046d19ecff6c2"
+      ],
+      "id": "1139c5fbd7001c15",
+      "date": 1466511089412
+    },
+    {
+      "type": "edit",
+      "id": "d7113e3babc9fe81",
+      "item": {
+        "type": "paragraph",
+        "id": "d7113e3babc9fe81",
+        "text": "or"
+      },
+      "date": 1466511094765
+    },
+    {
+      "type": "edit",
+      "id": "1139c5fbd7001c15",
+      "item": {
+        "type": "code",
+        "id": "1139c5fbd7001c15",
+        "text": "cd $(which oracle)"
+      },
+      "date": 1466511096797
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2f7000a56cc7076c"
+      },
+      "id": "2f7000a56cc7076c",
+      "type": "add",
+      "after": "8b4046d19ecff6c2",
+      "date": 1466511106577
+    },
+    {
+      "type": "move",
+      "order": [
+        "e89836305f23fe5c",
+        "245cf5797e66a64d",
+        "0b4aeb4463d6732e",
+        "02e6fc828339d5cb",
+        "4a21c2a49b6f85c6",
+        "717ec4e4ad394a88",
+        "d7113e3babc9fe81",
+        "1139c5fbd7001c15",
+        "6fd35c5b62ebedfc",
+        "538c70a1da50e56b",
+        "2f7000a56cc7076c",
+        "5e31ff8128bd75c3",
+        "1a5731db93f37fae",
+        "d0785bd34e2a6e5e",
+        "8b4046d19ecff6c2"
+      ],
+      "id": "2f7000a56cc7076c",
+      "date": 1466511108775
+    },
+    {
+      "type": "remove",
+      "id": "538c70a1da50e56b",
+      "date": 1466511112396
+    },
+    {
+      "type": "edit",
+      "id": "2f7000a56cc7076c",
+      "item": {
+        "type": "code",
+        "id": "2f7000a56cc7076c",
+        "text": "cd $(dirname $(which oracle))"
+      },
+      "date": 1466511114278
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "53ecab16655f130b"
+      },
+      "id": "53ecab16655f130b",
+      "type": "add",
+      "after": "8b4046d19ecff6c2",
+      "date": 1466511117239
+    },
+    {
+      "type": "move",
+      "order": [
+        "e89836305f23fe5c",
+        "245cf5797e66a64d",
+        "0b4aeb4463d6732e",
+        "02e6fc828339d5cb",
+        "4a21c2a49b6f85c6",
+        "717ec4e4ad394a88",
+        "d7113e3babc9fe81",
+        "1139c5fbd7001c15",
+        "6fd35c5b62ebedfc",
+        "2f7000a56cc7076c",
+        "5e31ff8128bd75c3",
+        "53ecab16655f130b",
+        "1a5731db93f37fae",
+        "d0785bd34e2a6e5e",
+        "8b4046d19ecff6c2"
+      ],
+      "id": "53ecab16655f130b",
+      "date": 1466511119365
+    },
+    {
+      "type": "remove",
+      "id": "1a5731db93f37fae",
+      "date": 1466511122220
+    },
+    {
+      "type": "edit",
+      "id": "53ecab16655f130b",
+      "item": {
+        "type": "code",
+        "id": "53ecab16655f130b",
+        "text": "cd \"$(dirname \"$(which oracle)\")\""
+      },
+      "date": 1466511124279
+    },
+    {
+      "type": "edit",
+      "id": "5e31ff8128bd75c3",
+      "item": {
+        "type": "paragraph",
+        "id": "5e31ff8128bd75c3",
+        "text": "(which shows you that you can use nesting easily)\n\n$(...) (as well as backticks) work also in double-quoted strings, which helps when the result may eventually contain spaces.\n\n"
+      },
+      "date": 1466511145360
+    },
+    {
+      "type": "edit",
+      "id": "e89836305f23fe5c",
+      "item": {
+        "type": "paragraph",
+        "id": "e89836305f23fe5c",
+        "text": "You use pipe in cases where the command expects parameters from the standard input. See [[Input, outputs and arguments]] - [http://superuser.com/questions/178796/understanding-pipe-in-bash/178798#178798 superuser]"
+      },
+      "date": 1466511187527
+    },
+    {
+      "type": "add",
+      "id": "dc492cedb88cbb99",
+      "item": {
+        "type": "paragraph",
+        "id": "dc492cedb88cbb99",
+        "text": "# Question"
+      },
+      "after": "e89836305f23fe5c",
+      "date": 1466511253070
+    },
+    {
+      "type": "add",
+      "id": "d7f9f647a96987ac",
+      "item": {
+        "type": "paragraph",
+        "id": "d7f9f647a96987ac",
+        "text": "How could I pipe the result from a which command to cd? This is what I am trying to do:"
+      },
+      "after": "dc492cedb88cbb99",
+      "date": 1466511263072
+    },
+    {
+      "type": "add",
+      "id": "346c9389a79be316",
+      "item": {
+        "type": "paragraph",
+        "id": "346c9389a79be316",
+        "text": "which oracle | cd\ncd < which oracle"
+      },
+      "after": "d7f9f647a96987ac",
+      "date": 1466511271191
+    },
+    {
+      "type": "add",
+      "id": "23781197b7a4728a",
+      "item": {
+        "type": "paragraph",
+        "id": "23781197b7a4728a",
+        "text": "which doesn;t work."
+      },
+      "after": "346c9389a79be316",
+      "date": 1466511279527
+    },
+    {
+      "type": "add",
+      "id": "015a06c4361e9ae1",
+      "item": {
+        "type": "paragraph",
+        "id": "015a06c4361e9ae1",
+        "text": "# Answer"
+      },
+      "after": "23781197b7a4728a",
+      "date": 1466511283290
+    },
+    {
+      "type": "edit",
+      "id": "015a06c4361e9ae1",
+      "item": {
+        "type": "markdown",
+        "id": "015a06c4361e9ae1",
+        "text": "# Answer"
+      },
+      "date": 1466511284851
+    },
+    {
+      "type": "edit",
+      "id": "dc492cedb88cbb99",
+      "item": {
+        "type": "markdown",
+        "id": "dc492cedb88cbb99",
+        "text": "# Question"
+      },
+      "date": 1466511286012
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4019d48da53f7ef0"
+      },
+      "id": "4019d48da53f7ef0",
+      "type": "add",
+      "after": "8b4046d19ecff6c2",
+      "date": 1466511287932
+    },
+    {
+      "type": "move",
+      "order": [
+        "e89836305f23fe5c",
+        "dc492cedb88cbb99",
+        "d7f9f647a96987ac",
+        "4019d48da53f7ef0",
+        "346c9389a79be316",
+        "23781197b7a4728a",
+        "015a06c4361e9ae1",
+        "245cf5797e66a64d",
+        "0b4aeb4463d6732e",
+        "02e6fc828339d5cb",
+        "4a21c2a49b6f85c6",
+        "717ec4e4ad394a88",
+        "d7113e3babc9fe81",
+        "1139c5fbd7001c15",
+        "6fd35c5b62ebedfc",
+        "2f7000a56cc7076c",
+        "5e31ff8128bd75c3",
+        "53ecab16655f130b",
+        "d0785bd34e2a6e5e",
+        "8b4046d19ecff6c2"
+      ],
+      "id": "4019d48da53f7ef0",
+      "date": 1466511290069
+    },
+    {
+      "type": "remove",
+      "id": "346c9389a79be316",
+      "date": 1466511293698
+    },
+    {
+      "type": "edit",
+      "id": "4019d48da53f7ef0",
+      "item": {
+        "type": "code",
+        "id": "4019d48da53f7ef0",
+        "text": "which oracle | cd\ncd < which oracle"
+      },
+      "date": 1466511295971
+    }
+  ]
+}

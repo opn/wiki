@@ -1,0 +1,1281 @@
+{
+  "title": "Microdata",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3e30312082e31a9a7cd41cba5100d3a9",
+      "text": "Microdata is an HTML specification used to nest metadata within existing content on web pages - [https://en.wikipedia.org/wiki/Microdata_(HTML) wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "e14a839fd6a49161",
+      "text": "Search engines, web crawlers, and browsers can extract and process Microdata from a web page and use it to provide a richer browsing experience for users. Search engines benefit greatly from direct access to this structured data because it allows search engines to understand the information on web pages and provide more relevant results to users. "
+    },
+    {
+      "type": "markdown",
+      "id": "10427d754b53657d",
+      "text": "Here you can:\n* Check microdata usage statistics - [http://trends.builtwith.com/docinfo/Microdata trends.builtwith.com]\n* Sites Using Microdata - [https://github.com/LawrenceWoodman/mida/wiki/Sites-Using-Microdata github]"
+    },
+    {
+      "type": "markdown",
+      "id": "f1de18df3c474f436d836b782fe471a4",
+      "text": "# Example"
+    },
+    {
+      "type": "paragraph",
+      "id": "72f51bb59f1b2692f21f5ee2e8687d33",
+      "text": "The following HTML5 markup may be found on a typical “About” page containing information about a person:"
+    },
+    {
+      "type": "code",
+      "id": "044b932f26cce0f9",
+      "text": "<section> Hello, my name is John Doe, I am a graduate research assistant at\nthe University of Dreams.\nMy friends call me Johnny. \nYou can visit my homepage at <a href=\"http://www.JohnnyD.com\">www.JohnnyD.com</a>.\nI live at 1234 Peach Drive, Warner Robins, Georgia.</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+      "text": "Here is the same markup with added [[Schema.org]] Microdata:"
+    },
+    {
+      "type": "code",
+      "id": "9495562aa310d447",
+      "text": "<section itemscope itemtype=\"http://schema.org/Person\"> \n\tHello, my name is \n\t<span itemprop=\"name\">John Doe</span>, \n\tI am a \n\t<span itemprop=\"jobTitle\">graduate research assistant</span> \n\tat the \n\t<span itemprop=\"affiliation\">University of Dreams</span>. \n\tMy friends call me \n\t<span itemprop=\"additionalName\">Johnny</span>. \n\tYou can visit my homepage at \n\t<a href=\"http://www.JohnnyD.com\" itemprop=\"url\">www.JohnnyD.com</a>. \n\t<section itemprop=\"address\" itemscope itemtype=\"http://schema.org/PostalAddress\">\n\t\tI live at \n\t\t<span itemprop=\"streetAddress\">1234 Peach Drive</span>,\n\t\t<span itemprop=\"addressLocality\">Warner Robins</span>,\n\t\t<span itemprop=\"addressRegion\">Georgia</span>.\n\t</section>\n</section>"
+    },
+    {
+      "type": "paragraph",
+      "id": "d5716846cf04250152941d649310a193",
+      "text": "As the above example shows, it is common to use the [[<section> element]], and the [[<span> element]] to create the desired markup. "
+    },
+    {
+      "type": "paragraph",
+      "id": "a1ffc882f244925a",
+      "text": "Microdata items can be nested. In this case an item of type http://schema.org/PostalAddress is nested inside an item of type http://schema.org/Person."
+    },
+    {
+      "type": "paragraph",
+      "id": "065851f4c42029e1385db48abfed6a43",
+      "text": "The following text shows how Google parses the Microdata from the above example code. Developers can test pages containing Microdata using Google's [[Rich Snippet Testing Tool]]."
+    },
+    {
+      "type": "code",
+      "id": "a2c249da2f25c170",
+      "text": "Item\n   Type: http://schema.org/Person\n   name = John Doe\n   jobTitle = graduate research assistant\n   affiliation = University of Dreams\n   additionalName = Johnny\n   url = http://www.johnnyd.com/\n   address = Item(1)\nItem 1\n   Type: http://schema.org/PostalAddress\n   streetAddress = 1234 Peach Drive\n   addressLocality = Warner Robins\n   addressRegion = Georgia"
+    },
+    {
+      "type": "paragraph",
+      "id": "b9af59b452f5e75e",
+      "text": "Microdata uses a supporting vocabulary to describe an item and name-value pairs to assign values to its properties. Microdata is an attempt to provide a simpler way of annotating HTML elements with machine-readable tags than the similar approaches of using [[RDFa]] and [[microformats]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "57c4bac13bc7bdeb4032437abc329757",
+      "text": "The W3C HTML Working Group failed to find an editor for the specification and terminated its development with a 'Note'."
+    },
+    {
+      "type": "markdown",
+      "id": "281f7d19eeb81cf16ae46b0554bc268c",
+      "text": "# Global attributes"
+    },
+    {
+      "type": "markdown",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.\n* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context.\n* __itemid__ – Indicates a unique identifier of the item.\n* __itemprop__ – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the [[a element]] and its [[href attribute]], the [[img element]] and its [[src attribute]], or other elements that link to or embed external resources.\n* __itemref__ – Properties that are not descendants of the element with the _itemscope_ attribute can be associated with the item using this attribute. Provides a list of element ids (not _itemid_s) with additional properties elsewhere in the document."
+    },
+    {
+      "type": "markdown",
+      "id": "41b90abe34cd0c5dff4c7aed4efed668",
+      "text": "# Vocabularies"
+    },
+    {
+      "type": "paragraph",
+      "id": "e08647bcb76f70e7e1dcda113e052241",
+      "text": "Microdata vocabularies provide the [[semantics]], or meaning of an Item.  Web developers can design a custom vocabulary or use vocabularies available on the web. "
+    },
+    {
+      "type": "markdown",
+      "id": "0af6ec8f5f1ccbe3",
+      "text": "A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include:\n* Person\n* Place\n* Event\n* Organization\n* Product\n* Review\n* Review-aggregate\n* Breadcrumb\n* Offer\n* Offer-aggregate"
+    },
+    {
+      "type": "paragraph",
+      "id": "b93e8b3337c0dee9",
+      "text": "Major search engine operators like [[Google]], [[Microsoft]] and [[Yahoo!]] rely on this markup to improve search results."
+    },
+    {
+      "type": "paragraph",
+      "id": "78dfd90df055392c51f799062b266445",
+      "text": "The same machine-readable terms can be used not only in HTML Microdata, but also in other annotations such as [[RDFa]] or [[JSON-LD]] in the markup, or in an external RDF ([[Resource Description Framework]]) file in a serialization such as [[RDF/XML]], [[Notation3]], or Turtle ([[Turtle (syntax)]])."
+    },
+    {
+      "type": "markdown",
+      "id": "818f07f2b5f0575affd3181b4d22653d",
+      "text": "# See also"
+    },
+    {
+      "type": "paragraph",
+      "id": "bf1a2473b8221f521d8451e3643755ab",
+      "text": "* [[Microformat]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "47df6f87b2ef49d34bedb29ede4b5c65",
+      "text": "* [[RDFa Lite]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "9f7d3dd61915c04ed8f44adc7db2d6fd",
+      "text": "* [[Semantic web]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "6d07a53f105b2036fec077082a5402f9",
+      "text": "* [[Semantic HTML]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Microdata",
+        "story": []
+      },
+      "date": 1457828548824
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "044b932f26cce0f9"
+      },
+      "id": "044b932f26cce0f9",
+      "type": "add",
+      "date": 1457828549728
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3e30312082e31a9a7cd41cba5100d3a9",
+        "text": "Microdata is a WHATWG HTML specification used to nest metadata within existing content on web pages. Search engines, web crawlers, and browsers can extract and process Microdata from a web page and use it to provide a richer browsing experience for users. Search engines benefit greatly from direct access to this structured data because it allows search engines to understand the information on web pages and provide more relevant results to users. Microdata uses a supporting vocabulary to describe an item and name-value pairs to assign values to its properties. Microdata is an attempt to provide a simpler way of annotating HTML elements with machine-readable tags than the similar approaches of using RDFa and microformats - [https://en.wikipedia.org/wiki/Microdata_(HTML) wikipedia]"
+      },
+      "id": "3e30312082e31a9a7cd41cba5100d3a9",
+      "date": 1457828551232
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "57c4bac13bc7bdeb4032437abc329757",
+        "text": "The W3C HTML Working Group failed to find an editor for the specification and terminated its development with a 'Note'."
+      },
+      "after": "3e30312082e31a9a7cd41cba5100d3a9",
+      "id": "57c4bac13bc7bdeb4032437abc329757",
+      "date": 1457828553721
+    },
+    {
+      "type": "edit",
+      "id": "3e30312082e31a9a7cd41cba5100d3a9",
+      "item": {
+        "type": "paragraph",
+        "id": "3e30312082e31a9a7cd41cba5100d3a9",
+        "text": "Microdata is a WHATWG HTML specification used to nest metadata within existing content on web pages - [https://en.wikipedia.org/wiki/Microdata_(HTML) wikipedia]"
+      },
+      "date": 1457828573328
+    },
+    {
+      "type": "add",
+      "id": "e14a839fd6a49161",
+      "item": {
+        "type": "paragraph",
+        "id": "e14a839fd6a49161",
+        "text": "Search engines, web crawlers, and browsers can extract and process Microdata from a web page and use it to provide a richer browsing experience for users. Search engines benefit greatly from direct access to this structured data because it allows search engines to understand the information on web pages and provide more relevant results to users. Microdata uses a supporting vocabulary to describe an item and name-value pairs to assign values to its properties. Microdata is an attempt to provide a simpler way of annotating HTML elements with machine-readable tags than the similar approaches of using RDFa and microformats."
+      },
+      "after": "3e30312082e31a9a7cd41cba5100d3a9",
+      "date": 1457828576702
+    },
+    {
+      "type": "edit",
+      "id": "3e30312082e31a9a7cd41cba5100d3a9",
+      "item": {
+        "type": "paragraph",
+        "id": "3e30312082e31a9a7cd41cba5100d3a9",
+        "text": "Microdata is an HTML specification used to nest metadata within existing content on web pages - [https://en.wikipedia.org/wiki/Microdata_(HTML) wikipedia]"
+      },
+      "date": 1457828588403
+    },
+    {
+      "type": "edit",
+      "id": "e14a839fd6a49161",
+      "item": {
+        "type": "paragraph",
+        "id": "e14a839fd6a49161",
+        "text": "Search engines, web crawlers, and browsers can extract and process Microdata from a web page and use it to provide a richer browsing experience for users. Search engines benefit greatly from direct access to this structured data because it allows search engines to understand the information on web pages and provide more relevant results to users. "
+      },
+      "date": 1457828591232
+    },
+    {
+      "type": "add",
+      "id": "b9af59b452f5e75e",
+      "item": {
+        "type": "paragraph",
+        "id": "b9af59b452f5e75e",
+        "text": "Microdata uses a supporting vocabulary to describe an item and name-value pairs to assign values to its properties. Microdata is an attempt to provide a simpler way of annotating HTML elements with machine-readable tags than the similar approaches of using [[RDFa]] and [[microformats]]."
+      },
+      "after": "e14a839fd6a49161",
+      "date": 1457828611170
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "41b90abe34cd0c5dff4c7aed4efed668",
+        "text": "# Vocabularies"
+      },
+      "after": "57c4bac13bc7bdeb4032437abc329757",
+      "id": "41b90abe34cd0c5dff4c7aed4efed668",
+      "date": 1457828642104
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e08647bcb76f70e7e1dcda113e052241",
+        "text": "Microdata vocabularies provide the [[semantics]], or meaning of an Item.  Web developers can design a custom vocabulary or use vocabularies available on the web. A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include: ''Person'', \"''Place''\",  ''Event'', ''Organization'', ''Product'', ''Review'', ''Review-aggregate'', ''Breadcrumb'', ''Offer'', ''Offer-aggregate''. Major search engine operators like [[Google]], [[Microsoft]] and [[Yahoo!]] rely on this markup to improve search results."
+      },
+      "after": "41b90abe34cd0c5dff4c7aed4efed668",
+      "id": "e08647bcb76f70e7e1dcda113e052241",
+      "date": 1457828644496
+    },
+    {
+      "type": "edit",
+      "id": "e08647bcb76f70e7e1dcda113e052241",
+      "item": {
+        "type": "paragraph",
+        "id": "e08647bcb76f70e7e1dcda113e052241",
+        "text": "Microdata vocabularies provide the [[semantics]], or meaning of an Item.  Web developers can design a custom vocabulary or use vocabularies available on the web. A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include: ''Person'', \"''Place''\",  ''Event'', ''Organization'', ''Product'', ''Review'', ''Review-aggregate'', ''Breadcrumb'', ''Offer'', ''Offer-aggregate''. "
+      },
+      "date": 1457828657327
+    },
+    {
+      "type": "add",
+      "id": "b93e8b3337c0dee9",
+      "item": {
+        "type": "paragraph",
+        "id": "b93e8b3337c0dee9",
+        "text": "Major search engine operators like [[Google]], [[Microsoft]] and [[Yahoo!]] rely on this markup to improve search results."
+      },
+      "after": "e08647bcb76f70e7e1dcda113e052241",
+      "date": 1457828661695
+    },
+    {
+      "type": "edit",
+      "id": "e08647bcb76f70e7e1dcda113e052241",
+      "item": {
+        "type": "paragraph",
+        "id": "e08647bcb76f70e7e1dcda113e052241",
+        "text": "Microdata vocabularies provide the [[semantics]], or meaning of an Item.  Web developers can design a custom vocabulary or use vocabularies available on the web. "
+      },
+      "date": 1457828682892
+    },
+    {
+      "type": "add",
+      "id": "0af6ec8f5f1ccbe3",
+      "item": {
+        "type": "paragraph",
+        "id": "0af6ec8f5f1ccbe3",
+        "text": "A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include:* Person'', \"''Place''\",  ''Event'', ''Organization'', ''Product'', ''Review'', ''Review-aggregate'', ''Breadcrumb'', ''Offer'', ''Offer-aggregate''. "
+      },
+      "after": "e08647bcb76f70e7e1dcda113e052241",
+      "date": 1457828693437
+    },
+    {
+      "type": "edit",
+      "id": "0af6ec8f5f1ccbe3",
+      "item": {
+        "type": "markdown",
+        "id": "0af6ec8f5f1ccbe3",
+        "text": "A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include:* Person'', \"''Place''\",  ''Event'', ''Organization'', ''Product'', ''Review'', ''Review-aggregate'', ''Breadcrumb'', ''Offer'', ''Offer-aggregate''. "
+      },
+      "date": 1457828694421
+    },
+    {
+      "type": "edit",
+      "id": "0af6ec8f5f1ccbe3",
+      "item": {
+        "type": "markdown",
+        "id": "0af6ec8f5f1ccbe3",
+        "text": "A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include:\n* Person\n* Place\n* Event\n* Organization\n* Product'\n* Review\n* Review-aggregate\n* Breadcrumb'\n* Offer\n* Offer-aggregate"
+      },
+      "date": 1457828747311
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ed75037b078c6860478c01702d211c4a",
+        "text": "In some cases, search engines covering specific regions may provide locally-specific extensions of microdata. For example, [[Yandex]], a major search engine in Russia, supports [[microformats]] such as [[hCard]] (company contact information), [[hRecipe]] (food recipe), [[hReview]] (market reviews) and [[hProduct]] (product data) and provides its own format for definition of the terms and encyclopedic articles. This extension was made in order to solve transliteration problems between the Cyrillic and Latin alphabets. Due to the implementation of additional marking parameters of Schema's vocabulary, <ref name=\"AcademicYan\"/> the indexation of information in Russian-language web-pages became considerably more successful."
+      },
+      "after": "b93e8b3337c0dee9",
+      "id": "ed75037b078c6860478c01702d211c4a",
+      "date": 1457828761142
+    },
+    {
+      "type": "remove",
+      "id": "ed75037b078c6860478c01702d211c4a",
+      "date": 1457828783206
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "281f7d19eeb81cf16ae46b0554bc268c",
+        "text": "# Global attributes"
+      },
+      "after": "b93e8b3337c0dee9",
+      "id": "281f7d19eeb81cf16ae46b0554bc268c",
+      "date": 1457828789756
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* <code>itemscope</code> – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.<ref name=\"WHATWG\"/>"
+      },
+      "after": "281f7d19eeb81cf16ae46b0554bc268c",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "date": 1457828792645
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "526233e4f1d292ca496b181e32dd4e6e",
+        "text": "* <code>itemtype</code> – A valid URL of a vocabulary that describes the item and its properties context."
+      },
+      "after": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "id": "526233e4f1d292ca496b181e32dd4e6e",
+      "date": 1457828795231
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "text": "* <code>itemid</code> – Indicates a unique identifier of the item."
+      },
+      "after": "526233e4f1d292ca496b181e32dd4e6e",
+      "id": "d3ae1cdddd6238ea14d26e59b6d17a26",
+      "date": 1457828798289
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f3039305eb79ec5120926608354371b3",
+        "text": "* <code>itemprop</code> – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the <code>a</code> element and its <code>href</code> attribute, the <code>img</code> element and its <code>src</code> attribute, or other elements that link to or embed external resources.<ref name=WHATWG/>"
+      },
+      "after": "d3ae1cdddd6238ea14d26e59b6d17a26",
+      "id": "f3039305eb79ec5120926608354371b3",
+      "date": 1457828800442
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3ac5a71b02ab024b3c16340650bbf6ca",
+        "text": "* <code>itemref</code> – Properties that are not descendants of the element with the <code>itemscope</code> attribute can be associated with the item using this attribute. Provides a list of element ids (not <code>itemid</code>s) with additional properties elsewhere in the document.<ref name=\"WHATWG\"/>"
+      },
+      "after": "f3039305eb79ec5120926608354371b3",
+      "id": "3ac5a71b02ab024b3c16340650bbf6ca",
+      "date": 1457828802642
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "f1de18df3c474f436d836b782fe471a4",
+        "text": "# Example"
+      },
+      "after": "3ac5a71b02ab024b3c16340650bbf6ca",
+      "id": "f1de18df3c474f436d836b782fe471a4",
+      "date": 1457828807490
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "72f51bb59f1b2692f21f5ee2e8687d33",
+        "text": "The following HTML5 markup may be found on a typical “About” page containing information about a person:"
+      },
+      "after": "f1de18df3c474f436d836b782fe471a4",
+      "id": "72f51bb59f1b2692f21f5ee2e8687d33",
+      "date": 1457828811396
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "ed45b1d7c217e95d8199249e5e56a19b",
+        "text": "<section> Hello, my name is John Doe, I am a graduate research assistant at"
+      },
+      "after": "72f51bb59f1b2692f21f5ee2e8687d33",
+      "id": "ed45b1d7c217e95d8199249e5e56a19b",
+      "date": 1457828813753
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "8ef062d286357d0e8a9b6b55b0516963",
+        "text": "the University of Dreams."
+      },
+      "after": "ed45b1d7c217e95d8199249e5e56a19b",
+      "id": "8ef062d286357d0e8a9b6b55b0516963",
+      "date": 1457828819943
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "abfd24f77165c0fccbb7775809a48711",
+        "text": "My friends call me Johnny."
+      },
+      "after": "8ef062d286357d0e8a9b6b55b0516963",
+      "id": "abfd24f77165c0fccbb7775809a48711",
+      "date": 1457828822753
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1bbd6c10fbf24418abc1789c7a404e85",
+        "text": "You can visit my homepage at <a href=\"http://www.JohnnyD.com\">www.JohnnyD.com</a>."
+      },
+      "after": "abfd24f77165c0fccbb7775809a48711",
+      "id": "1bbd6c10fbf24418abc1789c7a404e85",
+      "date": 1457828826333
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b51b565ae9cc11c426d61fd0022ad427",
+        "text": "I live at 1234 Peach Drive, Warner Robins, Georgia.</section>"
+      },
+      "after": "1bbd6c10fbf24418abc1789c7a404e85",
+      "id": "b51b565ae9cc11c426d61fd0022ad427",
+      "date": 1457828832957
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "text": "Here is the same markup with added [[Schema.org]]<ref>[http://schema.org/docs/documents.html Schema.org Documentation]</ref><ref>[http://schema.org/docs/full.html Schema.org Type Hierarchy]</ref><ref>[http://schema.rdfs.org/all.ttl Schema.org Turtle RDFS Schema]</ref> Microdata:"
+      },
+      "after": "b51b565ae9cc11c426d61fd0022ad427",
+      "id": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+      "date": 1457828836876
+    },
+    {
+      "type": "edit",
+      "id": "044b932f26cce0f9",
+      "item": {
+        "type": "code",
+        "id": "044b932f26cce0f9",
+        "text": "<section> Hello, my name is John Doe, I am a graduate research assistant at\nthe University of Dreams.\nMy friends call me Johnny. \nYou can visit my homepage at <a href=\"http://www.JohnnyD.com\">www.JohnnyD.com</a>.\nI live at 1234 Peach Drive, Warner Robins, Georgia.</section>"
+      },
+      "date": 1457828861072
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "ed45b1d7c217e95d8199249e5e56a19b",
+        "8ef062d286357d0e8a9b6b55b0516963",
+        "abfd24f77165c0fccbb7775809a48711",
+        "1bbd6c10fbf24418abc1789c7a404e85",
+        "b51b565ae9cc11c426d61fd0022ad427",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162"
+      ],
+      "id": "044b932f26cce0f9",
+      "date": 1457828864559
+    },
+    {
+      "type": "remove",
+      "id": "ed45b1d7c217e95d8199249e5e56a19b",
+      "date": 1457828870490
+    },
+    {
+      "type": "remove",
+      "id": "8ef062d286357d0e8a9b6b55b0516963",
+      "date": 1457828872834
+    },
+    {
+      "type": "remove",
+      "id": "abfd24f77165c0fccbb7775809a48711",
+      "date": 1457828875130
+    },
+    {
+      "type": "remove",
+      "id": "1bbd6c10fbf24418abc1789c7a404e85",
+      "date": 1457828877002
+    },
+    {
+      "type": "remove",
+      "id": "b51b565ae9cc11c426d61fd0022ad427",
+      "date": 1457828879226
+    },
+    {
+      "type": "edit",
+      "id": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+      "item": {
+        "type": "paragraph",
+        "id": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "text": "Here is the same markup with added [[Schema.org]] Microdata:"
+      },
+      "date": 1457828898534
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9495562aa310d447"
+      },
+      "id": "9495562aa310d447",
+      "type": "add",
+      "after": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+      "date": 1457828901873
+    },
+    {
+      "type": "edit",
+      "id": "9495562aa310d447",
+      "item": {
+        "type": "code",
+        "id": "9495562aa310d447",
+        "text": "<section itemscope itemtype=\"http://schema.org/Person\"> \n\tHello, my name is \n\t<span itemprop=\"name\">John Doe</span>, \n\tI am a \n\t<span itemprop=\"jobTitle\">graduate research assistant</span> \n\tat the \n\t<span itemprop=\"affiliation\">University of Dreams</span>. \n\tMy friends call me \n\t<span itemprop=\"additionalName\">Johnny</span>. \n\tYou can visit my homepage at \n\t<a href=\"http://www.JohnnyD.com\" itemprop=\"url\">www.JohnnyD.com</a>. \n\t<section itemprop=\"address\" itemscope itemtype=\"http://schema.org/PostalAddress\">\n\t\tI live at \n\t\t<span itemprop=\"streetAddress\">1234 Peach Drive</span>,\n\t\t<span itemprop=\"addressLocality\">Warner Robins</span>,\n\t\t<span itemprop=\"addressRegion\">Georgia</span>.\n\t</section>\n</section>"
+      },
+      "date": 1457828918144
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d5716846cf04250152941d649310a193",
+        "text": "As the above example shows, Microdata items can be nested. In this case an item of type http://schema.org/PostalAddress is nested inside an item of type http://schema.org/Person."
+      },
+      "after": "9495562aa310d447",
+      "id": "d5716846cf04250152941d649310a193",
+      "date": 1457828953764
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "065851f4c42029e1385db48abfed6a43",
+        "text": "The following text shows how Google parses the Microdata from the above example code. Developers can test pages containing Microdata using Google's ''Rich Snippet Testing Tool''.<ref name=\"GoogleRS\"/>"
+      },
+      "after": "d5716846cf04250152941d649310a193",
+      "id": "065851f4c42029e1385db48abfed6a43",
+      "date": 1457828956024
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a2c249da2f25c170"
+      },
+      "id": "a2c249da2f25c170",
+      "type": "add",
+      "after": "065851f4c42029e1385db48abfed6a43",
+      "date": 1457828958227
+    },
+    {
+      "type": "edit",
+      "id": "a2c249da2f25c170",
+      "item": {
+        "type": "code",
+        "id": "a2c249da2f25c170",
+        "text": "Item\n   Type: http://schema.org/Person\n   name = John Doe\n   jobTitle = graduate research assistant\n   affiliation = University of Dreams\n   additionalName = Johnny\n   url = http://www.johnnyd.com/\n   address = Item(1)\nItem 1\n   Type: http://schema.org/PostalAddress\n   streetAddress = 1234 Peach Drive\n   addressLocality = Warner Robins\n   addressRegion = Georgia"
+      },
+      "date": 1457828961233
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "78dfd90df055392c51f799062b266445",
+        "text": "The same machine-readable terms can be used not only in HTML Microdata, but also in other annotations such as [[RDFa]] or [[JSON-LD]] in the markup, or in an external RDF ([[Resource Description Framework]]) file in a serialization such as [[RDF/XML]], [[Notation3]], or Turtle ([[Turtle (syntax)]])."
+      },
+      "after": "a2c249da2f25c170",
+      "id": "78dfd90df055392c51f799062b266445",
+      "date": 1457828971828
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "818f07f2b5f0575affd3181b4d22653d",
+        "text": "# See also"
+      },
+      "after": "78dfd90df055392c51f799062b266445",
+      "id": "818f07f2b5f0575affd3181b4d22653d",
+      "date": 1457828995828
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bf1a2473b8221f521d8451e3643755ab",
+        "text": "* [[Microformat]]"
+      },
+      "after": "818f07f2b5f0575affd3181b4d22653d",
+      "id": "bf1a2473b8221f521d8451e3643755ab",
+      "date": 1457828998713
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "47df6f87b2ef49d34bedb29ede4b5c65",
+        "text": "* [[RDFa Lite]]"
+      },
+      "after": "bf1a2473b8221f521d8451e3643755ab",
+      "id": "47df6f87b2ef49d34bedb29ede4b5c65",
+      "date": 1457829001229
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "text": "* [[Semantic web]]"
+      },
+      "after": "47df6f87b2ef49d34bedb29ede4b5c65",
+      "id": "9f7d3dd61915c04ed8f44adc7db2d6fd",
+      "date": 1457829003909
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "6d07a53f105b2036fec077082a5402f9",
+        "text": "* [[Semantic HTML]]"
+      },
+      "after": "9f7d3dd61915c04ed8f44adc7db2d6fd",
+      "id": "6d07a53f105b2036fec077082a5402f9",
+      "date": 1457829006862
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "f1de18df3c474f436d836b782fe471a4",
+        "e14a839fd6a49161",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "f1de18df3c474f436d836b782fe471a4",
+      "date": 1457980324545
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "e14a839fd6a49161",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "72f51bb59f1b2692f21f5ee2e8687d33",
+      "date": 1457980341666
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "e14a839fd6a49161",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "044b932f26cce0f9",
+      "date": 1457980349980
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "e14a839fd6a49161",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+      "date": 1457980359062
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "e14a839fd6a49161",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "9495562aa310d447",
+      "date": 1457980368091
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "526233e4f1d292ca496b181e32dd4e6e",
+        "d3ae1cdddd6238ea14d26e59b6d17a26",
+        "f3039305eb79ec5120926608354371b3",
+        "3ac5a71b02ab024b3c16340650bbf6ca",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "e14a839fd6a49161",
+      "date": 1457980386435
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "paragraph",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.<ref name=\"WHATWG\"/>"
+      },
+      "date": 1457980504145
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.<ref name=\"WHATWG\"/>"
+      },
+      "date": 1457980505115
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it."
+      },
+      "date": 1457980511079
+    },
+    {
+      "type": "edit",
+      "id": "526233e4f1d292ca496b181e32dd4e6e",
+      "item": {
+        "type": "paragraph",
+        "id": "526233e4f1d292ca496b181e32dd4e6e",
+        "text": "* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context."
+      },
+      "date": 1457980524513
+    },
+    {
+      "type": "remove",
+      "id": "3ac5a71b02ab024b3c16340650bbf6ca",
+      "date": 1457980575467
+    },
+    {
+      "type": "remove",
+      "id": "f3039305eb79ec5120926608354371b3",
+      "date": 1457980591907
+    },
+    {
+      "type": "remove",
+      "id": "d3ae1cdddd6238ea14d26e59b6d17a26",
+      "date": 1457980604444
+    },
+    {
+      "type": "remove",
+      "id": "526233e4f1d292ca496b181e32dd4e6e",
+      "date": 1457980608946
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.\n* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context.\n* __itemid__ – Indicates a unique identifier of the item.\n* __itemprop__ – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the _a_ element and its _href_ attribute, the _img_ element and its _src_ attribute, or other elements that link to or embed external resources.\n* __itemref__ – Properties that are not descendants of the element with the _itemscope_ attribute can be associated with the item using this attribute. Provides a list of element ids (not _itemid_s) with additional properties elsewhere in the document."
+      },
+      "date": 1457980677862
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.\n* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context.\n* __itemid__ – Indicates a unique identifier of the item.\n* __itemprop__ – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the *a* element and its *href* attribute, the _img_ element and its _src_ attribute, or other elements that link to or embed external resources.\n* __itemref__ – Properties that are not descendants of the element with the _itemscope_ attribute can be associated with the item using this attribute. Provides a list of element ids (not _itemid_s) with additional properties elsewhere in the document."
+      },
+      "date": 1457980807707
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.\n* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context.\n* __itemid__ – Indicates a unique identifier of the item.\n* __itemprop__ – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the [[a element]] and its [[href attribute]], the _img_ element and its _src_ attribute, or other elements that link to or embed external resources.\n* __itemref__ – Properties that are not descendants of the element with the _itemscope_ attribute can be associated with the item using this attribute. Provides a list of element ids (not _itemid_s) with additional properties elsewhere in the document."
+      },
+      "date": 1457980883303
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.\n* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context.\n* __itemid__ – Indicates a unique identifier of the item.\n* __itemprop__ – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the [[a element]] and its [[href attribute]], the [[img_ element]] and its [[src_ attribute]], or other elements that link to or embed external resources.\n* __itemref__ – Properties that are not descendants of the element with the _itemscope_ attribute can be associated with the item using this attribute. Provides a list of element ids (not _itemid_s) with additional properties elsewhere in the document."
+      },
+      "date": 1457980918760
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "281f7d19eeb81cf16ae46b0554bc268c",
+      "date": 1457980938102
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "date": 1457980942863
+    },
+    {
+      "type": "edit",
+      "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+      "item": {
+        "type": "markdown",
+        "id": "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "text": "* __itemscope__ – Creates the Item and indicates that descendants of this element ([[HTML element]]) contain information about it.\n* __itemtype__ – A valid URL of a vocabulary that describes the item and its properties context.\n* __itemid__ – Indicates a unique identifier of the item.\n* __itemprop__ – Indicates that its containing tag holds the value of the specified item property. The property's name and value context are described by the item's vocabulary. Properties values usually consist of string values, but can also use [[URL]]s using the [[a element]] and its [[href attribute]], the [[img element]] and its [[src attribute]], or other elements that link to or embed external resources.\n* __itemref__ – Properties that are not descendants of the element with the _itemscope_ attribute can be associated with the item using this attribute. Provides a list of element ids (not _itemid_s) with additional properties elsewhere in the document."
+      },
+      "date": 1457986619896
+    },
+    {
+      "type": "edit",
+      "id": "0af6ec8f5f1ccbe3",
+      "item": {
+        "type": "markdown",
+        "id": "0af6ec8f5f1ccbe3",
+        "text": "A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include:\n* Person\n* Place\n* Event\n* Organization\n* Product\n* Review\n* Review-aggregate\n* Breadcrumb'\n* Offer\n* Offer-aggregate"
+      },
+      "date": 1457986675721
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "d5716846cf04250152941d649310a193",
+      "date": 1457986699693
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "a2c249da2f25c170",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "065851f4c42029e1385db48abfed6a43",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "a2c249da2f25c170",
+      "date": 1457986709094
+    },
+    {
+      "type": "move",
+      "order": [
+        "3e30312082e31a9a7cd41cba5100d3a9",
+        "e14a839fd6a49161",
+        "f1de18df3c474f436d836b782fe471a4",
+        "72f51bb59f1b2692f21f5ee2e8687d33",
+        "044b932f26cce0f9",
+        "c7cfcbbf4cc9f77ff1bc543ccbc84162",
+        "9495562aa310d447",
+        "d5716846cf04250152941d649310a193",
+        "065851f4c42029e1385db48abfed6a43",
+        "a2c249da2f25c170",
+        "b9af59b452f5e75e",
+        "57c4bac13bc7bdeb4032437abc329757",
+        "281f7d19eeb81cf16ae46b0554bc268c",
+        "dd404d3fb3faca6d00c7e3c5751b2cab",
+        "41b90abe34cd0c5dff4c7aed4efed668",
+        "e08647bcb76f70e7e1dcda113e052241",
+        "0af6ec8f5f1ccbe3",
+        "b93e8b3337c0dee9",
+        "78dfd90df055392c51f799062b266445",
+        "818f07f2b5f0575affd3181b4d22653d",
+        "bf1a2473b8221f521d8451e3643755ab",
+        "47df6f87b2ef49d34bedb29ede4b5c65",
+        "9f7d3dd61915c04ed8f44adc7db2d6fd",
+        "6d07a53f105b2036fec077082a5402f9"
+      ],
+      "id": "065851f4c42029e1385db48abfed6a43",
+      "date": 1457986725572
+    },
+    {
+      "type": "edit",
+      "id": "0af6ec8f5f1ccbe3",
+      "item": {
+        "type": "markdown",
+        "id": "0af6ec8f5f1ccbe3",
+        "text": "A collection of commonly used markup vocabularies are provided by [[Schema.org]] schemas which include:\n* Person\n* Place\n* Event\n* Organization\n* Product\n* Review\n* Review-aggregate\n* Breadcrumb\n* Offer\n* Offer-aggregate"
+      },
+      "date": 1457986754347
+    },
+    {
+      "type": "edit",
+      "id": "065851f4c42029e1385db48abfed6a43",
+      "item": {
+        "type": "paragraph",
+        "id": "065851f4c42029e1385db48abfed6a43",
+        "text": "The following text shows how Google parses the Microdata from the above example code. Developers can test pages containing Microdata using Google's [[Rich Snippet Testing Tool']]."
+      },
+      "date": 1457986807317
+    },
+    {
+      "type": "edit",
+      "id": "065851f4c42029e1385db48abfed6a43",
+      "item": {
+        "type": "paragraph",
+        "id": "065851f4c42029e1385db48abfed6a43",
+        "text": "The following text shows how Google parses the Microdata from the above example code. Developers can test pages containing Microdata using Google's [[Rich Snippet Testing Tool]]."
+      },
+      "date": 1457986813885
+    },
+    {
+      "type": "edit",
+      "id": "d5716846cf04250152941d649310a193",
+      "item": {
+        "type": "paragraph",
+        "id": "d5716846cf04250152941d649310a193",
+        "text": "As the above example shows, it is common to use the [[section element, and the [[<span> element]] to create the desired markup. "
+      },
+      "date": 1457986975275
+    },
+    {
+      "type": "add",
+      "id": "a1ffc882f244925a",
+      "item": {
+        "type": "paragraph",
+        "id": "a1ffc882f244925a",
+        "text": "Microdata items can be nested. In this case an item of type http://schema.org/PostalAddress is nested inside an item of type http://schema.org/Person."
+      },
+      "after": "d5716846cf04250152941d649310a193",
+      "date": 1457986984884
+    },
+    {
+      "type": "edit",
+      "id": "d5716846cf04250152941d649310a193",
+      "item": {
+        "type": "paragraph",
+        "id": "d5716846cf04250152941d649310a193",
+        "text": "As the above example shows, it is common to use the [[<section> element]], and the [[<span> element]] to create the desired markup. "
+      },
+      "date": 1457987004748
+    },
+    {
+      "type": "add",
+      "id": "10427d754b53657d",
+      "item": {
+        "type": "paragraph",
+        "id": "10427d754b53657d",
+        "text": "Here you can check microdata usage statistics - [http://trends.builtwith.com/docinfo/Microdata trends.builtwith.com]"
+      },
+      "after": "e14a839fd6a49161",
+      "date": 1458041957805
+    },
+    {
+      "type": "edit",
+      "id": "10427d754b53657d",
+      "item": {
+        "type": "paragraph",
+        "id": "10427d754b53657d",
+        "text": "Here you can: * Check microdata usage statistics - [http://trends.builtwith.com/docinfo/Microdata trends.builtwith.com]* Sites Using Microdata - [https://github.com/LawrenceWoodman/mida/wiki/Sites-Using-Microdata github"
+      },
+      "date": 1458042012823
+    },
+    {
+      "type": "edit",
+      "id": "10427d754b53657d",
+      "item": {
+        "type": "markdown",
+        "id": "10427d754b53657d",
+        "text": "Here you can: * Check microdata usage statistics - [http://trends.builtwith.com/docinfo/Microdata trends.builtwith.com]* Sites Using Microdata - [https://github.com/LawrenceWoodman/mida/wiki/Sites-Using-Microdata github"
+      },
+      "date": 1458042013767
+    },
+    {
+      "type": "edit",
+      "id": "10427d754b53657d",
+      "item": {
+        "type": "markdown",
+        "id": "10427d754b53657d",
+        "text": "Here you can:\n* Check microdata usage statistics - [http://trends.builtwith.com/docinfo/Microdata trends.builtwith.com]\n* Sites Using Microdata - [https://github.com/LawrenceWoodman/mida/wiki/Sites-Using-Microdata github"
+      },
+      "date": 1458042020415
+    },
+    {
+      "type": "edit",
+      "id": "10427d754b53657d",
+      "item": {
+        "type": "markdown",
+        "id": "10427d754b53657d",
+        "text": "Here you can:\n* Check microdata usage statistics - [http://trends.builtwith.com/docinfo/Microdata trends.builtwith.com]\n* Sites Using Microdata - [https://github.com/LawrenceWoodman/mida/wiki/Sites-Using-Microdata github]"
+      },
+      "date": 1458042024889
+    }
+  ]
+}

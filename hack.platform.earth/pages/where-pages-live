@@ -1,0 +1,1743 @@
+{
+  "title": "Where Pages Live",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "1ee29634cd7d388d",
+      "text": "We describe where the json representing a wiki page can be stored and how pages move between these stores. "
+    },
+    {
+      "type": "html",
+      "id": "4f0e977915ce563c",
+      "text": "<h3>Representation"
+    },
+    {
+      "type": "paragraph",
+      "id": "9838662e56b65e29",
+      "text": "A wiki page is a json object with members for title, story and journal. All are optional so {} can be a page, but [] cannot."
+    },
+    {
+      "type": "paragraph",
+      "id": "e2be9313977c5c73",
+      "text": "A title is expected to be a string which can be converted into a slug. Titles of various capitalization will produce the same slug. Stores often index pages by their title's slug. The slug of a slug is the slug."
+    },
+    {
+      "type": "paragraph",
+      "id": "8b062ab735b7f7ca",
+      "text": "We think of a page as being json even when it has been parsed into some host system's object representation. Good practice does this parsing as soon as possible. "
+    },
+    {
+      "type": "html",
+      "id": "41bc74b504690fb3",
+      "text": "<h3>Residence"
+    },
+    {
+      "type": "paragraph",
+      "id": "57f3f2ac1a97c4a2",
+      "text": "Servers managing a single site or a farm."
+    },
+    {
+      "type": "paragraph",
+      "id": "416cc45832e6b730",
+      "text": "Servers on the internet, an intranet, or a private computer."
+    },
+    {
+      "type": "paragraph",
+      "id": "05c5b13a47e793a2",
+      "text": "Local Storage in an html5 browser."
+    },
+    {
+      "type": "paragraph",
+      "id": "5f5b3a115c9145b3",
+      "text": "Included with plugins as documentation."
+    },
+    {
+      "type": "paragraph",
+      "id": "c741fa920aefc244",
+      "text": "DOM elements of class 'page'."
+    },
+    {
+      "type": "paragraph",
+      "id": "35b3def3bbd7f3de",
+      "text": "Create actions within the journal of a later version."
+    },
+    {
+      "type": "paragraph",
+      "id": "a5e8a82060198585",
+      "text": "Importer scripts and the files they read."
+    },
+    {
+      "type": "paragraph",
+      "id": "e70a20acd72b204a",
+      "text": "HTML text cached somewhere in the web from a server-side rendering."
+    },
+    {
+      "type": "paragraph",
+      "id": "e3df0993ed2ba619",
+      "text": "System pages, like recent-changes.json are constructed on demand from system information."
+    },
+    {
+      "type": "html",
+      "id": "8947a05d8caa8056",
+      "text": "<h3> Addressing"
+    },
+    {
+      "type": "paragraph",
+      "id": "4e4a8095ff018225",
+      "text": "Internet addresses for pages are formed by combining slugs with various storage indications."
+    },
+    {
+      "type": "paragraph",
+      "id": "b4e0e7e89b0e3426",
+      "text": "origin.com/slug.html — retrieve the HTML rendering"
+    },
+    {
+      "type": "paragraph",
+      "id": "a1e46771b2b79e76",
+      "text": "origin.com/view/slug — retrieve the js to render slug"
+    },
+    {
+      "type": "paragraph",
+      "id": "7396bfdd3261bbe3",
+      "text": "origin.com — same as origin.com/view/welcome-visitors"
+    },
+    {
+      "type": "paragraph",
+      "id": "d57ce180ae2a9b0d",
+      "text": "origin.com/view/slug_rev2 — render a revision of a slug"
+    },
+    {
+      "type": "paragraph",
+      "id": "87384936cdc44b18",
+      "text": "The js rendering interprets various alternative storage indicators. These can be repeated in indicator/slug pairs to specify multiple pages to be displayed at once."
+    },
+    {
+      "type": "paragraph",
+      "id": "39c7c3b1a52ca7cd",
+      "text": "origin/slug — retrieve page from origin server ignoring browser local storage copy if any."
+    },
+    {
+      "type": "paragraph",
+      "id": "cb6724c44be3054b",
+      "text": "local/slug — retrieve page from browser local storage ignoring the origin server copy if any."
+    },
+    {
+      "type": "paragraph",
+      "id": "18a972efd4361c75",
+      "text": "view/slug — retrieve page from origin or local, giving preference to local if present"
+    },
+    {
+      "type": "paragraph",
+      "id": "b8080876bb03c53d",
+      "text": "domain.com/slug — retrieve page from a remote server ignoring copies in local or origin."
+    },
+    {
+      "type": "html",
+      "id": "a26d10067c2ce8c0",
+      "text": "<h3>Transport"
+    },
+    {
+      "type": "paragraph",
+      "id": "a6665b69f42d18c4",
+      "text": "A browser gets a page from a server in response to a GET request, often via ajax."
+    },
+    {
+      "type": "paragraph",
+      "id": "5402a9fc4f7a885e",
+      "text": "A browser puts updates to a page by sending actions that can be interpreted by the server, presumably via ajax."
+    },
+    {
+      "type": "paragraph",
+      "id": "54edd380dd479eaa",
+      "text": "A browser writes whole pages to its own local storage when it cannot save edits on a remote machine."
+    },
+    {
+      "type": "paragraph",
+      "id": "a0ee5b26963ff266",
+      "text": "A browser puts a bundle of pages, usually changes, usually stored in new space on a farm."
+    },
+    {
+      "type": "paragraph",
+      "id": "3b5de6321e164814",
+      "text": "A browser puts an individual page from local storage to a writable origin. This is a recent variation on the fork action."
+    },
+    {
+      "type": "paragraph",
+      "id": "ca42b53c2057c1f5",
+      "text": "A browser gets a page from a remote server via CORS request."
+    },
+    {
+      "type": "paragraph",
+      "id": "dbed3e7613e620d5",
+      "text": "A browser gets a page from a remote server via the origin server acting as a proxy. This is deprecated but not yet eliminated."
+    },
+    {
+      "type": "paragraph",
+      "id": "30e1213c0ba1a737",
+      "text": "An administrator moves pages or whole sites by scp or related mechanisms."
+    },
+    {
+      "type": "paragraph",
+      "id": "e24596899afd70ae",
+      "text": "An importer runs and writes, typically, to page space of a private computer."
+    },
+    {
+      "type": "paragraph",
+      "id": "64fa600cdbdfd679",
+      "text": "An importer runs automatically and writes to page space of a public server."
+    },
+    {
+      "type": "paragraph",
+      "id": "3d2279c6284eaf03",
+      "text": "An importer adds its constructed story to a create action in the journal."
+    },
+    {
+      "type": "paragraph",
+      "id": "9cde325f4a705415",
+      "text": "An importer retrieves previously constructed pages so as to preserve previous creates that exist in those journals."
+    },
+    {
+      "type": "html",
+      "id": "84d145ff36412932",
+      "text": "<h3> Fork"
+    },
+    {
+      "type": "paragraph",
+      "id": "7f7baace8aa336d1",
+      "text": "A fork involves retrieving a page from one store and saving it in another store where it can be updated independently from its source."
+    },
+    {
+      "type": "paragraph",
+      "id": "8a9046dfb4da1749",
+      "text": "A fork should be recorded as a fork action in the journal. This satisfies the attribution requirement of the creative commons attribution, share-alike license."
+    },
+    {
+      "type": "paragraph",
+      "id": "ea4c848a8c26618f",
+      "text": "Caching a page for more efficient access is not a form of forking."
+    },
+    {
+      "type": "paragraph",
+      "id": "e948539b78a9b554",
+      "text": "Publishing a page from a private staging location is not a form of forking."
+    },
+    {
+      "type": "paragraph",
+      "id": "5b03f3752aa83cc3",
+      "text": "Saving a page in browser local storage is considered a fork. Saving it back to the origin is also a fork."
+    },
+    {
+      "type": "html",
+      "id": "8b4c0cdead4528bc",
+      "text": "<h3> Ghosts"
+    },
+    {
+      "type": "paragraph",
+      "id": "8f0192f9863d7a17",
+      "text": "A ghost page is one that isn't explicitly stored in the server's database."
+    },
+    {
+      "type": "paragraph",
+      "id": "f97e4550fa7887eb",
+      "text": "A revision retrieved by reconstructing it from the journal of a page."
+    },
+    {
+      "type": "paragraph",
+      "id": "db51a45b73a099a6",
+      "text": "A page that is cited in a link or in a url but does not yet exist."
+    },
+    {
+      "type": "paragraph",
+      "id": "0d39a12110a32ce6",
+      "text": "A page that holds the results of a search."
+    },
+    {
+      "type": "paragraph",
+      "id": "ffa5abc3e93f295b",
+      "text": "A page that holds the results from a failed server request."
+    },
+    {
+      "type": "paragraph",
+      "id": "0ae721dbe811010b",
+      "text": "But not a page retrieved from the pages component of a plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "95905754a5fe4bd7",
+      "text": "But not a page retrieved from the server's default pages directory."
+    },
+    {
+      "type": "paragraph",
+      "id": "cee69d23d13034c0",
+      "text": "But not a system page like recent-changes."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "id": "592f1ea2c4e6a1fa",
+      "item": {
+        "title": "Where Pages Live"
+      },
+      "date": 1345210940661
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1ee29634cd7d388d"
+      },
+      "id": "1ee29634cd7d388d",
+      "type": "add",
+      "date": 1345210942924
+    },
+    {
+      "type": "edit",
+      "id": "1ee29634cd7d388d",
+      "item": {
+        "type": "paragraph",
+        "id": "1ee29634cd7d388d",
+        "text": "We describe where the json representing a wiki page can be stored and how pages move between these stores. "
+      },
+      "date": 1345211124745
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4f0e977915ce563c",
+        "text": ""
+      },
+      "id": "4f0e977915ce563c",
+      "type": "add",
+      "after": "1ee29634cd7d388d",
+      "date": 1345211125251
+    },
+    {
+      "type": "edit",
+      "id": "4f0e977915ce563c",
+      "item": {
+        "type": "paragraph",
+        "id": "4f0e977915ce563c",
+        "text": "<h3>Representation"
+      },
+      "date": 1345211283682
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "9838662e56b65e29",
+        "text": ""
+      },
+      "id": "9838662e56b65e29",
+      "type": "add",
+      "after": "4f0e977915ce563c",
+      "date": 1345211284189
+    },
+    {
+      "type": "edit",
+      "id": "9838662e56b65e29",
+      "item": {
+        "type": "paragraph",
+        "id": "9838662e56b65e29",
+        "text": "A wiki page is a json object with members for title, story and journal. All are optional so {} can be a page, but [] cannot."
+      },
+      "date": 1345211404544
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e2be9313977c5c73",
+        "text": ""
+      },
+      "id": "e2be9313977c5c73",
+      "type": "add",
+      "after": "9838662e56b65e29",
+      "date": 1345211405048
+    },
+    {
+      "type": "edit",
+      "id": "e2be9313977c5c73",
+      "item": {
+        "type": "paragraph",
+        "id": "e2be9313977c5c73",
+        "text": "A title is expected to be a string. Titles of various capitalization will produce the same slug."
+      },
+      "date": 1345211542816
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3aaa5f6c88dc20da",
+        "text": ""
+      },
+      "id": "3aaa5f6c88dc20da",
+      "type": "add",
+      "after": "e2be9313977c5c73",
+      "date": 1345211543321
+    },
+    {
+      "type": "remove",
+      "id": "3aaa5f6c88dc20da",
+      "date": 1345211567597
+    },
+    {
+      "type": "edit",
+      "id": "e2be9313977c5c73",
+      "item": {
+        "type": "paragraph",
+        "id": "e2be9313977c5c73",
+        "text": "A title is expected to be a string. Titles of various capitalization will produce the same slug. Stores often index pages by their title's slug. The slug of a slug is the slug."
+      },
+      "date": 1345211649450
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8b062ab735b7f7ca",
+        "text": ""
+      },
+      "id": "8b062ab735b7f7ca",
+      "type": "add",
+      "after": "e2be9313977c5c73",
+      "date": 1345211649954
+    },
+    {
+      "type": "edit",
+      "id": "8b062ab735b7f7ca",
+      "item": {
+        "type": "paragraph",
+        "id": "8b062ab735b7f7ca",
+        "text": "We think of a page as being json even when it has been parsed into some host system's object representation. Good practice does this parsing as soon as possible. "
+      },
+      "date": 1345211803077
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "320d59a9e4ee9bcb",
+        "text": ""
+      },
+      "id": "320d59a9e4ee9bcb",
+      "type": "add",
+      "after": "8b062ab735b7f7ca",
+      "date": 1345211803583
+    },
+    {
+      "type": "remove",
+      "id": "320d59a9e4ee9bcb",
+      "date": 1345211855842
+    },
+    {
+      "type": "edit",
+      "id": "e2be9313977c5c73",
+      "item": {
+        "type": "paragraph",
+        "id": "e2be9313977c5c73",
+        "text": "A title is expected to be a string which can be converted into a slug. Titles of various capitalization will produce the same slug. Stores often index pages by their title's slug. The slug of a slug is the slug."
+      },
+      "date": 1345211879878
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "41bc74b504690fb3"
+      },
+      "id": "41bc74b504690fb3",
+      "type": "add",
+      "after": "8b062ab735b7f7ca",
+      "date": 1345211886059
+    },
+    {
+      "type": "edit",
+      "id": "41bc74b504690fb3",
+      "item": {
+        "type": "paragraph",
+        "id": "41bc74b504690fb3",
+        "text": "<h3>Residence"
+      },
+      "date": 1345211930805
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "57f3f2ac1a97c4a2",
+        "text": ""
+      },
+      "id": "57f3f2ac1a97c4a2",
+      "type": "add",
+      "after": "41bc74b504690fb3",
+      "date": 1345211931310
+    },
+    {
+      "type": "edit",
+      "id": "57f3f2ac1a97c4a2",
+      "item": {
+        "type": "paragraph",
+        "id": "57f3f2ac1a97c4a2",
+        "text": "Servers managing a single site or a farm."
+      },
+      "date": 1345212130345
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "416cc45832e6b730",
+        "text": ""
+      },
+      "id": "416cc45832e6b730",
+      "type": "add",
+      "after": "57f3f2ac1a97c4a2",
+      "date": 1345212130849
+    },
+    {
+      "type": "edit",
+      "id": "416cc45832e6b730",
+      "item": {
+        "type": "paragraph",
+        "id": "416cc45832e6b730",
+        "text": "Servers on the internet, an intranet, or a private computer."
+      },
+      "date": 1345212180377
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "05c5b13a47e793a2",
+        "text": ""
+      },
+      "id": "05c5b13a47e793a2",
+      "type": "add",
+      "after": "416cc45832e6b730",
+      "date": 1345212180881
+    },
+    {
+      "type": "edit",
+      "id": "05c5b13a47e793a2",
+      "item": {
+        "type": "paragraph",
+        "id": "05c5b13a47e793a2",
+        "text": "Local Storage in an html5 browser."
+      },
+      "date": 1345212223925
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c741fa920aefc244",
+        "text": ""
+      },
+      "id": "c741fa920aefc244",
+      "type": "add",
+      "after": "05c5b13a47e793a2",
+      "date": 1345212224432
+    },
+    {
+      "type": "edit",
+      "id": "c741fa920aefc244",
+      "item": {
+        "type": "paragraph",
+        "id": "c741fa920aefc244",
+        "text": "DOM elements of class 'page'."
+      },
+      "date": 1345212294940
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "35b3def3bbd7f3de",
+        "text": ""
+      },
+      "id": "35b3def3bbd7f3de",
+      "type": "add",
+      "after": "c741fa920aefc244",
+      "date": 1345212295445
+    },
+    {
+      "type": "edit",
+      "id": "35b3def3bbd7f3de",
+      "item": {
+        "type": "paragraph",
+        "id": "35b3def3bbd7f3de",
+        "text": "Create actions within the journal of a later version."
+      },
+      "date": 1345212361238
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c7ccc4844c50f2f3",
+        "text": ""
+      },
+      "id": "c7ccc4844c50f2f3",
+      "type": "add",
+      "after": "35b3def3bbd7f3de",
+      "date": 1345212361742
+    },
+    {
+      "type": "remove",
+      "id": "c7ccc4844c50f2f3",
+      "date": 1345212468157
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a5e8a82060198585"
+      },
+      "id": "a5e8a82060198585",
+      "type": "add",
+      "after": "35b3def3bbd7f3de",
+      "date": 1345212516302
+    },
+    {
+      "type": "edit",
+      "id": "a5e8a82060198585",
+      "item": {
+        "type": "paragraph",
+        "id": "a5e8a82060198585",
+        "text": "Importer scripts and the files they read."
+      },
+      "date": 1345212612689
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a26d10067c2ce8c0"
+      },
+      "id": "a26d10067c2ce8c0",
+      "type": "add",
+      "after": "a5e8a82060198585",
+      "date": 1345212707548
+    },
+    {
+      "type": "edit",
+      "id": "a26d10067c2ce8c0",
+      "item": {
+        "type": "paragraph",
+        "id": "a26d10067c2ce8c0",
+        "text": "<h3>Transport"
+      },
+      "date": 1345212720420
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a6665b69f42d18c4",
+        "text": ""
+      },
+      "id": "a6665b69f42d18c4",
+      "type": "add",
+      "after": "a26d10067c2ce8c0",
+      "date": 1345212720924
+    },
+    {
+      "type": "edit",
+      "id": "a6665b69f42d18c4",
+      "item": {
+        "type": "paragraph",
+        "id": "a6665b69f42d18c4",
+        "text": "A browser gets a page from a server in response to a GET request."
+      },
+      "date": 1345212776126
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5402a9fc4f7a885e",
+        "text": ""
+      },
+      "id": "5402a9fc4f7a885e",
+      "type": "add",
+      "after": "a6665b69f42d18c4",
+      "date": 1345212776632
+    },
+    {
+      "type": "edit",
+      "id": "5402a9fc4f7a885e",
+      "item": {
+        "type": "paragraph",
+        "id": "5402a9fc4f7a885e",
+        "text": "A browser puts updates to a page by sending actions that can be interpreted by the server."
+      },
+      "date": 1345212824369
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a0ee5b26963ff266",
+        "text": ""
+      },
+      "id": "a0ee5b26963ff266",
+      "type": "add",
+      "after": "5402a9fc4f7a885e",
+      "date": 1345212824873
+    },
+    {
+      "type": "edit",
+      "id": "a0ee5b26963ff266",
+      "item": {
+        "type": "paragraph",
+        "id": "a0ee5b26963ff266",
+        "text": "A browser puts a bundle of pages, usually changes, usually stored in new space on a farm."
+      },
+      "date": 1345212975916
+    },
+    {
+      "type": "edit",
+      "id": "a6665b69f42d18c4",
+      "item": {
+        "type": "paragraph",
+        "id": "a6665b69f42d18c4",
+        "text": "A browser gets a page from a server in response to a GET request, often via ajax."
+      },
+      "date": 1345212991771
+    },
+    {
+      "type": "edit",
+      "id": "5402a9fc4f7a885e",
+      "item": {
+        "type": "paragraph",
+        "id": "5402a9fc4f7a885e",
+        "text": "A browser puts updates to a page by sending actions that can be interpreted by the server, presumably via ajax."
+      },
+      "date": 1345213033021
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e70a20acd72b204a",
+        "text": ""
+      },
+      "id": "e70a20acd72b204a",
+      "type": "add",
+      "after": "a5e8a82060198585",
+      "date": 1345213061647
+    },
+    {
+      "type": "edit",
+      "id": "e70a20acd72b204a",
+      "item": {
+        "type": "paragraph",
+        "id": "e70a20acd72b204a",
+        "text": "HTML cached somewhere in the web."
+      },
+      "date": 1345213158633
+    },
+    {
+      "type": "edit",
+      "id": "e70a20acd72b204a",
+      "item": {
+        "type": "paragraph",
+        "id": "e70a20acd72b204a",
+        "text": "HTML text cached somewhere in the web from a server-side rendering."
+      },
+      "date": 1345213194933
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ca42b53c2057c1f5",
+        "text": ""
+      },
+      "id": "ca42b53c2057c1f5",
+      "type": "add",
+      "after": "a0ee5b26963ff266",
+      "date": 1345213633385
+    },
+    {
+      "type": "edit",
+      "id": "ca42b53c2057c1f5",
+      "item": {
+        "type": "paragraph",
+        "id": "ca42b53c2057c1f5",
+        "text": "A browser gets a page from a remote server via CORS request."
+      },
+      "date": 1345213663587
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "dbed3e7613e620d5",
+        "text": ""
+      },
+      "id": "dbed3e7613e620d5",
+      "type": "add",
+      "after": "ca42b53c2057c1f5",
+      "date": 1345213664092
+    },
+    {
+      "type": "edit",
+      "id": "dbed3e7613e620d5",
+      "item": {
+        "type": "paragraph",
+        "id": "dbed3e7613e620d5",
+        "text": "A browser gets a page from a remote server via the origin server acting as a proxy."
+      },
+      "date": 1345213797007
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "30e1213c0ba1a737",
+        "text": ""
+      },
+      "id": "30e1213c0ba1a737",
+      "type": "add",
+      "after": "dbed3e7613e620d5",
+      "date": 1345213797511
+    },
+    {
+      "type": "edit",
+      "id": "30e1213c0ba1a737",
+      "item": {
+        "type": "paragraph",
+        "id": "30e1213c0ba1a737",
+        "text": "An administrator moves pages or whole sites by scp or related mechanisms."
+      },
+      "date": 1345213876592
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e24596899afd70ae",
+        "text": ""
+      },
+      "id": "e24596899afd70ae",
+      "type": "add",
+      "after": "30e1213c0ba1a737",
+      "date": 1345213877096
+    },
+    {
+      "type": "edit",
+      "id": "e24596899afd70ae",
+      "item": {
+        "type": "paragraph",
+        "id": "e24596899afd70ae",
+        "text": "An importer runs and writes, typically, to page space of a private computer."
+      },
+      "date": 1345213990897
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "64fa600cdbdfd679",
+        "text": ""
+      },
+      "id": "64fa600cdbdfd679",
+      "type": "add",
+      "after": "e24596899afd70ae",
+      "date": 1345213991401
+    },
+    {
+      "type": "edit",
+      "id": "64fa600cdbdfd679",
+      "item": {
+        "type": "paragraph",
+        "id": "64fa600cdbdfd679",
+        "text": "An importer runs automatically and writes to page space of a public server."
+      },
+      "date": 1345214032107
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "54edd380dd479eaa",
+        "text": ""
+      },
+      "id": "54edd380dd479eaa",
+      "type": "add",
+      "after": "5402a9fc4f7a885e",
+      "date": 1345214054850
+    },
+    {
+      "type": "edit",
+      "id": "54edd380dd479eaa",
+      "item": {
+        "type": "paragraph",
+        "id": "54edd380dd479eaa",
+        "text": "A browser writes whole pages to its own local storage when it cannot save edits on a remote machine."
+      },
+      "date": 1345214099735
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3d2279c6284eaf03",
+        "text": ""
+      },
+      "id": "3d2279c6284eaf03",
+      "type": "add",
+      "after": "64fa600cdbdfd679",
+      "date": 1345214149904
+    },
+    {
+      "type": "edit",
+      "id": "3d2279c6284eaf03",
+      "item": {
+        "type": "paragraph",
+        "id": "3d2279c6284eaf03",
+        "text": "An importer adds its constructed story to a create action in the journal."
+      },
+      "date": 1345214279959
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "9cde325f4a705415",
+        "text": ""
+      },
+      "id": "9cde325f4a705415",
+      "type": "add",
+      "after": "3d2279c6284eaf03",
+      "date": 1345214280466
+    },
+    {
+      "type": "edit",
+      "id": "9cde325f4a705415",
+      "item": {
+        "type": "paragraph",
+        "id": "9cde325f4a705415",
+        "text": "An importer retrieves previously constructed pages so as to preserve previous creates that exist in those journals."
+      },
+      "date": 1345214375935
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "84d145ff36412932"
+      },
+      "id": "84d145ff36412932",
+      "type": "add",
+      "after": "9cde325f4a705415",
+      "date": 1345214502269
+    },
+    {
+      "type": "edit",
+      "id": "84d145ff36412932",
+      "item": {
+        "type": "paragraph",
+        "id": "84d145ff36412932",
+        "text": "<h3> Fork"
+      },
+      "date": 1345214522311
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7f7baace8aa336d1",
+        "text": ""
+      },
+      "id": "7f7baace8aa336d1",
+      "type": "add",
+      "after": "84d145ff36412932",
+      "date": 1345214522816
+    },
+    {
+      "type": "edit",
+      "id": "7f7baace8aa336d1",
+      "item": {
+        "type": "paragraph",
+        "id": "7f7baace8aa336d1",
+        "text": "A fork involves retrieving a page from one store and saving it in another store where it can be updated independently from its source."
+      },
+      "date": 1345214697862
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ea4c848a8c26618f",
+        "text": ""
+      },
+      "id": "ea4c848a8c26618f",
+      "type": "add",
+      "after": "7f7baace8aa336d1",
+      "date": 1345214698366
+    },
+    {
+      "type": "edit",
+      "id": "ea4c848a8c26618f",
+      "item": {
+        "type": "paragraph",
+        "id": "ea4c848a8c26618f",
+        "text": "Caching a page for more efficient access is not a form of forking."
+      },
+      "date": 1345214723959
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e948539b78a9b554",
+        "text": ""
+      },
+      "id": "e948539b78a9b554",
+      "type": "add",
+      "after": "ea4c848a8c26618f",
+      "date": 1345214724463
+    },
+    {
+      "type": "edit",
+      "id": "e948539b78a9b554",
+      "item": {
+        "type": "paragraph",
+        "id": "e948539b78a9b554",
+        "text": "Publishing a page from a private staging location is not a form of forking."
+      },
+      "date": 1345214810702
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8a9046dfb4da1749",
+        "text": ""
+      },
+      "id": "8a9046dfb4da1749",
+      "type": "add",
+      "after": "7f7baace8aa336d1",
+      "date": 1345214879007
+    },
+    {
+      "type": "edit",
+      "id": "8a9046dfb4da1749",
+      "item": {
+        "type": "paragraph",
+        "id": "8a9046dfb4da1749",
+        "text": "A fork should be recorded as a fork action in the journal. This satisfies the attribution requirement of the creative commons attribution, share-alike license."
+      },
+      "date": 1345214986014
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5b03f3752aa83cc3",
+        "text": ""
+      },
+      "id": "5b03f3752aa83cc3",
+      "type": "add",
+      "after": "e948539b78a9b554",
+      "date": 1345215019879
+    },
+    {
+      "type": "edit",
+      "id": "5b03f3752aa83cc3",
+      "item": {
+        "type": "paragraph",
+        "id": "5b03f3752aa83cc3",
+        "text": "Saving a page in browser local storage hasn't been, but probably should be considered a fork."
+      },
+      "date": 1345215060767
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8947a05d8caa8056",
+        "text": ""
+      },
+      "id": "8947a05d8caa8056",
+      "type": "add",
+      "after": "e70a20acd72b204a",
+      "date": 1345216000960
+    },
+    {
+      "type": "edit",
+      "id": "8947a05d8caa8056",
+      "item": {
+        "type": "paragraph",
+        "id": "8947a05d8caa8056",
+        "text": "<h3> Addressing"
+      },
+      "date": 1345216023809
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4e4a8095ff018225",
+        "text": ""
+      },
+      "id": "4e4a8095ff018225",
+      "type": "add",
+      "after": "8947a05d8caa8056",
+      "date": 1345216024315
+    },
+    {
+      "type": "edit",
+      "id": "4e4a8095ff018225",
+      "item": {
+        "type": "paragraph",
+        "id": "4e4a8095ff018225",
+        "text": "Internet addresses for pages are formed by combining slugs with various storage indications."
+      },
+      "date": 1345216111569
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b4e0e7e89b0e3426",
+        "text": ""
+      },
+      "id": "b4e0e7e89b0e3426",
+      "type": "add",
+      "after": "4e4a8095ff018225",
+      "date": 1345216112074
+    },
+    {
+      "type": "edit",
+      "id": "b4e0e7e89b0e3426",
+      "item": {
+        "type": "paragraph",
+        "id": "b4e0e7e89b0e3426",
+        "text": "origin.com/slug.html — retrieve the HTML rendering"
+      },
+      "date": 1345216256008
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a1e46771b2b79e76",
+        "text": ""
+      },
+      "id": "a1e46771b2b79e76",
+      "type": "add",
+      "after": "b4e0e7e89b0e3426",
+      "date": 1345216256514
+    },
+    {
+      "type": "edit",
+      "id": "a1e46771b2b79e76",
+      "item": {
+        "type": "paragraph",
+        "id": "a1e46771b2b79e76",
+        "text": "origin.com/view/slug — retrieve the json rendering and javascript to render it"
+      },
+      "date": 1345216326967
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "17f0fe0c60b22da7",
+        "text": ""
+      },
+      "id": "17f0fe0c60b22da7",
+      "type": "add",
+      "after": "a1e46771b2b79e76",
+      "date": 1345216327473
+    },
+    {
+      "type": "remove",
+      "id": "17f0fe0c60b22da7",
+      "date": 1345216363545
+    },
+    {
+      "type": "edit",
+      "id": "a1e46771b2b79e76",
+      "item": {
+        "type": "paragraph",
+        "id": "a1e46771b2b79e76",
+        "text": "origin.com/view/slug — retrieve the js to render slug"
+      },
+      "date": 1345216397318
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7396bfdd3261bbe3",
+        "text": ""
+      },
+      "id": "7396bfdd3261bbe3",
+      "type": "add",
+      "after": "a1e46771b2b79e76",
+      "date": 1345216439260
+    },
+    {
+      "type": "edit",
+      "id": "7396bfdd3261bbe3",
+      "item": {
+        "type": "paragraph",
+        "id": "7396bfdd3261bbe3",
+        "text": "origin.com — same as origin.com/view/welcome-visitors"
+      },
+      "date": 1345216461417
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "87384936cdc44b18",
+        "text": ""
+      },
+      "id": "87384936cdc44b18",
+      "type": "add",
+      "after": "7396bfdd3261bbe3",
+      "date": 1345216526982
+    },
+    {
+      "type": "edit",
+      "id": "87384936cdc44b18",
+      "item": {
+        "type": "paragraph",
+        "id": "87384936cdc44b18",
+        "text": "The js rendering"
+      },
+      "date": 1345216591803
+    },
+    {
+      "type": "edit",
+      "id": "87384936cdc44b18",
+      "item": {
+        "type": "paragraph",
+        "id": "87384936cdc44b18",
+        "text": "The js rendering interprets various alternative storage indicators. "
+      },
+      "date": 1345216671855
+    },
+    {
+      "type": "edit",
+      "id": "87384936cdc44b18",
+      "item": {
+        "type": "paragraph",
+        "id": "87384936cdc44b18",
+        "text": "The js rendering interprets various alternative storage indicators. These can be repeated in indicator/slug pairs to specify multiple pages to be displayed at once."
+      },
+      "date": 1345216732271
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "39c7c3b1a52ca7cd",
+        "text": ""
+      },
+      "id": "39c7c3b1a52ca7cd",
+      "type": "add",
+      "after": "87384936cdc44b18",
+      "date": 1345216732776
+    },
+    {
+      "type": "edit",
+      "id": "39c7c3b1a52ca7cd",
+      "item": {
+        "type": "paragraph",
+        "id": "39c7c3b1a52ca7cd",
+        "text": "origin/slug — retrieve page from origin server ignoring browser local storage copy if any."
+      },
+      "date": 1345216794703
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "cb6724c44be3054b",
+        "text": ""
+      },
+      "id": "cb6724c44be3054b",
+      "type": "add",
+      "after": "39c7c3b1a52ca7cd",
+      "date": 1345216795207
+    },
+    {
+      "type": "edit",
+      "id": "cb6724c44be3054b",
+      "item": {
+        "type": "paragraph",
+        "id": "cb6724c44be3054b",
+        "text": "local/slug — retrieve page from browser local storage ignoring the origin server copy if any."
+      },
+      "date": 1345216853917
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "18a972efd4361c75",
+        "text": ""
+      },
+      "id": "18a972efd4361c75",
+      "type": "add",
+      "after": "cb6724c44be3054b",
+      "date": 1345216854421
+    },
+    {
+      "type": "edit",
+      "id": "18a972efd4361c75",
+      "item": {
+        "type": "paragraph",
+        "id": "18a972efd4361c75",
+        "text": "view/slug — retrieve page from origin or local, giving preference to local if present"
+      },
+      "date": 1345216951084
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b8080876bb03c53d",
+        "text": ""
+      },
+      "id": "b8080876bb03c53d",
+      "type": "add",
+      "after": "18a972efd4361c75",
+      "date": 1345216951588
+    },
+    {
+      "type": "edit",
+      "id": "b8080876bb03c53d",
+      "item": {
+        "type": "paragraph",
+        "id": "b8080876bb03c53d",
+        "text": "domain.com/slug — retrieve page from a remote server ignoring copies in local or origin."
+      },
+      "date": 1345217039715
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "be0f215797f0fbef",
+        "text": ""
+      },
+      "id": "be0f215797f0fbef",
+      "type": "add",
+      "after": "e70a20acd72b204a",
+      "date": 1345220905464
+    },
+    {
+      "type": "remove",
+      "id": "be0f215797f0fbef",
+      "date": 1345220913308
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e3df0993ed2ba619",
+        "text": ""
+      },
+      "id": "e3df0993ed2ba619",
+      "type": "add",
+      "after": "e70a20acd72b204a",
+      "date": 1345220915030
+    },
+    {
+      "type": "edit",
+      "id": "e3df0993ed2ba619",
+      "item": {
+        "type": "paragraph",
+        "id": "e3df0993ed2ba619",
+        "text": "System pages, like recent-changes.json are constructed on demand from system information."
+      },
+      "date": 1345220957323
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "35cee5fd82888281",
+        "text": ""
+      },
+      "id": "35cee5fd82888281",
+      "type": "add",
+      "after": "b8080876bb03c53d",
+      "date": 1347236700353
+    },
+    {
+      "type": "remove",
+      "id": "35cee5fd82888281",
+      "date": 1347236733982
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d57ce180ae2a9b0d",
+        "text": ""
+      },
+      "id": "d57ce180ae2a9b0d",
+      "type": "add",
+      "after": "7396bfdd3261bbe3",
+      "date": 1347236743495
+    },
+    {
+      "type": "edit",
+      "id": "d57ce180ae2a9b0d",
+      "item": {
+        "type": "paragraph",
+        "id": "d57ce180ae2a9b0d",
+        "text": "origin.com/view/slug_rev2 — render a specific revision of a slug"
+      },
+      "date": 1347236866501
+    },
+    {
+      "type": "edit",
+      "id": "d57ce180ae2a9b0d",
+      "item": {
+        "type": "paragraph",
+        "id": "d57ce180ae2a9b0d",
+        "text": "origin.com/view/slug_rev2 — render a revision of a slug"
+      },
+      "date": 1347236888019
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8b4c0cdead4528bc",
+        "text": ""
+      },
+      "id": "8b4c0cdead4528bc",
+      "type": "add",
+      "after": "5b03f3752aa83cc3",
+      "date": 1347236918514
+    },
+    {
+      "type": "edit",
+      "id": "8b4c0cdead4528bc",
+      "item": {
+        "type": "paragraph",
+        "id": "8b4c0cdead4528bc",
+        "text": "<h3> Ghosts"
+      },
+      "date": 1347236929434
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8f0192f9863d7a17",
+        "text": ""
+      },
+      "id": "8f0192f9863d7a17",
+      "type": "add",
+      "after": "8b4c0cdead4528bc",
+      "date": 1347236929943
+    },
+    {
+      "type": "edit",
+      "id": "8f0192f9863d7a17",
+      "item": {
+        "type": "paragraph",
+        "id": "8f0192f9863d7a17",
+        "text": "A ghost page is one that isn't explicitly stored in the server's database."
+      },
+      "date": 1347237041834
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f97e4550fa7887eb",
+        "text": ""
+      },
+      "id": "f97e4550fa7887eb",
+      "type": "add",
+      "after": "8f0192f9863d7a17",
+      "date": 1347237042339
+    },
+    {
+      "type": "edit",
+      "id": "f97e4550fa7887eb",
+      "item": {
+        "type": "paragraph",
+        "id": "f97e4550fa7887eb",
+        "text": "A revision retrieved by reconstructing it from the journal of a page."
+      },
+      "date": 1347237082765
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "db51a45b73a099a6",
+        "text": ""
+      },
+      "id": "db51a45b73a099a6",
+      "type": "add",
+      "after": "f97e4550fa7887eb",
+      "date": 1347237083269
+    },
+    {
+      "type": "edit",
+      "id": "db51a45b73a099a6",
+      "item": {
+        "type": "paragraph",
+        "id": "db51a45b73a099a6",
+        "text": "A page that is cited in a link or in a url but does not yet exist."
+      },
+      "date": 1347237123036
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0d39a12110a32ce6",
+        "text": ""
+      },
+      "id": "0d39a12110a32ce6",
+      "type": "add",
+      "after": "db51a45b73a099a6",
+      "date": 1347237123541
+    },
+    {
+      "type": "edit",
+      "id": "0d39a12110a32ce6",
+      "item": {
+        "type": "paragraph",
+        "id": "0d39a12110a32ce6",
+        "text": "A page that holds the results of a search."
+      },
+      "date": 1347237140643
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ffa5abc3e93f295b",
+        "text": ""
+      },
+      "id": "ffa5abc3e93f295b",
+      "type": "add",
+      "after": "0d39a12110a32ce6",
+      "date": 1347237141148
+    },
+    {
+      "type": "edit",
+      "id": "ffa5abc3e93f295b",
+      "item": {
+        "type": "paragraph",
+        "id": "ffa5abc3e93f295b",
+        "text": "A page that holds the results from a failed server request."
+      },
+      "date": 1347237167474
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0ae721dbe811010b",
+        "text": ""
+      },
+      "id": "0ae721dbe811010b",
+      "type": "add",
+      "after": "ffa5abc3e93f295b",
+      "date": 1347237167980
+    },
+    {
+      "type": "edit",
+      "id": "0ae721dbe811010b",
+      "item": {
+        "type": "paragraph",
+        "id": "0ae721dbe811010b",
+        "text": "But not a page retrieved from the pages component of a plugin."
+      },
+      "date": 1347237229880
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "95905754a5fe4bd7",
+        "text": ""
+      },
+      "id": "95905754a5fe4bd7",
+      "type": "add",
+      "after": "0ae721dbe811010b",
+      "date": 1347237230386
+    },
+    {
+      "type": "edit",
+      "id": "95905754a5fe4bd7",
+      "item": {
+        "type": "paragraph",
+        "id": "95905754a5fe4bd7",
+        "text": "But not a page retrieved from the server's default pages directory. "
+      },
+      "date": 1347237248440
+    },
+    {
+      "type": "edit",
+      "id": "95905754a5fe4bd7",
+      "item": {
+        "type": "paragraph",
+        "id": "95905754a5fe4bd7",
+        "text": "But not a page retrieved from the server's default pages directory."
+      },
+      "date": 1347237301977
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "cee69d23d13034c0",
+        "text": ""
+      },
+      "id": "cee69d23d13034c0",
+      "type": "add",
+      "after": "95905754a5fe4bd7",
+      "date": 1347237302482
+    },
+    {
+      "type": "edit",
+      "id": "cee69d23d13034c0",
+      "item": {
+        "type": "paragraph",
+        "id": "cee69d23d13034c0",
+        "text": "But not system pages like recent-changes."
+      },
+      "date": 1347237316998
+    },
+    {
+      "type": "edit",
+      "id": "cee69d23d13034c0",
+      "item": {
+        "type": "paragraph",
+        "id": "cee69d23d13034c0",
+        "text": "But not a system page like recent-changes."
+      },
+      "date": 1347237336293
+    },
+    {
+      "type": "edit",
+      "id": "95905754a5fe4bd7",
+      "item": {
+        "type": "paragraph",
+        "id": "95905754a5fe4bd7",
+        "text": "But not a page retrieved from the server's default-pages directory."
+      },
+      "date": 1347237451011
+    },
+    {
+      "type": "edit",
+      "id": "95905754a5fe4bd7",
+      "item": {
+        "type": "paragraph",
+        "id": "95905754a5fe4bd7",
+        "text": "But not a page retrieved from the server's default-data/pages directory."
+      },
+      "date": 1347237479872
+    },
+    {
+      "type": "edit",
+      "id": "95905754a5fe4bd7",
+      "item": {
+        "type": "paragraph",
+        "id": "95905754a5fe4bd7",
+        "text": "But not a page retrieved from the server's default pages directory."
+      },
+      "date": 1347237495361
+    },
+    {
+      "type": "edit",
+      "id": "dbed3e7613e620d5",
+      "item": {
+        "type": "paragraph",
+        "id": "dbed3e7613e620d5",
+        "text": "A browser gets a page from a remote server via the origin server acting as a proxy. This is deprecated but not yet eliminated."
+      },
+      "date": 1354987433841
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3b5de6321e164814",
+        "text": ""
+      },
+      "id": "3b5de6321e164814",
+      "type": "add",
+      "after": "a0ee5b26963ff266",
+      "date": 1354987463093
+    },
+    {
+      "type": "edit",
+      "id": "3b5de6321e164814",
+      "item": {
+        "type": "paragraph",
+        "id": "3b5de6321e164814",
+        "text": "A browser puts an individual page from local storage to a writable origin. This is a recent variation on the fork action."
+      },
+      "date": 1354987517755
+    },
+    {
+      "type": "edit",
+      "id": "5b03f3752aa83cc3",
+      "item": {
+        "type": "paragraph",
+        "id": "5b03f3752aa83cc3",
+        "text": "Saving a page in browser local storage is considered a fork. Saving it back to the origin is also a fork."
+      },
+      "date": 1354987641736
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5f5b3a115c9145b3",
+        "text": ""
+      },
+      "id": "5f5b3a115c9145b3",
+      "type": "add",
+      "after": "05c5b13a47e793a2",
+      "date": 1363778666013
+    },
+    {
+      "type": "edit",
+      "id": "5f5b3a115c9145b3",
+      "item": {
+        "type": "paragraph",
+        "id": "5f5b3a115c9145b3",
+        "text": "Included with plugins as documentation."
+      },
+      "date": 1363778747083
+    },
+    {
+      "type": "edit",
+      "id": "4f0e977915ce563c",
+      "item": {
+        "type": "html",
+        "id": "4f0e977915ce563c",
+        "text": "<h3>Representation"
+      },
+      "date": 1420345679847
+    },
+    {
+      "type": "edit",
+      "id": "41bc74b504690fb3",
+      "item": {
+        "type": "html",
+        "id": "41bc74b504690fb3",
+        "text": "<h3>Residence"
+      },
+      "date": 1420345682427
+    },
+    {
+      "type": "edit",
+      "id": "8947a05d8caa8056",
+      "item": {
+        "type": "html",
+        "id": "8947a05d8caa8056",
+        "text": "<h3> Addressing"
+      },
+      "date": 1420345686090
+    },
+    {
+      "type": "edit",
+      "id": "a26d10067c2ce8c0",
+      "item": {
+        "type": "html",
+        "id": "a26d10067c2ce8c0",
+        "text": "<h3>Transport"
+      },
+      "date": 1420345690347
+    },
+    {
+      "type": "edit",
+      "id": "84d145ff36412932",
+      "item": {
+        "type": "html",
+        "id": "84d145ff36412932",
+        "text": "<h3> Fork"
+      },
+      "date": 1420345694627
+    },
+    {
+      "type": "edit",
+      "id": "8b4c0cdead4528bc",
+      "item": {
+        "type": "html",
+        "id": "8b4c0cdead4528bc",
+        "text": "<h3> Ghosts"
+      },
+      "date": 1420345697537
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1435491564947
+    },
+    {
+      "type": "fork",
+      "date": 1438562675652
+    },
+    {
+      "type": "fork",
+      "site": "fedwiki.org",
+      "date": 1520439072612
+    }
+  ]
+}

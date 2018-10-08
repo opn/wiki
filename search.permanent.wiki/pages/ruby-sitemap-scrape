@@ -1,0 +1,2950 @@
+{
+  "title": "Ruby Sitemap Scrape",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "13405c7bfe86615c",
+      "text": "This is a rewrite of the first ruby scraper that saves text files useful for searching instead of whole sites in export format. It incrementally refetches pages that have changed based on dates in the sitemaps. [https://github.com/WardCunningham/search github]"
+    },
+    {
+      "type": "reference",
+      "id": "4b05844da505bd5b",
+      "site": "scrape.ward.bay.wiki.org",
+      "slug": "how-scrape-works",
+      "title": "How Scrape Works",
+      "text": "The scrape runs every six hours on a schedule that shifts with daylight savings time. The scrape is built from scripts that manipulates files in directories. Some files are rolled up from similarly named files in subdirectories."
+    },
+    {
+      "type": "paragraph",
+      "id": "626a0197afd2438b",
+      "text": "We have a modest search application. [http://search.fed.wiki.org:3030 site]"
+    },
+    {
+      "type": "paragraph",
+      "id": "47a4f06a3f041dfc",
+      "text": "These files are updated when a page is discovered to be changed. A post scrape process rolls up these page level files to per site files and then these up to three files describing the whole visible federation."
+    },
+    {
+      "type": "paragraph",
+      "id": "370c657d680d4d94",
+      "text": "[[Search Index Downloads]] as flat files."
+    },
+    {
+      "type": "paragraph",
+      "id": "b7920472e1565755",
+      "text": "[[Sitemap Failures]] as sites disappear or what?"
+    },
+    {
+      "type": "pagefold",
+      "id": "a8db3329bacadfd7",
+      "text": "todo"
+    },
+    {
+      "type": "paragraph",
+      "id": "5bc03f981a3e4305",
+      "text": "Our scrape can miss content that is edited out of view and then forked or rsync'd into view well after the scrape's moving time window has passed. A fix would be to remember page names and last seen edit in the scraper."
+    },
+    {
+      "type": "paragraph",
+      "id": "5631c130f007f96e",
+      "text": "Scrape dates from actions and roll them up to sites. Possibly render this as sparklines when reporting participating sites in a query."
+    },
+    {
+      "type": "paragraph",
+      "id": "3407e47a58eaa60d",
+      "text": "Scrape titles (slugs) from pages and roll them up to sites. This is similar to sitemaps but simpler and could be searched to find all twins in the federation. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f95a282e58238054",
+      "text": "Rollup page names to federation level and compare with links.txt to see what is missing. Create pages.txt files in the rollups for sites we've successfully scraped. Add `search the federation` as an alternative for missing pages."
+    },
+    {
+      "type": "paragraph",
+      "id": "a3510d8d48b1af49",
+      "text": "Create a site like sites.fed.wiki.org from information we find in the scrape. Manufacture a synopsis from the who and what links on the welcome page. Would this site be a good neighbor? Would neighborhood search be useful for finding sites?"
+    },
+    {
+      "type": "paragraph",
+      "id": "fc819ef29395fcdf",
+      "text": "We seem to have polluted the index with sfw.c2.com words that should have been ignored because they are part of tags. We've fixed this in the scraper but how to clean the index?"
+    },
+    {
+      "type": "paragraph",
+      "id": "fececb00dd1b2db2",
+      "text": "Add css to make flags gray until their true colors arrive. Results can be very confusing otherwise."
+    },
+    {
+      "type": "paragraph",
+      "id": "fcbae728930e9524",
+      "text": "Add title and synopsis words to words.txt."
+    },
+    {
+      "type": "paragraph",
+      "id": "c150bbb43de60187",
+      "text": "See [[Sitemap Scrape Improvements]] we have completed."
+    },
+    {
+      "type": "pagefold",
+      "id": "7975137e7e11b941",
+      "text": "."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Ruby Sitemap Scrape",
+        "story": []
+      },
+      "date": 1437752909269
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "13405c7bfe86615c"
+      },
+      "id": "13405c7bfe86615c",
+      "type": "add",
+      "date": 1437752914980
+    },
+    {
+      "type": "edit",
+      "id": "13405c7bfe86615c",
+      "item": {
+        "type": "paragraph",
+        "id": "13405c7bfe86615c",
+        "text": "This is a rewrite of the first ruby scraper that saves text files useful for searching instead of whole sites in export format. It incrementally refetches pages that have changed based on dates in the sitemaps."
+      },
+      "date": 1437753028708
+    },
+    {
+      "type": "edit",
+      "id": "13405c7bfe86615c",
+      "item": {
+        "type": "paragraph",
+        "id": "13405c7bfe86615c",
+        "text": "This is a rewrite of the first ruby scraper that saves text files useful for searching instead of whole sites in export format. It incrementally refetches pages that have changed based on dates in the sitemaps. [https://github.com/WardCunningham/search github]"
+      },
+      "date": 1437753083322
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "504cc2b1eb4df438"
+      },
+      "id": "504cc2b1eb4df438",
+      "type": "add",
+      "after": "13405c7bfe86615c",
+      "date": 1437753095569
+    },
+    {
+      "type": "edit",
+      "id": "504cc2b1eb4df438",
+      "item": {
+        "type": "paragraph",
+        "id": "504cc2b1eb4df438",
+        "text": "The words.txt file contains all unique words found in text fields."
+      },
+      "date": 1437753158180
+    },
+    {
+      "type": "edit",
+      "id": "504cc2b1eb4df438",
+      "item": {
+        "type": "paragraph",
+        "id": "504cc2b1eb4df438",
+        "text": "The words.txt file contains all unique words found in text."
+      },
+      "date": 1437753165123
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "25bc9fc1d58daf83"
+      },
+      "id": "25bc9fc1d58daf83",
+      "type": "add",
+      "after": "504cc2b1eb4df438",
+      "date": 1437753167494
+    },
+    {
+      "type": "edit",
+      "id": "25bc9fc1d58daf83",
+      "item": {
+        "type": "paragraph",
+        "id": "25bc9fc1d58daf83",
+        "text": "The links.txt file contains all unique links found in markup."
+      },
+      "date": 1437753202636
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8cc949d4f5d22861"
+      },
+      "id": "8cc949d4f5d22861",
+      "type": "add",
+      "after": "25bc9fc1d58daf83",
+      "date": 1437753207135
+    },
+    {
+      "type": "edit",
+      "id": "8cc949d4f5d22861",
+      "item": {
+        "type": "paragraph",
+        "id": "8cc949d4f5d22861",
+        "text": "The sites.txt file contains all unique sites found in references, rosters and fork actions."
+      },
+      "date": 1437753247319
+    },
+    {
+      "type": "add",
+      "id": "47a4f06a3f041dfc",
+      "item": {
+        "type": "paragraph",
+        "id": "47a4f06a3f041dfc",
+        "text": "These files are updated when a page is discovered to be changed. A post scrape process rolls up these page level files to per site files and then these up to three files describing the whole visible federation."
+      },
+      "after": "8cc949d4f5d22861",
+      "date": 1437753450584
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a8db3329bacadfd7"
+      },
+      "id": "a8db3329bacadfd7",
+      "type": "add",
+      "after": "47a4f06a3f041dfc",
+      "date": 1437753515274
+    },
+    {
+      "type": "edit",
+      "id": "a8db3329bacadfd7",
+      "item": {
+        "type": "pagefold",
+        "id": "a8db3329bacadfd7",
+        "text": "todo"
+      },
+      "date": 1437753534306
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "699314bb47b5f61f"
+      },
+      "id": "699314bb47b5f61f",
+      "type": "add",
+      "after": "a8db3329bacadfd7",
+      "date": 1437753536957
+    },
+    {
+      "type": "edit",
+      "id": "699314bb47b5f61f",
+      "item": {
+        "type": "pagefold",
+        "id": "699314bb47b5f61f",
+        "text": "done"
+      },
+      "date": 1437753542775
+    },
+    {
+      "type": "add",
+      "id": "c4dbdf0b12280af6",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dbdf0b12280af6",
+        "text": "grep the words.txt with a simple web app. See search.fed.wiki.org."
+      },
+      "after": "47a4f06a3f041dfc",
+      "date": 1437753602680
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "699314bb47b5f61f",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "c4dbdf0b12280af6",
+      "date": 1437753607352
+    },
+    {
+      "type": "add",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "distribute the txt files in a single tgz file."
+      },
+      "after": "47a4f06a3f041dfc",
+      "date": 1437753637829
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "ae12be1f0cabb0b0",
+        "699314bb47b5f61f",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "ae12be1f0cabb0b0",
+      "date": 1437753641300
+    },
+    {
+      "type": "add",
+      "id": "f60675cdaa10ea64",
+      "item": {
+        "type": "paragraph",
+        "id": "f60675cdaa10ea64",
+        "text": "improve the grep sequence so it doesn't blow up with \"too many arguments\" from the shell."
+      },
+      "after": "ae12be1f0cabb0b0",
+      "date": 1437753689579
+    },
+    {
+      "type": "edit",
+      "id": "c4dbdf0b12280af6",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dbdf0b12280af6",
+        "text": "grep the words.txt with a simple web app."
+      },
+      "date": 1437753710986
+    },
+    {
+      "type": "edit",
+      "id": "c4dbdf0b12280af6",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dbdf0b12280af6",
+        "text": "grep the words.txt with a simple web app. [http://search.fed.wiki.org:3030/ site]"
+      },
+      "date": 1437753779210
+    },
+    {
+      "type": "add",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "rollup page names to federation level and compare with links.txt"
+      },
+      "after": "f60675cdaa10ea64",
+      "date": 1437753903249
+    },
+    {
+      "type": "edit",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "rollup page names to federation level and compare with links.txt to see what is missing."
+      },
+      "date": 1437753937684
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8f7fdff4c524ac07"
+      },
+      "id": "8f7fdff4c524ac07",
+      "type": "add",
+      "after": "c4dbdf0b12280af6",
+      "date": 1437754773200
+    },
+    {
+      "type": "edit",
+      "id": "8f7fdff4c524ac07",
+      "item": {
+        "type": "code",
+        "id": "8f7fdff4c524ac07",
+        "text": "tar -czf public/sites.tgz sites"
+      },
+      "date": 1437754777822
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "699314bb47b5f61f",
+        "ae12be1f0cabb0b0",
+        "c4dbdf0b12280af6",
+        "8f7fdff4c524ac07"
+      ],
+      "id": "ae12be1f0cabb0b0",
+      "date": 1437754897712
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "distribute the txt files in a single tgz file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1437754905343
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "699314bb47b5f61f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "8f7fdff4c524ac07",
+      "date": 1437754912088
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "distribute the txt files in a single tgz 15mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1437754949863
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "distribute the txt files in a single 15mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1437754963545
+    },
+    {
+      "type": "edit",
+      "id": "8f7fdff4c524ac07",
+      "item": {
+        "type": "code",
+        "id": "8f7fdff4c524ac07",
+        "text": "tar czf public/sites.tgz sites *.txt"
+      },
+      "date": 1437755170703
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "distribute the txt files in a single 17mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1437755266410
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a308ed372280a456"
+      },
+      "id": "a308ed372280a456",
+      "type": "add",
+      "after": "c4dbdf0b12280af6",
+      "date": 1437805004296
+    },
+    {
+      "type": "edit",
+      "id": "a308ed372280a456",
+      "item": {
+        "type": "reference",
+        "id": "a308ed372280a456",
+        "site": "search.fed.wiki.org:3030",
+        "slug": "recent-activity",
+        "title": "Recent Activity",
+        "text": "We run scrapes every day or so and find sites with new activity. We'll list them here and eventually automate the creation of these pages."
+      },
+      "date": 1437805008537
+    },
+    {
+      "type": "add",
+      "id": "160c5575361a590f",
+      "item": {
+        "type": "paragraph",
+        "id": "160c5575361a590f",
+        "text": "figure out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json."
+      },
+      "after": "f95a282e58238054",
+      "date": 1437811313060
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "699314bb47b5f61f",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "a308ed372280a456",
+      "date": 1437811319092
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "160c5575361a590f",
+        "699314bb47b5f61f",
+        "ae12be1f0cabb0b0",
+        "a308ed372280a456",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "a308ed372280a456",
+      "date": 1437840526008
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "160c5575361a590f",
+        "699314bb47b5f61f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "a308ed372280a456",
+      "date": 1437840534096
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "699314bb47b5f61f",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "160c5575361a590f",
+      "date": 1437840538018
+    },
+    {
+      "type": "edit",
+      "id": "160c5575361a590f",
+      "item": {
+        "type": "paragraph",
+        "id": "160c5575361a590f",
+        "text": "we've figured out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json."
+      },
+      "date": 1437840574561
+    },
+    {
+      "type": "edit",
+      "id": "160c5575361a590f",
+      "item": {
+        "type": "paragraph",
+        "id": "160c5575361a590f",
+        "text": "we've figured out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json. [https://github.com/WardCunningham/search/blob/3a60aabb4381255a79e1d404bfc11b21615be4ad/server.rb#L94-L98 github]"
+      },
+      "date": 1437840772683
+    },
+    {
+      "type": "edit",
+      "id": "160c5575361a590f",
+      "item": {
+        "type": "paragraph",
+        "id": "160c5575361a590f",
+        "text": "we've figured out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json after giving up on the default 'public' behavior. [https://github.com/WardCunningham/search/blob/3a60aabb4381255a79e1d404bfc11b21615be4ad/server.rb#L94-L98 github]"
+      },
+      "date": 1437840824367
+    },
+    {
+      "type": "add",
+      "id": "39f0fe449191de0c",
+      "item": {
+        "type": "paragraph",
+        "id": "39f0fe449191de0c",
+        "text": "scrape item ids and save them in ids.txt files."
+      },
+      "after": "f95a282e58238054",
+      "date": 1437842710903
+    },
+    {
+      "type": "edit",
+      "id": "a308ed372280a456",
+      "item": {
+        "type": "reference",
+        "id": "a308ed372280a456",
+        "site": "search.fed.wiki.org:3030",
+        "slug": "recent-activity",
+        "title": "Recent Activity",
+        "text": "We run scrapes four times a day and find sites with new activity. We'll list active sites here automatically."
+      },
+      "date": 1437842890327
+    },
+    {
+      "type": "edit",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "rollup page names to federation level and compare with links.txt to see what is missing. create pages.txt files in the rollups."
+      },
+      "date": 1437843049519
+    },
+    {
+      "type": "edit",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "rollup page names to federation level and compare with links.txt to see what is missing. create pages.txt files in the rollups for sites we've successfully scraped."
+      },
+      "date": 1437843071853
+    },
+    {
+      "type": "add",
+      "id": "042cbe8982becf40",
+      "item": {
+        "type": "paragraph",
+        "id": "042cbe8982becf40",
+        "text": "Find and remove old rosters after a week or so. Possibly merge them to have into whole days before that."
+      },
+      "after": "39f0fe449191de0c",
+      "date": 1437843468238
+    },
+    {
+      "type": "edit",
+      "id": "39f0fe449191de0c",
+      "item": {
+        "type": "paragraph",
+        "id": "39f0fe449191de0c",
+        "text": "Scrape item ids and save them in ids.txt files."
+      },
+      "date": 1437843478362
+    },
+    {
+      "type": "edit",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "Rollup page names to federation level and compare with links.txt to see what is missing. Create pages.txt files in the rollups for sites we've successfully scraped."
+      },
+      "date": 1437843496381
+    },
+    {
+      "type": "edit",
+      "id": "f60675cdaa10ea64",
+      "item": {
+        "type": "paragraph",
+        "id": "f60675cdaa10ea64",
+        "text": "Improve the grep sequence so it doesn't blow up with \"too many arguments\" from the shell."
+      },
+      "date": 1437843502965
+    },
+    {
+      "type": "edit",
+      "id": "160c5575361a590f",
+      "item": {
+        "type": "paragraph",
+        "id": "160c5575361a590f",
+        "text": "We've figured out how to set CORS headers on the port 3030 sinatra server that delivers the recent-activity.json after giving up on the default 'public' behavior. [https://github.com/WardCunningham/search/blob/3a60aabb4381255a79e1d404bfc11b21615be4ad/server.rb#L94-L98 github]"
+      },
+      "date": 1437843512371
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "Distribute the txt files in a single 17mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1437843518692
+    },
+    {
+      "type": "edit",
+      "id": "c4dbdf0b12280af6",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dbdf0b12280af6",
+        "text": "Grep the words.txt with a simple web app. [http://search.fed.wiki.org:3030/ site]"
+      },
+      "date": 1437843525197
+    },
+    {
+      "type": "add",
+      "id": "5631c130f007f96e",
+      "item": {
+        "type": "paragraph",
+        "id": "5631c130f007f96e",
+        "text": "Scrape dates from actions and roll them up to sites. Possibly render this as sparklines when reporting participating sites in a query."
+      },
+      "after": "39f0fe449191de0c",
+      "date": 1437844628045
+    },
+    {
+      "type": "add",
+      "id": "07fd43e9366a971e",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new."
+      },
+      "after": "042cbe8982becf40",
+      "date": 1437851690750
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cebc0680a0435d46"
+      },
+      "id": "cebc0680a0435d46",
+      "type": "add",
+      "after": "c4dbdf0b12280af6",
+      "date": 1437851695027
+    },
+    {
+      "type": "edit",
+      "id": "cebc0680a0435d46",
+      "item": {
+        "type": "code",
+        "id": "cebc0680a0435d46",
+        "text": "can't do sitemap for wikitytest.hapgood.net, \"\\xE2\" on US-ASCII"
+      },
+      "date": 1437851700528
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "39f0fe449191de0c",
+        "5631c130f007f96e",
+        "042cbe8982becf40",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "699314bb47b5f61f",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "cebc0680a0435d46",
+      "date": 1437851705048
+    },
+    {
+      "type": "edit",
+      "id": "cebc0680a0435d46",
+      "item": {
+        "type": "code",
+        "id": "cebc0680a0435d46",
+        "text": "can't do sitemap for wikitytest.hapgood.net, \"\\xE2\" on US-ASCII\n\n  11  \"\\xC2\" on US-ASCII\n  15  \"\\xC3\" on US-ASCII\n   3  \"\\xCB\" on US-ASCII\n   3  \"\\xCE\" on US-ASCII\n   1  \"\\xCF\" on US-ASCII\n   1  \"\\xE1\" on US-ASCII\n 106  \"\\xE2\" on US-ASCII\n"
+      },
+      "date": 1437851867838
+    },
+    {
+      "type": "edit",
+      "id": "07fd43e9366a971e",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view for this reason."
+      },
+      "date": 1437851933146
+    },
+    {
+      "type": "edit",
+      "id": "07fd43e9366a971e",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view."
+      },
+      "date": 1437851941646
+    },
+    {
+      "type": "edit",
+      "id": "07fd43e9366a971e",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view. Suggestion found online. [http://chrisneedham.com/posts/2014/06/21/ruby-cron-utf8.html post]"
+      },
+      "date": 1437857267422
+    },
+    {
+      "type": "edit",
+      "id": "07fd43e9366a971e",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view. This was first successful run from cron. Solution found online. [http://chrisneedham.com/posts/2014/06/21/ruby-cron-utf8.html post]"
+      },
+      "date": 1437857344859
+    },
+    {
+      "type": "edit",
+      "id": "07fd43e9366a971e",
+      "item": {
+        "type": "paragraph",
+        "id": "07fd43e9366a971e",
+        "text": "We've somehow lost utf-8 decoding in the scraper. These error messages are new. 140 sites lost from view. This was first successful run from cron. Solution online. [http://chrisneedham.com/posts/2014/06/21/ruby-cron-utf8.html post]"
+      },
+      "date": 1437857353139
+    },
+    {
+      "type": "edit",
+      "id": "cebc0680a0435d46",
+      "item": {
+        "type": "code",
+        "id": "cebc0680a0435d46",
+        "text": "can't do sitemap for wikitytest.hapgood.net, \"\\xE2\" on US-ASCII\n\ngrep \"can't do sitemap for\" logs/Sat-1900 | \\\n  cut -d , -f 2 | sort | uniq -c\n\n  11  \"\\xC2\" on US-ASCII\n  15  \"\\xC3\" on US-ASCII\n   3  \"\\xCB\" on US-ASCII\n   3  \"\\xCE\" on US-ASCII\n   1  \"\\xCF\" on US-ASCII\n   1  \"\\xE1\" on US-ASCII\n 106  \"\\xE2\" on US-ASCII\n"
+      },
+      "date": 1437857906156
+    },
+    {
+      "type": "edit",
+      "id": "504cc2b1eb4df438",
+      "item": {
+        "type": "paragraph",
+        "id": "504cc2b1eb4df438",
+        "text": "The words.txt file has unique words from text."
+      },
+      "date": 1437858001539
+    },
+    {
+      "type": "edit",
+      "id": "25bc9fc1d58daf83",
+      "item": {
+        "type": "paragraph",
+        "id": "25bc9fc1d58daf83",
+        "text": "The links.txt file has unique links from markup."
+      },
+      "date": 1437858019807
+    },
+    {
+      "type": "edit",
+      "id": "8cc949d4f5d22861",
+      "item": {
+        "type": "paragraph",
+        "id": "8cc949d4f5d22861",
+        "text": "The sites.txt file has unique sites from items/actions."
+      },
+      "date": 1437858068691
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f60675cdaa10ea64",
+        "f95a282e58238054",
+        "39f0fe449191de0c",
+        "5631c130f007f96e",
+        "042cbe8982becf40",
+        "699314bb47b5f61f",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "699314bb47b5f61f",
+      "date": 1437862799508
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f95a282e58238054",
+        "39f0fe449191de0c",
+        "5631c130f007f96e",
+        "042cbe8982becf40",
+        "699314bb47b5f61f",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "f60675cdaa10ea64",
+      "date": 1437862811536
+    },
+    {
+      "type": "edit",
+      "id": "f60675cdaa10ea64",
+      "item": {
+        "type": "paragraph",
+        "id": "f60675cdaa10ea64",
+        "text": "Improve the grep sequence so it doesn't blow up with \"too many arguments\" from the shell. [https://github.com/WardCunningham/search/commit/f12133f3cf9be69689af98563f5113e5ca7386b0 github]"
+      },
+      "date": 1437862822381
+    },
+    {
+      "type": "add",
+      "id": "9927266746df4c60",
+      "item": {
+        "type": "paragraph",
+        "id": "9927266746df4c60",
+        "text": "Add html plugin to sfw.c2.com since we're now generating lots of html items."
+      },
+      "after": "042cbe8982becf40",
+      "date": 1437864547837
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "f95a282e58238054",
+        "39f0fe449191de0c",
+        "5631c130f007f96e",
+        "042cbe8982becf40",
+        "699314bb47b5f61f",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "9927266746df4c60",
+      "date": 1437864552294
+    },
+    {
+      "type": "add",
+      "id": "fc819ef29395fcdf",
+      "item": {
+        "type": "paragraph",
+        "id": "fc819ef29395fcdf",
+        "text": "We seem to have polluted the index with sfw.c2.com words that should have been ignored because they are part of tags. We've fixed this in the scraper but how to clean the index?"
+      },
+      "after": "042cbe8982becf40",
+      "date": 1437865488905
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "39f0fe449191de0c",
+        "5631c130f007f96e",
+        "f95a282e58238054",
+        "042cbe8982becf40",
+        "fc819ef29395fcdf",
+        "699314bb47b5f61f",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6"
+      ],
+      "id": "f95a282e58238054",
+      "date": 1437865511125
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7975137e7e11b941"
+      },
+      "id": "7975137e7e11b941",
+      "type": "add",
+      "after": "c4dbdf0b12280af6",
+      "date": 1437933311794
+    },
+    {
+      "type": "edit",
+      "id": "7975137e7e11b941",
+      "item": {
+        "type": "pagefold",
+        "id": "7975137e7e11b941",
+        "text": "."
+      },
+      "date": 1437933317111
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e815922a0e1ec359"
+      },
+      "id": "e815922a0e1ec359",
+      "type": "add",
+      "after": "7975137e7e11b941",
+      "date": 1437933357429
+    },
+    {
+      "type": "edit",
+      "id": "e815922a0e1ec359",
+      "item": {
+        "type": "paragraph",
+        "id": "e815922a0e1ec359",
+        "text": "I have found public sites while scraping private wiki. I'll block the private sites but scrapes of the public sites should remain, so long as there is something there."
+      },
+      "date": 1437933472522
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "be4333570a134b15"
+      },
+      "id": "be4333570a134b15",
+      "type": "add",
+      "after": "e815922a0e1ec359",
+      "date": 1437933476374
+    },
+    {
+      "type": "remove",
+      "id": "be4333570a134b15",
+      "date": 1437933488264
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8e2b9b6a7e1de77"
+      },
+      "id": "c8e2b9b6a7e1de77",
+      "type": "add",
+      "after": "e815922a0e1ec359",
+      "date": 1437933504459
+    },
+    {
+      "type": "edit",
+      "id": "c8e2b9b6a7e1de77",
+      "item": {
+        "type": "code",
+        "id": "c8e2b9b6a7e1de77",
+        "text": "diff <(ls sites) sites.txt | \\\n  grep '<' | cut -d ' ' -f 2 | \\\n  while read i; do wc -l sites/$i/words.txt; done"
+      },
+      "date": 1437933538505
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0a17058e18b745b6"
+      },
+      "id": "0a17058e18b745b6",
+      "type": "add",
+      "after": "c8e2b9b6a7e1de77",
+      "date": 1437934041465
+    },
+    {
+      "type": "edit",
+      "id": "0a17058e18b745b6",
+      "item": {
+        "type": "paragraph",
+        "id": "0a17058e18b745b6",
+        "text": "I introduce sites to be scraped by adding them to the sites directory after some inspection of the diff and blocks for sites that shouldn't scrape."
+      },
+      "date": 1437934286054
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c093c7ab1c604d49"
+      },
+      "id": "c093c7ab1c604d49",
+      "type": "add",
+      "after": "0a17058e18b745b6",
+      "date": 1437934288928
+    },
+    {
+      "type": "edit",
+      "id": "c093c7ab1c604d49",
+      "item": {
+        "type": "code",
+        "id": "c093c7ab1c604d49",
+        "text": "diff <(ls sites) sites.txt | \\\n  grep '>' | cut -d ' ' -f 2 | \\\n  grep -v local | grep -v '/' | \\\n  while read i; do mkdir sites/$i; done"
+      },
+      "date": 1437934333445
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8e6df6b2da1633c4"
+      },
+      "id": "8e6df6b2da1633c4",
+      "type": "add",
+      "after": "c093c7ab1c604d49",
+      "date": 1437950850143
+    },
+    {
+      "type": "edit",
+      "id": "8e6df6b2da1633c4",
+      "item": {
+        "type": "html",
+        "id": "8e6df6b2da1633c4",
+        "text": "find:\n      <td><input type=\"radio\" name=\"find\" value=\"words\" checked>words</input>\n      <td><input type=\"radio\" name=\"find\" value=\"links\">links</input>\n      <td><input type=\"radio\" name=\"find\" value=\"sites\">sites</input>"
+      },
+      "date": 1437950862051
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1e14f79ab65c3d57"
+      },
+      "id": "1e14f79ab65c3d57",
+      "type": "add",
+      "after": "8e6df6b2da1633c4",
+      "date": 1437950942332
+    },
+    {
+      "type": "edit",
+      "id": "1e14f79ab65c3d57",
+      "item": {
+        "type": "html",
+        "id": "1e14f79ab65c3d57",
+        "text": "within:\n      <td><input type=\"radio\" name=\"within\" value=\"sites\" checked>sites</input>\n      <td><input type=\"radio\" name=\"within\" value=\"pages\">pages</input>"
+      },
+      "date": 1437950964126
+    },
+    {
+      "type": "edit",
+      "id": "1e14f79ab65c3d57",
+      "item": {
+        "type": "html",
+        "id": "1e14f79ab65c3d57",
+        "text": " <input class=query type=text size=40></input>"
+      },
+      "date": 1437951573240
+    },
+    {
+      "type": "remove",
+      "id": "1e14f79ab65c3d57",
+      "date": 1437954101245
+    },
+    {
+      "type": "remove",
+      "id": "8e6df6b2da1633c4",
+      "date": 1437954105051
+    },
+    {
+      "type": "edit",
+      "id": "c093c7ab1c604d49",
+      "item": {
+        "type": "code",
+        "id": "c093c7ab1c604d49",
+        "text": "diff <(ls sites) sites.txt | \\\n  grep '>' | cut -d ' ' -f 2 | \\\n  egrep -v 'local|/|192.168' | \\\n  while read i; do mkdir sites/$i; done"
+      },
+      "date": 1437974190537
+    },
+    {
+      "type": "edit",
+      "id": "c093c7ab1c604d49",
+      "item": {
+        "type": "code",
+        "id": "c093c7ab1c604d49",
+        "text": "diff <(ls sites) sites.txt | \\\n  grep '>' | cut -d ' ' -f 2 | \\\n  egrep -v 'local|/|^192.168' | \\\n  while read i; do mkdir sites/$i; done"
+      },
+      "date": 1437974217048
+    },
+    {
+      "type": "edit",
+      "id": "c093c7ab1c604d49",
+      "item": {
+        "type": "code",
+        "id": "c093c7ab1c604d49",
+        "text": "diff <(ls sites) sites.txt | \\\n  grep '>' | cut -d ' ' -f 2 | \\\n  egrep -v 'local|/|^192.168|^127.0' | \\\n  while read i; do mkdir sites/$i; done"
+      },
+      "date": 1437974274479
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "83942d7396741957"
+      },
+      "id": "83942d7396741957",
+      "type": "add",
+      "after": "c093c7ab1c604d49",
+      "date": 1438009588668
+    },
+    {
+      "type": "edit",
+      "id": "83942d7396741957",
+      "item": {
+        "type": "paragraph",
+        "id": "83942d7396741957",
+        "text": "I've revised the 2012 cron job that feeds my home sensor network data into the federation on a five minute cycle. This polluted the scrape's activity report until I modified the perl script to date pages with the install date of each sensor, not the date of the reading."
+      },
+      "date": 1438009790807
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fcba042b03c2fcbe"
+      },
+      "id": "fcba042b03c2fcbe",
+      "type": "add",
+      "after": "83942d7396741957",
+      "date": 1438009793882
+    },
+    {
+      "type": "edit",
+      "id": "fcba042b03c2fcbe",
+      "item": {
+        "type": "code",
+        "id": "fcba042b03c2fcbe",
+        "text": "$date = (stat($r))[9]*1000;"
+      },
+      "date": 1438009801213
+    },
+    {
+      "type": "edit",
+      "id": "83942d7396741957",
+      "item": {
+        "type": "paragraph",
+        "id": "83942d7396741957",
+        "text": "I've revised my 2012 cron job that feeds home sensor network data into the federation on a five minute cycle. This polluted the scrape's activity report until I modified the perl script to date pages with the install date of each sensor, not the date of the reading."
+      },
+      "date": 1438009848912
+    },
+    {
+      "type": "add",
+      "id": "3407e47a58eaa60d",
+      "item": {
+        "type": "paragraph",
+        "id": "3407e47a58eaa60d",
+        "text": "Scrape titles (slugs) from pages and roll them up to sites. This is similar to sitemaps but simpler and could be searched to find all twins in the federation. See [[Link Symmetry]"
+      },
+      "after": "39f0fe449191de0c",
+      "date": 1438096549392
+    },
+    {
+      "type": "edit",
+      "id": "3407e47a58eaa60d",
+      "item": {
+        "type": "paragraph",
+        "id": "3407e47a58eaa60d",
+        "text": "Scrape titles (slugs) from pages and roll them up to sites. This is similar to sitemaps but simpler and could be searched to find all twins in the federation. See [[Link Symmetry]]"
+      },
+      "date": 1438096554385
+    },
+    {
+      "type": "edit",
+      "id": "3407e47a58eaa60d",
+      "item": {
+        "type": "paragraph",
+        "id": "3407e47a58eaa60d",
+        "text": "Scrape titles (slugs) from pages and roll them up to sites. This is similar to sitemaps but simpler and could be searched to find all twins in the federation. "
+      },
+      "date": 1438096584481
+    },
+    {
+      "type": "edit",
+      "id": "39f0fe449191de0c",
+      "item": {
+        "type": "paragraph",
+        "id": "39f0fe449191de0c",
+        "text": "Scrape item ids and save them in ids.txt files. See [[Link Symmetry]]"
+      },
+      "date": 1438096589920
+    },
+    {
+      "type": "edit",
+      "id": "39f0fe449191de0c",
+      "item": {
+        "type": "paragraph",
+        "id": "39f0fe449191de0c",
+        "text": "Scrape item ids and save them in ids.txt files. Devise some convenient way to initiate a search from any paragraph. See [[Link Symmetry]]"
+      },
+      "date": 1438096632943
+    },
+    {
+      "type": "add",
+      "id": "a3510d8d48b1af49",
+      "item": {
+        "type": "paragraph",
+        "id": "a3510d8d48b1af49",
+        "text": "Create a site like sites.fed.wiki.org from information we find in the scrape. Manufacture a synopsis from the who and what links on the welcome page. Would this site be a good neighbor? Would neighborhood search be useful for finding sites?"
+      },
+      "after": "f95a282e58238054",
+      "date": 1438097920986
+    },
+    {
+      "type": "add",
+      "id": "fececb00dd1b2db2",
+      "item": {
+        "type": "paragraph",
+        "id": "fececb00dd1b2db2",
+        "text": "Add css to make flags gray until their true colors arrive. Results can be very confusing otherwise."
+      },
+      "after": "fc819ef29395fcdf",
+      "date": 1438098117431
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "3407e47a58eaa60d",
+        "5631c130f007f96e",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "042cbe8982becf40",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "699314bb47b5f61f",
+        "39f0fe449191de0c",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe"
+      ],
+      "id": "39f0fe449191de0c",
+      "date": 1438148763435
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "042cbe8982becf40",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "699314bb47b5f61f",
+        "39f0fe449191de0c",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe"
+      ],
+      "id": "3407e47a58eaa60d",
+      "date": 1438148792286
+    },
+    {
+      "type": "add",
+      "id": "bd98a5b09bc048e3",
+      "item": {
+        "type": "paragraph",
+        "id": "bd98a5b09bc048e3",
+        "text": "Scrape item types and same them in plugins.txt files."
+      },
+      "after": "39f0fe449191de0c",
+      "date": 1438173151766
+    },
+    {
+      "type": "edit",
+      "id": "39f0fe449191de0c",
+      "item": {
+        "type": "paragraph",
+        "id": "39f0fe449191de0c",
+        "text": "Scrape item ids and save them in items.txt files. Devise some convenient way to initiate a search from any paragraph. See [[Link Symmetry]]"
+      },
+      "date": 1438173164914
+    },
+    {
+      "type": "add",
+      "id": "86640497c64663d4",
+      "item": {
+        "type": "paragraph",
+        "id": "86640497c64663d4",
+        "text": "Momentarily defeat the scrape's incremental mechanism in order to retrieve the new indices, items.txt and plugins.txt from all pages. See [[Full Scrape]]"
+      },
+      "after": "39f0fe449191de0c",
+      "date": 1438173466501
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "042cbe8982becf40",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "699314bb47b5f61f",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe"
+      ],
+      "id": "86640497c64663d4",
+      "date": 1438173473210
+    },
+    {
+      "type": "edit",
+      "id": "ae12be1f0cabb0b0",
+      "item": {
+        "type": "paragraph",
+        "id": "ae12be1f0cabb0b0",
+        "text": "Distribute the txt files in a single 35mb file. [http://search.fed.wiki.org:3030/sites.tgz tgz]"
+      },
+      "date": 1438182925637
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2bda8603e29bfdab"
+      },
+      "id": "2bda8603e29bfdab",
+      "type": "add",
+      "after": "fcba042b03c2fcbe",
+      "date": 1438265878102
+    },
+    {
+      "type": "edit",
+      "id": "2bda8603e29bfdab",
+      "item": {
+        "type": "paragraph",
+        "id": "2bda8603e29bfdab",
+        "text": "I've revised my 2012 cron job that reports farm activity to date the activity in the journal with the date that it happened. A second commit suspends reporting until there is activity after the last report."
+      },
+      "date": 1438265996059
+    },
+    {
+      "type": "edit",
+      "id": "2bda8603e29bfdab",
+      "item": {
+        "type": "paragraph",
+        "id": "2bda8603e29bfdab",
+        "text": "I've revised my 2012 cron job that reports farm activity to date the activity in the journal with the date that it happened. A second commit suspends reporting until there is activity after the last report. [https://github.com/WardCunningham/farm-scripts/commit/afcf3f8e20b3ec68fd5f153d4ab72b3ee7f1e813 github]"
+      },
+      "date": 1438266008239
+    },
+    {
+      "type": "edit",
+      "id": "2bda8603e29bfdab",
+      "item": {
+        "type": "paragraph",
+        "id": "2bda8603e29bfdab",
+        "text": "I've revised my 2012 cron job that reports farm activity to date the activity in the journal with the date that it happened. A second commit suspends reporting until there is activity after the last report. [https://github.com/WardCunningham/farm-scripts/commit/afcf3f8e20b3ec68fd5f153d4ab72b3ee7f1e813 github][https://github.com/WardCunningham/farm-scripts/commit/61e9be7e1562598f565300d06cf3d0da9497ad18 github]"
+      },
+      "date": 1438266046259
+    },
+    {
+      "type": "edit",
+      "id": "2bda8603e29bfdab",
+      "item": {
+        "type": "paragraph",
+        "id": "2bda8603e29bfdab",
+        "text": "I've revised my 2012 cron job that reports farm activity to date the activity in the journal with the date that it happened. A second commit suspends reporting until there is activity after the last report. [https://github.com/WardCunningham/farm-scripts/commit/afcf3f8e20b3ec68fd5f153d4ab72b3ee7f1e813 github] [https://github.com/WardCunningham/farm-scripts/commit/61e9be7e1562598f565300d06cf3d0da9497ad18 github]"
+      },
+      "date": 1438266055797
+    },
+    {
+      "type": "edit",
+      "id": "83942d7396741957",
+      "item": {
+        "type": "paragraph",
+        "id": "83942d7396741957",
+        "text": "I've revised my 2011 cron job that feeds home sensor network data into the federation on a five minute cycle. This polluted the scrape's activity report until I modified the perl script to date pages with the install date of each sensor, not the date of the reading."
+      },
+      "date": 1438266746109
+    },
+    {
+      "type": "edit",
+      "id": "83942d7396741957",
+      "item": {
+        "type": "paragraph",
+        "id": "83942d7396741957",
+        "text": "I've revised my 2011 cron job that feeds home sensor network data into the federation on a five minute cycle. This polluted the scrape's activity report until I modified the perl script to date pages with the install date of each sensor, not the date of the reading. [http://sensors.c2.com/ site]"
+      },
+      "date": 1438266754425
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "47a9e57b532aab49"
+      },
+      "id": "47a9e57b532aab49",
+      "type": "add",
+      "after": "2bda8603e29bfdab",
+      "date": 1438486998447
+    },
+    {
+      "type": "edit",
+      "id": "47a9e57b532aab49",
+      "item": {
+        "type": "code",
+        "id": "47a9e57b532aab49",
+        "text": "find activity/*00 -mtime +7 -exec echo {} \\;"
+      },
+      "date": 1438487010070
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "042cbe8982becf40",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "699314bb47b5f61f",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "47a9e57b532aab49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "47a9e57b532aab49",
+      "date": 1438487020225
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "042cbe8982becf40",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "699314bb47b5f61f",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "47a9e57b532aab49",
+      "date": 1438487037818
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "042cbe8982becf40",
+        "699314bb47b5f61f",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "042cbe8982becf40",
+      "date": 1438487043561
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "699314bb47b5f61f",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "042cbe8982becf40",
+      "date": 1438487046979
+    },
+    {
+      "type": "edit",
+      "id": "47a9e57b532aab49",
+      "item": {
+        "type": "code",
+        "id": "47a9e57b532aab49",
+        "text": "find activity/*00 -mtime +7 -exec rm {} \\;"
+      },
+      "date": 1438487066494
+    },
+    {
+      "type": "add",
+      "id": "46cce71d6e7c50bd",
+      "item": {
+        "type": "paragraph",
+        "id": "46cce71d6e7c50bd",
+        "text": "Add a permalink to the search results so that searches can be saved and rerun with a single click."
+      },
+      "after": "fececb00dd1b2db2",
+      "date": 1438531677865
+    },
+    {
+      "type": "add",
+      "id": "fcbae728930e9524",
+      "item": {
+        "type": "paragraph",
+        "id": "fcbae728930e9524",
+        "text": "Add title words to words.txt."
+      },
+      "after": "46cce71d6e7c50bd",
+      "date": 1438539484714
+    },
+    {
+      "type": "edit",
+      "id": "fcbae728930e9524",
+      "item": {
+        "type": "paragraph",
+        "id": "fcbae728930e9524",
+        "text": "Add title and synopsis words to words.txt."
+      },
+      "date": 1438539521112
+    },
+    {
+      "type": "edit",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "Rollup page names to federation level and compare with links.txt to see what is missing. Create pages.txt files in the rollups for sites we've successfully scraped. Add `search the federation` as an alternative for missing page futures."
+      },
+      "date": 1438548030237
+    },
+    {
+      "type": "edit",
+      "id": "f95a282e58238054",
+      "item": {
+        "type": "paragraph",
+        "id": "f95a282e58238054",
+        "text": "Rollup page names to federation level and compare with links.txt to see what is missing. Create pages.txt files in the rollups for sites we've successfully scraped. Add `search the federation` as an alternative for missing pages."
+      },
+      "date": 1438548038471
+    },
+    {
+      "type": "edit",
+      "id": "46cce71d6e7c50bd",
+      "item": {
+        "type": "paragraph",
+        "id": "46cce71d6e7c50bd",
+        "text": "Add a permalink to the search results so that searches can be saved and rerun with a single click. [http://search.fed.wiki.org:3030/#/find=items&within=pages&query=dbed99c5d3c702b1 search]"
+      },
+      "date": 1438558810798
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "46cce71d6e7c50bd",
+      "date": 1438558817604
+    },
+    {
+      "type": "add",
+      "id": "d110549e9e544aec",
+      "item": {
+        "type": "paragraph",
+        "id": "d110549e9e544aec",
+        "text": "Add newly found sites to the activity report even if they are not recently active. "
+      },
+      "after": "f95a282e58238054",
+      "date": 1438617144383
+    },
+    {
+      "type": "edit",
+      "id": "d110549e9e544aec",
+      "item": {
+        "type": "paragraph",
+        "id": "d110549e9e544aec",
+        "text": "Add newly found sites to the activity report even if they are not recently active. This would be reporting the consequence of some other activity that linked to the site."
+      },
+      "date": 1438617196643
+    },
+    {
+      "type": "add",
+      "id": "2ae0cc9291a91e7d",
+      "item": {
+        "type": "paragraph",
+        "id": "2ae0cc9291a91e7d",
+        "text": "Refactor search.fed.wiki.org to have separate what, help and query details pages. Keep them up to date."
+      },
+      "after": "d110549e9e544aec",
+      "date": 1438617336027
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "2ae0cc9291a91e7d",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "e815922a0e1ec359",
+        "c8e2b9b6a7e1de77",
+        "0a17058e18b745b6",
+        "c093c7ab1c604d49",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "d110549e9e544aec",
+      "date": 1438658219023
+    },
+    {
+      "type": "edit",
+      "id": "d110549e9e544aec",
+      "item": {
+        "type": "paragraph",
+        "id": "d110549e9e544aec",
+        "text": "Add [[Newly Found Sites]] to the activity report even if they are not recently active. This would be reporting the consequence of some other activity that linked to the site."
+      },
+      "date": 1438684699283
+    },
+    {
+      "type": "remove",
+      "id": "e815922a0e1ec359",
+      "date": 1438686779582
+    },
+    {
+      "type": "remove",
+      "id": "c8e2b9b6a7e1de77",
+      "date": 1438686782953
+    },
+    {
+      "type": "remove",
+      "id": "0a17058e18b745b6",
+      "date": 1438686787174
+    },
+    {
+      "type": "remove",
+      "id": "c093c7ab1c604d49",
+      "date": 1438686791370
+    },
+    {
+      "type": "add",
+      "id": "b04a04fcb450f19e",
+      "item": {
+        "type": "paragraph",
+        "id": "b04a04fcb450f19e",
+        "text": "Find all pages that share any items with the current page. Prototype almost complete. [https://github.com/WardCunningham/search/commit/b9cbc630be42864bfe9e86f85d35bf0d18b171d6 github]"
+      },
+      "after": "5631c130f007f96e",
+      "date": 1438703027853
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "2ae0cc9291a91e7d",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "b04a04fcb450f19e",
+      "date": 1438703032315
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "78780a2d33adb16c"
+      },
+      "id": "78780a2d33adb16c",
+      "type": "add",
+      "after": "2bda8603e29bfdab",
+      "date": 1438708250000
+    },
+    {
+      "type": "edit",
+      "id": "78780a2d33adb16c",
+      "item": {
+        "type": "html",
+        "id": "78780a2d33adb16c",
+        "text": "Terms:\n<input type=radio name=terms value=and> narrow\n<input type=radio name=terms value=or> broaden"
+      },
+      "date": 1438708373527
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "78780a2d33adb16c",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "2ae0cc9291a91e7d",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "78780a2d33adb16c",
+      "date": 1438708409311
+    },
+    {
+      "type": "edit",
+      "id": "78780a2d33adb16c",
+      "item": {
+        "type": "html",
+        "id": "78780a2d33adb16c",
+        "text": "Terms:\n<input type=radio name=terms value=and checked> narrow\n<input type=radio name=terms value=or> broaden"
+      },
+      "date": 1438708466016
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "2ae0cc9291a91e7d",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "78780a2d33adb16c",
+      "date": 1439356485725
+    },
+    {
+      "type": "edit",
+      "id": "78780a2d33adb16c",
+      "item": {
+        "type": "html",
+        "id": "78780a2d33adb16c",
+        "text": "match:\n<input type=radio checked> and\n<input type=radio> or"
+      },
+      "date": 1439356518275
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "ae12be1f0cabb0b0",
+        "8f7fdff4c524ac07",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "2ae0cc9291a91e7d",
+      "date": 1439359964978
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "370c657d680d4d94",
+        "text": "[[Search Index Downloads]] as flat files."
+      },
+      "after": "a308ed372280a456",
+      "id": "370c657d680d4d94",
+      "date": 1441561492573
+    },
+    {
+      "type": "remove",
+      "id": "ae12be1f0cabb0b0",
+      "date": 1441561659746
+    },
+    {
+      "type": "remove",
+      "id": "8f7fdff4c524ac07",
+      "date": 1441561663599
+    },
+    {
+      "type": "add",
+      "id": "5bc03f981a3e4305",
+      "item": {
+        "type": "paragraph",
+        "id": "5bc03f981a3e4305",
+        "text": "Our scrape can miss content that is edited out of view and then forked or rsync'd into view well after the scrape's moving time window has passed. A fix would be to remember page names and last seen edit."
+      },
+      "after": "47a4f06a3f041dfc",
+      "date": 1446398320245
+    },
+    {
+      "type": "edit",
+      "id": "5bc03f981a3e4305",
+      "item": {
+        "type": "paragraph",
+        "id": "5bc03f981a3e4305",
+        "text": "Our scrape can miss content that is edited out of view and then forked or rsync'd into view well after the scrape's moving time window has passed. A fix would be to remember page names and last seen edit in the scraper."
+      },
+      "date": 1446398346356
+    },
+    {
+      "type": "add",
+      "id": "a87c9d5ff0d7aa14",
+      "item": {
+        "type": "paragraph",
+        "id": "a87c9d5ff0d7aa14",
+        "text": "Recent activity now includes new sites in a more compact format. [https://github.com/WardCunningham/search/commit/c5e2320ca2e59c71306545102a6f6d59fc94daa0 github]"
+      },
+      "after": "370c657d680d4d94",
+      "date": 1447775183314
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "a87c9d5ff0d7aa14",
+        "370c657d680d4d94",
+        "c4dbdf0b12280af6",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "a87c9d5ff0d7aa14",
+      "date": 1447775187682
+    },
+    {
+      "type": "add",
+      "id": "877b8ce6732e7dcb",
+      "item": {
+        "type": "paragraph",
+        "id": "877b8ce6732e7dcb",
+        "text": "I've added a report listing all sites with ten or more pages. I attempt to group these logically based on their subdomain hierarchy. See [[Visible Federation]]"
+      },
+      "after": "a87c9d5ff0d7aa14",
+      "date": 1447775382871
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "877b8ce6732e7dcb",
+        "370c657d680d4d94",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "a87c9d5ff0d7aa14",
+      "date": 1447775399457
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "b04a04fcb450f19e",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "370c657d680d4d94",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "877b8ce6732e7dcb",
+      "date": 1447775404155
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "b04a04fcb450f19e",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "39f0fe449191de0c",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "370c657d680d4d94",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "b04a04fcb450f19e",
+      "date": 1452455043029
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "b04a04fcb450f19e",
+        "39f0fe449191de0c",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "370c657d680d4d94",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "39f0fe449191de0c",
+      "date": 1452455100179
+    },
+    {
+      "type": "edit",
+      "id": "b04a04fcb450f19e",
+      "item": {
+        "type": "paragraph",
+        "id": "b04a04fcb450f19e",
+        "text": "Find all pages that share any items with the current page. Prototype search link now available. [https://github.com/fedwiki/wiki-client/pull/132 github]"
+      },
+      "date": 1452455236347
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "370c657d680d4d94",
+        "504cc2b1eb4df438",
+        "25bc9fc1d58daf83",
+        "8cc949d4f5d22861",
+        "47a4f06a3f041dfc",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "b04a04fcb450f19e",
+        "39f0fe449191de0c",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "370c657d680d4d94",
+      "date": 1452455473427
+    },
+    {
+      "type": "remove",
+      "id": "8cc949d4f5d22861",
+      "date": 1452455513468
+    },
+    {
+      "type": "remove",
+      "id": "25bc9fc1d58daf83",
+      "date": 1452455516301
+    },
+    {
+      "type": "remove",
+      "id": "504cc2b1eb4df438",
+      "date": 1452455518780
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "47a4f06a3f041dfc",
+        "370c657d680d4d94",
+        "5bc03f981a3e4305",
+        "a8db3329bacadfd7",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "b04a04fcb450f19e",
+        "39f0fe449191de0c",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "370c657d680d4d94",
+      "date": 1452455538447
+    },
+    {
+      "type": "add",
+      "id": "626a0197afd2438b",
+      "item": {
+        "type": "paragraph",
+        "id": "626a0197afd2438b",
+        "text": "We have a modest search application. [http://search.fed.wiki.org:3030 site]"
+      },
+      "after": "13405c7bfe86615c",
+      "date": 1452455720639
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "626a0197afd2438b",
+        "47a4f06a3f041dfc",
+        "370c657d680d4d94",
+        "a8db3329bacadfd7",
+        "5bc03f981a3e4305",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "b04a04fcb450f19e",
+        "39f0fe449191de0c",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "7975137e7e11b941",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab"
+      ],
+      "id": "5bc03f981a3e4305",
+      "date": 1452455772721
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "626a0197afd2438b",
+        "47a4f06a3f041dfc",
+        "370c657d680d4d94",
+        "a8db3329bacadfd7",
+        "5bc03f981a3e4305",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "699314bb47b5f61f",
+        "b04a04fcb450f19e",
+        "39f0fe449191de0c",
+        "2ae0cc9291a91e7d",
+        "78780a2d33adb16c",
+        "d110549e9e544aec",
+        "46cce71d6e7c50bd",
+        "042cbe8982becf40",
+        "47a9e57b532aab49",
+        "86640497c64663d4",
+        "bd98a5b09bc048e3",
+        "9927266746df4c60",
+        "f60675cdaa10ea64",
+        "07fd43e9366a971e",
+        "cebc0680a0435d46",
+        "160c5575361a590f",
+        "a308ed372280a456",
+        "c4dbdf0b12280af6",
+        "a87c9d5ff0d7aa14",
+        "877b8ce6732e7dcb",
+        "83942d7396741957",
+        "fcba042b03c2fcbe",
+        "2bda8603e29bfdab",
+        "7975137e7e11b941"
+      ],
+      "id": "7975137e7e11b941",
+      "date": 1452455788646
+    },
+    {
+      "type": "add",
+      "id": "c150bbb43de60187",
+      "item": {
+        "type": "paragraph",
+        "id": "c150bbb43de60187",
+        "text": "See [[Sitemap Scrape Improvements]]"
+      },
+      "after": "fcbae728930e9524",
+      "date": 1452455884068
+    },
+    {
+      "type": "edit",
+      "id": "c150bbb43de60187",
+      "item": {
+        "type": "paragraph",
+        "id": "c150bbb43de60187",
+        "text": "See [[Sitemap Scrape Improvements]] we have completed."
+      },
+      "date": 1452455893396
+    },
+    {
+      "type": "remove",
+      "id": "699314bb47b5f61f",
+      "date": 1452456139416
+    },
+    {
+      "type": "remove",
+      "id": "b04a04fcb450f19e",
+      "date": 1452456147926
+    },
+    {
+      "type": "remove",
+      "id": "39f0fe449191de0c",
+      "date": 1452456151489
+    },
+    {
+      "type": "remove",
+      "id": "2ae0cc9291a91e7d",
+      "date": 1452456154936
+    },
+    {
+      "type": "remove",
+      "id": "78780a2d33adb16c",
+      "date": 1452456159755
+    },
+    {
+      "type": "remove",
+      "id": "d110549e9e544aec",
+      "date": 1452456163751
+    },
+    {
+      "type": "remove",
+      "id": "46cce71d6e7c50bd",
+      "date": 1452456169406
+    },
+    {
+      "type": "remove",
+      "id": "042cbe8982becf40",
+      "date": 1452456174626
+    },
+    {
+      "type": "remove",
+      "id": "47a9e57b532aab49",
+      "date": 1452456180356
+    },
+    {
+      "type": "remove",
+      "id": "86640497c64663d4",
+      "date": 1452456189271
+    },
+    {
+      "type": "remove",
+      "id": "bd98a5b09bc048e3",
+      "date": 1452456192543
+    },
+    {
+      "type": "remove",
+      "id": "9927266746df4c60",
+      "date": 1452456196531
+    },
+    {
+      "type": "remove",
+      "id": "f60675cdaa10ea64",
+      "date": 1452456210966
+    },
+    {
+      "type": "remove",
+      "id": "07fd43e9366a971e",
+      "date": 1452456215800
+    },
+    {
+      "type": "remove",
+      "id": "cebc0680a0435d46",
+      "date": 1452456224849
+    },
+    {
+      "type": "remove",
+      "id": "160c5575361a590f",
+      "date": 1452456230871
+    },
+    {
+      "type": "remove",
+      "id": "a308ed372280a456",
+      "date": 1452456233981
+    },
+    {
+      "type": "remove",
+      "id": "c4dbdf0b12280af6",
+      "date": 1452456237598
+    },
+    {
+      "type": "remove",
+      "id": "a87c9d5ff0d7aa14",
+      "date": 1452456242339
+    },
+    {
+      "type": "remove",
+      "id": "877b8ce6732e7dcb",
+      "date": 1452456245777
+    },
+    {
+      "type": "remove",
+      "id": "83942d7396741957",
+      "date": 1452456249859
+    },
+    {
+      "type": "remove",
+      "id": "fcba042b03c2fcbe",
+      "date": 1452456255843
+    },
+    {
+      "type": "remove",
+      "id": "2bda8603e29bfdab",
+      "date": 1452456263608
+    },
+    {
+      "type": "add",
+      "id": "b7920472e1565755",
+      "item": {
+        "type": "paragraph",
+        "id": "b7920472e1565755",
+        "text": "[[Sitemap Failures]] as sites disappear or what?"
+      },
+      "after": "370c657d680d4d94",
+      "date": 1474249283883
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4b05844da505bd5b"
+      },
+      "id": "4b05844da505bd5b",
+      "type": "add",
+      "after": "7975137e7e11b941",
+      "date": 1508210393295
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57580d2263391926"
+      },
+      "id": "57580d2263391926",
+      "type": "add",
+      "after": "4b05844da505bd5b",
+      "date": 1508210395562
+    },
+    {
+      "type": "remove",
+      "id": "57580d2263391926",
+      "date": 1508210401646
+    },
+    {
+      "type": "edit",
+      "id": "4b05844da505bd5b",
+      "item": {
+        "type": "reference",
+        "id": "4b05844da505bd5b",
+        "site": "scrape.ward.bay.wiki.org",
+        "slug": "how-scrape-works",
+        "title": "How Scrape Works",
+        "text": "The scrape runs every six hours on a schedule that shifts with daylight savings time. The scrape is built from scripts that manipulates files in directories. Some files are rolled up from similarly named files in subdirectories."
+      },
+      "date": 1508210409645
+    },
+    {
+      "type": "move",
+      "order": [
+        "13405c7bfe86615c",
+        "4b05844da505bd5b",
+        "626a0197afd2438b",
+        "47a4f06a3f041dfc",
+        "370c657d680d4d94",
+        "b7920472e1565755",
+        "a8db3329bacadfd7",
+        "5bc03f981a3e4305",
+        "5631c130f007f96e",
+        "3407e47a58eaa60d",
+        "f95a282e58238054",
+        "a3510d8d48b1af49",
+        "fc819ef29395fcdf",
+        "fececb00dd1b2db2",
+        "fcbae728930e9524",
+        "c150bbb43de60187",
+        "7975137e7e11b941"
+      ],
+      "id": "4b05844da505bd5b",
+      "date": 1508210439181
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1511949919476
+    }
+  ]
+}

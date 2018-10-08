@@ -1,0 +1,1278 @@
+{
+  "title": "Himalayan Academy Web Site",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "433173e406f7ae23",
+      "text": "This document is meant to give an overview of the Content Management System of the Himalayan \nAcademy.com web site. "
+    },
+    {
+      "type": "reference",
+      "id": "097a1962efa1ba89",
+      "site": "dev.himalayan.academy",
+      "slug": "github-deployment-structure",
+      "title": "GitHub Deployment Structure",
+      "text": "Here we look at what the best architecture for developing, maintaining, and maintaining the various mobile, and revIgniter files and components are for the [[Himalayan Academy]] project."
+    },
+    {
+      "type": "paragraph",
+      "id": "89846ddf49d49e9d",
+      "text": "It serves to document how we do things, for new team members to follow so that they do not start building “ad hoc” outside this guideline;  and also to give anyone new to the site an understanding of how things work.  BBC web site is a good model as their “style guide” is open source and use by their team for both educating everyone and also setting the standards for development."
+    },
+    {
+      "type": "reference",
+      "id": "8ecd4678ce48d2fc",
+      "site": "dev.himalayan.academy",
+      "slug": "trouble-shooting",
+      "title": "Trouble Shooting",
+      "text": "If there is a problem on site the best way to proceed is:"
+    },
+    {
+      "type": "reference",
+      "id": "cc1cf3150a97bc6f",
+      "site": "dev.himalayan.academy",
+      "slug": "overview",
+      "title": "Overview",
+      "text": "HimalayanAcademy.com uses the [[RevIgniter]] framework as the underlying [[page assembly]] framework. The language is [[LiveCode]] and the engine is LInux [[LiveCode Server]]. This is based on the famous PHP “[[CodeIgniter]]” [[Model-view-controller]] (MVC) model. "
+    },
+    {
+      "type": "reference",
+      "id": "1c3bfa37c48e1742",
+      "site": "dev.himalayan.academy",
+      "slug": "page-assembly",
+      "title": "Page Assembly",
+      "text": "Pages are assembled based on revIgniter code, and rarely specialised code in the [[cgi-bin]]. The [[public_html]] folder holds all deliverables."
+    },
+    {
+      "type": "reference",
+      "id": "a87329006d4d3c86",
+      "site": "dev.himalayan.academy",
+      "slug": "ha-site-content",
+      "title": "HA Site Content",
+      "text": "Himalayan Academy site content can be broken down into [[assets]] and [[html]]."
+    },
+    {
+      "type": "html",
+      "id": "cec79293b6479153",
+      "text": "<blockquote><b style='color: red'>Important: </b><br>\n\nThere to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”"
+    },
+    {
+      "type": "html",
+      "id": "ac6053bb83e4ebbe",
+      "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\n<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\n<ul>\n<li>[[audio]]\n<li>[[books]]\n<li>[[art]]\n<li>[[slideshows]]\n<li>[[video]]\n<li># each of the above have their own unique structure (more below)</ul>\n<li>All other folders on the top level of [[public_html]] have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\n<ul>\n<li>[[public_html/audio]]  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team"
+    },
+    {
+      "type": "paragraph",
+      "id": "4af88b600c84369a",
+      "text": "[[/blog]] # this is [[TAKA]] (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same."
+    },
+    {
+      "type": "reference",
+      "id": "7eafdb5aa353e3d3",
+      "site": "dev.himalayan.academy",
+      "slug": "jnanam-database",
+      "title": "Jnanam Database",
+      "text": "The Jnanam Database is our [[MYSL]] database for all metadata relating to media and other data types."
+    },
+    {
+      "type": "reference",
+      "id": "d388afc13815b65c",
+      "site": "dev.himalayan.academy",
+      "slug": "core-controllers",
+      "title": "Core Controllers",
+      "text": "HTML Delivery controllers for html delivery maps to the site navigation."
+    },
+    {
+      "type": "reference",
+      "id": "741046c1fa5d1c86",
+      "site": "dev.himalayan.academy",
+      "slug": "admin-controllers",
+      "title": "Admin Controllers",
+      "text": "These are not top linked so google does not find them."
+    },
+    {
+      "type": "reference",
+      "id": "9d09bb6d082baee8",
+      "site": "dev.himalayan.academy",
+      "slug": "core-libraries",
+      "title": "Core Libraries",
+      "text": "Here we document some important core libraries used by the [[Himalayan Academy Web Site]]."
+    },
+    {
+      "type": "reference",
+      "id": "552ab6f472ef8b60",
+      "site": "dev.himalayan.academy",
+      "slug": "presentation-layer",
+      "title": "Presentation Layer",
+      "text": "[[RevIgniter]] assumes the site assets are independent of the assembly system so that upgrades to the core do not affect the CSS or Javascript assets."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Himalayan Academy Web Site",
+        "story": []
+      },
+      "date": 1459958978200
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "433173e406f7ae23"
+      },
+      "id": "433173e406f7ae23",
+      "type": "add",
+      "date": 1459958979512
+    },
+    {
+      "type": "edit",
+      "id": "433173e406f7ae23",
+      "item": {
+        "type": "paragraph",
+        "id": "433173e406f7ae23",
+        "text": "This document is meant to give an overview of the Content Management System of the Himalayan \nAcademy.com web site. It serves to document how we do things, for new team members to follow so that they do not start building “ad hoc” outside this guideline;  and also to give anyone new to the site an understanding of how things work.  BBC web site is a good model as their “style guide” is open source and use by their team for both educating everyone and also setting the standards for development."
+      },
+      "date": 1459959008469
+    },
+    {
+      "type": "add",
+      "id": "d64890f6624ad534",
+      "item": {
+        "type": "paragraph",
+        "id": "d64890f6624ad534",
+        "text": "# Overview"
+      },
+      "after": "433173e406f7ae23",
+      "date": 1459959016085
+    },
+    {
+      "type": "edit",
+      "id": "d64890f6624ad534",
+      "item": {
+        "type": "markdown",
+        "id": "d64890f6624ad534",
+        "text": "# Overview"
+      },
+      "date": 1459959017289
+    },
+    {
+      "type": "add",
+      "id": "2648af6df910a2da",
+      "item": {
+        "type": "paragraph",
+        "id": "2648af6df910a2da",
+        "text": "HimalayanAcademy.com uses the [[RevIgniter]] framework as the underlying page assembly framework. The language is [[LiveCode]] and the engine is LInux LiveCode server. This is based on the famous PHP “CodeIgniter” Model/View/Controller   model. Note IMHO this would be better labeled [[CMV]] because the controller is invoked first, *then* the model, *then* the views."
+      },
+      "after": "d64890f6624ad534",
+      "date": 1459959061744
+    },
+    {
+      "type": "add",
+      "id": "97336131a866bc34",
+      "item": {
+        "type": "paragraph",
+        "id": "97336131a866bc34",
+        "text": "The general algorithm is: URL’s map to controllers, which parse load core libraries, parse the URL segments, and load specific the libraries that generate the “models” (html snippets, chunks); load up the uber variable [[gData]][ ## ] array, then call the view where we insert the elements from the [[gData]] array and send back out on port 80."
+      },
+      "after": "2648af6df910a2da",
+      "date": 1459959201427
+    },
+    {
+      "type": "add",
+      "id": "8239077264a1f975",
+      "item": {
+        "type": "paragraph",
+        "id": "8239077264a1f975",
+        "text": "If there is a problem on site the best way to proceed is:"
+      },
+      "after": "97336131a866bc34",
+      "date": 1459959210604
+    },
+    {
+      "type": "add",
+      "id": "26de78e20e0caeb9",
+      "item": {
+        "type": "paragraph",
+        "id": "26de78e20e0caeb9",
+        "text": "<ol><li> check /config/routes.lc to remind yourself what the controller is doing if you forgot, then look into the controller and check any handlers being invoked by #2,3, URL segments, then check the views related to the delivery and then with all that in your head, you can look deeper into the controllers/libraries."
+      },
+      "after": "8239077264a1f975",
+      "date": 1459959268167
+    },
+    {
+      "type": "edit",
+      "id": "26de78e20e0caeb9",
+      "item": {
+        "type": "html",
+        "id": "26de78e20e0caeb9",
+        "text": "<ol><li> check /config/routes.lc to remind yourself what the controller is doing if you forgot, then look into the controller and check any handlers being invoked by #2,3, URL segments, then check the views related to the delivery and then with all that in your head, you can look deeper into the controllers/libraries."
+      },
+      "date": 1459959270199
+    },
+    {
+      "type": "add",
+      "id": "d536ecaeb5ccf8f6",
+      "item": {
+        "type": "paragraph",
+        "id": "d536ecaeb5ccf8f6",
+        "text": "Expanded Version with on-disk mapping: Note that there are many ways to do things in revigniter which is a toolbox and not a CMS as such. Some methods are standard operating procedure, but beyond the general algorithm our CMS is unique to HA.com site."
+      },
+      "after": "26de78e20e0caeb9",
+      "date": 1459959288033
+    },
+    {
+      "type": "add",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "paragraph",
+        "id": "ecd402c60f3ed78c",
+        "text": "URL’s map to controllers, via the first segment in the URL after the domain name."
+      },
+      "after": "d536ecaeb5ccf8f6",
+      "date": 1459959296812
+    },
+    {
+      "type": "add",
+      "id": "970799c3f36437b3",
+      "item": {
+        "type": "paragraph",
+        "id": "970799c3f36437b3",
+        "text": "Controllers are lightweight traffic managers that do this work.\nload core libraries \nwe opted to use “libraries” instead of “models” because that’s how we think in LiveCode, but the term “model” is still useful for discussion purposes. The way I think of it is libraries take the data (clay) and the model  into small forms (the clay sculpture in this case:  units of html code, or xml code etc for output, that are passed to the gData array)\nhandle the secondary URL segments for different tasks, by mapping them to LiveCode handlers in the controller script\nload libraries specific to a URL as needed for modeling the data needed for unique views.\nIn some cases the controller will then output to port 80\nSome cases the controller passes off work to the “site.lc” controller which will do the final output.\n\n"
+      },
+      "after": "ecd402c60f3ed78c",
+      "date": 1459959322438
+    },
+    {
+      "type": "add",
+      "id": "36425f0982c5fe14",
+      "item": {
+        "type": "paragraph",
+        "id": "36425f0982c5fe14",
+        "text": "# On disk Framework mapping (partial)"
+      },
+      "after": "970799c3f36437b3",
+      "date": 1459959328894
+    },
+    {
+      "type": "add",
+      "id": "5809fbfa9f99cc91",
+      "item": {
+        "type": "paragraph",
+        "id": "5809fbfa9f99cc91",
+        "text": "\nPage Assembly (more detail below)\ncgi-bin # livecode server lives here and, rarely, some unique cgi’s for work done outside the revIgniter framework.\npublic_html # holds the revIgniter system and all deliverables\npublic_html/system # the RevIgniter “engine”, all libraries \npublic_html/system/application/ha # holds the file unique to our site; note the following paths being inside this folder *note* the RevIgniter libraries above (which may be swapped out on upgrade)\nconfig/config.lc # key “uber” params for the whole site. e.g you can turn logging on and off here (please turn if off on HA.com after debugging as it slows the site down)\nroutes.lc # determines how URL’s are handled\ncontrollers/  # Key traffic managers (discussed in detail below)\nlibraries/ # scripts that fetch and model the data and insert into the gData[###]array\nviews/ #html templates and chunks used to build the final pages. gData array elements are inserted into these and occasionally, where “proprietary” to that one view, we may have lc handlers to do some work that are never called site side, but only for that view. These handlers could be externalized to scripts and call by the controller; but we decided it was overkill to have a library for all these small functions unique to each view. \n\nContent\npublic_html/assets # CSS, site wide images, Javascript lives here that are completely independent of the RevIgniter frame work. The dochead.lc view loads these for all pages. /assets/img also contains the site wide images and patterns etc that are use for the overall site wrapper, header,footer.\npublic_html/html # contains all the html used in the “html” pages that are new views of specific media. By convention, the folder structure of /public_html/html/  follows our navigation.\n\nRULE! There to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”\n\nTo “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\npublic_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same.\n\nJnanam Database\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\nCore controllers:\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\nAdmin Controllers\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\nCore Libraries\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… \n\n\n\nPresentation Layer\n\nHTML Views & CSS\nRevIgniter assumes the site assets are independent of the assembly system so that upgrades to the core do not affect the CSS or Javascript assets\nCSS is here /assets/css\nMainfile CSS file is    /assets /style.css\nAll the HTML views or “chunks” that contain DOM elements targeted by the styles.css are here\n/system/application/ha/views\nOur views are broken up into small modular elements, most of which are obvious and standard, others are unique to our CMS. I will list the obvious one here that are used by the CMS\n/system/application/ha/views\n/sitewide # in order of appearance in the final DOM output:\ndoc-head.lc\npage-header.lc\nglobal-navigation.lc # an include\nfooter.lc  # closes out the DOM\n\n# the following are the interior page DOM elements that change depending\n# on the body style that is applied.. the CMS will load these views\n# each of which will call the entire DOM :\ntwo-column.lc \nlanding.lc\nsearch-results.lc\nWe have also views unique to each media type, these views also call the entire DOM (by loading the head, header and footer as includes)\n/system/application/views/home\n/system/application/views/media\napp-details.lc\nart-details.lc\naudio-details.lc\nbook-details.lc\nslideshow-details.lc\nvideo-details.lc\nwebapp-details.lc\n\nTo get a good grip on all the html chunks being called, scan through\n\n/system/application/ha/controllers/site.lc\n/system/application/ha/libraries/cms.lc\n\nAlso note that the two-column.lc (simple html page with side bar on right) is loaded by the main controllers who will always default to this view if there is no other “fancy stuff” happening. Then we just call the two-column.lc view and insert the “plain” html chunk from the top /html folder"
+      },
+      "after": "36425f0982c5fe14",
+      "date": 1459959336329
+    },
+    {
+      "type": "edit",
+      "id": "d536ecaeb5ccf8f6",
+      "item": {
+        "type": "paragraph",
+        "id": "d536ecaeb5ccf8f6",
+        "text": "Expanded Version with on-disk mapping: "
+      },
+      "date": 1459959399007
+    },
+    {
+      "type": "add",
+      "id": "dde78a04c430cfec",
+      "item": {
+        "type": "paragraph",
+        "id": "dde78a04c430cfec",
+        "text": "Note that there are many ways to do things in revigniter which is a toolbox and not a CMS as such. Some methods are standard operating procedure, but beyond the general algorithm our CMS is unique to HA.com site."
+      },
+      "after": "d536ecaeb5ccf8f6",
+      "date": 1459959400488
+    },
+    {
+      "type": "edit",
+      "id": "d536ecaeb5ccf8f6",
+      "item": {
+        "type": "paragraph",
+        "id": "d536ecaeb5ccf8f6",
+        "text": "# Expanded Version with on-disk mapping: "
+      },
+      "date": 1459959404288
+    },
+    {
+      "type": "edit",
+      "id": "d536ecaeb5ccf8f6",
+      "item": {
+        "type": "markdown",
+        "id": "d536ecaeb5ccf8f6",
+        "text": "# Expanded Version with on-disk mapping: "
+      },
+      "date": 1459959405272
+    },
+    {
+      "type": "edit",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "paragraph",
+        "id": "ecd402c60f3ed78c",
+        "text": "<ul><li>URL’s map to controllers, via the first segment in the URL after the domain name."
+      },
+      "date": 1459959424128
+    },
+    {
+      "type": "edit",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "html",
+        "id": "ecd402c60f3ed78c",
+        "text": "<ul><li>URL’s map to controllers, via the first segment in the URL after the domain name."
+      },
+      "date": 1459959425156
+    },
+    {
+      "type": "remove",
+      "id": "970799c3f36437b3",
+      "date": 1459959443777
+    },
+    {
+      "type": "edit",
+      "id": "36425f0982c5fe14",
+      "item": {
+        "type": "markdown",
+        "id": "36425f0982c5fe14",
+        "text": "# On disk Framework mapping (partial)"
+      },
+      "date": 1459959454608
+    },
+    {
+      "type": "edit",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "html",
+        "id": "ecd402c60f3ed78c",
+        "text": "<ul><li>URL’s map to controllers, via the first segment in the URL after the domain name.\n<li>Controllers are lightweight traffic managers that do this work.\n<li>load core libraries \n<li>we opted to use “libraries” instead of “models” because that’s how we think in LiveCode, but the term “model” is still useful for discussion purposes. The way I think of it is libraries take the data (clay) and the model  into small forms (the clay sculpture in this case:  units of html code, or xml code etc for output, that are passed to the gData array)\n<li>handle the secondary URL segments for different tasks, by mapping them to LiveCode handlers in the controller script\n<li>load libraries specific to a URL as needed for modeling the data needed for unique views.\nIn some cases the controller will then output to port 80\n<li>Some cases the controller passes off work to the “site.lc” controller which will do the final output."
+      },
+      "date": 1459959482140
+    },
+    {
+      "type": "edit",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "html",
+        "id": "ecd402c60f3ed78c",
+        "text": "<ul><li>URL’s map to controllers, via the first segment in the URL after the domain name.\n<li>Controllers are lightweight traffic managers that do this work.\n<ul>\n<li>load core libraries \n<ul><li>we opted to use “libraries” instead of “models” because that’s how we think in LiveCode, but the term “model” is still useful for discussion purposes. The way I think of it is libraries take the data (clay) and the model  into small forms (the clay sculpture in this case:  units of html code, or xml code etc for output, that are passed to the gData array)\n<li>handle the secondary URL segments for different tasks, by mapping them to LiveCode handlers in the controller script</ul>\n<li>load libraries specific to a URL as needed for modeling the data needed for unique views.\nIn some cases the controller will then output to port 80\n<li>Some cases the controller passes off work to the “site.lc” controller which will do the final output."
+      },
+      "date": 1459959556125
+    },
+    {
+      "type": "edit",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "html",
+        "id": "ecd402c60f3ed78c",
+        "text": "<ul><li>URL’s map to controllers, via the first segment in the URL after the domain name.\n<li>Controllers are lightweight traffic managers that do this work.\n<ul>\n<li>load core libraries \n<ul><li>we opted to use “libraries” instead of “models” because that’s how we think in LiveCode, but the term “model” is still useful for discussion purposes. The way I think of it is libraries take the data (clay) and the model  into small forms (the clay sculpture in this case:  units of html code, or xml code etc for output, that are passed to the gData array)</ul>\n<li>handle the secondary URL segments for different tasks, by mapping them to LiveCode handlers in the controller script</ul>\n<li>load libraries specific to a URL as needed for modeling the data needed for unique views.\nIn some cases the controller will then output to port 80\n<li>Some cases the controller passes off work to the “site.lc” controller which will do the final output."
+      },
+      "date": 1459959609391
+    },
+    {
+      "type": "edit",
+      "id": "ecd402c60f3ed78c",
+      "item": {
+        "type": "html",
+        "id": "ecd402c60f3ed78c",
+        "text": "<ul><li>URL’s map to controllers, via the first segment in the URL after the domain name.\n<li>Controllers are lightweight traffic managers that do this work.\n<ul>\n<li>load core libraries \n<ul><li>we opted to use “libraries” instead of “models” because that’s how we think in LiveCode, but the term “model” is still useful for discussion purposes. The way I think of it is libraries take the data (clay) and the model  into small forms (the clay sculpture in this case:  units of html code, or xml code etc for output, that are passed to the gData array)</ul>\n<li>handle the secondary URL segments for different tasks, by mapping them to LiveCode handlers in the controller script\n<li>load libraries specific to a URL as needed for modeling the data needed for unique views.\nIn some cases the controller will then output to port 80\n<li>Some cases the controller passes off work to the “site.lc” controller which will do the final output."
+      },
+      "date": 1459959623151
+    },
+    {
+      "type": "edit",
+      "id": "5809fbfa9f99cc91",
+      "item": {
+        "type": "paragraph",
+        "id": "5809fbfa9f99cc91",
+        "text": "# Page Assembly"
+      },
+      "date": 1459959687729
+    },
+    {
+      "type": "edit",
+      "id": "5809fbfa9f99cc91",
+      "item": {
+        "type": "markdown",
+        "id": "5809fbfa9f99cc91",
+        "text": "# Page Assembly"
+      },
+      "date": 1459959690509
+    },
+    {
+      "type": "add",
+      "id": "c65c52b6f0cfcd06",
+      "item": {
+        "type": "paragraph",
+        "id": "c65c52b6f0cfcd06",
+        "text": "cgi-bin # livecode server lives here and, rarely, some unique cgi’s for work done outside the revIgniter framework.\npublic_html # holds the revIgniter system and all deliverables\npublic_html/system # the RevIgniter “engine”, all libraries \npublic_html/system/application/ha # holds the file unique to our site; note the following paths being inside this folder *note* the RevIgniter libraries above (which may be swapped out on upgrade)\nconfig/config.lc # key “uber” params for the whole site. e.g you can turn logging on and off here (please turn if off on HA.com after debugging as it slows the site down)\nroutes.lc # determines how URL’s are handled\ncontrollers/  # Key traffic managers (discussed in detail below)\nlibraries/ # scripts that fetch and model the data and insert into the gData[###]array\nviews/ #html templates and chunks used to build the final pages. gData array elements are inserted into these and occasionally, where “proprietary” to that one view, we may have lc handlers to do some work that are never called site side, but only for that view. These handlers could be externalized to scripts and call by the controller; but we decided it was overkill to have a library for all these small functions unique to each view. \n\nContent\npublic_html/assets # CSS, site wide images, Javascript lives here that are completely independent of the RevIgniter frame work. The dochead.lc view loads these for all pages. /assets/img also contains the site wide images and patterns etc that are use for the overall site wrapper, header,footer.\npublic_html/html # contains all the html used in the “html” pages that are new views of specific media. By convention, the folder structure of /public_html/html/  follows our navigation.\n\nRULE! There to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”\n\nTo “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\npublic_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same.\n\nJnanam Database\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\nCore controllers:\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\nAdmin Controllers\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\nCore Libraries\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… \n\n\n\nPresentation Layer\n\nHTML Views & CSS\nRevIgniter assumes the site assets are independent of the assembly system so that upgrades to the core do not affect the CSS or Javascript assets\nCSS is here /assets/css\nMainfile CSS file is    /assets /style.css\nAll the HTML views or “chunks” that contain DOM elements targeted by the styles.css are here\n/system/application/ha/views\nOur views are broken up into small modular elements, most of which are obvious and standard, others are unique to our CMS. I will list the obvious one here that are used by the CMS\n/system/application/ha/views\n/sitewide # in order of appearance in the final DOM output:\ndoc-head.lc\npage-header.lc\nglobal-navigation.lc # an include\nfooter.lc  # closes out the DOM\n\n# the following are the interior page DOM elements that change depending\n# on the body style that is applied.. the CMS will load these views\n# each of which will call the entire DOM :\ntwo-column.lc \nlanding.lc\nsearch-results.lc\nWe have also views unique to each media type, these views also call the entire DOM (by loading the head, header and footer as includes)\n/system/application/views/home\n/system/application/views/media\napp-details.lc\nart-details.lc\naudio-details.lc\nbook-details.lc\nslideshow-details.lc\nvideo-details.lc\nwebapp-details.lc\n\nTo get a good grip on all the html chunks being called, scan through\n\n/system/application/ha/controllers/site.lc\n/system/application/ha/libraries/cms.lc\n\nAlso note that the two-column.lc (simple html page with side bar on right) is loaded by the main controllers who will always default to this view if there is no other “fancy stuff” happening. Then we just call the two-column.lc view and insert the “plain” html chunk from the top /html folder"
+      },
+      "after": "5809fbfa9f99cc91",
+      "date": 1459959691699
+    },
+    {
+      "type": "remove",
+      "id": "36425f0982c5fe14",
+      "date": 1459959693512
+    },
+    {
+      "type": "edit",
+      "id": "c65c52b6f0cfcd06",
+      "item": {
+        "type": "paragraph",
+        "id": "c65c52b6f0cfcd06",
+        "text": "cgi-bin # livecode server lives here and, rarely, some unique cgi’s for work done outside the revIgniter framework.\npublic_html # holds the revIgniter system and all deliverables\npublic_html/system # the RevIgniter “engine”, all libraries \npublic_html/system/application/ha # holds the file unique to our site; note the following paths being inside this folder *note* the RevIgniter libraries above (which may be swapped out on upgrade)\nconfig/config.lc # key “uber” params for the whole site. e.g you can turn logging on and off here (please turn if off on HA.com after debugging as it slows the site down)\nroutes.lc # determines how URL’s are handled\ncontrollers/  # Key traffic managers (discussed in detail below)\nlibraries/ # scripts that fetch and model the data and insert into the gData[###]array\nviews/ #html templates and chunks used to build the final pages. gData array elements are inserted into these and occasionally, where “proprietary” to that one view, we may have lc handlers to do some work that are never called site side, but only for that view. These handlers could be externalized to scripts and call by the controller; but we decided it was overkill to have a library for all these small functions unique to each view. \n\nContent\npublic_html/assets # CSS, site wide images, Javascript lives here that are completely independent of the RevIgniter frame work. The dochead.lc view loads these for all pages. /assets/img also contains the site wide images and patterns etc that are use for the overall site wrapper, header,footer.\npublic_html/html # contains all the html used in the “html” pages that are new views of specific media. By convention, the folder structure of /public_html/html/  follows our navigation.\n\nRULE! There to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”\n\nTo “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\npublic_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same.\n\nJnanam Database\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\nCore controllers:\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\nAdmin Controllers\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\nCore Libraries\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… \n\n\n\n"
+      },
+      "date": 1459959706452
+    },
+    {
+      "type": "add",
+      "id": "f8742a5b2419d0f8",
+      "item": {
+        "type": "paragraph",
+        "id": "f8742a5b2419d0f8",
+        "text": "# [[Presentation Layer]]\n\nHTML Views & CSS\nRevIgniter assumes the site assets are independent of the assembly system so that upgrades to the core do not affect the CSS or Javascript assets\nCSS is here /assets/css\nMainfile CSS file is    /assets /style.css\nAll the HTML views or “chunks” that contain DOM elements targeted by the styles.css are here\n/system/application/ha/views\nOur views are broken up into small modular elements, most of which are obvious and standard, others are unique to our CMS. I will list the obvious one here that are used by the CMS\n/system/application/ha/views\n/sitewide # in order of appearance in the final DOM output:\ndoc-head.lc\npage-header.lc\nglobal-navigation.lc # an include\nfooter.lc  # closes out the DOM\n\n# the following are the interior page DOM elements that change depending\n# on the body style that is applied.. the CMS will load these views\n# each of which will call the entire DOM :\ntwo-column.lc \nlanding.lc\nsearch-results.lc\nWe have also views unique to each media type, these views also call the entire DOM (by loading the head, header and footer as includes)\n/system/application/views/home\n/system/application/views/media\napp-details.lc\nart-details.lc\naudio-details.lc\nbook-details.lc\nslideshow-details.lc\nvideo-details.lc\nwebapp-details.lc\n\nTo get a good grip on all the html chunks being called, scan through\n\n/system/application/ha/controllers/site.lc\n/system/application/ha/libraries/cms.lc\n\nAlso note that the two-column.lc (simple html page with side bar on right) is loaded by the main controllers who will always default to this view if there is no other “fancy stuff” happening. Then we just call the two-column.lc view and insert the “plain” html chunk from the top /html folder"
+      },
+      "after": "c65c52b6f0cfcd06",
+      "date": 1459959720906
+    },
+    {
+      "type": "edit",
+      "id": "c65c52b6f0cfcd06",
+      "item": {
+        "type": "paragraph",
+        "id": "c65c52b6f0cfcd06",
+        "text": "<ul><li>cgi-bin # livecode server lives here and, rarely, some unique cgi’s for work done outside the revIgniter framework.\n<li>[[public_html]] # holds the revIgniter system and all deliverables\n<li>[[public_html/system]] # the RevIgniter “engine”, all libraries \n<li>[[public_html/system/application/ha]] # holds the file unique to our site; note the following paths being inside this folder *note* the RevIgniter libraries above (which may be swapped out on upgrade)\n<li>[[config/config.lc]] # key “uber” params for the whole site. e.g you can turn logging on and off here (please turn if off on HA.com after debugging as it slows the site down)\n<li>[[routes.lc]] # determines how URL’s are handled\ncontrollers/  # Key traffic managers (discussed in detail below)\n<li>[[libraries]]/ # scripts that fetch and model the data and insert into the gData[###]array\n<li>[[views]]/ #html templates and chunks used to build the final pages. gData array elements are inserted into these and occasionally, where “proprietary” to that one view, we may have lc handlers to do some work that are never called site side, but only for that view. These handlers could be externalized to scripts and call by the controller; but we decided it was overkill to have a library for all these small functions unique to each view. "
+      },
+      "date": 1459959848505
+    },
+    {
+      "type": "add",
+      "id": "586e6e89748ad49f",
+      "item": {
+        "type": "paragraph",
+        "id": "586e6e89748ad49f",
+        "text": "# Content"
+      },
+      "after": "c65c52b6f0cfcd06",
+      "date": 1459959853748
+    },
+    {
+      "type": "edit",
+      "id": "586e6e89748ad49f",
+      "item": {
+        "type": "markdown",
+        "id": "586e6e89748ad49f",
+        "text": "# Content"
+      },
+      "date": 1459959854910
+    },
+    {
+      "type": "edit",
+      "id": "c65c52b6f0cfcd06",
+      "item": {
+        "type": "html",
+        "id": "c65c52b6f0cfcd06",
+        "text": "<ul><li>cgi-bin # livecode server lives here and, rarely, some unique cgi’s for work done outside the revIgniter framework.\n<li>[[public_html]] # holds the revIgniter system and all deliverables\n<li>[[public_html/system]] # the RevIgniter “engine”, all libraries \n<li>[[public_html/system/application/ha]] # holds the file unique to our site; note the following paths being inside this folder *note* the RevIgniter libraries above (which may be swapped out on upgrade)\n<li>[[config/config.lc]] # key “uber” params for the whole site. e.g you can turn logging on and off here (please turn if off on HA.com after debugging as it slows the site down)\n<li>[[routes.lc]] # determines how URL’s are handled\ncontrollers/  # Key traffic managers (discussed in detail below)\n<li>[[libraries]]/ # scripts that fetch and model the data and insert into the gData[###]array\n<li>[[views]]/ #html templates and chunks used to build the final pages. gData array elements are inserted into these and occasionally, where “proprietary” to that one view, we may have lc handlers to do some work that are never called site side, but only for that view. These handlers could be externalized to scripts and call by the controller; but we decided it was overkill to have a library for all these small functions unique to each view. "
+      },
+      "date": 1459959856903
+    },
+    {
+      "type": "add",
+      "id": "0dff7e2285c2a039",
+      "item": {
+        "type": "paragraph",
+        "id": "0dff7e2285c2a039",
+        "text": "public_html/assets # CSS, site wide images, Javascript lives here that are completely independent of the RevIgniter frame work. The dochead.lc view loads these for all pages. /assets/img also contains the site wide images and patterns etc that are use for the overall site wrapper, header,footer.\npublic_html/html # contains all the html used in the “html” pages that are new views of specific media. By convention, the folder structure of /public_html/html/  follows our navigation.\n\nRULE! There to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”\n\nTo “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\npublic_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same.\n\nJnanam Database\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\nCore controllers:\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\nAdmin Controllers\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\nCore Libraries\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… \n\n\n\n"
+      },
+      "after": "586e6e89748ad49f",
+      "date": 1459959865960
+    },
+    {
+      "type": "edit",
+      "id": "c65c52b6f0cfcd06",
+      "item": {
+        "type": "html",
+        "id": "c65c52b6f0cfcd06",
+        "text": "<ul><li>cgi-bin # livecode server lives here and, rarely, some unique cgi’s for work done outside the revIgniter framework.\n<li>[[public_html]] # holds the revIgniter system and all deliverables\n<li>[[public_html/system]] # the RevIgniter “engine”, all libraries \n<ul><li>[[public_html/system/application/ha]] # holds the file unique to our site; note the following paths being inside this folder *note* the RevIgniter libraries above (which may be swapped out on upgrade)\n<li>[[config/config.lc]] # key “uber” params for the whole site. e.g you can turn logging on and off here (please turn if off on HA.com after debugging as it slows the site down)\n<li>[[routes.lc]] # determines how URL’s are handled\ncontrollers/  # Key traffic managers (discussed in detail below)\n<li>[[libraries]]/ # scripts that fetch and model the data and insert into the gData[###]array\n<li>[[views]]/ #html templates and chunks used to build the final pages. gData array elements are inserted into these and occasionally, where “proprietary” to that one view, we may have lc handlers to do some work that are never called site side, but only for that view. These handlers could be externalized to scripts and call by the controller; but we decided it was overkill to have a library for all these small functions unique to each view. "
+      },
+      "date": 1459959879199
+    },
+    {
+      "type": "edit",
+      "id": "0dff7e2285c2a039",
+      "item": {
+        "type": "paragraph",
+        "id": "0dff7e2285c2a039",
+        "text": "public_html/assets # CSS, site wide images, Javascript lives here that are completely independent of the RevIgniter frame work. The dochead.lc view loads these for all pages. /assets/img also contains the site wide images and patterns etc that are use for the overall site wrapper, header,footer.\npublic_html/html # contains all the html used in the “html” pages that are new views of specific media. By convention, the folder structure of /public_html/html/  follows our navigation.\n\n"
+      },
+      "date": 1459959948072
+    },
+    {
+      "type": "add",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "paragraph",
+        "id": "ac6053bb83e4ebbe",
+        "text": "RULE! There to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”\n\nTo “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\npublic_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same.\n\nJnanam Database\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\nCore controllers:\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\nAdmin Controllers\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\nCore Libraries\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… \n\n\n\n"
+      },
+      "after": "0dff7e2285c2a039",
+      "date": 1459959957842
+    },
+    {
+      "type": "edit",
+      "id": "586e6e89748ad49f",
+      "item": {
+        "type": "markdown",
+        "id": "586e6e89748ad49f",
+        "text": "# [[HA Site Content]]"
+      },
+      "date": 1459959971328
+    },
+    {
+      "type": "remove",
+      "id": "0dff7e2285c2a039",
+      "date": 1459959978189
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "a87329006d4d3c86"
+      },
+      "after": "c65c52b6f0cfcd06",
+      "id": "a87329006d4d3c86",
+      "date": 1459959982442
+    },
+    {
+      "type": "edit",
+      "id": "a87329006d4d3c86",
+      "item": {
+        "type": "reference",
+        "id": "a87329006d4d3c86",
+        "site": "dev.himalayan.academy",
+        "slug": "ha-site-content",
+        "title": "HA Site Content",
+        "text": "Himalayan Academy site content can be broken down into [[assets]] and [[html]]."
+      },
+      "date": 1459960078515
+    },
+    {
+      "type": "remove",
+      "id": "586e6e89748ad49f",
+      "date": 1459960087691
+    },
+    {
+      "type": "edit",
+      "id": "5809fbfa9f99cc91",
+      "item": {
+        "type": "markdown",
+        "id": "5809fbfa9f99cc91",
+        "text": "# [[Page Assembly]]"
+      },
+      "date": 1459960099548
+    },
+    {
+      "type": "remove",
+      "id": "c65c52b6f0cfcd06",
+      "date": 1459960106541
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "1c3bfa37c48e1742"
+      },
+      "after": "ecd402c60f3ed78c",
+      "id": "1c3bfa37c48e1742",
+      "date": 1459960118746
+    },
+    {
+      "type": "edit",
+      "id": "1c3bfa37c48e1742",
+      "item": {
+        "type": "reference",
+        "id": "1c3bfa37c48e1742",
+        "site": "dev.himalayan.academy",
+        "slug": "page-assembly",
+        "title": "Page Assembly",
+        "text": "Pages are assembled based on revIgniter code, and rarely specialised code in the [[cgi-bin]]. The [[public_html]] folder holds all deliverables."
+      },
+      "date": 1459960252440
+    },
+    {
+      "type": "remove",
+      "id": "5809fbfa9f99cc91",
+      "date": 1459960256199
+    },
+    {
+      "type": "edit",
+      "id": "97336131a866bc34",
+      "item": {
+        "type": "paragraph",
+        "id": "97336131a866bc34",
+        "text": "# Trouble Shooting"
+      },
+      "date": 1459960317274
+    },
+    {
+      "type": "edit",
+      "id": "97336131a866bc34",
+      "item": {
+        "type": "markdown",
+        "id": "97336131a866bc34",
+        "text": "# Trouble Shooting"
+      },
+      "date": 1459960318735
+    },
+    {
+      "type": "add",
+      "id": "6c8cad2fa06dbcb2",
+      "item": {
+        "type": "paragraph",
+        "id": "6c8cad2fa06dbcb2",
+        "text": "The general algorithm is: URL’s map to controllers, which parse load core libraries, parse the URL segments, and load specific the libraries that generate the “models” (html snippets, chunks); load up the uber variable [[gData]][ ## ] array, then call the view where we insert the elements from the [[gData]] array and send back out on port 80."
+      },
+      "after": "97336131a866bc34",
+      "date": 1459960322621
+    },
+    {
+      "type": "edit",
+      "id": "97336131a866bc34",
+      "item": {
+        "type": "markdown",
+        "id": "97336131a866bc34",
+        "text": "# [[Trouble Shooting]]"
+      },
+      "date": 1459960328460
+    },
+    {
+      "type": "remove",
+      "id": "6c8cad2fa06dbcb2",
+      "date": 1459960379029
+    },
+    {
+      "type": "remove",
+      "id": "26de78e20e0caeb9",
+      "date": 1459960385795
+    },
+    {
+      "type": "remove",
+      "id": "8239077264a1f975",
+      "date": 1459960390618
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "6c8cad2fa06dbcb2",
+        "text": "The general algorithm is: URL’s map to controllers, which parse load core libraries, parse the URL segments, and load specific the libraries that generate the “models” (html snippets, chunks); load up the uber variable [[gData]][ ## ] array, then call the view where we insert the elements from the [[gData]] array and send back out on port 80."
+      },
+      "after": "2648af6df910a2da",
+      "id": "6c8cad2fa06dbcb2",
+      "date": 1459960403583
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "8ecd4678ce48d2fc"
+      },
+      "after": "6c8cad2fa06dbcb2",
+      "id": "8ecd4678ce48d2fc",
+      "date": 1459960424655
+    },
+    {
+      "type": "edit",
+      "id": "8ecd4678ce48d2fc",
+      "item": {
+        "type": "reference",
+        "id": "8ecd4678ce48d2fc",
+        "site": "dev.himalayan.academy",
+        "slug": "trouble-shooting",
+        "title": "Trouble Shooting",
+        "text": "If there is a problem on site the best way to proceed is:"
+      },
+      "date": 1459960435473
+    },
+    {
+      "type": "remove",
+      "id": "97336131a866bc34",
+      "date": 1459960438486
+    },
+    {
+      "type": "remove",
+      "id": "d536ecaeb5ccf8f6",
+      "date": 1459960488022
+    },
+    {
+      "type": "edit",
+      "id": "dde78a04c430cfec",
+      "item": {
+        "type": "paragraph",
+        "id": "dde78a04c430cfec",
+        "text": "[[Note]]: that there are many ways to do things in revigniter which is a toolbox and not a CMS as such. Some methods are standard operating procedure, but beyond the general algorithm our CMS is unique to HA.com site."
+      },
+      "date": 1459960498328
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote><b style='color: purple'>Note: </b><br>\n<ul>\n<li> [[Testability and code re-use]]\n<li> [[Automatic Testing]]"
+      },
+      "after": "dde78a04c430cfec",
+      "id": "cec79293b6479153",
+      "date": 1459960508205
+    },
+    {
+      "type": "remove",
+      "id": "dde78a04c430cfec",
+      "date": 1459960515718
+    },
+    {
+      "type": "edit",
+      "id": "cec79293b6479153",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote><b style='color: purple'>Note: </b><br>\n\nthat there are many ways to do things in revigniter which is a toolbox and not a CMS as such. Some methods are standard operating procedure, but beyond the general algorithm our CMS is unique to HA.com site."
+      },
+      "date": 1459960522040
+    },
+    {
+      "type": "move",
+      "order": [
+        "433173e406f7ae23",
+        "d64890f6624ad534",
+        "2648af6df910a2da",
+        "cec79293b6479153",
+        "6c8cad2fa06dbcb2",
+        "8ecd4678ce48d2fc",
+        "ecd402c60f3ed78c",
+        "1c3bfa37c48e1742",
+        "a87329006d4d3c86",
+        "ac6053bb83e4ebbe",
+        "f8742a5b2419d0f8"
+      ],
+      "id": "cec79293b6479153",
+      "date": 1459960537403
+    },
+    {
+      "type": "move",
+      "order": [
+        "433173e406f7ae23",
+        "d64890f6624ad534",
+        "2648af6df910a2da",
+        "cec79293b6479153",
+        "8ecd4678ce48d2fc",
+        "6c8cad2fa06dbcb2",
+        "ecd402c60f3ed78c",
+        "1c3bfa37c48e1742",
+        "a87329006d4d3c86",
+        "ac6053bb83e4ebbe",
+        "f8742a5b2419d0f8"
+      ],
+      "id": "6c8cad2fa06dbcb2",
+      "date": 1459960544805
+    },
+    {
+      "type": "move",
+      "order": [
+        "433173e406f7ae23",
+        "8ecd4678ce48d2fc",
+        "d64890f6624ad534",
+        "2648af6df910a2da",
+        "cec79293b6479153",
+        "6c8cad2fa06dbcb2",
+        "ecd402c60f3ed78c",
+        "1c3bfa37c48e1742",
+        "a87329006d4d3c86",
+        "ac6053bb83e4ebbe",
+        "f8742a5b2419d0f8"
+      ],
+      "id": "8ecd4678ce48d2fc",
+      "date": 1459960552418
+    },
+    {
+      "type": "edit",
+      "id": "433173e406f7ae23",
+      "item": {
+        "type": "paragraph",
+        "id": "433173e406f7ae23",
+        "text": "This document is meant to give an overview of the Content Management System of the Himalayan \nAcademy.com web site. "
+      },
+      "date": 1459960560041
+    },
+    {
+      "type": "add",
+      "id": "89846ddf49d49e9d",
+      "item": {
+        "type": "paragraph",
+        "id": "89846ddf49d49e9d",
+        "text": "It serves to document how we do things, for new team members to follow so that they do not start building “ad hoc” outside this guideline;  and also to give anyone new to the site an understanding of how things work.  BBC web site is a good model as their “style guide” is open source and use by their team for both educating everyone and also setting the standards for development."
+      },
+      "after": "433173e406f7ae23",
+      "date": 1459960560625
+    },
+    {
+      "type": "edit",
+      "id": "d64890f6624ad534",
+      "item": {
+        "type": "markdown",
+        "id": "d64890f6624ad534",
+        "text": "# [[Overview]]"
+      },
+      "date": 1459960686671
+    },
+    {
+      "type": "remove",
+      "id": "2648af6df910a2da",
+      "date": 1459960693561
+    },
+    {
+      "type": "remove",
+      "id": "cec79293b6479153",
+      "date": 1459960695440
+    },
+    {
+      "type": "remove",
+      "id": "6c8cad2fa06dbcb2",
+      "date": 1459960697246
+    },
+    {
+      "type": "remove",
+      "id": "ecd402c60f3ed78c",
+      "date": 1459960702068
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "cc1cf3150a97bc6f"
+      },
+      "after": "8ecd4678ce48d2fc",
+      "id": "cc1cf3150a97bc6f",
+      "date": 1459960707541
+    },
+    {
+      "type": "edit",
+      "id": "cc1cf3150a97bc6f",
+      "item": {
+        "type": "reference",
+        "id": "cc1cf3150a97bc6f",
+        "site": "dev.himalayan.academy",
+        "slug": "overview",
+        "title": "Overview",
+        "text": "HimalayanAcademy.com uses the [[RevIgniter]] framework as the underlying page assembly framework. The language is [[LiveCode]] and the engine is LInux LiveCode server. This is based on the famous PHP “CodeIgniter” Model/View/Controller   model. Note IMHO this would be better labeled [[CMV]] because the controller is invoked first, *then* the model, *then* the views."
+      },
+      "date": 1459960709504
+    },
+    {
+      "type": "remove",
+      "id": "d64890f6624ad534",
+      "date": 1459960712037
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "paragraph",
+        "id": "ac6053bb83e4ebbe",
+        "text": "[[Important]]: There to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”\n\nTo “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\npublic_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same.\n\nJnanam Database\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\nCore controllers:\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\nAdmin Controllers\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\nCore Libraries\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… "
+      },
+      "date": 1459960787536
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote><b style='color: red'>Important: </b><br>\n\nThis is an imrtant note. Maybe it should be styled with a background colour."
+      },
+      "after": "a87329006d4d3c86",
+      "id": "cec79293b6479153",
+      "date": 1459961047395
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "paragraph",
+        "id": "ac6053bb83e4ebbe",
+        "text": "To “discover” html delivery look at the URL  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor"
+      },
+      "date": 1459961074015
+    },
+    {
+      "type": "add",
+      "id": "cd6eb5ff303e69bb",
+      "item": {
+        "type": "paragraph",
+        "id": "cd6eb5ff303e69bb",
+        "text": "public_html/media  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same."
+      },
+      "after": "ac6053bb83e4ebbe",
+      "date": 1459961079752
+    },
+    {
+      "type": "add",
+      "id": "be8a86702ab707e1",
+      "item": {
+        "type": "paragraph",
+        "id": "be8a86702ab707e1",
+        "text": "\n[[Jnanam Database]]\nThis is our mySql database for all metadata relating to media and other data types.\nthe main table is the “item” table which contains one record for each media asset. A media asset may include many files in different formats. Note that the columns were original created based on research into the DCMI  standards for metadata + on top of this the W3C Media Metadata initiative. I added all those fields/columns and then occasionally we add a few proprietary ones.  There is probably no property about and kind of media that cannot be describe by our database: that said.. .there is redundancy because of the original approach, so we have a lot of columns/fields that are not used. The most “classic” of these is “tags” “keywords” “categories”  . \nWhile you *can* discover the semantic differences between these three, in practice they overlap too much to be useful. We deprecated “key_words” for now and only use\ntags somewhat adhoc by our volunteers with no data validation which has it’s own problems \nCategories: recently expanded to use more complex relational tables and predefined. Users cannot add or remove categories or create them adhoc. This area will be more important moving forward. Very important in fact.\nfile_id  is mission critical, and is the exact spelling and case of the matching folder /media containing the media element and it’s various formats.\nA discussion of the database is a whole subject itself… the above will suffice to for here.\n\n"
+      },
+      "after": "cd6eb5ff303e69bb",
+      "date": 1459961107041
+    },
+    {
+      "type": "add",
+      "id": "89f8aa88a1181edb",
+      "item": {
+        "type": "paragraph",
+        "id": "89f8aa88a1181edb",
+        "text": "[[Core Controllers]]\n\nHTML Delivery controllers for html delivery maps to the site navigation, URL segment #1\nhttp://www.himalayanacademy.com/monastery\ninvokes /public_html/system/application/ha/controllers/monastery\nWe have :\nmonastery\nreadlearn\nlooklisten\nlivespiritually\nvisit\nbodhinatha # new as of 2015 and dedicated to his teachings\nmedia delivery - site.lc \nSite.lc is an uber controller that handles almost all functions relating to media delivery. All url’s that start with “view” or “apps” followed by the file_id of the media are mapped to this controller. \ne.g. http://www.himalayanacademy.com/view/dancing-with-siva\ninvokes site.lc\nsite.lc  does a query to jnanam.item.file_id and inserts all the metadata for the record into an array. Getting a memory map of all the columns/fields in the item table is a good thing to do as you will see these call in arrays throughout the system.\nsite.lc calls the appropriate view based on the media type (see the site.lc/viewMedia handler) e.g. for a book: /system/application/ha/views/media/book-details.lc inserts the data and delivers the page. There is no static html involved other than the views. each media type has it’s own view.\n\n"
+      },
+      "after": "be8a86702ab707e1",
+      "date": 1459961126416
+    },
+    {
+      "type": "add",
+      "id": "6e1dd1517f8cd13f",
+      "item": {
+        "type": "paragraph",
+        "id": "6e1dd1517f8cd13f",
+        "text": "[[Admin Controllers]]\nThese are not top linked so google does not find them\nhttp://www.himalayanacademy.com/manager\nsome documentation\nHandlers for admin reports etc.\ntoolbox.lc # used for one off work.. Brahmanathaswami use this for global one-off tasks, database data insertion, small unit testing before adding to a controller etc. \n\n"
+      },
+      "after": "89f8aa88a1181edb",
+      "date": 1459961141632
+    },
+    {
+      "type": "add",
+      "id": "f2123cd88472380a",
+      "item": {
+        "type": "paragraph",
+        "id": "f2123cd88472380a",
+        "text": "[[Core Libraries]]\ncms.lc # handles the generation of HTML chunks that are put into gData[###] and later passed in views. e.g. top level portal/landing pages are done as xml…  (easier editing) and cms.lc turns them into html.\ngetSetNavHead.lc # a small but important library that handles the building of the top of the page, calls the doc-head, inserts navigation panel etc…which affects the top of all pages. \nwp.lc: invoked by the home page to run the XML-RPC needed to show the blog postsed in side revIgniter view.\n\n\nOthers which I will not detail here… ask as needed. sort the libraries folder by mod date and you will see right away which ones are actively in use as they will be the most recent… "
+      },
+      "after": "6e1dd1517f8cd13f",
+      "date": 1459961142241
+    },
+    {
+      "type": "edit",
+      "id": "cec79293b6479153",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote><b style='color: red'>Important: </b><br>\n\nThere to be no adhoc addition of folders and files to this folder! *all content and structure is discussed and vetted in advance, when consensus is reached, then we implement as this impacts a log of code, scalability, maintenance, it must be “approved before adopted.”"
+      },
+      "date": 1459961166739
+    },
+    {
+      "type": "remove",
+      "id": "cd6eb5ff303e69bb",
+      "date": 1459961248880
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "paragraph",
+        "id": "ac6053bb83e4ebbe",
+        "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same."
+      },
+      "date": 1459961312121
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "html",
+        "id": "ac6053bb83e4ebbe",
+        "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\naudio\nbooks\nart # includes photographs i.e. all “still” imagery\nslideshows\nvideo\n# each of the above have their own unique structure (more below)\nAll other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\npublic_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team\n/blog # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same."
+      },
+      "date": 1459961314086
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "html",
+        "id": "ac6053bb83e4ebbe",
+        "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\n<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\n<ul>\n<li>audio\n<li>books\n<li>art # includes photographs i.e. all “still” imagery\n<li>slideshows\n<li>video\n<li># each of the above have their own unique structure (more below)</ul>\n<li>All other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\n<ul>\n<li>public_html/audio  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team"
+      },
+      "date": 1459961426593
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4af88b600c84369a",
+        "text": "[[/blog]] # this is TAKA (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same."
+      },
+      "after": "ac6053bb83e4ebbe",
+      "id": "4af88b600c84369a",
+      "date": 1459961444195
+    },
+    {
+      "type": "remove",
+      "id": "be8a86702ab707e1",
+      "date": 1459961465205
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "7eafdb5aa353e3d3"
+      },
+      "after": "4af88b600c84369a",
+      "id": "7eafdb5aa353e3d3",
+      "date": 1459961730939
+    },
+    {
+      "type": "edit",
+      "id": "7eafdb5aa353e3d3",
+      "item": {
+        "type": "reference",
+        "id": "7eafdb5aa353e3d3",
+        "site": "dev.himalayan.academy",
+        "slug": "jnanam-database",
+        "title": "Jnanam Database",
+        "text": "The Jnanam Database is our [[MYSL]] database for all metadata relating to media and other data types."
+      },
+      "date": 1459961733368
+    },
+    {
+      "type": "remove",
+      "id": "89f8aa88a1181edb",
+      "date": 1459961762765
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "d388afc13815b65c"
+      },
+      "after": "7eafdb5aa353e3d3",
+      "id": "d388afc13815b65c",
+      "date": 1459961771148
+    },
+    {
+      "type": "edit",
+      "id": "d388afc13815b65c",
+      "item": {
+        "type": "reference",
+        "id": "d388afc13815b65c",
+        "site": "dev.himalayan.academy",
+        "slug": "core-controllers",
+        "title": "Core Controllers",
+        "text": "HTML Delivery controllers for html delivery maps to the site navigation."
+      },
+      "date": 1459961811156
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "html",
+        "id": "ac6053bb83e4ebbe",
+        "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\n<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\n<ul>\n<li>[[audio]]\n<li>[[books]]\n<li>[[art]] # includes photographs i.e. all “still” imagery\n<li>[[slideshows]]\n<li>[[video]]\n<li># each of the above have their own unique structure (more below)</ul>\n<li>All other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\n<ul>\n<li>[[public_html/audio]]  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team"
+      },
+      "date": 1459970216269
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "html",
+        "id": "ac6053bb83e4ebbe",
+        "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\n<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\n<ul>\n<li>[[audio]]\n<li>[[books]]\n<li>[[art]]\n<li>[[slideshows]]\n<li>[[video]]\n<li># each of the above have their own unique structure (more below)</ul>\n<li>All other folders on the top level of public_html have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\n<ul>\n<li>[[public_html/audio]]  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team"
+      },
+      "date": 1459970245054
+    },
+    {
+      "type": "edit",
+      "id": "ac6053bb83e4ebbe",
+      "item": {
+        "type": "html",
+        "id": "ac6053bb83e4ebbe",
+        "text": "<ul><li><b>To “discover” html delivery look at the URL</b>  e.g. “http://www.himalayanacademy.com/visit….” and then go to see /public_html/html/visit/… this makes for a “sane” structure that we can navigate easily without using magic numbers or a database for html content. HTML can be edited from terminal or by FTP, or edited in our online JS web editor\n<li>[[public_html/media]]  # contains all the media assets (discussed in depth below) in five categories\n<ul>\n<li>[[audio]]\n<li>[[books]]\n<li>[[art]]\n<li>[[slideshows]]\n<li>[[video]]\n<li># each of the above have their own unique structure (more below)</ul>\n<li>All other folders on the top level of [[public_html]] have meaning but are not, for the most part, used in our delivery system as such.. .some are for utility purposes only\n<ul>\n<li>[[public_html/audio]]  # this is legacy folder used for volunteers, transcript work it is not part of our delivery system. Brahmanathaswami uses static HTML here for working with a different team"
+      },
+      "date": 1459970284623
+    },
+    {
+      "type": "remove",
+      "id": "6e1dd1517f8cd13f",
+      "date": 1459970364373
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "741046c1fa5d1c86"
+      },
+      "after": "d388afc13815b65c",
+      "id": "741046c1fa5d1c86",
+      "date": 1459970681371
+    },
+    {
+      "type": "edit",
+      "id": "741046c1fa5d1c86",
+      "item": {
+        "type": "reference",
+        "id": "741046c1fa5d1c86",
+        "site": "dev.himalayan.academy",
+        "slug": "admin-controllers",
+        "title": "Admin Controllers",
+        "text": "These are not top linked so google does not find them."
+      },
+      "date": 1459970684297
+    },
+    {
+      "type": "remove",
+      "id": "f2123cd88472380a",
+      "date": 1459970694580
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "9d09bb6d082baee8"
+      },
+      "after": "741046c1fa5d1c86",
+      "id": "9d09bb6d082baee8",
+      "date": 1459970698890
+    },
+    {
+      "type": "edit",
+      "id": "9d09bb6d082baee8",
+      "item": {
+        "type": "reference",
+        "id": "9d09bb6d082baee8",
+        "site": "dev.himalayan.academy",
+        "slug": "core-libraries",
+        "title": "Core Libraries",
+        "text": "Here we document some important core libraries used by the [[Himalayan Academy Web Site]]."
+      },
+      "date": 1459970881284
+    },
+    {
+      "type": "remove",
+      "id": "f8742a5b2419d0f8",
+      "date": 1459970891397
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "552ab6f472ef8b60"
+      },
+      "id": "552ab6f472ef8b60",
+      "type": "add",
+      "after": "9d09bb6d082baee8",
+      "date": 1459971130146
+    },
+    {
+      "type": "edit",
+      "id": "552ab6f472ef8b60",
+      "item": {
+        "type": "reference",
+        "id": "552ab6f472ef8b60",
+        "site": "dev.himalayan.academy",
+        "slug": "presentation-layer",
+        "title": "Presentation Layer",
+        "text": "[[RevIgniter]] assumes the site assets are independent of the assembly system so that upgrades to the core do not affect the CSS or Javascript assets."
+      },
+      "date": 1459971133889
+    },
+    {
+      "type": "edit",
+      "id": "cc1cf3150a97bc6f",
+      "item": {
+        "type": "reference",
+        "id": "cc1cf3150a97bc6f",
+        "site": "dev.himalayan.academy",
+        "slug": "overview",
+        "title": "Overview",
+        "text": "HimalayanAcademy.com uses the [[RevIgniter]] framework as the underlying [[page assembly]] framework. The language is [[LiveCode]] and the engine is LInux [[LiveCode Server]]. This is based on the famous PHP “[[CodeIgniter]]” [[Model-view-controller]] (MVC) model. "
+      },
+      "date": 1459971373118
+    },
+    {
+      "type": "edit",
+      "id": "4af88b600c84369a",
+      "item": {
+        "type": "paragraph",
+        "id": "4af88b600c84369a",
+        "text": "[[/blog]] # this is [[TAKA]] (Today and Kauai Aadheenam) and is a complete, independent WordPress installation with it’s own database.  FYI we do use PHP to insert the views from revigniter and it access the same /assets/ folder. from the user point of view, it the look and feel are the same."
+      },
+      "date": 1460144202853
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "097a1962efa1ba89"
+      },
+      "id": "097a1962efa1ba89",
+      "type": "add",
+      "after": "552ab6f472ef8b60",
+      "date": 1462874030183
+    },
+    {
+      "type": "move",
+      "order": [
+        "433173e406f7ae23",
+        "097a1962efa1ba89",
+        "89846ddf49d49e9d",
+        "8ecd4678ce48d2fc",
+        "cc1cf3150a97bc6f",
+        "1c3bfa37c48e1742",
+        "a87329006d4d3c86",
+        "cec79293b6479153",
+        "ac6053bb83e4ebbe",
+        "4af88b600c84369a",
+        "7eafdb5aa353e3d3",
+        "d388afc13815b65c",
+        "741046c1fa5d1c86",
+        "9d09bb6d082baee8",
+        "552ab6f472ef8b60"
+      ],
+      "id": "097a1962efa1ba89",
+      "date": 1462874050424
+    },
+    {
+      "type": "edit",
+      "id": "097a1962efa1ba89",
+      "item": {
+        "type": "reference",
+        "id": "097a1962efa1ba89",
+        "site": "dev.himalayan.academy",
+        "slug": "github-deployment-structure",
+        "title": "GitHub Deployment Structure",
+        "text": "Here we look at what the best architecture for developing, maintaining, and maintaining the various mobile, and revIgniter files and components are for the Himalayan Academy project."
+      },
+      "date": 1462874057938
+    },
+    {
+      "type": "edit",
+      "id": "097a1962efa1ba89",
+      "item": {
+        "type": "reference",
+        "id": "097a1962efa1ba89",
+        "site": "dev.himalayan.academy",
+        "slug": "github-deployment-structure",
+        "title": "GitHub Deployment Structure",
+        "text": "Here we look at what the best architecture for developing, maintaining, and maintaining the various mobile, and revIgniter files and components are for the [[Himalayan Academy]] project."
+      },
+      "date": 1462874071880
+    },
+    {
+      "type": "fork",
+      "site": "dev.himalayan.academy",
+      "date": 1463311490763
+    }
+  ]
+}

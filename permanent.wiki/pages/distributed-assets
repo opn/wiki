@@ -1,0 +1,469 @@
+{
+  "title": "Distributed Assets",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8ac40ceeee234320",
+      "text": "We'd like to share large files with the same semantics as wiki pages. We can assume that they are too large to pass through the browser's GET and PUT as synchronous operations."
+    },
+    {
+      "type": "paragraph",
+      "id": "eb76e5fc33398189",
+      "text": "See [[Image Assets]] for earlier thinking."
+    },
+    {
+      "type": "paragraph",
+      "id": "6acc2b5fb15dac0a",
+      "text": "Store assets in .wiki within an assets subdirectory. The exact location tbd."
+    },
+    {
+      "type": "paragraph",
+      "id": "d9cff8afea80ae4f",
+      "text": "Assets to be identified by random id and suffix. An item would be created with the asset file name, id.suffix, in the \"asset\" field of the item, either as a string or an array of strings."
+    },
+    {
+      "type": "paragraph",
+      "id": "756bf5a086dd1b9b",
+      "text": "Assets can be created client-side, cached locally, and saved asynchronously coincident with a page action that records the asset's presence. This will require a new PUT route."
+    },
+    {
+      "type": "paragraph",
+      "id": "b39db5c69ca318c0",
+      "text": "Assets can be retrieved and cached client-side from remote servers. This will require a new CORS GET route."
+    },
+    {
+      "type": "paragraph",
+      "id": "4ae966faf942942b",
+      "text": "A server would retrieve an asset when a page with asset-bearing items is forked. The journal would provide the best advice as to how to fetch the asset. "
+    },
+    {
+      "type": "paragraph",
+      "id": "20c39fe65474eed8",
+      "text": "A serve could discard an asset when no page has a reference to the asset in story or journal. This could happen if a page is forked from an earlier revision."
+    },
+    {
+      "type": "paragraph",
+      "id": "2b86a49dabbdb61d",
+      "text": "A client-side plugin that cannot retrieve an asset should either fall back to alternative resources or report the failure in a class=caption field at the bottom of the rendered item."
+    },
+    {
+      "type": "pagefold",
+      "id": "76b417670091c5fe",
+      "text": "more"
+    },
+    {
+      "type": "paragraph",
+      "id": "db0c91d51c568ac4",
+      "text": "Consider how we might exploit DAT or IPFS for transport. One problem is retrieving an id in time to record it in an edit action."
+    },
+    {
+      "type": "paragraph",
+      "id": "cdbe6f9e98504b4c",
+      "text": "Consider restartable transfers for huge files. Some systems open multiple channels."
+    },
+    {
+      "type": "paragraph",
+      "id": "2847c9ae4fecb64c",
+      "text": "Consider how the presence of large assets could be represented in sitemap.json and search correspondingly enhanced."
+    },
+    {
+      "type": "paragraph",
+      "id": "8d1166210e9c9e4c",
+      "text": "Consider how to 'push' an asset to a public server across a firewall. IPFS can do this but it is tricky."
+    },
+    {
+      "type": "paragraph",
+      "id": "ae72ef64fdd6d2d8",
+      "text": "Consider how asset revisions can propagate. My immediate application is distributing database dumps in csv format. These could be revised daily."
+    },
+    {
+      "type": "reference",
+      "id": "ab19b3f72aa0e14f",
+      "site": "permanent.wiki",
+      "slug": "image-assets",
+      "title": "Image Assets",
+      "text": "We url-encode images dropped on the factory plugin. This captures the sharing dynamics expected of the federation but it doesn't match with current asset practices."
+    },
+    {
+      "type": "reference",
+      "id": "8a2df4b61f8f261d",
+      "site": "hosting.permanent.wiki",
+      "slug": "journal-duplication",
+      "title": "Journal Duplication",
+      "text": "The Journal stores new copies of story items each time they are edited. This presumes items are small and edits touch all parts of them. Not true for caption edits of fat images. But, let's consider the Journal an asset library for story items in the few cases where this is an issue."
+    },
+    {
+      "type": "reference",
+      "id": "9e9cf979b76b096d",
+      "site": "permanent.wiki",
+      "slug": "assets-in-ipfs",
+      "title": "Assets in IPFS",
+      "text": "We explore distributing assets via a node on localhost. The strategy is to store postcard sized assets in the json along with full resolution content in ipfs. Double-click will retrieve and display the ipfs version."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Distributed Assets",
+        "story": []
+      },
+      "date": 1488916798758
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8ac40ceeee234320"
+      },
+      "id": "8ac40ceeee234320",
+      "type": "add",
+      "date": 1488916828660
+    },
+    {
+      "type": "edit",
+      "id": "8ac40ceeee234320",
+      "item": {
+        "type": "paragraph",
+        "id": "8ac40ceeee234320",
+        "text": "We'd like to share large files with the same semantics as wiki pages. We can assume that they are too large to pass through the browser's GET and PUT. "
+      },
+      "date": 1488916972821
+    },
+    {
+      "type": "add",
+      "id": "eb76e5fc33398189",
+      "item": {
+        "type": "paragraph",
+        "id": "eb76e5fc33398189",
+        "text": "See [[Image Assets]]"
+      },
+      "after": "8ac40ceeee234320",
+      "date": 1488917009734
+    },
+    {
+      "type": "add",
+      "id": "6acc2b5fb15dac0a",
+      "item": {
+        "type": "paragraph",
+        "id": "6acc2b5fb15dac0a",
+        "text": "Store assets in .wiki within an assets subdirectory. The exact location tbd."
+      },
+      "after": "eb76e5fc33398189",
+      "date": 1488917077237
+    },
+    {
+      "type": "add",
+      "id": "d9cff8afea80ae4f",
+      "item": {
+        "type": "paragraph",
+        "id": "d9cff8afea80ae4f",
+        "text": "Assets to be identified by random id and suffix. An item would be created with the asset file name, id.suffix, in the \"asset\" field of the item, either as a string or an array of strings."
+      },
+      "after": "6acc2b5fb15dac0a",
+      "date": 1488917254503
+    },
+    {
+      "type": "add",
+      "id": "4ae966faf942942b",
+      "item": {
+        "type": "paragraph",
+        "id": "4ae966faf942942b",
+        "text": "A server would retrieve an asset when a page with asset-bearing items is saved. The journal would provide the best advice as to how to fetch the asset."
+      },
+      "after": "d9cff8afea80ae4f",
+      "date": 1488917455942
+    },
+    {
+      "type": "add",
+      "id": "20c39fe65474eed8",
+      "item": {
+        "type": "paragraph",
+        "id": "20c39fe65474eed8",
+        "text": "A serve could discard an asset when no page has a reference to the asset in story or journal. This could happen if a page is forked from an earlier revision."
+      },
+      "after": "4ae966faf942942b",
+      "date": 1488917541053
+    },
+    {
+      "type": "add",
+      "id": "756bf5a086dd1b9b",
+      "item": {
+        "type": "paragraph",
+        "id": "756bf5a086dd1b9b",
+        "text": "Assets can be created client-side, cached locally, and saved asynchronously coincident with a page action that records the asset's presence."
+      },
+      "after": "d9cff8afea80ae4f",
+      "date": 1488918479055
+    },
+    {
+      "type": "edit",
+      "id": "4ae966faf942942b",
+      "item": {
+        "type": "paragraph",
+        "id": "4ae966faf942942b",
+        "text": "A server would retrieve an asset when a page with asset-bearing items is forked. The journal would provide the best advice as to how to fetch the asset."
+      },
+      "date": 1488918501066
+    },
+    {
+      "type": "edit",
+      "id": "756bf5a086dd1b9b",
+      "item": {
+        "type": "paragraph",
+        "id": "756bf5a086dd1b9b",
+        "text": "Assets can be created client-side, cached locally, and saved asynchronously coincident with a page action that records the asset's presence. This will require a new PUT route."
+      },
+      "date": 1488918548390
+    },
+    {
+      "type": "edit",
+      "id": "4ae966faf942942b",
+      "item": {
+        "type": "paragraph",
+        "id": "4ae966faf942942b",
+        "text": "A server would retrieve an asset when a page with asset-bearing items is forked. The journal would provide the best advice as to how to fetch the asset. This will require a new GET route."
+      },
+      "date": 1488918565025
+    },
+    {
+      "type": "edit",
+      "id": "4ae966faf942942b",
+      "item": {
+        "type": "paragraph",
+        "id": "4ae966faf942942b",
+        "text": "A server would retrieve an asset when a page with asset-bearing items is forked. The journal would provide the best advice as to how to fetch the asset. "
+      },
+      "date": 1488918594782
+    },
+    {
+      "type": "add",
+      "id": "b39db5c69ca318c0",
+      "item": {
+        "type": "paragraph",
+        "id": "b39db5c69ca318c0",
+        "text": "Assets can be retrieved and cached client-side from remote servers. This will require a new CORS GET route."
+      },
+      "after": "756bf5a086dd1b9b",
+      "date": 1488918660401
+    },
+    {
+      "type": "add",
+      "id": "2b86a49dabbdb61d",
+      "item": {
+        "type": "paragraph",
+        "id": "2b86a49dabbdb61d",
+        "text": "A client-side plugin that cannot retrieve an asset should either fall back to alternative resources or report the failure in a class=caption field at the bottom of the rendered item."
+      },
+      "after": "20c39fe65474eed8",
+      "date": 1488926162225
+    },
+    {
+      "type": "edit",
+      "id": "eb76e5fc33398189",
+      "item": {
+        "type": "paragraph",
+        "id": "eb76e5fc33398189",
+        "text": "See [[Image Assets]] for earlier thinking."
+      },
+      "date": 1488926177339
+    },
+    {
+      "type": "edit",
+      "id": "8ac40ceeee234320",
+      "item": {
+        "type": "paragraph",
+        "id": "8ac40ceeee234320",
+        "text": "We'd like to share large files with the same semantics as wiki pages. We can assume that they are too large to pass through the browser's GET and PUT on the ui thread."
+      },
+      "date": 1488926266632
+    },
+    {
+      "type": "edit",
+      "id": "8ac40ceeee234320",
+      "item": {
+        "type": "paragraph",
+        "id": "8ac40ceeee234320",
+        "text": "We'd like to share large files with the same semantics as wiki pages. We can assume that they are too large to pass through the browser's GET and PUT as synchronous operations."
+      },
+      "date": 1488926316994
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "76b417670091c5fe"
+      },
+      "id": "76b417670091c5fe",
+      "type": "add",
+      "after": "2b86a49dabbdb61d",
+      "date": 1488927910224
+    },
+    {
+      "type": "edit",
+      "id": "76b417670091c5fe",
+      "item": {
+        "type": "pagefold",
+        "id": "76b417670091c5fe",
+        "text": "more"
+      },
+      "date": 1488927921339
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "db0c91d51c568ac4"
+      },
+      "id": "db0c91d51c568ac4",
+      "type": "add",
+      "after": "76b417670091c5fe",
+      "date": 1488927923954
+    },
+    {
+      "type": "edit",
+      "id": "db0c91d51c568ac4",
+      "item": {
+        "type": "paragraph",
+        "id": "db0c91d51c568ac4",
+        "text": "Consider how we might exploit DAT or IPFS for transport. One problem is retrieving an id in time to record it in an edit action."
+      },
+      "date": 1488927988250
+    },
+    {
+      "type": "add",
+      "id": "cdbe6f9e98504b4c",
+      "item": {
+        "type": "paragraph",
+        "id": "cdbe6f9e98504b4c",
+        "text": "Consider restartable transfers for huge files."
+      },
+      "after": "db0c91d51c568ac4",
+      "date": 1488928038071
+    },
+    {
+      "type": "add",
+      "id": "2847c9ae4fecb64c",
+      "item": {
+        "type": "paragraph",
+        "id": "2847c9ae4fecb64c",
+        "text": "Consider how the presence of large assets could be represented in sitemap.json and search correspondingly enhanced."
+      },
+      "after": "cdbe6f9e98504b4c",
+      "date": 1488928101774
+    },
+    {
+      "type": "edit",
+      "id": "cdbe6f9e98504b4c",
+      "item": {
+        "type": "paragraph",
+        "id": "cdbe6f9e98504b4c",
+        "text": "Consider restartable transfers for huge files. Some systems open multiple channels."
+      },
+      "date": 1488928118208
+    },
+    {
+      "type": "add",
+      "id": "8d1166210e9c9e4c",
+      "item": {
+        "type": "paragraph",
+        "id": "8d1166210e9c9e4c",
+        "text": "Consider how one could 'push' an asset to a public server across a firewall. IPFS can do this but it is tricky."
+      },
+      "after": "2847c9ae4fecb64c",
+      "date": 1488982746559
+    },
+    {
+      "type": "edit",
+      "id": "8d1166210e9c9e4c",
+      "item": {
+        "type": "paragraph",
+        "id": "8d1166210e9c9e4c",
+        "text": "Consider how to 'push' an asset to a public server across a firewall. IPFS can do this but it is tricky."
+      },
+      "date": 1488982768869
+    },
+    {
+      "type": "add",
+      "id": "ae72ef64fdd6d2d8",
+      "item": {
+        "type": "paragraph",
+        "id": "ae72ef64fdd6d2d8",
+        "text": "Consider how asset revisions can propagate. My immediate application is distributing database dumps in csv format. These could be revised daily."
+      },
+      "after": "8d1166210e9c9e4c",
+      "date": 1488983903372
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1490212632905
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ab19b3f72aa0e14f"
+      },
+      "id": "ab19b3f72aa0e14f",
+      "type": "add",
+      "after": "ae72ef64fdd6d2d8",
+      "date": 1511696230657
+    },
+    {
+      "type": "edit",
+      "id": "ab19b3f72aa0e14f",
+      "item": {
+        "type": "reference",
+        "id": "ab19b3f72aa0e14f",
+        "site": "permanent.wiki",
+        "slug": "image-assets",
+        "title": "Image Assets",
+        "text": "We url-encode images dropped on the factory plugin. This captures the sharing dynamics expected of the federation but it doesn't match with current asset practices."
+      },
+      "date": 1511696233275
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8a2df4b61f8f261d"
+      },
+      "id": "8a2df4b61f8f261d",
+      "type": "add",
+      "after": "ab19b3f72aa0e14f",
+      "date": 1511696241651
+    },
+    {
+      "type": "edit",
+      "id": "8a2df4b61f8f261d",
+      "item": {
+        "type": "reference",
+        "id": "8a2df4b61f8f261d",
+        "site": "hosting.permanent.wiki",
+        "slug": "journal-duplication",
+        "title": "Journal Duplication",
+        "text": "The Journal stores new copies of story items each time they are edited. This presumes items are small and edits touch all parts of them. Not true for caption edits of fat images. But, let's consider the Journal an asset library for story items in the few cases where this is an issue."
+      },
+      "date": 1511696244590
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9e9cf979b76b096d"
+      },
+      "id": "9e9cf979b76b096d",
+      "type": "add",
+      "after": "8a2df4b61f8f261d",
+      "date": 1511696272872
+    },
+    {
+      "type": "edit",
+      "id": "9e9cf979b76b096d",
+      "item": {
+        "type": "reference",
+        "id": "9e9cf979b76b096d",
+        "site": "permanent.wiki",
+        "slug": "assets-in-ipfs",
+        "title": "Assets in IPFS",
+        "text": "We explore distributing assets via a node on localhost. The strategy is to store postcard sized assets in the json along with full resolution content in ipfs. Double-click will retrieve and display the ipfs version."
+      },
+      "date": 1511696275413
+    }
+  ]
+}

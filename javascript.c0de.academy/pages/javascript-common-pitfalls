@@ -1,0 +1,2030 @@
+{
+  "title": "JavaScript Common Pitfalls",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "23419a65eb5c64cc",
+      "text": "This is a short list of common pitfalls in [[JavaScript]], and some simple solutions for them. "
+    },
+    {
+      "type": "paragraph",
+      "id": "c7c2f959b5d4f618",
+      "text": "A lot of these problems arise from the deeply asynchronous nature of the language and may be applicable to other similar environments. Others are unique to JavaScript's attempts to be beginner friendly, and attempting to do something sensible given ambiguous input. "
+    },
+    {
+      "type": "paragraph",
+      "id": "e7e02d641e67015e",
+      "text": "Example code is also on [https://github.com/nrn/js-pitfall-examples github]."
+    },
+    {
+      "id": "015ce6a5d268a835",
+      "type": "reference",
+      "site": "nrn.io",
+      "slug": "javascript-code-smells",
+      "title": "JavaScript Code Smells",
+      "text": "This is a collection of practices that I think should be avoided in JavaScript. Not absolutely never used, I'll leave that list for another page, or the community at large. But instead a guide to things that should be a flag, maybe I should rethink how I'm doing this and see if I can refactor this code to make it better by avoiding this."
+    },
+    {
+      "id": "c443b08679962530",
+      "type": "reference",
+      "site": "nrn.io",
+      "slug": "javascript-confused-concepts",
+      "title": "JavaScript Confused Concepts",
+      "text": "This is the content that originated here and not a set of links. It attempts to answer in detail the question \"What state does my function have access to when it's invoked?\" This turns out to be a complex question, leading to a lot of unexpected behavior. This section will hopefully remove a lot of surprises, allowing us to understand higher level abstractions that rely on these concepts."
+    },
+    {
+      "type": "paragraph",
+      "id": "e7e7f9611e296475",
+      "text": "Below we list some specific issues:"
+    },
+    {
+      "type": "paragraph",
+      "id": "2e986377a9be06e4",
+      "text": "[[Accuracy of the Date object]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bf4aad323ee282b5",
+      "text": "[[Array like objects]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c0ac5d40109a9c73",
+      "text": "[[Arrow function returns]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "1b8a36f9f4b39881",
+      "text": "[[Asynchronous Loops]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "d8cae9c040db205b",
+      "text": "[[binding `this`]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "0d39827fc0508a3c",
+      "text": "[[Block statements]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "1a851d2d3bdf40ee",
+      "text": "[[Circular dependencies]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "297a5e8bcb83167d",
+      "text": "[[Deeply nested callbacks for serial execution]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c81210ef1f264e0c",
+      "text": "[[eval vrs. new Function]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8501caf9d35ab540",
+      "text": "[[Events aren't always asynchronous]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5a0d82607ef04d3f",
+      "text": "[[Falsey 0]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "43af096ca16a01cd",
+      "text": "[[Finding the global object]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2ee5d0d9a329e49b",
+      "text": "[[Get the full result of a stream]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3db22f69ea4cf2a3",
+      "text": "[[Hoisting]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4dc0087f6b1fcc74",
+      "text": "[[Insignificantish whitespace]]"
+    },
+    {
+      "type": "reference",
+      "id": "7cfdc4a12a67f2e0",
+      "site": "nrn.io",
+      "slug": "javascript-mutability",
+      "title": "JavaScript Mutability",
+      "text": "In JavaScript all primitives are immutable, and all objects are mutable. The primitives types are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, and arrays. "
+    },
+    {
+      "type": "paragraph",
+      "id": "64bb7c8bf13f5c49",
+      "text": "[[Loops and asynchronous operations]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "cb46674951ccde95",
+      "text": "[[Mysteriously mutating objects]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "1687303bc7797c0d",
+      "text": "[[Nested branching]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a17cf50a3468e13f",
+      "text": "[[Node EventEmitter error events]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c3a402d66953308b",
+      "text": "[[Node style callback]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2002025804a70ccf",
+      "text": "[[Object Equality]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "b625e808ce49e3d1",
+      "text": "[[Object iteration]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "973d82f0a0a2d80a",
+      "text": "[[parallel execution]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "566b9ef5f182c89e",
+      "text": "[[Properties on window are global variables]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2060871d9bdedfcc",
+      "text": "[[Recursion Depth]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "10141079268024b4",
+      "text": "[[Reduce]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a5560e33d1364008",
+      "text": "[[Timer durations]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a11904879d2be9e9",
+      "text": "[[Timer Precedence]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "51f89328fc7a9a20",
+      "text": "[[Type casting]]"
+    },
+    {
+      "id": "24b68e2206db2358",
+      "type": "reference",
+      "site": "nrn.io",
+      "slug": "two-sides-of-promises",
+      "title": "Two sides of promises",
+      "text": "There are at least two ideas known as promises in software. The one most common in JavaScript is the promise for a value that must be fetched asynchronously. The other is a promise for a value that need not be calculated yet. Can these two 'promises' be unified?"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "JavaScript Common Pitfalls",
+        "story": []
+      },
+      "date": 1430895092158
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "23419a65eb5c64cc"
+      },
+      "id": "23419a65eb5c64cc",
+      "type": "add",
+      "date": 1430895097389
+    },
+    {
+      "type": "edit",
+      "id": "23419a65eb5c64cc",
+      "item": {
+        "type": "paragraph",
+        "id": "23419a65eb5c64cc",
+        "text": "This is a short list of common pitfalls in JavaScript, and some simple solutions for them. A lot of these problems arise from the deeply asynchronous nature of the language and may be applicable to other similar environments. Others are unique to JavaScript's attempts to be beginner friendly, and attempting to do something sensible given ambiguous input."
+      },
+      "date": 1430895286595
+    },
+    {
+      "type": "add",
+      "id": "64bb7c8bf13f5c49",
+      "item": {
+        "type": "paragraph",
+        "id": "64bb7c8bf13f5c49",
+        "text": "[[Loops and asynchronous operations]]"
+      },
+      "after": "23419a65eb5c64cc",
+      "date": 1430895358535
+    },
+    {
+      "type": "add",
+      "id": "269bdf0b7b4e95cb",
+      "item": {
+        "type": "paragraph",
+        "id": "269bdf0b7b4e95cb",
+        "text": "[[EventsEmitters aren't necessarily asynchronous]]"
+      },
+      "after": "64bb7c8bf13f5c49",
+      "date": 1430976481871
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2a9cfcf4dc12cdb6"
+      },
+      "id": "2a9cfcf4dc12cdb6",
+      "type": "add",
+      "after": "269bdf0b7b4e95cb",
+      "date": 1430980731299
+    },
+    {
+      "type": "remove",
+      "id": "2a9cfcf4dc12cdb6",
+      "date": 1430980760790
+    },
+    {
+      "type": "edit",
+      "id": "23419a65eb5c64cc",
+      "item": {
+        "type": "paragraph",
+        "id": "23419a65eb5c64cc",
+        "text": "This is a short list of common pitfalls in JavaScript, and some simple solutions for them. A lot of these problems arise from the deeply asynchronous nature of the language and may be applicable to other similar environments. Others are unique to JavaScript's attempts to be beginner friendly, and attempting to do something sensible given ambiguous input. Example code is also on GitHub [https://github.com/nrn/js-pitfall-examples here]."
+      },
+      "date": 1430980820977
+    },
+    {
+      "type": "add",
+      "id": "8501caf9d35ab540",
+      "item": {
+        "type": "paragraph",
+        "id": "8501caf9d35ab540",
+        "text": "[[EventEmitters aren't necessarily asynchronous]]"
+      },
+      "after": "269bdf0b7b4e95cb",
+      "date": 1431013257601
+    },
+    {
+      "type": "edit",
+      "id": "8501caf9d35ab540",
+      "item": {
+        "type": "paragraph",
+        "id": "8501caf9d35ab540",
+        "text": "[[Events aren't always asynchronous]]"
+      },
+      "date": 1431013300844
+    },
+    {
+      "type": "remove",
+      "id": "269bdf0b7b4e95cb",
+      "date": 1431013434435
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "297a5e8bcb83167d"
+      },
+      "id": "297a5e8bcb83167d",
+      "type": "add",
+      "after": "8501caf9d35ab540",
+      "date": 1431060834170
+    },
+    {
+      "type": "edit",
+      "id": "297a5e8bcb83167d",
+      "item": {
+        "type": "paragraph",
+        "id": "297a5e8bcb83167d",
+        "text": "[[Deeply nested callbacks for serial execution]]"
+      },
+      "date": 1431060884021
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cb46674951ccde95"
+      },
+      "id": "cb46674951ccde95",
+      "type": "add",
+      "after": "297a5e8bcb83167d",
+      "date": 1431152255638
+    },
+    {
+      "type": "edit",
+      "id": "cb46674951ccde95",
+      "item": {
+        "type": "paragraph",
+        "id": "cb46674951ccde95",
+        "text": "[[Mysteriously mutating objects]]"
+      },
+      "date": 1431152291042
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "44a309111856557f"
+      },
+      "id": "44a309111856557f",
+      "type": "add",
+      "after": "cb46674951ccde95",
+      "date": 1431235680172
+    },
+    {
+      "type": "remove",
+      "id": "44a309111856557f",
+      "date": 1431235698137
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bf4aad323ee282b5"
+      },
+      "id": "bf4aad323ee282b5",
+      "type": "add",
+      "after": "cb46674951ccde95",
+      "date": 1431235719882
+    },
+    {
+      "type": "edit",
+      "id": "bf4aad323ee282b5",
+      "item": {
+        "type": "paragraph",
+        "id": "bf4aad323ee282b5",
+        "text": "[[Array like objects]]"
+      },
+      "date": 1431235770415
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "415dc0b3ac353959"
+      },
+      "id": "415dc0b3ac353959",
+      "type": "add",
+      "after": "bf4aad323ee282b5",
+      "date": 1431366030990
+    },
+    {
+      "type": "edit",
+      "id": "415dc0b3ac353959",
+      "item": {
+        "type": "paragraph",
+        "id": "415dc0b3ac353959",
+        "text": "[[Function hoisting]]"
+      },
+      "date": 1431366057964
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3db22f69ea4cf2a3"
+      },
+      "id": "3db22f69ea4cf2a3",
+      "type": "add",
+      "after": "415dc0b3ac353959",
+      "date": 1431366730634
+    },
+    {
+      "type": "edit",
+      "id": "3db22f69ea4cf2a3",
+      "item": {
+        "type": "paragraph",
+        "id": "3db22f69ea4cf2a3",
+        "text": "[[Hoisting]]"
+      },
+      "date": 1431366741154
+    },
+    {
+      "type": "remove",
+      "id": "415dc0b3ac353959",
+      "date": 1431366768143
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d24296c04fb6ff84"
+      },
+      "id": "d24296c04fb6ff84",
+      "type": "add",
+      "after": "3db22f69ea4cf2a3",
+      "date": 1431445588105
+    },
+    {
+      "type": "edit",
+      "id": "d24296c04fb6ff84",
+      "item": {
+        "type": "paragraph",
+        "id": "d24296c04fb6ff84",
+        "text": "[[Use statement blocks]]"
+      },
+      "date": 1431445639257
+    },
+    {
+      "type": "remove",
+      "id": "d24296c04fb6ff84",
+      "date": 1431449011340
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0d39827fc0508a3c",
+        "text": "[[Block statements]]"
+      },
+      "after": "cb46674951ccde95",
+      "id": "0d39827fc0508a3c",
+      "date": 1431460085724
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "64bb7c8bf13f5c49",
+        "8501caf9d35ab540",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "bf4aad323ee282b5",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c"
+      ],
+      "id": "0d39827fc0508a3c",
+      "date": 1431460090730
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c0ac5d40109a9c73",
+        "text": "[[Arrow function returns]]"
+      },
+      "after": "0d39827fc0508a3c",
+      "id": "c0ac5d40109a9c73",
+      "date": 1431536812160
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1a851d2d3bdf40ee",
+        "text": "[[Circular dependencies]]"
+      },
+      "after": "c0ac5d40109a9c73",
+      "id": "1a851d2d3bdf40ee",
+      "date": 1431619660777
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5a0d82607ef04d3f",
+        "text": "[[Falsey 0]]"
+      },
+      "after": "1a851d2d3bdf40ee",
+      "id": "5a0d82607ef04d3f",
+      "date": 1431724109878
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a17cf50a3468e13f",
+        "text": "[[Node EventEmitter error events]]"
+      },
+      "after": "5a0d82607ef04d3f",
+      "id": "a17cf50a3468e13f",
+      "date": 1431792680890
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2002025804a70ccf",
+        "text": "[[Object Equality]]"
+      },
+      "after": "a17cf50a3468e13f",
+      "id": "2002025804a70ccf",
+      "date": 1431892231767
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "566b9ef5f182c89e"
+      },
+      "id": "566b9ef5f182c89e",
+      "type": "add",
+      "after": "2002025804a70ccf",
+      "date": 1432015999553
+    },
+    {
+      "type": "edit",
+      "id": "566b9ef5f182c89e",
+      "item": {
+        "type": "paragraph",
+        "id": "566b9ef5f182c89e",
+        "text": "[[Properties on window are global variables]]"
+      },
+      "date": 1432016016728
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5099676c406c3257"
+      },
+      "id": "5099676c406c3257",
+      "type": "add",
+      "after": "566b9ef5f182c89e",
+      "date": 1432017074574
+    },
+    {
+      "type": "remove",
+      "id": "5099676c406c3257",
+      "date": 1432017080350
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2060871d9bdedfcc",
+        "text": "[[Recursion Depth]]"
+      },
+      "id": "2060871d9bdedfcc",
+      "type": "add",
+      "after": "566b9ef5f182c89e",
+      "date": 1432146724684,
+      "error": {
+        "type": "error",
+        "msg": "",
+        "response": ""
+      }
+    },
+    {
+      "type": "edit",
+      "id": "2060871d9bdedfcc",
+      "item": {
+        "type": "paragraph",
+        "id": "2060871d9bdedfcc",
+        "text": "[[Recursion Depth]]"
+      },
+      "date": 1432146737554,
+      "error": {
+        "type": "error",
+        "msg": "",
+        "response": ""
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1432146815070
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c81210ef1f264e0c"
+      },
+      "id": "c81210ef1f264e0c",
+      "type": "add",
+      "after": "2060871d9bdedfcc",
+      "date": 1432259431992
+    },
+    {
+      "type": "edit",
+      "id": "c81210ef1f264e0c",
+      "item": {
+        "type": "paragraph",
+        "id": "c81210ef1f264e0c",
+        "text": "[[eval vrs. new Function]]"
+      },
+      "date": 1432259519113
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d8cae9c040db205b"
+      },
+      "id": "d8cae9c040db205b",
+      "type": "add",
+      "after": "c81210ef1f264e0c",
+      "date": 1432347535791
+    },
+    {
+      "type": "edit",
+      "id": "d8cae9c040db205b",
+      "item": {
+        "type": "paragraph",
+        "id": "d8cae9c040db205b",
+        "text": "[[binding `this`]]"
+      },
+      "date": 1432347549525
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4dc0087f6b1fcc74",
+        "text": "[[Insignificantish whitespace]]"
+      },
+      "after": "d8cae9c040db205b",
+      "id": "4dc0087f6b1fcc74",
+      "date": 1432529240171
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "973d82f0a0a2d80a",
+        "text": "[[parallel execution]]"
+      },
+      "after": "4dc0087f6b1fcc74",
+      "id": "973d82f0a0a2d80a",
+      "date": 1432597591333
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1687303bc7797c0d"
+      },
+      "id": "1687303bc7797c0d",
+      "type": "add",
+      "after": "973d82f0a0a2d80a",
+      "date": 1432616953988
+    },
+    {
+      "type": "remove",
+      "id": "1687303bc7797c0d",
+      "date": 1432616984501
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1687303bc7797c0d",
+        "text": "[[Nested branching]]"
+      },
+      "after": "973d82f0a0a2d80a",
+      "id": "1687303bc7797c0d",
+      "date": 1432655545969
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2ee5d0d9a329e49b",
+        "text": "[[Get the full result of a stream]]"
+      },
+      "after": "1687303bc7797c0d",
+      "id": "2ee5d0d9a329e49b",
+      "date": 1432924203425
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "51f89328fc7a9a20",
+        "text": "[[Type casting]]"
+      },
+      "after": "1687303bc7797c0d",
+      "id": "51f89328fc7a9a20",
+      "date": 1432966573532
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "64bb7c8bf13f5c49",
+        "8501caf9d35ab540",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "bf4aad323ee282b5",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20"
+      ],
+      "id": "51f89328fc7a9a20",
+      "date": 1432966577041
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b625e808ce49e3d1",
+        "text": "[[Object iteration]]"
+      },
+      "after": "51f89328fc7a9a20",
+      "id": "b625e808ce49e3d1",
+      "date": 1433141252719
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c3a402d66953308b",
+        "text": "[[Node style callback]]"
+      },
+      "after": "b625e808ce49e3d1",
+      "id": "c3a402d66953308b",
+      "date": 1433310733473
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1b8a36f9f4b39881",
+        "text": "[[Asynchronous Loops]]"
+      },
+      "after": "c0ac5d40109a9c73",
+      "id": "1b8a36f9f4b39881",
+      "date": 1433575230778
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "64bb7c8bf13f5c49",
+        "8501caf9d35ab540",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "bf4aad323ee282b5",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881"
+      ],
+      "id": "1b8a36f9f4b39881",
+      "date": 1433575240218
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "43af096ca16a01cd",
+        "text": "[[Finding the global object]]"
+      },
+      "after": "1b8a36f9f4b39881",
+      "id": "43af096ca16a01cd",
+      "date": 1433663269858
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2e986377a9be06e4",
+        "text": "[[Accuracy of the Date object]]"
+      },
+      "after": "43af096ca16a01cd",
+      "id": "2e986377a9be06e4",
+      "date": 1433833231986
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a5560e33d1364008",
+        "text": "[[Timer durations]]"
+      },
+      "after": "43af096ca16a01cd",
+      "id": "a5560e33d1364008",
+      "date": 1434080219029
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "64bb7c8bf13f5c49",
+        "8501caf9d35ab540",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "bf4aad323ee282b5",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008"
+      ],
+      "id": "a5560e33d1364008",
+      "date": 1434080223870
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a11904879d2be9e9"
+      },
+      "id": "a11904879d2be9e9",
+      "type": "add",
+      "after": "a5560e33d1364008",
+      "date": 1434093965514
+    },
+    {
+      "type": "edit",
+      "id": "a11904879d2be9e9",
+      "item": {
+        "type": "paragraph",
+        "id": "a11904879d2be9e9",
+        "text": "[[Timer Precedence]]"
+      },
+      "date": 1434093976045
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "10141079268024b4",
+        "text": "[[Reduce]]"
+      },
+      "after": "a11904879d2be9e9",
+      "id": "10141079268024b4",
+      "date": 1434525779793
+    },
+    {
+      "type": "fork",
+      "site": "nrn.io",
+      "date": 1448889214058
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e7e7f9611e296475"
+      },
+      "id": "e7e7f9611e296475",
+      "type": "add",
+      "after": "10141079268024b4",
+      "date": 1448889232893
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "e7e7f9611e296475",
+        "64bb7c8bf13f5c49",
+        "8501caf9d35ab540",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "bf4aad323ee282b5",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "e7e7f9611e296475",
+      "date": 1448889237918
+    },
+    {
+      "type": "edit",
+      "id": "23419a65eb5c64cc",
+      "item": {
+        "type": "paragraph",
+        "id": "23419a65eb5c64cc",
+        "text": "This is a short list of common pitfalls in [[JavaScript]], and some simple solutions for them. "
+      },
+      "date": 1448889254709
+    },
+    {
+      "type": "add",
+      "id": "c7c2f959b5d4f618",
+      "item": {
+        "type": "paragraph",
+        "id": "c7c2f959b5d4f618",
+        "text": "A lot of these problems arise from the deeply asynchronous nature of the language and may be applicable to other similar environments. Others are unique to JavaScript's attempts to be beginner friendly, and attempting to do something sensible given ambiguous input. Example code is also on GitHub [https://github.com/nrn/js-pitfall-examples here]."
+      },
+      "after": "23419a65eb5c64cc",
+      "date": 1448889277414
+    },
+    {
+      "type": "edit",
+      "id": "c7c2f959b5d4f618",
+      "item": {
+        "type": "paragraph",
+        "id": "c7c2f959b5d4f618",
+        "text": "A lot of these problems arise from the deeply asynchronous nature of the language and may be applicable to other similar environments. Others are unique to JavaScript's attempts to be beginner friendly, and attempting to do something sensible given ambiguous input. "
+      },
+      "date": 1448889293757
+    },
+    {
+      "type": "add",
+      "id": "e7e02d641e67015e",
+      "item": {
+        "type": "paragraph",
+        "id": "e7e02d641e67015e",
+        "text": "Example code is also on [https://github.com/nrn/js-pitfall-examples github]."
+      },
+      "after": "c7c2f959b5d4f618",
+      "date": 1448889295014
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "015ce6a5d268a835",
+        "type": "reference",
+        "site": "nrn.io",
+        "slug": "javascript-code-smells",
+        "title": "JavaScript Code Smells",
+        "text": "This is a collection of practices that I think should be avoided in JavaScript. Not absolutely never used, I'll leave that list for another page, or the community at large. But instead a guide to things that should be a flag, maybe I should rethink how I'm doing this and see if I can refactor this code to make it better by avoiding this."
+      },
+      "after": "e7e02d641e67015e",
+      "id": "015ce6a5d268a835",
+      "date": 1448889331368
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "c443b08679962530",
+        "type": "reference",
+        "site": "nrn.io",
+        "slug": "javascript-confused-concepts",
+        "title": "JavaScript Confused Concepts",
+        "text": "This is the content that originated here and not a set of links. It attempts to answer in detail the question \"What state does my function have access to when it's invoked?\" This turns out to be a complex question, leading to a lot of unexpected behavior. This section will hopefully remove a lot of surprises, allowing us to understand higher level abstractions that rely on these concepts."
+      },
+      "after": "015ce6a5d268a835",
+      "id": "c443b08679962530",
+      "date": 1448889350757
+    },
+    {
+      "type": "edit",
+      "id": "e7e7f9611e296475",
+      "item": {
+        "type": "paragraph",
+        "id": "e7e7f9611e296475",
+        "text": "Below we list some specific issues:"
+      },
+      "date": 1448889363768
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "64bb7c8bf13f5c49",
+        "8501caf9d35ab540",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "bf4aad323ee282b5",
+      "date": 1448890245802
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "8501caf9d35ab540",
+        "64bb7c8bf13f5c49",
+        "297a5e8bcb83167d",
+        "cb46674951ccde95",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "8501caf9d35ab540",
+      "date": 1448890248055
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "8501caf9d35ab540",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "297a5e8bcb83167d",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "cb46674951ccde95",
+      "date": 1448890249913
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "3db22f69ea4cf2a3",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "297a5e8bcb83167d",
+      "date": 1448890252203
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "0d39827fc0508a3c",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "3db22f69ea4cf2a3",
+      "date": 1448890254390
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "0d39827fc0508a3c",
+        "bf4aad323ee282b5",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "0d39827fc0508a3c",
+      "date": 1448890256849
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "0d39827fc0508a3c",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "c0ac5d40109a9c73",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "bf4aad323ee282b5",
+      "date": 1448890260229
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "0d39827fc0508a3c",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1a851d2d3bdf40ee",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "c0ac5d40109a9c73",
+      "date": 1448890263301
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "5a0d82607ef04d3f",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "1a851d2d3bdf40ee",
+      "date": 1448890266295
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "c81210ef1f264e0c",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "5a0d82607ef04d3f",
+      "date": 1448890269671
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "d8cae9c040db205b",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "c81210ef1f264e0c",
+      "date": 1448890275467
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "3db22f69ea4cf2a3",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "4dc0087f6b1fcc74",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "d8cae9c040db205b",
+      "date": 1448890281037
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "973d82f0a0a2d80a",
+        "1687303bc7797c0d",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "4dc0087f6b1fcc74",
+      "date": 1448890289907
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "973d82f0a0a2d80a",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "1687303bc7797c0d",
+      "date": 1448890295983
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "2ee5d0d9a329e49b",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "973d82f0a0a2d80a",
+      "date": 1448890299504
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "51f89328fc7a9a20",
+        "b625e808ce49e3d1",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "2ee5d0d9a329e49b",
+      "date": 1448890303012
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "51f89328fc7a9a20",
+        "c3a402d66953308b",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "b625e808ce49e3d1",
+      "date": 1448890309502
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "c3a402d66953308b",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "51f89328fc7a9a20",
+        "1b8a36f9f4b39881",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "c3a402d66953308b",
+      "date": 1448890316716
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "1b8a36f9f4b39881",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "c3a402d66953308b",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "51f89328fc7a9a20",
+        "43af096ca16a01cd",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "1b8a36f9f4b39881",
+      "date": 1448890321822
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "1b8a36f9f4b39881",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "43af096ca16a01cd",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "c3a402d66953308b",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "51f89328fc7a9a20",
+        "2e986377a9be06e4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "43af096ca16a01cd",
+      "date": 1448890326722
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "2e986377a9be06e4",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "1b8a36f9f4b39881",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "43af096ca16a01cd",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "c3a402d66953308b",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "51f89328fc7a9a20",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "10141079268024b4"
+      ],
+      "id": "2e986377a9be06e4",
+      "date": 1448890331513
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "2e986377a9be06e4",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "1b8a36f9f4b39881",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "43af096ca16a01cd",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "c3a402d66953308b",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "51f89328fc7a9a20",
+        "10141079268024b4"
+      ],
+      "id": "51f89328fc7a9a20",
+      "date": 1448890340095
+    },
+    {
+      "type": "move",
+      "order": [
+        "23419a65eb5c64cc",
+        "c7c2f959b5d4f618",
+        "e7e02d641e67015e",
+        "015ce6a5d268a835",
+        "c443b08679962530",
+        "e7e7f9611e296475",
+        "2e986377a9be06e4",
+        "bf4aad323ee282b5",
+        "c0ac5d40109a9c73",
+        "1b8a36f9f4b39881",
+        "d8cae9c040db205b",
+        "0d39827fc0508a3c",
+        "1a851d2d3bdf40ee",
+        "297a5e8bcb83167d",
+        "c81210ef1f264e0c",
+        "8501caf9d35ab540",
+        "5a0d82607ef04d3f",
+        "43af096ca16a01cd",
+        "2ee5d0d9a329e49b",
+        "3db22f69ea4cf2a3",
+        "4dc0087f6b1fcc74",
+        "64bb7c8bf13f5c49",
+        "cb46674951ccde95",
+        "1687303bc7797c0d",
+        "a17cf50a3468e13f",
+        "c3a402d66953308b",
+        "2002025804a70ccf",
+        "b625e808ce49e3d1",
+        "973d82f0a0a2d80a",
+        "566b9ef5f182c89e",
+        "2060871d9bdedfcc",
+        "10141079268024b4",
+        "a5560e33d1364008",
+        "a11904879d2be9e9",
+        "51f89328fc7a9a20"
+      ],
+      "id": "10141079268024b4",
+      "date": 1448890343291
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "24b68e2206db2358",
+        "type": "reference",
+        "site": "nrn.io",
+        "slug": "two-sides-of-promises",
+        "title": "Two sides of promises",
+        "text": "There are at least two ideas known as promises in software. The one most common in JavaScript is the promise for a value that must be fetched asynchronously. The other is a promise for a value that need not be calculated yet. Can these two 'promises' be unified?"
+      },
+      "after": "51f89328fc7a9a20",
+      "id": "24b68e2206db2358",
+      "date": 1448890352322
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "7cfdc4a12a67f2e0",
+        "site": "nrn.io",
+        "slug": "javascript-mutability",
+        "title": "JavaScript Mutability",
+        "text": "In JavaScript all primitives are immutable, and all objects are mutable. The primitives types are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, and arrays. "
+      },
+      "after": "4dc0087f6b1fcc74",
+      "id": "7cfdc4a12a67f2e0",
+      "date": 1448890500529
+    }
+  ]
+}

@@ -1,0 +1,464 @@
+{
+  "title": "Docker Image",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a417565f4ecff967",
+      "text": "A Docker image is a read-only template. For example, an image could contain an Ubuntu operating system with Apache and your web application installed. "
+    },
+    {
+      "type": "paragraph",
+      "id": "95c916fe339759db",
+      "text": "Images are used to create Docker containers. Docker provides a simple way to build new images or update existing images, or you can download Docker images that other people have already created - [http://docs.docker.com/userguide/dockerimages/ docs.docker.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "f2c0dad2fe441b4f",
+      "text": "#Docker Image Layers"
+    },
+    {
+      "type": "paragraph",
+      "id": "6efdf58b0b5345a4",
+      "text": "Each image consists of a series of layers. Docker makes use of [[Union File System]]s to combine these layers into a single image. Union file systems allow files and directories of separate file systems, known as branches, to be transparently overlaid, forming a single coherent file system."
+    },
+    {
+      "type": "paragraph",
+      "id": "13a005ee415d6934",
+      "text": "One of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version— a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a [[Virtual Machine]], only that layer is added or updated. "
+    },
+    {
+      "type": "paragraph",
+      "id": "fa92a326a8dbb391",
+      "text": "Now you don’t need to distribute a whole new image, just the update, making distributing Docker images faster and simpler."
+    },
+    {
+      "type": "markdown",
+      "id": "02fff6f470fa7013",
+      "text": "#Base Image"
+    },
+    {
+      "type": "paragraph",
+      "id": "3f8cb4ec6baff8b5",
+      "text": "Every image starts from a [[Docker Base Image]], for example [[Ubuntu]], a base Ubuntu image, or fedora, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base [[Apache]] image you could use this as the base of all your web application images."
+    },
+    {
+      "type": "html",
+      "id": "c8bc646ec6263102",
+      "text": "Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:\n<ul>\n<li>   Run a command.\n<li>   Add a file or directory.\n<li>   Create an environment variable.\n<li>   What process to run when launching a container from this image.\n</ul>"
+    },
+    {
+      "type": "paragraph",
+      "id": "e43cfb42accacebf",
+      "text": "These instructions are stored in a file called a [[Dockerfile]]. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image."
+    },
+    {
+      "type": "markdown",
+      "id": "6e2059aca3a8c02d",
+      "text": "#Questions"
+    },
+    {
+      "type": "code",
+      "id": "1210ceb9edb25485",
+      "text": "So what's the difference between using Docker Images and taking a snapshot of the system as you do on Digital Ocean for instance?"
+    },
+    {
+      "type": "paragraph",
+      "id": "93c13da17d25e8af",
+      "text": "With [[Docker]], you start with a base image, and then make your changes, and commit those changes using docker, and it creates an image."
+    },
+    {
+      "type": "paragraph",
+      "id": "f56335b063bc7987",
+      "text": "This image contains only the differences from the base. When you want to run your image, you also need the base, and it layers your image on top of the base using a layered file system, in this case AUFS. "
+    },
+    {
+      "type": "paragraph",
+      "id": "676604c96ed96d81",
+      "text": "AUFS merges the different layers together and you get what you want, and you just need to run it. You can keep adding more and more images (layers) and it will keep only saving the diffs."
+    },
+    {
+      "type": "paragraph",
+      "id": "cec6c44297e7f9e7",
+      "text": "Since docker typically builds on top of ready-made images from a registry, you rarely have to \"snapshot\" the whole OS yourself."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Docker Image",
+        "story": []
+      },
+      "date": 1438250194529
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a417565f4ecff967"
+      },
+      "id": "a417565f4ecff967",
+      "type": "add",
+      "date": 1438250200089
+    },
+    {
+      "type": "edit",
+      "id": "a417565f4ecff967",
+      "item": {
+        "type": "paragraph",
+        "id": "a417565f4ecff967",
+        "text": "A Docker image is a read-only template. For example, an image could contain an Ubuntu operating system with Apache and your web application installed. "
+      },
+      "date": 1438251119686
+    },
+    {
+      "type": "add",
+      "id": "95c916fe339759db",
+      "item": {
+        "type": "paragraph",
+        "id": "95c916fe339759db",
+        "text": "Images are used to create Docker containers. Docker provides a simple way to build new images or update existing images, or you can download Docker images that other people have already created. Docker images are the build component of Docker."
+      },
+      "after": "a417565f4ecff967",
+      "date": 1438251130266
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "1210ceb9edb25485",
+        "text": "So what's the difference between using Docker Images and taking a Snapshot of the system as you do on [[Digital Ocean]] for instance?"
+      },
+      "after": "95c916fe339759db",
+      "id": "1210ceb9edb25485",
+      "date": 1438251141750
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "93c13da17d25e8af",
+        "text": "With [[Docker]], you start with a base image, and then make your changes, and commit those changes using docker, and it creates an image."
+      },
+      "after": "1210ceb9edb25485",
+      "id": "93c13da17d25e8af",
+      "date": 1438251144584
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f56335b063bc7987",
+        "text": "This image contains only the differences from the base. When you want to run your image, you also need the base, and it layers your image on top of the base using a layered file system, in this case AUFS. "
+      },
+      "after": "93c13da17d25e8af",
+      "id": "f56335b063bc7987",
+      "date": 1438251145975
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "676604c96ed96d81",
+        "text": "AUFS merges the different layers together and you get what you want, and you just need to run it. You can keep adding more and more images (layers) and it will keep only saving the diffs."
+      },
+      "after": "f56335b063bc7987",
+      "id": "676604c96ed96d81",
+      "date": 1438251148422
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "cec6c44297e7f9e7",
+        "text": "Since docker typically builds on top of ready-made images from a registry, you rarely have to \"snapshot\" the whole OS yourself."
+      },
+      "after": "676604c96ed96d81",
+      "id": "cec6c44297e7f9e7",
+      "date": 1438251151081
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6e2059aca3a8c02d"
+      },
+      "id": "6e2059aca3a8c02d",
+      "type": "add",
+      "after": "cec6c44297e7f9e7",
+      "date": 1438251502919
+    },
+    {
+      "type": "edit",
+      "id": "6e2059aca3a8c02d",
+      "item": {
+        "type": "paragraph",
+        "id": "6e2059aca3a8c02d",
+        "text": "#Questions"
+      },
+      "date": 1438251510292
+    },
+    {
+      "type": "move",
+      "order": [
+        "a417565f4ecff967",
+        "95c916fe339759db",
+        "6e2059aca3a8c02d",
+        "1210ceb9edb25485",
+        "93c13da17d25e8af",
+        "f56335b063bc7987",
+        "676604c96ed96d81",
+        "cec6c44297e7f9e7"
+      ],
+      "id": "6e2059aca3a8c02d",
+      "date": 1438251513738
+    },
+    {
+      "type": "edit",
+      "id": "6e2059aca3a8c02d",
+      "item": {
+        "type": "markdown",
+        "id": "6e2059aca3a8c02d",
+        "text": "#Questions"
+      },
+      "date": 1438251514771
+    },
+    {
+      "type": "edit",
+      "id": "1210ceb9edb25485",
+      "item": {
+        "type": "code",
+        "id": "1210ceb9edb25485",
+        "text": "So what's the difference between using Docker Images and taking a snapshot of the system as you do on Digital Ocean for instance?"
+      },
+      "date": 1438251734145
+    },
+    {
+      "type": "add",
+      "id": "6efdf58b0b5345a4",
+      "item": {
+        "type": "paragraph",
+        "id": "6efdf58b0b5345a4",
+        "text": "Each image consists of a series of layers. Docker makes use of union file systems to combine these layers into a single image. Union file systems allow files and directories of separate file systems, known as branches, to be transparently overlaid, forming a single coherent file system.\n\nOne of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version— a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a virtual machine, only that layer is added or updated. Now you don’t need to distribute a whole new image, just the update, making distributing Docker images faster and simpler.\n\nEvery image starts from a base image, for example ubuntu, a base Ubuntu image, or fedora, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base Apache image you could use this as the base of all your web application images.\n\n    Note: Docker usually gets these base images from Docker Hub.\n\nDocker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:\n\n    Run a command.\n    Add a file or directory.\n    Create an environment variable.\n    What process to run when launching a container from this image.\n\nThese instructions are stored in a file called a Dockerfile. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image."
+      },
+      "after": "95c916fe339759db",
+      "date": 1438252610385
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f2c0dad2fe441b4f"
+      },
+      "id": "f2c0dad2fe441b4f",
+      "type": "add",
+      "after": "cec6c44297e7f9e7",
+      "date": 1438252617596
+    },
+    {
+      "type": "move",
+      "order": [
+        "a417565f4ecff967",
+        "95c916fe339759db",
+        "f2c0dad2fe441b4f",
+        "6efdf58b0b5345a4",
+        "6e2059aca3a8c02d",
+        "1210ceb9edb25485",
+        "93c13da17d25e8af",
+        "f56335b063bc7987",
+        "676604c96ed96d81",
+        "cec6c44297e7f9e7"
+      ],
+      "id": "f2c0dad2fe441b4f",
+      "date": 1438252629449
+    },
+    {
+      "type": "edit",
+      "id": "f2c0dad2fe441b4f",
+      "item": {
+        "type": "markdown",
+        "id": "f2c0dad2fe441b4f",
+        "text": "#About Docker Images"
+      },
+      "date": 1438252642486
+    },
+    {
+      "type": "edit",
+      "id": "6efdf58b0b5345a4",
+      "item": {
+        "type": "paragraph",
+        "id": "6efdf58b0b5345a4",
+        "text": "Each image consists of a series of layers. Docker makes use of [[Union File System]]s to combine these layers into a single image. Union file systems allow files and directories of separate file systems, known as branches, to be transparently overlaid, forming a single coherent file system."
+      },
+      "date": 1438252669292
+    },
+    {
+      "type": "add",
+      "id": "13a005ee415d6934",
+      "item": {
+        "type": "paragraph",
+        "id": "13a005ee415d6934",
+        "text": "One of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version— a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a [[Virtual Machine]], only that layer is added or updated. "
+      },
+      "after": "6efdf58b0b5345a4",
+      "date": 1438252704861
+    },
+    {
+      "type": "add",
+      "id": "fa92a326a8dbb391",
+      "item": {
+        "type": "paragraph",
+        "id": "fa92a326a8dbb391",
+        "text": "Now you don’t need to distribute a whole new image, just the update, making distributing Docker images faster and simpler."
+      },
+      "after": "13a005ee415d6934",
+      "date": 1438252710508
+    },
+    {
+      "type": "add",
+      "id": "3f8cb4ec6baff8b5",
+      "item": {
+        "type": "paragraph",
+        "id": "3f8cb4ec6baff8b5",
+        "text": "Every image starts from a [[Docker Base Image]], for example [[Ubuntu]], a base Ubuntu image, or fedora, a base Fedora image. You can also use images of your own as the basis for a new image, for example if you have a base [[Apache]] image you could use this as the base of all your web application images."
+      },
+      "after": "fa92a326a8dbb391",
+      "date": 1438252781345
+    },
+    {
+      "type": "add",
+      "id": "c8bc646ec6263102",
+      "item": {
+        "type": "paragraph",
+        "id": "c8bc646ec6263102",
+        "text": "Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:\n\n    Run a command.\n    Add a file or directory.\n    Create an environment variable.\n    What process to run when launching a container from this image.\n\nThese instructions are stored in a file called a Dockerfile. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image."
+      },
+      "after": "3f8cb4ec6baff8b5",
+      "date": 1438252815459
+    },
+    {
+      "type": "edit",
+      "id": "c8bc646ec6263102",
+      "item": {
+        "type": "paragraph",
+        "id": "c8bc646ec6263102",
+        "text": "Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:\n<ul>\n<li>   Run a command.\n<li>   Add a file or directory.\n<li>   Create an environment variable.\n<li>   What process to run when launching a container from this image.\n</ul>"
+      },
+      "date": 1438252874520
+    },
+    {
+      "type": "edit",
+      "id": "c8bc646ec6263102",
+      "item": {
+        "type": "html",
+        "id": "c8bc646ec6263102",
+        "text": "Docker images are then built from these base images using a simple, descriptive set of steps we call instructions. Each instruction creates a new layer in our image. Instructions include actions like:\n<ul>\n<li>   Run a command.\n<li>   Add a file or directory.\n<li>   Create an environment variable.\n<li>   What process to run when launching a container from this image.\n</ul>"
+      },
+      "date": 1438252875863
+    },
+    {
+      "type": "add",
+      "id": "e43cfb42accacebf",
+      "item": {
+        "type": "paragraph",
+        "id": "e43cfb42accacebf",
+        "text": "These instructions are stored in a file called a [[Dockerfile]]. Docker reads this Dockerfile when you request a build of an image, executes the instructions, and returns a final image."
+      },
+      "after": "c8bc646ec6263102",
+      "date": 1438252887755
+    },
+    {
+      "type": "edit",
+      "id": "95c916fe339759db",
+      "item": {
+        "type": "paragraph",
+        "id": "95c916fe339759db",
+        "text": "Images are used to create Docker containers. Docker provides a simple way to build new images or update existing images, or you can download Docker images that other people have already created."
+      },
+      "date": 1438252921041
+    },
+    {
+      "type": "edit",
+      "id": "95c916fe339759db",
+      "item": {
+        "type": "paragraph",
+        "id": "95c916fe339759db",
+        "text": "Images are used to create Docker containers. Docker provides a simple way to build new images or update existing images, or you can download Docker images that other people have already created - [http://docs.docker.com/userguide/dockerimages/ docs.docker.com]"
+      },
+      "date": 1438252954174
+    },
+    {
+      "type": "edit",
+      "id": "f2c0dad2fe441b4f",
+      "item": {
+        "type": "markdown",
+        "id": "f2c0dad2fe441b4f",
+        "text": "#Docker Image Layers"
+      },
+      "date": 1438252992733
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "02fff6f470fa7013"
+      },
+      "id": "02fff6f470fa7013",
+      "type": "add",
+      "after": "cec6c44297e7f9e7",
+      "date": 1438253005151
+    },
+    {
+      "type": "move",
+      "order": [
+        "a417565f4ecff967",
+        "95c916fe339759db",
+        "f2c0dad2fe441b4f",
+        "6efdf58b0b5345a4",
+        "13a005ee415d6934",
+        "fa92a326a8dbb391",
+        "3f8cb4ec6baff8b5",
+        "02fff6f470fa7013",
+        "c8bc646ec6263102",
+        "e43cfb42accacebf",
+        "6e2059aca3a8c02d",
+        "1210ceb9edb25485",
+        "93c13da17d25e8af",
+        "f56335b063bc7987",
+        "676604c96ed96d81",
+        "cec6c44297e7f9e7"
+      ],
+      "id": "02fff6f470fa7013",
+      "date": 1438253010806
+    },
+    {
+      "type": "move",
+      "order": [
+        "a417565f4ecff967",
+        "95c916fe339759db",
+        "f2c0dad2fe441b4f",
+        "6efdf58b0b5345a4",
+        "13a005ee415d6934",
+        "fa92a326a8dbb391",
+        "02fff6f470fa7013",
+        "3f8cb4ec6baff8b5",
+        "c8bc646ec6263102",
+        "e43cfb42accacebf",
+        "6e2059aca3a8c02d",
+        "1210ceb9edb25485",
+        "93c13da17d25e8af",
+        "f56335b063bc7987",
+        "676604c96ed96d81",
+        "cec6c44297e7f9e7"
+      ],
+      "id": "02fff6f470fa7013",
+      "date": 1438253014085
+    },
+    {
+      "type": "edit",
+      "id": "02fff6f470fa7013",
+      "item": {
+        "type": "markdown",
+        "id": "02fff6f470fa7013",
+        "text": "#Base Image"
+      },
+      "date": 1438253023574
+    }
+  ]
+}

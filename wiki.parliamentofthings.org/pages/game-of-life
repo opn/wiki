@@ -1,0 +1,564 @@
+{
+  "title": "Game Of Life",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "267d572708db8904",
+      "text": "The Game of Life, also known simply as LIFE, is a board game originally created in 1860 by Milton Bradley, as The Checkered Game of Life (and later produced by the Milton Bradley Company of Springfield, Massachusetts) - [http://www.newyorker.com/magazine/2007/05/21/the-meaning-of-life newyorker.com]"
+    },
+    {
+      "type": "image",
+      "id": "10704a2c-0d92-4d36-a8e4-7ab5b436f2ba",
+      "url": "data:image/gif;base64,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\nn4qACPP9KujoIDKHEj0wnDgQY0Uq/wpz4aLgayNAiPomiJT30WTHACeFkCw5ap60YR5pPpQJ\n4yJMe19W8hTIsdrOmj1xxky5z6gLnUM1+jTRqCW6p00FSp3pj+pSrVVvOmQRlStYsV1RZqTn\n6upIpWWtkgURlm0MtW2zdJtBty4xWkGR6vWyDZXcv1YC431LeNJdGXkTC/66Iutgx06Yrv3Y\nmPLclyQk+9UsxTJcWZlBbxW6kDRi06yTQm4Nu9zr2LSdTq5NWzRu0Lp3+/4NPLjw4cSLGz+O\nPLny5cybO38OPbr06dSrW7+OPbv27dy7e/8OPrz476XHP1lt3hr69IXXsw/t/v2V8vL3fq5P\nhj7+vjb3p9TR718KhgXYy2IEcpLKgfMZqKAiDDYIYYQSTkhhhRZeiGGGGm7IYYcefghiiCKO\nSGKJJp6IYooqrshiiy6+CGOMj/UnIwoA1gjObThaFN+OKuno41E23diiZzQGOVOO9yEJkmpA\nMgmUa0dC+QdqVGLV45XjcKalbGd1ieWTYI5JZplmnolmmmquyWabbr4JZ5xyzklnnXbeiedp\nS9JJpI997vgnjoEiOaiMhcZ4KIyJvrgoiQPC+eibkbo5aZuV5olppppuymmnnn4Kaqiijkpq\nqVIUAAAh+QQACgAAACwAAAAA+gC0AAAC/4yPqcvtD6OctNqLs968+w+G4kiW5omm6sq27gvH\n8kzX9o0bwM73+Q8ManpEgPCITCqKPqXzmWPyoNRqTLqzarcjYsLLDYsz4EN5jE47zgG2+v1m\nu+F0sbxZh9+nv/kGa5QXhadDeOM3hCU4yGdmaINIprh4aBh59cgBSFnZWOjZmRWyyamZGRF5\nuZJ6+inKsMdUiqAK29p2y8IK+nUbWzTryCux+zpTHGg7LGyMKxXsmlyBDOlrvRzd+wxdu0Bd\n863crN1MCk07+Zfu0k1h7r1+7ixruv3SPvG+FH+uj+G/KtcFgMyAySuIrwHBFAlR8UNn7+BC\ndw9VNIQwcWISjf+jBCL0+OHXQXURUbTjCELkSEklT5ysSELlyoEwu4CcZ9CipZszyeVkeBNl\nyJ3Yeq6pqQspDKFGIdKjwTRpy6YPopqwqnMqVYVKsz7FgdVoWJtaj3XdarboRZbj0Oq51rbE\nWrdPwgEtStcOXGkmeealYrcv3r9bZKb9Shgw0bjszibus5gvprKPjxiWMbYy5sjVKGv+7PQn\n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",
+      "text": "Bill Gosper's Glider Gun in action—a variation of Conway's Game of Life. This image was made by using Life32 v2.15 beta, by Johan G. Bontes. - [https://commons.wikimedia.org/wiki/File:Gospers_glider_gun.gif wikimedia]",
+      "caption": "Uploaded image"
+    },
+    {
+      "type": "reference",
+      "id": "509db17f33e48ee4",
+      "site": "wiki.parliamentofthings.org",
+      "slug": "conways-game-of-life",
+      "title": "Conway's Game of Life",
+      "text": "The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970 - [https://en.wikipedia.org/wiki/Conway's_game_of_life wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "e8a4b8c3b27ba163",
+      "text": "The Game of Life was America's first popular parlor game. The game simulates a person's travels through his or her life, from college to retirement, with jobs, marriage, and possible children along the way. Two to six players can participate in one game. Variations of the game accommodate eight to ten players - [http://www.hasbro.com/common/documents/dad261421c4311ddbd0b0800200c9a66/421541C319B9F36910397125043F45A3.pdf hasbro.com]"
+    },
+    {
+      "url": "http://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/04/Bradley-Milton-as-an-older-man.jpg?resize=269%2C300",
+      "text": "Though Milton Bradley died in 1911, the company he created with that first game, The Checkered Game of Life, bequeathed more American classics than any other game company and went on to become perhaps the largest game company in the world. His name no longer graces the boxes of Hasbro games, but his initials “MB” still represent the name that left such a remarkable legacy - [http://thebiggamehunter.com/games-one-by-one/checkered-game-of-life/ thebiggamehunter.com]",
+      "type": "image",
+      "id": "b38df7b38290fd82"
+    },
+    {
+      "type": "paragraph",
+      "id": "02e9879e40f0f8d1",
+      "text": "The modern version was originally published 100 years later, in 1960. It was created by toy and game designer Reuben Klamer and was \"heartily endorsed\" by Art Linkletter. It is now part of the permanent collection of the Smithsonian's National Museum of American History. It later spawned a book, The Game of Life: How to Succeed in Real Life No Matter Where You Land (Running Press), by Lou Harry."
+    },
+    {
+      "type": "paragraph",
+      "id": "c11dbafcf070f72d",
+      "text": "The game was originally created in 1860 by Milton Bradley as The Checkered Game of Life. This was the first game created by Bradley, a successful lithographer, whose major product until that time was a portrait of Abraham Lincoln with a clean-shaven face, which did not do well once the subject grew his famous beard. "
+    },
+    {
+      "type": "paragraph",
+      "id": "7dfaf20ef50c0b5f",
+      "text": "The game sold 45,000 copies by the end of its first year. Like many games from the 19th century, such as The Mansion of Happiness by S.B. Ives in 1843, it had a strong moral message."
+    },
+    {
+      "type": "paragraph",
+      "id": "55262a486331ba2f",
+      "text": "Bradley's game did not include dice, instead using a teetotum, a six-sided top (dice were considered too similar to gambling)."
+    },
+    {
+      "type": "paragraph",
+      "id": "4f051d6afdf93baf",
+      "text": "The game board was essentially a modified checkerboard. The object was to land on the \"good\" spaces and collect 100 points. A player could gain 50 points by reaching \"Happy Old Age\" in the upper-right corner, opposite \"Infancy\" where one began.\nIn 1960, the 100th anniversary of The Checkered Game of Life, the first modern version of The Game of Life, a collaboration between Reuben Klamer and Bill Markham, was introduced. "
+    },
+    {
+      "type": "paragraph",
+      "id": "d34447884a606bb8",
+      "text": "The game was re-published many times over the years, including 1961, 1966, 1978, 1985, 1992, 2000, and 2005. It was used as the basis of a TV Game show - [https://en.wikipedia.org/wiki/The_Game_of_Life_(game_show) wikipedia]"
+    },
+    {
+      "type": "video",
+      "id": "856573f8d7814953",
+      "text": "YOUTUBE L-o8Spa4isQ\nVarious commercials or ads for The Game of Life board game from the 60s, 80s and 90s."
+    },
+    {
+      "type": "markdown",
+      "id": "1804baab90aa9b6d",
+      "text": "# Original Version"
+    },
+    {
+      "type": "paragraph",
+      "id": "d9f04a4a08d7a7a6",
+      "text": "The original version of Life was somewhat more pessimistic than the one we play today. Some of the board's original squares included \"Disgrace,\" \"Poverty,\" and \"Ruin,\" as well as \"Crime,\" \"Prison,\" and \"Suicide.\" - [http://www.cracked.com/article_18995_5-classic-board-games-with-disturbing-origin-stories.html cracked.com]"
+    },
+    {
+      "url": "http://cdn-www.cracked.com/phpimages/article/3/6/2/42362.jpg?v=1",
+      "text": "Bravery, suicide, and Fat Office - squares on the original [[Game Of Life]] board game  [http://www.cracked.com/article_18995_5-classic-board-games-with-disturbing-origin-stories.html cracked.com]",
+      "type": "image",
+      "id": "19b87c6a59a6a52e"
+    },
+    {
+      "type": "paragraph",
+      "id": "c74791da35adff65",
+      "text": "So who was the man behind this grim game? Milton Bradley himself, who was going through a bit of a rough time when he made it. Bradley was a professional lithographer at the time, and was driven to financial ruin, solely because Abraham Lincoln grew a beard. Mr. Bradley was making a pretty sweet dime in 1860 selling lithographs of a then-beardless Abraham Lincoln until a little 11-year-old girl named Grace Bedell sent Honest Abe a letter asking him to grow a beard, which he did. "
+    },
+    {
+      "type": "paragraph",
+      "id": "40c3593594ab8ae6",
+      "text": "This unprecedented presidential fashion statement basically destroyed Bradley's business after all his unsold portraits of clean-shaven Abe were judged \"so yesterday.\""
+    },
+    {
+      "type": "paragraph",
+      "id": "8d882a4282ea81c8",
+      "text": "His business in ruins he sat down and drafted the board game."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Game Of Life",
+        "story": []
+      },
+      "date": 1467641948618
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "509db17f33e48ee4"
+      },
+      "id": "509db17f33e48ee4",
+      "type": "add",
+      "date": 1467641950006
+    },
+    {
+      "type": "edit",
+      "id": "509db17f33e48ee4",
+      "item": {
+        "type": "reference",
+        "id": "509db17f33e48ee4",
+        "site": "wiki.parliamentofthings.org",
+        "slug": "conways-game-of-life",
+        "title": "Conway's Game of Life",
+        "text": "The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970 - [https://en.wikipedia.org/wiki/Conway's_game_of_life wikipedia]"
+      },
+      "date": 1467641952185
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "267d572708db8904"
+      },
+      "id": "267d572708db8904",
+      "type": "add",
+      "after": "509db17f33e48ee4",
+      "date": 1467641954029
+    },
+    {
+      "type": "move",
+      "order": [
+        "267d572708db8904",
+        "509db17f33e48ee4"
+      ],
+      "id": "267d572708db8904",
+      "date": 1467641955175
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "856573f8d7814953"
+      },
+      "id": "856573f8d7814953",
+      "type": "add",
+      "after": "509db17f33e48ee4",
+      "date": 1467642097876
+    },
+    {
+      "type": "move",
+      "order": [
+        "267d572708db8904",
+        "856573f8d7814953",
+        "509db17f33e48ee4"
+      ],
+      "id": "856573f8d7814953",
+      "date": 1467642099669
+    },
+    {
+      "type": "edit",
+      "id": "856573f8d7814953",
+      "item": {
+        "type": "video",
+        "id": "856573f8d7814953",
+        "text": "YOUTUBE L-o8Spa4isQ\n(double-click to edit caption)\n"
+      },
+      "date": 1467642108905
+    },
+    {
+      "type": "edit",
+      "id": "267d572708db8904",
+      "item": {
+        "type": "paragraph",
+        "id": "267d572708db8904",
+        "text": "The Game of Life, also known simply as LIFE, is a board game originally created in 1860 by Milton Bradley, as The Checkered Game of Life (and later produced by the Milton Bradley Company of Springfield, Massachusetts). "
+      },
+      "date": 1467642156675
+    },
+    {
+      "type": "add",
+      "id": "e8a4b8c3b27ba163",
+      "item": {
+        "type": "paragraph",
+        "id": "e8a4b8c3b27ba163",
+        "text": "The Game of Life was America's first popular parlor game. The game simulates a person's travels through his or her life, from college to retirement, with jobs, marriage, and possible children along the way. Two to six players can participate in one game. Variations of the game accommodate eight to ten players."
+      },
+      "after": "267d572708db8904",
+      "date": 1467642161836
+    },
+    {
+      "type": "add",
+      "id": "02e9879e40f0f8d1",
+      "item": {
+        "type": "paragraph",
+        "id": "02e9879e40f0f8d1",
+        "text": "The modern version was originally published 100 years later, in 1960. It was created by toy and game designer Reuben Klamer and was \"heartily endorsed\" by Art Linkletter. It is now part of the permanent collection of the Smithsonian's National Museum of American History. It later spawned a book, The Game of Life: How to Succeed in Real Life No Matter Where You Land (Running Press), by Lou Harry."
+      },
+      "after": "e8a4b8c3b27ba163",
+      "date": 1467642166179
+    },
+    {
+      "type": "add",
+      "id": "c11dbafcf070f72d",
+      "item": {
+        "type": "paragraph",
+        "id": "c11dbafcf070f72d",
+        "text": "The game was originally created in 1860 by Milton Bradley as The Checkered Game of Life. This was the first game created by Bradley, a successful lithographer, whose major product until that time was a portrait of Abraham Lincoln with a clean-shaven face, which did not do well once the subject grew his famous beard. "
+      },
+      "after": "02e9879e40f0f8d1",
+      "date": 1467642179860
+    },
+    {
+      "type": "add",
+      "id": "7dfaf20ef50c0b5f",
+      "item": {
+        "type": "paragraph",
+        "id": "7dfaf20ef50c0b5f",
+        "text": "The game sold 45,000 copies by the end of its first year. Like many games from the 19th century, such as The Mansion of Happiness by S.B. Ives in 1843, it had a strong moral message."
+      },
+      "after": "c11dbafcf070f72d",
+      "date": 1467642186668
+    },
+    {
+      "type": "add",
+      "id": "55262a486331ba2f",
+      "item": {
+        "type": "paragraph",
+        "id": "55262a486331ba2f",
+        "text": "Bradley's game did not include dice, instead using a teetotum, a six-sided top (dice were considered too similar to gambling)."
+      },
+      "after": "7dfaf20ef50c0b5f",
+      "date": 1467642190379
+    },
+    {
+      "type": "add",
+      "id": "4f051d6afdf93baf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f051d6afdf93baf",
+        "text": "The game board was essentially a modified checkerboard. The object was to land on the \"good\" spaces and collect 100 points. A player could gain 50 points by reaching \"Happy Old Age\" in the upper-right corner, opposite \"Infancy\" where one began.\nIn 1960, the 100th anniversary of The Checkered Game of Life, the first modern version of The Game of Life, a collaboration between Reuben Klamer and Bill Markham, was introduced. "
+      },
+      "after": "55262a486331ba2f",
+      "date": 1467642204621
+    },
+    {
+      "type": "add",
+      "id": "d34447884a606bb8",
+      "item": {
+        "type": "paragraph",
+        "id": "d34447884a606bb8",
+        "text": "The game was re-published many times over the years, including 1961, 1966, 1978, 1985, 1992, 2000, and 2005."
+      },
+      "after": "4f051d6afdf93baf",
+      "date": 1467642206054
+    },
+    {
+      "type": "edit",
+      "id": "856573f8d7814953",
+      "item": {
+        "type": "video",
+        "id": "856573f8d7814953",
+        "text": "YOUTUBE L-o8Spa4isQ\nVarious commercials or ads for The Game of Life board game from the 60s, 80s and 90s."
+      },
+      "date": 1467642214291
+    },
+    {
+      "type": "move",
+      "order": [
+        "267d572708db8904",
+        "509db17f33e48ee4",
+        "e8a4b8c3b27ba163",
+        "02e9879e40f0f8d1",
+        "c11dbafcf070f72d",
+        "7dfaf20ef50c0b5f",
+        "55262a486331ba2f",
+        "4f051d6afdf93baf",
+        "d34447884a606bb8",
+        "856573f8d7814953"
+      ],
+      "id": "509db17f33e48ee4",
+      "date": 1467642223633
+    },
+    {
+      "type": "edit",
+      "id": "e8a4b8c3b27ba163",
+      "item": {
+        "type": "paragraph",
+        "id": "e8a4b8c3b27ba163",
+        "text": "The Game of Life was America's first popular parlor game. The game simulates a person's travels through his or her life, from college to retirement, with jobs, marriage, and possible children along the way. Two to six players can participate in one game. Variations of the game accommodate eight to ten players - [http://www.hasbro.com/common/documents/dad261421c4311ddbd0b0800200c9a66/421541C319B9F36910397125043F45A3.pdf hasbro.com]"
+      },
+      "date": 1467642252929
+    },
+    {
+      "type": "edit",
+      "id": "267d572708db8904",
+      "item": {
+        "type": "paragraph",
+        "id": "267d572708db8904",
+        "text": "The Game of Life, also known simply as LIFE, is a board game originally created in 1860 by Milton Bradley, as The Checkered Game of Life (and later produced by the Milton Bradley Company of Springfield, Massachusetts) - [http://www.newyorker.com/magazine/2007/05/21/the-meaning-of-life newyorker.com]"
+      },
+      "date": 1467642524304
+    },
+    {
+      "type": "edit",
+      "id": "d34447884a606bb8",
+      "item": {
+        "type": "paragraph",
+        "id": "d34447884a606bb8",
+        "text": "The game was re-published many times over the years, including 1961, 1966, 1978, 1985, 1992, 2000, and 2005. It was used as the basis of a TV Game show - [https://en.wikipedia.org/wiki/The_Game_of_Life_(game_show) wikipedia]"
+      },
+      "date": 1467642625010
+    },
+    {
+      "type": "add",
+      "item": {
+        "url": "http://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/04/Bradley-Milton-as-an-older-man.jpg?resize=269%2C300",
+        "text": "Transported image. [http://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/04/Bradley-Milton-as-an-older-man.jpg?resize=269%2C300 source]",
+        "type": "image",
+        "id": "b38df7b38290fd82"
+      },
+      "after": "e8a4b8c3b27ba163",
+      "id": "b38df7b38290fd82",
+      "date": 1467642701383
+    },
+    {
+      "type": "edit",
+      "id": "b38df7b38290fd82",
+      "item": {
+        "url": "http://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/04/Bradley-Milton-as-an-older-man.jpg?resize=269%2C300",
+        "text": "Though Milton Bradley died in 1911, the company he created with that first game, The Checkered Game of Life, bequeathed more American classics than any other game company and went on to become perhaps the largest game company in the world. His name no longer graces the boxes of Hasbro games, but his initials “MB” still represent the name that left such a remarkable legacy - [http://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/04/Bradley-Milton-as-an-older-man.jpg?resize=269%2C300 wp.com]",
+        "type": "image",
+        "id": "b38df7b38290fd82"
+      },
+      "date": 1467642786023
+    },
+    {
+      "type": "edit",
+      "id": "b38df7b38290fd82",
+      "item": {
+        "url": "http://i2.wp.com/thebiggamehunter.com/wp-content/uploads/2011/04/Bradley-Milton-as-an-older-man.jpg?resize=269%2C300",
+        "text": "Though Milton Bradley died in 1911, the company he created with that first game, The Checkered Game of Life, bequeathed more American classics than any other game company and went on to become perhaps the largest game company in the world. His name no longer graces the boxes of Hasbro games, but his initials “MB” still represent the name that left such a remarkable legacy - [http://thebiggamehunter.com/games-one-by-one/checkered-game-of-life/ thebiggamehunter.com]",
+        "type": "image",
+        "id": "b38df7b38290fd82"
+      },
+      "date": 1467642830618
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1804baab90aa9b6d"
+      },
+      "id": "1804baab90aa9b6d",
+      "type": "add",
+      "after": "856573f8d7814953",
+      "date": 1467642933907
+    },
+    {
+      "type": "edit",
+      "id": "1804baab90aa9b6d",
+      "item": {
+        "type": "paragraph",
+        "id": "1804baab90aa9b6d",
+        "text": "The original version of Life was somewhat more pessimistic than the one we play today. Some of the board's original squares included \"Disgrace,\" \"Poverty,\" and \"Ruin,\" as well as \"Crime,\" \"Prison,\" and -- no joke -- \"Suicide.\"\n\n\nMaking a square for \"Suicide\" is one thing, but landing a job at the \"Fat Office\" is just plain cruel.\n\nEven though today this would be like having a slot for the Joker's pencil trick in Operation, the original version of Life nevertheless sold like hotcakes.\n\nSo who was the psychopath behind this grim game? Milton Bradley himself, who was going through a bit of a rough time when he made it. Bradley was a professional lithographer at the time, and was driven to financial ruin, solely because Abraham Lincoln grew a beard. We're not making this up. Mr. Bradley was making a pretty sweet dime in 1860 selling lithographs of a then-beardless Abraham Lincoln until a little 11-year-old girl named Grace Bedell sent Honest Abe a letter asking him to grow a beard, which he did. This unprecedented presidential fashion statement basically destroyed Bradley's business after all his unsold portraits of clean-shaven Abe were judged \"so yesterday.\""
+      },
+      "date": 1467642938480
+    },
+    {
+      "type": "edit",
+      "id": "1804baab90aa9b6d",
+      "item": {
+        "type": "paragraph",
+        "id": "1804baab90aa9b6d",
+        "text": "# original Version"
+      },
+      "date": 1467642972875
+    },
+    {
+      "type": "add",
+      "id": "d9f04a4a08d7a7a6",
+      "item": {
+        "type": "paragraph",
+        "id": "d9f04a4a08d7a7a6",
+        "text": "The original version of Life was somewhat more pessimistic than the one we play today. Some of the board's original squares included \"Disgrace,\" \"Poverty,\" and \"Ruin,\" as well as \"Crime,\" \"Prison,\" and -- no joke -- \"Suicide.\"\n\n\nMaking a square for \"Suicide\" is one thing, but landing a job at the \"Fat Office\" is just plain cruel.\n\nEven though today this would be like having a slot for the Joker's pencil trick in Operation, the original version of Life nevertheless sold like hotcakes.\n\nSo who was the psychopath behind this grim game? Milton Bradley himself, who was going through a bit of a rough time when he made it. Bradley was a professional lithographer at the time, and was driven to financial ruin, solely because Abraham Lincoln grew a beard. We're not making this up. Mr. Bradley was making a pretty sweet dime in 1860 selling lithographs of a then-beardless Abraham Lincoln until a little 11-year-old girl named Grace Bedell sent Honest Abe a letter asking him to grow a beard, which he did. This unprecedented presidential fashion statement basically destroyed Bradley's business after all his unsold portraits of clean-shaven Abe were judged \"so yesterday.\""
+      },
+      "after": "1804baab90aa9b6d",
+      "date": 1467642974451
+    },
+    {
+      "type": "edit",
+      "id": "1804baab90aa9b6d",
+      "item": {
+        "type": "paragraph",
+        "id": "1804baab90aa9b6d",
+        "text": "# Original Version"
+      },
+      "date": 1467642978573
+    },
+    {
+      "type": "edit",
+      "id": "1804baab90aa9b6d",
+      "item": {
+        "type": "markdown",
+        "id": "1804baab90aa9b6d",
+        "text": "# Original Version"
+      },
+      "date": 1467642979601
+    },
+    {
+      "type": "edit",
+      "id": "d9f04a4a08d7a7a6",
+      "item": {
+        "type": "paragraph",
+        "id": "d9f04a4a08d7a7a6",
+        "text": "The original version of Life was somewhat more pessimistic than the one we play today. Some of the board's original squares included \"Disgrace,\" \"Poverty,\" and \"Ruin,\" as well as \"Crime,\" \"Prison,\" and -- no joke -- \"Suicide.\" - [http://www.cracked.com/article_18995_5-classic-board-games-with-disturbing-origin-stories.html cracked.com]"
+      },
+      "date": 1467642993876
+    },
+    {
+      "type": "add",
+      "id": "c74791da35adff65",
+      "item": {
+        "type": "paragraph",
+        "id": "c74791da35adff65",
+        "text": "So who was the man behind this grim game? Milton Bradley himself, who was going through a bit of a rough time when he made it. Bradley was a professional lithographer at the time, and was driven to financial ruin, solely because Abraham Lincoln grew a beard. Mr. Bradley was making a pretty sweet dime in 1860 selling lithographs of a then-beardless Abraham Lincoln until a little 11-year-old girl named Grace Bedell sent Honest Abe a letter asking him to grow a beard, which he did. This unprecedented presidential fashion statement basically destroyed Bradley's business after all his unsold portraits of clean-shaven Abe were judged \"so yesterday.\""
+      },
+      "after": "d9f04a4a08d7a7a6",
+      "date": 1467643093601
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8d882a4282ea81c8"
+      },
+      "id": "8d882a4282ea81c8",
+      "type": "add",
+      "after": "c74791da35adff65",
+      "date": 1467643141690
+    },
+    {
+      "type": "edit",
+      "id": "8d882a4282ea81c8",
+      "item": {
+        "type": "paragraph",
+        "id": "8d882a4282ea81c8",
+        "text": "His business in ruins he sat down and drafted the board game."
+      },
+      "date": 1467643162043
+    },
+    {
+      "type": "add",
+      "item": {
+        "url": "http://cdn-www.cracked.com/phpimages/article/3/6/2/42362.jpg?v=1",
+        "text": "Transported image. [http://cdn-www.cracked.com/phpimages/article/3/6/2/42362.jpg?v=1 source]",
+        "type": "image",
+        "id": "19b87c6a59a6a52e"
+      },
+      "after": "55262a486331ba2f",
+      "id": "19b87c6a59a6a52e",
+      "date": 1467643210800
+    },
+    {
+      "type": "move",
+      "order": [
+        "267d572708db8904",
+        "509db17f33e48ee4",
+        "e8a4b8c3b27ba163",
+        "b38df7b38290fd82",
+        "02e9879e40f0f8d1",
+        "c11dbafcf070f72d",
+        "7dfaf20ef50c0b5f",
+        "55262a486331ba2f",
+        "4f051d6afdf93baf",
+        "d34447884a606bb8",
+        "856573f8d7814953",
+        "1804baab90aa9b6d",
+        "d9f04a4a08d7a7a6",
+        "19b87c6a59a6a52e",
+        "c74791da35adff65",
+        "8d882a4282ea81c8"
+      ],
+      "id": "19b87c6a59a6a52e",
+      "date": 1467643229818
+    },
+    {
+      "type": "edit",
+      "id": "19b87c6a59a6a52e",
+      "item": {
+        "url": "http://cdn-www.cracked.com/phpimages/article/3/6/2/42362.jpg?v=1",
+        "text": "Braver, suicide, and Fat Office - squares on the original [[Game Of Life]] board game  [http://cdn-www.cracked.com/phpimages/article/3/6/2/42362.jpg?v=1 source]",
+        "type": "image",
+        "id": "19b87c6a59a6a52e"
+      },
+      "date": 1467643316753
+    },
+    {
+      "type": "edit",
+      "id": "19b87c6a59a6a52e",
+      "item": {
+        "url": "http://cdn-www.cracked.com/phpimages/article/3/6/2/42362.jpg?v=1",
+        "text": "Bravery, suicide, and Fat Office - squares on the original [[Game Of Life]] board game  [http://www.cracked.com/article_18995_5-classic-board-games-with-disturbing-origin-stories.html cracked.com]",
+        "type": "image",
+        "id": "19b87c6a59a6a52e"
+      },
+      "date": 1467643356408
+    },
+    {
+      "type": "edit",
+      "id": "d9f04a4a08d7a7a6",
+      "item": {
+        "type": "paragraph",
+        "id": "d9f04a4a08d7a7a6",
+        "text": "The original version of Life was somewhat more pessimistic than the one we play today. Some of the board's original squares included \"Disgrace,\" \"Poverty,\" and \"Ruin,\" as well as \"Crime,\" \"Prison,\" and \"Suicide.\" - [http://www.cracked.com/article_18995_5-classic-board-games-with-disturbing-origin-stories.html cracked.com]"
+      },
+      "date": 1467643368192
+    },
+    {
+      "type": "edit",
+      "id": "c74791da35adff65",
+      "item": {
+        "type": "paragraph",
+        "id": "c74791da35adff65",
+        "text": "So who was the man behind this grim game? Milton Bradley himself, who was going through a bit of a rough time when he made it. Bradley was a professional lithographer at the time, and was driven to financial ruin, solely because Abraham Lincoln grew a beard. Mr. Bradley was making a pretty sweet dime in 1860 selling lithographs of a then-beardless Abraham Lincoln until a little 11-year-old girl named Grace Bedell sent Honest Abe a letter asking him to grow a beard, which he did. "
+      },
+      "date": 1467643381624
+    },
+    {
+      "type": "add",
+      "id": "40c3593594ab8ae6",
+      "item": {
+        "type": "paragraph",
+        "id": "40c3593594ab8ae6",
+        "text": "This unprecedented presidential fashion statement basically destroyed Bradley's business after all his unsold portraits of clean-shaven Abe were judged \"so yesterday.\""
+      },
+      "after": "c74791da35adff65",
+      "date": 1467643382233
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "image",
+        "id": "10704a2c-0d92-4d36-a8e4-7ab5b436f2ba",
+        "url": "data:image/gif;base64,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\nn4qACPP9KujoIDKHEj0wnDgQY0Uq/wpz4aLgayNAiPomiJT30WTHACeFkCw5ap60YR5pPpQJ\n4yJMe19W8hTIsdrOmj1xxky5z6gLnUM1+jTRqCW6p00FSp3pj+pSrVVvOmQRlStYsV1RZqTn\n6upIpWWtkgURlm0MtW2zdJtBty4xWkGR6vWyDZXcv1YC431LeNJdGXkTC/66Iutgx06Yrv3Y\nmPLclyQk+9UsxTJcWZlBbxW6kDRi06yTQm4Nu9zr2LSdTq5NWzRu0Lp3+/4NPLjw4cSLGz+O\nPLny5cybO38OPbr06dSrW7+OPbv27dy7e/8OPrz476XHP1lt3hr69IXXsw/t/v2V8vL3fq5P\nhj7+vjb3p9TR718KhgXYy2IEcpLKgfMZqKAiDDYIYYQSTkhhhRZeiGGGGm7IYYcefghiiCKO\nSGKJJp6IYooqrshiiy6+CGOMj/UnIwoA1gjObThaFN+OKuno41E23diiZzQGOVOO9yEJkmpA\nMgmUa0dC+QdqVGLV45XjcKalbGd1ieWTYI5JZplmnolmmmquyWabbr4JZ5xyzklnnXbeiedp\nS9JJpI997vgnjoEiOaiMhcZ4KIyJvrgoiQPC+eibkbo5aZuV5olppppuymmnnn4Kaqiijkpq\nqVIUAAAh+QQACgAAACwAAAAA+gC0AAAC/4yPqcvtD6OctNqLs968+w+G4kiW5omm6sq27gvH\n8kzX9o0bwM73+Q8ManpEgPCITCqKPqXzmWPyoNRqTLqzarcjYsLLDYsz4EN5jE47zgG2+v1m\nu+F0sbxZh9+nv/kGa5QXhadDeOM3hCU4yGdmaINIprh4aBh59cgBSFnZWOjZmRWyyamZGRF5\nuZJ6+inKsMdUiqAK29p2y8IK+nUbWzTryCux+zpTHGg7LGyMKxXsmlyBDOlrvRzd+wxdu0Bd\n863crN1MCk07+Zfu0k1h7r1+7ixruv3SPvG+FH+uj+G/KtcFgMyAySuIrwHBFAlR8UNn7+BC\ndw9VNIQwcWISjf+jBCL0+OHXQXURUbTjCELkSEklT5ysSELlyoEwu4CcZ9CipZszyeVkeBNl\nyJ3Yeq6pqQspDKFGIdKjwTRpy6YPopqwqnMqVYVKsz7FgdVoWJtaj3XdarboRZbj0Oq51rbE\nWrdPwgEtStcOXGkmeealYrcv3r9bZKb9Shgw0bjszibus5gvprKPjxiWMbYy5sjVKGv+7PQn\n6NFVHZP+nPl03tSq3bJuDTu27Nm0a9u+jTu37t28e/v+DTy48OHEixs/jjy58uXMmzt/Dj26\n9OnUq1u/jj279u3cOV3ubuU7eMWg5o4Hx/m8FvHqq7xuD9U0fCDv509GbB9K/fyNB/O/3+jX\nf5D5J6AQ5hV4mGQILshggw4+CGGEEk5IYYUWXohhhhpuyGGHHn4IYogijkiicgeWaMGJKFJE\n4IodqOiiQy3GOJRnNP4j340y4qcjSTz2yJZoQE6T45DiCGkkTTYmiVGRTIYG45NSTklllVZe\niWWWWm7JZZdefglmmGKOSWaZZp6JZppqrskmkeUFyCR7WsqZJZ1Y2snlfkDq2SOfOvp5I6A0\nRvkkoXHCWSeidyraZqOOPgpppJJOSumjBQAAIfkEAAoAAAAsAAAAAPoAtAAAAv+Mj6nL7Q+j\nnLTai7PevPsPhuJIluaJpurKtu4Lx/JM1/aNG8DO9/kPDGp6RIDwiEwqij6l85lj8qDUaky6\ns2q3I2LCyw2LM+BDeYxOO84Btvr9ZrvhdLG8Wc/r8EJsEeOndzQX5cdHESgYRIhjeDiRqPjD\neOM4dREp2fg4aWmEiaUZQrnmSTrqCchpZroqesrQ6tqVCnoZK5slugDLm/upYqp665u7W6xr\n8QucImybjNx6vDRbarzirDy7PP1VLcGNXast5W3ZjdD7EB48XpHZ5t6tbi3Lkv0emi4/Td/A\n3owfOH2szqHbQ4zMr3sCI8DDVwUew4TmoLW4Q/EgIoL/Lij5A4HRosaN5WB4/FYiJLORJJlc\n2YaShEqWz/6YhJmxXcKPNCWKu0bDJ811HC8urCF06L+iE+0hZaq0ns0XAGUkjUqtJNWjQaFi\n7cM1YM6vaaqe4En2iVkTaNMqWZsyptuIYVG0nTtI7suxeKHc1SmyL12+Nv4K7kr4aeLDeRfP\nMMw4KsTIlCsaqow5q6PMnBFu7px5MujRpEubPo06terVrFu7fg07tuzZtGvbvo07t+7dvHv7\n/g08uPDhxIsbP448ufLlzJs7fw5JL3S/0qc7gWy9kOPsaqtzR2wR+/ef4b2P31t++3nwK8Wv\nP3vI/XvAU+df92p/Ef78nbTyrUdy1X8CDkhggQYeiGCCCi7IYIMOPghhhBJOSGGFFl6IYYYa\nbqiJfBxK9SF9IYoV2IioqGciBx6muA+KLLa00osfrCgjjRmKJuNABuVIzmc85rPjj9EFKWSR\nRh6JZJJKLslkk04+CWWUUk5JZZVWXollllpuyWWXXn55k4tN2sgimSmaaSKaFc5EJZtTuikl\nnFHKWWWAT9rpJJ5j7gelnmD+CWiggg5KaKGGDloAACH5BAAKAAAALAAAAAD6ALQAAAL/jI+p\ny+0Po5y02ouz3rz7D4biSJbmiabqyrbuC8fyTNf2jRvAzvf5DwxqekSA8IhMKoo+pfOZY/Kg\n1GpMurNqtx6iw8sNiylgRnmMTifOy6b6nWav3fA6V47A2+FsfcrfhSUIuGfSR9dCyDHImFXo\ncjgFo7jRyPgIiUhJsplhOYiZqInI0onxKRhaStpgeuEaAbsgqzrRSWvLWqlbgVsLccsbKAni\ne2D82yo8R8y5/PocG51sEdw8gtx2fTpNjZL91c0tlbvt/QKubF6MVe54LpNuJg5NLiEPX//u\nvP6Rek8vXwh82vZhawewn5J/KmgRZGYQohFDAYUw/FMxwMM8/8I2HssI5OK3jB51dASZMOIW\nkSccopSmsKTGlzhYUlQYDueikzp39XRiMwrNYUwEjiuKRKa7Ikb1MU06tEPQpjmRHlGa8inV\npVh9qkSHcCsUa1/FmiXTrevZUGQnrn2L9udMuXDhtq2LF9goujuvqc1bIlLZg36jAr6yd7AI\nwW4PW2G8qjBfxzUTNx4pWTHlzRztcf6sziro0Z1FkyY99TTl1KoP/22N6TXsQrJn26ltm4/h\n3Lx7+/4NPLjw4cSLGz+OPLny5cybO38OPbr06dSrW7+OPbv27dy7e5+N+3tkzeLDhC+PcTL6\nJ+fXr2Dtnn3Y+Hfm09cC/z5Uz/qB2r/vP9Z/APrH34DyFWjgQgImyGCDDj4IYYQSTkhhhRZe\niGGGGm7IYYcefghiiCKOSGKJJp6IYooqrsjiLJa1SNRl7WEIGYx9GTTjhTXa6M+CPB6l1Y83\nBinkED4WGZdpSDq1JDvqNTnPk1AWdNmUQFqJZZZabslll15+CWaYYo5JZplmnolmmmquyaaO\nuy2ZI4hxfjinh3WKmF+XeXK555Z9avlnk4FiOaiVhU55KJSJtsloo44+Cmmkkk5KqQUFAAAh\n+QQACgAAACwAAAAA+gC0AAAC/4yPqcvtD6OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o0b\nwM73+Q8ManpEgPCITCqKPqXzmWPyoNRqTLqzarcorPHiJXLHUC8m3CSrj2YwOruOA9uWN1yO\nt9Er9m9+njaz59E3+CcjVmPIUYh1qBeI6BjSKPWoGHk1CVLJdEmTCLr50Vn0KRgZStLXofrg\n6nralZpJaddaywCbK7tKO2XCysi79HvXOwt8EGv7hqsMsQuNHGzs5+s8PO0gfUwtatnsKX79\nOvqNGs55/uzNzY4Os7gxP0ScUB/Pkn8GT3+PgJ++FALr+LO3rUFBIQslqXPRcOCCiPIOJhsn\n0c3DIP8U123MOKEjRIsnRII0uY9ktY8gI6Bc8fIfy5bmZuKIiRAjTQk4L5qqaHPnRJXgdLbo\niQ7pSqMpgwpN0q3c06mkrFG96tEbM6xc+VjtClajVoBhywYkOzKhWStb07lbyxbtUblwGdKF\nebfuj7YO3+qFG/WvYB1fB+sNbPhw4cRrETMWrPRxvMiSv1GujOwyZlmaN3v+DDq06NGkS5s+\njTq16tWsW7t+DTu27Nm0a9u+jTu37t28e/v+DfwT3+BqhhMfY/z4luTK46ptLoc59DJ5pyOR\nbl0J9uzXq3PXlO279lvix4cvz4Y8+vTn17t/Dz++/Pn069u/jz+//v38+/ua/w9ggAIOSGCB\nBh6IYIIKLshgg/tt56BYUkVIDoVLTWghId5lSNg0EHK4zGIgUuDYiCSKaKJLKKZ4olMsvuPi\ni7oQJWMxMdaID4047shjjz7+CGSQQg5JZJFGHolkkkouyWSTTj4J2oc9SskjlTtaiSOWPmop\nI5cveskimCmKyaAwRJo5JJpCqhkkm1C+CWeccs5JZ5123tlAAQAh+QQACgAAACwAAAAA+gC0\nAAAC/4yPqcvtD6OctNqLs968+w+G4kiW5omm6sq27gvH8kzX9o0bwM73XQ/ICYc0IPDnIyqX\nKmNyc2RKpyEnD3mlarcY6w775YrHCq9xEo2kyeyhef2AO+TtevGdVT8hdLv/hZfHtxdH+HfY\nEhimJ1jYiCjURwJnBhYECSk5QulliZlpaMJp5fl5qCky6lRq6odaRVjJ8dpKpXoJokm7sOu4\nWBtzmxp60Jtg3IAMPNyoPPiI4BwgfUy83BRrnaGrPdctQX09mw0NpS0dXvwtniI83twJI8su\n424OTyofTx9M/rvt74y+fPwG/kunIyBCgAQLurCn4dbCLvvGzMPBrdwHRf+4HDJcFencuoiK\nPN4DmSPjP2Z4TJJseENlx00lXVKEaUPmCY42b6LEGLAfzp6MfsYMalAgUQoXj+JbuaLp0mdG\ncyIFVHEqVaVAn85kIVUrG4hiy+a6ajYtq4Qa1bpFg/atXKZx59r19TXqyLttJl7wy5cI4AqD\nA6fcyzKv4T+F4bZdDDlZ1siUw1JebPly4Mya73LunPYz6LeiR6stbdos6tRiV7N+DTu27Nm0\na9u+jTu37t28e/v+DTy48OHEixs/jjy58uXMmzt/Dj269OnUq1u/jj27z5mNtYuq630J2fDi\nwZN3Y/58+aHq11dt754rfCau59ebbB/94/wh9/Ot7wrVf4IhJuB9/hWIYIIKLshggw4+CGGE\nEk5IYYUWXohhhhpuyGGHHn4IonPdhajOgSRud2IJI564YoolvufiX/jFaEF9NPIy442Owaij\nZOz1WJR8QO4o5JBBtsihjUYuyWSTTj4JZZRSTklllVZeiWWWWm7JZZdefglmmGKOSaZ040V5\nJpRpPrmmk21KqeSQcQI5Z4916njnjUiCuOeHfXr4Z4eBlklooYYuWQAAIfkEAAoAAAAsAAAA\nAPoAtAAAAv+Mj6nL7Q+jnLTai7PevPsPhuJIluaJpurKtu4Lx/JM1/ZdA7qe7DwODAoxPkDP\nN0wql8dd88eMSm3Fp3GKzbqqCK72C/54F2NKOYyOnrvIyzoNF74N80c9jqfV7w1+/r/VxuBH\nJgiYR+hRlOiwaHh4yMjh6DRJeQUJKblxianRmZm5+XnZARoa+XhyylmKClc2qsAKIUvk+hoT\nq+qGW8tbQpsbWHlgy0Y5cWwhPMyyW0yaLLFc0eysAg0l7agMTHKNjSJcPesrEy5uQv6dkd7y\nrj7CHq14rnsvv35ebtVvOU1fCnrb7AWcEW9Jwmz88rWqZ0Xgw245Gh40WDCiRHf/DolRNNaR\nI0RkGTd6u4jv4kJr7f6JWznO4kcxLduZbBTymUxPMeu5xAZz1U6dPm3eHJRzBUGeQouOPGon\nKUOVRkFoYwo1KkoYS4kW/JkV4SOwYcuS5EnWrNmrattaHVvVrVytX+POvUsX69SSeDXZFZG2\nL5DAv54K/kM47+FXiXEaXgyZ2t/IkBtTlmj5sr7MmtVx7gyo02fQiEQ/Jt3W9GnUa1XrZZ3a\nNezZtGvbvo07t+7dvHv7/g08uPDhxIsbP448ufLlzJs7fw49uvTp1Ktbv449u/bt3LvbHu29\nJ9/wYMCTDzb5fBLz6m85Hd9+MNzV8Su+f13/Btv8SvbzsFcj1X/2zSTgegEWiM6BCHKl4IIO\nPghhhBJOSGGFFl6IYYYabshhhx5+CGKIIo5IYokmmsgeiCl+uKKHLXb4YogxbjijhjVmeCOG\nOS7oGn4nsqTajxiJJqQpshU5EZFILslkk04+CWWUUk5JZZVWXollllpuyWWXXn4JZphijklm\nmU3uaCGaFapJIZsTusmff17K2SWdXNq5JZ5fBmUln1X6SSWgUwpqZqGGHoqoCAUAADs=",
+        "text": "Bill Gosper's Glider Gun in action—a variation of Conway's Game of Life. This image was made by using Life32 v2.15 beta, by Johan G. Bontes. - [https://commons.wikimedia.org/wiki/File:Gospers_glider_gun.gif wikimedia]",
+        "caption": "Uploaded image"
+      },
+      "after": "267d572708db8904",
+      "id": "10704a2c-0d92-4d36-a8e4-7ab5b436f2ba",
+      "date": 1468758530667
+    }
+  ]
+}

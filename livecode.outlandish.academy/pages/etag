@@ -1,0 +1,694 @@
+{
+  "title": "eTag",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "22b096ba3cc5c733",
+      "text": "The ETag, or entity tag, is one of several mechanisms that HTTP provides for web cache validation, and which allows a client to make conditional requests - [https://en.wikipedia.org/wiki/HTTP_ETag wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bea71dbbaebb4068",
+      "text": "This allows caches to be more efficient, and saves bandwidth, as a web server does not need to send a full response if the content has not changed."
+    },
+    {
+      "type": "paragraph",
+      "id": "c0e01107a1aa165a",
+      "text": "The method by which ETags are generated has never been specified in the HTTP specification. Common methods of ETag generation include using a collision-resistant hash function of the resource's content, a hash of the last modification timestamp, or even just a revision number."
+    },
+    {
+      "type": "html",
+      "id": "4c7d87a8f0aca134",
+      "text": "<H3>Strong and weak validation"
+    },
+    {
+      "type": "paragraph",
+      "id": "a277093f6edf9a0f",
+      "text": "The ETag mechanism supports both strong validation and weak validation. They are distinguished by the presence of an initial \"W/\" in the ETag identifier, as:"
+    },
+    {
+      "type": "code",
+      "id": "d3d00d5c6e5ea9a0",
+      "text": "\"123456789\"    – A strong ETag validator\nW/\"123456789\"  – A weak ETag validator"
+    },
+    {
+      "type": "html",
+      "id": "f983c820aa568ecd",
+      "text": "<H4>Strong ETags"
+    },
+    {
+      "type": "paragraph",
+      "id": "36d447cd38a84025",
+      "text": "A strongly validating ETag match indicates that the content of the two resources is byte-for-byte identical and that all other entity fields (such as Content-Language) are also unchanged. "
+    },
+    {
+      "type": "paragraph",
+      "id": "51a0093456374caa",
+      "text": "Strong ETags permit the caching and reassembly of partial responses, as with byte-range requests."
+    },
+    {
+      "type": "html",
+      "id": "e1eb914c8c62402f",
+      "text": "<H4>Weak ETags"
+    },
+    {
+      "type": "paragraph",
+      "id": "8a38d344dbaa2d8b",
+      "text": "A weakly validating ETag match only indicates that the two resources are semantically equivalent, meaning that for practical purposes they are interchangeable and that cached copies can be used. However the resources are not necessarily byte-for-byte identical, and thus weak ETags are not suitable for byte-range requests. Weak ETags may be useful for cases in which strong ETags are impractical for a web server to generate, such as with dynamically-generated content."
+    },
+    {
+      "type": "html",
+      "id": "d526d7b3f0e5f573",
+      "text": "<H3>Typical usage"
+    },
+    {
+      "type": "paragraph",
+      "id": "4d34c916d46c2a69",
+      "text": "In typical usage, when a URL is retrieved the web server will return the resource along with its corresponding ETag value, which is placed in an HTTP \"ETag\" field:"
+    },
+    {
+      "type": "code",
+      "id": "36db14e451426724",
+      "text": "ETag: \"686897696a7c876b7e\""
+    },
+    {
+      "type": "paragraph",
+      "id": "324542b7957bd369",
+      "text": "The client may then decide to cache the resource, along with its ETag. Later, if the client wants to retrieve the same URL again, it will send its previously saved copy of the ETag along with the request in a \"If-None-Match\" field."
+    },
+    {
+      "type": "code",
+      "id": "3d2684edcd460c61",
+      "text": "If-None-Match: \"686897696a7c876b7e\""
+    },
+    {
+      "type": "paragraph",
+      "id": "f5151bb0e39c786c",
+      "text": "On this subsequent request, the server may now compare the client's ETag with the ETag for the current version of the resource. "
+    },
+    {
+      "type": "paragraph",
+      "id": "e73ac9f9ec537629",
+      "text": "If the ETag values match, meaning that the resource has not changed, then the server may send back a very short response with a [[HTTP 304]] Not Modified status. The 304 status tells the client that its cached version is still good and that it should use that."
+    },
+    {
+      "type": "paragraph",
+      "id": "bb832793ebb7f67c",
+      "text": "However, if the ETag values do not match, meaning the resource has likely changed, then a full response including the resource's content is returned, just as if ETags were not being used. In this case the client may decide to replace its previously cached version with the newly returned resource and the new ETag."
+    },
+    {
+      "type": "html",
+      "id": "8370335a03d4f78b",
+      "text": "<H3>Unauthorised Tracking"
+    },
+    {
+      "type": "paragraph",
+      "id": "69cf42e0a617ae53",
+      "text": "ETags can be used to track unique users,[2] as HTTP cookies are increasingly being deleted by privacy-aware users. In July 2011, Ashkan Soltani and a team of researchers at UC Berkeley reported that a number of websites, including Hulu.com, were using ETags for tracking purposes.[3] Hulu and KISSmetrics have both ceased \"respawning\" as of 29 July 2011,[4] as KISSmetrics and over 20 of its clients are facing a class-action lawsuit over the use of \"undeletable\" tracking cookies partially involving the use of ETags.\n\nBecause ETags are cached by the browser, and returned with subsequent requests for the same resource, a tracking server can simply repeat any ETag received from the browser to ensure an assigned ETag persists indefinitely (in a similar way to persistent cookies). Additional caching headers can also enhance the preservation of ETag data.\n\nETags may be flushable by clearing the browser cache (implementations vary)."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "eTag",
+        "story": []
+      },
+      "date": 1437500421692
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "22b096ba3cc5c733"
+      },
+      "id": "22b096ba3cc5c733",
+      "type": "add",
+      "date": 1437500423934
+    },
+    {
+      "type": "edit",
+      "id": "22b096ba3cc5c733",
+      "item": {
+        "type": "paragraph",
+        "id": "22b096ba3cc5c733",
+        "text": "The ETag or entity tag is part of HTTP, the protocol for the World Wide Web. It is one of several mechanisms that HTTP provides for web cache validation, and which allows a client to make conditional requests. This allows caches to be more efficient, and saves bandwidth, as a web server does not need to send a full response if the content has not changed - [fdsa wikipedia]"
+      },
+      "date": 1437500450123
+    },
+    {
+      "type": "edit",
+      "id": "22b096ba3cc5c733",
+      "item": {
+        "type": "paragraph",
+        "id": "22b096ba3cc5c733",
+        "text": "The ETag or entity tag is part of HTTP, the protocol for the World Wide Web - [https://en.wikipedia.org/wiki/HTTP_ETag wikipedia]"
+      },
+      "date": 1437500470632
+    },
+    {
+      "type": "add",
+      "id": "bea71dbbaebb4068",
+      "item": {
+        "type": "paragraph",
+        "id": "bea71dbbaebb4068",
+        "text": "It is one of several mechanisms that HTTP provides for web cache validation, and which allows a client to make conditional requests. This allows caches to be more efficient, and saves bandwidth, as a web server does not need to send a full response if the content has not changed."
+      },
+      "after": "22b096ba3cc5c733",
+      "date": 1437500471386
+    },
+    {
+      "type": "edit",
+      "id": "bea71dbbaebb4068",
+      "item": {
+        "type": "paragraph",
+        "id": "bea71dbbaebb4068",
+        "text": "This allows caches to be more efficient, and saves bandwidth, as a web server does not need to send a full response if the content has not changed."
+      },
+      "date": 1437500500342
+    },
+    {
+      "type": "edit",
+      "id": "22b096ba3cc5c733",
+      "item": {
+        "type": "paragraph",
+        "id": "22b096ba3cc5c733",
+        "text": "The ETag, or entity tag, is one of several mechanisms that HTTP provides for web cache validation, and which allows a client to make conditional requests - [https://en.wikipedia.org/wiki/HTTP_ETag wikipedia]"
+      },
+      "date": 1437500523461
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c0e01107a1aa165a"
+      },
+      "id": "c0e01107a1aa165a",
+      "type": "add",
+      "after": "bea71dbbaebb4068",
+      "date": 1437500629778
+    },
+    {
+      "type": "edit",
+      "id": "c0e01107a1aa165a",
+      "item": {
+        "type": "paragraph",
+        "id": "c0e01107a1aa165a",
+        "text": "The method by which ETags are generated has never been specified in the HTTP specification. Common methods of ETag generation include using a collision-resistant hash function of the resource's content, a hash of the last modification timestamp, or even just a revision number."
+      },
+      "date": 1437500669492
+    },
+    {
+      "type": "add",
+      "id": "4c7d87a8f0aca134",
+      "item": {
+        "type": "paragraph",
+        "id": "4c7d87a8f0aca134",
+        "text": "<H3>Strong and weak validation"
+      },
+      "after": "c0e01107a1aa165a",
+      "date": 1437500692816
+    },
+    {
+      "type": "add",
+      "id": "a277093f6edf9a0f",
+      "item": {
+        "type": "paragraph",
+        "id": "a277093f6edf9a0f",
+        "text": "The ETag mechanism supports both strong validation and weak validation. They are distinguished by the presence of an initial \"W/\" in the ETag identifier, as:"
+      },
+      "after": "4c7d87a8f0aca134",
+      "date": 1437500705160
+    },
+    {
+      "type": "add",
+      "id": "14905df222dde4df",
+      "item": {
+        "type": "paragraph",
+        "id": "14905df222dde4df",
+        "text": "\"123456789\"    – A strong ETag validator\nW/\"123456789\"  – A weak ETag validator"
+      },
+      "after": "a277093f6edf9a0f",
+      "date": 1437500712279
+    },
+    {
+      "type": "add",
+      "id": "f983c820aa568ecd",
+      "item": {
+        "type": "paragraph",
+        "id": "f983c820aa568ecd",
+        "text": "A strongly validating ETag match indicates that the content of the two resources is byte-for-byte identical and that all other entity fields (such as Content-Language) are also unchanged. Strong ETags permit the caching and reassembly of partial responses, as with byte-range requests."
+      },
+      "after": "14905df222dde4df",
+      "date": 1437500717728
+    },
+    {
+      "type": "add",
+      "id": "8a38d344dbaa2d8b",
+      "item": {
+        "type": "paragraph",
+        "id": "8a38d344dbaa2d8b",
+        "text": "A weakly validating ETag match only indicates that the two resources are semantically equivalent, meaning that for practical purposes they are interchangeable and that cached copies can be used. However the resources are not necessarily byte-for-byte identical, and thus weak ETags are not suitable for byte-range requests. Weak ETags may be useful for cases in which strong ETags are impractical for a web server to generate, such as with dynamically-generated content."
+      },
+      "after": "f983c820aa568ecd",
+      "date": 1437500726169
+    },
+    {
+      "type": "add",
+      "id": "d526d7b3f0e5f573",
+      "item": {
+        "type": "paragraph",
+        "id": "d526d7b3f0e5f573",
+        "text": "<H3>Typical usage"
+      },
+      "after": "8a38d344dbaa2d8b",
+      "date": 1437500733018
+    },
+    {
+      "type": "add",
+      "id": "4d34c916d46c2a69",
+      "item": {
+        "type": "paragraph",
+        "id": "4d34c916d46c2a69",
+        "text": "In typical usage, when a URL is retrieved the web server will return the resource along with its corresponding ETag value, which is placed in an HTTP \"ETag\" field:"
+      },
+      "after": "d526d7b3f0e5f573",
+      "date": 1437500740753
+    },
+    {
+      "type": "add",
+      "id": "87b20ad06138d6de",
+      "item": {
+        "type": "paragraph",
+        "id": "87b20ad06138d6de",
+        "text": "ETag: \"686897696a7c876b7e\""
+      },
+      "after": "4d34c916d46c2a69",
+      "date": 1437500745064
+    },
+    {
+      "type": "add",
+      "id": "324542b7957bd369",
+      "item": {
+        "type": "paragraph",
+        "id": "324542b7957bd369",
+        "text": "The client may then decide to cache the resource, along with its ETag. Later, if the client wants to retrieve the same URL again, it will send its previously saved copy of the ETag along with the request in a \"If-None-Match\" field."
+      },
+      "after": "87b20ad06138d6de",
+      "date": 1437500750113
+    },
+    {
+      "type": "add",
+      "id": "6fde80c524fc9acd",
+      "item": {
+        "type": "paragraph",
+        "id": "6fde80c524fc9acd",
+        "text": "If-None-Match: \"686897696a7c876b7e\""
+      },
+      "after": "324542b7957bd369",
+      "date": 1437500754677
+    },
+    {
+      "type": "add",
+      "id": "f5151bb0e39c786c",
+      "item": {
+        "type": "paragraph",
+        "id": "f5151bb0e39c786c",
+        "text": "On this subsequent request, the server may now compare the client's ETag with the ETag for the current version of the resource. If the ETag values match, meaning that the resource has not changed, then the server may send back a very short response with a HTTP 304 Not Modified status. The 304 status tells the client that its cached version is still good and that it should use that."
+      },
+      "after": "6fde80c524fc9acd",
+      "date": 1437500759104
+    },
+    {
+      "type": "add",
+      "id": "bb832793ebb7f67c",
+      "item": {
+        "type": "paragraph",
+        "id": "bb832793ebb7f67c",
+        "text": "However, if the ETag values do not match, meaning the resource has likely changed, then a full response including the resource's content is returned, just as if ETags were not being used. In this case the client may decide to replace its previously cached version with the newly returned resource and the new ETag."
+      },
+      "after": "f5151bb0e39c786c",
+      "date": 1437500765905
+    },
+    {
+      "type": "add",
+      "id": "18ef6f067e67b373",
+      "item": {
+        "type": "paragraph",
+        "id": "18ef6f067e67b373",
+        "text": "ETag values can be used in web page monitoring systems. Efficient web page monitoring is hindered by the fact that most websites do not set the ETag headers for web pages. When a web monitor has no hints whether web content has been changed all content has to be retrieved, and analyzed, using computing resources for both the publisher and subscriber.\nTracking using ETags"
+      },
+      "after": "bb832793ebb7f67c",
+      "date": 1437500770122
+    },
+    {
+      "type": "add",
+      "id": "8370335a03d4f78b",
+      "item": {
+        "type": "paragraph",
+        "id": "8370335a03d4f78b",
+        "text": "Unauthorised Tracking"
+      },
+      "after": "18ef6f067e67b373",
+      "date": 1437500812951
+    },
+    {
+      "type": "add",
+      "id": "69cf42e0a617ae53",
+      "item": {
+        "type": "paragraph",
+        "id": "69cf42e0a617ae53",
+        "text": "ETags can be used to track unique users,[2] as HTTP cookies are increasingly being deleted by privacy-aware users. In July 2011, Ashkan Soltani and a team of researchers at UC Berkeley reported that a number of websites, including Hulu.com, were using ETags for tracking purposes.[3] Hulu and KISSmetrics have both ceased \"respawning\" as of 29 July 2011,[4] as KISSmetrics and over 20 of its clients are facing a class-action lawsuit over the use of \"undeletable\" tracking cookies partially involving the use of ETags.\n\nBecause ETags are cached by the browser, and returned with subsequent requests for the same resource, a tracking server can simply repeat any ETag received from the browser to ensure an assigned ETag persists indefinitely (in a similar way to persistent cookies). Additional caching headers can also enhance the preservation of ETag data.\n\nETags may be flushable by clearing the browser cache (implementations vary)."
+      },
+      "after": "8370335a03d4f78b",
+      "date": 1437500814669
+    },
+    {
+      "type": "edit",
+      "id": "8370335a03d4f78b",
+      "item": {
+        "type": "paragraph",
+        "id": "8370335a03d4f78b",
+        "text": "<H3>Unauthorised Tracking"
+      },
+      "date": 1437500820991
+    },
+    {
+      "type": "edit",
+      "id": "8370335a03d4f78b",
+      "item": {
+        "type": "html",
+        "id": "8370335a03d4f78b",
+        "text": "<H3>Unauthorised Tracking"
+      },
+      "date": 1437500822374
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d3d00d5c6e5ea9a0"
+      },
+      "id": "d3d00d5c6e5ea9a0",
+      "type": "add",
+      "after": "69cf42e0a617ae53",
+      "date": 1437500825477
+    },
+    {
+      "type": "move",
+      "order": [
+        "22b096ba3cc5c733",
+        "bea71dbbaebb4068",
+        "c0e01107a1aa165a",
+        "4c7d87a8f0aca134",
+        "a277093f6edf9a0f",
+        "14905df222dde4df",
+        "d3d00d5c6e5ea9a0",
+        "f983c820aa568ecd",
+        "8a38d344dbaa2d8b",
+        "d526d7b3f0e5f573",
+        "4d34c916d46c2a69",
+        "87b20ad06138d6de",
+        "324542b7957bd369",
+        "6fde80c524fc9acd",
+        "f5151bb0e39c786c",
+        "bb832793ebb7f67c",
+        "18ef6f067e67b373",
+        "8370335a03d4f78b",
+        "69cf42e0a617ae53"
+      ],
+      "id": "d3d00d5c6e5ea9a0",
+      "date": 1437500831729
+    },
+    {
+      "type": "remove",
+      "id": "14905df222dde4df",
+      "date": 1437500836380
+    },
+    {
+      "type": "edit",
+      "id": "d3d00d5c6e5ea9a0",
+      "item": {
+        "type": "code",
+        "id": "d3d00d5c6e5ea9a0",
+        "text": "\"123456789\"    – A strong ETag validator\nW/\"123456789\"  – A weak ETag validator"
+      },
+      "date": 1437500839482
+    },
+    {
+      "type": "edit",
+      "id": "4c7d87a8f0aca134",
+      "item": {
+        "type": "html",
+        "id": "4c7d87a8f0aca134",
+        "text": "<H3>Strong and weak validation"
+      },
+      "date": 1437500845555
+    },
+    {
+      "type": "edit",
+      "id": "d526d7b3f0e5f573",
+      "item": {
+        "type": "html",
+        "id": "d526d7b3f0e5f573",
+        "text": "<H3>Typical usage"
+      },
+      "date": 1437500850647
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "36db14e451426724"
+      },
+      "id": "36db14e451426724",
+      "type": "add",
+      "after": "69cf42e0a617ae53",
+      "date": 1437500853594
+    },
+    {
+      "type": "move",
+      "order": [
+        "22b096ba3cc5c733",
+        "bea71dbbaebb4068",
+        "c0e01107a1aa165a",
+        "4c7d87a8f0aca134",
+        "a277093f6edf9a0f",
+        "d3d00d5c6e5ea9a0",
+        "f983c820aa568ecd",
+        "8a38d344dbaa2d8b",
+        "d526d7b3f0e5f573",
+        "4d34c916d46c2a69",
+        "87b20ad06138d6de",
+        "36db14e451426724",
+        "324542b7957bd369",
+        "6fde80c524fc9acd",
+        "f5151bb0e39c786c",
+        "bb832793ebb7f67c",
+        "18ef6f067e67b373",
+        "8370335a03d4f78b",
+        "69cf42e0a617ae53"
+      ],
+      "id": "36db14e451426724",
+      "date": 1437500858398
+    },
+    {
+      "type": "remove",
+      "id": "87b20ad06138d6de",
+      "date": 1437500864075
+    },
+    {
+      "type": "edit",
+      "id": "36db14e451426724",
+      "item": {
+        "type": "code",
+        "id": "36db14e451426724",
+        "text": "ETag: \"686897696a7c876b7e\""
+      },
+      "date": 1437500865518
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3d2684edcd460c61"
+      },
+      "id": "3d2684edcd460c61",
+      "type": "add",
+      "after": "69cf42e0a617ae53",
+      "date": 1437500869789
+    },
+    {
+      "type": "move",
+      "order": [
+        "22b096ba3cc5c733",
+        "bea71dbbaebb4068",
+        "c0e01107a1aa165a",
+        "4c7d87a8f0aca134",
+        "a277093f6edf9a0f",
+        "d3d00d5c6e5ea9a0",
+        "f983c820aa568ecd",
+        "8a38d344dbaa2d8b",
+        "d526d7b3f0e5f573",
+        "4d34c916d46c2a69",
+        "36db14e451426724",
+        "324542b7957bd369",
+        "6fde80c524fc9acd",
+        "3d2684edcd460c61",
+        "f5151bb0e39c786c",
+        "bb832793ebb7f67c",
+        "18ef6f067e67b373",
+        "8370335a03d4f78b",
+        "69cf42e0a617ae53"
+      ],
+      "id": "3d2684edcd460c61",
+      "date": 1437500875327
+    },
+    {
+      "type": "remove",
+      "id": "6fde80c524fc9acd",
+      "date": 1437500879452
+    },
+    {
+      "type": "edit",
+      "id": "3d2684edcd460c61",
+      "item": {
+        "type": "code",
+        "id": "3d2684edcd460c61",
+        "text": "If-None-Match: \"686897696a7c876b7e\""
+      },
+      "date": 1437500882654
+    },
+    {
+      "type": "edit",
+      "id": "f5151bb0e39c786c",
+      "item": {
+        "type": "paragraph",
+        "id": "f5151bb0e39c786c",
+        "text": "On this subsequent request, the server may now compare the client's ETag with the ETag for the current version of the resource. "
+      },
+      "date": 1437500919625
+    },
+    {
+      "type": "add",
+      "id": "e73ac9f9ec537629",
+      "item": {
+        "type": "paragraph",
+        "id": "e73ac9f9ec537629",
+        "text": "If the ETag values match, meaning that the resource has not changed, then the server may send back a very short response with a [[HTTP 304]] Not Modified status. The 304 status tells the client that its cached version is still good and that it should use that."
+      },
+      "after": "f5151bb0e39c786c",
+      "date": 1437500968835
+    },
+    {
+      "type": "remove",
+      "id": "18ef6f067e67b373",
+      "date": 1437501035490
+    },
+    {
+      "type": "edit",
+      "id": "f983c820aa568ecd",
+      "item": {
+        "type": "paragraph",
+        "id": "f983c820aa568ecd",
+        "text": "A strongly validating ETag match indicates that the content of the two resources is byte-for-byte identical and that all other entity fields (such as Content-Language) are also unchanged. "
+      },
+      "date": 1437501113999
+    },
+    {
+      "type": "add",
+      "id": "51a0093456374caa",
+      "item": {
+        "type": "paragraph",
+        "id": "51a0093456374caa",
+        "text": "Strong ETags permit the caching and reassembly of partial responses, as with byte-range requests."
+      },
+      "after": "f983c820aa568ecd",
+      "date": 1437501118412
+    },
+    {
+      "type": "edit",
+      "id": "f983c820aa568ecd",
+      "item": {
+        "type": "paragraph",
+        "id": "f983c820aa568ecd",
+        "text": "<H3>Strong ETags"
+      },
+      "date": 1437501136878
+    },
+    {
+      "type": "edit",
+      "id": "f983c820aa568ecd",
+      "item": {
+        "type": "html",
+        "id": "f983c820aa568ecd",
+        "text": "<H3>Strong ETags"
+      },
+      "date": 1437501138861
+    },
+    {
+      "type": "add",
+      "id": "36d447cd38a84025",
+      "item": {
+        "type": "paragraph",
+        "id": "36d447cd38a84025",
+        "text": "A strongly validating ETag match indicates that the content of the two resources is byte-for-byte identical and that all other entity fields (such as Content-Language) are also unchanged. "
+      },
+      "after": "f983c820aa568ecd",
+      "date": 1437501140907
+    },
+    {
+      "type": "edit",
+      "id": "f983c820aa568ecd",
+      "item": {
+        "type": "html",
+        "id": "f983c820aa568ecd",
+        "text": "<H4>Strong ETags"
+      },
+      "date": 1437501150958
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e1eb914c8c62402f"
+      },
+      "id": "e1eb914c8c62402f",
+      "type": "add",
+      "after": "69cf42e0a617ae53",
+      "date": 1437501159082
+    },
+    {
+      "type": "edit",
+      "id": "e1eb914c8c62402f",
+      "item": {
+        "type": "html",
+        "id": "e1eb914c8c62402f",
+        "text": "<H4>Weak ETags"
+      },
+      "date": 1437501164830
+    },
+    {
+      "type": "move",
+      "order": [
+        "22b096ba3cc5c733",
+        "bea71dbbaebb4068",
+        "c0e01107a1aa165a",
+        "4c7d87a8f0aca134",
+        "a277093f6edf9a0f",
+        "d3d00d5c6e5ea9a0",
+        "f983c820aa568ecd",
+        "36d447cd38a84025",
+        "51a0093456374caa",
+        "e1eb914c8c62402f",
+        "8a38d344dbaa2d8b",
+        "d526d7b3f0e5f573",
+        "4d34c916d46c2a69",
+        "36db14e451426724",
+        "324542b7957bd369",
+        "3d2684edcd460c61",
+        "f5151bb0e39c786c",
+        "e73ac9f9ec537629",
+        "bb832793ebb7f67c",
+        "8370335a03d4f78b",
+        "69cf42e0a617ae53"
+      ],
+      "id": "e1eb914c8c62402f",
+      "date": 1437501180099
+    }
+  ]
+}

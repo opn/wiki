@@ -1,0 +1,1674 @@
+{
+  "title": "Transport Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e374896cffbe1482",
+      "text": "This plugin provides interactive access to remote services that can read content you drop and create from it useful pages that appear ready to be saved or used at one's discretion. [https://github.com/WardCunningham/wiki-plugin-transport github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "45c24bb00f1e8fe8",
+      "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to [[wiki page json]] converter. Its markup consists of the address of the remote service."
+    },
+    {
+      "type": "transport",
+      "id": "41539361b8005c94",
+      "text": "POST http://fed.wiki.org:4010/image"
+    },
+    {
+      "type": "paragraph",
+      "id": "06df698110ae13ec",
+      "text": "See [[About Transport Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "39649173392aee3d",
+      "text": "The Transport plugin posts a [[json]] document to the remote service with each drop. The document contains information retrieved from the drop event's dataTransfer object.\n\n"
+    },
+    {
+      "type": "code",
+      "id": "9883408ac553644b",
+      "text": "{\n    \"text\": getData(\"text\"),\n    \"html\": getData(\"text/html\")\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "547a1d7522d37aad",
+      "text": "The remote service is expected to reply with valid federated wiki page json. Conventionally this will be decorated with provenance details when they can be inferred. The returned page will be added to the lineup but not saved until forked or plundered for content."
+    },
+    {
+      "type": "markdown",
+      "id": "e2fc9140959ecde0",
+      "text": "# Installation"
+    },
+    {
+      "type": "paragraph",
+      "id": "c4237d20b88ed354",
+      "text": "Currently the plugin is not part of the default installation and needs to be installed using the method described in the [[Maintaining a Custom Wiki]] page. in my case I have forked the wiki Github project to our ViralAcademy account - [https://github.com/ViralAcademy/wiki github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "098d14595b833f1a",
+      "text": "If you fork the wiki [https://github.com/ViralAcademy/wiki/commit/cfad5a23e578453d9a93216f7c9f93cb2ec0c639 github] project and modify [[package.json]] to incude the following line:"
+    },
+    {
+      "type": "code",
+      "id": "958552f22e139960",
+      "text": "\"wiki-plugin-transport\": \"wardcunningham/wiki-plugin-transport\","
+    },
+    {
+      "type": "paragraph",
+      "id": "2de6aed8801605ac",
+      "text": "then you can simply call:"
+    },
+    {
+      "type": "code",
+      "id": "a9d356dbdbd66581",
+      "text": "npm install -g git://github.com/ViralAcademy/wiki.git"
+    },
+    {
+      "type": "paragraph",
+      "id": "0c9ed23efb1fd03f",
+      "text": "and [[npm]] will install your customised version of Fedwiki on your current system. The -g flag makes the wiki available anywhere from the shell prompt."
+    },
+    {
+      "type": "reference",
+      "id": "d51738c4ce5415fe",
+      "site": "plugin.fedwiki.org",
+      "slug": "-installation-daq",
+      "title": " Installation DAQ",
+      "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+    },
+    {
+      "type": "markdown",
+      "id": "6cdbb79c139af051",
+      "text": "# History"
+    },
+    {
+      "type": "paragraph",
+      "id": "9567a3e97f7030e5",
+      "text": "The Transport Plugin is the name given to the plugin idea initially described here:"
+    },
+    {
+      "type": "reference",
+      "id": "4690e7d1727dd6f2",
+      "site": "future.fedwiki.org",
+      "slug": "create-page-plugin",
+      "title": "Create Page Plugin",
+      "text": "A generic [[REST Plugin]] that enables simple and flexible integration with [[Federation REST Services]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "20e2a2ce00287698",
+      "text": "It currently enables configuration of the web service (base url only for now), and the ability to drag-drop a url onto the plugin which gets passed onto the web service in the form of a \"drop\" parameter."
+    },
+    {
+      "type": "reference",
+      "id": "6a3916f99f28037a",
+      "site": "plugin.fedwiki.org",
+      "slug": "transporter-roster",
+      "title": "Transporter Roster",
+      "text": "Transporters are public services that transform available content into federated wiki pages. "
+    },
+    {
+      "type": "paragraph",
+      "id": "1884835bcb1dc179",
+      "text": "We experimented with generating pages from remote servers that could produce correct json but were not otherwise wiki servers."
+    },
+    {
+      "type": "paragraph",
+      "id": "113a8706f439b5c9",
+      "text": "We explored several metaphors from which to draw names for this and related operations which we felt could become an important part of federation activities. Immigration related terminology seemed fruitful and topical. Using php to enter wiki reminded us of boats crossing the Mediterranean. "
+    },
+    {
+      "type": "paragraph",
+      "id": "19b90da6223fc4cc",
+      "text": "The metaphor morphed into StarTrek terms when we spoke of entering the federation. It was completed with a function to 'beam up' a page leaving it in a transparent form (ghost page) in the lineup."
+    },
+    {
+      "type": "code",
+      "id": "215faf11730a3393",
+      "text": "beam = (item) ->\n  $.getJSON item.text, (page) ->\n    wiki.showResult wiki.newPage(page)"
+    },
+    {
+      "type": "paragraph",
+      "id": "a7a736fce4334e7f",
+      "text": "We explored some problems that arise when the story items don't have ids. We should detect and correct this situation. [https://github.com/WardCunningham/wiki-plugin-transport/issues/1 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4ccd7efcbc006460",
+      "text": "A few months pass."
+    },
+    {
+      "type": "paragraph",
+      "id": "90bb152b3d953d93",
+      "text": "I have renewed interest in the project having offered it as a solution to two needs identified by Mike Caulfield."
+    },
+    {
+      "type": "paragraph",
+      "id": "eea67517042acd66",
+      "text": "￭ Methodical tracking of ip for open ed resources."
+    },
+    {
+      "type": "paragraph",
+      "id": "26f80bb0b9e115b6",
+      "text": "￭ Transcluding large or detailed images."
+    },
+    {
+      "type": "paragraph",
+      "id": "af0ed6bb27e8a533",
+      "text": "Paul and I accept and publish the core javascript changes that has plugins adding new content to the lineup."
+    },
+    {
+      "type": "paragraph",
+      "id": "02123d64a0e2f72c",
+      "text": "I merge Francesco's Transport plugin drop logic and beef it up for various image drops."
+    },
+    {
+      "type": "paragraph",
+      "id": "bfd66f5e98d0c398",
+      "text": "I write an Image Transporter in ruby/sinatra and try all kinds of drops from all kinds of photo sites."
+    },
+    {
+      "type": "paragraph",
+      "id": "edec43f08fe578c6",
+      "text": "I use local wiki to author the Image Transporter drag and drop interface pages in the transporter project itself."
+    },
+    {
+      "type": "code",
+      "id": "f2d4670b22789df1",
+      "text": "wiki -d . -p 3030"
+    },
+    {
+      "type": "paragraph",
+      "id": "8b289994c2aa4216",
+      "text": "I build the catalog that will organize the proliferation of transporters. See [[Transporter Roster]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "b33a32d174b3245d",
+      "text": "After a few upgrades I can run the image workflow in public with elements served from asia and my basement."
+    },
+    {
+      "type": "pagefold",
+      "id": "2371ad572b59402d",
+      "text": "to do"
+    },
+    {
+      "type": "paragraph",
+      "id": "1445609f2369109f",
+      "text": "Have a go at porting paragraphs."
+    },
+    {
+      "type": "paragraph",
+      "id": "e73e95d59321ca89",
+      "text": "Package page and federate libraries."
+    },
+    {
+      "type": "paragraph",
+      "id": "d837aa92ded73596",
+      "text": "Write a guide to writing Transporters."
+    },
+    {
+      "type": "paragraph",
+      "id": "e2584ee6b9cf3c9a",
+      "text": "Create npm @ward/wiki for experimenters."
+    },
+    {
+      "type": "markdown",
+      "id": "f04ef733fd43c514",
+      "text": "# Related"
+    },
+    {
+      "type": "reference",
+      "id": "cb2f3a9a8f3c0ea8",
+      "site": "plugin.fedwiki.org",
+      "slug": "tangled-plugin",
+      "title": "Tangled Plugin",
+      "text": "The tangled-plugin is a plugin that help weave the [[tangled web]]. It is an authoring tool for [[Federation REST Services]]."
+    },
+    {
+      "type": "reference",
+      "id": "f2896a003e332914",
+      "site": "future.fedwiki.org",
+      "slug": "data-and-javascript",
+      "title": "Data and Javascript",
+      "text": "Here we gather some links and ideas related to using data in the javascript centred world of the Federation:"
+    },
+    {
+      "type": "reference",
+      "id": "a505049f3a20aba7",
+      "site": "future.fedwiki.org",
+      "slug": "factory-wo-drag-and-drop",
+      "title": "Factory w/o Drag and Drop",
+      "text": "The drag and drop features of federated wiki fully exploit newer capabilities of the browser and result in excellent flow for expert users on laptops and desktops. In thinking about the [[Basic Data Editor]] one helpful idea is to consider a drag/dropless factory, and what advantages that might provide certain users.  "
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Transport Plugin",
+        "story": []
+      },
+      "date": 1438520200330
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1884835bcb1dc179"
+      },
+      "id": "1884835bcb1dc179",
+      "type": "add",
+      "date": 1438520235466
+    },
+    {
+      "type": "edit",
+      "id": "1884835bcb1dc179",
+      "item": {
+        "type": "paragraph",
+        "id": "1884835bcb1dc179",
+        "text": "We experimented with generating pages from remote servers that could produce correct json but were not otherwise wiki servers."
+      },
+      "date": 1438520396381
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "215faf11730a3393"
+      },
+      "id": "215faf11730a3393",
+      "type": "add",
+      "after": "1884835bcb1dc179",
+      "date": 1438520398645
+    },
+    {
+      "type": "edit",
+      "id": "215faf11730a3393",
+      "item": {
+        "type": "code",
+        "id": "215faf11730a3393",
+        "text": "beam = (url) ->\n  $.getJSON url, (page) ->\n    resultPage = wiki.newPage(page)\n    wiki.showResult resultPage\n"
+      },
+      "date": 1438520408139
+    },
+    {
+      "type": "add",
+      "id": "113a8706f439b5c9",
+      "item": {
+        "type": "paragraph",
+        "id": "113a8706f439b5c9",
+        "text": "We explored several metaphors from which to draw names for this and related operations which we felt could become an important part of federation activities. Immigration related terminology seemed fruitful and topical. This somehow morphed into StarTrek because we already use the term federation which they made popular. We wrote a function that would 'beam up' a page leaving it in a transparent form in the lineup."
+      },
+      "after": "1884835bcb1dc179",
+      "date": 1438520900850
+    },
+    {
+      "type": "edit",
+      "id": "215faf11730a3393",
+      "item": {
+        "type": "code",
+        "id": "215faf11730a3393",
+        "text": "beam = (item) ->\n  $.getJSON item.text, (page) ->\n    wiki.showResult wiki.newPage(page)"
+      },
+      "date": 1438520985742
+    },
+    {
+      "type": "edit",
+      "id": "113a8706f439b5c9",
+      "item": {
+        "type": "paragraph",
+        "id": "113a8706f439b5c9",
+        "text": "We explored several metaphors from which to draw names for this and related operations which we felt could become an important part of federation activities. Immigration related terminology seemed fruitful and topical."
+      },
+      "date": 1438520997333
+    },
+    {
+      "type": "add",
+      "id": "19b90da6223fc4cc",
+      "item": {
+        "type": "paragraph",
+        "id": "19b90da6223fc4cc",
+        "text": "The metaphor somehow morphed into StarTrek terms. We already speak of the federation. The metaphor was completed with a function to 'beam up' a page leaving it in a transparent form (ghost page) in the lineup."
+      },
+      "after": "113a8706f439b5c9",
+      "date": 1438521115077
+    },
+    {
+      "type": "edit",
+      "id": "19b90da6223fc4cc",
+      "item": {
+        "type": "paragraph",
+        "id": "19b90da6223fc4cc",
+        "text": "The metaphor morphed into StarTrek terms when we spoke of entering the federation. It was completed with a function to 'beam up' a page leaving it in a transparent form (ghost page) in the lineup."
+      },
+      "date": 1438521525592
+    },
+    {
+      "type": "edit",
+      "id": "113a8706f439b5c9",
+      "item": {
+        "type": "paragraph",
+        "id": "113a8706f439b5c9",
+        "text": "We explored several metaphors from which to draw names for this and related operations which we felt could become an important part of federation activities. Immigration related terminology seemed fruitful and topical. Using php to enter wiki reminded us of boats crossing the Mediterranean. "
+      },
+      "date": 1438521654518
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a7a736fce4334e7f"
+      },
+      "id": "a7a736fce4334e7f",
+      "type": "add",
+      "after": "215faf11730a3393",
+      "date": 1438545591203
+    },
+    {
+      "type": "edit",
+      "id": "a7a736fce4334e7f",
+      "item": {
+        "type": "paragraph",
+        "id": "a7a736fce4334e7f",
+        "text": "We explored some problems that arise when the story items don't have ids. We should detect and correct this situation. [https://github.com/WardCunningham/wiki-plugin-transport/issues/1 github]"
+      },
+      "date": 1438545676209
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "The Transport Plugin is the name given to the plugin idea initially described here:"
+      },
+      "id": "45c24bb00f1e8fe8",
+      "date": 1438575748187
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "20e2a2ce00287698",
+        "text": "It currently enables configuration of teh web service (base url only for now), and the ability to drag-drop a url onto the plugin which gets passe onto the web service in the from of a \"drop\" parameter."
+      },
+      "after": "45c24bb00f1e8fe8",
+      "id": "20e2a2ce00287698",
+      "date": 1438575752634
+    },
+    {
+      "type": "edit",
+      "id": "20e2a2ce00287698",
+      "item": {
+        "type": "paragraph",
+        "id": "20e2a2ce00287698",
+        "text": "It currently enables configuration of the web service (base url only for now), and the ability to drag-drop a url onto the plugin which gets passed onto the web service in the form of a \"drop\" parameter."
+      },
+      "date": 1438575789359
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1438597966412
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4690e7d1727dd6f2"
+      },
+      "id": "4690e7d1727dd6f2",
+      "type": "add",
+      "after": "a7a736fce4334e7f",
+      "date": 1438597990954
+    },
+    {
+      "type": "edit",
+      "id": "4690e7d1727dd6f2",
+      "item": {
+        "type": "reference",
+        "id": "4690e7d1727dd6f2",
+        "site": "future.fedwiki.org",
+        "slug": "create-page-plugin",
+        "title": "Create Page Plugin",
+        "text": "The [[Create Page Plugin]] is a generic [[REST Plugin]] that enables simple and flexible integration with [[Federation REST Services]] provided by developers for the wider community of users."
+      },
+      "date": 1438598022792
+    },
+    {
+      "type": "move",
+      "order": [
+        "45c24bb00f1e8fe8",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f"
+      ],
+      "id": "4690e7d1727dd6f2",
+      "date": 1438598025771
+    },
+    {
+      "type": "edit",
+      "id": "4690e7d1727dd6f2",
+      "item": {
+        "type": "reference",
+        "id": "4690e7d1727dd6f2",
+        "site": "future.fedwiki.org",
+        "slug": "create-page-plugin",
+        "title": "Create Page Plugin",
+        "text": "A generic [[REST Plugin]] that enables simple and flexible integration with [[Federation REST Services]]."
+      },
+      "date": 1438598048907
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f04ef733fd43c514"
+      },
+      "id": "f04ef733fd43c514",
+      "type": "add",
+      "after": "a7a736fce4334e7f",
+      "date": 1438598056495
+    },
+    {
+      "type": "edit",
+      "id": "f04ef733fd43c514",
+      "item": {
+        "type": "paragraph",
+        "id": "f04ef733fd43c514",
+        "text": "# Related"
+      },
+      "date": 1438598063757
+    },
+    {
+      "type": "edit",
+      "id": "f04ef733fd43c514",
+      "item": {
+        "type": "markdown",
+        "id": "f04ef733fd43c514",
+        "text": "# Related"
+      },
+      "date": 1438598064997
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f2896a003e332914"
+      },
+      "id": "f2896a003e332914",
+      "type": "add",
+      "after": "f04ef733fd43c514",
+      "date": 1438598066611
+    },
+    {
+      "type": "edit",
+      "id": "f2896a003e332914",
+      "item": {
+        "type": "reference",
+        "id": "f2896a003e332914",
+        "site": "future.fedwiki.org",
+        "slug": "data-and-javascript",
+        "title": "Data and Javascript",
+        "text": "Here we gather some links and ideas related to using data in the javascript centred world of the Federation:"
+      },
+      "date": 1438598076774
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a505049f3a20aba7"
+      },
+      "id": "a505049f3a20aba7",
+      "type": "add",
+      "after": "f2896a003e332914",
+      "date": 1438598101893
+    },
+    {
+      "type": "edit",
+      "id": "a505049f3a20aba7",
+      "item": {
+        "type": "reference",
+        "id": "a505049f3a20aba7",
+        "site": "future.fedwiki.org",
+        "slug": "factory-wo-drag-and-drop",
+        "title": "Factory w/o Drag and Drop",
+        "text": "The drag and drop features of federated wiki fully exploit newer capabilities of the browser and result in excellent flow for expert users on laptops and desktops. In thinking about the [[Basic Data Editor]] one helpful idea is to consider a drag/dropless factory, and what advantages that might provide certain users.  "
+      },
+      "date": 1438598104449
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1438789679293
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4ccd7efcbc006460",
+        "text": "A few months pass."
+      },
+      "after": "a7a736fce4334e7f",
+      "id": "4ccd7efcbc006460",
+      "date": 1446737402844
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "90bb152b3d953d93",
+        "text": "I have renewed interest in the project having offered it as a solution to two needs identified by Mike Caulfield."
+      },
+      "after": "4ccd7efcbc006460",
+      "id": "90bb152b3d953d93",
+      "date": 1446737412897
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "eea67517042acd66",
+        "text": "￭ Methodical tracking of ip for open ed resources."
+      },
+      "after": "90bb152b3d953d93",
+      "id": "eea67517042acd66",
+      "date": 1446737415232
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "26f80bb0b9e115b6",
+        "text": "￭ Transcluding large or detailed images."
+      },
+      "after": "eea67517042acd66",
+      "id": "26f80bb0b9e115b6",
+      "date": 1446737417316
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "af0ed6bb27e8a533",
+        "text": "Paul and I accept and publish the core javascript changes that has plugins adding new content to the lineup."
+      },
+      "after": "26f80bb0b9e115b6",
+      "id": "af0ed6bb27e8a533",
+      "date": 1446737419746
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "02123d64a0e2f72c",
+        "text": "I merge Francesco's Transport plugin drop logic and beef it up for various image drops."
+      },
+      "after": "af0ed6bb27e8a533",
+      "id": "02123d64a0e2f72c",
+      "date": 1446737422964
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bfd66f5e98d0c398",
+        "text": "I write an Image Transporter in ruby/sinatra and try all kinds of drops from all kinds of photo sites."
+      },
+      "after": "02123d64a0e2f72c",
+      "id": "bfd66f5e98d0c398",
+      "date": 1446737427187
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "edec43f08fe578c6",
+        "text": "I use local wiki to author the Image Transporter drag and drop interface pages in the transporter project itself."
+      },
+      "after": "bfd66f5e98d0c398",
+      "id": "edec43f08fe578c6",
+      "date": 1446737430948
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "f2d4670b22789df1",
+        "text": "wiki -d . -p 3030"
+      },
+      "after": "edec43f08fe578c6",
+      "id": "f2d4670b22789df1",
+      "date": 1446737436324
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "8b289994c2aa4216",
+        "text": "I build the catalog that will organize the proliferation of transporters. See [[Transporter Roster]]"
+      },
+      "after": "f2d4670b22789df1",
+      "id": "8b289994c2aa4216",
+      "date": 1446737439864
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b33a32d174b3245d",
+        "text": "After a few upgrades I can run the image workflow in public with elements served from asia and my basement."
+      },
+      "after": "8b289994c2aa4216",
+      "id": "b33a32d174b3245d",
+      "date": 1446737443385
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "pagefold",
+        "id": "2371ad572b59402d",
+        "text": "to do"
+      },
+      "after": "b33a32d174b3245d",
+      "id": "2371ad572b59402d",
+      "date": 1446737460121
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1445609f2369109f",
+        "text": "Have a go at porting paragraphs."
+      },
+      "after": "2371ad572b59402d",
+      "id": "1445609f2369109f",
+      "date": 1446737467098
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e73e95d59321ca89",
+        "text": "Package page and federate libraries."
+      },
+      "after": "1445609f2369109f",
+      "id": "e73e95d59321ca89",
+      "date": 1446737469835
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d837aa92ded73596",
+        "text": "Write a guide to writing Transporters."
+      },
+      "after": "e73e95d59321ca89",
+      "id": "d837aa92ded73596",
+      "date": 1446737472905
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e2584ee6b9cf3c9a",
+        "text": "Create npm @ward/wiki for experimenters."
+      },
+      "after": "d837aa92ded73596",
+      "id": "e2584ee6b9cf3c9a",
+      "date": 1446737475278
+    },
+    {
+      "type": "add",
+      "id": "06df698110ae13ec",
+      "item": {
+        "type": "paragraph",
+        "id": "06df698110ae13ec",
+        "text": "See [[About Transport Plugin]]"
+      },
+      "after": "20e2a2ce00287698",
+      "date": 1446753224382
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cb2f3a9a8f3c0ea8"
+      },
+      "id": "cb2f3a9a8f3c0ea8",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448740676022
+    },
+    {
+      "type": "edit",
+      "id": "cb2f3a9a8f3c0ea8",
+      "item": {
+        "type": "reference",
+        "id": "cb2f3a9a8f3c0ea8",
+        "site": "plugin.fedwiki.org",
+        "slug": "tangled-plugin",
+        "title": "Tangled Plugin",
+        "text": "The tangled-plugin is a plugin that help weave the [[tangled web]]. It is an authoring tool for [[Federation REST Services]]."
+      },
+      "date": 1448740678543
+    },
+    {
+      "type": "move",
+      "order": [
+        "45c24bb00f1e8fe8",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "06df698110ae13ec",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "cb2f3a9a8f3c0ea8",
+      "date": 1448740682810
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6a3916f99f28037a"
+      },
+      "id": "6a3916f99f28037a",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448967340761
+    },
+    {
+      "type": "edit",
+      "id": "6a3916f99f28037a",
+      "item": {
+        "type": "reference",
+        "id": "6a3916f99f28037a",
+        "site": "plugin.fedwiki.org",
+        "slug": "transporter-roster",
+        "title": "Transporter Roster",
+        "text": "Transporters are public services that transform available content into federated wiki pages. "
+      },
+      "date": 1448967342859
+    },
+    {
+      "type": "move",
+      "order": [
+        "45c24bb00f1e8fe8",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "06df698110ae13ec",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "6a3916f99f28037a",
+      "date": 1448967348924
+    },
+    {
+      "type": "edit",
+      "id": "45c24bb00f1e8fe8",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to wiki page json converter. Its markup consists of the address of the remote service."
+      },
+      "date": 1448967634906
+    },
+    {
+      "type": "add",
+      "id": "6cdbb79c139af051",
+      "item": {
+        "type": "markdown",
+        "id": "6cdbb79c139af051",
+        "text": "# History"
+      },
+      "after": "45c24bb00f1e8fe8",
+      "date": 1448967644060
+    },
+    {
+      "type": "edit",
+      "id": "6cdbb79c139af051",
+      "item": {
+        "type": "markdown",
+        "id": "6cdbb79c139af051",
+        "text": "# History"
+      },
+      "date": 1448967645851
+    },
+    {
+      "type": "add",
+      "id": "9567a3e97f7030e5",
+      "item": {
+        "type": "paragraph",
+        "id": "9567a3e97f7030e5",
+        "text": "The Transport Plugin is the name given to the plugin idea initially described here:"
+      },
+      "after": "6cdbb79c139af051",
+      "date": 1448967647293
+    },
+    {
+      "type": "edit",
+      "id": "45c24bb00f1e8fe8",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to wiki page json converter. Its markup consists of the address of the remote service."
+      },
+      "date": 1448967651943
+    },
+    {
+      "type": "add",
+      "id": "547a1d7522d37aad",
+      "item": {
+        "type": "paragraph",
+        "id": "547a1d7522d37aad",
+        "text": "The remote service is expected to reply with valid federated wiki page json. Conventionally this will be decorated with provenance details when they can be inferred. The returned page will be added to the lineup but not saved until forked or plundered for content.\n\n"
+      },
+      "after": "45c24bb00f1e8fe8",
+      "date": 1448967654250
+    },
+    {
+      "type": "edit",
+      "id": "45c24bb00f1e8fe8",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to wiki page json converter. Its markup consists of the address of the remote service."
+      },
+      "date": 1448967656917
+    },
+    {
+      "type": "add",
+      "id": "8e9c2364fd216edb",
+      "item": {
+        "type": "paragraph",
+        "id": "8e9c2364fd216edb",
+        "text": "{\n    \"text\": getData(\"text\"),\n    \"html\": getData(\"text/html\")\n}"
+      },
+      "after": "45c24bb00f1e8fe8",
+      "date": 1448967658886
+    },
+    {
+      "type": "edit",
+      "id": "45c24bb00f1e8fe8",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to wiki page json converter. Its markup consists of the address of the remote service."
+      },
+      "date": 1448967660620
+    },
+    {
+      "type": "add",
+      "id": "39649173392aee3d",
+      "item": {
+        "type": "paragraph",
+        "id": "39649173392aee3d",
+        "text": "The Transport plugin posts a [[json]] document to the remote service with each drop. The document contains information retrieved from the drop event's dataTransfer object.\n\n"
+      },
+      "after": "45c24bb00f1e8fe8",
+      "date": 1448967670811
+    },
+    {
+      "type": "fork",
+      "date": 1448967693142
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9883408ac553644b"
+      },
+      "id": "9883408ac553644b",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448967694565
+    },
+    {
+      "type": "move",
+      "order": [
+        "45c24bb00f1e8fe8",
+        "39649173392aee3d",
+        "8e9c2364fd216edb",
+        "547a1d7522d37aad",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "06df698110ae13ec",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "9883408ac553644b",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "9883408ac553644b",
+      "date": 1448967697687
+    },
+    {
+      "type": "move",
+      "order": [
+        "45c24bb00f1e8fe8",
+        "39649173392aee3d",
+        "8e9c2364fd216edb",
+        "9883408ac553644b",
+        "547a1d7522d37aad",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "06df698110ae13ec",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "9883408ac553644b",
+      "date": 1448967706321
+    },
+    {
+      "type": "remove",
+      "id": "8e9c2364fd216edb",
+      "date": 1448967710668
+    },
+    {
+      "type": "edit",
+      "id": "9883408ac553644b",
+      "item": {
+        "type": "code",
+        "id": "9883408ac553644b",
+        "text": "{\n    \"text\": getData(\"text\"),\n    \"html\": getData(\"text/html\")\n}"
+      },
+      "date": 1448967713418
+    },
+    {
+      "type": "move",
+      "order": [
+        "45c24bb00f1e8fe8",
+        "06df698110ae13ec",
+        "39649173392aee3d",
+        "9883408ac553644b",
+        "547a1d7522d37aad",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "06df698110ae13ec",
+      "date": 1448967729749
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e374896cffbe1482",
+        "text": "This plugin provides interactive access to remote services that can read content you drop and create from it useful pages that appear ready to be saved or used at one's discretion. [https://github.com/WardCunningham/wiki-plugin-transport github]"
+      },
+      "id": "e374896cffbe1482",
+      "date": 1448967743690
+    },
+    {
+      "type": "edit",
+      "id": "45c24bb00f1e8fe8",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to wiki page [[json]] converter. Its markup consists of the address of the remote service."
+      },
+      "date": 1448967763526
+    },
+    {
+      "type": "edit",
+      "id": "547a1d7522d37aad",
+      "item": {
+        "type": "paragraph",
+        "id": "547a1d7522d37aad",
+        "text": "The remote service is expected to reply with valid federated wiki page json. Conventionally this will be decorated with provenance details when they can be inferred. The returned page will be added to the lineup but not saved until forked or plundered for content."
+      },
+      "date": 1448967804815
+    },
+    {
+      "type": "add",
+      "id": "e2fc9140959ecde0",
+      "item": {
+        "type": "paragraph",
+        "id": "e2fc9140959ecde0",
+        "text": "# Installation"
+      },
+      "after": "547a1d7522d37aad",
+      "date": 1448967811442
+    },
+    {
+      "type": "add",
+      "id": "c4237d20b88ed354",
+      "item": {
+        "type": "paragraph",
+        "id": "c4237d20b88ed354",
+        "text": "Currently the plugin is not part of the default installation and needs to be installed using the "
+      },
+      "after": "e2fc9140959ecde0",
+      "date": 1448968434044
+    },
+    {
+      "type": "edit",
+      "id": "e2fc9140959ecde0",
+      "item": {
+        "type": "markdown",
+        "id": "e2fc9140959ecde0",
+        "text": "# Installation"
+      },
+      "date": 1448969103902
+    },
+    {
+      "type": "edit",
+      "id": "c4237d20b88ed354",
+      "item": {
+        "type": "paragraph",
+        "id": "c4237d20b88ed354",
+        "text": "Currently the plugin is not part of the default installation and needs to be installed using the method described in the [[Maintaining a Custom Wiki]] page."
+      },
+      "date": 1448969153809
+    },
+    {
+      "type": "add",
+      "id": "098d14595b833f1a",
+      "item": {
+        "type": "paragraph",
+        "id": "098d14595b833f1a",
+        "text": "If you fork the wiki github project and modify [[package.json]] to incude the following line:"
+      },
+      "after": "c4237d20b88ed354",
+      "date": 1448969618182
+    },
+    {
+      "type": "add",
+      "id": "9a7d958131680ec9",
+      "item": {
+        "type": "paragraph",
+        "id": "9a7d958131680ec9",
+        "text": "dfas"
+      },
+      "after": "098d14595b833f1a",
+      "date": 1448969620524
+    },
+    {
+      "type": "add",
+      "id": "2de6aed8801605ac",
+      "item": {
+        "type": "paragraph",
+        "id": "2de6aed8801605ac",
+        "text": "then you can simply call:"
+      },
+      "after": "9a7d958131680ec9",
+      "date": 1448969629483
+    },
+    {
+      "type": "add",
+      "id": "810fd56309f595ce",
+      "item": {
+        "type": "paragraph",
+        "id": "810fd56309f595ce",
+        "text": "npm install -g git://github.com/<you>/wiki.git"
+      },
+      "after": "2de6aed8801605ac",
+      "date": 1448969634123
+    },
+    {
+      "type": "add",
+      "id": "0c9ed23efb1fd03f",
+      "item": {
+        "type": "paragraph",
+        "id": "0c9ed23efb1fd03f",
+        "text": "and [[npm]] will install your customised version of Fedwiki on your current system. The -g flag makes the wiki available anywhere from the shell prompt."
+      },
+      "after": "810fd56309f595ce",
+      "date": 1448969707470
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a9d356dbdbd66581"
+      },
+      "id": "a9d356dbdbd66581",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448969711283
+    },
+    {
+      "type": "move",
+      "order": [
+        "e374896cffbe1482",
+        "45c24bb00f1e8fe8",
+        "06df698110ae13ec",
+        "39649173392aee3d",
+        "9883408ac553644b",
+        "547a1d7522d37aad",
+        "e2fc9140959ecde0",
+        "c4237d20b88ed354",
+        "098d14595b833f1a",
+        "9a7d958131680ec9",
+        "2de6aed8801605ac",
+        "a9d356dbdbd66581",
+        "810fd56309f595ce",
+        "0c9ed23efb1fd03f",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "a9d356dbdbd66581",
+      "date": 1448969719757
+    },
+    {
+      "type": "remove",
+      "id": "810fd56309f595ce",
+      "date": 1448969724494
+    },
+    {
+      "type": "edit",
+      "id": "a9d356dbdbd66581",
+      "item": {
+        "type": "code",
+        "id": "a9d356dbdbd66581",
+        "text": "npm install -g git://github.com/<you>/wiki.git"
+      },
+      "date": 1448969734408
+    },
+    {
+      "type": "edit",
+      "id": "a9d356dbdbd66581",
+      "item": {
+        "type": "code",
+        "id": "a9d356dbdbd66581",
+        "text": "npm install -g git://github.com/ViralAcademy/wiki.git"
+      },
+      "date": 1448969777042
+    },
+    {
+      "type": "edit",
+      "id": "c4237d20b88ed354",
+      "item": {
+        "type": "paragraph",
+        "id": "c4237d20b88ed354",
+        "text": "Currently the plugin is not part of the default installation and needs to be installed using the method described in the [[Maintaining a Custom Wiki]] page. in my case I have forked the wiki Github project to our ViralAcademy account - ]afds github]"
+      },
+      "date": 1448969827527
+    },
+    {
+      "type": "edit",
+      "id": "c4237d20b88ed354",
+      "item": {
+        "type": "paragraph",
+        "id": "c4237d20b88ed354",
+        "text": "Currently the plugin is not part of the default installation and needs to be installed using the method described in the [[Maintaining a Custom Wiki]] page. in my case I have forked the wiki Github project to our ViralAcademy account - [https://github.com/ViralAcademy/wikigithub]"
+      },
+      "date": 1448969837961
+    },
+    {
+      "type": "edit",
+      "id": "c4237d20b88ed354",
+      "item": {
+        "type": "paragraph",
+        "id": "c4237d20b88ed354",
+        "text": "Currently the plugin is not part of the default installation and needs to be installed using the method described in the [[Maintaining a Custom Wiki]] page. in my case I have forked the wiki Github project to our ViralAcademy account - [https://github.com/ViralAcademy/wiki github]"
+      },
+      "date": 1448969847345
+    },
+    {
+      "type": "edit",
+      "id": "9a7d958131680ec9",
+      "item": {
+        "type": "paragraph",
+        "id": "9a7d958131680ec9",
+        "text": "\"wiki-plugin-transport\": \"wardcunningham/wiki-plugin-transport\",\n"
+      },
+      "date": 1448969879314
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "958552f22e139960"
+      },
+      "id": "958552f22e139960",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448969882860
+    },
+    {
+      "type": "move",
+      "order": [
+        "e374896cffbe1482",
+        "45c24bb00f1e8fe8",
+        "06df698110ae13ec",
+        "39649173392aee3d",
+        "9883408ac553644b",
+        "547a1d7522d37aad",
+        "e2fc9140959ecde0",
+        "c4237d20b88ed354",
+        "098d14595b833f1a",
+        "9a7d958131680ec9",
+        "958552f22e139960",
+        "2de6aed8801605ac",
+        "a9d356dbdbd66581",
+        "0c9ed23efb1fd03f",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "958552f22e139960",
+      "date": 1448969890732
+    },
+    {
+      "type": "remove",
+      "id": "9a7d958131680ec9",
+      "date": 1448969893657
+    },
+    {
+      "type": "edit",
+      "id": "958552f22e139960",
+      "item": {
+        "type": "code",
+        "id": "958552f22e139960",
+        "text": "\"wiki-plugin-transport\": \"wardcunningham/wiki-plugin-transport\","
+      },
+      "date": 1448969898843
+    },
+    {
+      "type": "edit",
+      "id": "098d14595b833f1a",
+      "item": {
+        "type": "paragraph",
+        "id": "098d14595b833f1a",
+        "text": "If you fork the wiki github project and modify [[package.json]] to incude the following line: - [https://github.com/ViralAcademy/wiki/commit/cfad5a23e578453d9a93216f7c9f93cb2ec0c639 github]"
+      },
+      "date": 1448969967974
+    },
+    {
+      "type": "edit",
+      "id": "098d14595b833f1a",
+      "item": {
+        "type": "paragraph",
+        "id": "098d14595b833f1a",
+        "text": "If you fork the wiki [https://github.com/ViralAcademy/wiki/commit/cfad5a23e578453d9a93216f7c9f93cb2ec0c639 github] project and modify [[package.json]] to incude the following line:"
+      },
+      "date": 1448969982421
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d51738c4ce5415fe"
+      },
+      "id": "d51738c4ce5415fe",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448971496634
+    },
+    {
+      "type": "move",
+      "order": [
+        "e374896cffbe1482",
+        "45c24bb00f1e8fe8",
+        "06df698110ae13ec",
+        "39649173392aee3d",
+        "9883408ac553644b",
+        "547a1d7522d37aad",
+        "e2fc9140959ecde0",
+        "c4237d20b88ed354",
+        "098d14595b833f1a",
+        "958552f22e139960",
+        "2de6aed8801605ac",
+        "a9d356dbdbd66581",
+        "0c9ed23efb1fd03f",
+        "d51738c4ce5415fe",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "d51738c4ce5415fe",
+      "date": 1448971507447
+    },
+    {
+      "type": "edit",
+      "id": "d51738c4ce5415fe",
+      "item": {
+        "type": "reference",
+        "id": "d51738c4ce5415fe",
+        "site": "plugin.fedwiki.org",
+        "slug": "-installation-daq",
+        "title": " Installation DAQ",
+        "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+      },
+      "date": 1448971517296
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2c7992fd3e54761a"
+      },
+      "id": "2c7992fd3e54761a",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1448971832135
+    },
+    {
+      "type": "edit",
+      "id": "2c7992fd3e54761a",
+      "item": {
+        "type": "reference",
+        "id": "2c7992fd3e54761a",
+        "site": "plugin.fedwiki.org",
+        "slug": "-installation-daq",
+        "title": " Installation DAQ",
+        "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+      },
+      "date": 1448971834083
+    },
+    {
+      "type": "move",
+      "order": [
+        "e374896cffbe1482",
+        "45c24bb00f1e8fe8",
+        "06df698110ae13ec",
+        "39649173392aee3d",
+        "9883408ac553644b",
+        "547a1d7522d37aad",
+        "e2fc9140959ecde0",
+        "c4237d20b88ed354",
+        "098d14595b833f1a",
+        "958552f22e139960",
+        "2de6aed8801605ac",
+        "a9d356dbdbd66581",
+        "0c9ed23efb1fd03f",
+        "2c7992fd3e54761a",
+        "d51738c4ce5415fe",
+        "6cdbb79c139af051",
+        "9567a3e97f7030e5",
+        "4690e7d1727dd6f2",
+        "20e2a2ce00287698",
+        "6a3916f99f28037a",
+        "1884835bcb1dc179",
+        "113a8706f439b5c9",
+        "19b90da6223fc4cc",
+        "215faf11730a3393",
+        "a7a736fce4334e7f",
+        "4ccd7efcbc006460",
+        "90bb152b3d953d93",
+        "eea67517042acd66",
+        "26f80bb0b9e115b6",
+        "af0ed6bb27e8a533",
+        "02123d64a0e2f72c",
+        "bfd66f5e98d0c398",
+        "edec43f08fe578c6",
+        "f2d4670b22789df1",
+        "8b289994c2aa4216",
+        "b33a32d174b3245d",
+        "2371ad572b59402d",
+        "1445609f2369109f",
+        "e73e95d59321ca89",
+        "d837aa92ded73596",
+        "e2584ee6b9cf3c9a",
+        "f04ef733fd43c514",
+        "cb2f3a9a8f3c0ea8",
+        "f2896a003e332914",
+        "a505049f3a20aba7"
+      ],
+      "id": "2c7992fd3e54761a",
+      "date": 1448971841882
+    },
+    {
+      "type": "remove",
+      "id": "2c7992fd3e54761a",
+      "date": 1448971844249
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "transport",
+        "id": "41539361b8005c94",
+        "text": "POST http://port.fed.wiki.org:4010/image."
+      },
+      "after": "45c24bb00f1e8fe8",
+      "id": "41539361b8005c94",
+      "date": 1449077704294
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9a90e864afecdd44"
+      },
+      "id": "9a90e864afecdd44",
+      "type": "add",
+      "after": "a505049f3a20aba7",
+      "date": 1449078967472
+    },
+    {
+      "type": "edit",
+      "id": "41539361b8005c94",
+      "item": {
+        "type": "transport",
+        "id": "41539361b8005c94",
+        "text": "POST http://fed.wiki.org:4010/image."
+      },
+      "date": 1449081844199
+    },
+    {
+      "type": "edit",
+      "id": "41539361b8005c94",
+      "item": {
+        "type": "transport",
+        "id": "41539361b8005c94",
+        "text": "POST http://fed.wiki.org:4010/image"
+      },
+      "date": 1449081952322
+    },
+    {
+      "type": "remove",
+      "id": "9a90e864afecdd44",
+      "date": 1450586289398
+    },
+    {
+      "type": "edit",
+      "id": "45c24bb00f1e8fe8",
+      "item": {
+        "type": "paragraph",
+        "id": "45c24bb00f1e8fe8",
+        "text": "This plugin, type: transport, creates a drop zone for web content to be run through a remote web content to [[wiki page json]] converter. Its markup consists of the address of the remote service."
+      },
+      "date": 1450971469026
+    }
+  ]
+}

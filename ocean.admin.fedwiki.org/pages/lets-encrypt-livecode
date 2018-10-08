@@ -1,0 +1,766 @@
+{
+  "title": "Let's Encrypt Livecode",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "7ed1a480a87bc729",
+      "text": "Today I managed to install a [[let's Encrypt]] certificate on [[DigitalOcean]] so that it works with [[revIgniter]] and Livecode."
+    },
+    {
+      "type": "markdown",
+      "id": "c58cf4659f1b11a8",
+      "text": "# Upgrading the certificate"
+    },
+    {
+      "type": "paragraph",
+      "id": "d9df826099e54585",
+      "text": "To upgrade the certificate manually you need to ssh to the server and issue the following commands to the certbot-auto script:"
+    },
+    {
+      "type": "code",
+      "id": "b65663f480e6083b",
+      "text": "root@LiveWorld:~# cd tmp/\nroot@LiveWorld:~/tmp# ./certbot-auto --apache\nUpgrading certbot-auto 0.12.0 to 0.14.2...\nReplacing certbot-auto...\nCreating virtual environment...\nInstalling Python packages...\nInstallation succeeded.\nSaving debug log to /var/log/letsencrypt/letsencrypt.log\n\nWhich names would you like to activate HTTPS for?\n-------------------------------------------------------------------------------\n1: livecode.world"
+    },
+    {
+      "type": "paragraph",
+      "id": "6103b159379cd56d",
+      "text": "and follow the instructions."
+    },
+    {
+      "type": "markdown",
+      "id": "9f35ccbe591a21f4",
+      "text": "# Installation"
+    },
+    {
+      "type": "paragraph",
+      "id": "d177f2ea0d956911",
+      "text": "I had an old certificate installed which i needed to manually remove from:"
+    },
+    {
+      "type": "code",
+      "id": "b40890fbc08d36f2",
+      "text": "nano /etc/apache2/sites-enabled/000-default.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "e22a73081e41ed29",
+      "text": "I then issued the commands found by following the instructions found [https://certbot.eff.org/ certbot.eff.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "0949e756d7cac83b",
+      "text": "* Docs [https://certbot.eff.org/docs/using.html#apache certbot.eff.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c5d86f38558a9f5b",
+      "text": "Which created the following conf files:"
+    },
+    {
+      "type": "code",
+      "id": "781fff6771990c48",
+      "text": "000-default.conf\n000-default-le-ssl.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "2474bcfce2cdd64e",
+      "text": "In the directory:"
+    },
+    {
+      "type": "code",
+      "id": "6d30e382a9b20ce1",
+      "text": "/etc/apache2/sites-enabled"
+    },
+    {
+      "type": "paragraph",
+      "id": "8b55a1eadcd892bd",
+      "text": "which in term is usually sym-linked to files inside:"
+    },
+    {
+      "type": "code",
+      "id": "57e4337c062512ec",
+      "text": "/etc/apache2/sites-available"
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\n\nthe reason for having to manually edit the 000-default.conf file was because it over-rides thenewly created 000-default-le-ssl.conf file that "
+    },
+    {
+      "type": "code",
+      "id": "f003255018781742",
+      "text": "https://certbot.eff.org/docs/using.html#apache"
+    },
+    {
+      "type": "markdown",
+      "id": "1632b08f3da59b75",
+      "text": "# See also"
+    },
+    {
+      "id": "7d6a5415d679b2e9",
+      "type": "reference",
+      "site": "ocean.admin.fedwiki.org",
+      "slug": "livecode-server-on-digitalocean",
+      "title": "Livecode Server on DigitalOcean",
+      "text": "The following instructions are thanks to Mike Bonner and describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+    },
+    {
+      "id": "f19b5e1cf1b5ff18",
+      "type": "reference",
+      "site": "ocean.admin.fedwiki.org",
+      "slug": "revigniter",
+      "title": "revIgniter",
+      "text": "revIgniter is a toolkit for people who develop web projects using [[LiveCode]].revIgniter is modelled on [[CodeIgniter]] - [http://revigniter.com/userGuide/index.html revigniter.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Let's Encrypt Livecode",
+        "story": []
+      },
+      "date": 1467035961077
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7ed1a480a87bc729"
+      },
+      "id": "7ed1a480a87bc729",
+      "type": "add",
+      "date": 1467035962364
+    },
+    {
+      "type": "edit",
+      "id": "7ed1a480a87bc729",
+      "item": {
+        "type": "paragraph",
+        "id": "7ed1a480a87bc729",
+        "text": "Today I managed to install a [[let's Encrypt]] certificate on [[DigitalOcean]] so that it works with [[revIgniter]] and Livecode."
+      },
+      "date": 1467036021917
+    },
+    {
+      "type": "add",
+      "id": "d177f2ea0d956911",
+      "item": {
+        "type": "paragraph",
+        "id": "d177f2ea0d956911",
+        "text": "I had an old certificate installed:"
+      },
+      "after": "7ed1a480a87bc729",
+      "date": 1467036043124
+    },
+    {
+      "type": "add",
+      "id": "e22a73081e41ed29",
+      "item": {
+        "type": "paragraph",
+        "id": "e22a73081e41ed29",
+        "text": "I then issued the commands found here:"
+      },
+      "after": "d177f2ea0d956911",
+      "date": 1467036059981
+    },
+    {
+      "type": "add",
+      "id": "c5d86f38558a9f5b",
+      "item": {
+        "type": "paragraph",
+        "id": "c5d86f38558a9f5b",
+        "text": "Which created the following conf file:"
+      },
+      "after": "e22a73081e41ed29",
+      "date": 1467036069520
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "781fff6771990c48"
+      },
+      "id": "781fff6771990c48",
+      "type": "add",
+      "after": "c5d86f38558a9f5b",
+      "date": 1467036070782
+    },
+    {
+      "type": "edit",
+      "id": "781fff6771990c48",
+      "item": {
+        "type": "code",
+        "id": "781fff6771990c48",
+        "text": "000-default.conf -> ../sites-available/000-default.conf\n000-default-le-ssl.conf -> /etc/apache2/sites-available/000-default-le-ssl.conf\n"
+      },
+      "date": 1467036091324
+    },
+    {
+      "type": "edit",
+      "id": "781fff6771990c48",
+      "item": {
+        "type": "code",
+        "id": "781fff6771990c48",
+        "text": "000-default.conf\n000-default-le-ssl.conf"
+      },
+      "date": 1467036154260
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6d30e382a9b20ce1"
+      },
+      "id": "6d30e382a9b20ce1",
+      "type": "add",
+      "after": "781fff6771990c48",
+      "date": 1467036195395
+    },
+    {
+      "type": "edit",
+      "id": "6d30e382a9b20ce1",
+      "item": {
+        "type": "code",
+        "id": "6d30e382a9b20ce1",
+        "text": "/etc/apache2/sites-enabled"
+      },
+      "date": 1467036199957
+    },
+    {
+      "type": "add",
+      "id": "2474bcfce2cdd64e",
+      "item": {
+        "type": "paragraph",
+        "id": "2474bcfce2cdd64e",
+        "text": "In the directory:"
+      },
+      "after": "c5d86f38558a9f5b",
+      "date": 1467036219863
+    },
+    {
+      "type": "move",
+      "order": [
+        "7ed1a480a87bc729",
+        "d177f2ea0d956911",
+        "e22a73081e41ed29",
+        "c5d86f38558a9f5b",
+        "781fff6771990c48",
+        "2474bcfce2cdd64e",
+        "6d30e382a9b20ce1"
+      ],
+      "id": "2474bcfce2cdd64e",
+      "date": 1467036221994
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8b55a1eadcd892bd"
+      },
+      "id": "8b55a1eadcd892bd",
+      "type": "add",
+      "after": "6d30e382a9b20ce1",
+      "date": 1467036224117
+    },
+    {
+      "type": "edit",
+      "id": "8b55a1eadcd892bd",
+      "item": {
+        "type": "paragraph",
+        "id": "8b55a1eadcd892bd",
+        "text": "which in term is sym-linked to"
+      },
+      "date": 1467036243612
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57e4337c062512ec"
+      },
+      "id": "57e4337c062512ec",
+      "type": "add",
+      "after": "8b55a1eadcd892bd",
+      "date": 1467036270247
+    },
+    {
+      "type": "edit",
+      "id": "57e4337c062512ec",
+      "item": {
+        "type": "code",
+        "id": "57e4337c062512ec",
+        "text": "sites-available"
+      },
+      "date": 1467036273018
+    },
+    {
+      "type": "edit",
+      "id": "57e4337c062512ec",
+      "item": {
+        "type": "code",
+        "id": "57e4337c062512ec",
+        "text": "/etc/apache2/sites-available"
+      },
+      "date": 1467036281333
+    },
+    {
+      "type": "edit",
+      "id": "8b55a1eadcd892bd",
+      "item": {
+        "type": "paragraph",
+        "id": "8b55a1eadcd892bd",
+        "text": "which in term is usually sym-linked to files inside:"
+      },
+      "date": 1467036298835
+    },
+    {
+      "type": "edit",
+      "id": "c5d86f38558a9f5b",
+      "item": {
+        "type": "paragraph",
+        "id": "c5d86f38558a9f5b",
+        "text": "Which created the following conf files:"
+      },
+      "date": 1467036307307
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1793b736c6ab104c"
+      },
+      "id": "1793b736c6ab104c",
+      "type": "add",
+      "after": "57e4337c062512ec",
+      "date": 1467036314858
+    },
+    {
+      "type": "remove",
+      "id": "1793b736c6ab104c",
+      "date": 1467036320986
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>"
+      },
+      "after": "57e4337c062512ec",
+      "id": "20084356ff8e69ce",
+      "date": 1467036346026
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nthe reason for having to manually edit the 000-default.conf file was because it over-rides thenewly created "
+      },
+      "date": 1467036387471
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nthe reason for having to manually edit the 000-default.conf file was because it over-rides thenewly created 000-default-le-ssl.conf file that "
+      },
+      "date": 1467036399600
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f003255018781742"
+      },
+      "id": "f003255018781742",
+      "type": "add",
+      "after": "20084356ff8e69ce",
+      "date": 1467036417147
+    },
+    {
+      "type": "edit",
+      "id": "f003255018781742",
+      "item": {
+        "type": "code",
+        "id": "f003255018781742",
+        "text": "https://certbot.eff.org/docs/using.html#apache"
+      },
+      "date": 1467036423264
+    },
+    {
+      "type": "edit",
+      "id": "e22a73081e41ed29",
+      "item": {
+        "type": "paragraph",
+        "id": "e22a73081e41ed29",
+        "text": "I then issued the commands found over at [https://certbot.eff.org/docs/using.html#apache certbot.eff.org]"
+      },
+      "date": 1467036439585
+    },
+    {
+      "type": "edit",
+      "id": "e22a73081e41ed29",
+      "item": {
+        "type": "paragraph",
+        "id": "e22a73081e41ed29",
+        "text": "I then issued the commands found at [https://certbot.eff.org/docs/using.html#apache certbot.eff.org]"
+      },
+      "date": 1467036449544
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fe683af74605aa24"
+      },
+      "id": "fe683af74605aa24",
+      "type": "add",
+      "after": "f003255018781742",
+      "date": 1467036452439
+    },
+    {
+      "type": "move",
+      "order": [
+        "7ed1a480a87bc729",
+        "d177f2ea0d956911",
+        "e22a73081e41ed29",
+        "fe683af74605aa24",
+        "c5d86f38558a9f5b",
+        "781fff6771990c48",
+        "2474bcfce2cdd64e",
+        "6d30e382a9b20ce1",
+        "8b55a1eadcd892bd",
+        "57e4337c062512ec",
+        "20084356ff8e69ce",
+        "f003255018781742"
+      ],
+      "id": "fe683af74605aa24",
+      "date": 1467036454822
+    },
+    {
+      "type": "edit",
+      "id": "d177f2ea0d956911",
+      "item": {
+        "type": "paragraph",
+        "id": "d177f2ea0d956911",
+        "text": "I had an old certificate installed which i needed to manually remove from:"
+      },
+      "date": 1467036471898
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b40890fbc08d36f2"
+      },
+      "id": "b40890fbc08d36f2",
+      "type": "add",
+      "after": "f003255018781742",
+      "date": 1467036473630
+    },
+    {
+      "type": "move",
+      "order": [
+        "7ed1a480a87bc729",
+        "d177f2ea0d956911",
+        "b40890fbc08d36f2",
+        "e22a73081e41ed29",
+        "fe683af74605aa24",
+        "c5d86f38558a9f5b",
+        "781fff6771990c48",
+        "2474bcfce2cdd64e",
+        "6d30e382a9b20ce1",
+        "8b55a1eadcd892bd",
+        "57e4337c062512ec",
+        "20084356ff8e69ce",
+        "f003255018781742"
+      ],
+      "id": "b40890fbc08d36f2",
+      "date": 1467036475864
+    },
+    {
+      "type": "edit",
+      "id": "b40890fbc08d36f2",
+      "item": {
+        "type": "code",
+        "id": "b40890fbc08d36f2",
+        "text": "nano /etc/apache2/sites-enabled/"
+      },
+      "date": 1467036494328
+    },
+    {
+      "type": "edit",
+      "id": "b40890fbc08d36f2",
+      "item": {
+        "type": "code",
+        "id": "b40890fbc08d36f2",
+        "text": "nano /etc/apache2/sites-enabled/000-default.conf"
+      },
+      "date": 1467036501266
+    },
+    {
+      "type": "edit",
+      "id": "e22a73081e41ed29",
+      "item": {
+        "type": "paragraph",
+        "id": "e22a73081e41ed29",
+        "text": "I then issued the commands found by following the instructions found [https://certbot.eff.org/ "
+      },
+      "date": 1467036560972
+    },
+    {
+      "type": "add",
+      "id": "0949e756d7cac83b",
+      "item": {
+        "type": "paragraph",
+        "id": "0949e756d7cac83b",
+        "text": "* Docs [https://certbot.eff.org/docs/using.html#apache certbot.eff.org]"
+      },
+      "after": "e22a73081e41ed29",
+      "date": 1467036574965
+    },
+    {
+      "type": "edit",
+      "id": "0949e756d7cac83b",
+      "item": {
+        "type": "markdown",
+        "id": "0949e756d7cac83b",
+        "text": "* Docs [https://certbot.eff.org/docs/using.html#apache certbot.eff.org]"
+      },
+      "date": 1467036576393
+    },
+    {
+      "type": "edit",
+      "id": "e22a73081e41ed29",
+      "item": {
+        "type": "paragraph",
+        "id": "e22a73081e41ed29",
+        "text": "I then issued the commands found by following the instructions found [https://certbot.eff.org/ certbot.eff.org]"
+      },
+      "date": 1467036584389
+    },
+    {
+      "type": "remove",
+      "id": "fe683af74605aa24",
+      "date": 1467036587708
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1632b08f3da59b75"
+      },
+      "id": "1632b08f3da59b75",
+      "type": "add",
+      "after": "f003255018781742",
+      "date": 1467036596225
+    },
+    {
+      "type": "edit",
+      "id": "1632b08f3da59b75",
+      "item": {
+        "type": "markdown",
+        "id": "1632b08f3da59b75",
+        "text": "# See also"
+      },
+      "date": 1467036602358
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fe254dba2ca98e59"
+      },
+      "id": "fe254dba2ca98e59",
+      "type": "add",
+      "after": "1632b08f3da59b75",
+      "date": 1467036603593
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "7d6a5415d679b2e9",
+        "type": "reference",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "livecode-server-on-digitalocean",
+        "title": "Livecode Server on DigitalOcean",
+        "text": "The following instructions are thanks to Mike Bonner and describe how to get [[Livecode Server]] running on [[DigitalOcean]]:"
+      },
+      "after": "1632b08f3da59b75",
+      "id": "7d6a5415d679b2e9",
+      "date": 1467036635783
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "f19b5e1cf1b5ff18",
+        "type": "reference",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "revigniter",
+        "title": "revIgniter",
+        "text": "revIgniter is a toolkit for people who develop web projects using [[LiveCode]].revIgniter is modelled on [[CodeIgniter]] - [http://revigniter.com/userGuide/index.html revigniter.com]"
+      },
+      "after": "7d6a5415d679b2e9",
+      "id": "f19b5e1cf1b5ff18",
+      "date": 1467036639596
+    },
+    {
+      "type": "remove",
+      "id": "fe254dba2ca98e59",
+      "date": 1467036649830
+    },
+    {
+      "type": "add",
+      "id": "c58cf4659f1b11a8",
+      "item": {
+        "type": "paragraph",
+        "id": "c58cf4659f1b11a8",
+        "text": "# Upgrading the certificate"
+      },
+      "after": "7ed1a480a87bc729",
+      "date": 1496656033360
+    },
+    {
+      "type": "add",
+      "id": "d9df826099e54585",
+      "item": {
+        "type": "paragraph",
+        "id": "d9df826099e54585",
+        "text": "To upgrade the certificate manually you need to ssh to the server and issue the following commands to the certbot-auto script:"
+      },
+      "after": "c58cf4659f1b11a8",
+      "date": 1496656075138
+    },
+    {
+      "type": "edit",
+      "id": "c58cf4659f1b11a8",
+      "item": {
+        "type": "markdown",
+        "id": "c58cf4659f1b11a8",
+        "text": "# Upgrading the certificate"
+      },
+      "date": 1496656077164
+    },
+    {
+      "type": "add",
+      "id": "9f35ccbe591a21f4",
+      "item": {
+        "type": "paragraph",
+        "id": "9f35ccbe591a21f4",
+        "text": "# Installation"
+      },
+      "after": "d9df826099e54585",
+      "date": 1496656086627
+    },
+    {
+      "type": "edit",
+      "id": "9f35ccbe591a21f4",
+      "item": {
+        "type": "markdown",
+        "id": "9f35ccbe591a21f4",
+        "text": "# Installation"
+      },
+      "date": 1496656087671
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b65663f480e6083b"
+      },
+      "id": "b65663f480e6083b",
+      "type": "add",
+      "after": "f19b5e1cf1b5ff18",
+      "date": 1496656091162
+    },
+    {
+      "type": "edit",
+      "id": "b65663f480e6083b",
+      "item": {
+        "type": "code",
+        "id": "b65663f480e6083b",
+        "text": "root@LiveWorld:~# cd tmp/\nroot@LiveWorld:~/tmp# ./certbot-auto --apache\nUpgrading certbot-auto 0.12.0 to 0.14.2...\nReplacing certbot-auto...\nCreating virtual environment...\nInstalling Python packages...\n"
+      },
+      "date": 1496656094102
+    },
+    {
+      "type": "move",
+      "order": [
+        "7ed1a480a87bc729",
+        "c58cf4659f1b11a8",
+        "d9df826099e54585",
+        "b65663f480e6083b",
+        "9f35ccbe591a21f4",
+        "d177f2ea0d956911",
+        "b40890fbc08d36f2",
+        "e22a73081e41ed29",
+        "0949e756d7cac83b",
+        "c5d86f38558a9f5b",
+        "781fff6771990c48",
+        "2474bcfce2cdd64e",
+        "6d30e382a9b20ce1",
+        "8b55a1eadcd892bd",
+        "57e4337c062512ec",
+        "20084356ff8e69ce",
+        "f003255018781742",
+        "1632b08f3da59b75",
+        "7d6a5415d679b2e9",
+        "f19b5e1cf1b5ff18"
+      ],
+      "id": "b65663f480e6083b",
+      "date": 1496656099311
+    },
+    {
+      "type": "edit",
+      "id": "b65663f480e6083b",
+      "item": {
+        "type": "code",
+        "id": "b65663f480e6083b",
+        "text": "root@LiveWorld:~# cd tmp/\nroot@LiveWorld:~/tmp# ./certbot-auto --apache\nUpgrading certbot-auto 0.12.0 to 0.14.2...\nReplacing certbot-auto...\nCreating virtual environment...\nInstalling Python packages...\nInstallation succeeded.\nSaving debug log to /var/log/letsencrypt/letsencrypt.log\n\nWhich names would you like to activate HTTPS for?\n-------------------------------------------------------------------------------\n1: livecode.world\n-------------------------------------------------------------------------------\nSelect the appropriate numbers separated by commas and/or spaces, or leave input\nblank to select all options shown (Enter 'c' to cancel):1\nCert is due for renewal, auto-renewing...\nRenewing an existing certificate\nPerforming the following challenges:\ntls-sni-01 challenge for livecode.world\nWaiting for verification...\nCleaning up challenges\nDeploying Certificate for livecode.world to VirtualHost /etc/apache2/sites-available/000-default-le-ssl.conf\n\nPlease choose whether HTTPS access is required or optional.\n-------------------------------------------------------------------------------\n1: Easy - Allow both HTTP and HTTPS access to these sites\n2: Secure - Make all requests redirect to secure HTTPS access\n-------------------------------------------------------------------------------\nSelect the appropriate number [1-2] then [enter] (press 'c' to cancel): 1\n\n-------------------------------------------------------------------------------\nYour existing certificate has been successfully renewed, and the new certificate\nhas been installed.\n\nThe new certificate covers the following domains: https://livecode.world\n\nYou should test your configuration at:\nhttps://www.ssllabs.com/ssltest/analyze.html?d=livecode.world\n-------------------------------------------------------------------------------\n\nIMPORTANT NOTES:\n - Congratulations! Your certificate and chain have been saved at\n   /etc/letsencrypt/live/livecode.world/fullchain.pem. Your cert will\n   expire on 2017-09-03. To obtain a new or tweaked version of this\n   certificate in the future, simply run certbot-auto again with the\n   \"certonly\" option. To non-interactively renew *all* of your\n   certificates, run \"certbot-auto renew\"\n - If you like Certbot, please consider supporting our work by:\n\n   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate\n   Donating to EFF:                    https://eff.org/donate-le\n\nroot@LiveWorld:~/tmp#\n"
+      },
+      "date": 1496656200887
+    },
+    {
+      "type": "edit",
+      "id": "b65663f480e6083b",
+      "item": {
+        "type": "code",
+        "id": "b65663f480e6083b",
+        "text": "root@LiveWorld:~# cd tmp/\nroot@LiveWorld:~/tmp# ./certbot-auto --apache\nUpgrading certbot-auto 0.12.0 to 0.14.2...\nReplacing certbot-auto...\nCreating virtual environment...\nInstalling Python packages...\nInstallation succeeded.\nSaving debug log to /var/log/letsencrypt/letsencrypt.log\n\nWhich names would you like to activate HTTPS for?\n-------------------------------------------------------------------------------\n1: livecode.world"
+      },
+      "date": 1496656316677
+    },
+    {
+      "type": "add",
+      "id": "6103b159379cd56d",
+      "item": {
+        "type": "paragraph",
+        "id": "6103b159379cd56d",
+        "text": "and follow the instructions."
+      },
+      "after": "d9df826099e54585",
+      "date": 1496656330525
+    },
+    {
+      "type": "move",
+      "order": [
+        "7ed1a480a87bc729",
+        "c58cf4659f1b11a8",
+        "d9df826099e54585",
+        "b65663f480e6083b",
+        "6103b159379cd56d",
+        "9f35ccbe591a21f4",
+        "d177f2ea0d956911",
+        "b40890fbc08d36f2",
+        "e22a73081e41ed29",
+        "0949e756d7cac83b",
+        "c5d86f38558a9f5b",
+        "781fff6771990c48",
+        "2474bcfce2cdd64e",
+        "6d30e382a9b20ce1",
+        "8b55a1eadcd892bd",
+        "57e4337c062512ec",
+        "20084356ff8e69ce",
+        "f003255018781742",
+        "1632b08f3da59b75",
+        "7d6a5415d679b2e9",
+        "f19b5e1cf1b5ff18"
+      ],
+      "id": "6103b159379cd56d",
+      "date": 1496656332784
+    }
+  ]
+}

@@ -1,0 +1,754 @@
+{
+  "title": "Journal Duplication",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5b596fc7c4183d99",
+      "text": "The Journal stores new copies of story items each time they are edited. This presumes items are small and edits touch all parts of them. Not true for caption edits of fat images. But, let's consider the Journal an asset library for story items in the few cases where this is an issue."
+    },
+    {
+      "type": "paragraph",
+      "id": "1a4c9f34f12150c9",
+      "text": "Nick Niemeir has suggested that the [[JSON Schema]] should include a top-level collection of assets for big things were duplication is wasteful. "
+    },
+    {
+      "type": "code",
+      "id": "50a481f9e3028a2f",
+      "text": "assets = { key: asset, key: asset, ... }"
+    },
+    {
+      "type": "paragraph",
+      "id": "e38c83cc06922cd4",
+      "text": "But wait, the Journal already has that asset stored in a top-level structure, though admittedly not as simply indexed."
+    },
+    {
+      "type": "html",
+      "id": "dc45bf4ccbe98f79",
+      "text": "<h3> Principle"
+    },
+    {
+      "type": "paragraph",
+      "id": "1bc03021a3786744",
+      "text": "A plugin is allowed to apply the omission principle for any field where duplication is costly."
+    },
+    {
+      "type": "paragraph",
+      "id": "b5c95646ec4359f7",
+      "text": "The omission principle says that should a field of an item be omitted, the plugin is allowed to search the Journal for a revision for which the field is known."
+    },
+    {
+      "type": "html",
+      "id": "aaab190a70e85a35",
+      "text": "<h3> Application"
+    },
+    {
+      "type": "paragraph",
+      "id": "55dee95d6af52173",
+      "text": "For images this could be implemented by special case logic every place the url field is handled."
+    },
+    {
+      "type": "paragraph",
+      "id": "a248febb3bbdec4b",
+      "text": "The Factory creates an image upon drop."
+    },
+    {
+      "type": "paragraph",
+      "id": "7aee00fc36529c26",
+      "text": "The TextEditor revises the caption of an image."
+    },
+    {
+      "type": "paragraph",
+      "id": "e1a79a22bf9d2ab5",
+      "text": "The Image is rendered into the DOM."
+    },
+    {
+      "type": "paragraph",
+      "id": "c18125f7b2539cfe",
+      "text": "An Image is moved within a page."
+    },
+    {
+      "type": "paragraph",
+      "id": "830bcaac263c7556",
+      "text": "An Image is moved between pages."
+    },
+    {
+      "type": "paragraph",
+      "id": "f868d16bcb16af22",
+      "text": "A Journal merge scrambles the order of the Journal."
+    },
+    {
+      "type": "paragraph",
+      "id": "83331b5f7c0a2968",
+      "text": "The server handles edit Actions for Images."
+    },
+    {
+      "type": "paragraph",
+      "id": "b55b23fd921b7e69",
+      "text": "A better approach might be to allow Image plugins to participate as encapsulated objects in each one of these interactions. This would be an expansion of the plugin API."
+    },
+    {
+      "type": "paragraph",
+      "id": "10a89af42b388c4e",
+      "text": "See [[Image Assets]] which if implemented would make this less important but still useful."
+    },
+    {
+      "type": "paragraph",
+      "id": "a27b96a6e4cceb9e",
+      "text": "Could there be some incremental process that safely revised existing pages to exploit the omission principle? Could the principle be applied automatically to compress pages in transit? to collapse redundancy in memory?"
+    },
+    {
+      "type": "html",
+      "id": "1e74e7ee09e6d996",
+      "text": "<h3>Inheritance"
+    },
+    {
+      "type": "paragraph",
+      "id": "e83aaf519e0802be",
+      "text": "All field lookups must start with the story, then most recent Journal entries and searching back until the most recent occurrence of that field is found. To remove a field from a paragraph, an explicit null must be inserted into that field."
+    },
+    {
+      "type": "paragraph",
+      "id": "d6e271346640c6ad",
+      "text": "This could be modeled in javascript using prototypical inheritance where the paragraph in the story -> most recent instance of paragraph in the journal -> ... -> first ever instance of paragraph in the journal. Then property lookups on this chain at any point in the chain would give us the proper state of the object as it existed at that point in history."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Journal Duplication",
+        "story": []
+      },
+      "date": 1416780369784
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5b596fc7c4183d99"
+      },
+      "id": "5b596fc7c4183d99",
+      "type": "add",
+      "date": 1416780371642
+    },
+    {
+      "type": "edit",
+      "id": "5b596fc7c4183d99",
+      "item": {
+        "type": "paragraph",
+        "id": "5b596fc7c4183d99",
+        "text": "The Journal stores new copies of story items each time they are edited. This presumes items are small and edits touch all parts of them. Not true for caption edits of fat images. But, let's consider the Journal an asset library for story items in the few cases where this is an issue."
+      },
+      "date": 1416780542151
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1a4c9f34f12150c9"
+      },
+      "id": "1a4c9f34f12150c9",
+      "type": "add",
+      "after": "5b596fc7c4183d99",
+      "date": 1416780545421
+    },
+    {
+      "type": "edit",
+      "id": "1a4c9f34f12150c9",
+      "item": {
+        "type": "paragraph",
+        "id": "1a4c9f34f12150c9",
+        "text": "Nick Niemeir has suggested that the [[JSON Schema]] should include a top-level collection of assets for big things were duplication is wasteful. "
+      },
+      "date": 1416780670667
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "50a481f9e3028a2f"
+      },
+      "id": "50a481f9e3028a2f",
+      "type": "add",
+      "after": "1a4c9f34f12150c9",
+      "date": 1416780683049
+    },
+    {
+      "type": "edit",
+      "id": "50a481f9e3028a2f",
+      "item": {
+        "type": "code",
+        "id": "50a481f9e3028a2f",
+        "text": "assets = { key: asset, key: asset, ... }"
+      },
+      "date": 1416780750374
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e38c83cc06922cd4"
+      },
+      "id": "e38c83cc06922cd4",
+      "type": "add",
+      "after": "50a481f9e3028a2f",
+      "date": 1416780760340
+    },
+    {
+      "type": "edit",
+      "id": "e38c83cc06922cd4",
+      "item": {
+        "type": "paragraph",
+        "id": "e38c83cc06922cd4",
+        "text": "But wait, the Journal already has that asset stored in a top-level structure, though admittedly not as simply indexed."
+      },
+      "date": 1416780846680
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "dc45bf4ccbe98f79",
+        "text": ""
+      },
+      "id": "dc45bf4ccbe98f79",
+      "type": "add",
+      "after": "e38c83cc06922cd4",
+      "date": 1416780846689
+    },
+    {
+      "type": "edit",
+      "id": "dc45bf4ccbe98f79",
+      "item": {
+        "type": "paragraph",
+        "id": "dc45bf4ccbe98f79",
+        "text": "<h3> Principle"
+      },
+      "date": 1416780872303
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1bc03021a3786744",
+        "text": ""
+      },
+      "id": "1bc03021a3786744",
+      "type": "add",
+      "after": "dc45bf4ccbe98f79",
+      "date": 1416780872315
+    },
+    {
+      "type": "edit",
+      "id": "1bc03021a3786744",
+      "item": {
+        "type": "paragraph",
+        "id": "1bc03021a3786744",
+        "text": "A plugin is allowed to apply the omission principle for any field where duplication is costly."
+      },
+      "date": 1416780990656
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b5c95646ec4359f7",
+        "text": ""
+      },
+      "id": "b5c95646ec4359f7",
+      "type": "add",
+      "after": "1bc03021a3786744",
+      "date": 1416780990664
+    },
+    {
+      "type": "edit",
+      "id": "b5c95646ec4359f7",
+      "item": {
+        "type": "paragraph",
+        "id": "b5c95646ec4359f7",
+        "text": "The omission principle says that should a field of an item be omitted, the plugin is allowed to search the Journal for a revision for which the field is known."
+      },
+      "date": 1416781125333
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "aaab190a70e85a35",
+        "text": ""
+      },
+      "id": "aaab190a70e85a35",
+      "type": "add",
+      "after": "b5c95646ec4359f7",
+      "date": 1416781125342
+    },
+    {
+      "type": "edit",
+      "id": "aaab190a70e85a35",
+      "item": {
+        "type": "paragraph",
+        "id": "aaab190a70e85a35",
+        "text": "<h3> Application"
+      },
+      "date": 1416781574715
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "55dee95d6af52173",
+        "text": ""
+      },
+      "id": "55dee95d6af52173",
+      "type": "add",
+      "after": "aaab190a70e85a35",
+      "date": 1416781574729
+    },
+    {
+      "type": "edit",
+      "id": "55dee95d6af52173",
+      "item": {
+        "type": "paragraph",
+        "id": "55dee95d6af52173",
+        "text": "For images this could be implemented by special case logic every place the url field is handled."
+      },
+      "date": 1416781704771
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a248febb3bbdec4b",
+        "text": ""
+      },
+      "id": "a248febb3bbdec4b",
+      "type": "add",
+      "after": "55dee95d6af52173",
+      "date": 1416781704780
+    },
+    {
+      "type": "edit",
+      "id": "a248febb3bbdec4b",
+      "item": {
+        "type": "paragraph",
+        "id": "a248febb3bbdec4b",
+        "text": "The Factory creates an image upon drop."
+      },
+      "date": 1416781729043
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7aee00fc36529c26",
+        "text": ""
+      },
+      "id": "7aee00fc36529c26",
+      "type": "add",
+      "after": "a248febb3bbdec4b",
+      "date": 1416781729051
+    },
+    {
+      "type": "edit",
+      "id": "7aee00fc36529c26",
+      "item": {
+        "type": "paragraph",
+        "id": "7aee00fc36529c26",
+        "text": "The TextEditor revises the caption of an image."
+      },
+      "date": 1416781753795
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e1a79a22bf9d2ab5",
+        "text": ""
+      },
+      "id": "e1a79a22bf9d2ab5",
+      "type": "add",
+      "after": "7aee00fc36529c26",
+      "date": 1416781753803
+    },
+    {
+      "type": "edit",
+      "id": "e1a79a22bf9d2ab5",
+      "item": {
+        "type": "paragraph",
+        "id": "e1a79a22bf9d2ab5",
+        "text": "The Image is rendered into the DOM."
+      },
+      "date": 1416781766733
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c18125f7b2539cfe",
+        "text": ""
+      },
+      "id": "c18125f7b2539cfe",
+      "type": "add",
+      "after": "e1a79a22bf9d2ab5",
+      "date": 1416781766742
+    },
+    {
+      "type": "edit",
+      "id": "c18125f7b2539cfe",
+      "item": {
+        "type": "paragraph",
+        "id": "c18125f7b2539cfe",
+        "text": "An Image is moved within a page."
+      },
+      "date": 1416781791228
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "830bcaac263c7556",
+        "text": ""
+      },
+      "id": "830bcaac263c7556",
+      "type": "add",
+      "after": "c18125f7b2539cfe",
+      "date": 1416781791235
+    },
+    {
+      "type": "edit",
+      "id": "830bcaac263c7556",
+      "item": {
+        "type": "paragraph",
+        "id": "830bcaac263c7556",
+        "text": "An Image is moved between pages."
+      },
+      "date": 1416781815092
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f868d16bcb16af22",
+        "text": ""
+      },
+      "id": "f868d16bcb16af22",
+      "type": "add",
+      "after": "830bcaac263c7556",
+      "date": 1416781815101
+    },
+    {
+      "type": "edit",
+      "id": "f868d16bcb16af22",
+      "item": {
+        "type": "paragraph",
+        "id": "f868d16bcb16af22",
+        "text": "A Journal merge scrambles the order of the Journal."
+      },
+      "date": 1416781834561
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "83331b5f7c0a2968",
+        "text": ""
+      },
+      "id": "83331b5f7c0a2968",
+      "type": "add",
+      "after": "f868d16bcb16af22",
+      "date": 1416781834576
+    },
+    {
+      "type": "edit",
+      "id": "83331b5f7c0a2968",
+      "item": {
+        "type": "paragraph",
+        "id": "83331b5f7c0a2968",
+        "text": "The server handles edit Actions for Images."
+      },
+      "date": 1416781926940
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b55b23fd921b7e69",
+        "text": ""
+      },
+      "id": "b55b23fd921b7e69",
+      "type": "add",
+      "after": "83331b5f7c0a2968",
+      "date": 1416781926948
+    },
+    {
+      "type": "edit",
+      "id": "b55b23fd921b7e69",
+      "item": {
+        "type": "paragraph",
+        "id": "b55b23fd921b7e69",
+        "text": "A better approach might be to allow Image plugins to participate as encapsulated objects in each one of these interactions. This would be a large expansion of the plugin API."
+      },
+      "date": 1416782041198
+    },
+    {
+      "type": "edit",
+      "id": "b55b23fd921b7e69",
+      "item": {
+        "type": "paragraph",
+        "id": "b55b23fd921b7e69",
+        "text": "A better approach might be to allow Image plugins to participate as encapsulated objects in each one of these interactions. This would be an expansion of the plugin API."
+      },
+      "date": 1416782048096
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "10a89af42b388c4e",
+        "text": ""
+      },
+      "id": "10a89af42b388c4e",
+      "type": "add",
+      "after": "b55b23fd921b7e69",
+      "date": 1416782072678
+    },
+    {
+      "type": "edit",
+      "id": "10a89af42b388c4e",
+      "item": {
+        "type": "paragraph",
+        "id": "10a89af42b388c4e",
+        "text": "See [[Image Assets]] which if implemented would make this less important but still useful."
+      },
+      "date": 1416782118931
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a27b96a6e4cceb9e",
+        "text": ""
+      },
+      "id": "a27b96a6e4cceb9e",
+      "type": "add",
+      "after": "10a89af42b388c4e",
+      "date": 1416782514617
+    },
+    {
+      "type": "edit",
+      "id": "a27b96a6e4cceb9e",
+      "item": {
+        "type": "paragraph",
+        "id": "a27b96a6e4cceb9e",
+        "text": "Could there be some incremental process that safely revised existing pages to exploit the omission principle? Could the principle be applied automatically to compress pages in transit? to collapse redundancy in memory?"
+      },
+      "date": 1416782726247
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1416813642570
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e83aaf519e0802be",
+        "text": ""
+      },
+      "id": "e83aaf519e0802be",
+      "type": "add",
+      "after": "b5c95646ec4359f7",
+      "date": 1416813651663
+    },
+    {
+      "type": "edit",
+      "id": "e83aaf519e0802be",
+      "item": {
+        "type": "paragraph",
+        "id": "e83aaf519e0802be",
+        "text": "All field lookups must start with the  most recent Journal entries and searching back until the first time it is found. "
+      },
+      "date": 1416813721057
+    },
+    {
+      "type": "edit",
+      "id": "e83aaf519e0802be",
+      "item": {
+        "type": "paragraph",
+        "id": "e83aaf519e0802be",
+        "text": "All field lookups must start with the story, then most recent Journal entries and searching back until the most recent occurrence is found. To remove a field from a paragraph, an explicit null must be inserted into that field."
+      },
+      "date": 1416813816909
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1e74e7ee09e6d996",
+        "text": ""
+      },
+      "id": "1e74e7ee09e6d996",
+      "type": "add",
+      "after": "b5c95646ec4359f7",
+      "date": 1416813866641
+    },
+    {
+      "type": "edit",
+      "id": "1e74e7ee09e6d996",
+      "item": {
+        "type": "paragraph",
+        "id": "1e74e7ee09e6d996",
+        "text": "<h3>Practically Speaking"
+      },
+      "date": 1416813883112
+    },
+    {
+      "type": "edit",
+      "id": "e83aaf519e0802be",
+      "item": {
+        "type": "paragraph",
+        "id": "e83aaf519e0802be",
+        "text": "All field lookups must start with the story, then most recent Journal entries and searching back until the most recent occurrence of that field is found. To remove a field from a paragraph, an explicit null must be inserted into that field."
+      },
+      "date": 1416813914557
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d6e271346640c6ad",
+        "text": ""
+      },
+      "id": "d6e271346640c6ad",
+      "type": "add",
+      "after": "e83aaf519e0802be",
+      "date": 1416814196102
+    },
+    {
+      "type": "edit",
+      "id": "d6e271346640c6ad",
+      "item": {
+        "type": "paragraph",
+        "id": "d6e271346640c6ad",
+        "text": "This could be modeled in javascript using prototypical inheritance where the paragraph in the story -> most recent instance of paragraph in the journal -> ... -> first ever instance of paragraph in the journal. Then property lookups on this chain at any point in the chain would give us the proper state of the object as it existed at that point in history."
+      },
+      "date": 1416814210034
+    },
+    {
+      "type": "fork",
+      "site": "nrn.io",
+      "date": 1416838682525
+    },
+    {
+      "type": "move",
+      "order": [
+        "5b596fc7c4183d99",
+        "1a4c9f34f12150c9",
+        "50a481f9e3028a2f",
+        "e38c83cc06922cd4",
+        "dc45bf4ccbe98f79",
+        "1bc03021a3786744",
+        "b5c95646ec4359f7",
+        "1e74e7ee09e6d996",
+        "e83aaf519e0802be",
+        "aaab190a70e85a35",
+        "55dee95d6af52173",
+        "a248febb3bbdec4b",
+        "7aee00fc36529c26",
+        "e1a79a22bf9d2ab5",
+        "c18125f7b2539cfe",
+        "830bcaac263c7556",
+        "f868d16bcb16af22",
+        "83331b5f7c0a2968",
+        "b55b23fd921b7e69",
+        "10a89af42b388c4e",
+        "a27b96a6e4cceb9e",
+        "d6e271346640c6ad"
+      ],
+      "id": "d6e271346640c6ad",
+      "date": 1416838900759
+    },
+    {
+      "type": "move",
+      "order": [
+        "5b596fc7c4183d99",
+        "1a4c9f34f12150c9",
+        "50a481f9e3028a2f",
+        "e38c83cc06922cd4",
+        "dc45bf4ccbe98f79",
+        "1bc03021a3786744",
+        "b5c95646ec4359f7",
+        "1e74e7ee09e6d996",
+        "aaab190a70e85a35",
+        "55dee95d6af52173",
+        "a248febb3bbdec4b",
+        "7aee00fc36529c26",
+        "e1a79a22bf9d2ab5",
+        "c18125f7b2539cfe",
+        "830bcaac263c7556",
+        "f868d16bcb16af22",
+        "83331b5f7c0a2968",
+        "b55b23fd921b7e69",
+        "10a89af42b388c4e",
+        "a27b96a6e4cceb9e",
+        "e83aaf519e0802be",
+        "d6e271346640c6ad"
+      ],
+      "id": "e83aaf519e0802be",
+      "date": 1416838909962
+    },
+    {
+      "type": "move",
+      "order": [
+        "5b596fc7c4183d99",
+        "1a4c9f34f12150c9",
+        "50a481f9e3028a2f",
+        "e38c83cc06922cd4",
+        "dc45bf4ccbe98f79",
+        "1bc03021a3786744",
+        "b5c95646ec4359f7",
+        "aaab190a70e85a35",
+        "55dee95d6af52173",
+        "a248febb3bbdec4b",
+        "7aee00fc36529c26",
+        "e1a79a22bf9d2ab5",
+        "c18125f7b2539cfe",
+        "830bcaac263c7556",
+        "f868d16bcb16af22",
+        "83331b5f7c0a2968",
+        "b55b23fd921b7e69",
+        "10a89af42b388c4e",
+        "a27b96a6e4cceb9e",
+        "1e74e7ee09e6d996",
+        "e83aaf519e0802be",
+        "d6e271346640c6ad"
+      ],
+      "id": "1e74e7ee09e6d996",
+      "date": 1416838918557
+    },
+    {
+      "type": "edit",
+      "id": "1e74e7ee09e6d996",
+      "item": {
+        "type": "paragraph",
+        "id": "1e74e7ee09e6d996",
+        "text": "<h3>Inheritance"
+      },
+      "date": 1416838932489
+    },
+    {
+      "type": "edit",
+      "id": "dc45bf4ccbe98f79",
+      "item": {
+        "type": "html",
+        "id": "dc45bf4ccbe98f79",
+        "text": "<h3> Principle"
+      },
+      "date": 1420512445638
+    },
+    {
+      "type": "edit",
+      "id": "aaab190a70e85a35",
+      "item": {
+        "type": "html",
+        "id": "aaab190a70e85a35",
+        "text": "<h3> Application"
+      },
+      "date": 1420512448949
+    },
+    {
+      "type": "edit",
+      "id": "1e74e7ee09e6d996",
+      "item": {
+        "type": "html",
+        "id": "1e74e7ee09e6d996",
+        "text": "<h3>Inheritance"
+      },
+      "date": 1420512453908
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1428869254953
+    }
+  ]
+}

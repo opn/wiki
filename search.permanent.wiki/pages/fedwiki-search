@@ -1,0 +1,415 @@
+{
+  "title": "Fedwiki Search",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "660c54c640eeb92c",
+      "text": "Here we look at the most sustainable way to integrate robust cross-federation search into wiki. What we aim to implement is a bootstrapping philosophy which is not reliant on central funding, but compatible with a [[Decentralised Funding]] model for wiki."
+    },
+    {
+      "type": "paragraph",
+      "id": "b4a7ea9596624b0f",
+      "text": "Recently there have been a number of changes to the way major search engines have made accessible their api's to developers, and their are currently no good free indexing and crawling solutions for wiki sites."
+    },
+    {
+      "type": "markdown",
+      "id": "cf06a64feb89e151",
+      "text": "# Google Custom Search\n\n[[Google Custom Search]] can no longer be automatically created through an api, but you must manually upload an XML file, or maintain the list of search engines through the Control Panel interface."
+    },
+    {
+      "type": "paragraph",
+      "id": "d52a3258d3efbf68",
+      "text": "More importantly the JSON API is now heavily restricted for free use to 100 call per day. This may be OK for an individual user running a local site on their laptop but not for shared use and public viewing on the web."
+    },
+    {
+      "type": "html",
+      "id": "7572572095dbddd0",
+      "text": "<blockquote>\nFor CSE users, the API provides 100 search queries per day for free. If you need more, you may sign up for billing in the API Console. Additional requests cost $5 per 1000 queries, up to 10k queries per day.\n</blockquote>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "5badfce0154dd3bd",
+      "text": "For that we need to embed the search engine using a search plugin that contains the following type of code:"
+    },
+    {
+      "type": "code",
+      "id": "1ba23c9eb11a18f9",
+      "text": "<script>\n  (function() {\n    var cx = '001994538507449046028:ylobtshqas4';\n    var gcse = document.createElement('script');\n    gcse.type = 'text/javascript';\n    gcse.async = true;\n    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;\n    var s = document.getElementsByTagName('script')[0];\n    s.parentNode.insertBefore(gcse, s);\n  })();\n</script>\n<gcse:search></gcse:search>"
+    },
+    {
+      "type": "paragraph",
+      "id": "ccb3f55df13b8925",
+      "text": "It should be possible to separate the search form and display the results nicely as a wiki page. However the links would be normal html links and not wiki elements. The popup style overlay should fit over the relevant wiki page area and opens links in a new tab. It should also allow drag and drop of the links onto a suitable [[Transporter]] like area for bringing in the page - [https://developers.google.com/custom-search/docs/element developers.google.com]"
+    },
+    {
+      "type": "html",
+      "id": "535acba06007bc01",
+      "text": "Below are some links:\n\n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=c0de.academy\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://c0de.academy/view/welcome-visitors/view/search-for-custom-search/view/topical-engines/view/linked-custom-search-engine/view/custom-search-engine/view/context-xml-file#\">Context XML File</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=dev.himalayan.academy\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://dev.himalayan.academy/view/welcome-visitors/view/changes-to-this-site/view/linked-custom-search-engine/view/topical-engines/view/search-annotations-file/view/custom-search-xml-files/view/annotations-xml-file/view/custom-search-xml-annotations/view/programatically-create-custom-search-engine/view/custom-search-api/view/annotations-selecting-sites/view/creating-and-updating-annotations\">Custom Search XML Annotations</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=support.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://support.google.com/websearch/answer/2466433?visit_id=1-636271047948109733-2706823097&amp;rd=1\">Refine web searches - Search Help</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/annotations\">Annotations: Defining Sites to Search &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/linked_cse\">Linked Custom Search Engine &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/basics#edit\">Creating Custom Search Engine with configuration files &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/reference/cse/list#try-it\">CSE: list &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/topical\">Topical CSE &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/element\">Custom Search Element Control API &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=cse.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://cse.google.com/cse/setup/basic?cx=001994538507449046028%3Aylobtshqas4\">Custom Search - Basic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/\">Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/overview#cx\">Custom Search JSON/Atom API &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=console.developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://console.developers.google.com/apis/credentials/key/215?project=federated-search-1143\">API key - Federated Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/reference/cse/list\">CSE: list &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=stackoverflow.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://stackoverflow.com/questions/tagged/google-custom-search?sort=newest\">Newest 'google-custom-search' Questions - Stack Overflow</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.com/webmasters/tools/site-message-view?hl=en&amp;siteUrl=http://david.feast.fm/&amp;message-filter=all&amp;grid.r=0&amp;msgid=AB9YKzK__15twighIk_ga84ACdj2AzwcXeIl4Jt5sWA7WOcKjXL_xDsDs3aNI6Y6l_TLKAcMcA492IcEz7kAe78AT2mLrq_DYQ\">Search Console - Messages for david.feast.fm - http://david.feast.fm/</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/webmaster-tools/search-console-api-original/v3/limits\">Usage Limits &nbsp;|&nbsp; Search Console API &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/basics#how--the-components--work-together\">Creating Custom Search Engine with configuration files &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n"
+    },
+    {
+      "type": "html",
+      "id": "a26024345fd3f3cb",
+      "text": "    <div style=\"padding-top:10px; padding-bottom:0px; padding-left:24px; font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; color: #444; font-size:26px; font-weight:300\">CSE alternatives</div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.impactbnd.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.impactbnd.com/blog/3-life-saving-alternatives-to-google-site-search\">3 Life-Saving Alternatives to Google Site Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=aws.amazon.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://aws.amazon.com/cloudsearch/pricing/\">AWS | Amazon CloudSearch | Pricing</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.ibm.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.ibm.com/cloud-computing/bluemix/getting-started?S_PKG=&amp;cm_mmc=Search_Google-_-IBM+Cloud_WW_+search++api_Broad_&amp;cm_mmca1=&amp;cm_mmca2=&amp;mkwid=bfb2fd9b-487b-47a9-af1b-ceee038592b4|401|1643614&amp;cvosrc=ppc.google.%2Bsearch%20%2Bapi&amp;cvo_campaign=IBM%20Cloud_WW_&amp;cvo_crid=189410247554&amp;Matchtype=b\">IBM Bluemix - Getting Started</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=news.ycombinator.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://news.ycombinator.com/item?id=11625633\">Google Deactivates Web Search API | Hacker News</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/pricing\">Hosted Search as a Service Plans and Pricing | Algolia</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/doc/guides/geo-search/geo-search-overview/\">Geo-Search Overview - Geo-Search Guide | Algolia Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/doc/guides/indexing/formatting-your-data/\">Formatting Your Data - Indexing Guide | Algolia Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/doc/guides/indexing/import-synchronize-data/\">Import &amp; Synchronize Your Data - Indexing Guide | Algolia Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.indexden.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.indexden.com/documentation/faq\">FAQ (general, billing, search) help - IndexDen (IndexTank alternative)</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.indexden.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.indexden.com/documentation/query-syntax\">Query syntax - Documentation - IndexDen (IndexTank alternative)</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=duckduckgo+api\">duckduckgo api - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duckduckgo.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duckduckgo.com/api\">DuckDuckGo Instant Answer API</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=stackoverflow.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://stackoverflow.com/questions/37012469/duckduckgo-api-getting-search-results\">Duckduckgo API getting search results - Stack Overflow</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duck.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duck.co/forum/thread/15258/duckduckgo-api\">DuckDuckGO API</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duckduckgo.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duckduckgo.com/search_box\">DuckDuckGo Search Box</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duck.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duck.co/help/results/sources\">Sources</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duck.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duck.co/help/company/partnerships\">Partnerships</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=Bing+Search+API&amp;tbs=qdr:y\">Bing Search API - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=blogs.bing.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://blogs.bing.com/search/july-2016/new-bing-search-api-portfolio-now-available\">New Bing Search API portfolio now available | Bing Search Blog</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/cognitive-services/en-us/pricing\">Microsoft Cognitive Services - Pricing</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/cognitive-services/en-us/academic-knowledge-api/documentation/overview\">Microsoft Cognitive Services - Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/en-us/research/project/microsoft-academic-graph/?from=http%3A%2F%2Fresearch.microsoft.com%2Fmag\">Microsoft Academic Graph - Microsoft Research</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=azure4research.azurewebsites.net\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://azure4research.azurewebsites.net/proposal/\">Proposal&nbsp;&middot; A4R</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=academic.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://academic.microsoft.com/\">Microsoft Academic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/en-us/research/project/academic/\">Microsoft Academic - Microsoft Research</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=westus.dev.cognitive.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://westus.dev.cognitive.microsoft.com/docs/services/56332331778daf02acc0a50b/operations/565d9001ca73072048922d97\">Cognitive Services APIs Reference</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=blogs.bing.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://blogs.bing.com/search-quality-insights/November-2016/apis-for-developers-series-bing-search-apis\">APIs for Developers Series - Bing Search APIs | Search Quality Insights</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.digitalocean.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.digitalocean.com/community/tutorials/how-to-set-up-a-production-elasticsearch-cluster-on-ubuntu-14-04\">How To Set Up a Production Elasticsearch Cluster on Ubuntu 14.04 | DigitalOcean</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.elastic.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.elastic.co/cloud/as-a-service/subscriptions\">Elastic Cloud Subscriptions| Elastic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=en.wikipedia.org\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://en.wikipedia.org/wiki/Firebase\">Firebase - Wikipedia</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=firebase.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://firebase.google.com/pricing/\">Pricing &nbsp;|&nbsp; Firebase</a>\n      </div>\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Fedwiki Search",
+        "story": []
+      },
+      "date": 1491578819554
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "660c54c640eeb92c"
+      },
+      "id": "660c54c640eeb92c",
+      "type": "add",
+      "date": 1491578822699
+    },
+    {
+      "type": "edit",
+      "id": "660c54c640eeb92c",
+      "item": {
+        "type": "paragraph",
+        "id": "660c54c640eeb92c",
+        "text": "Here we look at the most sustainable way to integrate robust cross-federation search into wiki."
+      },
+      "date": 1491578873674
+    },
+    {
+      "type": "add",
+      "id": "b4a7ea9596624b0f",
+      "item": {
+        "type": "paragraph",
+        "id": "b4a7ea9596624b0f",
+        "text": "Recently there have been a number of changes"
+      },
+      "after": "660c54c640eeb92c",
+      "date": 1491578885932
+    },
+    {
+      "type": "edit",
+      "id": "660c54c640eeb92c",
+      "item": {
+        "type": "paragraph",
+        "id": "660c54c640eeb92c",
+        "text": "Here we look at the most sustainable way to integrate robust cross-federation search into wiki. What we aim to implement is a bootstrapping philosophy which is not reliant on central funding, but compatible with a [[Decentralised Funding]] model for wiki."
+      },
+      "date": 1491578971012
+    },
+    {
+      "type": "edit",
+      "id": "b4a7ea9596624b0f",
+      "item": {
+        "type": "paragraph",
+        "id": "b4a7ea9596624b0f",
+        "text": "Recently there have been a number of changes to the way major search engines have made accessible their api's to developers, and their are currently no good free indexing and crawling solutions for wiki sites."
+      },
+      "date": 1491579065539
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7572572095dbddd0"
+      },
+      "id": "7572572095dbddd0",
+      "type": "add",
+      "after": "b4a7ea9596624b0f",
+      "date": 1491579158517
+    },
+    {
+      "type": "edit",
+      "id": "7572572095dbddd0",
+      "item": {
+        "type": "html",
+        "id": "7572572095dbddd0",
+        "text": "<blockquote>\nFor CSE users, the API provides 100 search queries per day for free. If you need more, you may sign up for billing in the API Console. Additional requests cost $5 per 1000 queries, up to 10k queries per day.\n</blockquote>\n"
+      },
+      "date": 1491579183002
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cf06a64feb89e151"
+      },
+      "id": "cf06a64feb89e151",
+      "type": "add",
+      "after": "7572572095dbddd0",
+      "date": 1491579192864
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "7572572095dbddd0"
+      ],
+      "id": "cf06a64feb89e151",
+      "date": 1491579194394
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "535acba06007bc01"
+      },
+      "id": "535acba06007bc01",
+      "type": "add",
+      "after": "7572572095dbddd0",
+      "date": 1491579287545
+    },
+    {
+      "type": "edit",
+      "id": "535acba06007bc01",
+      "item": {
+        "type": "html",
+        "id": "535acba06007bc01",
+        "text": "      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=c0de.academy\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://c0de.academy/view/welcome-visitors/view/search-for-custom-search/view/topical-engines/view/linked-custom-search-engine/view/custom-search-engine/view/context-xml-file#\">Context XML File</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=dev.himalayan.academy\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://dev.himalayan.academy/view/welcome-visitors/view/changes-to-this-site/view/linked-custom-search-engine/view/topical-engines/view/search-annotations-file/view/custom-search-xml-files/view/annotations-xml-file/view/custom-search-xml-annotations/view/programatically-create-custom-search-engine/view/custom-search-api/view/annotations-selecting-sites/view/creating-and-updating-annotations\">Custom Search XML Annotations</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=support.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://support.google.com/websearch/answer/2466433?visit_id=1-636271047948109733-2706823097&amp;rd=1\">Refine web searches - Search Help</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/annotations\">Annotations: Defining Sites to Search &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/linked_cse\">Linked Custom Search Engine &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/basics#edit\">Creating Custom Search Engine with configuration files &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/reference/cse/list#try-it\">CSE: list &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/topical\">Topical CSE &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/element\">Custom Search Element Control API &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=cse.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://cse.google.com/cse/setup/basic?cx=001994538507449046028%3Aylobtshqas4\">Custom Search - Basic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/\">Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/overview#cx\">Custom Search JSON/Atom API &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=console.developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://console.developers.google.com/apis/credentials/key/215?project=federated-search-1143\">API key - Federated Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/reference/cse/list\">CSE: list &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=stackoverflow.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://stackoverflow.com/questions/tagged/google-custom-search?sort=newest\">Newest 'google-custom-search' Questions - Stack Overflow</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.com/webmasters/tools/site-message-view?hl=en&amp;siteUrl=http://david.feast.fm/&amp;message-filter=all&amp;grid.r=0&amp;msgid=AB9YKzK__15twighIk_ga84ACdj2AzwcXeIl4Jt5sWA7WOcKjXL_xDsDs3aNI6Y6l_TLKAcMcA492IcEz7kAe78AT2mLrq_DYQ\">Search Console - Messages for david.feast.fm - http://david.feast.fm/</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/webmaster-tools/search-console-api-original/v3/limits\">Usage Limits &nbsp;|&nbsp; Search Console API &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/basics#how--the-components--work-together\">Creating Custom Search Engine with configuration files &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n"
+      },
+      "date": 1491579290656
+    },
+    {
+      "type": "edit",
+      "id": "cf06a64feb89e151",
+      "item": {
+        "type": "markdown",
+        "id": "cf06a64feb89e151",
+        "text": "# Google Custom Search\n\n[[Google Custom Search]] can no longer be automatically created through an api, but you must manually upload an XML file, or maintain the list of search engines through the Control Panel interface."
+      },
+      "date": 1491579398141
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d52a3258d3efbf68"
+      },
+      "id": "d52a3258d3efbf68",
+      "type": "add",
+      "after": "535acba06007bc01",
+      "date": 1491579409015
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "7572572095dbddd0",
+        "d52a3258d3efbf68",
+        "535acba06007bc01"
+      ],
+      "id": "d52a3258d3efbf68",
+      "date": 1491579411643
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "d52a3258d3efbf68",
+        "7572572095dbddd0",
+        "535acba06007bc01"
+      ],
+      "id": "d52a3258d3efbf68",
+      "date": 1491579415535
+    },
+    {
+      "type": "edit",
+      "id": "d52a3258d3efbf68",
+      "item": {
+        "type": "paragraph",
+        "id": "d52a3258d3efbf68",
+        "text": "More importantly the JSON API is now heavily restricted for free use to 100 call per day. This may be OK for an individual user running a local site on their laptop but not for shared use and public viewing on the web."
+      },
+      "date": 1491579509829
+    },
+    {
+      "type": "add",
+      "id": "5badfce0154dd3bd",
+      "item": {
+        "type": "paragraph",
+        "id": "5badfce0154dd3bd",
+        "text": "For that we need to embed the search engine using a search plugin that contains the following type of code:"
+      },
+      "after": "d52a3258d3efbf68",
+      "date": 1491579580512
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "d52a3258d3efbf68",
+        "7572572095dbddd0",
+        "5badfce0154dd3bd",
+        "535acba06007bc01"
+      ],
+      "id": "5badfce0154dd3bd",
+      "date": 1491579582579
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1ba23c9eb11a18f9"
+      },
+      "id": "1ba23c9eb11a18f9",
+      "type": "add",
+      "after": "535acba06007bc01",
+      "date": 1491579584640
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "d52a3258d3efbf68",
+        "7572572095dbddd0",
+        "5badfce0154dd3bd",
+        "1ba23c9eb11a18f9",
+        "535acba06007bc01"
+      ],
+      "id": "1ba23c9eb11a18f9",
+      "date": 1491579588533
+    },
+    {
+      "type": "edit",
+      "id": "1ba23c9eb11a18f9",
+      "item": {
+        "type": "code",
+        "id": "1ba23c9eb11a18f9",
+        "text": "<script>\n  (function() {\n    var cx = '001994538507449046028:ylobtshqas4';\n    var gcse = document.createElement('script');\n    gcse.type = 'text/javascript';\n    gcse.async = true;\n    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;\n    var s = document.getElementsByTagName('script')[0];\n    s.parentNode.insertBefore(gcse, s);\n  })();\n</script>\n<gcse:search></gcse:search>"
+      },
+      "date": 1491579645504
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ccb3f55df13b8925"
+      },
+      "id": "ccb3f55df13b8925",
+      "type": "add",
+      "after": "535acba06007bc01",
+      "date": 1491579662382
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "d52a3258d3efbf68",
+        "7572572095dbddd0",
+        "5badfce0154dd3bd",
+        "1ba23c9eb11a18f9",
+        "ccb3f55df13b8925",
+        "535acba06007bc01"
+      ],
+      "id": "ccb3f55df13b8925",
+      "date": 1491579666249
+    },
+    {
+      "type": "edit",
+      "id": "ccb3f55df13b8925",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb3f55df13b8925",
+        "text": "It should be possible to separate the search form and display the results nicely as a wiki page. However the links would be normal html links and not wiki elements."
+      },
+      "date": 1491579756195
+    },
+    {
+      "type": "edit",
+      "id": "ccb3f55df13b8925",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb3f55df13b8925",
+        "text": "It should be possible to separate the search form and display the results nicely as a wiki page. However the links would be normal html links and not wiki elements - [https://developers.google.com/custom-search/docs/element developers.google.com]"
+      },
+      "date": 1491580171761
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f1cf31e75d9539be"
+      },
+      "id": "f1cf31e75d9539be",
+      "type": "add",
+      "after": "535acba06007bc01",
+      "date": 1491580176367
+    },
+    {
+      "type": "edit",
+      "id": "ccb3f55df13b8925",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb3f55df13b8925",
+        "text": "It should be possible to separate the search form and display the results nicely as a wiki page. However the links would be normal html links and not wiki elements. The popup style overlay should fit over the relevant wiki page area and opens links in a new tab. It should also allow drag and drop of the links onto a suitable [[Transporter]] like area for bringing in the page - [https://developers.google.com/custom-search/docs/element developers.google.com]"
+      },
+      "date": 1491580536745
+    },
+    {
+      "type": "move",
+      "order": [
+        "660c54c640eeb92c",
+        "b4a7ea9596624b0f",
+        "cf06a64feb89e151",
+        "d52a3258d3efbf68",
+        "7572572095dbddd0",
+        "5badfce0154dd3bd",
+        "1ba23c9eb11a18f9",
+        "ccb3f55df13b8925",
+        "f1cf31e75d9539be",
+        "535acba06007bc01"
+      ],
+      "id": "f1cf31e75d9539be",
+      "date": 1491580545093
+    },
+    {
+      "type": "remove",
+      "id": "f1cf31e75d9539be",
+      "date": 1491580548276
+    },
+    {
+      "type": "edit",
+      "id": "535acba06007bc01",
+      "item": {
+        "type": "html",
+        "id": "535acba06007bc01",
+        "text": "Below are some links:\n\n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=c0de.academy\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://c0de.academy/view/welcome-visitors/view/search-for-custom-search/view/topical-engines/view/linked-custom-search-engine/view/custom-search-engine/view/context-xml-file#\">Context XML File</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=dev.himalayan.academy\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://dev.himalayan.academy/view/welcome-visitors/view/changes-to-this-site/view/linked-custom-search-engine/view/topical-engines/view/search-annotations-file/view/custom-search-xml-files/view/annotations-xml-file/view/custom-search-xml-annotations/view/programatically-create-custom-search-engine/view/custom-search-api/view/annotations-selecting-sites/view/creating-and-updating-annotations\">Custom Search XML Annotations</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=support.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://support.google.com/websearch/answer/2466433?visit_id=1-636271047948109733-2706823097&amp;rd=1\">Refine web searches - Search Help</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/annotations\">Annotations: Defining Sites to Search &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/linked_cse\">Linked Custom Search Engine &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/basics#edit\">Creating Custom Search Engine with configuration files &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/reference/cse/list#try-it\">CSE: list &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/topical\">Topical CSE &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/element\">Custom Search Element Control API &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=cse.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://cse.google.com/cse/setup/basic?cx=001994538507449046028%3Aylobtshqas4\">Custom Search - Basic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/\">Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/overview#cx\">Custom Search JSON/Atom API &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=console.developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://console.developers.google.com/apis/credentials/key/215?project=federated-search-1143\">API key - Federated Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/json-api/v1/reference/cse/list\">CSE: list &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=stackoverflow.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://stackoverflow.com/questions/tagged/google-custom-search?sort=newest\">Newest 'google-custom-search' Questions - Stack Overflow</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.com/webmasters/tools/site-message-view?hl=en&amp;siteUrl=http://david.feast.fm/&amp;message-filter=all&amp;grid.r=0&amp;msgid=AB9YKzK__15twighIk_ga84ACdj2AzwcXeIl4Jt5sWA7WOcKjXL_xDsDs3aNI6Y6l_TLKAcMcA492IcEz7kAe78AT2mLrq_DYQ\">Search Console - Messages for david.feast.fm - http://david.feast.fm/</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/webmaster-tools/search-console-api-original/v3/limits\">Usage Limits &nbsp;|&nbsp; Search Console API &nbsp;|&nbsp; Google Developers</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=developers.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://developers.google.com/custom-search/docs/basics#how--the-components--work-together\">Creating Custom Search Engine with configuration files &nbsp;|&nbsp; Custom Search &nbsp;|&nbsp; Google Developers</a>\n      </div>\n"
+      },
+      "date": 1491580570656
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a26024345fd3f3cb"
+      },
+      "id": "a26024345fd3f3cb",
+      "type": "add",
+      "after": "535acba06007bc01",
+      "date": 1491580730055
+    },
+    {
+      "type": "edit",
+      "id": "a26024345fd3f3cb",
+      "item": {
+        "type": "html",
+        "id": "a26024345fd3f3cb",
+        "text": "    <div style=\"padding-top:10px; padding-bottom:0px; padding-left:24px; font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; color: #444; font-size:26px; font-weight:300\">CSE alternatives</div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.impactbnd.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.impactbnd.com/blog/3-life-saving-alternatives-to-google-site-search\">3 Life-Saving Alternatives to Google Site Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=aws.amazon.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://aws.amazon.com/cloudsearch/pricing/\">AWS | Amazon CloudSearch | Pricing</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.ibm.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.ibm.com/cloud-computing/bluemix/getting-started?S_PKG=&amp;cm_mmc=Search_Google-_-IBM+Cloud_WW_+search++api_Broad_&amp;cm_mmca1=&amp;cm_mmca2=&amp;mkwid=bfb2fd9b-487b-47a9-af1b-ceee038592b4|401|1643614&amp;cvosrc=ppc.google.%2Bsearch%20%2Bapi&amp;cvo_campaign=IBM%20Cloud_WW_&amp;cvo_crid=189410247554&amp;Matchtype=b\">IBM Bluemix - Getting Started</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=news.ycombinator.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://news.ycombinator.com/item?id=11625633\">Google Deactivates Web Search API | Hacker News</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/pricing\">Hosted Search as a Service Plans and Pricing | Algolia</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/doc/guides/geo-search/geo-search-overview/\">Geo-Search Overview - Geo-Search Guide | Algolia Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/doc/guides/indexing/formatting-your-data/\">Formatting Your Data - Indexing Guide | Algolia Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.algolia.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.algolia.com/doc/guides/indexing/import-synchronize-data/\">Import &amp; Synchronize Your Data - Indexing Guide | Algolia Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.indexden.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.indexden.com/documentation/faq\">FAQ (general, billing, search) help - IndexDen (IndexTank alternative)</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.indexden.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.indexden.com/documentation/query-syntax\">Query syntax - Documentation - IndexDen (IndexTank alternative)</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=duckduckgo+api\">duckduckgo api - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duckduckgo.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duckduckgo.com/api\">DuckDuckGo Instant Answer API</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=stackoverflow.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://stackoverflow.com/questions/37012469/duckduckgo-api-getting-search-results\">Duckduckgo API getting search results - Stack Overflow</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duck.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duck.co/forum/thread/15258/duckduckgo-api\">DuckDuckGO API</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duckduckgo.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duckduckgo.com/search_box\">DuckDuckGo Search Box</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duck.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duck.co/help/results/sources\">Sources</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=duck.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://duck.co/help/company/partnerships\">Partnerships</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=Bing+Search+API&amp;tbs=qdr:y\">Bing Search API - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=blogs.bing.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://blogs.bing.com/search/july-2016/new-bing-search-api-portfolio-now-available\">New Bing Search API portfolio now available | Bing Search Blog</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/cognitive-services/en-us/pricing\">Microsoft Cognitive Services - Pricing</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/cognitive-services/en-us/academic-knowledge-api/documentation/overview\">Microsoft Cognitive Services - Documentation</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/en-us/research/project/microsoft-academic-graph/?from=http%3A%2F%2Fresearch.microsoft.com%2Fmag\">Microsoft Academic Graph - Microsoft Research</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=azure4research.azurewebsites.net\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://azure4research.azurewebsites.net/proposal/\">Proposal&nbsp;&middot; A4R</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=academic.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://academic.microsoft.com/\">Microsoft Academic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.microsoft.com/en-us/research/project/academic/\">Microsoft Academic - Microsoft Research</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=westus.dev.cognitive.microsoft.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://westus.dev.cognitive.microsoft.com/docs/services/56332331778daf02acc0a50b/operations/565d9001ca73072048922d97\">Cognitive Services APIs Reference</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=blogs.bing.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://blogs.bing.com/search-quality-insights/November-2016/apis-for-developers-series-bing-search-apis\">APIs for Developers Series - Bing Search APIs | Search Quality Insights</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.digitalocean.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.digitalocean.com/community/tutorials/how-to-set-up-a-production-elasticsearch-cluster-on-ubuntu-14-04\">How To Set Up a Production Elasticsearch Cluster on Ubuntu 14.04 | DigitalOcean</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.elastic.co\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.elastic.co/cloud/as-a-service/subscriptions\">Elastic Cloud Subscriptions| Elastic</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=en.wikipedia.org\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://en.wikipedia.org/wiki/Firebase\">Firebase - Wikipedia</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=firebase.google.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://firebase.google.com/pricing/\">Pricing &nbsp;|&nbsp; Firebase</a>\n      </div>\n"
+      },
+      "date": 1491580733555
+    },
+    {
+      "type": "fork",
+      "site": "david.bovill.me",
+      "date": 1512338299250
+    }
+  ]
+}

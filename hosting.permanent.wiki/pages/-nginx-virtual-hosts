@@ -1,0 +1,445 @@
+{
+  "title": " Nginx Virtual Hosts",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8729a4cf17eaf1f7",
+      "text": "Redirect: space in page title"
+    },
+    {
+      "type": "reference",
+      "id": "bc686a8aa2a5429c",
+      "site": "hosting.permanent.wiki",
+      "slug": "nginx-virtual-hosts",
+      "title": "Nginx Virtual Hosts",
+      "text": "Here we look at how to configure [[Virtual Host]]s in [[Nginx]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "82f5c046098a8485",
+      "text": "[[Symlink Sites Available]]"
+    },
+    {
+      "type": "code",
+      "id": "85e146a006ee2950",
+      "text": "ln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  "
+    },
+    {
+      "type": "paragraph",
+      "id": "17bf4d8018c20cab",
+      "text": "\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": " Nginx Virtual Hosts",
+        "story": []
+      },
+      "date": 1502226440726
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c0cd8a3a6d51e4a3"
+      },
+      "id": "c0cd8a3a6d51e4a3",
+      "type": "add",
+      "date": 1502226441662
+    },
+    {
+      "type": "edit",
+      "id": "c0cd8a3a6d51e4a3",
+      "item": {
+        "type": "paragraph",
+        "id": "c0cd8a3a6d51e4a3",
+        "text": "First of all, you need to create 2 new folders to handle our next step:"
+      },
+      "date": 1502226443681
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9f740ffbba6e3349",
+        "text": "mkdir /usr/local/etc/nginx/sites-available  \nmkdir /usr/local/etc/nginx/sites-enabled  "
+      },
+      "after": "c0cd8a3a6d51e4a3",
+      "id": "9f740ffbba6e3349",
+      "date": 1502226447485
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d865f0b15313fe25",
+        "text": "sites-available are all your virtual config files and sites-enabled hold a symbolic link from sites-available folder so you can remove and create new config if you want new sites added."
+      },
+      "after": "9f740ffbba6e3349",
+      "id": "d865f0b15313fe25",
+      "date": 1502226450383
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bfb34fc186bc0254",
+        "text": "Next step is create your first virtualhost file:"
+      },
+      "after": "d865f0b15313fe25",
+      "id": "bfb34fc186bc0254",
+      "date": 1502226453506
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "0ff043f8a07feccd",
+        "text": "nano /usr/local/etc/nginx/sites-available/{hostfile}  "
+      },
+      "after": "bfb34fc186bc0254",
+      "id": "0ff043f8a07feccd",
+      "date": 1502226456432
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "151882e56c1b7830",
+        "text": "Change {hostfile} to your domain eg. test.local "
+      },
+      "after": "0ff043f8a07feccd",
+      "id": "151882e56c1b7830",
+      "date": 1502226459075
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b9f00cfa9edb6c64",
+        "text": "My virtualhost file look likes this:"
+      },
+      "after": "151882e56c1b7830",
+      "id": "b9f00cfa9edb6c64",
+      "date": 1502226482498
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "5216badaf4625758",
+        "text": "server {  \n  listen                *:8080;\n  server_name           {test-domain};\n  #access_log           /Users/{username}/{webfolder}/{hostfile}/log/access.log;\n  #error_log            /Users/{username}/{webfolder}/{hostfile}/log/error.log;\n  root  /Users/{username}/{webfolder}/{hostfile};\n  index  index.html index.htm index.php;\n\n  location / {\n    try_files  $uri  $uri/  /index.php?$args;\n  }\n\n  location ~ \\.php$ {\n    try_files  $uri  $uri/  /index.php?$args;\n\n    fastcgi_param PATH_INFO $fastcgi_path_info;\n    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n    fastcgi_pass 127.0.0.1:9000;\n    fastcgi_index index.php;\n    fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n    fastcgi_intercept_errors on;\n    include fastcgi_params;\n  }\n}"
+      },
+      "after": "b9f00cfa9edb6c64",
+      "id": "5216badaf4625758",
+      "date": 1502226485896
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "330e516b54559ae5",
+        "text": "change {username}, {webfolder} and {hostfile} width there names your ealier have changes the names on."
+      },
+      "after": "5216badaf4625758",
+      "id": "330e516b54559ae5",
+      "date": 1502226491178
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "00c156b2ba7851ae",
+        "text": "When you have save this folder you go to the sites-enabled and run the following command."
+      },
+      "after": "330e516b54559ae5",
+      "id": "00c156b2ba7851ae",
+      "date": 1502226493798
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "85e146a006ee2950",
+        "text": "ln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  "
+      },
+      "after": "00c156b2ba7851ae",
+      "id": "85e146a006ee2950",
+      "date": 1502226496398
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a60f1631414f27bf",
+        "text": "Restart you NGINX webserver now:"
+      },
+      "after": "85e146a006ee2950",
+      "id": "a60f1631414f27bf",
+      "date": 1502226499577
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "c8994fd84adc7d4d",
+        "text": "sudo nginx -s reload "
+      },
+      "after": "a60f1631414f27bf",
+      "id": "c8994fd84adc7d4d",
+      "date": 1502226504248
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "17bf4d8018c20cab",
+        "text": "Look in your browser about its working well:\n\n"
+      },
+      "after": "c8994fd84adc7d4d",
+      "id": "17bf4d8018c20cab",
+      "date": 1502226507822
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "26e171d810d9ec0d",
+        "text": "http://{hostfile}:8080"
+      },
+      "after": "17bf4d8018c20cab",
+      "id": "26e171d810d9ec0d",
+      "date": 1502226511490
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b79389f41fe4a7ba",
+        "text": "Remember to changes your computers hostfile if not you have done that already in sudo nano /etc/hosts put this line in your hostfile"
+      },
+      "after": "26e171d810d9ec0d",
+      "id": "b79389f41fe4a7ba",
+      "date": 1502226514850
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "03b35b22ab016d56",
+        "text": "127.0.0.1 {test-domain} "
+      },
+      "after": "b79389f41fe4a7ba",
+      "id": "03b35b22ab016d56",
+      "date": 1502226546381
+    },
+    {
+      "type": "remove",
+      "id": "c0cd8a3a6d51e4a3",
+      "date": 1502531441729
+    },
+    {
+      "type": "remove",
+      "id": "9f740ffbba6e3349",
+      "date": 1502531444847
+    },
+    {
+      "type": "remove",
+      "id": "d865f0b15313fe25",
+      "date": 1502531447055
+    },
+    {
+      "type": "remove",
+      "id": "bfb34fc186bc0254",
+      "date": 1502531449312
+    },
+    {
+      "type": "remove",
+      "id": "0ff043f8a07feccd",
+      "date": 1502531451439
+    },
+    {
+      "type": "remove",
+      "id": "151882e56c1b7830",
+      "date": 1502531453423
+    },
+    {
+      "type": "remove",
+      "id": "b9f00cfa9edb6c64",
+      "date": 1502531455383
+    },
+    {
+      "type": "remove",
+      "id": "5216badaf4625758",
+      "date": 1502531458146
+    },
+    {
+      "type": "remove",
+      "id": "330e516b54559ae5",
+      "date": 1502531460888
+    },
+    {
+      "type": "remove",
+      "id": "00c156b2ba7851ae",
+      "date": 1502531462671
+    },
+    {
+      "type": "edit",
+      "id": "17bf4d8018c20cab",
+      "item": {
+        "type": "paragraph",
+        "id": "17bf4d8018c20cab",
+        "text": "\n"
+      },
+      "date": 1502531480640
+    },
+    {
+      "type": "remove",
+      "id": "26e171d810d9ec0d",
+      "date": 1502531483112
+    },
+    {
+      "type": "remove",
+      "id": "b79389f41fe4a7ba",
+      "date": 1502531485648
+    },
+    {
+      "type": "remove",
+      "id": "03b35b22ab016d56",
+      "date": 1502531487872
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bc686a8aa2a5429c"
+      },
+      "id": "bc686a8aa2a5429c",
+      "type": "add",
+      "after": "17bf4d8018c20cab",
+      "date": 1502531490666
+    },
+    {
+      "type": "move",
+      "order": [
+        "bc686a8aa2a5429c",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab"
+      ],
+      "id": "bc686a8aa2a5429c",
+      "date": 1502531492066
+    },
+    {
+      "type": "edit",
+      "id": "bc686a8aa2a5429c",
+      "item": {
+        "type": "reference",
+        "id": "bc686a8aa2a5429c",
+        "site": "hosting.permanent.wiki",
+        "slug": "nginx-virtual-hosts",
+        "title": "Nginx Virtual Hosts",
+        "text": "Here we look at how to configure [[Virtual Host]]s in [[Nginx]]."
+      },
+      "date": 1502531493937
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8729a4cf17eaf1f7"
+      },
+      "id": "8729a4cf17eaf1f7",
+      "type": "add",
+      "after": "17bf4d8018c20cab",
+      "date": 1502531495828
+    },
+    {
+      "type": "move",
+      "order": [
+        "8729a4cf17eaf1f7",
+        "bc686a8aa2a5429c",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab"
+      ],
+      "id": "8729a4cf17eaf1f7",
+      "date": 1502531497258
+    },
+    {
+      "type": "edit",
+      "id": "8729a4cf17eaf1f7",
+      "item": {
+        "type": "paragraph",
+        "id": "8729a4cf17eaf1f7",
+        "text": "Redirect: space in page title"
+      },
+      "date": 1502531519593
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "82f5c046098a8485"
+      },
+      "id": "82f5c046098a8485",
+      "type": "add",
+      "after": "17bf4d8018c20cab",
+      "date": 1502531530215
+    },
+    {
+      "type": "move",
+      "order": [
+        "8729a4cf17eaf1f7",
+        "bc686a8aa2a5429c",
+        "82f5c046098a8485",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab"
+      ],
+      "id": "82f5c046098a8485",
+      "date": 1502531531433
+    },
+    {
+      "type": "edit",
+      "id": "82f5c046098a8485",
+      "item": {
+        "type": "paragraph",
+        "id": "82f5c046098a8485",
+        "text": "[[Nginx Symlink Sites Available]]"
+      },
+      "date": 1502531560090
+    },
+    {
+      "type": "edit",
+      "id": "82f5c046098a8485",
+      "item": {
+        "type": "paragraph",
+        "id": "82f5c046098a8485",
+        "text": "[[Symlink Sites Available for Nginx]]"
+      },
+      "date": 1502531579130
+    },
+    {
+      "type": "edit",
+      "id": "82f5c046098a8485",
+      "item": {
+        "type": "paragraph",
+        "id": "82f5c046098a8485",
+        "text": "[[Symlink Sites Available]]"
+      },
+      "date": 1502531590822
+    },
+    {
+      "type": "remove",
+      "id": "a60f1631414f27bf",
+      "date": 1502531687882
+    },
+    {
+      "type": "remove",
+      "id": "c8994fd84adc7d4d",
+      "date": 1502531690008
+    }
+  ]
+}

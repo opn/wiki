@@ -1,0 +1,540 @@
+{
+  "title": "npm link",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "f040199344f81cad",
+      "text": "[[Node.js]] package linking is a two-step process. First, [[npm]] link in a package folder will create a globally-installed symbolic link to the current folder. Next, in some other location (ie the plugin folder you are developing):"
+    },
+    {
+      "type": "code",
+      "id": "0e1be6b71bdb734c",
+      "text": "npm link your-package-name"
+    },
+    {
+      "type": "paragraph",
+      "id": "ba8ab3992377d1a3",
+      "text": "will create a symlink from the local node_modules folder to the global symlink."
+    },
+    {
+      "type": "markdown",
+      "id": "3982abadac810bdc",
+      "text": "# Examples"
+    },
+    {
+      "type": "html",
+      "id": "c630503a7ca79aee",
+      "text": "Let's say we are working on a new plugin for redis. First we cd into the package directory, then create a global link, before moving into the directory where we have out wiki, and connecting our new plugin there (by creating a symlink) using\nnpm link redis.\n"
+    },
+    {
+      "type": "code",
+      "id": "981022eec5789ed2",
+      "text": "cd ~/projects/node-redis\nnpm link\ncd ~/projects/node-bloggy\nnpm link redis\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "ea8b4a5d60bc548e",
+      "text": "Now, any changes to ~/projects/node-redis will be reflected in ~/projects/node-bloggy/node_modules/node-redis/. Note that the link should be to the package name, not the directory name for that package."
+    },
+    {
+      "type": "paragraph",
+      "id": "4fdd08d6be8ce32b",
+      "text": "You may also shortcut the two steps in one. For example, to do the above use-case in a shorter way:"
+    },
+    {
+      "type": "code",
+      "id": "e3e51df348f8b66c",
+      "text": "cd ~/projects/node-bloggy  # go to main project\nnpm link ../node-redis     # link your dependency"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "npm link",
+        "story": []
+      },
+      "date": 1461494140752
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f040199344f81cad"
+      },
+      "id": "f040199344f81cad",
+      "type": "add",
+      "date": 1461494183161
+    },
+    {
+      "type": "edit",
+      "id": "f040199344f81cad",
+      "item": {
+        "type": "paragraph",
+        "id": "f040199344f81cad",
+        "text": "Package linking is a two-step process."
+      },
+      "date": 1461494195568
+    },
+    {
+      "type": "add",
+      "id": "f1d5cecad3df5125",
+      "item": {
+        "type": "paragraph",
+        "id": "f1d5cecad3df5125",
+        "text": "First, npm link in a package folder will create a globally-installed symbolic link to the current folder."
+      },
+      "after": "f040199344f81cad",
+      "date": 1461494230688
+    },
+    {
+      "type": "add",
+      "id": "3c1ed3a079004826",
+      "item": {
+        "type": "paragraph",
+        "id": "3c1ed3a079004826",
+        "text": "Next, in some other location:"
+      },
+      "after": "f1d5cecad3df5125",
+      "date": 1461494257769
+    },
+    {
+      "type": "add",
+      "id": "2139313d930c4043",
+      "item": {
+        "type": "paragraph",
+        "id": "2139313d930c4043",
+        "text": "npm link your-package-name will create a symlink from the local node_modules folder to the global symlink.\n\nNote that package-name is taken from package.json, not from directory name.\n\nThe package name can be optionally prefixed with a scope. See npm-scope. The scope must be preceded by an @-symbol and followed by a slash.\n\nWhen creating tarballs for npm publish, the linked packages are \"snapshotted\" to their current state by resolving the symbolic links.\n\nThis is handy for installing your own stuff, so that you can work on it and test it iteratively without having to continually rebuild.\n\nFor example:\n\ncd ~/projects/node-redis    # go into the package directory\nnpm link                    # creates global link\ncd ~/projects/node-bloggy   # go into some other package directory.\nnpm link redis              # link-install the package\nNow, any changes to ~/projects/node-redis will be reflected in ~/projects/node-bloggy/node_modules/node-redis/. Note that the link should be to the package name, not the directory name for that package.\n\nYou may also shortcut the two steps in one. For example, to do the above use-case in a shorter way:\n\ncd ~/projects/node-bloggy  # go into the dir of your main project\nnpm link ../node-redis     # link the dir of your dependency\nThe second line is the equivalent of doing:\n\n(cd ../node-redis; npm link)\nnpm link node-redis\nThat is, it first creates a global link, and then links the global installation target into your project's node_modules folder."
+      },
+      "after": "3c1ed3a079004826",
+      "date": 1461494259168
+    },
+    {
+      "type": "edit",
+      "id": "3c1ed3a079004826",
+      "item": {
+        "type": "paragraph",
+        "id": "3c1ed3a079004826",
+        "text": "Next, in some other location (ie the plugin folder you are developing):"
+      },
+      "date": 1461494273412
+    },
+    {
+      "type": "edit",
+      "id": "2139313d930c4043",
+      "item": {
+        "type": "paragraph",
+        "id": "2139313d930c4043",
+        "text": "npm link your-package-name"
+      },
+      "date": 1461494280243
+    },
+    {
+      "type": "add",
+      "id": "ba8ab3992377d1a3",
+      "item": {
+        "type": "paragraph",
+        "id": "ba8ab3992377d1a3",
+        "text": "will create a symlink from the local node_modules folder to the global symlink."
+      },
+      "after": "2139313d930c4043",
+      "date": 1461494284731
+    },
+    {
+      "type": "add",
+      "id": "3982abadac810bdc",
+      "item": {
+        "type": "paragraph",
+        "id": "3982abadac810bdc",
+        "text": "# Examples"
+      },
+      "after": "ba8ab3992377d1a3",
+      "date": 1461494325859
+    },
+    {
+      "type": "add",
+      "id": "c5d97349428196d2",
+      "item": {
+        "type": "paragraph",
+        "id": "c5d97349428196d2",
+        "text": "\ncd ~/projects/node-redis    # go into the package directory\nnpm link                    # creates global link\ncd ~/projects/node-bloggy   # go into some other package directory.\nnpm link redis              # link-install the package\n"
+      },
+      "after": "3982abadac810bdc",
+      "date": 1461494329910
+    },
+    {
+      "type": "add",
+      "id": "ea8b4a5d60bc548e",
+      "item": {
+        "type": "paragraph",
+        "id": "ea8b4a5d60bc548e",
+        "text": "Now, any changes to ~/projects/node-redis will be reflected in ~/projects/node-bloggy/node_modules/node-redis/. Note that the link should be to the package name, not the directory name for that package."
+      },
+      "after": "c5d97349428196d2",
+      "date": 1461494334589
+    },
+    {
+      "type": "add",
+      "id": "4fdd08d6be8ce32b",
+      "item": {
+        "type": "paragraph",
+        "id": "4fdd08d6be8ce32b",
+        "text": "You may also shortcut the two steps in one. For example, to do the above use-case in a shorter way:"
+      },
+      "after": "ea8b4a5d60bc548e",
+      "date": 1461494339460
+    },
+    {
+      "type": "add",
+      "id": "cc4a6b673272f3cd",
+      "item": {
+        "type": "paragraph",
+        "id": "cc4a6b673272f3cd",
+        "text": "\ncd ~/projects/node-bloggy  # go into the dir of your main project\nnpm link ../node-redis     # link the dir of your dependency"
+      },
+      "after": "4fdd08d6be8ce32b",
+      "date": 1461494342493
+    },
+    {
+      "type": "add",
+      "id": "38857d6120a25f6b",
+      "item": {
+        "type": "paragraph",
+        "id": "38857d6120a25f6b",
+        "text": "The second line is the equivalent of doing:"
+      },
+      "after": "cc4a6b673272f3cd",
+      "date": 1461494345204
+    },
+    {
+      "type": "add",
+      "id": "3be3d518302f553c",
+      "item": {
+        "type": "paragraph",
+        "id": "3be3d518302f553c",
+        "text": "(cd ../node-redis; npm link)\nnpm link node-redis"
+      },
+      "after": "38857d6120a25f6b",
+      "date": 1461494350365
+    },
+    {
+      "type": "add",
+      "id": "ecda2261f9bdbe69",
+      "item": {
+        "type": "paragraph",
+        "id": "ecda2261f9bdbe69",
+        "text": "That is, it first creates a global link, and then links the global installation target into your project's node_modules folder."
+      },
+      "after": "3be3d518302f553c",
+      "date": 1461494352014
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0e1be6b71bdb734c"
+      },
+      "id": "0e1be6b71bdb734c",
+      "type": "add",
+      "after": "ecda2261f9bdbe69",
+      "date": 1461494353482
+    },
+    {
+      "type": "move",
+      "order": [
+        "f040199344f81cad",
+        "f1d5cecad3df5125",
+        "3c1ed3a079004826",
+        "0e1be6b71bdb734c",
+        "2139313d930c4043",
+        "ba8ab3992377d1a3",
+        "3982abadac810bdc",
+        "c5d97349428196d2",
+        "ea8b4a5d60bc548e",
+        "4fdd08d6be8ce32b",
+        "cc4a6b673272f3cd",
+        "38857d6120a25f6b",
+        "3be3d518302f553c",
+        "ecda2261f9bdbe69"
+      ],
+      "id": "0e1be6b71bdb734c",
+      "date": 1461494361761
+    },
+    {
+      "type": "remove",
+      "id": "f1d5cecad3df5125",
+      "date": 1461494366662
+    },
+    {
+      "type": "edit",
+      "id": "f040199344f81cad",
+      "item": {
+        "type": "paragraph",
+        "id": "f040199344f81cad",
+        "text": "Package linking is a two-step process. First, npm link in a package folder will create a globally-installed symbolic link to the current folder."
+      },
+      "date": 1461494369064
+    },
+    {
+      "type": "remove",
+      "id": "3c1ed3a079004826",
+      "date": 1461494370856
+    },
+    {
+      "type": "edit",
+      "id": "f040199344f81cad",
+      "item": {
+        "type": "paragraph",
+        "id": "f040199344f81cad",
+        "text": "Package linking is a two-step process. First, npm link in a package folder will create a globally-installed symbolic link to the current folder. Next, in some other location (ie the plugin folder you are developing):"
+      },
+      "date": 1461494375598
+    },
+    {
+      "type": "remove",
+      "id": "2139313d930c4043",
+      "date": 1461494379925
+    },
+    {
+      "type": "edit",
+      "id": "0e1be6b71bdb734c",
+      "item": {
+        "type": "code",
+        "id": "0e1be6b71bdb734c",
+        "text": "npm link your-package-name"
+      },
+      "date": 1461494382751
+    },
+    {
+      "type": "edit",
+      "id": "3982abadac810bdc",
+      "item": {
+        "type": "markdown",
+        "id": "3982abadac810bdc",
+        "text": "# Examples"
+      },
+      "date": 1461494392273
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c630503a7ca79aee"
+      },
+      "id": "c630503a7ca79aee",
+      "type": "add",
+      "after": "ecda2261f9bdbe69",
+      "date": 1461494947592
+    },
+    {
+      "type": "move",
+      "order": [
+        "f040199344f81cad",
+        "0e1be6b71bdb734c",
+        "ba8ab3992377d1a3",
+        "3982abadac810bdc",
+        "c630503a7ca79aee",
+        "c5d97349428196d2",
+        "ea8b4a5d60bc548e",
+        "4fdd08d6be8ce32b",
+        "cc4a6b673272f3cd",
+        "38857d6120a25f6b",
+        "3be3d518302f553c",
+        "ecda2261f9bdbe69"
+      ],
+      "id": "c630503a7ca79aee",
+      "date": 1461494949536
+    },
+    {
+      "type": "remove",
+      "id": "c5d97349428196d2",
+      "date": 1461494956891
+    },
+    {
+      "type": "edit",
+      "id": "c630503a7ca79aee",
+      "item": {
+        "type": "html",
+        "id": "c630503a7ca79aee",
+        "text": "cd ~/projects/node-redis    # go into the package directory\nnpm link                    # creates global link\ncd ~/projects/node-bloggy   # go into some other package directory.\nnpm link redis              # link-install the package\n"
+      },
+      "date": 1461494960462
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "981022eec5789ed2"
+      },
+      "id": "981022eec5789ed2",
+      "type": "add",
+      "after": "ecda2261f9bdbe69",
+      "date": 1461494964066
+    },
+    {
+      "type": "move",
+      "order": [
+        "f040199344f81cad",
+        "0e1be6b71bdb734c",
+        "ba8ab3992377d1a3",
+        "3982abadac810bdc",
+        "c630503a7ca79aee",
+        "981022eec5789ed2",
+        "ea8b4a5d60bc548e",
+        "4fdd08d6be8ce32b",
+        "cc4a6b673272f3cd",
+        "38857d6120a25f6b",
+        "3be3d518302f553c",
+        "ecda2261f9bdbe69"
+      ],
+      "id": "981022eec5789ed2",
+      "date": 1461494966000
+    },
+    {
+      "type": "edit",
+      "id": "981022eec5789ed2",
+      "item": {
+        "type": "code",
+        "id": "981022eec5789ed2",
+        "text": "cd ~/projects/node-redis    # go into the package directory\nnpm link                    # creates global link\ncd ~/projects/node-bloggy   # go into some other package directory.\nnpm link redis              # link-install the package\n"
+      },
+      "date": 1461494972554
+    },
+    {
+      "type": "edit",
+      "id": "981022eec5789ed2",
+      "item": {
+        "type": "code",
+        "id": "981022eec5789ed2",
+        "text": "cd ~/projects/node-redis # go into the package directory\nnpm link                    # creates global link\ncd ~/projects/node-bloggy   # go into some other package directory.\nnpm link redis              # link-install the package\n"
+      },
+      "date": 1461494994087
+    },
+    {
+      "type": "edit",
+      "id": "981022eec5789ed2",
+      "item": {
+        "type": "code",
+        "id": "981022eec5789ed2",
+        "text": "cd ~/projects/node-redis\nnpm link                    # creates global link\ncd ~/projects/node-bloggy   # go into some other package directory.\nnpm link redis              # link-install the package\n"
+      },
+      "date": 1461495006376
+    },
+    {
+      "type": "edit",
+      "id": "981022eec5789ed2",
+      "item": {
+        "type": "code",
+        "id": "981022eec5789ed2",
+        "text": "cd ~/projects/node-redis\nnpm link\ncd ~/projects/node-bloggy\nnpm link redis\n"
+      },
+      "date": 1461495032744
+    },
+    {
+      "type": "edit",
+      "id": "c630503a7ca79aee",
+      "item": {
+        "type": "html",
+        "id": "c630503a7ca79aee",
+        "text": "Let's say we are working on a new plugin for redis. First we cd into the package directory, then create a global link, before moving into the directory where we have out wiki, and connecting our new plugin there (by creating a symlink) using\nnpm link redis.\n"
+      },
+      "date": 1461495192960
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e3e51df348f8b66c"
+      },
+      "id": "e3e51df348f8b66c",
+      "type": "add",
+      "after": "ecda2261f9bdbe69",
+      "date": 1461495212978
+    },
+    {
+      "type": "move",
+      "order": [
+        "f040199344f81cad",
+        "0e1be6b71bdb734c",
+        "ba8ab3992377d1a3",
+        "3982abadac810bdc",
+        "c630503a7ca79aee",
+        "981022eec5789ed2",
+        "ea8b4a5d60bc548e",
+        "4fdd08d6be8ce32b",
+        "cc4a6b673272f3cd",
+        "e3e51df348f8b66c",
+        "38857d6120a25f6b",
+        "3be3d518302f553c",
+        "ecda2261f9bdbe69"
+      ],
+      "id": "e3e51df348f8b66c",
+      "date": 1461495214737
+    },
+    {
+      "type": "remove",
+      "id": "cc4a6b673272f3cd",
+      "date": 1461495218588
+    },
+    {
+      "type": "edit",
+      "id": "e3e51df348f8b66c",
+      "item": {
+        "type": "code",
+        "id": "e3e51df348f8b66c",
+        "text": "cd ~/projects/node-bloggy  # go into the dir of your main project\nnpm link ../node-redis     # link the dir of your dependency"
+      },
+      "date": 1461495224413
+    },
+    {
+      "type": "edit",
+      "id": "e3e51df348f8b66c",
+      "item": {
+        "type": "code",
+        "id": "e3e51df348f8b66c",
+        "text": "cd ~/projects/node-bloggy  # go to main project\nnpm link ../node-redis     # link the dir of your dependency"
+      },
+      "date": 1461495253622
+    },
+    {
+      "type": "edit",
+      "id": "e3e51df348f8b66c",
+      "item": {
+        "type": "code",
+        "id": "e3e51df348f8b66c",
+        "text": "cd ~/projects/node-bloggy  # go to main project\nnpm link ../node-redis     # link your dependency"
+      },
+      "date": 1461495261053
+    },
+    {
+      "type": "remove",
+      "id": "38857d6120a25f6b",
+      "date": 1461495272238
+    },
+    {
+      "type": "remove",
+      "id": "3be3d518302f553c",
+      "date": 1461495277589
+    },
+    {
+      "type": "remove",
+      "id": "ecda2261f9bdbe69",
+      "date": 1461495289214
+    },
+    {
+      "type": "fork",
+      "site": "plugin.fedwiki.org",
+      "date": 1461498992596
+    },
+    {
+      "type": "fork",
+      "site": "javascript.c0de.academy",
+      "date": 1461499059893
+    },
+    {
+      "type": "edit",
+      "id": "f040199344f81cad",
+      "item": {
+        "type": "paragraph",
+        "id": "f040199344f81cad",
+        "text": "[[Node.js]] package linking is a two-step process. First, [[npm]] link in a package folder will create a globally-installed symbolic link to the current folder. Next, in some other location (ie the plugin folder you are developing):"
+      },
+      "date": 1461499079982
+    }
+  ]
+}

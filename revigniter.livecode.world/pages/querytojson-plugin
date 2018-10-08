@@ -1,0 +1,601 @@
+{
+  "title": "QueryToJSON Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "4a206b1a3db2669a",
+      "text": "The QueryToJSON Plugin file contains a function for converting database query result arrays to the JSON format."
+    },
+    {
+      "type": "markdown",
+      "id": "4ae6c3cd4a45f47c",
+      "text": "# Loading this Plugin"
+    },
+    {
+      "type": "paragraph",
+      "id": "5413e8381b7229cc",
+      "text": "This plugin is loaded using the following code:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "eb2d04ca76a9813e",
+      "text": "rigLoadPlugin \"querytojson\""
+    },
+    {
+      "type": "paragraph",
+      "id": "f7288c4abfa495cc",
+      "text": "The function:"
+    },
+    {
+      "type": "code",
+      "id": "61ce1813c4013044",
+      "text": "rigQueryToJSON(pResult, pFieldnames)\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "0735eca454ac3c94",
+      "text": "\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "f813abf4a5daa5e9",
+      "text": "The first parameter is a database query result array. The optional second parameter is an array containing the field names of the database table. "
+    },
+    {
+      "type": "markdown",
+      "id": "1d477a90c0e75adc",
+      "text": "# Example:"
+    },
+    {
+      "type": "code",
+      "id": "67cd68c2ed11f530",
+      "text": "# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]"
+    },
+    {
+      "type": "markdown",
+      "id": "c4832ff88e5a8686",
+      "text": "# Conversion example:"
+    },
+    {
+      "type": "paragraph",
+      "id": "9544241f74ad12ab",
+      "text": "Input: database table:"
+    },
+    {
+      "type": "code",
+      "id": "14f9134a4dc39c97",
+      "text": "ID\tName\t        Directions\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8b9573ba8bda7440",
+      "text": "# Output: JSON"
+    },
+    {
+      "type": "code",
+      "id": "77eb0b81868744a6",
+      "text": "{\n\"queryToJSON\":[\n{\n\"ID\":\"1\",\n\"Name\":\"Banana Bread\",\n\"Directions\":\"How to make banana bread.\"\n},\n{\n\"ID\":\"2\",\n\"Name\":\"Pancakes\",\n\"Directions\":\"How to make pancakes.\"\n}\n]\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "b1b3aefddc2c7e82",
+      "text": "To reference the JSON object use the term \"queryToJSON\". To reference individual items of the JSON records use the table field names. If the \"fieldnames\" parameter is empty, item names are \"field1\", \"field2\", \"field3\" ... etc. "
+    },
+    {
+      "type": "markdown",
+      "id": "a89586df687da1ed",
+      "text": "# Example:"
+    },
+    {
+      "type": "code",
+      "id": "68195694bfa5e682",
+      "text": "rigJQopen\nrigJQeventOpen \"'#go'\", \"'click'\"\nput \"getjsontest/getjsondata\" into tAjax[\"url\"]\nput \"'json'\" into tAjax[\"dataType\"]\n\nput rigJQvarR(\"jsObj, data;\") & return into tSuccess\nput rigJQsetR(\"'#resultData'\", \"append\", \"'<p>' + element.myTabeleFieldName + '</p>'\") into tCallback\nput rigJQeachOpenR(\"jsObj.queryToJSON\", , tCallback) && rigJQeachCloseR() after tSuccess\n\nput tSuccess into tAjax[\"success\"]\n\nrigJQajax tAjax\n\nrigJQeventClose\nrigJQclose\n\nput the result into gData[\"JQscript\"]"
+    },
+    {
+      "type": "paragraph",
+      "id": "a002287cb9398a53",
+      "text": "In the example above we perform an Ajax request. We store the retrieved data in a variable called \"jsObj\" and reference the JSON object with \"jsObj.queryToJSON\". "
+    },
+    {
+      "type": "paragraph",
+      "id": "3e1baaa0c4500009",
+      "text": "We iterate over the JSON object using \"element.myTabeleFieldName\" for an item \"myTabeleFieldName\" in each JSON record \"element\" where \"myTabeleFieldName\" is the name of a database tabel field and \"element\" is an argument of the JQuery .each function (rigJQeachOpenR)."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "QueryToJSON Plugin",
+        "story": []
+      },
+      "date": 1459815131512
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4a206b1a3db2669a"
+      },
+      "id": "4a206b1a3db2669a",
+      "type": "add",
+      "date": 1459815152405
+    },
+    {
+      "type": "edit",
+      "id": "4a206b1a3db2669a",
+      "item": {
+        "type": "paragraph",
+        "id": "4a206b1a3db2669a",
+        "text": "The QueryToJSON Plugin file contains a function for converting database query result arrays to the JSON format."
+      },
+      "date": 1459815160760
+    },
+    {
+      "type": "add",
+      "id": "4ae6c3cd4a45f47c",
+      "item": {
+        "type": "paragraph",
+        "id": "4ae6c3cd4a45f47c",
+        "text": "# Loading this Plugin"
+      },
+      "after": "4a206b1a3db2669a",
+      "date": 1459815166768
+    },
+    {
+      "type": "add",
+      "id": "5413e8381b7229cc",
+      "item": {
+        "type": "paragraph",
+        "id": "5413e8381b7229cc",
+        "text": "This plugin is loaded using the following code:\n\n"
+      },
+      "after": "4ae6c3cd4a45f47c",
+      "date": 1459815172913
+    },
+    {
+      "type": "add",
+      "id": "061b22bf708f29bb",
+      "item": {
+        "type": "paragraph",
+        "id": "061b22bf708f29bb",
+        "text": "rigLoadPlugin \"querytojson\""
+      },
+      "after": "5413e8381b7229cc",
+      "date": 1459815174984
+    },
+    {
+      "type": "add",
+      "id": "f7288c4abfa495cc",
+      "item": {
+        "type": "paragraph",
+        "id": "f7288c4abfa495cc",
+        "text": "The function:"
+      },
+      "after": "061b22bf708f29bb",
+      "date": 1459815185505
+    },
+    {
+      "type": "add",
+      "id": "0735eca454ac3c94",
+      "item": {
+        "type": "paragraph",
+        "id": "0735eca454ac3c94",
+        "text": "\nrigQueryToJSON(pResult, pFieldnames)\n\n"
+      },
+      "after": "f7288c4abfa495cc",
+      "date": 1459815187705
+    },
+    {
+      "type": "add",
+      "id": "f813abf4a5daa5e9",
+      "item": {
+        "type": "paragraph",
+        "id": "f813abf4a5daa5e9",
+        "text": "The first parameter is a database query result array. The optional second parameter is an array containing the field names of the database table. "
+      },
+      "after": "0735eca454ac3c94",
+      "date": 1459815194802
+    },
+    {
+      "type": "add",
+      "id": "1d477a90c0e75adc",
+      "item": {
+        "type": "paragraph",
+        "id": "1d477a90c0e75adc",
+        "text": "# Example:\n\n# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]\nConversion example:\n\nInput: database table\n\nID\tName\tDirections\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\nOutput: JSON\n\n{\n\"queryToJSON\":[\n{\n\"ID\":\"1\",\n\"Name\":\"Banana Bread\",\n\"Directions\":\"How to make banana bread.\"\n},\n{\n\"ID\":\"2\",\n\"Name\":\"Pancakes\",\n\"Directions\":\"How to make pancakes.\"\n}\n]\n}\nTo reference the JSON object use the term \"queryToJSON\". To reference individual items of the JSON records use the table field names. If the \"fieldnames\" parameter is empty, item names are \"field1\", \"field2\", \"field3\" ... etc. Example:\n\nrigJQopen\nrigJQeventOpen \"'#go'\", \"'click'\"\nput \"getjsontest/getjsondata\" into tAjax[\"url\"]\nput \"'json'\" into tAjax[\"dataType\"]\n\nput rigJQvarR(\"jsObj, data;\") & return into tSuccess\nput rigJQsetR(\"'#resultData'\", \"append\", \"'<p>' + element.myTabeleFieldName + '</p>'\") into tCallback\nput rigJQeachOpenR(\"jsObj.queryToJSON\", , tCallback) && rigJQeachCloseR() after tSuccess\n\nput tSuccess into tAjax[\"success\"]\n\nrigJQajax tAjax\n\nrigJQeventClose\nrigJQclose\n\nput the result into gData[\"JQscript\"]\nIn the example above we perform an Ajax request. We store the retrieved data in a variable called \"jsObj\" and reference the JSON object with \"jsObj.queryToJSON\". We iterate over the JSON object using \"element.myTabeleFieldName\" for an item \"myTabeleFieldName\" in each JSON record \"element\" where \"myTabeleFieldName\" is the name of a database tabel field and \"element\" is an argument of the JQuery .each function (rigJQeachOpenR)."
+      },
+      "after": "f813abf4a5daa5e9",
+      "date": 1459815199500
+    },
+    {
+      "type": "edit",
+      "id": "1d477a90c0e75adc",
+      "item": {
+        "type": "paragraph",
+        "id": "1d477a90c0e75adc",
+        "text": "# Example:\n\n# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]\nConversion example:\n\nInput: database table\n\nID\tName\tDirections\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\nOutput: JSON\n\n{\n\"queryToJSON\":[\n{\n\"ID\":\"1\",\n\"Name\":\"Banana Bread\",\n\"Directions\":\"How to make banana bread.\"\n},\n{\n\"ID\":\"2\",\n\"Name\":\"Pancakes\",\n\"Directions\":\"How to make pancakes.\"\n}\n]\n}\nTo reference the JSON object use the term \"queryToJSON\". To reference individual items of the JSON records use the table field names. If the \"fieldnames\" parameter is empty, item names are \"field1\", \"field2\", \"field3\" ... etc. Example:\n\nrigJQopen\nrigJQeventOpen \"'#go'\", \"'click'\"\nput \"getjsontest/getjsondata\" into tAjax[\"url\"]\nput \"'json'\" into tAjax[\"dataType\"]\n\nput rigJQvarR(\"jsObj, data;\") & return into tSuccess\nput rigJQsetR(\"'#resultData'\", \"append\", \"'<p>' + element.myTabeleFieldName + '</p>'\") into tCallback\nput rigJQeachOpenR(\"jsObj.queryToJSON\", , tCallback) && rigJQeachCloseR() after tSuccess\n\nput tSuccess into tAjax[\"success\"]\n\nrigJQajax tAjax\n\nrigJQeventClose\nrigJQclose\n\nput the result into gData[\"JQscript\"]\n"
+      },
+      "date": 1459815206788
+    },
+    {
+      "type": "add",
+      "id": "a002287cb9398a53",
+      "item": {
+        "type": "paragraph",
+        "id": "a002287cb9398a53",
+        "text": "In the example above we perform an Ajax request. We store the retrieved data in a variable called \"jsObj\" and reference the JSON object with \"jsObj.queryToJSON\". "
+      },
+      "after": "1d477a90c0e75adc",
+      "date": 1459815212209
+    },
+    {
+      "type": "add",
+      "id": "3e1baaa0c4500009",
+      "item": {
+        "type": "paragraph",
+        "id": "3e1baaa0c4500009",
+        "text": "We iterate over the JSON object using \"element.myTabeleFieldName\" for an item \"myTabeleFieldName\" in each JSON record \"element\" where \"myTabeleFieldName\" is the name of a database tabel field and \"element\" is an argument of the JQuery .each function (rigJQeachOpenR)."
+      },
+      "after": "a002287cb9398a53",
+      "date": 1459815216998
+    },
+    {
+      "type": "edit",
+      "id": "1d477a90c0e75adc",
+      "item": {
+        "type": "paragraph",
+        "id": "1d477a90c0e75adc",
+        "text": "# Example:\n\n# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]\nConversion example:\n\nInput: database table\n\nID\tName\tDirections\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\nOutput: JSON\n\n{\n\"queryToJSON\":[\n{\n\"ID\":\"1\",\n\"Name\":\"Banana Bread\",\n\"Directions\":\"How to make banana bread.\"\n},\n{\n\"ID\":\"2\",\n\"Name\":\"Pancakes\",\n\"Directions\":\"How to make pancakes.\"\n}\n]\n}\nTo reference the JSON object use the term \"queryToJSON\". To reference individual items of the JSON records use the table field names. If the \"fieldnames\" parameter is empty, item names are \"field1\", \"field2\", \"field3\" ... etc. "
+      },
+      "date": 1459815230098
+    },
+    {
+      "type": "add",
+      "id": "a89586df687da1ed",
+      "item": {
+        "type": "paragraph",
+        "id": "a89586df687da1ed",
+        "text": "# Example:"
+      },
+      "after": "1d477a90c0e75adc",
+      "date": 1459815235650
+    },
+    {
+      "type": "edit",
+      "id": "a89586df687da1ed",
+      "item": {
+        "type": "markdown",
+        "id": "a89586df687da1ed",
+        "text": "# Example:"
+      },
+      "date": 1459815237497
+    },
+    {
+      "type": "add",
+      "id": "859a60972328fdd9",
+      "item": {
+        "type": "paragraph",
+        "id": "859a60972328fdd9",
+        "text": "\nrigJQopen\nrigJQeventOpen \"'#go'\", \"'click'\"\nput \"getjsontest/getjsondata\" into tAjax[\"url\"]\nput \"'json'\" into tAjax[\"dataType\"]\n\nput rigJQvarR(\"jsObj, data;\") & return into tSuccess\nput rigJQsetR(\"'#resultData'\", \"append\", \"'<p>' + element.myTabeleFieldName + '</p>'\") into tCallback\nput rigJQeachOpenR(\"jsObj.queryToJSON\", , tCallback) && rigJQeachCloseR() after tSuccess\n\nput tSuccess into tAjax[\"success\"]\n\nrigJQajax tAjax\n\nrigJQeventClose\nrigJQclose\n\nput the result into gData[\"JQscript\"]\n"
+      },
+      "after": "a89586df687da1ed",
+      "date": 1459815239536
+    },
+    {
+      "type": "edit",
+      "id": "1d477a90c0e75adc",
+      "item": {
+        "type": "paragraph",
+        "id": "1d477a90c0e75adc",
+        "text": "# Example:\n\n# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]\n"
+      },
+      "date": 1459815255380
+    },
+    {
+      "type": "add",
+      "id": "c4832ff88e5a8686",
+      "item": {
+        "type": "paragraph",
+        "id": "c4832ff88e5a8686",
+        "text": "# Conversion example:"
+      },
+      "after": "1d477a90c0e75adc",
+      "date": 1459815260491
+    },
+    {
+      "type": "add",
+      "id": "9544241f74ad12ab",
+      "item": {
+        "type": "paragraph",
+        "id": "9544241f74ad12ab",
+        "text": "Input: database table\n\nID\tName\tDirections\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\n"
+      },
+      "after": "c4832ff88e5a8686",
+      "date": 1459815269868
+    },
+    {
+      "type": "add",
+      "id": "8b9573ba8bda7440",
+      "item": {
+        "type": "paragraph",
+        "id": "8b9573ba8bda7440",
+        "text": "# Output: JSON"
+      },
+      "after": "9544241f74ad12ab",
+      "date": 1459815272962
+    },
+    {
+      "type": "add",
+      "id": "0e6f3ead00be54ac",
+      "item": {
+        "type": "paragraph",
+        "id": "0e6f3ead00be54ac",
+        "text": "{\n\"queryToJSON\":[\n{\n\"ID\":\"1\",\n\"Name\":\"Banana Bread\",\n\"Directions\":\"How to make banana bread.\"\n},\n{\n\"ID\":\"2\",\n\"Name\":\"Pancakes\",\n\"Directions\":\"How to make pancakes.\"\n}\n]\n}"
+      },
+      "after": "8b9573ba8bda7440",
+      "date": 1459815278108
+    },
+    {
+      "type": "add",
+      "id": "b1b3aefddc2c7e82",
+      "item": {
+        "type": "paragraph",
+        "id": "b1b3aefddc2c7e82",
+        "text": "To reference the JSON object use the term \"queryToJSON\". To reference individual items of the JSON records use the table field names. If the \"fieldnames\" parameter is empty, item names are \"field1\", \"field2\", \"field3\" ... etc. "
+      },
+      "after": "0e6f3ead00be54ac",
+      "date": 1459815281236
+    },
+    {
+      "type": "edit",
+      "id": "c4832ff88e5a8686",
+      "item": {
+        "type": "markdown",
+        "id": "c4832ff88e5a8686",
+        "text": "# Conversion example:"
+      },
+      "date": 1459815282806
+    },
+    {
+      "type": "edit",
+      "id": "1d477a90c0e75adc",
+      "item": {
+        "type": "markdown",
+        "id": "1d477a90c0e75adc",
+        "text": "# Example:\n\n# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]\n"
+      },
+      "date": 1459815284187
+    },
+    {
+      "type": "edit",
+      "id": "1d477a90c0e75adc",
+      "item": {
+        "type": "markdown",
+        "id": "1d477a90c0e75adc",
+        "text": "# Example:"
+      },
+      "date": 1459815295477
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "67cd68c2ed11f530"
+      },
+      "after": "1d477a90c0e75adc",
+      "id": "67cd68c2ed11f530",
+      "date": 1459815300230
+    },
+    {
+      "type": "edit",
+      "id": "67cd68c2ed11f530",
+      "item": {
+        "type": "code",
+        "id": "67cd68c2ed11f530",
+        "text": "# MODEL DATABASE QUERY\nput mymodelFetchAllData(\"recipe\") into tQuery\nput tQuery[\"resultarray\"] into tResult\nput tQuery[\"fieldnames\"] into tFieldNames\n\n# CONVERT ARRAY TO JSON\nput rigQueryToJSON(tResult, tFieldNames) into gData[\"jsonData\"]"
+      },
+      "date": 1459815303510
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "14f9134a4dc39c97"
+      },
+      "after": "c4832ff88e5a8686",
+      "id": "14f9134a4dc39c97",
+      "date": 1459815309513
+    },
+    {
+      "type": "move",
+      "order": [
+        "4a206b1a3db2669a",
+        "4ae6c3cd4a45f47c",
+        "5413e8381b7229cc",
+        "061b22bf708f29bb",
+        "f7288c4abfa495cc",
+        "0735eca454ac3c94",
+        "f813abf4a5daa5e9",
+        "1d477a90c0e75adc",
+        "67cd68c2ed11f530",
+        "c4832ff88e5a8686",
+        "9544241f74ad12ab",
+        "14f9134a4dc39c97",
+        "8b9573ba8bda7440",
+        "0e6f3ead00be54ac",
+        "b1b3aefddc2c7e82",
+        "a89586df687da1ed",
+        "859a60972328fdd9",
+        "a002287cb9398a53",
+        "3e1baaa0c4500009"
+      ],
+      "id": "9544241f74ad12ab",
+      "date": 1459815312541
+    },
+    {
+      "type": "edit",
+      "id": "9544241f74ad12ab",
+      "item": {
+        "type": "paragraph",
+        "id": "9544241f74ad12ab",
+        "text": "Input: database table:"
+      },
+      "date": 1459815319413
+    },
+    {
+      "type": "edit",
+      "id": "14f9134a4dc39c97",
+      "item": {
+        "type": "code",
+        "id": "14f9134a4dc39c97",
+        "text": "ID\tName\tDirections\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\n"
+      },
+      "date": 1459815323119
+    },
+    {
+      "type": "edit",
+      "id": "14f9134a4dc39c97",
+      "item": {
+        "type": "code",
+        "id": "14f9134a4dc39c97",
+        "text": "ID\tName\t          Directions\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\n"
+      },
+      "date": 1459815331503
+    },
+    {
+      "type": "edit",
+      "id": "14f9134a4dc39c97",
+      "item": {
+        "type": "code",
+        "id": "14f9134a4dc39c97",
+        "text": "ID\tName\t        Directions\n1\tBanana Bread\tHow to make banana bread.\n2\tPancakes\tHow to make pancakes.\n"
+      },
+      "date": 1459815335566
+    },
+    {
+      "type": "edit",
+      "id": "8b9573ba8bda7440",
+      "item": {
+        "type": "markdown",
+        "id": "8b9573ba8bda7440",
+        "text": "# Output: JSON"
+      },
+      "date": 1459815339478
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "77eb0b81868744a6"
+      },
+      "after": "8b9573ba8bda7440",
+      "id": "77eb0b81868744a6",
+      "date": 1459815342878
+    },
+    {
+      "type": "remove",
+      "id": "0e6f3ead00be54ac",
+      "date": 1459815347778
+    },
+    {
+      "type": "edit",
+      "id": "77eb0b81868744a6",
+      "item": {
+        "type": "code",
+        "id": "77eb0b81868744a6",
+        "text": "{\n\"queryToJSON\":[\n{\n\"ID\":\"1\",\n\"Name\":\"Banana Bread\",\n\"Directions\":\"How to make banana bread.\"\n},\n{\n\"ID\":\"2\",\n\"Name\":\"Pancakes\",\n\"Directions\":\"How to make pancakes.\"\n}\n]\n}"
+      },
+      "date": 1459815349752
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "68195694bfa5e682"
+      },
+      "after": "a89586df687da1ed",
+      "id": "68195694bfa5e682",
+      "date": 1459815363875
+    },
+    {
+      "type": "remove",
+      "id": "859a60972328fdd9",
+      "date": 1459815370101
+    },
+    {
+      "type": "edit",
+      "id": "68195694bfa5e682",
+      "item": {
+        "type": "code",
+        "id": "68195694bfa5e682",
+        "text": "rigJQopen\nrigJQeventOpen \"'#go'\", \"'click'\"\nput \"getjsontest/getjsondata\" into tAjax[\"url\"]\nput \"'json'\" into tAjax[\"dataType\"]\n\nput rigJQvarR(\"jsObj, data;\") & return into tSuccess\nput rigJQsetR(\"'#resultData'\", \"append\", \"'<p>' + element.myTabeleFieldName + '</p>'\") into tCallback\nput rigJQeachOpenR(\"jsObj.queryToJSON\", , tCallback) && rigJQeachCloseR() after tSuccess\n\nput tSuccess into tAjax[\"success\"]\n\nrigJQajax tAjax\n\nrigJQeventClose\nrigJQclose\n\nput the result into gData[\"JQscript\"]"
+      },
+      "date": 1459815374673
+    },
+    {
+      "type": "edit",
+      "id": "4ae6c3cd4a45f47c",
+      "item": {
+        "type": "markdown",
+        "id": "4ae6c3cd4a45f47c",
+        "text": "# Loading this Plugin"
+      },
+      "date": 1459815384130
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "eb2d04ca76a9813e"
+      },
+      "after": "5413e8381b7229cc",
+      "id": "eb2d04ca76a9813e",
+      "date": 1459815389427
+    },
+    {
+      "type": "remove",
+      "id": "061b22bf708f29bb",
+      "date": 1459815392895
+    },
+    {
+      "type": "edit",
+      "id": "eb2d04ca76a9813e",
+      "item": {
+        "type": "code",
+        "id": "eb2d04ca76a9813e",
+        "text": "rigLoadPlugin \"querytojson\""
+      },
+      "date": 1459815394648
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "61ce1813c4013044"
+      },
+      "after": "f7288c4abfa495cc",
+      "id": "61ce1813c4013044",
+      "date": 1459815398347
+    },
+    {
+      "type": "edit",
+      "id": "0735eca454ac3c94",
+      "item": {
+        "type": "paragraph",
+        "id": "0735eca454ac3c94",
+        "text": "\n"
+      },
+      "date": 1459815401824
+    },
+    {
+      "type": "edit",
+      "id": "61ce1813c4013044",
+      "item": {
+        "type": "code",
+        "id": "61ce1813c4013044",
+        "text": "rigQueryToJSON(pResult, pFieldnames)\n"
+      },
+      "date": 1459815404232
+    }
+  ]
+}

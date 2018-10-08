@@ -1,0 +1,425 @@
+{
+  "title": "Reduce Revisited",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "c025adbf5a533054",
+      "text": "The Reduce plugin reflects to find links to pages with calculations that it can perform in sequence. This is a powerful idea but the implementation suggests we can improve speed, power and usability. [https://github.com/fedwiki/wiki-plugin-reduce/issues/7#issuecomment-125006350 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c051539164b4862d",
+      "text": "See [[About Reduce Plugin]]"
+    },
+    {
+      "type": "markdown",
+      "id": "24ba431e76a56196",
+      "text": "# Speed"
+    },
+    {
+      "type": "paragraph",
+      "id": "c3b5968fb5b1e337",
+      "text": "We demonstrate that the calculations found on pages can be transformed to source code for other engines. In our example, we create spreadsheet formulas. But better to create javascript source, maybe even javascript asm.js source, which will jit to machine code when evaluated. [https://en.wikipedia.org/wiki/Asm.js wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2c9c84fde11173ec",
+      "text": "A better division of responsibility would be to have computation plugins, such as Method plugin in our example, offer the markup to javascript translation."
+    },
+    {
+      "type": "markdown",
+      "id": "b5585b981add12c3",
+      "text": "# Power"
+    },
+    {
+      "type": "image",
+      "id": "fd8f4e3f2b5ac753",
+      "url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAF8ASQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0CiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAqancyWtqDCqmaSRYo933QzEDJ9h1/Cs69u7zTyqS3ImIilmJSIKSAFCr3Gdze3Sta6tobuAwzruQkHgkEEHIII5BB7ioBpVnxuR3IAGXldifmDcknnkD/APVQBn3+sSQ6dPMqmOKNxCLpiOX3hCdvoDn8ulWptX8rS475rcqkrDaGcAKp6Mx/hGPyyKmXSrNZTII2z5nm7TIxUPknIXOBySelLJpdpJaR2pR1hjBVVSVl4xjGQeRjtQBRGsXP2iVPsQYeesEQWQZZtm45PTAH8j1pI/EccjMFtnbPEe1gS7bgoHtknjPYE8VoRabaQz+dHGQ+8uBvbaGIwSBnA4NR/wBkWflPEElCMwbaJnAUg5BXn5efTFAFKXxA8UUhNi5eISs6iQYCx4yc+5OB9K0LC9a7NwrwNC8MgQqWB6qG7ezCmppFikRjWD5WUqcuxyC24857k5q1FBHCZDGuDI+9+ScngZ/QUASUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAVivqt5cyyf2fFAIEYoJZiT5hBwcAds8Zz+FWNX0Ox1nyvtqO3lZ27XK9cZ6fQVl24bRovsM9vcGKIkQyxRNIHTPGdoJB7HPpXHjZ1oU70Vd/eVFJvU19M1BrzzYp4hDcw48xA24EHowPcHB/I1frmB4eg1u4e91S3ljXaI4I95RgoySzAepPT296k/wCEH0T/AJ4zf9/2/wAa3oucqac1Zidr6HR0Vzn/AAg+if8APGb/AL/t/jR/wg+if88Zv+/7f41qI6OsLUdcmjvJLWwijYxECSWUnaGxnaAOpwRnmof+EH0T/njN/wB/2/xrPm0t9Dlkhht55LJm3xPGrSFc9VbGT17+9Y15TjC8NzOq5KN47m5pGsPezPa3USxXKrvGw5WRc4JHpgkZHuKk1jVjYGOGCITXMoJVWbCqo6sT+I+tYVroC63MJtRt5o7WJSI1bMbuxIycdQAB365p134bj0eVbnS4JZImUrMgYu47hgD175Aq6LlKKc9zOcqqouUV7xesteuBdRQ6hDEEmYIssJOFY9AQfXpnPWugri0sJNaZbX7POlsWBmkkjaP5Qc4GQCScY46Vo/8ACD6J/wA8Zv8Av+3+NayST0Iwc6s6d6qszo6K5z/hB9E/54zf9/2/xo/4QfRP+eM3/f8Ab/GpOs3bq4itLWW4nbbHEpZj7CuZPijUDJ5iWUAi7Rs53kfXoD+B+tSXPgbSzbyfZVkjn25jZpWIDdsj0rHMN4snkvp935/TYsRIJ9m+7j3zW9GNOV+dmNWU1blO30+9i1Cyiuoc7JB0bqpBwQfcEEVZrlbPwTp72yvqCO105LybJWCgk5wMenSp/wDhB9E/54zf9/2/xrF76GyOjrH1bWZLW5FpZxJJOFDu0hIWMHp05JODxVT/AIQfRP8AnjN/3/b/ABqlc6INDnZrG3mks5QC2zMjRsPUdSCMdOmKI2vqYYmVSNJumrs1NN1ySS6FtqEccbuCY5YydrYGSCD0OMnv0NIuq6hdqJ7OC3S3bmPzy26Qdjx93P41kxaO2vSJHcQTRWUeWZ3Uxs7YIAAPOOc59qvQ3EtlClreWtz50ShAYoGkWTHGVKgjn0OMVxY+danFewV/xHg5TnTTrKzNnTb4X8DOYzFLG5jljJzsYc4z3GCCD6GsrVvEUtvePa2MMbtFgSSSk7QcZ2gDrwRUMfhW11N5b7VYZFnmbIjWUjYoAABwcZ4yfrisy90aTRp3jt7eaSyY7o3jUyFfVWxk9e/vXdhrSt7XTT8S6raXunQ6Jrh1GV7a5iWK5Rd42HKuucEj0wSMj3FbNcVp3hwavL52pW80VtGpEasTG7scZOOoAA7+taX/AAg+if8APGb/AL/t/jTqKKk1HYINuK5tzo6K5z/hB9E/54zf9/2/xo/4QfRP+eM3/f8Ab/GoLOjrPh1WOXWbnTRGwe3jWRnPQg1mf8IPon/PGb/v+3+NZdv4Ms28Q3kUltOLJYkMT+Y2C3fnvQB1dlqun6gM2d5DMf7quMj8OtXK4yx+HOnQgG8uZ7hvRcIv9T+tddbW8drAsMIYIvADOWP5kk0AS0UUUAFFFFABRRRQAU0nGPrTqY5Axk96AH0UUUAFFFFABTWOFJ9BTqbJ/q2+lADqKSigBFOR+Jp1NQgg49T/ADp1ABRRRQAU3PzAe1OphI8wc9j/AEoAfRRRQAUh4BNLTW4U/SgBRyAaQnBA9aF5UfSkYjevNAD6axwpNOpshwhzQA6ikpaACiiigAooooAKKKKACiiigAooooAKKKKACo5ULbcevP0qO7d18lUcpvfBIAzjaT3+lRYm/wCfmT8l/wAKALtFUsTf8/Mn5L/hRib/AJ+ZPyX/AAoAu0VSxN/z8yfkv+FGJv8An5k/Jf8ACgC7TJVLRsB1xxVXE3/PzJ+S/wCFGJv+fmT8l/woAuKMKB6UVTxN/wA/Mn5L/hRib/n5k/Jf8KALMSFFIPqakqlib/n5k/Jf8KMTf8/Mn5L/AIUAXaKpYm/5+ZPyX/CjE3/PzJ+S/wCFAF2o2QmZW7Y5qtib/n5k/Jf8KMTf8/Mn5L/hQBdoqlib/n5k/Jf8KMTf8/Mn5L/hQBdprjchHftVTE3/AD8yfkv+FGJv+fmT8l/woAtoNqAd8c010JkQ9h1qtib/AJ+ZPyX/AAoxN/z8yfkv+FAF2mSqWQ469qq4m/5+ZPyX/CjE3/PzJ+S/4UAXAMAAdqWqWJv+fmT8l/woxN/z8yfkv+FAF2iqWJv+fmT8l/woxN/z8yfkv+FAF2iqWJv+fmT8l/woxN/z8yfkv+FAF2iqLtNHsbz3b51BBC4ILAenvV6gAooooAKKKKACiiigCrefet/+uv8A7K1FF5963/66/wDsrUUAFFFFABVHWbuSx05riLbuWSMfMcDBdQee3BPNXqa6LIpV1DKexGRQBjW3iFbmaCFbdRLNjaPN4ziTvjkZj6/7QqC31HVZrHT5CIA93clWOfuoAxwOP9k8/wCPG8IIQysIkDIMKQoyo9BThGgCgIoCnKjHT6UAYVv4ka5idorL5vNSOMNJgHcSBnjgjHv9aszapLbG9kmjG22ijPlq3Vmzn5vToM47GtIQQqSREgLHcSFHJ9aDDEZGkKKXdQjHHVRng/mfzoAzkv5f7RgSWSBY5rd3CK4K71ZRw/GeCe1QW+uFoLYYiklmllVi0wVVCsRjOOTjGOBmtjyIdqr5SbU+6NowPpSC1t1XaIIgoO7AQYz6/WgDn/7funspmRY0kgm2uXIBZctyqkgHhfXnDelWV1yZftcjxwvDBarcJtcq7gqT0I46fh71rtbQOMPDGw9CoPvTmhjY5aNCSu3JUdPT6UAY8uvvb3yWtzZhG2B5CshYKDuxj5efu89OvGaqDxazRl1sVO3cW/fHG0KrZHy88N04ro2ijd1do0Zl+6xGSPpTVtbdV2rBEB6BBQBU1XUGtbCaa1MMskLqrh3wEyR1x3wR+eaonXZoLm9WaBHjijaRDHJn7sSOV6cj5jg/pW4Y0IYFFw/3hj731pvkRYx5SYxjG0dMY/kKAMltcmjvILaazRZJQhwJ843khcfLz93n096ij1u9NtaytFZgyXLQyfvyAoG7Hbg/L/nPG6Y4y6uUUsv3WxyPpTTBEQwMSEMdxG0cn1oAxptbexS7E224ljuxCi/dwpVWBOATjk84qX+1WkDytIlpClmlwTIu7aWJ9Dzjb29a1HghfdviRtww2VBz9aRraBmDNEhITZ0/h9PpxQBhw6xeBrBpzD5c/DBACxJZgvG7I4AzjODn0qlZ+LLs2xeW1jmJ+YFX8sAbVOP4uct+VdUtvAjKVhjUoMKQoGPpR9nhxjyY8ZJxtHfrQBkS647RakI40iks4zIu5i28DPXjAzjHBJ+lXxcyf2qtuceW9uZAMcqQwB/PcPyqZ7W3dXVoUxJgv8v3sevrTxFGJmmCjzGUKW74GcD9TQA+iiigAooooAjn+6n/AF0T/wBCFXqoz/dT/ron/oQq9QAUUUUAFFFFABRRRQAySKOVQsqK4ByAwzUf2O1/59of++BU9FAEH2O1/wCfaH/vgUfY7X/n2h/74FT0UAQfY7X/AJ9of++BSC0tSP8Aj2h6/wBwVPTY2DA49TQBH9jtf+faH/vgUfY7X/n2h/74FT0UAQfY7X/n2h/74FH2O1/59of++BU9FAEH2O1/59of++BR9jtf+faH/vgVPRQBB9jtf+faH/vgUn2S13AfZoef9gVYphYCRR3xQBH9jtf+faH/AL4FH2O1/wCfaH/vgVPRQBB9jtf+faH/AL4FH2O1/wCfaH/vgVPRQBXNpahSfs0PH+wKX7Ha/wDPtD/3wKkkIEbZOOKcCCMjkUAQ/Y7X/n2h/wC+BR9jtf8An2h/74FT0UAQfY7X/n2h/wC+BR9jtf8An2h/74FT0UAQfY7X/n2h/wC+BR9jtf8An2h/74FT0UAQfY7X/n2h/wC+BSC0tST/AKNDwf7gqxTEYFmx6/0oAj+x2v8Az7Q/98Cj7Ha/8+0P/fAqeigCFbS2Vgy28QIOQQg4qaiigAooooAKKKKACiiigAooooAKKKKACmRpsBHqc0+igAooooAKKKKACiiigAphTMit6DmnMwVSzEAAZJPasubxDYQTeU8gDHpukRD+TMD+nNAGrRUcE8dxHvibIzg5GCD6EdqkoAKKKKAGSqWjIHXtTgMAAdqWigAooooAKKKKACiiigBksqQoXkbao/U+nuaqR3sSPIXSVVzncV6D3A5H4gVmeJp5VMccbsmWRN6nBXfuyR6HCbc/7RrGaxt4l326Lbypyk0Ywyn1z3/HrVKLZxYjGww8lGS3O5BBAIOQehFLWZoE7XGmo7LsyFYL/d3IrkfQFjj2rTqTtCiiigAooooAKKKKACiiigAorN1dNYbyv7Iks0xnzPtAY56Yxj8azvK8Yf8APxpH/fL/AOFAHR0VznleMP8An40j/vl/8KPK8Yf8/Gkf98v/AIUAa9/qEVihLlcgZJZtqqOmSfc8AYJPp1qjBr0ckyxsvLchTHJGxH+yGUbvwOfasxxfJqFsdaeBpBKfmhB2AlR5fX3838TVjW8f2bIq/wCvYgQAdfNz8mPfOK8+vjXSrRpKN7lqN1c6NGV0V0IZWGQR0Ip1c0kfiZt5sJ9NW0LsYRKr7tm446D0/SneV4w/5+NI/wC+X/wr0CDo6K5zyvGH/PxpH/fL/wCFHleMP+fjSP8Avl/8KAOjornPK8Yf8/Gkf98v/hR5XjD/AJ+NI/75f/CgDS1x5VsGWEbnbdtGM5KozAfiVArmLSOL7ImzDrIu5mPJcnqT6k1r26eIE1KzbVJtPa2EjZEAYNny3x17VlXDadNcPJZWd6bZmJPkziNX9SqnnB9tua5sRQlWSUWc2J5bLmlb1NHwqWRpY1J8kNIif7q7MAfQu4/ADtXS1zjtcTxaefDLWsKCKUFbhWAUApkYHOc9c0eV4w/5+NI/75f/AAroirJI6I6JHR0VznleMP8An40j/vl/8KPK8Yf8/Gkf98v/AIUxl/UdagsTtZkHJXLZOSOoVVBLY79h60mna3BettVlPIUkbgVJ6blYArnseQfWuUuRKuoH7UQZjCnI6Ej7+P8Atpv/ADFJAJG1BBb484RSZ+hUhc/8D2Y966PYr2fPcx9r7/JY9BornPK8Yf8APxpH/fL/AOFHleMP+fjSP++X/wAK5zY6Oiuc8rxh/wA/Gkf98v8A4UeV4w/5+NI/75f/AAoA6Oiuc8rxh/z8aR/3y/8AhR5XjD/n40j/AL5f/CgDRvoLa5kvI7wgQeRGWYtt24ZznPbHXNYEFtpk86RXGqXUlu5AUSW5iWX2L7QDn2xmnXa6ohc61JavGJIDJ9nBChMyfez23ba0b9rcWExusGDYd+e4rgxWNlh5xgo3uHsIVNZLY1LQBZrsKAAJQAB2/dpUkV3BNPNBFKrywY8xAeUz0zXN2sXibZ/os1iuEiEouAxfzPKTd0rM0uPxGde1sW82ni5Bi+0Fg+0/Kdu38M9a7wO9orgNDt/HAUfvgkXb7awb/Fq7q2E4gX7U0bS/xGNSF/DJNAEtFFFABRRRQAUUUUAFFFFABRRRQBVvbGK8Qq4GcbTuUMGHoQeo/wA8VRt9Aghl3/uwcYyituA7gFmbA+mK2KSlYAVQqhVAAAwAO1LRRTAKKKKACiiigDO1yBp9OkCNtIDDPoGUqT+G7P4Vysd7bwxLHcOlvKgAaJyAQfYdx6Eda7uqjadalwwRlI5ASRlA+gBwKqMrHJisLHEJKTtYyPC8Mm+ad0ZFZ3YKwwRuCADHY4TOP9oV0VMjjSJAkahFHQAYFPqTphFQioroFFFFBRm6ho9vfZLrGcncVkTcAfUYIIP0NGn6Nb2JyixjndtRNoJ7E5JJI9zWjS0AFFFFABRRRQAUUUUAZl/eW9jJdz3Q3RCGNSgGS5LOAoHfNc3balYW1yk8uhrDChyGWYyGL3CYwMf7Naniu0mmWKSFC5DK4QdW27vlHqcOSB/s1zQuVnYw2yme4PAhUHdn3HYeua3pU6c03JmNSc4tKKO9snWSS6dGDK0oII6EeWlTpBFHJJIkSLJJjeyqAWx0ye9UPD9u1tpccZbcAqqGH8QVFTI9jtyPYitOsDYKKKKACiiigAooooAKKKKACiiigAooooAKavVvr/QU6o42LM4Ixg+tAElFFFABRRRQAUUUUAFNP3x9DTqjZiJlGO3rQBJRRRQAUUUUANf/AFbfQ06mSnEbH2pynKg4xkUALRRRQAUUUUAFFFFADJI0lQpIoZT1BFVxYwsSH811H8Lysyn6gnn8at1GjEyOMdD60APpaKKACiiigAooooAKKKKACiiigBksscIBkcICcDJ6mo/tlt/z2T86Zefet/8Arr/7K1FAD/tlt/z2T86Ptlt/z2T86ZRQA/7Zbf8APZPzpou7UEkTJycnmkooAf8AbLb/AJ7J+dH2y2/57J+dMooAf9stv+eyfnR9stv+eyfnTKKAH/bLb/nsn50fbLb/AJ7J+dQtLGkiRswDyZ2r3OOtEUscyb4nDrkjI9QcH9RQBN9stv8Ansn5003dqWDecmR05pkkiRLukdUXIGWOBknA/Wm3E8VtA00zhI0GWY9qAJ/tlt/z2T86Ptlt/wA9k/Oo1YOoZTlSMg+tLQA/7Zbf89k/Oj7Zbf8APZPzqu1zAvWVPviPg5+Y9vrUtACtd2rKVMyYPvTvtlt/z2T86ry3MMMsUUkgV5SQi92x1oluYYZYopHCvMSEB/iI5oAsfbLb/nsn50fbLb/nsn51CsqPI6KTuQgNwe4zS+YhkMe9d6gMVzyAc4OPwP5UAS/bLb/nsn50fbLb/nsn51WjuoJRF5cqt5yb48fxLxyPzFTUAP8Atlt/z2T86Ptlt/z2T86ZRQA/7Zbf89k/Omi7tQSRMmT15pKKAH/bLb/nsn50fbLb/nsn50yigB4u7csAJkyTgc9TU9UZ/up/10T/ANCFXqACiiigAooooAKKKKAKt5963/66/wDsrUU67jkfyjGoYo+4gnHG0j+tR7bn/nin/fz/AOtQA6im7bn/AJ4p/wB/P/rUbbn/AJ4p/wB/P/rUAOopu25/54p/38/+tRtuf+eKf9/P/rUAOopu25/54p/38/8ArUbbn/nin/fz/wCtQBQ1jTP7TjgQlNscgchxkEYNYj+G76KORxNFO7QrFgLtLYKdemQNp7966rbc/wDPFP8Av5/9ajbc/wDPFP8Av5/9agDL0/TJrKWyJZHWKOWNgvAXewYbR6DGPyqt4g0qa4FotjbqVTcu0BQseWU7uoweD0B6mt3bc/8APFP+/n/1qNtz/wA8U/7+f/WoA55PDLiC7jlkilaV1dGdcgkMWyw9cHGeuPyrblt/N097b5U3xGP5RwuRjgelTbbn/nin/fz/AOtRtuf+eKf9/P8A61AGE+hXU15b3MtxHujiWMhQRtxu+73wQRke3eqF34cuoYYYrZFm+boAAseVjBflhzlG5AP3jXWbbn/nin/fz/61G25/54p/38/+tQBiSeHkdrlNluIZrhZsCPBIA5U+o/xq7Jp8j6Eun+d+8EKxmTnBIAzn2OP1q9tuf+eKf9/P/rUbbn/nin/fz/61AGRZaGtvNaTSiFmgEvCpwu5sqFz0C8gfWr2oW0twLdoHRZIJhIN4JB4Ixx9as7bn/nin/fz/AOtRtuf+eKf9/P8A61AGHdaJc3AvkzbLHcSLIoAPBHr1Bz1PBq1baT5OpLdsIHLW6RSN5eGLLnkfXOMewrS23P8AzxT/AL+f/Wo23P8AzxT/AL+f/WoAqzWha8sTEqpDbbjxxj5doUD05P5CrlN23P8AzxT/AL+f/Wo23P8AzxT/AL+f/WoAdRTdtz/zxT/v5/8AWo23P/PFP+/n/wBagB1FN23P/PFP+/n/ANajbc/88U/7+f8A1qAHUU3bc/8APFP+/n/1qNtz/wA8U/7+f/WoAbP91P8Aron/AKEKvVRaK4fYDGigOrE788BgfT2q9QAUUUUAFFFFABRRRQAUUUUAFFFFABTV6t9f6CnVHG25nGMc0ASUUUUAFFFFABRRRQAU0/fH0NOqNmxKox2oAkooooAKKKKAGv8AcP0pR0pshxGx9qVTuUGgB1FFFABRRRQAUUUUAFNH+sP0H9adUatmZhjtQBJRRRQAUUUUAFFFFABRRRQAUUUUAFFVrvULOx2fbLuC3352+bIF3Y64z9ar/wBv6P8A9BWy/wDAhf8AGgDRorO/t/R/+grZf+BC/wCNH9v6P/0FbL/wIX/GgDQqCK5tmlaOO4iaQnJRXBI/Cse4uodbvGtre5SWxhQNKYXyJWOcKSOwAyR3yKYtvptzNNZfYUUwBT/qwvXOCpHPY81lKqouxag2rnR0VhWOr29i01jqd/EjwkeW88gVpIyOM56kcjPsPWrn9v6P/wBBWy/8CF/xrRO6uiGrGjRWd/b+j/8AQVsv/Ahf8aP7f0f/AKCtl/4EL/jTA0aKzv7f0f8A6Ctl/wCBC/40f2/o/wD0FbL/AMCF/wAaANGq0t1aRTqstzCkg6K0gB/KsvUNYt7zybLS7+F5bhiHeGQM0aAZJGOhPAH19qryQabYGK3awUpMwTeYwwLHpuJ5JP41nOoouxcY31Okpa52C4h0K9SGSdIdPuFOwSvhYXHOAT0BGeOxHHWtH+39H/6Ctl/4EL/jVRkpK6Jas7GjRWd/b+j/APQVsv8AwIX/ABpr+IdGVC39qWZwM4E6kn9aoRfnkjjiYzSLGnQsxwKIZYpYw0MiSJ03KwIrnooluLf+09Qh+0TunmKhXd5SnkKoPHTqe5oaKMWi6rpaCGfyxKoUbRKuM7XA65H5Vj7ZXsaezdjpaKzI/EWjyRI/9p2a7gDhp1BH15p39v6P/wBBWy/8CF/xrYzNGis7+39H/wCgrZf+BC/40f2/o/8A0FbL/wACF/xoA0aKzv7f0f8A6Ctl/wCBC/40f2/o/wD0FbL/AMCF/wAaANCoI7m2knZY7iJ5OhVXBPHtWPcXUOt3jW8FwkthCoMnlPkSuc4UkdgBkjvkelQiPTLi6k082KI8S7x+7VcDOMqRyP0rKVVRdi1C6udNRWHY6vb2TTWWp38KSQMPLeeQK0iEZBOepHIP0z3qCw8VWkuralDc31kltAY/s7+YB5mQS3JODg46VondXRDVjo6KwLHxnod6ABeCBj/DONmPx6frW5HIkqB43V0PRlOQaYD6KKKACiiigAooooAq3mnWV/s+2WkNxszt81A23PXGfoKr/wDCPaN/0CrP/vwv+FaVFAGb/wAI9o3/AECrP/vwv+FH/CPaN/0CrP8A78L/AIVpUUAc/PaQaHeNcQW6Q2EyBZfKTAicZwxA7EHBPbAqJZLG2u5dQbU9wmULsLoVwM42gDJPJ7nrXSVDHZ2scpljtoUk7uqAH86ylSUnctTsrGTY6Rb37zX2p2ETvMQIknjBaOMDjOehPJx7irf/AAj2jf8AQKs/+/C/4VpUVolZWRDdzN/4R7Rv+gVZ/wDfhf8ACj/hHtG/6BVn/wB+F/wrSopgZv8Awj2jf9Aqz/78L/hR/wAI9o3/AECrP/vwv+FaVFAGDf6Nb2RhvtLsIklgYmRIYwrSIRggY6kcEfT3qs72F7cwX66ls+zg/JvQKPXcGGQe3Y109VpbGzmlEs1rBJJ2d4wT+dZzpqTuXGVtDGht4NevUlkgSbTrdW2mRcrM54yAeoAzz6njpWh/wj2jf9Aqz/78L/hWj06UtVGKirIlu7uZv/CPaN/0CrP/AL8L/hTX8O6MyFf7LtBkYyIVBH6VqUVQjmoZRBbf2ZfTm2uUTy1k4HmKOA6k8HI6jsaYrJHYrpOnTm6uNnlqxIbyl6bnKgAAD8TiukmhimjKTRpIndXUEfrRDDFAmyCJI0/uooA/SsfYq9zT2jsZ0fhzRo4kT+zLRtoA3NCpJ9zxT/8AhHtG/wCgVZ/9+F/wrSorYzM3/hHtG/6BVn/34X/Cj/hHtG/6BVn/AN+F/wAK0qKAM3/hHtG/6BVn/wB+F/wo/wCEe0b/AKBVn/34X/CtKigDn57WDQ7xp4LdIbCdQJPKTAicZ+YgdiDjPbHvUIfT7e7fUZNQWQupRRvQgAkHA2jLdBjOTXS1DHZ2sUpljtoUkPVlQA/nWUqSk7lqdlYybHR7e+aa+1OwieSZh5aTRhmjjAwAc9CeTj39qgsfClnFqupTXNlZvbTlPs8YjB8vAIbgjAycdK6SitErKyIbuc/Y+C9DswD9k89h/FO279On6VuxRRwoEiRY0HRVGAKfRTAKKKKACiiigAooooAKKKKACiiigApo+81OqNGJkcHHFAElFFFABRRRQAUUUUAFNbqv1/oadUcjEOgGOTQBJRRRQAUUUUANf7jfSlHSmykiNiPSlQkoCe9ADqKKKACiiigAooooAKaP9YfoP606o1YmZlx2oAkooooAKKKKACiiigAooooAKKKKAI5pkhCmQn5jgYUkk4z2+lR/bIf+mv8A36f/AApt5963/wCuv/srUUAO+2Q/9Nf+/T/4UfbIf+mv/fp/8KbRQA77ZD/01/79P/hSC7gBJxLk9f3T/wCFJRQA77ZD/wBNf+/T/wCFH2yH/pr/AN+n/wAKbRQA77ZD/wBNf+/T/wCFH2yH/pr/AN+n/wAKbRQA77ZD/wBNf+/T/wCFH2yH/pr/AN+n/wAKbTJZUhieWVgiIMsx6AUAS/bIf+mv/fp/8KQ3cBIJEvHT90/+FVItRt5o4pIjIyyoXUiNs4HtjP09aWPULSSGCVZgEuDiPcCpY88YPPY0AW/tkP8A01/79P8A4UfbIf8Apr/36f8AwqLzYxu/eJ8pw3zDj60z7VB5vleYu/YJPbaTgHPTmgCx9sh/6a/9+n/wo+2Q/wDTX/v0/wDhTN67S24bR1OeBS9aAFN5CQQRLg/9Mn/wpftkI7S/9+n/AMKgubmK1iMsxIQdwpb9BSRXUE0myKQM3lrIMd1OcEevSgCx9sh/6a/9+n/wo+2Q/wDTX/v0/wDhTaKAHfbIf+mv/fp/8KPtkP8A01/79P8A4U2igB32yH/pr/36f/Cj7ZD/ANNf+/T/AOFNooAd9sh/6a/9+n/wpBdwBi2Jcnj/AFT/AOFJRQA77ZD/ANNf+/T/AOFH2yH/AKa/9+n/AMKbRQA4XkJIH7wZIAzEwGTwO1WKoz/dT/ron/oQq9QAUUUUAFFFFABRRRQBVvPvW/8A11/9lain3UTyCMx7co+7DHGeCP61H5dz/ch/77P+FAC0Unl3P9yH/vs/4UeXc/3If++z/hQAtFJ5dz/ch/77P+FHl3P9yH/vs/4UALRSeXc/3If++z/hR5dz/ch/77P+FAC0Unl3P9yH/vs/4UeXc/3If++z/hQAtQ3lut3ZzW7YAlQrkjOMjripfLuf7kP/AH2f8KPLuf7kP/fZ/wAKAMxdKkiu7KWCWBEtY/LK+R8zg9eQwx+R79ajGiP9nto2nhc2s5kiZ4M/KQflPzc9evHQcVr+Xc/3If8Avs/4Unl3P9yH/vs/4UAYUPhmONpt8yyLJKsh3ISSBJvw2WwfTOB+NXLrSmme6WJo44bi2WDBTOzaW6Dp0Y/QgVpeXc/3If8Avs/4UeXc/wByH/vs/wCFAFSysfsmmJZCQOEUoH2AcdsjufX1qn/wjlp5CReZJhWLcrGRk46AqQo46KBWv5dz/ch/77P+FHl3P9yH/vs/4UAVNTtJr2ya3guBbliNzFN2V7rwQefY0kFnJHfLMxj2x26wqEXbk5yTjsOBgZPernl3P9yH/vs/4UeXc/3If++z/hQAtFJ5dz/ch/77P+FHl3P9yH/vs/4UALRSeXc/3If++z/hR5dz/ch/77P+FAC0Unl3P9yH/vs/4UeXc/3If++z/hQAtFJ5dz/ch/77P+FHl3P9yH/vs/4UALRSeXc/3If++z/hR5dz/ch/77P+FADJ/up/10T/ANCFXqpNBcOVDCIAOrEhiehB9PartABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABTW6r9f6GnVHIxDoMdTQBJRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABTR/rD9B/WnVGrZmYY7UASUUUUAFFFFABRRRQAUUUUAFFFFABRVLUtVsdKjR7+4WFXOFJBOT+FUP+Ew0D/oJR/wDfDf4UAblFYf8AwmGgf9BKP/vhv8KP+Ew0D/oJR/8AfDf4UAblFYf/AAmGgf8AQSj/AO+G/wAKP+Ew0D/oJR/98N/hQBuUVh/8JhoH/QSj/wC+G/wo/wCEw0D/AKCUf/fDf4UAblFYf/CYaB/0Eo/++G/wo/4TDQP+glH/AN8N/hQBuUVh/wDCYaB/0Eo/++G/wo/4TDQP+glH/wB8N/hQBuVn3WsaXbT+VcX0CSoeVLjK/X0/Gsu88R2OpCKw0q+DT3MgQsgIZEwSxBI64GPxqSWSDR4YY4bQiFnCZj28EkAZBOSTn36Gsp1OV2LjG+puwyxzxLLDIkkbDKujAg/Qin1zU89voF7FeFxBZ3DmO4UD5Q2CVcAd+MH1z7VZ/wCEw0D/AKCUf/fDf4VcJKSuiZKzsblFYf8AwmGgf9BKP/vhv8KP+Ew0D/oJR/8AfDf4VQjcorD/AOEw0D/oJR/98N/hR/wmGgf9BKP/AL4b/CgDcorD/wCEw0D/AKCUf/fDf4Uf8JhoH/QSj/74b/CgDcorD/4TDQP+glH/AN8N/hR/wmGgf9BKP/vhv8KANyisP/hMNA/6CUf/AHw3+FH/AAmGgf8AQSj/AO+G/wAKANskAEk4A6k1nprOlNPtXULYu3y480cn0+tZb6jZ+IrwW9rOJ7KBA8wAIEjknapz1AwTjvxUpu4H1A6VJb8GIuAdpUqMdVzkDnHI7GsZ1eV2SLjC6ub9LXNwaxZaDcy2F/deVBtWS235bCnIKfQEcexx2qrb+M7E6/dLLqCf2eIl8k7D97v2zWqd1dEtWdjrqK5W08f6NM5SczW5BI3Mm5T+XP6V0dpeW99AJ7SZJom6MhzTET0UUUAFFFFABRRRQBHJDFMAJY0cDpuUHFR/YrT/AJ9of+/YqaSRIo2kkdURRlmY4AHqTSebGZBH5ibyu4LuGSPXHpzQBF9itP8An2h/79ij7Faf8+0P/fsVI88Ucio8iqzKWAJ7DGT+GRSrLG8jxq6l48blB5XPIzQBF9itP+faH/v2KPsVp/z7Q/8AfsVIJY2maEMDIihmXuAc4P6H8qkoAr/YrT/n2h/79ij7Faf8+0P/AH7FOW6gaXyllQybiu3POQASPwBFO82MTCHcPMKlgvfGcZ/WgCP7Faf8+0P/AH7FH2K0/wCfaH/v2KsUm4bguRkjOKAIPsVp/wA+0P8A37FH2K0/59of+/YqxRQBl6ppgkt0ksYYkureQSx4AXcRkFSfcEj8ayLq80u4nglvLp7K4tySIpX8pgT14PX6iurpKznTUtSoysYNtGdYvoZmhYWFsS6mVMec5BAIB/hAJ57nGOla/wBitP8An2h/79irFFVGKirITd3cr/YrT/n2h/79ij7Faf8APtD/AN+xViiqEV/sVp/z7Q/9+xR9itP+faH/AL9irFFAFf7Faf8APtD/AN+xR9itP+faH/v2KsUUAV/sVp/z7Q/9+xR9itP+faH/AL9irFFAFf7Faf8APtD/AN+xR9itP+faH/v2KsUUAY2oWhsrtL+0t90ezy54ol+bbnIYAdSMnjrg+1Z/23STfC6+2mWcAhIQxZlzjOIxznj0rqaSspUlJ3LU2lYydNsTNLNfX1uoeYKscUgBMaLnGfckkn8B2psGgxRa7dagywtFNEqLF5Y+UjvWzRWiVlZEt3Mm08NaPZyGSLT4TITktIN5z7Z6fhWqAFAAAAHAApaKYgooooAKKKKACiiigCjrEDXWntbKhYTOiOB/cLDd/wCO5rDhsdRtrhbmeOV5QsEbGE5IRWJIHt8q5/3m7V1VFAHK3Fpe3VvIbmC5JaIZUMdwWSfLqCD/AAoq8U+c3AuVgZL6RGaWQRRzMG2qFRATnIB5PXrya6em7V379o3YxnHOKAOWa01RFHmmcnckcrxhmaQLEuD8rKcFy/IPpnvWlcQXCyWEE7Xc8Cw7XeFihaT5QGYg5HG49cfpWzRQBzBg1EIXVLmNGZmlWM4Yh5snHuEUDPXB4p7Wt5/akc8UVytkqopjMh81vvv94npuKgjP6Ag9JRQBgWkV2uiXccn2wSM2xJcsZGGB8+0tkdTkAjpkdRVVbS9kLuYLuG4e0SONhM7BCzsHOSTyAVOD0x7V1NFAHMyWmpw3V2baW5zCHa3Vtzq48vgbi+DljnkZ49MUsFpdST4X+0EtWkXd5s7byqxsSeuRuYqOMdK6WigDF0O0u7eRTcPcHNrFv82VnBkJbcBk8YGB75raoooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA/9k=",
+      "caption": "Uploaded image",
+      "text": "Reactive programming is coding with asynchronous data streams. On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams. [https://gist.github.com/staltz/868e7e9bc2a7b8c1f754 post]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8cdf09eceae34f57",
+      "text": "The Method plugin is intentionally weak in its supported computations. (Possibly excepting unit conversion which it performs based on 'types' embedded in the names of values.) We can imagine much more powerful abstractions that are still compatible with the linear flow of the lineup. "
+    },
+    {
+      "type": "paragraph",
+      "id": "90bc397e6d9bb2ca",
+      "text": "We'd like to supplement Method with a plugin supporting functional reactive programming using the naming and typing conventions already explored."
+    },
+    {
+      "type": "paragraph",
+      "id": "db381c8fe9f8c8b4",
+      "text": "We've yet to discover what the inputs and outputs of such a mechanism might be but there is no reason to assume functions so constructed need to be confined to the browser. We could pass them to server-side companions for instrument control or big data applications or even bundle them as generic modules to be used anywhere."
+    },
+    {
+      "type": "markdown",
+      "id": "fae156762fbdbc49",
+      "text": "# Useability"
+    },
+    {
+      "type": "paragraph",
+      "id": "e92f65931fbccf5f",
+      "text": "Our single-page application offers an interactive exploratory environment where material from many sources can integrate and demonstrate the implications of the integration in a situated and visually rich way."
+    },
+    {
+      "type": "paragraph",
+      "id": "f3d7618fc6e8f924",
+      "text": "We're moving in this direction with our introduction of the Lineup model that can be coordinated with the DOM but is not dependent on it."
+    },
+    {
+      "type": "paragraph",
+      "id": "022247df1ff04250",
+      "text": "We see the desirable incremental behavior as we follow links, render pages and bind the plugins they contain. We can still improve our handling of other updates including edits to markup, rearranging pages and maybe even updating position sensitive calculations while items are dragged but not yet dropped."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Reduce Revisited",
+        "story": []
+      },
+      "date": 1437923438629
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c025adbf5a533054"
+      },
+      "id": "c025adbf5a533054",
+      "type": "add",
+      "date": 1437923461885
+    },
+    {
+      "type": "edit",
+      "id": "c025adbf5a533054",
+      "item": {
+        "type": "paragraph",
+        "id": "c025adbf5a533054",
+        "text": "The Reduce plugin reflects to find links to pages with calculations that it can perform in sequence. This is a powerful idea but the implementation suggests improved speed, power and usability. "
+      },
+      "date": 1437923646482
+    },
+    {
+      "type": "edit",
+      "id": "c025adbf5a533054",
+      "item": {
+        "type": "paragraph",
+        "id": "c025adbf5a533054",
+        "text": "The Reduce plugin reflects to find links to pages with calculations that it can perform in sequence. This is a powerful idea but the implementation suggests improved speed, power and usability. [https://github.com/fedwiki/wiki-plugin-reduce/issues/7#issuecomment-125006350 github]"
+      },
+      "date": 1437923872133
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "24ba431e76a56196"
+      },
+      "id": "24ba431e76a56196",
+      "type": "add",
+      "after": "c025adbf5a533054",
+      "date": 1437924115444
+    },
+    {
+      "type": "edit",
+      "id": "24ba431e76a56196",
+      "item": {
+        "type": "markdown",
+        "id": "24ba431e76a56196",
+        "text": "# Speed"
+      },
+      "date": 1437924509632
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c3b5968fb5b1e337"
+      },
+      "id": "c3b5968fb5b1e337",
+      "type": "add",
+      "after": "24ba431e76a56196",
+      "date": 1437924512294
+    },
+    {
+      "type": "edit",
+      "id": "c3b5968fb5b1e337",
+      "item": {
+        "type": "paragraph",
+        "id": "c3b5968fb5b1e337",
+        "text": "We demonstrate that the calculations found on pages can be transformed to source code for other engines. In our example, we create spreadsheet formulas. But better to create javascript source, maybe even javascript ASM source, which will jit to machine code when evaluated."
+      },
+      "date": 1437924683162
+    },
+    {
+      "type": "edit",
+      "id": "c3b5968fb5b1e337",
+      "item": {
+        "type": "paragraph",
+        "id": "c3b5968fb5b1e337",
+        "text": "We demonstrate that the calculations found on pages can be transformed to source code for other engines. In our example, we create spreadsheet formulas. But better to create javascript source, maybe even javascript asm.js source, which will jit to machine code when evaluated. [https://en.wikipedia.org/wiki/Asm.js wikipedia]"
+      },
+      "date": 1437924996920
+    },
+    {
+      "type": "add",
+      "id": "2c9c84fde11173ec",
+      "item": {
+        "type": "paragraph",
+        "id": "2c9c84fde11173ec",
+        "text": "A better division of responsibility would be to have computation plugins, such as Method plugin in our example, offer the markup to javascript translation."
+      },
+      "after": "c3b5968fb5b1e337",
+      "date": 1437925107099
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b5585b981add12c3"
+      },
+      "id": "b5585b981add12c3",
+      "type": "add",
+      "after": "2c9c84fde11173ec",
+      "date": 1437925130982
+    },
+    {
+      "type": "edit",
+      "id": "b5585b981add12c3",
+      "item": {
+        "type": "markdown",
+        "id": "b5585b981add12c3",
+        "text": "# Power"
+      },
+      "date": 1437925141462
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8cdf09eceae34f57"
+      },
+      "id": "8cdf09eceae34f57",
+      "type": "add",
+      "after": "b5585b981add12c3",
+      "date": 1437925143445
+    },
+    {
+      "type": "edit",
+      "id": "8cdf09eceae34f57",
+      "item": {
+        "type": "paragraph",
+        "id": "8cdf09eceae34f57",
+        "text": "The Method plugin is intentionally weak in the computations it performs. (One exception is units conversion, based on 'types' embedded in names of values.) We can imagine much more powerful abstractions that are still compatible with the linear (acyclic) flow of the lineup. "
+      },
+      "date": 1437925392627
+    },
+    {
+      "type": "edit",
+      "id": "8cdf09eceae34f57",
+      "item": {
+        "type": "paragraph",
+        "id": "8cdf09eceae34f57",
+        "text": "The Method plugin is intentionally weak in the computations it performs. (One exception is units conversion, based on 'types' embedded in names of values.) We can imagine much more powerful abstractions that are still compatible with the linear flow of the lineup. "
+      },
+      "date": 1437925401717
+    },
+    {
+      "type": "edit",
+      "id": "8cdf09eceae34f57",
+      "item": {
+        "type": "paragraph",
+        "id": "8cdf09eceae34f57",
+        "text": "The Method plugin is intentionally weak in the computations it performs. (One exception is unit conversion, based on 'types' embedded in names of values.) We can imagine much more powerful abstractions that are still compatible with the linear flow of the lineup. "
+      },
+      "date": 1437925414767
+    },
+    {
+      "type": "edit",
+      "id": "8cdf09eceae34f57",
+      "item": {
+        "type": "paragraph",
+        "id": "8cdf09eceae34f57",
+        "text": "The Method plugin is intentionally weak in the computations it performs. (Except for unit conversion, based on 'types' embedded in names of values.) We can imagine much more powerful abstractions that are still compatible with the linear flow of the lineup. "
+      },
+      "date": 1437925457868
+    },
+    {
+      "type": "edit",
+      "id": "8cdf09eceae34f57",
+      "item": {
+        "type": "paragraph",
+        "id": "8cdf09eceae34f57",
+        "text": "The Method plugin is intentionally weak in the computations it performs. (Possibly excepting unit conversion which it performs based on 'types' embedded in the names of values.) We can imagine much more powerful abstractions that are still compatible with the linear flow of the lineup. "
+      },
+      "date": 1437925536208
+    },
+    {
+      "type": "edit",
+      "id": "8cdf09eceae34f57",
+      "item": {
+        "type": "paragraph",
+        "id": "8cdf09eceae34f57",
+        "text": "The Method plugin is intentionally weak in its supported computations. (Possibly excepting unit conversion which it performs based on 'types' embedded in the names of values.) We can imagine much more powerful abstractions that are still compatible with the linear flow of the lineup. "
+      },
+      "date": 1437925565844
+    },
+    {
+      "type": "add",
+      "id": "90bc397e6d9bb2ca",
+      "item": {
+        "type": "paragraph",
+        "id": "90bc397e6d9bb2ca",
+        "text": "We'd like to supplement Method with a plugin supporting functional reactive programming using the naming and typing conventions already explored."
+      },
+      "after": "8cdf09eceae34f57",
+      "date": 1437926260993
+    },
+    {
+      "type": "add",
+      "id": "db381c8fe9f8c8b4",
+      "item": {
+        "type": "paragraph",
+        "id": "db381c8fe9f8c8b4",
+        "text": "We've yet to discover what the inputs and outputs of such a mechanism might be but there is no reason to assume functions so constructed need to be confined to the browser. We could pass them to server-side companions for instrument control or big data applications or even bundle them as generic modules to be used anywhere."
+      },
+      "after": "90bc397e6d9bb2ca",
+      "date": 1437926519446
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3d66be9ba5b83489"
+      },
+      "id": "3d66be9ba5b83489",
+      "type": "add",
+      "after": "db381c8fe9f8c8b4",
+      "date": 1437926569712
+    },
+    {
+      "type": "edit",
+      "id": "3d66be9ba5b83489",
+      "item": {
+        "type": "paragraph",
+        "id": "3d66be9ba5b83489",
+        "text": "# Useability"
+      },
+      "date": 1437926579861
+    },
+    {
+      "type": "remove",
+      "id": "3d66be9ba5b83489",
+      "date": 1437926586253
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fae156762fbdbc49"
+      },
+      "id": "fae156762fbdbc49",
+      "type": "add",
+      "after": "db381c8fe9f8c8b4",
+      "date": 1437926588279
+    },
+    {
+      "type": "edit",
+      "id": "fae156762fbdbc49",
+      "item": {
+        "type": "markdown",
+        "id": "fae156762fbdbc49",
+        "text": "# Useability"
+      },
+      "date": 1437926592048
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e92f65931fbccf5f"
+      },
+      "id": "e92f65931fbccf5f",
+      "type": "add",
+      "after": "fae156762fbdbc49",
+      "date": 1437926614327
+    },
+    {
+      "type": "edit",
+      "id": "e92f65931fbccf5f",
+      "item": {
+        "type": "paragraph",
+        "id": "e92f65931fbccf5f",
+        "text": "Our single-page application offers an interactive exploratory environment where material from many sources can integrate and demonstrate the implications of such integrations."
+      },
+      "date": 1437927037531
+    },
+    {
+      "type": "edit",
+      "id": "e92f65931fbccf5f",
+      "item": {
+        "type": "paragraph",
+        "id": "e92f65931fbccf5f",
+        "text": "Our single-page application offers an interactive exploratory environment where material from many sources can integrate and demonstrate the implications of the integration in a situated and visually rich way."
+      },
+      "date": 1437927090583
+    },
+    {
+      "type": "add",
+      "id": "f3d7618fc6e8f924",
+      "item": {
+        "type": "paragraph",
+        "id": "f3d7618fc6e8f924",
+        "text": "We're moving in this direction with our introduction of the Lineup model that can be coordinated with the DOM but is not dependent on it."
+      },
+      "after": "e92f65931fbccf5f",
+      "date": 1437927216968
+    },
+    {
+      "type": "add",
+      "id": "022247df1ff04250",
+      "item": {
+        "type": "paragraph",
+        "id": "022247df1ff04250",
+        "text": "We see the desirable incremental behavior as we follow links, render pages and bind the plugins they contain. We can still improve our handling of other updates including edits to markup, rearranging pages and maybe even updating position sensitive calculations while items are dragged but not yet dropped."
+      },
+      "after": "f3d7618fc6e8f924",
+      "date": 1437927530153
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "image",
+        "id": "fd8f4e3f2b5ac753",
+        "url": "data:image/jpeg;base64,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",
+        "caption": "Uploaded image",
+        "text": "Reactive programming is coding with asynchronous data streams. On top of that, you are given an amazing toolbox of functions to combine, create and filter any of those streams. [https://gist.github.com/staltz/868e7e9bc2a7b8c1f754 post]"
+      },
+      "after": "b5585b981add12c3",
+      "id": "fd8f4e3f2b5ac753",
+      "date": 1437927846529
+    },
+    {
+      "type": "edit",
+      "id": "c025adbf5a533054",
+      "item": {
+        "type": "paragraph",
+        "id": "c025adbf5a533054",
+        "text": "The Reduce plugin reflects to find links to pages with calculations that it can perform in sequence. This is a powerful idea but the implementation suggests we can improve speed, power and usability. [https://github.com/fedwiki/wiki-plugin-reduce/issues/7#issuecomment-125006350 github]"
+      },
+      "date": 1437928024401
+    },
+    {
+      "type": "add",
+      "id": "c051539164b4862d",
+      "item": {
+        "type": "paragraph",
+        "id": "c051539164b4862d",
+        "text": "See [[About Reduce Plugin]]"
+      },
+      "after": "c025adbf5a533054",
+      "date": 1437928420998
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1437948297670
+    }
+  ]
+}

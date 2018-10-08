@@ -1,0 +1,555 @@
+{
+  "title": "Storage Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5dc14e5a62e5460d",
+      "text": "To save and retrieve BLOB data into IPFS, we interface with it via a storage plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "6c300a59b89cb597",
+      "text": "We have to see if we can interact with IPFS' leveldb directly via the wiki-storage-leveldb plugin. Else the file system approach may be sufficient, yet complicated in a Docker container. See this discussion regarding [https://github.com/ipfs/ipfs/issues/75#issuecomment-123519753 IPFS and CORS]. FUSE is not working within a Docker."
+    },
+    {
+      "type": "paragraph",
+      "id": "a88d8c1e18bc50e4",
+      "text": "Priviledged mode or btrfs may be of help here."
+    },
+    {
+      "type": "pagefold",
+      "id": "cabfd35ab9303de1",
+      "text": "Requirements"
+    },
+    {
+      "type": "reference",
+      "id": "57de45410af9d7b2",
+      "site": "data.fedwiki.org",
+      "slug": "federated-data",
+      "title": "Federated Data",
+      "text": "When we are thinking about data in the federation we are talking about people curating there own data sets by embedding [[Live Data]] or [[Static Data]] as [[JSON Data Objects]] into one of their [[Federated Wiki Pages]]."
+    },
+    {
+      "type": "reference",
+      "id": "2442a505b9fd8fa2",
+      "site": "future.fedwiki.org",
+      "slug": "fedwiki-on-ipfs",
+      "title": "Fedwiki on IPFS",
+      "text": "The aim is to have [[Fedwiki]] running as a pure Javascript application (no custom server required) and served by IPFS to allow a fully decentralised platform."
+    },
+    {
+      "type": "paragraph",
+      "id": "e1a268fe954b6402",
+      "text": "[[IPNS]]"
+    },
+    {
+      "type": "reference",
+      "id": "d1bc23f933c090cc",
+      "site": "cccamp.federated.wiki",
+      "slug": "fedwiki-security",
+      "title": "Fedwiki Security",
+      "text": "Here are early some explorations on how to provide better login experience for wiki farms, and for users developing mobile apps. The aim is to provide backward compatibility with Persona, while moving over to a better security model."
+    },
+    {
+      "type": "reference",
+      "id": "c0ff841916152aeb",
+      "site": "cccamp.federated.wiki",
+      "slug": "image-assets",
+      "title": "Image Assets",
+      "text": "We url-encode images dropped on the factory plugin. This captures the sharing dynamics expected of the federation but it doesn't match with current asset practices."
+    },
+    {
+      "type": "pagefold",
+      "id": "3537a132dca37e5e",
+      "text": "Inspiration"
+    },
+    {
+      "type": "paragraph",
+      "id": "6a36b73a51d831f3",
+      "text": "[[About Factory Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "074d4ff409ba34c1",
+      "text": "[[About Future Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2779cdbedc4d3943",
+      "text": "[[About Image Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c36c91c0d02ce17f",
+      "text": "[[About Audio Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "17431770139c55a4",
+      "text": "[[About Video Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "7892ce8dec83f7ac",
+      "text": "[[About Parse Plugin]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "e5f8443b33fb4c27",
+      "text": "[https://github.com/eris-ltd/2gather/search?utf8=%E2%9C%93&q=ipfs eris 2Gather DApp]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Storage Plugin",
+        "story": []
+      },
+      "date": 1437526170054
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5dc14e5a62e5460d"
+      },
+      "id": "5dc14e5a62e5460d",
+      "type": "add",
+      "date": 1437526179590
+    },
+    {
+      "type": "edit",
+      "id": "5dc14e5a62e5460d",
+      "item": {
+        "type": "paragraph",
+        "id": "5dc14e5a62e5460d",
+        "text": "To save and retrieve BLOB data into IPFS, we interface with it via a storage plugin."
+      },
+      "date": 1437526219842
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "2442a505b9fd8fa2",
+        "site": "future.fedwiki.org",
+        "slug": "fedwiki-on-ipfs",
+        "title": "Fedwiki on IPFS",
+        "text": "The aim is to have [[Fedwiki]] running as a pure Javascript application (no custom server required) and served by IPFS to allow a fully decentralised platform."
+      },
+      "after": "5dc14e5a62e5460d",
+      "id": "2442a505b9fd8fa2",
+      "date": 1437526247171
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e1a268fe954b6402",
+        "text": "[[IPNS]]"
+      },
+      "after": "2442a505b9fd8fa2",
+      "id": "e1a268fe954b6402",
+      "date": 1437526252503
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "57de45410af9d7b2",
+        "site": "data.fedwiki.org",
+        "slug": "federated-data",
+        "title": "Federated Data",
+        "text": "When we are thinking about data in the federation we are talking about people curating there own data sets by embedding [[Live Data]] or [[Static Data]] as [[JSON Data Objects]] into one of their [[Federated Wiki Pages]]."
+      },
+      "id": "57de45410af9d7b2",
+      "date": 1437526262202
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dc14e5a62e5460d",
+        "57de45410af9d7b2",
+        "2442a505b9fd8fa2",
+        "e1a268fe954b6402"
+      ],
+      "id": "57de45410af9d7b2",
+      "date": 1437526266012
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d1bc23f933c090cc"
+      },
+      "id": "d1bc23f933c090cc",
+      "type": "add",
+      "after": "e1a268fe954b6402",
+      "date": 1437526593308
+    },
+    {
+      "type": "edit",
+      "id": "d1bc23f933c090cc",
+      "item": {
+        "type": "reference",
+        "id": "d1bc23f933c090cc",
+        "site": "cccamp.federated.wiki",
+        "slug": "fedwiki-security",
+        "title": "Fedwiki Security",
+        "text": "Here are early some explorations on how to provide better login experience for wiki farms, and for users developing mobile apps. The aim is to provide backward compatibility with Persona, while moving over to a better security model."
+      },
+      "date": 1437526598483
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c0ff841916152aeb"
+      },
+      "id": "c0ff841916152aeb",
+      "type": "add",
+      "after": "d1bc23f933c090cc",
+      "date": 1437526628058
+    },
+    {
+      "type": "edit",
+      "id": "c0ff841916152aeb",
+      "item": {
+        "type": "reference",
+        "id": "c0ff841916152aeb",
+        "site": "cccamp.federated.wiki",
+        "slug": "image-assets",
+        "title": "Image Assets",
+        "text": "We url-encode images dropped on the factory plugin. This captures the sharing dynamics expected of the federation but it doesn't match with current asset practices."
+      },
+      "date": 1437526632319
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c36c91c0d02ce17f"
+      },
+      "id": "c36c91c0d02ce17f",
+      "type": "add",
+      "after": "c0ff841916152aeb",
+      "date": 1437528447064
+    },
+    {
+      "type": "edit",
+      "id": "c36c91c0d02ce17f",
+      "item": {
+        "type": "paragraph",
+        "id": "c36c91c0d02ce17f",
+        "text": "[[About Audio Plugin]]"
+      },
+      "date": 1437528453308
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17431770139c55a4"
+      },
+      "id": "17431770139c55a4",
+      "type": "add",
+      "after": "c36c91c0d02ce17f",
+      "date": 1437528455847
+    },
+    {
+      "type": "edit",
+      "id": "17431770139c55a4",
+      "item": {
+        "type": "paragraph",
+        "id": "17431770139c55a4",
+        "text": "[[About Video Plugin]]"
+      },
+      "date": 1437528461299
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6a36b73a51d831f3"
+      },
+      "id": "6a36b73a51d831f3",
+      "type": "add",
+      "after": "17431770139c55a4",
+      "date": 1437528472520
+    },
+    {
+      "type": "edit",
+      "id": "6a36b73a51d831f3",
+      "item": {
+        "type": "paragraph",
+        "id": "6a36b73a51d831f3",
+        "text": "[[About Factory Plugin]]"
+      },
+      "date": 1437528479599
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2779cdbedc4d3943"
+      },
+      "id": "2779cdbedc4d3943",
+      "type": "add",
+      "after": "6a36b73a51d831f3",
+      "date": 1437528484210
+    },
+    {
+      "type": "edit",
+      "id": "2779cdbedc4d3943",
+      "item": {
+        "type": "paragraph",
+        "id": "2779cdbedc4d3943",
+        "text": "[[About Image Plugin]]"
+      },
+      "date": 1437528491722
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7892ce8dec83f7ac"
+      },
+      "id": "7892ce8dec83f7ac",
+      "type": "add",
+      "after": "2779cdbedc4d3943",
+      "date": 1437529007172
+    },
+    {
+      "type": "edit",
+      "id": "7892ce8dec83f7ac",
+      "item": {
+        "type": "paragraph",
+        "id": "7892ce8dec83f7ac",
+        "text": "[[About Parse Plugin]]"
+      },
+      "date": 1437529013529
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3537a132dca37e5e"
+      },
+      "id": "3537a132dca37e5e",
+      "type": "add",
+      "after": "7892ce8dec83f7ac",
+      "date": 1437529015257
+    },
+    {
+      "type": "edit",
+      "id": "3537a132dca37e5e",
+      "item": {
+        "type": "pagefold",
+        "id": "3537a132dca37e5e",
+        "text": "Inspiration"
+      },
+      "date": 1437529021760
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dc14e5a62e5460d",
+        "57de45410af9d7b2",
+        "2442a505b9fd8fa2",
+        "e1a268fe954b6402",
+        "d1bc23f933c090cc",
+        "c0ff841916152aeb",
+        "3537a132dca37e5e",
+        "c36c91c0d02ce17f",
+        "17431770139c55a4",
+        "6a36b73a51d831f3",
+        "2779cdbedc4d3943",
+        "7892ce8dec83f7ac"
+      ],
+      "id": "3537a132dca37e5e",
+      "date": 1437529024204
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cabfd35ab9303de1"
+      },
+      "id": "cabfd35ab9303de1",
+      "type": "add",
+      "after": "7892ce8dec83f7ac",
+      "date": 1437529029108
+    },
+    {
+      "type": "edit",
+      "id": "cabfd35ab9303de1",
+      "item": {
+        "type": "pagefold",
+        "id": "cabfd35ab9303de1",
+        "text": "Requirements"
+      },
+      "date": 1437529033987
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dc14e5a62e5460d",
+        "cabfd35ab9303de1",
+        "57de45410af9d7b2",
+        "2442a505b9fd8fa2",
+        "e1a268fe954b6402",
+        "d1bc23f933c090cc",
+        "c0ff841916152aeb",
+        "3537a132dca37e5e",
+        "c36c91c0d02ce17f",
+        "17431770139c55a4",
+        "6a36b73a51d831f3",
+        "2779cdbedc4d3943",
+        "7892ce8dec83f7ac"
+      ],
+      "id": "cabfd35ab9303de1",
+      "date": 1437529038058
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "074d4ff409ba34c1"
+      },
+      "id": "074d4ff409ba34c1",
+      "type": "add",
+      "after": "7892ce8dec83f7ac",
+      "date": 1437529105359
+    },
+    {
+      "type": "edit",
+      "id": "074d4ff409ba34c1",
+      "item": {
+        "type": "paragraph",
+        "id": "074d4ff409ba34c1",
+        "text": "[[About Future Plugin"
+      },
+      "date": 1437529111251
+    },
+    {
+      "type": "edit",
+      "id": "074d4ff409ba34c1",
+      "item": {
+        "type": "paragraph",
+        "id": "074d4ff409ba34c1",
+        "text": "[[About Future Plugin]]"
+      },
+      "date": 1437529114262
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dc14e5a62e5460d",
+        "cabfd35ab9303de1",
+        "57de45410af9d7b2",
+        "2442a505b9fd8fa2",
+        "e1a268fe954b6402",
+        "d1bc23f933c090cc",
+        "c0ff841916152aeb",
+        "3537a132dca37e5e",
+        "6a36b73a51d831f3",
+        "c36c91c0d02ce17f",
+        "17431770139c55a4",
+        "2779cdbedc4d3943",
+        "7892ce8dec83f7ac",
+        "074d4ff409ba34c1"
+      ],
+      "id": "6a36b73a51d831f3",
+      "date": 1437529116992
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dc14e5a62e5460d",
+        "cabfd35ab9303de1",
+        "57de45410af9d7b2",
+        "2442a505b9fd8fa2",
+        "e1a268fe954b6402",
+        "d1bc23f933c090cc",
+        "c0ff841916152aeb",
+        "3537a132dca37e5e",
+        "6a36b73a51d831f3",
+        "074d4ff409ba34c1",
+        "c36c91c0d02ce17f",
+        "17431770139c55a4",
+        "2779cdbedc4d3943",
+        "7892ce8dec83f7ac"
+      ],
+      "id": "074d4ff409ba34c1",
+      "date": 1437529119287
+    },
+    {
+      "type": "move",
+      "order": [
+        "5dc14e5a62e5460d",
+        "cabfd35ab9303de1",
+        "57de45410af9d7b2",
+        "2442a505b9fd8fa2",
+        "e1a268fe954b6402",
+        "d1bc23f933c090cc",
+        "c0ff841916152aeb",
+        "3537a132dca37e5e",
+        "6a36b73a51d831f3",
+        "074d4ff409ba34c1",
+        "2779cdbedc4d3943",
+        "c36c91c0d02ce17f",
+        "17431770139c55a4",
+        "7892ce8dec83f7ac"
+      ],
+      "id": "2779cdbedc4d3943",
+      "date": 1437529121302
+    },
+    {
+      "type": "add",
+      "id": "6c300a59b89cb597",
+      "item": {
+        "type": "paragraph",
+        "id": "6c300a59b89cb597",
+        "text": "We have to see if we can interact with IPFS' leveldb directly via the wiki-storage-leveldb plugin. Else the file system approach may be sufficient, yet complicated in a Docker container"
+      },
+      "after": "5dc14e5a62e5460d",
+      "date": 1437529196368
+    },
+    {
+      "type": "edit",
+      "id": "6c300a59b89cb597",
+      "item": {
+        "type": "paragraph",
+        "id": "6c300a59b89cb597",
+        "text": "We have to see if we can interact with IPFS' leveldb directly via the wiki-storage-leveldb plugin. Else the file system approach may be sufficient, yet complicated in a Docker container. See this discussion regarding [https://github.com/ipfs/ipfs/issues/75#issuecomment-123519753 IPFS and CORS]. FUSE is not working within a Docker."
+      },
+      "date": 1437529252841
+    },
+    {
+      "type": "add",
+      "id": "a88d8c1e18bc50e4",
+      "item": {
+        "type": "paragraph",
+        "id": "a88d8c1e18bc50e4",
+        "text": "Priviledged mode or btrfs may be of help here."
+      },
+      "after": "6c300a59b89cb597",
+      "date": 1437529502927
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e5f8443b33fb4c27"
+      },
+      "id": "e5f8443b33fb4c27",
+      "type": "add",
+      "after": "7892ce8dec83f7ac",
+      "date": 1438186502679
+    },
+    {
+      "type": "edit",
+      "id": "e5f8443b33fb4c27",
+      "item": {
+        "type": "paragraph",
+        "id": "e5f8443b33fb4c27",
+        "text": "[https://github.com/eris-ltd/2gather/search?utf8=%E2%9C%93&q=ipfs eris 2Gather DApp]"
+      },
+      "date": 1438186513032
+    },
+    {
+      "type": "fork",
+      "site": "cccamp.federated.wiki",
+      "date": 1452417050305
+    }
+  ]
+}

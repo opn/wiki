@@ -1,0 +1,511 @@
+{
+  "title": "Archive File Naming Convention",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "73272c5a266b501d",
+      "text": "Here we are looking at how we name files, and what folder structure we use so that assets in the [[Permanent Wiki]] can be stored conventionally, and in [[IPFS]]."
+    },
+    {
+      "text": "# Objectives",
+      "id": "49cd6cea4fc82cb9",
+      "type": "markdown"
+    },
+    {
+      "type": "paragraph",
+      "id": "7f0f0d2779315d54",
+      "text": "The aim here is to make file recovery easy to do both manually and programatically, and to play well with external IPFS based archiving (see [[Loose Coupling of IPFS]])."
+    },
+    {
+      "type": "markdown",
+      "id": "2932d16e9c305bce",
+      "text": "# Some thoughts"
+    },
+    {
+      "type": "paragraph",
+      "id": "83d9dccedc9966c4",
+      "text": "IPFS [[multihash]] naming ensures that there is no possibility of a name clash as the file reference is a content addressable reference. By prepending \"ipfs_\" we indicate that the file has been [[Archived in IPFS]] and by adding a mime-type compatible suffix (such as \".jpg\") we ensure that a conventional server can serve the file with the correct mime-type headers."
+    },
+    {
+      "text": "The preliminary version of this supports assets to be presented on federated wikis and uses IPFS to store the assets, which may be images, video clips, audio clips or any other form of digital media.",
+      "id": "8830cbfd286bc4b4",
+      "type": "paragraph"
+    },
+    {
+      "type": "markdown",
+      "id": "172451ddde1d20ee",
+      "text": "# File renaming example"
+    },
+    {
+      "type": "paragraph",
+      "id": "42400daae9675dae",
+      "text": "Suppose we have an asset called fred.jpg within wiki with domain outlandish.academy. Instead of storing this on the file path:"
+    },
+    {
+      "type": "code",
+      "id": "4fb69662b442ee88",
+      "text": "outlandish.academy/assets/img/fred.jpg"
+    },
+    {
+      "type": "paragraph",
+      "id": "2a389cee5c2a5596",
+      "text": "It will then be added to ipfs, which will return the hash which uniquely identifies the file in ipfs. E.g."
+    },
+    {
+      "type": "code",
+      "id": "4de4f16d71475323",
+      "text": "ipfs add mypicture.jpg\nadded QmUZDM7VYg....dVNQesw3 mypicture.jpg"
+    },
+    {
+      "type": "paragraph",
+      "id": "8e01266733cda1b0",
+      "text": "The asset will then be renamed with the prefix ipfs_ followed by the returned hash and the original file extension. E.g: Above file mypicture.png will be renamed to:"
+    },
+    {
+      "type": "code",
+      "id": "02498732ed9a92d0",
+      "text": "ipfs_QmUZDM7VYgF7BaFDPdei895iSaTFCMQtyJRnCndVNQesw3.jpg"
+    },
+    {
+      "text": "then adding it to ipfs and renaming it to ipfs_ipfs_hash.jpg, we put it in a directory with name:",
+      "id": "e6597bc0be0a26f2",
+      "type": "paragraph"
+    },
+    {
+      "text": "then add the directory to ipfs and rename the file as above. E.g:",
+      "id": "07400454d4d72648",
+      "type": "paragraph"
+    },
+    {
+      "text": "outlandish.academy/assets/img/fred.jpg/",
+      "id": "a67a12ef19015f6a",
+      "type": "code"
+    },
+    {
+      "type": "markdown",
+      "id": "f9815ed742d42e54",
+      "text": "# Indexes and folders"
+    },
+    {
+      "type": "paragraph",
+      "id": "d8c6072cddcb10fd",
+      "text": "Assets come in multiple versions and encodings. An image may be provided in several resolutions and a video file encoded with different codecs."
+    },
+    {
+      "type": "paragraph",
+      "id": "45e8eab86b0ab9d4",
+      "text": "We look to use a [[Media Package]] concept, to place all versions of an asset in the same folder. The folder is then named the same as the asset, and contains a manifest or index file which provides metadata for the asset versions contained within the folder."
+    },
+    {
+      "type": "markdown",
+      "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+      "text": "# See also\n\n- [[Media Package]]\n- [[Document Package]]\n- [[Virtual file system]]\n- [[Permanent Archive]]\n- [[DreamFactory Wiki Files]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Archive File Naming Convention",
+        "story": []
+      },
+      "date": 1502967966398
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "73272c5a266b501d"
+      },
+      "id": "73272c5a266b501d",
+      "type": "add",
+      "date": 1502967967454
+    },
+    {
+      "type": "edit",
+      "id": "73272c5a266b501d",
+      "item": {
+        "type": "paragraph",
+        "id": "73272c5a266b501d",
+        "text": "Here we are looking at how we name files, and what folder structure we use so that assets in the [[Permanent Wiki]] can be stored conventionally, and in IPFS."
+      },
+      "date": 1502968079134
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "49cd6cea4fc82cb9",
+        "text": "# Objectives"
+      },
+      "after": "73272c5a266b501d",
+      "id": "49cd6cea4fc82cb9",
+      "date": 1502968084006
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "57cd03e4eaa09cfb",
+        "text": "The Permanent Archive is intended to store online assets so that they cannot get lost."
+      },
+      "after": "49cd6cea4fc82cb9",
+      "id": "57cd03e4eaa09cfb",
+      "date": 1502968086244
+    },
+    {
+      "type": "edit",
+      "id": "57cd03e4eaa09cfb",
+      "item": {
+        "type": "paragraph",
+        "id": "57cd03e4eaa09cfb",
+        "text": "The Permanent Archive is intended to store online assets so that they cannot get lost. This naming convention is designed to make this goal easy to do both manually and programatically."
+      },
+      "date": 1502968134327
+    },
+    {
+      "type": "edit",
+      "id": "57cd03e4eaa09cfb",
+      "item": {
+        "type": "paragraph",
+        "id": "57cd03e4eaa09cfb",
+        "text": "The [[Permanent Archive]] is intended to store online assets so that they cannot get lost. This naming convention is designed to make this goal easy to do both manually and programatically."
+      },
+      "date": 1502968146952
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "42400daae9675dae",
+        "text": "Suppose we have an asset called fred.jpg within wiki with domain outlandish.academy. Instead of storing this on the file path:"
+      },
+      "after": "57cd03e4eaa09cfb",
+      "id": "42400daae9675dae",
+      "date": 1502968150626
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "4fb69662b442ee88",
+        "text": "outlandish.academy/assets/img/fred.jpg"
+      },
+      "after": "42400daae9675dae",
+      "id": "4fb69662b442ee88",
+      "date": 1502968156211
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "02498732ed9a92d0",
+        "text": "ipfs_QmUZDM7VYgF7BaFDPdei895iSaTFCMQtyJRnCndVNQesw3.jpg"
+      },
+      "after": "4fb69662b442ee88",
+      "id": "02498732ed9a92d0",
+      "date": 1502968305717
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2a389cee5c2a5596",
+        "text": "It will then be added to ipfs, which will return the hash which uniquely identifies the file in ipfs. E.g."
+      },
+      "after": "4fb69662b442ee88",
+      "id": "2a389cee5c2a5596",
+      "date": 1502968314942
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "4de4f16d71475323",
+        "text": "ipfs add mypicture.jpg\nadded QmUZDM7VYg....dVNQesw3 mypicture.jpg"
+      },
+      "after": "2a389cee5c2a5596",
+      "id": "4de4f16d71475323",
+      "date": 1502968318307
+    },
+    {
+      "type": "add",
+      "id": "172451ddde1d20ee",
+      "item": {
+        "type": "paragraph",
+        "id": "172451ddde1d20ee",
+        "text": "# Example"
+      },
+      "after": "57cd03e4eaa09cfb",
+      "date": 1502968330451
+    },
+    {
+      "type": "edit",
+      "id": "172451ddde1d20ee",
+      "item": {
+        "type": "markdown",
+        "id": "172451ddde1d20ee",
+        "text": "# Example"
+      },
+      "date": 1502968332097
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "8e01266733cda1b0",
+        "text": "The asset will then be renamed with the prefix ipfs_ followed by the returned hash and the original file extension. E.g: Above file mypicture.png will be renamed to:"
+      },
+      "after": "4de4f16d71475323",
+      "id": "8e01266733cda1b0",
+      "date": 1502968338625
+    },
+    {
+      "type": "edit",
+      "id": "73272c5a266b501d",
+      "item": {
+        "type": "paragraph",
+        "id": "73272c5a266b501d",
+        "text": "Here we are looking at how we name files, and what folder structure we use so that assets in the [[Permanent Wiki]] can be stored conventionally, and in [[IPFS]]."
+      },
+      "date": 1502971742476
+    },
+    {
+      "type": "remove",
+      "id": "49cd6cea4fc82cb9",
+      "date": 1502975477408
+    },
+    {
+      "type": "remove",
+      "id": "57cd03e4eaa09cfb",
+      "date": 1502975478751
+    },
+    {
+      "type": "add",
+      "id": "83d9dccedc9966c4",
+      "item": {
+        "type": "paragraph",
+        "id": "83d9dccedc9966c4",
+        "text": "IPFS [[multihash]] naming ensures that there is no possibility of a name clash as the file reference is a content addressable reference. By prepending \"ipfs_\" we indicate that the file has been [[Archived in IPFS]] and by adding a mime-type compatible suffix (such as \".jpg\") we ensure that a conventional server can serve the file with the correct mime-type headers."
+      },
+      "after": "73272c5a266b501d",
+      "date": 1502979747586
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f9815ed742d42e54"
+      },
+      "id": "f9815ed742d42e54",
+      "type": "add",
+      "after": "02498732ed9a92d0",
+      "date": 1502979778573
+    },
+    {
+      "type": "edit",
+      "id": "f9815ed742d42e54",
+      "item": {
+        "type": "markdown",
+        "id": "f9815ed742d42e54",
+        "text": "# Indexes and folders"
+      },
+      "date": 1502979795313
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d8c6072cddcb10fd"
+      },
+      "id": "d8c6072cddcb10fd",
+      "type": "add",
+      "after": "f9815ed742d42e54",
+      "date": 1502980281123
+    },
+    {
+      "type": "edit",
+      "id": "d8c6072cddcb10fd",
+      "item": {
+        "type": "paragraph",
+        "id": "d8c6072cddcb10fd",
+        "text": "Assets come in multiple versions and encodings. An image may be provided in several resolutions and a video file encoded with different codecs."
+      },
+      "date": 1502980342739
+    },
+    {
+      "type": "add",
+      "id": "45e8eab86b0ab9d4",
+      "item": {
+        "type": "paragraph",
+        "id": "45e8eab86b0ab9d4",
+        "text": "We look to use a [[Media Package]] concept, to place all versions of an asset in the same folder. The folder is then named the same as the asset, and contains a manifest or index file which provides metadata for the asset versions contained within the folder."
+      },
+      "after": "d8c6072cddcb10fd",
+      "date": 1502980443863
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "299947cb3efe9aef"
+      },
+      "id": "299947cb3efe9aef",
+      "type": "add",
+      "after": "45e8eab86b0ab9d4",
+      "date": 1502985426994
+    },
+    {
+      "type": "edit",
+      "id": "299947cb3efe9aef",
+      "item": {
+        "type": "reference",
+        "id": "299947cb3efe9aef",
+        "site": "hosting.permanent.wiki",
+        "slug": "media-package",
+        "title": "Media Package",
+        "text": "Packaging is an evolving discipline on Linux. OSX has it's own definitions of application and [[Document Package]]s. Ubuntu has [[Ubuntu Snappy]]."
+      },
+      "date": 1502985429649
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+        "text": "# See also\n\n- [[Media Package]]\n- [[Virtual file system]]\n- [[Permanent Archive]]\n- [[Archive File Naming Convention]]"
+      },
+      "after": "45e8eab86b0ab9d4",
+      "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+      "date": 1502985665361
+    },
+    {
+      "type": "remove",
+      "id": "299947cb3efe9aef",
+      "date": 1502985668197
+    },
+    {
+      "type": "edit",
+      "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+      "item": {
+        "type": "markdown",
+        "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+        "text": "# See also\n\n- [[Media Package]]\n- [[Document Package]]\n- [[Virtual file system]]\n- [[Permanent Archive]]\n- [[Archive File Naming Convention]]"
+      },
+      "date": 1502985690033
+    },
+    {
+      "type": "add",
+      "id": "7f0f0d2779315d54",
+      "item": {
+        "type": "paragraph",
+        "id": "7f0f0d2779315d54",
+        "text": "The aim here is to make file recovery easy to do both manually and programatically, and to play well with external IPFS based archiving (see [[Loose Coupling of IPFS]])."
+      },
+      "after": "73272c5a266b501d",
+      "date": 1502997523006
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "# Objectives",
+        "id": "49cd6cea4fc82cb9",
+        "type": "markdown"
+      },
+      "after": "73272c5a266b501d",
+      "id": "49cd6cea4fc82cb9",
+      "date": 1502997530438
+    },
+    {
+      "type": "add",
+      "id": "2932d16e9c305bce",
+      "item": {
+        "type": "paragraph",
+        "id": "2932d16e9c305bce",
+        "text": "# Some thoughts"
+      },
+      "after": "7f0f0d2779315d54",
+      "date": 1502997539555
+    },
+    {
+      "type": "edit",
+      "id": "2932d16e9c305bce",
+      "item": {
+        "type": "markdown",
+        "id": "2932d16e9c305bce",
+        "text": "# Some thoughts"
+      },
+      "date": 1502997540631
+    },
+    {
+      "type": "edit",
+      "id": "172451ddde1d20ee",
+      "item": {
+        "type": "markdown",
+        "id": "172451ddde1d20ee",
+        "text": "# File renaming example"
+      },
+      "date": 1502997588365
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "then adding it to ipfs and renaming it to ipfs_ipfs_hash.jpg, we put it in a directory with name:",
+        "id": "e6597bc0be0a26f2",
+        "type": "paragraph"
+      },
+      "after": "02498732ed9a92d0",
+      "id": "e6597bc0be0a26f2",
+      "date": 1503001364190
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "outlandish.academy/assets/img/fred.jpg",
+        "id": "a67a12ef19015f6a",
+        "type": "code"
+      },
+      "after": "e6597bc0be0a26f2",
+      "id": "a67a12ef19015f6a",
+      "date": 1503001367259
+    },
+    {
+      "type": "edit",
+      "id": "a67a12ef19015f6a",
+      "item": {
+        "text": "outlandish.academy/assets/img/fred.jpg/",
+        "id": "a67a12ef19015f6a",
+        "type": "code"
+      },
+      "date": 1503001372786
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "then add the directory to ipfs and rename the file as above. E.g:",
+        "id": "07400454d4d72648",
+        "type": "paragraph"
+      },
+      "after": "e6597bc0be0a26f2",
+      "id": "07400454d4d72648",
+      "date": 1503001385600
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "The preliminary version of this supports assets to be presented on federated wikis and uses IPFS to store the assets, which may be images, video clips, audio clips or any other form of digital media.",
+        "id": "8830cbfd286bc4b4",
+        "type": "paragraph"
+      },
+      "after": "83d9dccedc9966c4",
+      "id": "8830cbfd286bc4b4",
+      "date": 1503001412443
+    },
+    {
+      "type": "edit",
+      "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+      "item": {
+        "type": "markdown",
+        "id": "a3ef9480-e533-48df-89ee-912908971cc7",
+        "text": "# See also\n\n- [[Media Package]]\n- [[Document Package]]\n- [[Virtual file system]]\n- [[Permanent Archive]]\n- [[DreamFactory Wiki Files]]"
+      },
+      "date": 1503088243997
+    }
+  ]
+}

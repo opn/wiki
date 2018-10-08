@@ -1,0 +1,563 @@
+{
+  "title": "JavaScript Mutability",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d07f8185012cd0ce",
+      "text": "In JavaScript all primitives are immutable, and all objects are mutable. The primitives types are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, and arrays."
+    },
+    {
+      "type": "paragraph",
+      "id": "5958d25b0ce08079",
+      "text": " "
+    },
+    {
+      "type": "paragraph",
+      "id": "e9e74abbaddb091b",
+      "text": "Mutability means that something can be changed in place, and that all references to that thing will see the change. Immutable things on the other hand cannot just change on you. Some examples:"
+    },
+    {
+      "type": "code",
+      "id": "5d826433487227d7",
+      "text": "var name = ' Foo '\nname.trim()  // -> 'Foo'\nname // -> ' Foo '\n\n// Trim returned a new value that had the whitespace\n// removed, but didn't change the string saved as\n// name."
+    },
+    {
+      "type": "code",
+      "id": "61b6684b1bf4153d",
+      "text": "var kid =\n  { screaming: false\n  , isCute: function () { return !this.screaming }\n  }\n\nkid.screaming = true // our state changes.\nkid.isCute() // now returns false,\n// because the state of kid has mutated."
+    },
+    {
+      "type": "paragraph",
+      "id": "82bd1c18466bc3bb",
+      "text": "Many methods on objects don't mutate, and instead return a new changed object (especially confusing are the array methods which can go either way), but they can change things in place. Primitives however cannot never change in place. The only way to change the value of a variable with a primitive assigned is to assign a new value."
+    },
+    {
+      "type": "paragraph",
+      "id": "26eacbfd4636837d",
+      "text": "Primitives can have values assigned in tricky ways that look like mutation, for example += and it's cousins. The really tricky ones are ++ and --, while they look like they change a number in place they really assign a new number to the variable."
+    },
+    {
+      "type": "paragraph",
+      "id": "85997ba4002b9260",
+      "text": "Objects being mutable and passed by reference in JavaScript has far reaching consequences. All parts of your code that share a reference to a single object are touching at that point. Weither that object is passed in as an argument, assigned to a variable in scope, or accessible via the invocation context, if one part of the code changes that object it is changed from then on for all other parts of the code."
+    },
+    {
+      "type": "paragraph",
+      "id": "98bc5097df029835",
+      "text": "This balance of mutable objects and immutable primitives turns out to be very practical, even though the different rules can be confusing. If primitives were mutable the state of your program would be even harder to understand, and if objects were immutable you wouldn't have access to JavaScript's flexible prototype based object oriented paradigm."
+    },
+    {
+      "type": "paragraph",
+      "id": "1e6401fbf581c2df",
+      "text": "Be aware, when you mutate state you add complexity to your program. This is sometimes unavoidable, and sometimes a worthwhile tradeoff, but always worth being deliberate about. Mutating state willy nilly without any care will lead to a program that is hard to understand, and almost impossible to change without breaking."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "JavaScript Mutability"
+      },
+      "date": 1357370792030
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d07f8185012cd0ce"
+      },
+      "id": "d07f8185012cd0ce",
+      "type": "add",
+      "date": 1357370795653
+    },
+    {
+      "type": "edit",
+      "id": "d07f8185012cd0ce",
+      "item": {
+        "type": "paragraph",
+        "id": "d07f8185012cd0ce",
+        "text": "JavaScript has several primitive types, and one complex type, the Object. The primitives are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, arrays, etc."
+      },
+      "date": 1357370972716
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ae9367e3075d1e8e",
+        "text": ""
+      },
+      "id": "ae9367e3075d1e8e",
+      "type": "add",
+      "after": "d07f8185012cd0ce",
+      "date": 1357370973220
+    },
+    {
+      "type": "edit",
+      "id": "ae9367e3075d1e8e",
+      "item": {
+        "type": "paragraph",
+        "id": "ae9367e3075d1e8e",
+        "text": "All primitives are immutable."
+      },
+      "date": 1357370982116
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "eb27cd39cc925ab8",
+        "text": ""
+      },
+      "id": "eb27cd39cc925ab8",
+      "type": "add",
+      "after": "ae9367e3075d1e8e",
+      "date": 1357370982619
+    },
+    {
+      "type": "edit",
+      "id": "eb27cd39cc925ab8",
+      "item": {
+        "type": "paragraph",
+        "id": "eb27cd39cc925ab8",
+        "text": "All Objects are mutable."
+      },
+      "date": 1357370989715
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5958d25b0ce08079",
+        "text": ""
+      },
+      "id": "5958d25b0ce08079",
+      "type": "add",
+      "after": "eb27cd39cc925ab8",
+      "date": 1357370990218
+    },
+    {
+      "type": "edit",
+      "id": "5958d25b0ce08079",
+      "item": {
+        "type": "paragraph",
+        "id": "5958d25b0ce08079",
+        "text": "Many methods on objects don't mutate, and instead return a new changed object (especially confusing are the array methods which can go either way), but they can change things in place. Primitives however can never change in place. The only way to change the value of a variable with a primitive assigned is to asing a new value."
+      },
+      "date": 1357371172602
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8b85c2d0c2d84b95",
+        "text": ""
+      },
+      "id": "8b85c2d0c2d84b95",
+      "type": "add",
+      "after": "5958d25b0ce08079",
+      "date": 1357371173105
+    },
+    {
+      "type": "remove",
+      "id": "8b85c2d0c2d84b95",
+      "date": 1357371177232
+    },
+    {
+      "type": "edit",
+      "id": "5958d25b0ce08079",
+      "item": {
+        "type": "paragraph",
+        "id": "5958d25b0ce08079",
+        "text": "Many methods on objects don't mutate, and instead return a new changed object (especially confusing are the array methods which can go either way), but they can change things in place. Primitives however can never change in place. The only way to change the value of a variable with a primitive assigned is to asine a new value."
+      },
+      "date": 1357371189129
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "26eacbfd4636837d",
+        "text": ""
+      },
+      "id": "26eacbfd4636837d",
+      "type": "add",
+      "after": "5958d25b0ce08079",
+      "date": 1357371189633
+    },
+    {
+      "type": "edit",
+      "id": "26eacbfd4636837d",
+      "item": {
+        "type": "paragraph",
+        "id": "26eacbfd4636837d",
+        "text": "Primitives can have values assigned in tricky ways that look like mutation, for example when using ++ or -- on a number, but they are really assignments."
+      },
+      "date": 1357371302115
+    },
+    {
+      "type": "edit",
+      "id": "5958d25b0ce08079",
+      "item": {
+        "type": "paragraph",
+        "id": "5958d25b0ce08079",
+        "text": "Many methods on objects don't mutate, and instead return a new changed object (especially confusing are the array methods which can go either way), but they can change things in place. Primitives however can never change in place. The only way to change the value of a variable with a primitive assigned is to assign a new value."
+      },
+      "date": 1357449344010
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "85997ba4002b9260",
+        "text": ""
+      },
+      "id": "85997ba4002b9260",
+      "type": "add",
+      "after": "26eacbfd4636837d",
+      "date": 1357450607825
+    },
+    {
+      "type": "edit",
+      "id": "85997ba4002b9260",
+      "item": {
+        "type": "paragraph",
+        "id": "85997ba4002b9260",
+        "text": "Objects being mutable and passed by reference in JavaScript has far reaching consequences. All parts of your code that share a reference to a single object are touching at that point. Weither that object is passed in as an argument, assigned to a variable in scope, or accessible via the invocation context, if one part of the code changes that object it is changed from then on for all other parts of the code."
+      },
+      "date": 1357450814658
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "98bc5097df029835",
+        "text": ""
+      },
+      "id": "98bc5097df029835",
+      "type": "add",
+      "after": "85997ba4002b9260",
+      "date": 1357536798813
+    },
+    {
+      "type": "edit",
+      "id": "98bc5097df029835",
+      "item": {
+        "type": "paragraph",
+        "id": "98bc5097df029835",
+        "text": "This balance of mutable objects and immutable primitives turns out to be very practical, even though the different rules can be confusing. If primitives were mutable the state of your program would be even harder to understand, and if objects were immutable you wouldn't have access to the flexible object oriented paradigm you do."
+      },
+      "date": 1357537042884
+    },
+    {
+      "type": "edit",
+      "id": "98bc5097df029835",
+      "item": {
+        "type": "paragraph",
+        "id": "98bc5097df029835",
+        "text": "This balance of mutable objects and immutable primitives turns out to be very practical, even though the different rules can be confusing. If primitives were mutable the state of your program would be even harder to understand, and if objects were immutable you wouldn't have access to JavaScript's flexible prototype based object oriented paradigm."
+      },
+      "date": 1362468566316
+    },
+    {
+      "type": "edit",
+      "id": "26eacbfd4636837d",
+      "item": {
+        "type": "paragraph",
+        "id": "26eacbfd4636837d",
+        "text": "Primitives can have values assigned in tricky ways that look like mutation, for example when using ++ or -- on a number, but they are really assignments. the += operator and it's cousins can also slip by and look like mutation, but they are just reassignments."
+      },
+      "date": 1362552373436
+    },
+    {
+      "type": "edit",
+      "id": "26eacbfd4636837d",
+      "item": {
+        "type": "paragraph",
+        "id": "26eacbfd4636837d",
+        "text": "Primitives can have values assigned in tricky ways that look like mutation, for example += and it's cousins. The really tricky ones are ++ and --, while they look like they change a number in place they really assign a new number to the variable."
+      },
+      "date": 1362552490523
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1e6401fbf581c2df",
+        "text": ""
+      },
+      "id": "1e6401fbf581c2df",
+      "type": "add",
+      "after": "98bc5097df029835",
+      "date": 1362979615763
+    },
+    {
+      "type": "edit",
+      "id": "1e6401fbf581c2df",
+      "item": {
+        "type": "paragraph",
+        "id": "1e6401fbf581c2df",
+        "text": "Be aware, when you mutate state you add complexity to your program. This is sometimes unavoidable, and sometimes a worthwhile tradeoff, but always worth being deliberate about. Mutating state willy nilly without any care will lead to a program that will be hard to understand, and almost impossible to change without breaking."
+      },
+      "date": 1362979751901
+    },
+    {
+      "type": "edit",
+      "id": "1e6401fbf581c2df",
+      "item": {
+        "type": "paragraph",
+        "id": "1e6401fbf581c2df",
+        "text": "Be aware, when you mutate state you add complexity to your program. This is sometimes unavoidable, and sometimes a worthwhile tradeoff, but always worth being deliberate about. Mutating state willy nilly without any care will lead to a program that is hard to understand, and almost impossible to change without breaking."
+      },
+      "date": 1362979780671
+    },
+    {
+      "type": "edit",
+      "id": "d07f8185012cd0ce",
+      "item": {
+        "type": "paragraph",
+        "id": "d07f8185012cd0ce",
+        "text": " "
+      },
+      "date": 1413434707023
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4ee4c5e469517e24",
+        "text": "JavaScript has several primitive types, and one complex type, the Object. The primitives are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, arrays, etc."
+      },
+      "id": "4ee4c5e469517e24",
+      "type": "add",
+      "after": "d07f8185012cd0ce",
+      "date": 1413434707530
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5f887c70de337d63",
+        "text": ""
+      },
+      "id": "5f887c70de337d63",
+      "type": "add",
+      "after": "d07f8185012cd0ce",
+      "date": 1413434707532
+    },
+    {
+      "type": "edit",
+      "id": "5f887c70de337d63",
+      "item": {
+        "type": "paragraph",
+        "id": "5f887c70de337d63",
+        "text": "In JavaScript all primitives are immutable, and all objects are mutable."
+      },
+      "date": 1413434745571
+    },
+    {
+      "type": "remove",
+      "id": "eb27cd39cc925ab8",
+      "date": 1413434749341
+    },
+    {
+      "type": "remove",
+      "id": "ae9367e3075d1e8e",
+      "date": 1413434752074
+    },
+    {
+      "type": "remove",
+      "id": "4ee4c5e469517e24",
+      "date": 1413434754977
+    },
+    {
+      "type": "edit",
+      "id": "5f887c70de337d63",
+      "item": {
+        "type": "paragraph",
+        "id": "5f887c70de337d63",
+        "text": "In JavaScript all primitives are immutable, and all objects are mutable. The primitives types are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, and arrays."
+      },
+      "date": 1413434825063
+    },
+    {
+      "type": "edit",
+      "id": "5958d25b0ce08079",
+      "item": {
+        "type": "paragraph",
+        "id": "5958d25b0ce08079",
+        "text": "Many methods on objects don't mutate, and instead return a new changed object (especially confusing are the array methods which can go either way), but they can change things in place. Primitives however cannot never change in place. The only way to change the value of a variable with a primitive assigned is to assign a new value."
+      },
+      "date": 1413434876457
+    },
+    {
+      "type": "edit",
+      "id": "5958d25b0ce08079",
+      "item": {
+        "type": "paragraph",
+        "id": "5958d25b0ce08079",
+        "text": " "
+      },
+      "date": 1413434911369
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "82bd1c18466bc3bb",
+        "text": "Many methods on objects don't mutate, and instead return a new changed object (especially confusing are the array methods which can go either way), but they can change things in place. Primitives however cannot never change in place. The only way to change the value of a variable with a primitive assigned is to assign a new value."
+      },
+      "id": "82bd1c18466bc3bb",
+      "type": "add",
+      "after": "5958d25b0ce08079",
+      "date": 1413434911877
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e9e74abbaddb091b",
+        "text": ""
+      },
+      "id": "e9e74abbaddb091b",
+      "type": "add",
+      "after": "5958d25b0ce08079",
+      "date": 1413434911880
+    },
+    {
+      "type": "edit",
+      "id": "e9e74abbaddb091b",
+      "item": {
+        "type": "paragraph",
+        "id": "e9e74abbaddb091b",
+        "text": "Mutability means that something can be changed in place, and that all references to that thing will see the change. Immutable things on the other hand cannot just change on you. Some examples:"
+      },
+      "date": 1413435037977
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "04366c10a16a4284",
+        "text": ""
+      },
+      "id": "04366c10a16a4284",
+      "type": "add",
+      "after": "e9e74abbaddb091b",
+      "date": 1413435038484
+    },
+    {
+      "type": "remove",
+      "id": "04366c10a16a4284",
+      "date": 1413435042898
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5d826433487227d7"
+      },
+      "id": "5d826433487227d7",
+      "type": "add",
+      "after": "1e6401fbf581c2df",
+      "date": 1413435046098
+    },
+    {
+      "type": "move",
+      "order": [
+        "d07f8185012cd0ce",
+        "5f887c70de337d63",
+        "5958d25b0ce08079",
+        "e9e74abbaddb091b",
+        "82bd1c18466bc3bb",
+        "5d826433487227d7",
+        "26eacbfd4636837d",
+        "85997ba4002b9260",
+        "98bc5097df029835",
+        "1e6401fbf581c2df"
+      ],
+      "id": "5d826433487227d7",
+      "date": 1413435048319
+    },
+    {
+      "type": "move",
+      "order": [
+        "d07f8185012cd0ce",
+        "5f887c70de337d63",
+        "5958d25b0ce08079",
+        "e9e74abbaddb091b",
+        "5d826433487227d7",
+        "82bd1c18466bc3bb",
+        "26eacbfd4636837d",
+        "85997ba4002b9260",
+        "98bc5097df029835",
+        "1e6401fbf581c2df"
+      ],
+      "id": "5d826433487227d7",
+      "date": 1413435054783
+    },
+    {
+      "type": "edit",
+      "id": "5d826433487227d7",
+      "item": {
+        "type": "code",
+        "id": "5d826433487227d7",
+        "text": "var name = ' Foo '\nname.trim()  // -> 'Foo'\nname // -> ' Foo '\n\n// Trim returned a new value that had the whitespace\n// removed, but didn't change the string saved as name."
+      },
+      "date": 1413435194137
+    },
+    {
+      "type": "edit",
+      "id": "5d826433487227d7",
+      "item": {
+        "type": "code",
+        "id": "5d826433487227d7",
+        "text": "var name = ' Foo '\nname.trim()  // -> 'Foo'\nname // -> ' Foo '\n\n// Trim returned a new value that had the whitespace\n// removed, but didn't change the string saved as\n// name."
+      },
+      "date": 1413435207788
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "61b6684b1bf4153d"
+      },
+      "id": "61b6684b1bf4153d",
+      "type": "add",
+      "after": "1e6401fbf581c2df",
+      "date": 1413435222202
+    },
+    {
+      "type": "edit",
+      "id": "61b6684b1bf4153d",
+      "item": {
+        "type": "code",
+        "id": "61b6684b1bf4153d",
+        "text": "var kid =\n  { screaming: false\n  , isCute: function () { return !this.screaming }\n  }\n\nkid.screaming = true // our state changes.\nkid.isCute() // now returns false,\n// because the state of kid has mutated."
+      },
+      "date": 1413435437178
+    },
+    {
+      "type": "move",
+      "order": [
+        "d07f8185012cd0ce",
+        "5f887c70de337d63",
+        "5958d25b0ce08079",
+        "e9e74abbaddb091b",
+        "5d826433487227d7",
+        "61b6684b1bf4153d",
+        "82bd1c18466bc3bb",
+        "26eacbfd4636837d",
+        "85997ba4002b9260",
+        "98bc5097df029835",
+        "1e6401fbf581c2df"
+      ],
+      "id": "61b6684b1bf4153d",
+      "date": 1413435441034
+    },
+    {
+      "type": "fork",
+      "site": "nrn.io",
+      "date": 1448843607261
+    },
+    {
+      "type": "remove",
+      "id": "5f887c70de337d63",
+      "date": 1448843651969
+    },
+    {
+      "type": "edit",
+      "id": "d07f8185012cd0ce",
+      "item": {
+        "type": "paragraph",
+        "id": "d07f8185012cd0ce",
+        "text": "In JavaScript all primitives are immutable, and all objects are mutable. The primitives types are strings, numbers, booleans, null, and undefined. Everything else is an object, including functions, regexs, and arrays."
+      },
+      "date": 1448843657033
+    }
+  ]
+}

@@ -1,0 +1,1211 @@
+{
+  "title": "Three Layer Storage",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "751b16c27888fe56",
+      "text": "I have improved some code paths in pageHandler but there are many opportunities for simplification remaining. I have worked slowly here because many cases have order sensitivities due to the compounding of function.\n[https://github.com/WardCunningham/Smallest-Federated-Wiki/issues/431 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "c9b06e52fca407f6",
+      "text": "I would like to separate these functions into several layers where they can be inspected for correctness and more easily accommodate extension. These layers might be:\n\n"
+    },
+    {
+      "type": "pagefold",
+      "id": "f5f82a277d3d2772",
+      "text": "one"
+    },
+    {
+      "type": "paragraph",
+      "id": "7b0ae1b18e97a59a",
+      "text": "handles storage and dom journal actions\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2395b63ef23b4cf4",
+      "text": "[[Page Editor]]"
+    },
+    {
+      "type": "pagefold",
+      "id": "6fc1641b73de7101",
+      "text": "two"
+    },
+    {
+      "type": "paragraph",
+      "id": "7463c5e55e5d8e01",
+      "text": "handles gets and puts\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "c4018fffd0032181",
+      "text": "handles explicit and implicit forks\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "bb81d16e36d2be3a",
+      "text": "handles successful and failed puts\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "3bc06bcfcc7fc3e3",
+      "text": "[[Page Storage Policy]]\n"
+    },
+    {
+      "type": "pagefold",
+      "id": "f13362f7bebde148",
+      "text": "three"
+    },
+    {
+      "type": "paragraph",
+      "id": "d630c5d3bf1e2b15",
+      "text": "handles origin (ajax) and local storage\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "9f292f84bf451cfb",
+      "text": "exposes permissions and login state"
+    },
+    {
+      "type": "paragraph",
+      "id": "0469532431c7af56",
+      "text": "[[Page Origin Store]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "9bd5a6f6a3f5c72d",
+      "text": "[[Page Remote Store]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5f13fdb4b7be038d",
+      "text": "[[Page Local Store]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "949b89725e518c5c",
+      "text": "could we not use:"
+    },
+    {
+      "type": "reference",
+      "id": "414f08dada17eae9",
+      "site": "future.fedwiki.org",
+      "slug": "remotestoragejs",
+      "title": "remoteStorage.js",
+      "text": "An open protocol for per-user storage - [https://github.com/remotestorage/remotestorage.js github.com]"
+    },
+    {
+      "type": "pagefold",
+      "id": "729612645e6ca3ab",
+      "text": "data"
+    },
+    {
+      "type": "paragraph",
+      "id": "1c8ccb7a683697b9",
+      "text": "The page data could move smoothly up and down this stack. However there is some situational awareness and some exception handing that must move up and down the stack too. I've yet to find the inspiration that would keep the one layer we already have from becoming three layers of equally brittle code. Accumulating experience can help. Auto-quoting the BBC is one more case to think about."
+    },
+    {
+      "type": "paragraph",
+      "id": "bd181d4b86106d42",
+      "text": "save ⇒ editor ⇒ policy ⇒ store"
+    },
+    {
+      "type": "paragraph",
+      "id": "1d60f3b9b03ca7e5",
+      "text": "link ⇒ policy ⇒ store ⇒ policy ⇒ refresh"
+    },
+    {
+      "type": "paragraph",
+      "id": "0906163754fbfc97",
+      "text": "add ⇒ editor ⇒ policy ⇒ store ⇒ ⇒ refresh"
+    },
+    {
+      "type": "paragraph",
+      "id": "1bbebb3635f4532e",
+      "text": "See [[Page Storage Abstraction]] for earlier thinking."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Three Layer Storage",
+        "story": [
+          {
+            "type": "paragraph",
+            "id": "751b16c27888fe56",
+            "text": "I have improved some code paths in pageHandler but there are many opportunities for simplification remaining. I have worked slowly here because many cases have order sensitivities due to the compounding of function. Let me mention a few.\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "7463c5e55e5d8e01",
+            "text": "handles gets and puts\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "d630c5d3bf1e2b15",
+            "text": "handles origin (ajax) and local storage\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "c4018fffd0032181",
+            "text": "handles explicit and implicit forks\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "bb81d16e36d2be3a",
+            "text": "handles successful and failed puts\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "7b0ae1b18e97a59a",
+            "text": "handles storage and dom journal updates\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "c9b06e52fca407f6",
+            "text": "I would like to separate these functions into several layers where they can be inspected for correctness and more easily accommodate extension. These layers might be:\n\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "2395b63ef23b4cf4",
+            "text": "observing and recording history in the journal\n"
+          },
+          {
+            "type": "paragraph",
+            "id": "3bc06bcfcc7fc3e3",
+            "text": "applying storage policy such as fail-over\n"
+          }
+        ]
+      },
+      "date": 1411257691895
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "751b16c27888fe56",
+        "text": "I have improved some code paths in pageHandler but there are many opportunities for simplification remaining. I have worked slowly here because many cases have order sensitivities due to the compounding of function. Let me mention a few.\n"
+      },
+      "id": "751b16c27888fe56",
+      "type": "add",
+      "date": 1411257698945
+    },
+    {
+      "type": "edit",
+      "id": "751b16c27888fe56",
+      "item": {
+        "type": "paragraph",
+        "id": "751b16c27888fe56",
+        "text": "I have improved some code paths in pageHandler but there are many opportunities for simplification remaining. I have worked slowly here because many cases have order sensitivities due to the compounding of function. Let me mention a few.\n"
+      },
+      "date": 1411257716583
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7463c5e55e5d8e01",
+        "text": "handles gets and puts\n"
+      },
+      "id": "7463c5e55e5d8e01",
+      "type": "add",
+      "after": "751b16c27888fe56",
+      "date": 1411257716597
+    },
+    {
+      "type": "edit",
+      "id": "7463c5e55e5d8e01",
+      "item": {
+        "type": "paragraph",
+        "id": "7463c5e55e5d8e01",
+        "text": "handles gets and puts\n"
+      },
+      "date": 1411257721166
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d630c5d3bf1e2b15",
+        "text": "handles origin (ajax) and local storage\n"
+      },
+      "id": "d630c5d3bf1e2b15",
+      "type": "add",
+      "after": "7463c5e55e5d8e01",
+      "date": 1411257721183
+    },
+    {
+      "type": "edit",
+      "id": "d630c5d3bf1e2b15",
+      "item": {
+        "type": "paragraph",
+        "id": "d630c5d3bf1e2b15",
+        "text": "handles origin (ajax) and local storage\n"
+      },
+      "date": 1411257722310
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c4018fffd0032181",
+        "text": "handles explicit and implicit forks\n"
+      },
+      "id": "c4018fffd0032181",
+      "type": "add",
+      "after": "d630c5d3bf1e2b15",
+      "date": 1411257722323
+    },
+    {
+      "type": "edit",
+      "id": "c4018fffd0032181",
+      "item": {
+        "type": "paragraph",
+        "id": "c4018fffd0032181",
+        "text": "handles explicit and implicit forks\n"
+      },
+      "date": 1411257723254
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "bb81d16e36d2be3a",
+        "text": "handles successful and failed puts\n"
+      },
+      "id": "bb81d16e36d2be3a",
+      "type": "add",
+      "after": "c4018fffd0032181",
+      "date": 1411257723270
+    },
+    {
+      "type": "edit",
+      "id": "bb81d16e36d2be3a",
+      "item": {
+        "type": "paragraph",
+        "id": "bb81d16e36d2be3a",
+        "text": "handles successful and failed puts\n"
+      },
+      "date": 1411257724133
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7b0ae1b18e97a59a",
+        "text": "handles storage and dom journal updates\n"
+      },
+      "id": "7b0ae1b18e97a59a",
+      "type": "add",
+      "after": "bb81d16e36d2be3a",
+      "date": 1411257724148
+    },
+    {
+      "type": "edit",
+      "id": "7b0ae1b18e97a59a",
+      "item": {
+        "type": "paragraph",
+        "id": "7b0ae1b18e97a59a",
+        "text": "handles storage and dom journal updates\n"
+      },
+      "date": 1411257729237
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c9b06e52fca407f6",
+        "text": "I would like to separate these functions into several layers where they can be inspected for correctness and more easily accommodate extension. These layers might be:\n\n"
+      },
+      "id": "c9b06e52fca407f6",
+      "type": "add",
+      "after": "7b0ae1b18e97a59a",
+      "date": 1411257729253
+    },
+    {
+      "type": "edit",
+      "id": "c9b06e52fca407f6",
+      "item": {
+        "type": "paragraph",
+        "id": "c9b06e52fca407f6",
+        "text": "I would like to separate these functions into several layers where they can be inspected for correctness and more easily accommodate extension. These layers might be:\n\n"
+      },
+      "date": 1411257734478
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2395b63ef23b4cf4",
+        "text": "observing and recording history in the journal\n"
+      },
+      "id": "2395b63ef23b4cf4",
+      "type": "add",
+      "after": "c9b06e52fca407f6",
+      "date": 1411257734495
+    },
+    {
+      "type": "edit",
+      "id": "2395b63ef23b4cf4",
+      "item": {
+        "type": "paragraph",
+        "id": "2395b63ef23b4cf4",
+        "text": "observing and recording history in the journal\n"
+      },
+      "date": 1411257735597
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3bc06bcfcc7fc3e3",
+        "text": "applying storage policy such as fail-over\n"
+      },
+      "id": "3bc06bcfcc7fc3e3",
+      "type": "add",
+      "after": "2395b63ef23b4cf4",
+      "date": 1411257735611
+    },
+    {
+      "type": "edit",
+      "id": "3bc06bcfcc7fc3e3",
+      "item": {
+        "type": "paragraph",
+        "id": "3bc06bcfcc7fc3e3",
+        "text": "applying storage policy such as fail-over\n"
+      },
+      "date": 1411257736855
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0469532431c7af56",
+        "text": "performing storage operations to an abstract interface\nThe page data could move smoothly up and down this stack. However there is some situational awareness and some exception handing that must move up and down the stack too. I've yet to find the inspiration that would keep the one layer we already have from becoming three layers of equally brittle code. Accumulating experience can help. Auto-quoting the BBC is one more case to think about."
+      },
+      "id": "0469532431c7af56",
+      "type": "add",
+      "after": "3bc06bcfcc7fc3e3",
+      "date": 1411257736867,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1411257754276
+    },
+    {
+      "type": "edit",
+      "id": "0469532431c7af56",
+      "item": {
+        "type": "paragraph",
+        "id": "0469532431c7af56",
+        "text": "performing storage operations to an abstract interface\n"
+      },
+      "date": 1411257766485
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1c8ccb7a683697b9",
+        "text": "The page data could move smoothly up and down this stack. However there is some situational awareness and some exception handing that must move up and down the stack too. I've yet to find the inspiration that would keep the one layer we already have from becoming three layers of equally brittle code. Accumulating experience can help. Auto-quoting the BBC is one more case to think about."
+      },
+      "id": "1c8ccb7a683697b9",
+      "type": "add",
+      "after": "0469532431c7af56",
+      "date": 1411257766498
+    },
+    {
+      "type": "edit",
+      "id": "751b16c27888fe56",
+      "item": {
+        "type": "paragraph",
+        "id": "751b16c27888fe56",
+        "text": "I have improved some code paths in pageHandler but there are many opportunities for simplification remaining. I have worked slowly here because many cases have order sensitivities due to the compounding of function. Let me mention a few.\n[https://github.com/WardCunningham/Smallest-Federated-Wiki/issues/431 github]"
+      },
+      "date": 1411257863449
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7463c5e55e5d8e01",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "2395b63ef23b4cf4",
+        "3bc06bcfcc7fc3e3",
+        "1c8ccb7a683697b9",
+        "0469532431c7af56"
+      ],
+      "id": "1c8ccb7a683697b9",
+      "date": 1411257904467
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1bbebb3635f4532e",
+        "text": ""
+      },
+      "id": "1bbebb3635f4532e",
+      "type": "add",
+      "after": "1c8ccb7a683697b9",
+      "date": 1411257908447
+    },
+    {
+      "type": "edit",
+      "id": "1bbebb3635f4532e",
+      "item": {
+        "type": "paragraph",
+        "id": "1bbebb3635f4532e",
+        "text": "See [[Page Storage Abstraction]] for earlier thinking."
+      },
+      "date": 1411257924267
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7463c5e55e5d8e01",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "2395b63ef23b4cf4",
+        "3bc06bcfcc7fc3e3",
+        "0469532431c7af56",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "0469532431c7af56",
+      "date": 1411257945207
+    },
+    {
+      "type": "edit",
+      "id": "2395b63ef23b4cf4",
+      "item": {
+        "type": "paragraph",
+        "id": "2395b63ef23b4cf4",
+        "text": "observing, applying and recording history in the linup and journal\n"
+      },
+      "date": 1411263172649
+    },
+    {
+      "type": "edit",
+      "id": "2395b63ef23b4cf4",
+      "item": {
+        "type": "paragraph",
+        "id": "2395b63ef23b4cf4",
+        "text": "observing, applying and recording history  in linup and dom"
+      },
+      "date": 1411263189510
+    },
+    {
+      "type": "edit",
+      "id": "2395b63ef23b4cf4",
+      "item": {
+        "type": "paragraph",
+        "id": "2395b63ef23b4cf4",
+        "text": "observing and applying edits in linup and dom"
+      },
+      "date": 1411263227910
+    },
+    {
+      "type": "edit",
+      "id": "2395b63ef23b4cf4",
+      "item": {
+        "type": "paragraph",
+        "id": "2395b63ef23b4cf4",
+        "text": "[[Page Editor]]"
+      },
+      "date": 1411263385385
+    },
+    {
+      "type": "edit",
+      "id": "3bc06bcfcc7fc3e3",
+      "item": {
+        "type": "paragraph",
+        "id": "3bc06bcfcc7fc3e3",
+        "text": "[[Page Storage Policy]]\n"
+      },
+      "date": 1411263459559
+    },
+    {
+      "type": "edit",
+      "id": "0469532431c7af56",
+      "item": {
+        "type": "paragraph",
+        "id": "0469532431c7af56",
+        "text": "[[Page Origin Store]]"
+      },
+      "date": 1411263610033
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5f13fdb4b7be038d",
+        "text": ""
+      },
+      "id": "5f13fdb4b7be038d",
+      "type": "add",
+      "after": "0469532431c7af56",
+      "date": 1411263615605
+    },
+    {
+      "type": "edit",
+      "id": "5f13fdb4b7be038d",
+      "item": {
+        "type": "paragraph",
+        "id": "5f13fdb4b7be038d",
+        "text": "[[Page Local Store]]"
+      },
+      "date": 1411263623643
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "9bd5a6f6a3f5c72d",
+        "text": ""
+      },
+      "id": "9bd5a6f6a3f5c72d",
+      "type": "add",
+      "after": "0469532431c7af56",
+      "date": 1411263690582
+    },
+    {
+      "type": "edit",
+      "id": "9bd5a6f6a3f5c72d",
+      "item": {
+        "type": "paragraph",
+        "id": "9bd5a6f6a3f5c72d",
+        "text": "[[Page Remote Store]]"
+      },
+      "date": 1411263701678
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f5f82a277d3d2772"
+      },
+      "id": "f5f82a277d3d2772",
+      "type": "add",
+      "after": "1bbebb3635f4532e",
+      "date": 1411264767146
+    },
+    {
+      "type": "edit",
+      "id": "f5f82a277d3d2772",
+      "item": {
+        "type": "pagefold",
+        "id": "f5f82a277d3d2772",
+        "text": "one"
+      },
+      "date": 1411264771886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6fc1641b73de7101"
+      },
+      "id": "6fc1641b73de7101",
+      "type": "add",
+      "after": "f5f82a277d3d2772",
+      "date": 1411264776060
+    },
+    {
+      "type": "edit",
+      "id": "6fc1641b73de7101",
+      "item": {
+        "type": "pagefold",
+        "id": "6fc1641b73de7101",
+        "text": "two"
+      },
+      "date": 1411264780451
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f13362f7bebde148"
+      },
+      "id": "f13362f7bebde148",
+      "type": "add",
+      "after": "6fc1641b73de7101",
+      "date": 1411264782321
+    },
+    {
+      "type": "edit",
+      "id": "f13362f7bebde148",
+      "item": {
+        "type": "pagefold",
+        "id": "f13362f7bebde148",
+        "text": "three"
+      },
+      "date": 1411264787394
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7463c5e55e5d8e01",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "3bc06bcfcc7fc3e3",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e",
+        "6fc1641b73de7101",
+        "f13362f7bebde148"
+      ],
+      "id": "f5f82a277d3d2772",
+      "date": 1411264791366
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7463c5e55e5d8e01",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "3bc06bcfcc7fc3e3",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e",
+        "f13362f7bebde148"
+      ],
+      "id": "6fc1641b73de7101",
+      "date": 1411264796367
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7463c5e55e5d8e01",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "f13362f7bebde148",
+      "date": 1411264799892
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "729612645e6ca3ab"
+      },
+      "id": "729612645e6ca3ab",
+      "type": "add",
+      "after": "1bbebb3635f4532e",
+      "date": 1411268278905
+    },
+    {
+      "type": "edit",
+      "id": "729612645e6ca3ab",
+      "item": {
+        "type": "pagefold",
+        "id": "729612645e6ca3ab",
+        "text": "data"
+      },
+      "date": 1411268326543
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7463c5e55e5d8e01",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "729612645e6ca3ab",
+      "date": 1411268330976
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "7463c5e55e5d8e01",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "7463c5e55e5d8e01",
+      "date": 1411270606582
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "d630c5d3bf1e2b15",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "7463c5e55e5d8e01",
+      "date": 1411270621305
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "d630c5d3bf1e2b15",
+      "date": 1411270628484
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "bb81d16e36d2be3a",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "c4018fffd0032181",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "c4018fffd0032181",
+      "date": 1411270638359
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "7b0ae1b18e97a59a",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "bb81d16e36d2be3a",
+      "date": 1411270646883
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "2395b63ef23b4cf4",
+        "7b0ae1b18e97a59a",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "7b0ae1b18e97a59a",
+      "date": 1411270651351
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "7b0ae1b18e97a59a",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "1bbebb3635f4532e"
+      ],
+      "id": "7b0ae1b18e97a59a",
+      "date": 1411270654976
+    },
+    {
+      "type": "edit",
+      "id": "729612645e6ca3ab",
+      "item": {
+        "type": "pagefold",
+        "id": "729612645e6ca3ab",
+        "text": "storage"
+      },
+      "date": 1411270684849
+    },
+    {
+      "type": "edit",
+      "id": "729612645e6ca3ab",
+      "item": {
+        "type": "pagefold",
+        "id": "729612645e6ca3ab",
+        "text": "data"
+      },
+      "date": 1411270692880
+    },
+    {
+      "type": "edit",
+      "id": "7b0ae1b18e97a59a",
+      "item": {
+        "type": "paragraph",
+        "id": "7b0ae1b18e97a59a",
+        "text": "handles storage and dom journal actions\n"
+      },
+      "date": 1411270749640
+    },
+    {
+      "type": "edit",
+      "id": "751b16c27888fe56",
+      "item": {
+        "type": "paragraph",
+        "id": "751b16c27888fe56",
+        "text": "I have improved some code paths in pageHandler but there are many opportunities for simplification remaining. I have worked slowly here because many cases have order sensitivities due to the compounding of function.\n[https://github.com/WardCunningham/Smallest-Federated-Wiki/issues/431 github]"
+      },
+      "date": 1411271151211
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "9f292f84bf451cfb",
+        "text": ""
+      },
+      "id": "9f292f84bf451cfb",
+      "type": "add",
+      "after": "d630c5d3bf1e2b15",
+      "date": 1411271694156
+    },
+    {
+      "type": "edit",
+      "id": "9f292f84bf451cfb",
+      "item": {
+        "type": "paragraph",
+        "id": "9f292f84bf451cfb",
+        "text": "holds login and session credentials?"
+      },
+      "date": 1411271712313
+    },
+    {
+      "type": "edit",
+      "id": "9f292f84bf451cfb",
+      "item": {
+        "type": "paragraph",
+        "id": "9f292f84bf451cfb",
+        "text": "exposes permissions and login state"
+      },
+      "date": 1411271756577
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "bd181d4b86106d42",
+        "text": ""
+      },
+      "id": "bd181d4b86106d42",
+      "type": "add",
+      "after": "1c8ccb7a683697b9",
+      "date": 1411272874697
+    },
+    {
+      "type": "edit",
+      "id": "bd181d4b86106d42",
+      "item": {
+        "type": "paragraph",
+        "id": "bd181d4b86106d42",
+        "text": "save ⇒ editor ⇒ policy ⇒ store"
+      },
+      "date": 1411272991087
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1d60f3b9b03ca7e5",
+        "text": ""
+      },
+      "id": "1d60f3b9b03ca7e5",
+      "type": "add",
+      "after": "bd181d4b86106d42",
+      "date": 1411272991116
+    },
+    {
+      "type": "edit",
+      "id": "1d60f3b9b03ca7e5",
+      "item": {
+        "type": "paragraph",
+        "id": "1d60f3b9b03ca7e5",
+        "text": "link ⇒ policy ⇒ store ⇒ policy ⇒ refresh"
+      },
+      "date": 1411273083195
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0906163754fbfc97",
+        "text": ""
+      },
+      "id": "0906163754fbfc97",
+      "type": "add",
+      "after": "1d60f3b9b03ca7e5",
+      "date": 1411273286001
+    },
+    {
+      "type": "edit",
+      "id": "0906163754fbfc97",
+      "item": {
+        "type": "paragraph",
+        "id": "0906163754fbfc97",
+        "text": "add ⇒ editor ⇒ policy ⇒ store ⇒ ⇒ refresh"
+      },
+      "date": 1411273757470
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1428864993769
+    },
+    {
+      "type": "add",
+      "id": "949b89725e518c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "949b89725e518c5c",
+        "text": "could we not use [[Remote Store]] for this"
+      },
+      "after": "9f292f84bf451cfb",
+      "date": 1428870074915
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "7b0ae1b18e97a59a",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "9f292f84bf451cfb",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "949b89725e518c5c",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "bd181d4b86106d42",
+        "1d60f3b9b03ca7e5",
+        "0906163754fbfc97",
+        "1bbebb3635f4532e"
+      ],
+      "id": "949b89725e518c5c",
+      "date": 1428870080553
+    },
+    {
+      "type": "edit",
+      "id": "949b89725e518c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "949b89725e518c5c",
+        "text": "could we not use [[RemoteStorage.js]] for this - [https://github.com/remotestorage/remotestorage.js github.com]"
+      },
+      "date": 1428870143208
+    },
+    {
+      "type": "edit",
+      "id": "949b89725e518c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "949b89725e518c5c",
+        "text": "could we not use [[remoteStorage.js]] for this - [https://github.com/remotestorage/remotestorage.js github.com]"
+      },
+      "date": 1428870165127
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "414f08dada17eae9"
+      },
+      "id": "414f08dada17eae9",
+      "type": "add",
+      "after": "1bbebb3635f4532e",
+      "date": 1428870608950
+    },
+    {
+      "type": "move",
+      "order": [
+        "751b16c27888fe56",
+        "c9b06e52fca407f6",
+        "f5f82a277d3d2772",
+        "7b0ae1b18e97a59a",
+        "2395b63ef23b4cf4",
+        "6fc1641b73de7101",
+        "7463c5e55e5d8e01",
+        "c4018fffd0032181",
+        "bb81d16e36d2be3a",
+        "3bc06bcfcc7fc3e3",
+        "f13362f7bebde148",
+        "d630c5d3bf1e2b15",
+        "9f292f84bf451cfb",
+        "0469532431c7af56",
+        "9bd5a6f6a3f5c72d",
+        "5f13fdb4b7be038d",
+        "949b89725e518c5c",
+        "414f08dada17eae9",
+        "729612645e6ca3ab",
+        "1c8ccb7a683697b9",
+        "bd181d4b86106d42",
+        "1d60f3b9b03ca7e5",
+        "0906163754fbfc97",
+        "1bbebb3635f4532e"
+      ],
+      "id": "414f08dada17eae9",
+      "date": 1428870614046
+    },
+    {
+      "type": "edit",
+      "id": "414f08dada17eae9",
+      "item": {
+        "type": "reference",
+        "id": "414f08dada17eae9",
+        "site": "future.fedwiki.org",
+        "slug": "remotestoragejs",
+        "title": "remoteStorage.js",
+        "text": "An open protocol for per-user storage - [https://github.com/remotestorage/remotestorage.js github.com]\n<UL><LI>\n  [[Webfinger]] + [[OAuth]] + [[CORS]] + [[REST]]\n</LI></UL>"
+      },
+      "date": 1428870616572
+    },
+    {
+      "type": "edit",
+      "id": "414f08dada17eae9",
+      "item": {
+        "type": "reference",
+        "id": "414f08dada17eae9",
+        "site": "future.fedwiki.org",
+        "slug": "remotestoragejs",
+        "title": "remoteStorage.js",
+        "text": "An open protocol for per-user storage - [https://github.com/remotestorage/remotestorage.js github.com]"
+      },
+      "date": 1428870632697
+    },
+    {
+      "type": "edit",
+      "id": "949b89725e518c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "949b89725e518c5c",
+        "text": "could we not use:"
+      },
+      "date": 1428870650559
+    }
+  ]
+}

@@ -1,0 +1,432 @@
+{
+  "title": "Web Services Discussion",
+  "story": [
+    {
+      "type": "html",
+      "text": "From my standpoint, there are two kinds of ways that data in the two-way web will flow in a distributed ecosystem that has the scale of the Internet: query-based and real-time.",
+      "id": "1f61baec503a4f66bd066f10acf60d4c"
+    },
+    {
+      "type": "html",
+      "text": " <b>Query-based</b> - relational or non-relational; you send a request for and receive a snapshot of data. Sometimes, languages like SQL allow you to define what you want. Sometimes, it's a URL. Sometimes, it's a method invocation on a component. Semantically, there tends to be overlap. E.g., stored procedures are like method invocations, and URL requests indicate where you want a GET or POST invoked.",
+      "id": "17b971e16bde6ad473bacd7011a3b279"
+    },
+    {
+      "type": "html",
+      "text": " <b>Real-time</b> - continuous or snapshot based. You indicate interest in living data, and notifications come flying in your direction. The initial notification might act much like a snapshot, but then all subsequent notifications consist only of deltas. At the application level, you may not want <i>every single update</i> for usability or performance reasons. So it's cached and you request snapshots of the live instance of this data in that cache when you're ready for it.",
+      "id": "db5b703fbb523b791653d16680683fce"
+    },
+    {
+      "type": "html",
+      "text": "\nMany standards, technologies, and products exist for these data movement strategies. The question is how something might emerge - as pervasive as the web - that gives you both of them on <i>any</i> connected device. One thing I truly believe is that it cannot involve software that must run on big, expensive servers. (Earth will go flat before a Tibco/Rendezvous daemon runs on my Palm IV.) That's where peer computing comes in. Lightweight, cross-platform [[Web Services]] will emerge that allow any device to interact at Internet scale.",
+      "id": "bcdc27423f48e978e4800a6835d101ea"
+    },
+    {
+      "type": "html",
+      "text": "\nI think there is great promise in peer computing as a distributed metaphor, but we just need to get people away from thinking it's limited to stealing songs ;-) To me, peer computing is as much about stealing music as living life itself is about stealing music.",
+      "id": "e413151321c32c82b358fbd42e749bc5"
+    },
+    {
+      "type": "html",
+      "text": "-- [[Philip Eskelin]]",
+      "id": "7ecb3740bffcf4407c78fc33334f4f82"
+    },
+    {
+      "type": "html",
+      "text": "<i>Philip, I generally agree with you, and my experiences resonate with query-based vs realtime-based. Working in finance IT, one of the problems I have with \"distributed component\" specs like EJB is that they seem to be query-biased and didn't have explicit support (until recently) for \"realtime\" systems, such as those involving market data, positions, or risk calculators that talk through Tibco/Rendezvous.</i>",
+      "id": "029ec7c29cc90994e4b9076d6acfc576"
+    },
+    {
+      "type": "html",
+      "text": "<i>Interesting that you mention Rendezvous though. I actually think it's one of the most \"lightweight\" messaging products available, even though the cost certainly isn't lightweight. :-) If you look at the network overhead of RVD compared to other messaging beasts (MQSeries, etc), or even SOAP-over-HTTP, it's quite slim. A model like that would be quite nice on a wireless device, assuming we had wireless availability to handle real time updates. RVD is also much more suited to peer-to-peer than almost any other approach I've seen (barring now-defunct alternatives like ISIS, which was part of the NYSE's communication infrastructure).</i>",
+      "id": "8b84c5004de770b595713f1849535d31"
+    },
+    {
+      "type": "html",
+      "text": "<i>The trick is to standardize another \"semantic data stream\" that fits over wireless-sized bandwidth so we can make these peer-to-peer interoperability dreams into reality. XML-over-wireless just seems to me too \"pie in the sky\" right now - we can afford to waste bandwidth on land-lines, but not through the air, at least for the next few years. I think some seem to agree with this - I've heard a lot of humming & hawing over the usefulness of WAP/WML compared to custom approaches for delivering content (using, say, the Java 2 Micro Edition - which I believe NTT [[Do Co Mo]] is using here in Tokyo for their latest phones). -- [[Stu Charlton]]</i>",
+      "id": "fa479a21c97877a49f06f69ffaf482c8"
+    },
+    {
+      "type": "html",
+      "text": "\nI realize I threw out a controversial statement without providing some background. I too have worked with Rendezvous at a financial organization. The main problem I had in working with RV 4.2 was that the RV daemon had a 2MB footprint, it resided in a separate process, and we had to restart it whenever configuration changes were made. RV has a structured, very packed and <i>proprietary</i> format that it uses to send data from publisher to subscriber.  We had to create a hidden window where the RV API would post all updates for all subjects we were listening on. To use the RV API directly was a big pain, and the [[Tib Msg]] API made it slightly easier, but the Market Data API made things even easier. Yet we had to work with the MD API team at TIBCO and pistol whip them into fixing bugs we found that rendered it virtually useless.",
+      "id": "69d31a7e6a348f9d37289590cff882be"
+    },
+    {
+      "type": "html",
+      "text": "\nRV just didn't seem that elegant. It wasn't flexible enough to work across a multitude of devices in an unstructured environment like the Internet, through firewalls and network address translation services, and in a non-proprietary manner that makes e-markets and inter-company business processes more interoperable. Can you imagine IP multicast to a cellphone in a car going through a tunnel at 75 mph? ;-)",
+      "id": "5b1964d19284801993fa4a0a7a6f5a4f"
+    },
+    {
+      "type": "html",
+      "text": "\nStandards like WAP/WML didn't catch as well as I thought they would. There  are certain some nascent issues. Connections that break a lot and little bandwidth are a reality today. But I think it will improve over time; software will become more intelligent and active, and our understanding of its application in a distributed sense will evolve to the extent that we won't be treating wireless communication like it's wired. Actually . . . isn't most of wireless communication infrastructure <i>actually wired</i>, with only the last few hundred yards or so between your device and the cell doing RF?",
+      "id": "e5a8cd18c7365b37cb4c1d23db89c8ae"
+    },
+    {
+      "type": "html",
+      "text": "-- [[Philip Eskelin]]",
+      "id": "7ecb3740bffcf4407c78fc33334f4f82"
+    },
+    {
+      "type": "html",
+      "text": "\nI think the thing that caught my attention about RV was the concept more than the product: it was a compact, self-describing protocol for efficient peer-to-peer messaging. Sure, it was proprietary and the older API's were rough, but the newer Java API is a cinch to work in, which is why I'm less negative about it as a product. XML has the self-describing part, but not the efficiency & compactness. Though perhaps we'll find a way to make it more efficient, or we'll just throw our arms up and use a hand-crafted protocol when certain QoS demands are needed. -- [[Stu Charlton]]",
+      "id": "dd8c2b4efaf12fd83c3b51c207a68d4a"
+    },
+    {
+      "type": "html",
+      "text": "\nI don't have any experience with the newer Java API, but I've heard it's pretty cool. Still . . . try stamping it onto an embedded device running a KVM that may or may not be reliable or support the services you need to do distributed computing at the scale we're discussing here. SOAP seems to be riding a wave right now, but you're right about efficiency & compactness - it suffers there. One strategy off the cuff might be to compress and base 64 encode it. Still, QoS for SOAP is lacking at this point, but other overlapping protocols such as HTTP do as well. Maybe this is something we can look forward to in an \"EJB 3.0\" spec (or equivalent). -- [[Philip Eskelin]]",
+      "id": "3bf4d18d157e315ce95510550d1856c0"
+    },
+    {
+      "type": "html",
+      "text": "\nPhilip - I'm glad you mentioned real-time services in the context of a [[Web Services Discussion]]. It's been on my mind since reading Microsoft's and Sun's offerings.  You hardly hear talk about anything but HTTP. But two-way asynchronous communications, both between two software components and between one software component and its user, are crucial for lots of applications (try implementing instant messaging or Napster without it). Because of this, it seems to me that HTTP just doesn't cut it. We need a more symmetrical protocol. -- [[Russ Atkind]]",
+      "id": "a5cf52bab59a650345678fad8d980eaf"
+    },
+    {
+      "type": "html",
+      "text": "\nGuys - SOAP itself doesn't mandate the protocol - it just requires that at LEAST HTTP be supported. Personally, I'm seeing a lot of interest in SOAP over JMS (through IBM MQSeries) and even (imagine this) SOAP over SMTP! And yes, there is significant ongoing work on compressing SOAP and providing additional support for QoS and other useful things like Transactions... -- [[Kyle Brown]]",
+      "id": "6bd51787fee635c1e5576cc8b2e143ae"
+    },
+    {
+      "type": "html",
+      "text": "\nWe are doing SOAP over JMS. -- sg",
+      "id": "8ab108724bde943c696772cd037e05df"
+    },
+    {
+      "type": "html",
+      "text": "<i>I don't get SOAP-over-JMS. JMS is an API, is it not? Not comparable to HTTP. Or does JMS also specify a new network protocol??  SOAP-over-MQ I get. SOAP-over-JMS I do not get.</i> ",
+      "id": "d79b81b91a761bf7ca7445d1153ad7ef"
+    },
+    {
+      "type": "html",
+      "text": "<i>How are you going with it, Sam? A while back, I had to do a feasibility study of integrating a Java/JMS-based environment with [[Biz Talk]], and didn't think it would be too much of a problem (just a lot of work replicating the [[Biz Talk]] Server in Java) -- [[Robert Watkins]]</i>",
+      "id": "73cbc93b929348542b467af90d9a6cf0"
+    },
+    {
+      "type": "html",
+      "text": "<i>Can't say much because its NDA but in general, its going extremely well. We have SonicMQ JMS busses geographically dispersed and my group is totally [[Microsoft Dot Net]]. We simply deal with everything as XML [[Web Services]]. Java components in other places format SOAP and put a SOAP call onto the JMS bus, which the [[Microsoft Dot Net]] [[Web Services]] and [[Csharp Language]] components pull off the JMS bus and call the right [[Web Service]]. By making HTTP, XML and Web Services our standard all throughout we can talk to *anything*. The JMS bus gives us great store and forward capability and robustness. We are having no problems. SOAP messages travel on the JMS busses, we pull it off and we can talk to [[Biz Talk]] Server, SQLServer, wrapped Oracle databases, whatever. Its a great combination and one where all the different technology groups can share equally.</i> -- sg",
+      "id": "50ec97081d0bdfa1d92898a09cd57e8d"
+    },
+    {
+      "type": "html",
+      "text": "<i>Something I don't quite understand - is it the JMS that gives you store/forward, or is it the SonicMQ product? I thought JMS was just the API you would use from Java to put/get to/from SonicMQ? Does SonicMQ have an alternative API for apps written in not-Java? How does CSharp code pull off SonicMQ? Can't be through the Java classes, can it? -- [[Dino Chiesa]]</i>",
+      "id": "86182f6dfe40007412bd57b6bc05ae02"
+    },
+    {
+      "type": "html",
+      "text": "\nBy the way, people should look at what IBM is also doing with SOAP and [[Web Services]]. I am delighted to see their stuff. They are doing some good work. -- sg",
+      "id": "40d5b1a3ce200375cc52bb5feb0ea12f"
+    },
+    {
+      "type": "html",
+      "text": "\nAnd for once, I might say the same for Microsoft. The great thing that about SOAP and WSDL is that it provides a common way for Microsoft's and Sun/IBM's programming models to interoperate. I can't wait to see the first application delivered with a VB client and a [[Web Sphere]] back-end! -- [[Kyle Brown]]",
+      "id": "e26bdf5cb81d4f8a4a1627a34a5a9846"
+    },
+    {
+      "type": "html",
+      "text": "\nYes! It's a whole new world -- sg",
+      "id": "e0d791b2b4ec5d39078c0e82d36737d6"
+    },
+    {
+      "type": "html",
+      "text": "\nIt's weird how the [[Espeak Platform]] by [[Hewlett Packard]] was really the forerunner of [[Web Services]] but no-one really hears anything about it anymore.",
+      "id": "932ad54184f0d62e9387b025e2ad7bc3"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "4c07b0347681181e7bd87cc53bf43086"
+    },
+    {
+      "type": "html",
+      "text": "<b>Charging</b>",
+      "id": "0608bb6335d7b9fbb1b969c730028383"
+    },
+    {
+      "type": "html",
+      "text": "\nHow does charging work with [[Web Services]]? Presumably there is some way to make a profit ;-) -- [[Glyn Normington]]",
+      "id": "dcf670a470890ebf036cec2fe2f66821"
+    },
+    {
+      "type": "html",
+      "text": "\nHeh. That's always the problem isn't it. If you bring that up to the standards committees, though, it's as if you made a rude noise in a crowded room. -- [[Kyle Brown]]",
+      "id": "4f28e3145345b0f7deb155f24d490fb3"
+    },
+    {
+      "type": "html",
+      "text": "\nThe question of charging has come up a few times in the UDDI forum (for example [http://groups.yahoo.com/group/uddi-general/message/200 groups.yahoo.com]), and there is description of a license-based solution at [http://msdn.microsoft.com/library/techart/ssf1lic.htm msdn.microsoft.com] -- [[Ian Mitchell]]",
+      "id": "39030dea6c14eb0bb46215f8da0eecae"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "4c07b0347681181e7bd87cc53bf43086"
+    },
+    {
+      "type": "html",
+      "text": "\nIs this a new anti-piracy thing? I mean, it's like, \"It used to be that I had to worry about you copying my software if I gave it to you, but now I no longer have to <i>give</i> you a copy of the software I write. With the ubiquity of the Internet, I can run a server, and give you a mere stub that securely contacts my server for everything, and I can charge you a nice monthly fee. Want to use my Large Integer implementation? I'll give you an object that, whenever you want to do some Large Integer arithmetic, just contacts my Large Integer server, sends the numbers to the server along with the operation, and receives the result. Not only that, I'll throw in Quaternion arithmetic, Regular Expressions, and LR(1) parser generation, and live chat-room tech support, all for just $8.99 per month! You'll never have to worry about bugs or upgrades, because I'll always be cleaning up the code on my end!\" Of course if the network goes down, you're screwed, and if it's slow, you're screwed, and if the server is full or overloaded, you're screwed, and if I introduce a new bug into the code for a while, you may be screwed... but in the internet of the future, maybe many of these will never happen. Sometimes a server can do things an individual computer can't do. Maybe you can trade Large Integers with other people, or deal with integers larger than you can represent on your local machine (for a substantial additional fee, of course). I can also imagine open standards where you could run your own server of a certain kind and, perhaps, get paid... -- [[Edward Kiser]]",
+      "id": "a76b801d79e586c0efe221406248dc13"
+    },
+    {
+      "type": "html",
+      "text": "\nFor non-[[Real Time]] critical apps where you can assume Internet access, this does appear to be the next model of choice. It'll be interesting to see what metering and billing technologies emerge to collect that $8.99 per month. -- [[Michael Leach]]",
+      "id": "c1ae6262c6da97c0aec8f471b2e1ff53"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "4c07b0347681181e7bd87cc53bf43086"
+    },
+    {
+      "type": "html",
+      "text": "\nAs a [[Relational Weenie]], I like the idea of using database queries for \"distributed\" information. It reduces the burden of having to create behavioral interfaces in advance of potential uses. A relational interface would say: \"Here's the possible data, take as needed and you do what you want to with it once you get it\". There is less it has to anticipate in advance with regard to \"features\", because it is generally non-behavioral (other than things that queries can do like joins, sum, average, group, etc.). Whether there are protocols or techniques to make such secure to the public or a wide range of businesses has yet to be seen that I know of. A front-end would have to prevent things like cartesian joins, billion-record dumps, etc. I wonder what an Oracle sales-person would propose?",
+      "id": "50b047eaba36d3bfb1504807dffd7e54"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "4c07b0347681181e7bd87cc53bf43086"
+    },
+    {
+      "type": "html",
+      "text": "\nIs it just me, or are there some others who feel a bit skeptical about [[Web Services]]?  As if all the hype about them is so great it cannot possibly be true.",
+      "id": "0b5b4a270374d3f0bbe9063deda8c936"
+    },
+    {
+      "type": "html",
+      "text": "\nDoes anyone have some success stories to share?  (Or some \"failure stories\").",
+      "id": "f6639151120a16be0ec2f6422ba4c530"
+    },
+    {
+      "type": "html",
+      "text": "<hr>",
+      "id": "4c07b0347681181e7bd87cc53bf43086"
+    },
+    {
+      "type": "html",
+      "text": "See original on  [http://c2.com/cgi/wiki?WebServicesDiscussion c2.com]",
+      "id": "1857c06b3199fc14866071f1890a3187"
+    }
+  ],
+  "journal": [
+    {
+      "date": 1078292090000,
+      "id": "a7e6dfa0eebc6272891e0a4a14f4f9b2",
+      "type": "create",
+      "item": {
+        "title": "Web Services Discussion",
+        "story": [
+          {
+            "type": "html",
+            "text": "From my standpoint, there are two kinds of ways that data in the two-way web will flow in a distributed ecosystem that has the scale of the Internet: query-based and real-time.",
+            "id": "1f61baec503a4f66bd066f10acf60d4c"
+          },
+          {
+            "type": "html",
+            "text": " <b>Query-based</b> - relational or non-relational; you send a request for and receive a snapshot of data. Sometimes, languages like SQL allow you to define what you want. Sometimes, it's a URL. Sometimes, it's a method invocation on a component. Semantically, there tends to be overlap. E.g., stored procedures are like method invocations, and URL requests indicate where you want a GET or POST invoked.",
+            "id": "17b971e16bde6ad473bacd7011a3b279"
+          },
+          {
+            "type": "html",
+            "text": " <b>Real-time</b> - continuous or snapshot based. You indicate interest in living data, and notifications come flying in your direction. The initial notification might act much like a snapshot, but then all subsequent notifications consist only of deltas. At the application level, you may not want <i>every single update</i> for usability or performance reasons. So it's cached and you request snapshots of the live instance of this data in that cache when you're ready for it.",
+            "id": "db5b703fbb523b791653d16680683fce"
+          },
+          {
+            "type": "html",
+            "text": "\nMany standards, technologies, and products exist for these data movement strategies. The question is how something might emerge - as pervasive as the web - that gives you both of them on <i>any</i> connected device. One thing I truly believe is that it cannot involve software that must run on big, expensive servers. (Earth will go flat before a Tibco/Rendezvous daemon runs on my Palm IV.) That's where peer computing comes in. Lightweight, cross-platform [[Web Services]] will emerge that allow any device to interact at Internet scale.",
+            "id": "bcdc27423f48e978e4800a6835d101ea"
+          },
+          {
+            "type": "html",
+            "text": "\nI think there is great promise in peer computing as a distributed metaphor, but we just need to get people away from thinking it's limited to stealing songs ;-) To me, peer computing is as much about stealing music as living life itself is about stealing music.",
+            "id": "e413151321c32c82b358fbd42e749bc5"
+          },
+          {
+            "type": "html",
+            "text": "-- [[Philip Eskelin]]",
+            "id": "7ecb3740bffcf4407c78fc33334f4f82"
+          },
+          {
+            "type": "html",
+            "text": "<i>Philip, I generally agree with you, and my experiences resonate with query-based vs realtime-based. Working in finance IT, one of the problems I have with \"distributed component\" specs like EJB is that they seem to be query-biased and didn't have explicit support (until recently) for \"realtime\" systems, such as those involving market data, positions, or risk calculators that talk through Tibco/Rendezvous.</i>",
+            "id": "029ec7c29cc90994e4b9076d6acfc576"
+          },
+          {
+            "type": "html",
+            "text": "<i>Interesting that you mention Rendezvous though. I actually think it's one of the most \"lightweight\" messaging products available, even though the cost certainly isn't lightweight. :-) If you look at the network overhead of RVD compared to other messaging beasts (MQSeries, etc), or even SOAP-over-HTTP, it's quite slim. A model like that would be quite nice on a wireless device, assuming we had wireless availability to handle real time updates. RVD is also much more suited to peer-to-peer than almost any other approach I've seen (barring now-defunct alternatives like ISIS, which was part of the NYSE's communication infrastructure).</i>",
+            "id": "8b84c5004de770b595713f1849535d31"
+          },
+          {
+            "type": "html",
+            "text": "<i>The trick is to standardize another \"semantic data stream\" that fits over wireless-sized bandwidth so we can make these peer-to-peer interoperability dreams into reality. XML-over-wireless just seems to me too \"pie in the sky\" right now - we can afford to waste bandwidth on land-lines, but not through the air, at least for the next few years. I think some seem to agree with this - I've heard a lot of humming & hawing over the usefulness of WAP/WML compared to custom approaches for delivering content (using, say, the Java 2 Micro Edition - which I believe NTT [[Do Co Mo]] is using here in Tokyo for their latest phones). -- [[Stu Charlton]]</i>",
+            "id": "fa479a21c97877a49f06f69ffaf482c8"
+          },
+          {
+            "type": "html",
+            "text": "\nI realize I threw out a controversial statement without providing some background. I too have worked with Rendezvous at a financial organization. The main problem I had in working with RV 4.2 was that the RV daemon had a 2MB footprint, it resided in a separate process, and we had to restart it whenever configuration changes were made. RV has a structured, very packed and <i>proprietary</i> format that it uses to send data from publisher to subscriber.  We had to create a hidden window where the RV API would post all updates for all subjects we were listening on. To use the RV API directly was a big pain, and the [[Tib Msg]] API made it slightly easier, but the Market Data API made things even easier. Yet we had to work with the MD API team at TIBCO and pistol whip them into fixing bugs we found that rendered it virtually useless.",
+            "id": "69d31a7e6a348f9d37289590cff882be"
+          },
+          {
+            "type": "html",
+            "text": "\nRV just didn't seem that elegant. It wasn't flexible enough to work across a multitude of devices in an unstructured environment like the Internet, through firewalls and network address translation services, and in a non-proprietary manner that makes e-markets and inter-company business processes more interoperable. Can you imagine IP multicast to a cellphone in a car going through a tunnel at 75 mph? ;-)",
+            "id": "5b1964d19284801993fa4a0a7a6f5a4f"
+          },
+          {
+            "type": "html",
+            "text": "\nStandards like WAP/WML didn't catch as well as I thought they would. There  are certain some nascent issues. Connections that break a lot and little bandwidth are a reality today. But I think it will improve over time; software will become more intelligent and active, and our understanding of its application in a distributed sense will evolve to the extent that we won't be treating wireless communication like it's wired. Actually . . . isn't most of wireless communication infrastructure <i>actually wired</i>, with only the last few hundred yards or so between your device and the cell doing RF?",
+            "id": "e5a8cd18c7365b37cb4c1d23db89c8ae"
+          },
+          {
+            "type": "html",
+            "text": "-- [[Philip Eskelin]]",
+            "id": "7ecb3740bffcf4407c78fc33334f4f82"
+          },
+          {
+            "type": "html",
+            "text": "\nI think the thing that caught my attention about RV was the concept more than the product: it was a compact, self-describing protocol for efficient peer-to-peer messaging. Sure, it was proprietary and the older API's were rough, but the newer Java API is a cinch to work in, which is why I'm less negative about it as a product. XML has the self-describing part, but not the efficiency & compactness. Though perhaps we'll find a way to make it more efficient, or we'll just throw our arms up and use a hand-crafted protocol when certain QoS demands are needed. -- [[Stu Charlton]]",
+            "id": "dd8c2b4efaf12fd83c3b51c207a68d4a"
+          },
+          {
+            "type": "html",
+            "text": "\nI don't have any experience with the newer Java API, but I've heard it's pretty cool. Still . . . try stamping it onto an embedded device running a KVM that may or may not be reliable or support the services you need to do distributed computing at the scale we're discussing here. SOAP seems to be riding a wave right now, but you're right about efficiency & compactness - it suffers there. One strategy off the cuff might be to compress and base 64 encode it. Still, QoS for SOAP is lacking at this point, but other overlapping protocols such as HTTP do as well. Maybe this is something we can look forward to in an \"EJB 3.0\" spec (or equivalent). -- [[Philip Eskelin]]",
+            "id": "3bf4d18d157e315ce95510550d1856c0"
+          },
+          {
+            "type": "html",
+            "text": "\nPhilip - I'm glad you mentioned real-time services in the context of a [[Web Services Discussion]]. It's been on my mind since reading Microsoft's and Sun's offerings.  You hardly hear talk about anything but HTTP. But two-way asynchronous communications, both between two software components and between one software component and its user, are crucial for lots of applications (try implementing instant messaging or Napster without it). Because of this, it seems to me that HTTP just doesn't cut it. We need a more symmetrical protocol. -- [[Russ Atkind]]",
+            "id": "a5cf52bab59a650345678fad8d980eaf"
+          },
+          {
+            "type": "html",
+            "text": "\nGuys - SOAP itself doesn't mandate the protocol - it just requires that at LEAST HTTP be supported. Personally, I'm seeing a lot of interest in SOAP over JMS (through IBM MQSeries) and even (imagine this) SOAP over SMTP! And yes, there is significant ongoing work on compressing SOAP and providing additional support for QoS and other useful things like Transactions... -- [[Kyle Brown]]",
+            "id": "6bd51787fee635c1e5576cc8b2e143ae"
+          },
+          {
+            "type": "html",
+            "text": "\nWe are doing SOAP over JMS. -- sg",
+            "id": "8ab108724bde943c696772cd037e05df"
+          },
+          {
+            "type": "html",
+            "text": "<i>I don't get SOAP-over-JMS. JMS is an API, is it not? Not comparable to HTTP. Or does JMS also specify a new network protocol??  SOAP-over-MQ I get. SOAP-over-JMS I do not get.</i> ",
+            "id": "d79b81b91a761bf7ca7445d1153ad7ef"
+          },
+          {
+            "type": "html",
+            "text": "<i>How are you going with it, Sam? A while back, I had to do a feasibility study of integrating a Java/JMS-based environment with [[Biz Talk]], and didn't think it would be too much of a problem (just a lot of work replicating the [[Biz Talk]] Server in Java) -- [[Robert Watkins]]</i>",
+            "id": "73cbc93b929348542b467af90d9a6cf0"
+          },
+          {
+            "type": "html",
+            "text": "<i>Can't say much because its NDA but in general, its going extremely well. We have SonicMQ JMS busses geographically dispersed and my group is totally [[Microsoft Dot Net]]. We simply deal with everything as XML [[Web Services]]. Java components in other places format SOAP and put a SOAP call onto the JMS bus, which the [[Microsoft Dot Net]] [[Web Services]] and [[Csharp Language]] components pull off the JMS bus and call the right [[Web Service]]. By making HTTP, XML and Web Services our standard all throughout we can talk to *anything*. The JMS bus gives us great store and forward capability and robustness. We are having no problems. SOAP messages travel on the JMS busses, we pull it off and we can talk to [[Biz Talk]] Server, SQLServer, wrapped Oracle databases, whatever. Its a great combination and one where all the different technology groups can share equally.</i> -- sg",
+            "id": "50ec97081d0bdfa1d92898a09cd57e8d"
+          },
+          {
+            "type": "html",
+            "text": "<i>Something I don't quite understand - is it the JMS that gives you store/forward, or is it the SonicMQ product? I thought JMS was just the API you would use from Java to put/get to/from SonicMQ? Does SonicMQ have an alternative API for apps written in not-Java? How does CSharp code pull off SonicMQ? Can't be through the Java classes, can it? -- [[Dino Chiesa]]</i>",
+            "id": "86182f6dfe40007412bd57b6bc05ae02"
+          },
+          {
+            "type": "html",
+            "text": "\nBy the way, people should look at what IBM is also doing with SOAP and [[Web Services]]. I am delighted to see their stuff. They are doing some good work. -- sg",
+            "id": "40d5b1a3ce200375cc52bb5feb0ea12f"
+          },
+          {
+            "type": "html",
+            "text": "\nAnd for once, I might say the same for Microsoft. The great thing that about SOAP and WSDL is that it provides a common way for Microsoft's and Sun/IBM's programming models to interoperate. I can't wait to see the first application delivered with a VB client and a [[Web Sphere]] back-end! -- [[Kyle Brown]]",
+            "id": "e26bdf5cb81d4f8a4a1627a34a5a9846"
+          },
+          {
+            "type": "html",
+            "text": "\nYes! It's a whole new world -- sg",
+            "id": "e0d791b2b4ec5d39078c0e82d36737d6"
+          },
+          {
+            "type": "html",
+            "text": "\nIt's weird how the [[Espeak Platform]] by [[Hewlett Packard]] was really the forerunner of [[Web Services]] but no-one really hears anything about it anymore.",
+            "id": "932ad54184f0d62e9387b025e2ad7bc3"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "4c07b0347681181e7bd87cc53bf43086"
+          },
+          {
+            "type": "html",
+            "text": "<b>Charging</b>",
+            "id": "0608bb6335d7b9fbb1b969c730028383"
+          },
+          {
+            "type": "html",
+            "text": "\nHow does charging work with [[Web Services]]? Presumably there is some way to make a profit ;-) -- [[Glyn Normington]]",
+            "id": "dcf670a470890ebf036cec2fe2f66821"
+          },
+          {
+            "type": "html",
+            "text": "\nHeh. That's always the problem isn't it. If you bring that up to the standards committees, though, it's as if you made a rude noise in a crowded room. -- [[Kyle Brown]]",
+            "id": "4f28e3145345b0f7deb155f24d490fb3"
+          },
+          {
+            "type": "html",
+            "text": "\nThe question of charging has come up a few times in the UDDI forum (for example [http://groups.yahoo.com/group/uddi-general/message/200 groups.yahoo.com]), and there is description of a license-based solution at [http://msdn.microsoft.com/library/techart/ssf1lic.htm msdn.microsoft.com] -- [[Ian Mitchell]]",
+            "id": "39030dea6c14eb0bb46215f8da0eecae"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "4c07b0347681181e7bd87cc53bf43086"
+          },
+          {
+            "type": "html",
+            "text": "\nIs this a new anti-piracy thing? I mean, it's like, \"It used to be that I had to worry about you copying my software if I gave it to you, but now I no longer have to <i>give</i> you a copy of the software I write. With the ubiquity of the Internet, I can run a server, and give you a mere stub that securely contacts my server for everything, and I can charge you a nice monthly fee. Want to use my Large Integer implementation? I'll give you an object that, whenever you want to do some Large Integer arithmetic, just contacts my Large Integer server, sends the numbers to the server along with the operation, and receives the result. Not only that, I'll throw in Quaternion arithmetic, Regular Expressions, and LR(1) parser generation, and live chat-room tech support, all for just $8.99 per month! You'll never have to worry about bugs or upgrades, because I'll always be cleaning up the code on my end!\" Of course if the network goes down, you're screwed, and if it's slow, you're screwed, and if the server is full or overloaded, you're screwed, and if I introduce a new bug into the code for a while, you may be screwed... but in the internet of the future, maybe many of these will never happen. Sometimes a server can do things an individual computer can't do. Maybe you can trade Large Integers with other people, or deal with integers larger than you can represent on your local machine (for a substantial additional fee, of course). I can also imagine open standards where you could run your own server of a certain kind and, perhaps, get paid... -- [[Edward Kiser]]",
+            "id": "a76b801d79e586c0efe221406248dc13"
+          },
+          {
+            "type": "html",
+            "text": "\nFor non-[[Real Time]] critical apps where you can assume Internet access, this does appear to be the next model of choice. It'll be interesting to see what metering and billing technologies emerge to collect that $8.99 per month. -- [[Michael Leach]]",
+            "id": "c1ae6262c6da97c0aec8f471b2e1ff53"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "4c07b0347681181e7bd87cc53bf43086"
+          },
+          {
+            "type": "html",
+            "text": "\nAs a [[Relational Weenie]], I like the idea of using database queries for \"distributed\" information. It reduces the burden of having to create behavioral interfaces in advance of potential uses. A relational interface would say: \"Here's the possible data, take as needed and you do what you want to with it once you get it\". There is less it has to anticipate in advance with regard to \"features\", because it is generally non-behavioral (other than things that queries can do like joins, sum, average, group, etc.). Whether there are protocols or techniques to make such secure to the public or a wide range of businesses has yet to be seen that I know of. A front-end would have to prevent things like cartesian joins, billion-record dumps, etc. I wonder what an Oracle sales-person would propose?",
+            "id": "50b047eaba36d3bfb1504807dffd7e54"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "4c07b0347681181e7bd87cc53bf43086"
+          },
+          {
+            "type": "html",
+            "text": "\nIs it just me, or are there some others who feel a bit skeptical about [[Web Services]]?  As if all the hype about them is so great it cannot possibly be true.",
+            "id": "0b5b4a270374d3f0bbe9063deda8c936"
+          },
+          {
+            "type": "html",
+            "text": "\nDoes anyone have some success stories to share?  (Or some \"failure stories\").",
+            "id": "f6639151120a16be0ec2f6422ba4c530"
+          },
+          {
+            "type": "html",
+            "text": "<hr>",
+            "id": "4c07b0347681181e7bd87cc53bf43086"
+          },
+          {
+            "type": "html",
+            "text": "See original on  [http://c2.com/cgi/wiki?WebServicesDiscussion c2.com]",
+            "id": "1857c06b3199fc14866071f1890a3187"
+          }
+        ]
+      }
+    },
+    {
+      "type": "fork",
+      "site": "web.sfw.c2.com",
+      "date": 1451355078467
+    }
+  ]
+}

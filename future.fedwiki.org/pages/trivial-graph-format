@@ -1,0 +1,521 @@
+{
+  "title": "Trivial Graph Format",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "1519feecfab8d524",
+      "text": "Trivial Graph Format (TGF) is a simple text-based file format for describing graphs - [https://en.wikipedia.org/wiki/Trivial_Graph_Format wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bdbba342165a4c5c",
+      "text": "It consists of a list of node definitions, which map node IDs to labels, followed by a list of edges, which specify node pairs and an optional edge label. Node IDs can be arbitrary identifiers, whereas labels for both nodes and edges are plain strings."
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\n\nFor an early discussion of these ideas see the  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+    },
+    {
+      "type": "paragraph",
+      "id": "1ba540ede2c87d35",
+      "text": "The graph may be interpreted as a directed or undirected graph. For directed graphs, to specify the concept of bi-directionality in an edge, one may either specify two edges (forward and back) or differentiate the edge by means of a label. "
+    },
+    {
+      "type": "markdown",
+      "id": "17892077c5c7508a",
+      "text": "# Example\nA simple graph with 2 nodes and 1 edge might look like this:"
+    },
+    {
+      "type": "code",
+      "id": "2a90fd49c1f232cf",
+      "text": "1 First node\n2 Second node\n#\n1 2 Edge between the two"
+    },
+    {
+      "type": "paragraph",
+      "id": "2f4b8689f1ef3504",
+      "text": "The # sign marks the end of the node list and the start of the edge list."
+    },
+    {
+      "type": "markdown",
+      "id": "29af24b814a8b3e4",
+      "text": "# Tradeoffs\nThis approach comes with trade-offs:"
+    },
+    {
+      "type": "markdown",
+      "id": "9ac68259b0f0684c",
+      "text": "**Pros**:\n\n* Human readable and writable\n* Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "7a59e90b5239bced",
+      "text": "**Cons:**\n\n* Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n* Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below."
+    },
+    {
+      "type": "paragraph",
+      "id": "00560b7006377151",
+      "text": "These are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\"."
+    },
+    {
+      "type": "paragraph",
+      "id": "cef20db7560aed40",
+      "text": "I took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy."
+    },
+    {
+      "type": "markdown",
+      "id": "3d3e13f0e8a39603",
+      "text": "# See also"
+    },
+    {
+      "type": "reference",
+      "id": "0ed774c2b5aa1870",
+      "site": "future.fedwiki.org",
+      "slug": "federation-graph-representation",
+      "title": "Federation Graph Representation",
+      "text": "Here we look in more detail at how [[graphs in wiki]] can be specified. We look to define a markup, or [[domain specific language]] for authors wishing to create maps or network graphs."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Trivial Graph Format",
+        "story": []
+      },
+      "date": 1464599192646
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1519feecfab8d524"
+      },
+      "id": "1519feecfab8d524",
+      "type": "add",
+      "date": 1464599193783
+    },
+    {
+      "type": "edit",
+      "id": "1519feecfab8d524",
+      "item": {
+        "type": "paragraph",
+        "id": "1519feecfab8d524",
+        "text": "Trivial Graph Format (TGF) is a simple text-based file format for describing graphs. "
+      },
+      "date": 1464599217579
+    },
+    {
+      "type": "add",
+      "id": "bdbba342165a4c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "bdbba342165a4c5c",
+        "text": "It consists of a list of node definitions, which map node IDs to labels, followed by a list of edges, which specify node pairs and an optional edge label. Node IDs can be arbitrary identifiers, whereas labels for both nodes and edges are plain strings."
+      },
+      "after": "1519feecfab8d524",
+      "date": 1464599219484
+    },
+    {
+      "type": "add",
+      "id": "1ba540ede2c87d35",
+      "item": {
+        "type": "paragraph",
+        "id": "1ba540ede2c87d35",
+        "text": "The graph may be interpreted as a directed or undirected graph. For directed graphs, to specify the concept of bi-directionality in an edge, one may either specify two edges (forward and back) or differentiate the edge by means of a label. "
+      },
+      "after": "bdbba342165a4c5c",
+      "date": 1464599230540
+    },
+    {
+      "type": "add",
+      "id": "d137d0cb1fc47387",
+      "item": {
+        "type": "paragraph",
+        "id": "d137d0cb1fc47387",
+        "text": "For more powerful specification of graphs, see the other graph file formats below.\n\n# Example\nA simple graph with 2 nodes and 1 edge might look like this:"
+      },
+      "after": "1ba540ede2c87d35",
+      "date": 1464599243670
+    },
+    {
+      "type": "edit",
+      "id": "d137d0cb1fc47387",
+      "item": {
+        "type": "markdown",
+        "id": "d137d0cb1fc47387",
+        "text": "For more powerful specification of graphs, see the other graph file formats below.\n\n# Example\nA simple graph with 2 nodes and 1 edge might look like this:"
+      },
+      "date": 1464599245024
+    },
+    {
+      "type": "add",
+      "id": "212e199c8cb60d32",
+      "item": {
+        "type": "paragraph",
+        "id": "212e199c8cb60d32",
+        "text": "1 First node\n2 Second node\n#\n1 2 Edge between the two"
+      },
+      "after": "d137d0cb1fc47387",
+      "date": 1464599251911
+    },
+    {
+      "type": "add",
+      "id": "2f4b8689f1ef3504",
+      "item": {
+        "type": "paragraph",
+        "id": "2f4b8689f1ef3504",
+        "text": "The # sign marks the end of the node list and the start of the edge list."
+      },
+      "after": "212e199c8cb60d32",
+      "date": 1464599253396
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2a90fd49c1f232cf"
+      },
+      "id": "2a90fd49c1f232cf",
+      "type": "add",
+      "after": "2f4b8689f1ef3504",
+      "date": 1464599254538
+    },
+    {
+      "type": "move",
+      "order": [
+        "1519feecfab8d524",
+        "bdbba342165a4c5c",
+        "1ba540ede2c87d35",
+        "d137d0cb1fc47387",
+        "212e199c8cb60d32",
+        "2a90fd49c1f232cf",
+        "2f4b8689f1ef3504"
+      ],
+      "id": "2a90fd49c1f232cf",
+      "date": 1464599256292
+    },
+    {
+      "type": "remove",
+      "id": "212e199c8cb60d32",
+      "date": 1464599259416
+    },
+    {
+      "type": "edit",
+      "id": "2a90fd49c1f232cf",
+      "item": {
+        "type": "code",
+        "id": "2a90fd49c1f232cf",
+        "text": "1 First node\n2 Second node\n#\n1 2 Edge between the two"
+      },
+      "date": 1464599261689
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3d3e13f0e8a39603"
+      },
+      "id": "3d3e13f0e8a39603",
+      "type": "add",
+      "after": "2f4b8689f1ef3504",
+      "date": 1464599266408
+    },
+    {
+      "type": "edit",
+      "id": "3d3e13f0e8a39603",
+      "item": {
+        "type": "markdown",
+        "id": "3d3e13f0e8a39603",
+        "text": "# See also"
+      },
+      "date": 1464599272158
+    },
+    {
+      "type": "move",
+      "order": [
+        "1519feecfab8d524",
+        "bdbba342165a4c5c",
+        "1ba540ede2c87d35",
+        "2a90fd49c1f232cf",
+        "2f4b8689f1ef3504",
+        "3d3e13f0e8a39603",
+        "d137d0cb1fc47387"
+      ],
+      "id": "d137d0cb1fc47387",
+      "date": 1464599279116
+    },
+    {
+      "type": "edit",
+      "id": "d137d0cb1fc47387",
+      "item": {
+        "type": "markdown",
+        "id": "d137d0cb1fc47387",
+        "text": "For more powerful specification of graphs, see the other graph file formats below."
+      },
+      "date": 1464599291931
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17892077c5c7508a"
+      },
+      "id": "17892077c5c7508a",
+      "type": "add",
+      "after": "d137d0cb1fc47387",
+      "date": 1464599294512
+    },
+    {
+      "type": "move",
+      "order": [
+        "1519feecfab8d524",
+        "bdbba342165a4c5c",
+        "1ba540ede2c87d35",
+        "17892077c5c7508a",
+        "2a90fd49c1f232cf",
+        "2f4b8689f1ef3504",
+        "3d3e13f0e8a39603",
+        "d137d0cb1fc47387"
+      ],
+      "id": "17892077c5c7508a",
+      "date": 1464599296420
+    },
+    {
+      "type": "edit",
+      "id": "17892077c5c7508a",
+      "item": {
+        "type": "markdown",
+        "id": "17892077c5c7508a",
+        "text": "# Example\nA simple graph with 2 nodes and 1 edge might look like this:"
+      },
+      "date": 1464599299137
+    },
+    {
+      "type": "edit",
+      "id": "1519feecfab8d524",
+      "item": {
+        "type": "paragraph",
+        "id": "1519feecfab8d524",
+        "text": "Trivial Graph Format (TGF) is a simple text-based file format for describing graphs - [https://en.wikipedia.org/wiki/Trivial_Graph_Format wikiedia]"
+      },
+      "date": 1464599325566
+    },
+    {
+      "type": "edit",
+      "id": "1519feecfab8d524",
+      "item": {
+        "type": "paragraph",
+        "id": "1519feecfab8d524",
+        "text": "Trivial Graph Format (TGF) is a simple text-based file format for describing graphs - [https://en.wikipedia.org/wiki/Trivial_Graph_Format wikipedia]"
+      },
+      "date": 1464599334097
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "29af24b814a8b3e4"
+      },
+      "id": "29af24b814a8b3e4",
+      "type": "add",
+      "after": "d137d0cb1fc47387",
+      "date": 1464606634024
+    },
+    {
+      "type": "move",
+      "order": [
+        "1519feecfab8d524",
+        "bdbba342165a4c5c",
+        "1ba540ede2c87d35",
+        "17892077c5c7508a",
+        "2a90fd49c1f232cf",
+        "2f4b8689f1ef3504",
+        "29af24b814a8b3e4",
+        "3d3e13f0e8a39603",
+        "d137d0cb1fc47387"
+      ],
+      "id": "29af24b814a8b3e4",
+      "date": 1464606635499
+    },
+    {
+      "type": "edit",
+      "id": "29af24b814a8b3e4",
+      "item": {
+        "type": "markdown",
+        "id": "29af24b814a8b3e4",
+        "text": "# Tradeoffs"
+      },
+      "date": 1464606643835
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "73fd2b5b8e6e3971"
+      },
+      "id": "73fd2b5b8e6e3971",
+      "type": "add",
+      "after": "d137d0cb1fc47387",
+      "date": 1464606645433
+    },
+    {
+      "type": "move",
+      "order": [
+        "1519feecfab8d524",
+        "bdbba342165a4c5c",
+        "1ba540ede2c87d35",
+        "17892077c5c7508a",
+        "2a90fd49c1f232cf",
+        "2f4b8689f1ef3504",
+        "29af24b814a8b3e4",
+        "73fd2b5b8e6e3971",
+        "3d3e13f0e8a39603",
+        "d137d0cb1fc47387"
+      ],
+      "id": "73fd2b5b8e6e3971",
+      "date": 1464606647025
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9ac68259b0f0684c",
+        "text": "The edge list / TGF approach comes with trade-offs:\n\nPros:\n\n• Human readable and writable\n\n• Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\nCons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\n"
+      },
+      "after": "29af24b814a8b3e4",
+      "id": "9ac68259b0f0684c",
+      "date": 1464606656903
+    },
+    {
+      "type": "edit",
+      "id": "9ac68259b0f0684c",
+      "item": {
+        "type": "paragraph",
+        "id": "9ac68259b0f0684c",
+        "text": "This approach comes with trade-offs:\n**Pros**:\n\n* Human readable and writable\n* Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\n"
+      },
+      "date": 1464606710211
+    },
+    {
+      "type": "edit",
+      "id": "9ac68259b0f0684c",
+      "item": {
+        "type": "markdown",
+        "id": "9ac68259b0f0684c",
+        "text": "This approach comes with trade-offs:\n**Pros**:\n\n* Human readable and writable\n* Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\n"
+      },
+      "date": 1464606711824
+    },
+    {
+      "type": "add",
+      "id": "7a59e90b5239bced",
+      "item": {
+        "type": "paragraph",
+        "id": "7a59e90b5239bced",
+        "text": "Cons:\n\n• Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n\n• Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below.\n\nThese are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\".\n\nI took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy.\n\n"
+      },
+      "after": "9ac68259b0f0684c",
+      "date": 1464606714852
+    },
+    {
+      "type": "edit",
+      "id": "9ac68259b0f0684c",
+      "item": {
+        "type": "markdown",
+        "id": "9ac68259b0f0684c",
+        "text": "**Pros**:\n\n* Human readable and writable\n* Easily converted to other representations and exported as CSV, graphml, TGF, etc. for offline analysis or for use in other tools, including JavaScript visualization libraries.\n\n"
+      },
+      "date": 1464606719203
+    },
+    {
+      "type": "edit",
+      "id": "29af24b814a8b3e4",
+      "item": {
+        "type": "markdown",
+        "id": "29af24b814a8b3e4",
+        "text": "# Tradeoffs\nThis approach comes with trade-offs:"
+      },
+      "date": 1464606724054
+    },
+    {
+      "type": "edit",
+      "id": "7a59e90b5239bced",
+      "item": {
+        "type": "paragraph",
+        "id": "7a59e90b5239bced",
+        "text": "**Cons:**\n\n* Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n* Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below."
+      },
+      "date": 1464606756238
+    },
+    {
+      "type": "add",
+      "id": "00560b7006377151",
+      "item": {
+        "type": "paragraph",
+        "id": "00560b7006377151",
+        "text": "These are serious drawbacks: Many types of systems are intuitively represented as a multidimensional network with different types of vertices and edges in the same diagram. Even for a unipartite directed graph, vertex and edge properties can be useful. TGF wasn't intended to be a universal graph format, however...hence \"trivial\"."
+      },
+      "after": "7a59e90b5239bced",
+      "date": 1464606762223
+    },
+    {
+      "type": "add",
+      "id": "cef20db7560aed40",
+      "item": {
+        "type": "paragraph",
+        "id": "cef20db7560aed40",
+        "text": "I took the time to illustrate what a TGF representation looks like not to espouse it or yEd, but to show that the appeal of TGF is its simplicity. Leaving off any XML or JSON syntax and presentation allows for relatively easy human reading and writing while maintaining just enough structure to make programmatic parsing easy."
+      },
+      "after": "00560b7006377151",
+      "date": 1464606771567
+    },
+    {
+      "type": "edit",
+      "id": "7a59e90b5239bced",
+      "item": {
+        "type": "markdown",
+        "id": "7a59e90b5239bced",
+        "text": "**Cons:**\n\n* Doesn't easily capture more complex k-partite networks containing multiple types of vertices, and so doesn't handle @coevolving's OPM use case; more formally, such networks are multipartite edge-labeled multigraphs and are the most complex that a wiki would need to support unless someone can make a case for hypergraphs. TGF does support edge labels, and so can handle multi-dimensional graphs, but I'm not aware of a way to support vertex types.\n* Doesn't capture vertex or edge properties other than a label. The TGF representation above omits the url's embedded in the SVG vertices for the moment...I'll return to that below."
+      },
+      "date": 1464606775383
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nFor an early discussion of these ideas see the  - [https://github.com/fedwiki/wiki/issues/63 github issue]."
+      },
+      "after": "bdbba342165a4c5c",
+      "id": "20084356ff8e69ce",
+      "date": 1464607173567
+    },
+    {
+      "type": "remove",
+      "id": "73fd2b5b8e6e3971",
+      "date": 1464608091618
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0ed774c2b5aa1870"
+      },
+      "id": "0ed774c2b5aa1870",
+      "type": "add",
+      "after": "d137d0cb1fc47387",
+      "date": 1464608097808
+    },
+    {
+      "type": "edit",
+      "id": "0ed774c2b5aa1870",
+      "item": {
+        "type": "reference",
+        "id": "0ed774c2b5aa1870",
+        "site": "future.fedwiki.org",
+        "slug": "federation-graph-representation",
+        "title": "Federation Graph Representation",
+        "text": "Here we look in more detail at how [[graphs in wiki]] can be specified. We look to define a markup, or [[domain specific language]] for authors wishing to create maps or network graphs."
+      },
+      "date": 1464608107105
+    },
+    {
+      "type": "remove",
+      "id": "d137d0cb1fc47387",
+      "date": 1464608109243
+    }
+  ]
+}

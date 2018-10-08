@@ -1,0 +1,973 @@
+{
+  "title": "HTML5 Deployment",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "2e5d78aa0cf01bab",
+      "text": "With LiveCode 8's HTML5 deployment capability, you can now run applications written in LiveCode in any web browser that supports JavaScript and HTML5.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "31ee210ed31f283f",
+      "text": "# Demos\n\n- http://hh.on-rev.com/html5/index-large.html\n\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "84d742930de7f548",
+      "text": "# Supported browsers"
+    },
+    {
+      "type": "markdown",
+      "id": "c6d5ee1c53b45d72",
+      "text": "Only a limited range of browsers are supported for HTML5 deployment in this release of LiveCode.\n\n- Mozilla Firefox 40.0 (or newer)\n- Google Chrome 44 (or newer)\n- Safari for Mac (latest version)"
+    },
+    {
+      "type": "paragraph",
+      "id": "1ac692775fb1c256",
+      "text": "We hope to broaden the range of supported browsers in the future."
+    },
+    {
+      "type": "markdown",
+      "id": "34cae9c8a7a25bc6",
+      "text": "# HTML5 engine features"
+    },
+    {
+      "type": "markdown",
+      "id": "7439f25253fb34dc",
+      "text": "The HTML5 engine in this release of LiveCode has a limited range of features. You can:\n\n- deploy single or multiple stack applications with - embedded resources. Stacks other than the main stack will open in their own floating container windows.\n- use most of the engine's built-in controls and graphics capabilities.\n- read and write temporary files in a special virtual filesystem (which is erased when the user navigates away from the page)\n- use LiveCode Builder widgets and extensions\ninteract with JavaScript code in the web page using do <script> as \"JavaScript\"\n- call JavaScript from LiveCode Builder widgets and extensions using the com.livecode.emscripten module\nimplement widgets by embedding DOM elements as native layers\n- perform basic networking operations using the load command"
+    },
+    {
+      "type": "markdown",
+      "id": "ce0ac7beaff98b37",
+      "text": "Several important features are not yet supported:\n\n- some ask and answer message boxes\n- multimedia (the \"player\" control)\n"
+    },
+    {
+      "type": "markdown",
+      "id": "19489808eed2a508",
+      "text": "Two important unsupported features are unlikely to be added in the near future:\n\n- operations that need to pause the script while something happens (e.g. wait 10)\n- externals (including revdb)\n"
+    },
+    {
+      "type": "markdown",
+      "id": "fef851e1c4d01dd1",
+      "text": "# How to deploy an app to HTML5\n"
+    },
+    {
+      "type": "markdown",
+      "id": "e950601d1e3e2d4b",
+      "text": "Deploying an app to an HTML5 standalone is straightforward:\n\n1. Open your stack in the LiveCode IDE\n1. Select File → Standalone Application Settings... from the menu bar\n1. Browse to the HTML5 tab of the standalone settings window\n1.) Make sure that the Build for HTML5 checkbox is enabled\n1. Close the standalone settings window\n1. Select File → Save as Standalone Application... from the menu bar"
+    },
+    {
+      "type": "paragraph",
+      "id": "21f76d48602b6add",
+      "text": "\nYour application will be packaged up and placed in the selected output folder.\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "87badb528ae20f81",
+      "text": "# Contents of the HTML5 standalone"
+    },
+    {
+      "type": "paragraph",
+      "id": "50d826968cc5fab2",
+      "text": "The HTML5 standalone contains four files:\n\nA standalone archive, named standalone.zip by default. This file contains your application and all of the resources that it depends on. When the engine runs, the filesystem that's visible to the engine (e.g. via the open file syntax) is based on the contents of the standalone archive.\n\nThe engine itself, which consists of two files. The .js file contains the engine's executable code, and the .html.mem file contains essential data that's needed for the engine to run. These files are always the same, and only change when LiveCode is upgraded.\n\nA test HTML page. This can be opened in a browser and will correctly prepare, download and start your HTML5 app in a convenient test environment.\n\nTesting your HTML5 app with a local web server\nSome browsers, such as Google Chrome, do not permit pages to download resources from file:// URLs. You won't be able to test your application in these browsers unless you run a local HTTP server.\n\nA quick and easy way to run a simple local HTTP server is to use Python. Open a terminal window, change directory to your standalone's directory, and run:\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "cbcfa946699468b1",
+      "text": "python -m SimpleHTTPServer 8080"
+    },
+    {
+      "type": "paragraph",
+      "id": "21a104d9c30a381b",
+      "text": "This will let you access your standalone by opening your web browser and visiting http://localhost:8080.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "292da0e30153b1fb",
+      "text": "# Reporting bugs"
+    },
+    {
+      "type": "paragraph",
+      "id": "13a857296d40e4e9",
+      "text": "Please report bugs to the LiveCode Quality Centre. Make sure to select \"HTML5 Standalone\" when you're creating your bug report!\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "d092d5289c2e7d72",
+      "text": "# Advanced: HTML5 standalone filesystem"
+    },
+    {
+      "type": "paragraph",
+      "id": "9e984c69404fb3ce",
+      "text": "JavaScript applications running in a browser don't have access to the host system's filesystem. Instead, the filesystem-related features of LiveCode, such as open file, use a virtual filesystem (VFS) that exists only in memory. "
+    },
+    {
+      "type": "paragraph",
+      "id": "4c4526b82d0d2c8e",
+      "text": "This filesystem is initialised before the engine starts, and is reset and its content discarded when the engine stops (when the user closes the browser view or navigates to a different page).\n\nDuring engine startup, the VFS is populated from the contents of the standalone.zip file that's created by the HTML5 deployment process. All of the initial files are stored in /boot/ in the VFS.\n\nThere are several special files & directories in the /boot/ directory:\n\n/boot/__startup.livecode: a stack that performs loading & initialisation operations during engine startup.\n/boot/auxiliary_stackfiles/: during startup, each file in this directory is loaded and is receives the revLoadLibrary message\n/boot/fonts/basefont.ttf: the font used by the engine\n/boot/standalone/__boot.livecode: this is the initial stack of the application, which is the main stack that receives the startup message when the engine has been initialized\n/boot/standalone/: the defaultFolder when the engine starts, and the location where additional assets selected using the \"Copy files\" page of the standalone builder are placed\n/boot/extensions/extensions.txt: list of extensions included in the standalone, in the order in which they should be autoloaded\n/boot/extensions/: the directory where all autoloaded extensions are stored\nIn general, if you wish to add new files or directories to the standalone.zip archive, it is best to add them outside the /boot/ directory tree."
+    },
+    {
+      "type": "markdown",
+      "id": "dbb3178cf9810ae9",
+      "text": "\n# Advanced: Embedding an HTML5 standalone in a web page"
+    },
+    {
+      "type": "paragraph",
+      "id": "1d904596bafe2ea5",
+      "text": "The default HTML5 page provided by the HTML5 standalone builder is designed for testing and debugging purposes. However, you may want to embed the standalone engine in a more visually appealing page. To do this, you require three elements: 1) a canvas, 2) a JavaScript Module object, and 3) an HTML <script> element that downloads the engine.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8e6c9197ab121544",
+      "text": "# The canvas"
+    },
+    {
+      "type": "paragraph",
+      "id": "6c55e1d38c52ff64",
+      "text": "The engine renders into a HTML5 <canvas> element contained within a <div> element. There are some important considerations when creating the canvas & div:\n\nboth the canvas and div must have absolutely no border, or mouse coordinate calculations will be incorrect\n\nthey will be automatically resized by the engine to match the size of your stack, so don't attempt to set their size using HTML or CSS\n\nthe canvas should be the only element within the containing div, which may be used to hold additional elements as native layers are added to the app.\n\nthe canvas needs to be easily uniquely identifiable, so that the engine can find it.\n\nThe absolute minimum canvas element would look something like this:\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "22ee988b6788cd1e",
+      "text": "<div><canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault();\"></canvas></div>"
+    },
+    {
+      "type": "paragraph",
+      "id": "309bccf4c822d138",
+      "text": "By default, most web browsers will indicate when the canvas has focus by displaying a highlighted outline. This helps users identify which part of the web page is capturing their key presses. You can usually disable this outline by adding outline: none; to the canvas's CSS styles."
+    },
+    {
+      "type": "markdown",
+      "id": "20dcd304768d649e",
+      "text": "# The Module object"
+    },
+    {
+      "type": "paragraph",
+      "id": "a9335061da74a632",
+      "text": "The top-level JavaScript Module object contains the parameters that control how the engine runs. At minimum, you need only specify the Module.canvas, which should be your canvas element."
+    },
+    {
+      "type": "paragraph",
+      "id": "e73f205e9368ffb1",
+      "text": "\nThe absolute minimum Module object declaration would look something like:\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "c6963ea7af0f669e",
+      "text": "<script type=\"text/javascript\">\nvar Module = {\n  canvas: document.getElementById('canvas'),\n};\n</script>"
+    },
+    {
+      "type": "paragraph",
+      "id": "225efa95b434221e",
+      "text": "# Engine download\nThe engine is quite a large JavaScript file, so it's downloaded asynchronously in order to let the rest of the page finish loading and start being displayed.\n\nQuite straightforwardly:\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2201ad9bc2a87a98",
+      "text": "<script async type=\"text/javascript\" src=\"standalone-<version>.js\"></script>"
+    },
+    {
+      "type": "paragraph",
+      "id": "efe73fb896993585",
+      "text": "Make sure to replace <version> as appropriate.\n\nBringing it all together\nHere's the complete skeleton web page for an HTML5 standalone:"
+    },
+    {
+      "type": "paragraph",
+      "id": "efca6c911e95bc15",
+      "text": "\n<html>\n   <body>\n      <div>\n         <canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault()\"></canvas>\n      </div>\n\n     <script type=\"text/javascript\">\n       var Module = { canvas: document.getElementById('canvas')  };\n     </script>\n    <script async type=\"text/javascript\" src=\"standalone-community.js\"></script>\n  </body>\n</html>"
+    },
+    {
+      "type": "markdown",
+      "id": "7a57d6564ccd9a9a",
+      "text": "# Advanced: Speeding up engine download"
+    },
+    {
+      "type": "paragraph",
+      "id": "0eeec87e3ae8476c",
+      "text": "Currently, the engine files are almost 30 MB, which is a lot to download before the engine can start. It is possible to speed up the download by enabling deflate compression in the web server configuration."
+    },
+    {
+      "type": "paragraph",
+      "id": "9181839f8192bbe7",
+      "text": "Enabling deflate compression reduces the total download size to around 6.3 MB. It's recommended to pre-compress the engine with gzip, and then configure your web server to serve the pre-compressed files."
+    },
+    {
+      "type": "paragraph",
+      "id": "25ea715f3f2446af",
+      "text": "For the Apache web server, configure mod_deflate to serve pre-compressed content\nFor the NGINX web server, add gzip_static on; to your configuration."
+    },
+    {
+      "type": "markdown",
+      "id": "08f2b67473be08b3",
+      "text": "# Advanced: Customizing the Module object\nThere are a number of LiveCode-specific Module attributes that you can modify to affect how the engine behaves:"
+    },
+    {
+      "type": "paragraph",
+      "id": "bf808380b3fd4625",
+      "text": "Module.livecodeStandalone: the filename of the standalone archive (default standalone.zip)"
+    },
+    {
+      "type": "paragraph",
+      "id": "a047b4e8ed7ca853",
+      "text": "Module.livecodeStandalonePrefixURL: Prepended to the standalone archive filename to construct its full URL (default empty)"
+    },
+    {
+      "type": "paragraph",
+      "id": "db8ea2e8d926461f",
+      "text": "Module.livecodeStandaloneRequest: If you assign a network request to this attribute (before the engine runs), then it will use that request for the standalone archive instead of automatically starting a download for you. This means that you can, in your HTML, fire off a request for the standalone before the engine script actually arrives. For this to work, the network request should be an XMLHttpRequest with its responseType set to arraybuffer."
+    },
+    {
+      "type": "paragraph",
+      "id": "53843e719da4b686",
+      "text": "See also Emscripten's Module object documentation."
+    },
+    {
+      "type": "markdown",
+      "id": "2e080c19-a694-41d7-b419-ee4839167781",
+      "text": "# See also\n\n- Some exciting HTML5 demos... - [https://livecode.com/some-exciting-html5-demos-for-livecode-9-dp-3/ livecode.com]\n- How Do I Put My First App On... - [http://lessons.livecode.com/m/4071/l/800867-how-do-i-put-my-first-app-on-the-web livecode.com]\n- html5 Export Question -... - [https://forums.livecode.com/viewtopic.php?t=29685 livecode.com]\n- (49) Livecode: Modern web... - [https://www.youtube.com/watch?v=mNPPo-G4jQs youtube.com]\n- HTML5 | Livecode Wiki |... - [http://livecode.wikia.com/wiki/HTML5 wikia.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "HTML5 Deployment",
+        "story": []
+      },
+      "date": 1534787703622
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2e5d78aa0cf01bab"
+      },
+      "id": "2e5d78aa0cf01bab",
+      "type": "add",
+      "date": 1534787704643
+    },
+    {
+      "type": "edit",
+      "id": "2e5d78aa0cf01bab",
+      "item": {
+        "type": "paragraph",
+        "id": "2e5d78aa0cf01bab",
+        "text": "Introduction\nNote: This release of HTML5 deployment support is not yet feature complete. If you intend to use it in production, please test thoroughly that it supports all the functionality you are looking for.\n\nAlmost every Internet-connected device has a web browser. If your application can run in a browser, your app can be used anywhere and by anyone, without any need to download or install it.\n\nWith LiveCode 8's HTML5 deployment capability, you can now run applications written in LiveCode in any web browser that supports JavaScript and HTML5.\n\nSupported browsers\nOnly a limited range of browsers are supported for HTML5 deployment in this release of LiveCode.\n\nMozilla Firefox 40.0 (or newer)\nGoogle Chrome 44 (or newer)\nSafari for Mac (latest version)\nWe hope to broaden the range of supported browsers in the future.\n\nHTML5 engine features\nThe HTML5 engine in this release of LiveCode has a limited range of features. You can:\n\ndeploy single or multiple stack applications with embedded resources. Stacks other than the main stack will open in their own floating container windows.\nuse most of the engine's built-in controls and graphics capabilities.\nread and write temporary files in a special virtual filesystem (which is erased when the user navigates away from the page)\nuse LiveCode Builder widgets and extensions\ninteract with JavaScript code in the web page using do <script> as \"JavaScript\"\ncall JavaScript from LiveCode Builder widgets and extensions using the com.livecode.emscripten module\nimplement widgets by embedding DOM elements as native layers\nperform basic networking operations using the load command\nSeveral important features are not yet supported:\n\nsome ask and answer message boxes\nmultimedia (the \"player\" control)\nTwo important unsupported features are unlikely to be added in the near future:\n\noperations that need to pause the script while something happens (e.g. wait 10)\nexternals (including revdb)\nHow to deploy an app to HTML5\nStep by step\nDeploying an app to an HTML5 standalone is straightforward:\n\n1) Open your stack in the LiveCode IDE\n\n2) Select File → Standalone Application Settings... from the menu bar\n\n3) Browse to the HTML5 tab of the standalone settings window\n\n4) Make sure that the Build for HTML5 checkbox is enabled\n\n5) Close the standalone settings window\n\n6) Select File → Save as Standalone Application... from the menu bar\n\nYour application will be packaged up and placed in the selected output folder.\n\nContents of the HTML5 standalone\nThe HTML5 standalone contains four files:\n\nA standalone archive, named standalone.zip by default. This file contains your application and all of the resources that it depends on. When the engine runs, the filesystem that's visible to the engine (e.g. via the open file syntax) is based on the contents of the standalone archive.\n\nThe engine itself, which consists of two files. The .js file contains the engine's executable code, and the .html.mem file contains essential data that's needed for the engine to run. These files are always the same, and only change when LiveCode is upgraded.\n\nA test HTML page. This can be opened in a browser and will correctly prepare, download and start your HTML5 app in a convenient test environment.\n\nTesting your HTML5 app with a local web server\nSome browsers, such as Google Chrome, do not permit pages to download resources from file:// URLs. You won't be able to test your application in these browsers unless you run a local HTTP server.\n\nA quick and easy way to run a simple local HTTP server is to use Python. Open a terminal window, change directory to your standalone's directory, and run:\n\npython -m SimpleHTTPServer 8080\nThis will let you access your standalone by opening your web browser and visiting http://localhost:8080.\n\nReporting bugs\nPlease report bugs to the LiveCode Quality Centre. Make sure to select \"HTML5 Standalone\" when you're creating your bug report!\n\nAdvanced: HTML5 standalone filesystem\nJavaScript applications running in a browser don't have access to the host system's filesystem. Instead, the filesystem-related features of LiveCode, such as open file, use a virtual filesystem (VFS) that exists only in memory. This filesystem is initialised before the engine starts, and is reset and its content discarded when the engine stops (when the user closes the browser view or navigates to a different page).\n\nDuring engine startup, the VFS is populated from the contents of the standalone.zip file that's created by the HTML5 deployment process. All of the initial files are stored in /boot/ in the VFS.\n\nThere are several special files & directories in the /boot/ directory:\n\n/boot/__startup.livecode: a stack that performs loading & initialisation operations during engine startup.\n/boot/auxiliary_stackfiles/: during startup, each file in this directory is loaded and is receives the revLoadLibrary message\n/boot/fonts/basefont.ttf: the font used by the engine\n/boot/standalone/__boot.livecode: this is the initial stack of the application, which is the main stack that receives the startup message when the engine has been initialized\n/boot/standalone/: the defaultFolder when the engine starts, and the location where additional assets selected using the \"Copy files\" page of the standalone builder are placed\n/boot/extensions/extensions.txt: list of extensions included in the standalone, in the order in which they should be autoloaded\n/boot/extensions/: the directory where all autoloaded extensions are stored\nIn general, if you wish to add new files or directories to the standalone.zip archive, it is best to add them outside the /boot/ directory tree.\n\nAdvanced: Embedding an HTML5 standalone in a web page\nThe default HTML5 page provided by the HTML5 standalone builder is designed for testing and debugging purposes. However, you may want to embed the standalone engine in a more visually appealing page. To do this, you require three elements: 1) a canvas, 2) a JavaScript Module object, and 3) an HTML <script> element that downloads the engine.\n\nThe canvas\nThe engine renders into a HTML5 <canvas> element contained within a <div> element. There are some important considerations when creating the canvas & div:\n\nboth the canvas and div must have absolutely no border, or mouse coordinate calculations will be incorrect\n\nthey will be automatically resized by the engine to match the size of your stack, so don't attempt to set their size using HTML or CSS\n\nthe canvas should be the only element within the containing div, which may be used to hold additional elements as native layers are added to the app.\n\nthe canvas needs to be easily uniquely identifiable, so that the engine can find it.\n\nThe absolute minimum canvas element would look something like this:\n\n<div><canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault();\"></canvas></div>\nBy default, most web browsers will indicate when the canvas has focus by displaying a highlighted outline. This helps users identify which part of the web page is capturing their key presses. You can usually disable this outline by adding outline: none; to the canvas's CSS styles.\n\nThe Module object\nThe top-level JavaScript Module object contains the parameters that control how the engine runs. At minimum, you need only specify the Module.canvas, which should be your canvas element.\n\nThe absolute minimum Module object declaration would look something like:\n\n<script type=\"text/javascript\">\nvar Module = {\n  canvas: document.getElementById('canvas'),\n};\n</script>\nEngine download\nThe engine is quite a large JavaScript file, so it's downloaded asynchronously in order to let the rest of the page finish loading and start being displayed.\n\nQuite straightforwardly:\n\n<script async type=\"text/javascript\" src=\"standalone-<version>.js\"></script>\nMake sure to replace <version> as appropriate.\n\nBringing it all together\nHere's the complete skeleton web page for an HTML5 standalone:\n\n<html>\n   <body>\n      <div>\n         <canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault()\"></canvas>\n      </div>\n\n     <script type=\"text/javascript\">\n       var Module = { canvas: document.getElementById('canvas')  };\n     </script>\n    <script async type=\"text/javascript\" src=\"standalone-community.js\"></script>\n  </body>\n</html>\nAdvanced: Speeding up engine download\nCurrently, the engine files are almost 30 MB, which is a lot to download before the engine can start. It is possible to speed up the download by enabling deflate compression in the web server configuration.\n\nEnabling deflate compression reduces the total download size to around 6.3 MB. It's recommended to pre-compress the engine with gzip, and then configure your web server to serve the pre-compressed files.\n\nFor the Apache web server, configure mod_deflate to serve pre-compressed content\nFor the NGINX web server, add gzip_static on; to your configuration.\nAdvanced: Customizing the Module object\nThere are a number of LiveCode-specific Module attributes that you can modify to affect how the engine behaves:\n\nModule.livecodeStandalone: the filename of the standalone archive (default standalone.zip)\nModule.livecodeStandalonePrefixURL: Prepended to the standalone archive filename to construct its full URL (default empty)\nModule.livecodeStandaloneRequest: If you assign a network request to this attribute (before the engine runs), then it will use that request for the standalone archive instead of automatically starting a download for you. This means that you can, in your HTML, fire off a request for the standalone before the engine script actually arrives. For this to work, the network request should be an XMLHttpRequest with its responseType set to arraybuffer.\nSee also Emscripten's Module object documentation."
+      },
+      "date": 1534787706095
+    },
+    {
+      "type": "edit",
+      "id": "2e5d78aa0cf01bab",
+      "item": {
+        "type": "paragraph",
+        "id": "2e5d78aa0cf01bab",
+        "text": "With LiveCode 8's HTML5 deployment capability, you can now run applications written in LiveCode in any web browser that supports JavaScript and HTML5.\n\n# Supported browsers"
+      },
+      "date": 1534789032384
+    },
+    {
+      "type": "edit",
+      "id": "2e5d78aa0cf01bab",
+      "item": {
+        "type": "markdown",
+        "id": "2e5d78aa0cf01bab",
+        "text": "With LiveCode 8's HTML5 deployment capability, you can now run applications written in LiveCode in any web browser that supports JavaScript and HTML5.\n\n# Supported browsers"
+      },
+      "date": 1534789033905
+    },
+    {
+      "type": "add",
+      "id": "c6d5ee1c53b45d72",
+      "item": {
+        "type": "paragraph",
+        "id": "c6d5ee1c53b45d72",
+        "text": "Only a limited range of browsers are supported for HTML5 deployment in this release of LiveCode.\n\n- Mozilla Firefox 40.0 (or newer)\n- Google Chrome 44 (or newer)\n- Safari for Mac (latest version)"
+      },
+      "after": "2e5d78aa0cf01bab",
+      "date": 1534789045857
+    },
+    {
+      "type": "add",
+      "id": "1ac692775fb1c256",
+      "item": {
+        "type": "paragraph",
+        "id": "1ac692775fb1c256",
+        "text": "We hope to broaden the range of supported browsers in the future.\n\nHTML5 engine features\nThe HTML5 engine in this release of LiveCode has a limited range of features. You can:\n\ndeploy single or multiple stack applications with embedded resources. Stacks other than the main stack will open in their own floating container windows.\nuse most of the engine's built-in controls and graphics capabilities.\nread and write temporary files in a special virtual filesystem (which is erased when the user navigates away from the page)\nuse LiveCode Builder widgets and extensions\ninteract with JavaScript code in the web page using do <script> as \"JavaScript\"\ncall JavaScript from LiveCode Builder widgets and extensions using the com.livecode.emscripten module\nimplement widgets by embedding DOM elements as native layers\nperform basic networking operations using the load command\nSeveral important features are not yet supported:\n\nsome ask and answer message boxes\nmultimedia (the \"player\" control)\nTwo important unsupported features are unlikely to be added in the near future:\n\noperations that need to pause the script while something happens (e.g. wait 10)\nexternals (including revdb)\nHow to deploy an app to HTML5\nStep by step\nDeploying an app to an HTML5 standalone is straightforward:\n\n1) Open your stack in the LiveCode IDE\n\n2) Select File → Standalone Application Settings... from the menu bar\n\n3) Browse to the HTML5 tab of the standalone settings window\n\n4) Make sure that the Build for HTML5 checkbox is enabled\n\n5) Close the standalone settings window\n\n6) Select File → Save as Standalone Application... from the menu bar\n\nYour application will be packaged up and placed in the selected output folder.\n\nContents of the HTML5 standalone\nThe HTML5 standalone contains four files:\n\nA standalone archive, named standalone.zip by default. This file contains your application and all of the resources that it depends on. When the engine runs, the filesystem that's visible to the engine (e.g. via the open file syntax) is based on the contents of the standalone archive.\n\nThe engine itself, which consists of two files. The .js file contains the engine's executable code, and the .html.mem file contains essential data that's needed for the engine to run. These files are always the same, and only change when LiveCode is upgraded.\n\nA test HTML page. This can be opened in a browser and will correctly prepare, download and start your HTML5 app in a convenient test environment.\n\nTesting your HTML5 app with a local web server\nSome browsers, such as Google Chrome, do not permit pages to download resources from file:// URLs. You won't be able to test your application in these browsers unless you run a local HTTP server.\n\nA quick and easy way to run a simple local HTTP server is to use Python. Open a terminal window, change directory to your standalone's directory, and run:\n\npython -m SimpleHTTPServer 8080\nThis will let you access your standalone by opening your web browser and visiting http://localhost:8080.\n\nReporting bugs\nPlease report bugs to the LiveCode Quality Centre. Make sure to select \"HTML5 Standalone\" when you're creating your bug report!\n\nAdvanced: HTML5 standalone filesystem\nJavaScript applications running in a browser don't have access to the host system's filesystem. Instead, the filesystem-related features of LiveCode, such as open file, use a virtual filesystem (VFS) that exists only in memory. This filesystem is initialised before the engine starts, and is reset and its content discarded when the engine stops (when the user closes the browser view or navigates to a different page).\n\nDuring engine startup, the VFS is populated from the contents of the standalone.zip file that's created by the HTML5 deployment process. All of the initial files are stored in /boot/ in the VFS.\n\nThere are several special files & directories in the /boot/ directory:\n\n/boot/__startup.livecode: a stack that performs loading & initialisation operations during engine startup.\n/boot/auxiliary_stackfiles/: during startup, each file in this directory is loaded and is receives the revLoadLibrary message\n/boot/fonts/basefont.ttf: the font used by the engine\n/boot/standalone/__boot.livecode: this is the initial stack of the application, which is the main stack that receives the startup message when the engine has been initialized\n/boot/standalone/: the defaultFolder when the engine starts, and the location where additional assets selected using the \"Copy files\" page of the standalone builder are placed\n/boot/extensions/extensions.txt: list of extensions included in the standalone, in the order in which they should be autoloaded\n/boot/extensions/: the directory where all autoloaded extensions are stored\nIn general, if you wish to add new files or directories to the standalone.zip archive, it is best to add them outside the /boot/ directory tree.\n\nAdvanced: Embedding an HTML5 standalone in a web page\nThe default HTML5 page provided by the HTML5 standalone builder is designed for testing and debugging purposes. However, you may want to embed the standalone engine in a more visually appealing page. To do this, you require three elements: 1) a canvas, 2) a JavaScript Module object, and 3) an HTML <script> element that downloads the engine.\n\nThe canvas\nThe engine renders into a HTML5 <canvas> element contained within a <div> element. There are some important considerations when creating the canvas & div:\n\nboth the canvas and div must have absolutely no border, or mouse coordinate calculations will be incorrect\n\nthey will be automatically resized by the engine to match the size of your stack, so don't attempt to set their size using HTML or CSS\n\nthe canvas should be the only element within the containing div, which may be used to hold additional elements as native layers are added to the app.\n\nthe canvas needs to be easily uniquely identifiable, so that the engine can find it.\n\nThe absolute minimum canvas element would look something like this:\n\n<div><canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault();\"></canvas></div>\nBy default, most web browsers will indicate when the canvas has focus by displaying a highlighted outline. This helps users identify which part of the web page is capturing their key presses. You can usually disable this outline by adding outline: none; to the canvas's CSS styles.\n\nThe Module object\nThe top-level JavaScript Module object contains the parameters that control how the engine runs. At minimum, you need only specify the Module.canvas, which should be your canvas element.\n\nThe absolute minimum Module object declaration would look something like:\n\n<script type=\"text/javascript\">\nvar Module = {\n  canvas: document.getElementById('canvas'),\n};\n</script>\nEngine download\nThe engine is quite a large JavaScript file, so it's downloaded asynchronously in order to let the rest of the page finish loading and start being displayed.\n\nQuite straightforwardly:\n\n<script async type=\"text/javascript\" src=\"standalone-<version>.js\"></script>\nMake sure to replace <version> as appropriate.\n\nBringing it all together\nHere's the complete skeleton web page for an HTML5 standalone:\n\n<html>\n   <body>\n      <div>\n         <canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault()\"></canvas>\n      </div>\n\n     <script type=\"text/javascript\">\n       var Module = { canvas: document.getElementById('canvas')  };\n     </script>\n    <script async type=\"text/javascript\" src=\"standalone-community.js\"></script>\n  </body>\n</html>\nAdvanced: Speeding up engine download\nCurrently, the engine files are almost 30 MB, which is a lot to download before the engine can start. It is possible to speed up the download by enabling deflate compression in the web server configuration.\n\nEnabling deflate compression reduces the total download size to around 6.3 MB. It's recommended to pre-compress the engine with gzip, and then configure your web server to serve the pre-compressed files.\n\nFor the Apache web server, configure mod_deflate to serve pre-compressed content\nFor the NGINX web server, add gzip_static on; to your configuration.\nAdvanced: Customizing the Module object\nThere are a number of LiveCode-specific Module attributes that you can modify to affect how the engine behaves:\n\nModule.livecodeStandalone: the filename of the standalone archive (default standalone.zip)\nModule.livecodeStandalonePrefixURL: Prepended to the standalone archive filename to construct its full URL (default empty)\nModule.livecodeStandaloneRequest: If you assign a network request to this attribute (before the engine runs), then it will use that request for the standalone archive instead of automatically starting a download for you. This means that you can, in your HTML, fire off a request for the standalone before the engine script actually arrives. For this to work, the network request should be an XMLHttpRequest with its responseType set to arraybuffer.\nSee also Emscripten's Module object documentation."
+      },
+      "after": "c6d5ee1c53b45d72",
+      "date": 1534789046009
+    },
+    {
+      "type": "edit",
+      "id": "1ac692775fb1c256",
+      "item": {
+        "type": "paragraph",
+        "id": "1ac692775fb1c256",
+        "text": "We hope to broaden the range of supported browsers in the future."
+      },
+      "date": 1534789059512
+    },
+    {
+      "type": "add",
+      "id": "34cae9c8a7a25bc6",
+      "item": {
+        "type": "paragraph",
+        "id": "34cae9c8a7a25bc6",
+        "text": "# HTML5 engine features"
+      },
+      "after": "1ac692775fb1c256",
+      "date": 1534789064923
+    },
+    {
+      "type": "edit",
+      "id": "34cae9c8a7a25bc6",
+      "item": {
+        "type": "markdown",
+        "id": "34cae9c8a7a25bc6",
+        "text": "# HTML5 engine features"
+      },
+      "date": 1534789065971
+    },
+    {
+      "type": "add",
+      "id": "7439f25253fb34dc",
+      "item": {
+        "type": "paragraph",
+        "id": "7439f25253fb34dc",
+        "text": "The HTML5 engine in this release of LiveCode has a limited range of features. You can:\n\n- deploy single or multiple stack applications with - embedded resources. Stacks other than the main stack will open in their own floating container windows.\n- use most of the engine's built-in controls and graphics capabilities.\n- read and write temporary files in a special virtual filesystem (which is erased when the user navigates away from the page)\n- use LiveCode Builder widgets and extensions\ninteract with JavaScript code in the web page using do <script> as \"JavaScript\"\n- call JavaScript from LiveCode Builder widgets and extensions using the com.livecode.emscripten module\nimplement widgets by embedding DOM elements as native layers\n- perform basic networking operations using the load command"
+      },
+      "after": "34cae9c8a7a25bc6",
+      "date": 1534789091049
+    },
+    {
+      "type": "edit",
+      "id": "7439f25253fb34dc",
+      "item": {
+        "type": "markdown",
+        "id": "7439f25253fb34dc",
+        "text": "The HTML5 engine in this release of LiveCode has a limited range of features. You can:\n\n- deploy single or multiple stack applications with - embedded resources. Stacks other than the main stack will open in their own floating container windows.\n- use most of the engine's built-in controls and graphics capabilities.\n- read and write temporary files in a special virtual filesystem (which is erased when the user navigates away from the page)\n- use LiveCode Builder widgets and extensions\ninteract with JavaScript code in the web page using do <script> as \"JavaScript\"\n- call JavaScript from LiveCode Builder widgets and extensions using the com.livecode.emscripten module\nimplement widgets by embedding DOM elements as native layers\n- perform basic networking operations using the load command"
+      },
+      "date": 1534789092822
+    },
+    {
+      "type": "add",
+      "id": "ce0ac7beaff98b37",
+      "item": {
+        "type": "paragraph",
+        "id": "ce0ac7beaff98b37",
+        "text": "Several important features are not yet supported:\n\n- some ask and answer message boxes\n- multimedia (the \"player\" control)\n"
+      },
+      "after": "7439f25253fb34dc",
+      "date": 1534789102578
+    },
+    {
+      "type": "add",
+      "id": "19489808eed2a508",
+      "item": {
+        "type": "paragraph",
+        "id": "19489808eed2a508",
+        "text": "Two important unsupported features are unlikely to be added in the near future:\n\n- operations that need to pause the script while something happens (e.g. wait 10)\n- externals (including revdb)\n"
+      },
+      "after": "ce0ac7beaff98b37",
+      "date": 1534789112115
+    },
+    {
+      "type": "add",
+      "id": "fef851e1c4d01dd1",
+      "item": {
+        "type": "paragraph",
+        "id": "fef851e1c4d01dd1",
+        "text": "# How to deploy an app to HTML5\n"
+      },
+      "after": "19489808eed2a508",
+      "date": 1534789118369
+    },
+    {
+      "type": "add",
+      "id": "e950601d1e3e2d4b",
+      "item": {
+        "type": "paragraph",
+        "id": "e950601d1e3e2d4b",
+        "text": "Deploying an app to an HTML5 standalone is straightforward:\n\n1. Open your stack in the LiveCode IDE\n1. Select File → Standalone Application Settings... from the menu bar\n1. Browse to the HTML5 tab of the standalone settings window\n1.) Make sure that the Build for HTML5 checkbox is enabled\n1. Close the standalone settings window\n1. Select File → Save as Standalone Application... from the menu bar"
+      },
+      "after": "fef851e1c4d01dd1",
+      "date": 1534789150684
+    },
+    {
+      "type": "add",
+      "id": "21f76d48602b6add",
+      "item": {
+        "type": "paragraph",
+        "id": "21f76d48602b6add",
+        "text": "\nYour application will be packaged up and placed in the selected output folder.\n\n"
+      },
+      "after": "e950601d1e3e2d4b",
+      "date": 1534789153783
+    },
+    {
+      "type": "add",
+      "id": "87badb528ae20f81",
+      "item": {
+        "type": "paragraph",
+        "id": "87badb528ae20f81",
+        "text": "# Contents of the HTML5 standalone"
+      },
+      "after": "21f76d48602b6add",
+      "date": 1534789158179
+    },
+    {
+      "type": "edit",
+      "id": "e950601d1e3e2d4b",
+      "item": {
+        "type": "markdown",
+        "id": "e950601d1e3e2d4b",
+        "text": "Deploying an app to an HTML5 standalone is straightforward:\n\n1. Open your stack in the LiveCode IDE\n1. Select File → Standalone Application Settings... from the menu bar\n1. Browse to the HTML5 tab of the standalone settings window\n1.) Make sure that the Build for HTML5 checkbox is enabled\n1. Close the standalone settings window\n1. Select File → Save as Standalone Application... from the menu bar"
+      },
+      "date": 1534789160540
+    },
+    {
+      "type": "edit",
+      "id": "fef851e1c4d01dd1",
+      "item": {
+        "type": "markdown",
+        "id": "fef851e1c4d01dd1",
+        "text": "# How to deploy an app to HTML5\n"
+      },
+      "date": 1534789162963
+    },
+    {
+      "type": "edit",
+      "id": "19489808eed2a508",
+      "item": {
+        "type": "markdown",
+        "id": "19489808eed2a508",
+        "text": "Two important unsupported features are unlikely to be added in the near future:\n\n- operations that need to pause the script while something happens (e.g. wait 10)\n- externals (including revdb)\n"
+      },
+      "date": 1534789165954
+    },
+    {
+      "type": "edit",
+      "id": "ce0ac7beaff98b37",
+      "item": {
+        "type": "markdown",
+        "id": "ce0ac7beaff98b37",
+        "text": "Several important features are not yet supported:\n\n- some ask and answer message boxes\n- multimedia (the \"player\" control)\n"
+      },
+      "date": 1534789166931
+    },
+    {
+      "type": "add",
+      "id": "50d826968cc5fab2",
+      "item": {
+        "type": "paragraph",
+        "id": "50d826968cc5fab2",
+        "text": "The HTML5 standalone contains four files:\n\nA standalone archive, named standalone.zip by default. This file contains your application and all of the resources that it depends on. When the engine runs, the filesystem that's visible to the engine (e.g. via the open file syntax) is based on the contents of the standalone archive.\n\nThe engine itself, which consists of two files. The .js file contains the engine's executable code, and the .html.mem file contains essential data that's needed for the engine to run. These files are always the same, and only change when LiveCode is upgraded.\n\nA test HTML page. This can be opened in a browser and will correctly prepare, download and start your HTML5 app in a convenient test environment.\n\nTesting your HTML5 app with a local web server\nSome browsers, such as Google Chrome, do not permit pages to download resources from file:// URLs. You won't be able to test your application in these browsers unless you run a local HTTP server.\n\nA quick and easy way to run a simple local HTTP server is to use Python. Open a terminal window, change directory to your standalone's directory, and run:\n\n"
+      },
+      "after": "87badb528ae20f81",
+      "date": 1534789184324
+    },
+    {
+      "type": "add",
+      "id": "cbcfa946699468b1",
+      "item": {
+        "type": "paragraph",
+        "id": "cbcfa946699468b1",
+        "text": "python -m SimpleHTTPServer 8080"
+      },
+      "after": "50d826968cc5fab2",
+      "date": 1534789186926
+    },
+    {
+      "type": "add",
+      "id": "21a104d9c30a381b",
+      "item": {
+        "type": "paragraph",
+        "id": "21a104d9c30a381b",
+        "text": "This will let you access your standalone by opening your web browser and visiting http://localhost:8080.\n\n"
+      },
+      "after": "cbcfa946699468b1",
+      "date": 1534789190352
+    },
+    {
+      "type": "add",
+      "id": "292da0e30153b1fb",
+      "item": {
+        "type": "paragraph",
+        "id": "292da0e30153b1fb",
+        "text": "# Reporting bugs"
+      },
+      "after": "21a104d9c30a381b",
+      "date": 1534789192628
+    },
+    {
+      "type": "edit",
+      "id": "292da0e30153b1fb",
+      "item": {
+        "type": "markdown",
+        "id": "292da0e30153b1fb",
+        "text": "# Reporting bugs"
+      },
+      "date": 1534789193653
+    },
+    {
+      "type": "add",
+      "id": "13a857296d40e4e9",
+      "item": {
+        "type": "paragraph",
+        "id": "13a857296d40e4e9",
+        "text": "Please report bugs to the LiveCode Quality Centre. Make sure to select \"HTML5 Standalone\" when you're creating your bug report!\n\n"
+      },
+      "after": "292da0e30153b1fb",
+      "date": 1534789197702
+    },
+    {
+      "type": "add",
+      "id": "d092d5289c2e7d72",
+      "item": {
+        "type": "paragraph",
+        "id": "d092d5289c2e7d72",
+        "text": "# Advanced: HTML5 standalone filesystem"
+      },
+      "after": "13a857296d40e4e9",
+      "date": 1534789200491
+    },
+    {
+      "type": "add",
+      "id": "9e984c69404fb3ce",
+      "item": {
+        "type": "paragraph",
+        "id": "9e984c69404fb3ce",
+        "text": "JavaScript applications running in a browser don't have access to the host system's filesystem. Instead, the filesystem-related features of LiveCode, such as open file, use a virtual filesystem (VFS) that exists only in memory. "
+      },
+      "after": "d092d5289c2e7d72",
+      "date": 1534789203982
+    },
+    {
+      "type": "add",
+      "id": "4c4526b82d0d2c8e",
+      "item": {
+        "type": "paragraph",
+        "id": "4c4526b82d0d2c8e",
+        "text": "This filesystem is initialised before the engine starts, and is reset and its content discarded when the engine stops (when the user closes the browser view or navigates to a different page).\n\nDuring engine startup, the VFS is populated from the contents of the standalone.zip file that's created by the HTML5 deployment process. All of the initial files are stored in /boot/ in the VFS.\n\nThere are several special files & directories in the /boot/ directory:\n\n/boot/__startup.livecode: a stack that performs loading & initialisation operations during engine startup.\n/boot/auxiliary_stackfiles/: during startup, each file in this directory is loaded and is receives the revLoadLibrary message\n/boot/fonts/basefont.ttf: the font used by the engine\n/boot/standalone/__boot.livecode: this is the initial stack of the application, which is the main stack that receives the startup message when the engine has been initialized\n/boot/standalone/: the defaultFolder when the engine starts, and the location where additional assets selected using the \"Copy files\" page of the standalone builder are placed\n/boot/extensions/extensions.txt: list of extensions included in the standalone, in the order in which they should be autoloaded\n/boot/extensions/: the directory where all autoloaded extensions are stored\nIn general, if you wish to add new files or directories to the standalone.zip archive, it is best to add them outside the /boot/ directory tree."
+      },
+      "after": "9e984c69404fb3ce",
+      "date": 1534789221414
+    },
+    {
+      "type": "add",
+      "id": "dbb3178cf9810ae9",
+      "item": {
+        "type": "paragraph",
+        "id": "dbb3178cf9810ae9",
+        "text": "\n# Advanced: Embedding an HTML5 standalone in a web page"
+      },
+      "after": "4c4526b82d0d2c8e",
+      "date": 1534789226724
+    },
+    {
+      "type": "edit",
+      "id": "dbb3178cf9810ae9",
+      "item": {
+        "type": "markdown",
+        "id": "dbb3178cf9810ae9",
+        "text": "\n# Advanced: Embedding an HTML5 standalone in a web page"
+      },
+      "date": 1534789227846
+    },
+    {
+      "type": "edit",
+      "id": "d092d5289c2e7d72",
+      "item": {
+        "type": "markdown",
+        "id": "d092d5289c2e7d72",
+        "text": "# Advanced: HTML5 standalone filesystem"
+      },
+      "date": 1534789230946
+    },
+    {
+      "type": "add",
+      "id": "1d904596bafe2ea5",
+      "item": {
+        "type": "paragraph",
+        "id": "1d904596bafe2ea5",
+        "text": "The default HTML5 page provided by the HTML5 standalone builder is designed for testing and debugging purposes. However, you may want to embed the standalone engine in a more visually appealing page. To do this, you require three elements: 1) a canvas, 2) a JavaScript Module object, and 3) an HTML <script> element that downloads the engine.\n\n"
+      },
+      "after": "dbb3178cf9810ae9",
+      "date": 1534789238749
+    },
+    {
+      "type": "add",
+      "id": "8e6c9197ab121544",
+      "item": {
+        "type": "paragraph",
+        "id": "8e6c9197ab121544",
+        "text": "# The canvas"
+      },
+      "after": "1d904596bafe2ea5",
+      "date": 1534789240769
+    },
+    {
+      "type": "edit",
+      "id": "8e6c9197ab121544",
+      "item": {
+        "type": "markdown",
+        "id": "8e6c9197ab121544",
+        "text": "# The canvas"
+      },
+      "date": 1534789241764
+    },
+    {
+      "type": "add",
+      "id": "6c55e1d38c52ff64",
+      "item": {
+        "type": "paragraph",
+        "id": "6c55e1d38c52ff64",
+        "text": "The engine renders into a HTML5 <canvas> element contained within a <div> element. There are some important considerations when creating the canvas & div:\n\nboth the canvas and div must have absolutely no border, or mouse coordinate calculations will be incorrect\n\nthey will be automatically resized by the engine to match the size of your stack, so don't attempt to set their size using HTML or CSS\n\nthe canvas should be the only element within the containing div, which may be used to hold additional elements as native layers are added to the app.\n\nthe canvas needs to be easily uniquely identifiable, so that the engine can find it.\n\nThe absolute minimum canvas element would look something like this:\n\n"
+      },
+      "after": "8e6c9197ab121544",
+      "date": 1534789248519
+    },
+    {
+      "type": "add",
+      "id": "22ee988b6788cd1e",
+      "item": {
+        "type": "paragraph",
+        "id": "22ee988b6788cd1e",
+        "text": "<div><canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault();\"></canvas></div>"
+      },
+      "after": "6c55e1d38c52ff64",
+      "date": 1534789252406
+    },
+    {
+      "type": "add",
+      "id": "309bccf4c822d138",
+      "item": {
+        "type": "paragraph",
+        "id": "309bccf4c822d138",
+        "text": "By default, most web browsers will indicate when the canvas has focus by displaying a highlighted outline. This helps users identify which part of the web page is capturing their key presses. You can usually disable this outline by adding outline: none; to the canvas's CSS styles."
+      },
+      "after": "22ee988b6788cd1e",
+      "date": 1534789253917
+    },
+    {
+      "type": "add",
+      "id": "20dcd304768d649e",
+      "item": {
+        "type": "paragraph",
+        "id": "20dcd304768d649e",
+        "text": "# The Module object"
+      },
+      "after": "309bccf4c822d138",
+      "date": 1534789258586
+    },
+    {
+      "type": "edit",
+      "id": "20dcd304768d649e",
+      "item": {
+        "type": "markdown",
+        "id": "20dcd304768d649e",
+        "text": "# The Module object"
+      },
+      "date": 1534789259561
+    },
+    {
+      "type": "add",
+      "id": "a9335061da74a632",
+      "item": {
+        "type": "paragraph",
+        "id": "a9335061da74a632",
+        "text": "The top-level JavaScript Module object contains the parameters that control how the engine runs. At minimum, you need only specify the Module.canvas, which should be your canvas element."
+      },
+      "after": "20dcd304768d649e",
+      "date": 1534789265198
+    },
+    {
+      "type": "add",
+      "id": "e73f205e9368ffb1",
+      "item": {
+        "type": "paragraph",
+        "id": "e73f205e9368ffb1",
+        "text": "\nThe absolute minimum Module object declaration would look something like:\n\n"
+      },
+      "after": "a9335061da74a632",
+      "date": 1534789268353
+    },
+    {
+      "type": "add",
+      "id": "c6963ea7af0f669e",
+      "item": {
+        "type": "paragraph",
+        "id": "c6963ea7af0f669e",
+        "text": "<script type=\"text/javascript\">\nvar Module = {\n  canvas: document.getElementById('canvas'),\n};\n</script>"
+      },
+      "after": "e73f205e9368ffb1",
+      "date": 1534789270810
+    },
+    {
+      "type": "add",
+      "id": "225efa95b434221e",
+      "item": {
+        "type": "paragraph",
+        "id": "225efa95b434221e",
+        "text": "# Engine download\nThe engine is quite a large JavaScript file, so it's downloaded asynchronously in order to let the rest of the page finish loading and start being displayed.\n\nQuite straightforwardly:\n\n"
+      },
+      "after": "c6963ea7af0f669e",
+      "date": 1534789277016
+    },
+    {
+      "type": "add",
+      "id": "2201ad9bc2a87a98",
+      "item": {
+        "type": "paragraph",
+        "id": "2201ad9bc2a87a98",
+        "text": "<script async type=\"text/javascript\" src=\"standalone-<version>.js\"></script>"
+      },
+      "after": "225efa95b434221e",
+      "date": 1534789279311
+    },
+    {
+      "type": "add",
+      "id": "efe73fb896993585",
+      "item": {
+        "type": "paragraph",
+        "id": "efe73fb896993585",
+        "text": "Make sure to replace <version> as appropriate.\n\nBringing it all together\nHere's the complete skeleton web page for an HTML5 standalone:"
+      },
+      "after": "2201ad9bc2a87a98",
+      "date": 1534789285958
+    },
+    {
+      "type": "add",
+      "id": "efca6c911e95bc15",
+      "item": {
+        "type": "paragraph",
+        "id": "efca6c911e95bc15",
+        "text": "\n<html>\n   <body>\n      <div>\n         <canvas style=\"border: 0px none;\" id=\"canvas\" oncontextmenu=\"event.preventDefault()\"></canvas>\n      </div>\n\n     <script type=\"text/javascript\">\n       var Module = { canvas: document.getElementById('canvas')  };\n     </script>\n    <script async type=\"text/javascript\" src=\"standalone-community.js\"></script>\n  </body>\n</html>"
+      },
+      "after": "efe73fb896993585",
+      "date": 1534789289808
+    },
+    {
+      "type": "add",
+      "id": "7a57d6564ccd9a9a",
+      "item": {
+        "type": "paragraph",
+        "id": "7a57d6564ccd9a9a",
+        "text": "# Advanced: Speeding up engine download"
+      },
+      "after": "efca6c911e95bc15",
+      "date": 1534789293742
+    },
+    {
+      "type": "edit",
+      "id": "7a57d6564ccd9a9a",
+      "item": {
+        "type": "markdown",
+        "id": "7a57d6564ccd9a9a",
+        "text": "# Advanced: Speeding up engine download"
+      },
+      "date": 1534789294923
+    },
+    {
+      "type": "add",
+      "id": "0eeec87e3ae8476c",
+      "item": {
+        "type": "paragraph",
+        "id": "0eeec87e3ae8476c",
+        "text": "Currently, the engine files are almost 30 MB, which is a lot to download before the engine can start. It is possible to speed up the download by enabling deflate compression in the web server configuration."
+      },
+      "after": "7a57d6564ccd9a9a",
+      "date": 1534789300151
+    },
+    {
+      "type": "add",
+      "id": "9181839f8192bbe7",
+      "item": {
+        "type": "paragraph",
+        "id": "9181839f8192bbe7",
+        "text": "Enabling deflate compression reduces the total download size to around 6.3 MB. It's recommended to pre-compress the engine with gzip, and then configure your web server to serve the pre-compressed files."
+      },
+      "after": "0eeec87e3ae8476c",
+      "date": 1534789305010
+    },
+    {
+      "type": "add",
+      "id": "25ea715f3f2446af",
+      "item": {
+        "type": "paragraph",
+        "id": "25ea715f3f2446af",
+        "text": "For the Apache web server, configure mod_deflate to serve pre-compressed content\nFor the NGINX web server, add gzip_static on; to your configuration."
+      },
+      "after": "9181839f8192bbe7",
+      "date": 1534789308303
+    },
+    {
+      "type": "add",
+      "id": "08f2b67473be08b3",
+      "item": {
+        "type": "paragraph",
+        "id": "08f2b67473be08b3",
+        "text": "# Advanced: Customizing the Module object\nThere are a number of LiveCode-specific Module attributes that you can modify to affect how the engine behaves:"
+      },
+      "after": "25ea715f3f2446af",
+      "date": 1534789312807
+    },
+    {
+      "type": "edit",
+      "id": "08f2b67473be08b3",
+      "item": {
+        "type": "markdown",
+        "id": "08f2b67473be08b3",
+        "text": "# Advanced: Customizing the Module object\nThere are a number of LiveCode-specific Module attributes that you can modify to affect how the engine behaves:"
+      },
+      "date": 1534789314927
+    },
+    {
+      "type": "add",
+      "id": "bf808380b3fd4625",
+      "item": {
+        "type": "paragraph",
+        "id": "bf808380b3fd4625",
+        "text": "Module.livecodeStandalone: the filename of the standalone archive (default standalone.zip)\nModule.livecodeStandalonePrefixURL: Prepended to the standalone archive filename to construct its full URL (default empty)"
+      },
+      "after": "08f2b67473be08b3",
+      "date": 1534789326940
+    },
+    {
+      "type": "add",
+      "id": "db8ea2e8d926461f",
+      "item": {
+        "type": "paragraph",
+        "id": "db8ea2e8d926461f",
+        "text": "Module.livecodeStandaloneRequest: If you assign a network request to this attribute (before the engine runs), then it will use that request for the standalone archive instead of automatically starting a download for you. This means that you can, in your HTML, fire off a request for the standalone before the engine script actually arrives. For this to work, the network request should be an XMLHttpRequest with its responseType set to arraybuffer.\nSee also Emscripten's Module object documentation."
+      },
+      "after": "bf808380b3fd4625",
+      "date": 1534789328156
+    },
+    {
+      "type": "edit",
+      "id": "bf808380b3fd4625",
+      "item": {
+        "type": "paragraph",
+        "id": "bf808380b3fd4625",
+        "text": "Module.livecodeStandalone: the filename of the standalone archive (default standalone.zip)"
+      },
+      "date": 1534789330243
+    },
+    {
+      "type": "add",
+      "id": "a047b4e8ed7ca853",
+      "item": {
+        "type": "paragraph",
+        "id": "a047b4e8ed7ca853",
+        "text": "Module.livecodeStandalonePrefixURL: Prepended to the standalone archive filename to construct its full URL (default empty)"
+      },
+      "after": "bf808380b3fd4625",
+      "date": 1534789336262
+    },
+    {
+      "type": "edit",
+      "id": "db8ea2e8d926461f",
+      "item": {
+        "type": "paragraph",
+        "id": "db8ea2e8d926461f",
+        "text": "Module.livecodeStandaloneRequest: If you assign a network request to this attribute (before the engine runs), then it will use that request for the standalone archive instead of automatically starting a download for you. This means that you can, in your HTML, fire off a request for the standalone before the engine script actually arrives. For this to work, the network request should be an XMLHttpRequest with its responseType set to arraybuffer."
+      },
+      "date": 1534789346059
+    },
+    {
+      "type": "add",
+      "id": "53843e719da4b686",
+      "item": {
+        "type": "paragraph",
+        "id": "53843e719da4b686",
+        "text": "See also Emscripten's Module object documentation."
+      },
+      "after": "db8ea2e8d926461f",
+      "date": 1534789347672
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "2e080c19-a694-41d7-b419-ee4839167781",
+        "text": "# \n\n- Some exciting HTML5 demos... - [https://livecode.com/some-exciting-html5-demos-for-livecode-9-dp-3/ livecode.com]\n- How Do I Put My First App On... - [http://lessons.livecode.com/m/4071/l/800867-how-do-i-put-my-first-app-on-the-web livecode.com]\n- html5 Export Question -... - [https://forums.livecode.com/viewtopic.php?t=29685 livecode.com]\n- (49) Livecode: Modern web... - [https://www.youtube.com/watch?v=mNPPo-G4jQs youtube.com]\n- HTML5 | Livecode Wiki |... - [http://livecode.wikia.com/wiki/HTML5 wikia.com]"
+      },
+      "after": "53843e719da4b686",
+      "id": "2e080c19-a694-41d7-b419-ee4839167781",
+      "date": 1534789378903
+    },
+    {
+      "type": "edit",
+      "id": "2e080c19-a694-41d7-b419-ee4839167781",
+      "item": {
+        "type": "markdown",
+        "id": "2e080c19-a694-41d7-b419-ee4839167781",
+        "text": "# See also\n\n- Some exciting HTML5 demos... - [https://livecode.com/some-exciting-html5-demos-for-livecode-9-dp-3/ livecode.com]\n- How Do I Put My First App On... - [http://lessons.livecode.com/m/4071/l/800867-how-do-i-put-my-first-app-on-the-web livecode.com]\n- html5 Export Question -... - [https://forums.livecode.com/viewtopic.php?t=29685 livecode.com]\n- (49) Livecode: Modern web... - [https://www.youtube.com/watch?v=mNPPo-G4jQs youtube.com]\n- HTML5 | Livecode Wiki |... - [http://livecode.wikia.com/wiki/HTML5 wikia.com]"
+      },
+      "date": 1534789383561
+    },
+    {
+      "type": "edit",
+      "id": "2e5d78aa0cf01bab",
+      "item": {
+        "type": "markdown",
+        "id": "2e5d78aa0cf01bab",
+        "text": "With LiveCode 8's HTML5 deployment capability, you can now run applications written in LiveCode in any web browser that supports JavaScript and HTML5.\n\n\n"
+      },
+      "date": 1534789456261
+    },
+    {
+      "type": "add",
+      "id": "84d742930de7f548",
+      "item": {
+        "type": "markdown",
+        "id": "84d742930de7f548",
+        "text": "# Supported browsers"
+      },
+      "after": "2e5d78aa0cf01bab",
+      "date": 1534789458084
+    },
+    {
+      "type": "edit",
+      "id": "2e5d78aa0cf01bab",
+      "item": {
+        "type": "markdown",
+        "id": "2e5d78aa0cf01bab",
+        "text": "With LiveCode 8's HTML5 deployment capability, you can now run applications written in LiveCode in any web browser that supports JavaScript and HTML5.\n\n"
+      },
+      "date": 1534789467844
+    },
+    {
+      "type": "add",
+      "id": "31ee210ed31f283f",
+      "item": {
+        "type": "markdown",
+        "id": "31ee210ed31f283f",
+        "text": "# Demos\n- \n\n\n"
+      },
+      "after": "2e5d78aa0cf01bab",
+      "date": 1534789471403
+    },
+    {
+      "type": "edit",
+      "id": "31ee210ed31f283f",
+      "item": {
+        "type": "markdown",
+        "id": "31ee210ed31f283f",
+        "text": "# Demos\n\n- http://hh.on-rev.com/html5/index-large.html\n\n\n"
+      },
+      "date": 1534789479802
+    },
+    {
+      "type": "edit",
+      "id": "c6d5ee1c53b45d72",
+      "item": {
+        "type": "markdown",
+        "id": "c6d5ee1c53b45d72",
+        "text": "Only a limited range of browsers are supported for HTML5 deployment in this release of LiveCode.\n\n- Mozilla Firefox 40.0 (or newer)\n- Google Chrome 44 (or newer)\n- Safari for Mac (latest version)"
+      },
+      "date": 1534789514080
+    }
+  ]
+}

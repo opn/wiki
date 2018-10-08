@@ -1,0 +1,1499 @@
+{
+  "title": "format",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "bac9c7abf6b51203",
+      "text": "Returns a formatted string that has been transformed according to the rules of the C \"printf()\"."
+    },
+    {
+      "type": "code",
+      "id": "504c36884348bf14",
+      "text": "put format(\"%1.3e\",865.3)"
+    },
+    {
+      "type": "code",
+      "id": "557a7444904eb097",
+      "text": "put format(\"%03d\", someNum)"
+    },
+    {
+      "type": "markdown",
+      "id": "b80b19adb6d0bed3",
+      "text": "# Description"
+    },
+    {
+      "type": "paragraph",
+      "id": "e4563fb403746ebb",
+      "text": "Use the format to create strings in special formats."
+    },
+    {
+      "type": "paragraph",
+      "id": "c36c9287a7ecac18",
+      "text": "The format works by taking a baseString that contains formatting incantations, transforming each member of the valuesList according to the corresponding incantation, then substituting the transformed string for the incantation in the baseString. "
+    },
+    {
+      "type": "html",
+      "id": "8221e91abe885b4b",
+      "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<td>%[charLength]o \n<tr><td><b>Hexadecimal:\n<td>%[charLength]x\n<tr><td><b>Floating-point:\n<td>%[charLength].[precision]f\n<tr><td><b>Scientific notation: \n<td>%[charLength.precision]e\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>"
+    },
+    {
+      "type": "paragraph",
+      "id": "870ee5ad5f826d0f",
+      "text": "It also transforms [[C escape sequences]] in the baseString into their single- character equivalents."
+    },
+    {
+      "type": "markdown",
+      "id": "7e3f942ffc96518b",
+      "text": "# String"
+    },
+    {
+      "type": "code",
+      "id": "28d4324781472014",
+      "text": "%[charLength]s "
+    },
+    {
+      "type": "paragraph",
+      "id": "7ec16c24542ee14a",
+      "text": "The corresponding value is unchanged, except that if a charLength is specified, if the string is shorter than the charLength, enough leading spaces are added to make it charLength characters long. If the length of the string is equal to or greater than the charLength, it is unchanged. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f032683550ae51c1",
+      "text": "For example the following is true:"
+    },
+    {
+      "type": "code",
+      "id": "6bb37d39c767e70a",
+      "text": "put format (\"%3s\", \"H\") = \"  H\""
+    },
+    {
+      "type": "markdown",
+      "id": "5aec07d6a3a49dbb",
+      "text": "# Character"
+    },
+    {
+      "type": "code",
+      "id": "ca9957a96d431249",
+      "text": "%[charLength]c "
+    },
+    {
+      "type": "paragraph",
+      "id": "434e4a9c7ee59cd8",
+      "text": "The corresponding value is treated as an [[ASCII]] value and translated to the corresponding character. If a charLength is specified, one fewer leading spaces are added to make it charLength characters long. "
+    },
+    {
+      "type": "paragraph",
+      "id": "6d5cd16a795da21b",
+      "text": "For example the following is true:"
+    },
+    {
+      "type": "code",
+      "id": "031b96fd2999ef14",
+      "text": "put format (\"%2c\", 65) = \" A\""
+    },
+    {
+      "type": "paragraph",
+      "id": "ed41987be4c939e8",
+      "text": " (65 is the ASCII value of the character \"A\")."
+    },
+    {
+      "type": "markdown",
+      "id": "aa501bd606bc2901",
+      "text": "# Decimal number"
+    },
+    {
+      "type": "code",
+      "id": "2302b0addd9633c9",
+      "text": "%[charLength]d"
+    },
+    {
+      "type": "code",
+      "id": "8ef1bc575770a445",
+      "text": "Unsigned integer: %[charLength]u "
+    },
+    {
+      "type": "paragraph",
+      "id": "85012c30f09e1563",
+      "text": "Like %[charLength]d, except that if the value is negative, it is subtracted from the largest long integer allowed by the current operating system. (On most operating systems, this is 2^32, or 4,294,967,296.) "
+    },
+    {
+      "type": "code",
+      "id": "34061892e3de8ff2",
+      "text": "Octal:%[charLength]o "
+    },
+    {
+      "type": "code",
+      "id": "8df83148db8503c1",
+      "text": "Hexadecimal:%[charLength]x\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "c17cf3ed8d3e4e39",
+      "text": "\n%[charLength]X Like %[charLength]x, except that the hex digits A-F are given in uppercase. "
+    },
+    {
+      "type": "paragraph",
+      "id": "ae0b9c72ef4ca052",
+      "text": "For example, the incantation %4x transforms \"30. 3\" to \" 1E\".\n\n"
+    },
+    {
+      "type": "code",
+      "id": "445145db97e129f1",
+      "text": "Floating-point: %[charLength].[precision]f"
+    },
+    {
+      "type": "paragraph",
+      "id": "2bf93f69acc48c04",
+      "text": "%[charLength. precision]g Like %[charLength]. [precision]f, except that trailing zeroes are not added if the number of digits is less than the precision.\n\n"
+    },
+    {
+      "type": "code",
+      "id": "e85776b3bdba16ae",
+      "text": "Scientific notation: %[charLength. precision]e\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "4697e74f65aa0b38",
+      "text": "\n%[charLength. precision]E Like %[charLength. precision]e, except that the \"E\" separating the number from the power of ten is uppercase. For example, the incantation %3. 2e transforms \"232. 4\" to \"2. 32E+02\".\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "018c002c8fb171c9",
+      "text": "If any of the following C escape sequences are present in the baseString, the format function transforms them to the equivalent character:"
+    },
+    {
+      "type": "code",
+      "id": "5820b55587f5fc66",
+      "text": "\\aControl-G (bell) \n\\bControl-H (backspace) \n\\fControl-L (formfeed) \n\\nControl-J (linefeed) \n\\rControl-M (return) \n\\tControl-I (tab) \n\\vControl-K (vertical tab) \n\\\\ \\?? \\'' (enclose a quote within a string) \n\n\\nnncharacter whose ASCII value is the octal number represented bynnn \\xnncharacter whose ASCII value is the hex number represented by"
+    },
+    {
+      "type": "paragraph",
+      "id": "e761cd38777c368f",
+      "text": "[[Note]]: Transformation of values in valuesList uses the standard LiveCode conversion rules. For example, if empty is passed for a numeric incantation it will be taken as the value 0."
+    },
+    {
+      "type": "paragraph",
+      "id": "a50dac844a2fffeb",
+      "text": "Here is how you would pad a number (someNum) up to three trailing 0's:"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "format",
+        "story": []
+      },
+      "date": 1460030543892
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bac9c7abf6b51203"
+      },
+      "id": "bac9c7abf6b51203",
+      "type": "add",
+      "date": 1460030545202
+    },
+    {
+      "type": "edit",
+      "id": "bac9c7abf6b51203",
+      "item": {
+        "type": "paragraph",
+        "id": "bac9c7abf6b51203",
+        "text": "put format(\"%1.3e\",865.3)"
+      },
+      "date": 1460030576112
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fb0a72eac64279cb"
+      },
+      "id": "fb0a72eac64279cb",
+      "type": "add",
+      "after": "bac9c7abf6b51203",
+      "date": 1460030583321
+    },
+    {
+      "type": "edit",
+      "id": "fb0a72eac64279cb",
+      "item": {
+        "type": "paragraph",
+        "id": "fb0a72eac64279cb",
+        "text": "Use the format to create strings in special formats.\n\nThe format works by taking a baseString that contains formatting incantations, transforming each member of the valuesList according to the corresponding incantation, then substituting the transformed string for the incantation in the baseString. It also transforms C escape sequences in the baseString into their single- character equivalents.\n\nThe valid incantations are as follows: String:%[charLength]s The corresponding value is unchanged, except that if a charLength is specified, if the string is shorter than the charLength, enough leading spaces are added to make it charLength characters long. If the length of the string is equal to or greater than the charLength, it is unchanged. For example, the incantation %3s transforms \"H\" to \" H\". Character:%[charLength]c The corresponding value is treated as an ASCII value and translated to the corresponding character. If a charLength is specified, one fewer leading spaces are added to make it charLength characters long. For example, the incantation %2c transforms 65 to \" A\" (65 is the ASCII value of the character \"A\").\n\nDecimal number: %[charLength]d\n\nUnsigned integer: %[charLength]u Like %[charLength]d, except that if the value is negative, it is subtracted from the largest long integer allowed by the current operating system. (On most operating systems, this is 2^32, or 4,294,967,296.) Octal:%[charLength]o Hexadecimal:%[charLength]x\n\n%[charLength]X Like %[charLength]x, except that the hex digits A-F are given in uppercase. For example, the incantation %4x transforms \"30. 3\" to \" 1E\".\n\nFloating-point: %[charLength].[precision]f\n\n%[charLength. precision]g Like %[charLength]. [precision]f, except that trailing zeroes are not added if the number of digits is less than the precision.\n\nScientific notation: %[charLength. precision]e\n\n%[charLength. precision]E Like %[charLength. precision]e, except that the \"E\" separating the number from the power of ten is uppercase. For example, the incantation %3. 2e transforms \"232. 4\" to \"2. 32E+02\".\n\nIf any of the following C escape sequences are present in the baseString, the format function transforms them to the equivalent character:\n\n\\aControl-G (bell) \\bControl-H (backspace) \\fControl-L (formfeed) \\nControl-J (linefeed) \\rControl-M (return) \\tControl-I (tab) \\vControl-K (vertical tab) \\\\ \\?? \\'' (enclose a quote within a string) \\nnncharacter whose ASCII value is the octal number represented bynnn \\xnncharacter whose ASCII value is the hex number represented byNote: Transformation of values in valuesList uses the standard LiveCode conversion rules. For example, if empty is passed for a numeric incantation it will be taken as the value 0."
+      },
+      "date": 1460030611706
+    },
+    {
+      "type": "edit",
+      "id": "fb0a72eac64279cb",
+      "item": {
+        "type": "paragraph",
+        "id": "fb0a72eac64279cb",
+        "text": "put format(\"%1.3e\",865.3)"
+      },
+      "date": 1460030625651
+    },
+    {
+      "type": "add",
+      "id": "e4563fb403746ebb",
+      "item": {
+        "type": "paragraph",
+        "id": "e4563fb403746ebb",
+        "text": "Use the format to create strings in special formats."
+      },
+      "after": "fb0a72eac64279cb",
+      "date": 1460030629186
+    },
+    {
+      "type": "add",
+      "id": "c36c9287a7ecac18",
+      "item": {
+        "type": "paragraph",
+        "id": "c36c9287a7ecac18",
+        "text": "The format works by taking a baseString that contains formatting incantations, transforming each member of the valuesList according to the corresponding incantation, then substituting the transformed string for the incantation in the baseString. It also transforms C escape sequences in the baseString into their single- character equivalents."
+      },
+      "after": "e4563fb403746ebb",
+      "date": 1460030633386
+    },
+    {
+      "type": "add",
+      "id": "7e3f942ffc96518b",
+      "item": {
+        "type": "paragraph",
+        "id": "7e3f942ffc96518b",
+        "text": "The valid incantations are as follows: "
+      },
+      "after": "c36c9287a7ecac18",
+      "date": 1460030638553
+    },
+    {
+      "type": "add",
+      "id": "e89f54e8369bacef",
+      "item": {
+        "type": "paragraph",
+        "id": "e89f54e8369bacef",
+        "text": "String:%[charLength]s "
+      },
+      "after": "7e3f942ffc96518b",
+      "date": 1460030645203
+    },
+    {
+      "type": "add",
+      "id": "7ec16c24542ee14a",
+      "item": {
+        "type": "paragraph",
+        "id": "7ec16c24542ee14a",
+        "text": "The corresponding value is unchanged, except that if a charLength is specified, if the string is shorter than the charLength, enough leading spaces are added to make it charLength characters long. If the length of the string is equal to or greater than the charLength, it is unchanged. "
+      },
+      "after": "e89f54e8369bacef",
+      "date": 1460030655562
+    },
+    {
+      "type": "add",
+      "id": "f032683550ae51c1",
+      "item": {
+        "type": "paragraph",
+        "id": "f032683550ae51c1",
+        "text": "For example, the incantation %3s transforms \"H\" to \" H\". Character:"
+      },
+      "after": "7ec16c24542ee14a",
+      "date": 1460030666746
+    },
+    {
+      "type": "edit",
+      "id": "f032683550ae51c1",
+      "item": {
+        "type": "paragraph",
+        "id": "f032683550ae51c1",
+        "text": "For example, the incantation %3s transforms \"H\" to \" H\". "
+      },
+      "date": 1460030674195
+    },
+    {
+      "type": "add",
+      "id": "5aec07d6a3a49dbb",
+      "item": {
+        "type": "paragraph",
+        "id": "5aec07d6a3a49dbb",
+        "text": "Character:%[charLength]c "
+      },
+      "after": "f032683550ae51c1",
+      "date": 1460030676857
+    },
+    {
+      "type": "add",
+      "id": "434e4a9c7ee59cd8",
+      "item": {
+        "type": "paragraph",
+        "id": "434e4a9c7ee59cd8",
+        "text": "The corresponding value is treated as an ASCII value and translated to the corresponding character. If a charLength is specified, one fewer leading spaces are added to make it charLength characters long. "
+      },
+      "after": "5aec07d6a3a49dbb",
+      "date": 1460030687282
+    },
+    {
+      "type": "add",
+      "id": "6d5cd16a795da21b",
+      "item": {
+        "type": "paragraph",
+        "id": "6d5cd16a795da21b",
+        "text": "For example, the incantation %2c transforms 65 to \" A\" (65 is the ASCII value of the character \"A\")."
+      },
+      "after": "434e4a9c7ee59cd8",
+      "date": 1460030690187
+    },
+    {
+      "type": "add",
+      "id": "f3f66ee4b9e3902c",
+      "item": {
+        "type": "paragraph",
+        "id": "f3f66ee4b9e3902c",
+        "text": "Decimal number: %[charLength]d"
+      },
+      "after": "6d5cd16a795da21b",
+      "date": 1460030695578
+    },
+    {
+      "type": "add",
+      "id": "693f3ea19c27acfe",
+      "item": {
+        "type": "paragraph",
+        "id": "693f3ea19c27acfe",
+        "text": "Unsigned integer: %[charLength]u "
+      },
+      "after": "f3f66ee4b9e3902c",
+      "date": 1460030701922
+    },
+    {
+      "type": "add",
+      "id": "85012c30f09e1563",
+      "item": {
+        "type": "paragraph",
+        "id": "85012c30f09e1563",
+        "text": "Like %[charLength]d, except that if the value is negative, it is subtracted from the largest long integer allowed by the current operating system. (On most operating systems, this is 2^32, or 4,294,967,296.) "
+      },
+      "after": "693f3ea19c27acfe",
+      "date": 1460030707659
+    },
+    {
+      "type": "add",
+      "id": "a75aff8d3dc214aa",
+      "item": {
+        "type": "paragraph",
+        "id": "a75aff8d3dc214aa",
+        "text": "Octal:%[charLength]o "
+      },
+      "after": "85012c30f09e1563",
+      "date": 1460030713587
+    },
+    {
+      "type": "add",
+      "id": "c17cf3ed8d3e4e39",
+      "item": {
+        "type": "paragraph",
+        "id": "c17cf3ed8d3e4e39",
+        "text": "Hexadecimal:%[charLength]x\n\n%[charLength]X Like %[charLength]x, except that the hex digits A-F are given in uppercase. "
+      },
+      "after": "a75aff8d3dc214aa",
+      "date": 1460030730148
+    },
+    {
+      "type": "add",
+      "id": "ae0b9c72ef4ca052",
+      "item": {
+        "type": "paragraph",
+        "id": "ae0b9c72ef4ca052",
+        "text": "For example, the incantation %4x transforms \"30. 3\" to \" 1E\".\n\n"
+      },
+      "after": "c17cf3ed8d3e4e39",
+      "date": 1460030733300
+    },
+    {
+      "type": "add",
+      "id": "499f7d7416ebb07b",
+      "item": {
+        "type": "paragraph",
+        "id": "499f7d7416ebb07b",
+        "text": "Floating-point: %[charLength].[precision]f"
+      },
+      "after": "ae0b9c72ef4ca052",
+      "date": 1460030757397
+    },
+    {
+      "type": "add",
+      "id": "2bf93f69acc48c04",
+      "item": {
+        "type": "paragraph",
+        "id": "2bf93f69acc48c04",
+        "text": "%[charLength. precision]g Like %[charLength]. [precision]f, except that trailing zeroes are not added if the number of digits is less than the precision.\n\n"
+      },
+      "after": "499f7d7416ebb07b",
+      "date": 1460030761805
+    },
+    {
+      "type": "add",
+      "id": "4697e74f65aa0b38",
+      "item": {
+        "type": "paragraph",
+        "id": "4697e74f65aa0b38",
+        "text": "Scientific notation: %[charLength. precision]e\n\n%[charLength. precision]E Like %[charLength. precision]e, except that the \"E\" separating the number from the power of ten is uppercase. For example, the incantation %3. 2e transforms \"232. 4\" to \"2. 32E+02\".\n\n"
+      },
+      "after": "2bf93f69acc48c04",
+      "date": 1460030778172
+    },
+    {
+      "type": "add",
+      "id": "018c002c8fb171c9",
+      "item": {
+        "type": "paragraph",
+        "id": "018c002c8fb171c9",
+        "text": "If any of the following C escape sequences are present in the baseString, the format function transforms them to the equivalent character:"
+      },
+      "after": "4697e74f65aa0b38",
+      "date": 1460030781469
+    },
+    {
+      "type": "add",
+      "id": "ab48d7c084e2a05c",
+      "item": {
+        "type": "paragraph",
+        "id": "ab48d7c084e2a05c",
+        "text": "\n\\aControl-G (bell) \\bControl-H (backspace) \\fControl-L (formfeed) \\nControl-J (linefeed) \\rControl-M (return) \\tControl-I (tab) \\vControl-K (vertical tab) \\\\ \\?? \\'' (enclose a quote within a string) \\nnncharacter whose ASCII value is the octal number represented bynnn \\xnncharacter whose ASCII value is the hex number represented byNote: Transformation of values in valuesList uses the standard LiveCode conversion rules. For example, if empty is passed for a numeric incantation it will be taken as the value 0."
+      },
+      "after": "018c002c8fb171c9",
+      "date": 1460030788287
+    },
+    {
+      "type": "edit",
+      "id": "bac9c7abf6b51203",
+      "item": {
+        "type": "paragraph",
+        "id": "bac9c7abf6b51203",
+        "text": "Returns a formatted string that has been transformed according to the rules of the C \"printf()\" ."
+      },
+      "date": 1460030811104
+    },
+    {
+      "type": "add",
+      "id": "b80b19adb6d0bed3",
+      "item": {
+        "type": "paragraph",
+        "id": "b80b19adb6d0bed3",
+        "text": "# Description"
+      },
+      "after": "fb0a72eac64279cb",
+      "date": 1460030822560
+    },
+    {
+      "type": "edit",
+      "id": "b80b19adb6d0bed3",
+      "item": {
+        "type": "markdown",
+        "id": "b80b19adb6d0bed3",
+        "text": "# Description"
+      },
+      "date": 1460030823548
+    },
+    {
+      "type": "edit",
+      "id": "434e4a9c7ee59cd8",
+      "item": {
+        "type": "paragraph",
+        "id": "434e4a9c7ee59cd8",
+        "text": "The corresponding value is treated as an [[ASCII]] value and translated to the corresponding character. If a charLength is specified, one fewer leading spaces are added to make it charLength characters long. "
+      },
+      "date": 1460030864497
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "504c36884348bf14"
+      },
+      "after": "bac9c7abf6b51203",
+      "id": "504c36884348bf14",
+      "date": 1460030880724
+    },
+    {
+      "type": "remove",
+      "id": "fb0a72eac64279cb",
+      "date": 1460030884136
+    },
+    {
+      "type": "edit",
+      "id": "504c36884348bf14",
+      "item": {
+        "type": "code",
+        "id": "504c36884348bf14",
+        "text": "put format(\"%1.3e\",865.3)"
+      },
+      "date": 1460030886466
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "28d4324781472014"
+      },
+      "after": "7e3f942ffc96518b",
+      "id": "28d4324781472014",
+      "date": 1460030900497
+    },
+    {
+      "type": "remove",
+      "id": "e89f54e8369bacef",
+      "date": 1460030903449
+    },
+    {
+      "type": "edit",
+      "id": "28d4324781472014",
+      "item": {
+        "type": "code",
+        "id": "28d4324781472014",
+        "text": "String:%[charLength]s "
+      },
+      "date": 1460030906229
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "ca9957a96d431249"
+      },
+      "after": "f032683550ae51c1",
+      "id": "ca9957a96d431249",
+      "date": 1460030915056
+    },
+    {
+      "type": "edit",
+      "id": "ca9957a96d431249",
+      "item": {
+        "type": "code",
+        "id": "ca9957a96d431249",
+        "text": "Character:%[charLength]c "
+      },
+      "date": 1460030933578
+    },
+    {
+      "type": "move",
+      "order": [
+        "bac9c7abf6b51203",
+        "504c36884348bf14",
+        "b80b19adb6d0bed3",
+        "e4563fb403746ebb",
+        "c36c9287a7ecac18",
+        "7e3f942ffc96518b",
+        "28d4324781472014",
+        "7ec16c24542ee14a",
+        "f032683550ae51c1",
+        "5aec07d6a3a49dbb",
+        "ca9957a96d431249",
+        "434e4a9c7ee59cd8",
+        "6d5cd16a795da21b",
+        "f3f66ee4b9e3902c",
+        "693f3ea19c27acfe",
+        "85012c30f09e1563",
+        "a75aff8d3dc214aa",
+        "c17cf3ed8d3e4e39",
+        "ae0b9c72ef4ca052",
+        "499f7d7416ebb07b",
+        "2bf93f69acc48c04",
+        "4697e74f65aa0b38",
+        "018c002c8fb171c9",
+        "ab48d7c084e2a05c"
+      ],
+      "id": "5aec07d6a3a49dbb",
+      "date": 1460030938132
+    },
+    {
+      "type": "edit",
+      "id": "5aec07d6a3a49dbb",
+      "item": {
+        "type": "paragraph",
+        "id": "5aec07d6a3a49dbb",
+        "text": "# Character:"
+      },
+      "date": 1460030947748
+    },
+    {
+      "type": "edit",
+      "id": "5aec07d6a3a49dbb",
+      "item": {
+        "type": "markdown",
+        "id": "5aec07d6a3a49dbb",
+        "text": "# Character:"
+      },
+      "date": 1460030948803
+    },
+    {
+      "type": "edit",
+      "id": "ca9957a96d431249",
+      "item": {
+        "type": "code",
+        "id": "ca9957a96d431249",
+        "text": "%[charLength]c "
+      },
+      "date": 1460030953788
+    },
+    {
+      "type": "edit",
+      "id": "5aec07d6a3a49dbb",
+      "item": {
+        "type": "markdown",
+        "id": "5aec07d6a3a49dbb",
+        "text": "# Character"
+      },
+      "date": 1460030963989
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "8221e91abe885b4b"
+      },
+      "after": "f032683550ae51c1",
+      "id": "8221e91abe885b4b",
+      "date": 1460030981162
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "String:%[charLength]s "
+      },
+      "date": 1460031026719
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n  <tr>\n    <td valign=\"top\"><b>String:</b></td>\n    <td>%[charLength]s</td>\n  </tr>\n  <tr>\n    <td valign=\"top\"><b>Episode:</b></td>\n    <td>\n    </td>\n  </tr>\n</table>"
+      },
+      "date": 1460031654497
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n  <tr>\n    <td valign=\"top\"><b>String:</b></td>\n    <td>%[charLength]s</td>\n  </tr>\n  <tr>\n    <td valign=\"top\"><b>Episode:</b></td>\n    <td>\n    </td>\n  </tr>\n</table>"
+      },
+      "date": 1460031725690
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n  <tr>\n    <td valign=\"top\"><b>String:\n    <td>%[charLength]s</td>\n  </tr>%[charLength]c<tr>\n    <td valign=\"top\"><b>Episode:</b></td>\n    <td>\n    </td>\n  </tr>\n</table>"
+      },
+      "date": 1460031785316
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr>\n<td><b>String:\n<td>%[charLength]s"
+      },
+      "date": 1460031994097
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n\n<tr>\n<td><b>String:\n<td>%[charLength]s\n\n<tr>\n<td><b>String:\n<td>%[charLength]s"
+      },
+      "date": 1460032014725
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n\n<tr>\n<td><b>Character:\n<td>%[charLength]c \n\n<tr>\n<td><b>String:\n<td>%[charLength]s"
+      },
+      "date": 1460032027793
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n\n<tr>\n<td><b>Character:\n<td>%[charLength]c \n\n<tr>\n<td><b>String:\n<td>%[charLength]s\n\n<tr>\n<td><b>Decimal number: \n<td>%[charLength]d"
+      },
+      "date": 1460032084483
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "2302b0addd9633c9"
+      },
+      "after": "6d5cd16a795da21b",
+      "id": "2302b0addd9633c9",
+      "date": 1460032099016
+    },
+    {
+      "type": "remove",
+      "id": "f3f66ee4b9e3902c",
+      "date": 1460032102641
+    },
+    {
+      "type": "edit",
+      "id": "2302b0addd9633c9",
+      "item": {
+        "type": "code",
+        "id": "2302b0addd9633c9",
+        "text": "Decimal number: %[charLength]d"
+      },
+      "date": 1460032104021
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "8ef1bc575770a445"
+      },
+      "after": "693f3ea19c27acfe",
+      "id": "8ef1bc575770a445",
+      "date": 1460032106830
+    },
+    {
+      "type": "remove",
+      "id": "693f3ea19c27acfe",
+      "date": 1460032109810
+    },
+    {
+      "type": "edit",
+      "id": "8ef1bc575770a445",
+      "item": {
+        "type": "code",
+        "id": "8ef1bc575770a445",
+        "text": "Unsigned integer: %[charLength]u "
+      },
+      "date": 1460032112108
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "34061892e3de8ff2"
+      },
+      "after": "85012c30f09e1563",
+      "id": "34061892e3de8ff2",
+      "date": 1460032121729
+    },
+    {
+      "type": "remove",
+      "id": "a75aff8d3dc214aa",
+      "date": 1460032124723
+    },
+    {
+      "type": "edit",
+      "id": "34061892e3de8ff2",
+      "item": {
+        "type": "code",
+        "id": "34061892e3de8ff2",
+        "text": "Octal:%[charLength]o "
+      },
+      "date": 1460032127893
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "8df83148db8503c1"
+      },
+      "after": "34061892e3de8ff2",
+      "id": "8df83148db8503c1",
+      "date": 1460032130280
+    },
+    {
+      "type": "edit",
+      "id": "c17cf3ed8d3e4e39",
+      "item": {
+        "type": "paragraph",
+        "id": "c17cf3ed8d3e4e39",
+        "text": "\n%[charLength]X Like %[charLength]x, except that the hex digits A-F are given in uppercase. "
+      },
+      "date": 1460032133068
+    },
+    {
+      "type": "edit",
+      "id": "8df83148db8503c1",
+      "item": {
+        "type": "code",
+        "id": "8df83148db8503c1",
+        "text": "Hexadecimal:%[charLength]x\n"
+      },
+      "date": 1460032135495
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "445145db97e129f1"
+      },
+      "after": "ae0b9c72ef4ca052",
+      "id": "445145db97e129f1",
+      "date": 1460032140091
+    },
+    {
+      "type": "remove",
+      "id": "499f7d7416ebb07b",
+      "date": 1460032143324
+    },
+    {
+      "type": "edit",
+      "id": "445145db97e129f1",
+      "item": {
+        "type": "code",
+        "id": "445145db97e129f1",
+        "text": "Floating-point: %[charLength].[precision]f"
+      },
+      "date": 1460032146006
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "e85776b3bdba16ae"
+      },
+      "after": "2bf93f69acc48c04",
+      "id": "e85776b3bdba16ae",
+      "date": 1460032166571
+    },
+    {
+      "type": "edit",
+      "id": "4697e74f65aa0b38",
+      "item": {
+        "type": "paragraph",
+        "id": "4697e74f65aa0b38",
+        "text": "\n%[charLength. precision]E Like %[charLength. precision]e, except that the \"E\" separating the number from the power of ten is uppercase. For example, the incantation %3. 2e transforms \"232. 4\" to \"2. 32E+02\".\n\n"
+      },
+      "date": 1460032173991
+    },
+    {
+      "type": "edit",
+      "id": "e85776b3bdba16ae",
+      "item": {
+        "type": "code",
+        "id": "e85776b3bdba16ae",
+        "text": "Scientific notation: %[charLength. precision]e\n"
+      },
+      "date": 1460032176071
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "5820b55587f5fc66"
+      },
+      "after": "018c002c8fb171c9",
+      "id": "5820b55587f5fc66",
+      "date": 1460032182441
+    },
+    {
+      "type": "edit",
+      "id": "ab48d7c084e2a05c",
+      "item": {
+        "type": "paragraph",
+        "id": "ab48d7c084e2a05c",
+        "text": "\\aControl-G (bell) \\bControl-H (backspace) \\fControl-L (formfeed) \\nControl-J (linefeed) \\rControl-M (return) \\tControl-I (tab) \\vControl-K (vertical tab) \\\\ \\?? \\'' (enclose a quote within a string) \\nnncharacter whose ASCII value is the octal number represented bynnn \\xnncharacter whose ASCII value is the hex number represented byNote: Transformation of values in valuesList uses the standard LiveCode conversion rules. For example, if empty is passed for a numeric incantation it will be taken as the value 0."
+      },
+      "date": 1460032186763
+    },
+    {
+      "type": "edit",
+      "id": "5820b55587f5fc66",
+      "item": {
+        "type": "code",
+        "id": "5820b55587f5fc66",
+        "text": "\\aControl-G (bell) \n\\bControl-H (backspace) \n\\fControl-L (formfeed) \n\\nControl-J (linefeed) \n\\rControl-M (return) \n\\tControl-I (tab) \n\\vControl-K (vertical tab) \n\\\\ \\?? \\'' (enclose a quote within a string) \n\n\\nnncharacter whose ASCII value is the octal number represented bynnn \\xnncharacter whose ASCII value is the hex number represented by"
+      },
+      "date": 1460032250490
+    },
+    {
+      "type": "remove",
+      "id": "ab48d7c084e2a05c",
+      "date": 1460032254255
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e761cd38777c368f"
+      },
+      "id": "e761cd38777c368f",
+      "type": "add",
+      "after": "5820b55587f5fc66",
+      "date": 1460032255449
+    },
+    {
+      "type": "edit",
+      "id": "e761cd38777c368f",
+      "item": {
+        "type": "paragraph",
+        "id": "e761cd38777c368f",
+        "text": "[[Note]]: Transformation of values in valuesList uses the standard LiveCode conversion rules. For example, if empty is passed for a numeric incantation it will be taken as the value 0."
+      },
+      "date": 1460032264673
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>"
+      },
+      "date": 1460032359468
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<tr>%[charLength]o \n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>\n<tr>\n<tr><td><b>"
+      },
+      "date": 1460032380845
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<td>%[charLength]o \n<tr><td><b>\n<td>\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>"
+      },
+      "date": 1460032446934
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<td>%[charLength]o \n<tr><td><b>Hexadecimal:\n<td>%[charLength]x\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>"
+      },
+      "date": 1460032492272
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<td>%[charLength]o \n<tr><td><b>Hexadecimal:\n<td>%[charLength]x\n<tr><td><b>Floating-point:\n<td>%[charLength].[precision]f\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>"
+      },
+      "date": 1460032522337
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<td>%[charLength]o \n<tr><td><b>Hexadecimal:\n<td>%[charLength]x\n<tr><td><b>Floating-point:\n<td>%[charLength].[precision]f\n<tr><td><b>Scientific notation: \n<td>%[charLength. precision]e\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>"
+      },
+      "date": 1460032547554
+    },
+    {
+      "type": "edit",
+      "id": "8221e91abe885b4b",
+      "item": {
+        "type": "html",
+        "id": "8221e91abe885b4b",
+        "text": "<blockquote>\n<table style=\"width:100%; border-collapse:separate; border-spacing:8px 2px\">\n<tr><td><b>Character:\n<td>%[charLength]c \n<tr><td><b>String:\n<td>%[charLength]s\n<tr><td><b>Decimal number: \n<td>%[charLength]d\n<tr><td><b>Unsigned integer:\n<td>%[charLength]u\n<tr><td><b>Octal:\n<td>%[charLength]o \n<tr><td><b>Hexadecimal:\n<td>%[charLength]x\n<tr><td><b>Floating-point:\n<td>%[charLength].[precision]f\n<tr><td><b>Scientific notation: \n<td>%[charLength.precision]e\n<tr><td><b>\n<td>\n<tr><td><b>\n<td>"
+      },
+      "date": 1460032559402
+    },
+    {
+      "type": "edit",
+      "id": "6d5cd16a795da21b",
+      "item": {
+        "type": "paragraph",
+        "id": "6d5cd16a795da21b",
+        "text": "For example:"
+      },
+      "date": 1460032627489
+    },
+    {
+      "type": "add",
+      "id": "b44fcf5d84d5ff9b",
+      "item": {
+        "type": "paragraph",
+        "id": "b44fcf5d84d5ff9b",
+        "text": "the incantation %2c transforms 65 to:"
+      },
+      "after": "6d5cd16a795da21b",
+      "date": 1460032640641
+    },
+    {
+      "type": "add",
+      "id": "c4218e129c271f4d",
+      "item": {
+        "type": "paragraph",
+        "id": "c4218e129c271f4d",
+        "text": "\" A\""
+      },
+      "after": "b44fcf5d84d5ff9b",
+      "date": 1460032645170
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "031b96fd2999ef14"
+      },
+      "after": "6d5cd16a795da21b",
+      "id": "031b96fd2999ef14",
+      "date": 1460032650179
+    },
+    {
+      "type": "add",
+      "id": "ed41987be4c939e8",
+      "item": {
+        "type": "paragraph",
+        "id": "ed41987be4c939e8",
+        "text": " (65 is the ASCII value of the character \"A\")."
+      },
+      "after": "c4218e129c271f4d",
+      "date": 1460032651859
+    },
+    {
+      "type": "edit",
+      "id": "031b96fd2999ef14",
+      "item": {
+        "type": "code",
+        "id": "031b96fd2999ef14",
+        "text": "put format \"%2c\", 65) = "
+      },
+      "date": 1460032686587
+    },
+    {
+      "type": "remove",
+      "id": "c4218e129c271f4d",
+      "date": 1460032692227
+    },
+    {
+      "type": "edit",
+      "id": "031b96fd2999ef14",
+      "item": {
+        "type": "code",
+        "id": "031b96fd2999ef14",
+        "text": "put format \"%2c\", 65) = \" A\""
+      },
+      "date": 1460032697244
+    },
+    {
+      "type": "remove",
+      "id": "b44fcf5d84d5ff9b",
+      "date": 1460032705675
+    },
+    {
+      "type": "edit",
+      "id": "6d5cd16a795da21b",
+      "item": {
+        "type": "paragraph",
+        "id": "6d5cd16a795da21b",
+        "text": "For example the following is true:"
+      },
+      "date": 1460032713782
+    },
+    {
+      "type": "edit",
+      "id": "2302b0addd9633c9",
+      "item": {
+        "type": "code",
+        "id": "2302b0addd9633c9",
+        "text": "%[charLength]d"
+      },
+      "date": 1460032738503
+    },
+    {
+      "type": "add",
+      "id": "aa501bd606bc2901",
+      "item": {
+        "type": "paragraph",
+        "id": "aa501bd606bc2901",
+        "text": "# Decimal number"
+      },
+      "after": "ed41987be4c939e8",
+      "date": 1460032749630
+    },
+    {
+      "type": "edit",
+      "id": "aa501bd606bc2901",
+      "item": {
+        "type": "markdown",
+        "id": "aa501bd606bc2901",
+        "text": "# Decimal number"
+      },
+      "date": 1460032751607
+    },
+    {
+      "type": "edit",
+      "id": "28d4324781472014",
+      "item": {
+        "type": "code",
+        "id": "28d4324781472014",
+        "text": "%[charLength]s "
+      },
+      "date": 1460032821227
+    },
+    {
+      "type": "edit",
+      "id": "7e3f942ffc96518b",
+      "item": {
+        "type": "paragraph",
+        "id": "7e3f942ffc96518b",
+        "text": "# String"
+      },
+      "date": 1460032828984
+    },
+    {
+      "type": "edit",
+      "id": "7e3f942ffc96518b",
+      "item": {
+        "type": "markdown",
+        "id": "7e3f942ffc96518b",
+        "text": "# String"
+      },
+      "date": 1460032829882
+    },
+    {
+      "type": "move",
+      "order": [
+        "bac9c7abf6b51203",
+        "504c36884348bf14",
+        "b80b19adb6d0bed3",
+        "e4563fb403746ebb",
+        "c36c9287a7ecac18",
+        "8221e91abe885b4b",
+        "7e3f942ffc96518b",
+        "28d4324781472014",
+        "7ec16c24542ee14a",
+        "f032683550ae51c1",
+        "5aec07d6a3a49dbb",
+        "ca9957a96d431249",
+        "434e4a9c7ee59cd8",
+        "6d5cd16a795da21b",
+        "031b96fd2999ef14",
+        "ed41987be4c939e8",
+        "aa501bd606bc2901",
+        "2302b0addd9633c9",
+        "8ef1bc575770a445",
+        "85012c30f09e1563",
+        "34061892e3de8ff2",
+        "8df83148db8503c1",
+        "c17cf3ed8d3e4e39",
+        "ae0b9c72ef4ca052",
+        "445145db97e129f1",
+        "2bf93f69acc48c04",
+        "e85776b3bdba16ae",
+        "4697e74f65aa0b38",
+        "018c002c8fb171c9",
+        "5820b55587f5fc66",
+        "e761cd38777c368f"
+      ],
+      "id": "8221e91abe885b4b",
+      "date": 1460032842338
+    },
+    {
+      "type": "edit",
+      "id": "c36c9287a7ecac18",
+      "item": {
+        "type": "paragraph",
+        "id": "c36c9287a7ecac18",
+        "text": "The format works by taking a baseString that contains formatting incantations, transforming each member of the valuesList according to the corresponding incantation, then substituting the transformed string for the incantation in the baseString. "
+      },
+      "date": 1460032854960
+    },
+    {
+      "type": "add",
+      "id": "870ee5ad5f826d0f",
+      "item": {
+        "type": "paragraph",
+        "id": "870ee5ad5f826d0f",
+        "text": "It also transforms [[C escape sequences]] in the baseString into their single- character equivalents."
+      },
+      "after": "c36c9287a7ecac18",
+      "date": 1460032870066
+    },
+    {
+      "type": "move",
+      "order": [
+        "bac9c7abf6b51203",
+        "504c36884348bf14",
+        "b80b19adb6d0bed3",
+        "e4563fb403746ebb",
+        "c36c9287a7ecac18",
+        "8221e91abe885b4b",
+        "870ee5ad5f826d0f",
+        "7e3f942ffc96518b",
+        "28d4324781472014",
+        "7ec16c24542ee14a",
+        "f032683550ae51c1",
+        "5aec07d6a3a49dbb",
+        "ca9957a96d431249",
+        "434e4a9c7ee59cd8",
+        "6d5cd16a795da21b",
+        "031b96fd2999ef14",
+        "ed41987be4c939e8",
+        "aa501bd606bc2901",
+        "2302b0addd9633c9",
+        "8ef1bc575770a445",
+        "85012c30f09e1563",
+        "34061892e3de8ff2",
+        "8df83148db8503c1",
+        "c17cf3ed8d3e4e39",
+        "ae0b9c72ef4ca052",
+        "445145db97e129f1",
+        "2bf93f69acc48c04",
+        "e85776b3bdba16ae",
+        "4697e74f65aa0b38",
+        "018c002c8fb171c9",
+        "5820b55587f5fc66",
+        "e761cd38777c368f"
+      ],
+      "id": "870ee5ad5f826d0f",
+      "date": 1460032872299
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "6bb37d39c767e70a"
+      },
+      "after": "7ec16c24542ee14a",
+      "id": "6bb37d39c767e70a",
+      "date": 1460032885822
+    },
+    {
+      "type": "edit",
+      "id": "031b96fd2999ef14",
+      "item": {
+        "type": "code",
+        "id": "031b96fd2999ef14",
+        "text": "put format (\"%2c\", 65) = \" A\""
+      },
+      "date": 1460032919563
+    },
+    {
+      "type": "edit",
+      "id": "6bb37d39c767e70a",
+      "item": {
+        "type": "code",
+        "id": "6bb37d39c767e70a",
+        "text": "put format (\"%2c\", 65) = \" A\""
+      },
+      "date": 1460032925560
+    },
+    {
+      "type": "edit",
+      "id": "6bb37d39c767e70a",
+      "item": {
+        "type": "code",
+        "id": "6bb37d39c767e70a",
+        "text": "put format (\"%3s\", \"H\") = \" A\""
+      },
+      "date": 1460032953189
+    },
+    {
+      "type": "edit",
+      "id": "f032683550ae51c1",
+      "item": {
+        "type": "paragraph",
+        "id": "f032683550ae51c1",
+        "text": "For example, the incantation %3s transforms \"H\" to . "
+      },
+      "date": 1460032963708
+    },
+    {
+      "type": "edit",
+      "id": "6bb37d39c767e70a",
+      "item": {
+        "type": "code",
+        "id": "6bb37d39c767e70a",
+        "text": "put format (\"%3s\", \"H\") = \" H\""
+      },
+      "date": 1460032968750
+    },
+    {
+      "type": "move",
+      "order": [
+        "bac9c7abf6b51203",
+        "504c36884348bf14",
+        "b80b19adb6d0bed3",
+        "e4563fb403746ebb",
+        "c36c9287a7ecac18",
+        "8221e91abe885b4b",
+        "870ee5ad5f826d0f",
+        "7e3f942ffc96518b",
+        "28d4324781472014",
+        "7ec16c24542ee14a",
+        "f032683550ae51c1",
+        "6bb37d39c767e70a",
+        "5aec07d6a3a49dbb",
+        "ca9957a96d431249",
+        "434e4a9c7ee59cd8",
+        "6d5cd16a795da21b",
+        "031b96fd2999ef14",
+        "ed41987be4c939e8",
+        "aa501bd606bc2901",
+        "2302b0addd9633c9",
+        "8ef1bc575770a445",
+        "85012c30f09e1563",
+        "34061892e3de8ff2",
+        "8df83148db8503c1",
+        "c17cf3ed8d3e4e39",
+        "ae0b9c72ef4ca052",
+        "445145db97e129f1",
+        "2bf93f69acc48c04",
+        "e85776b3bdba16ae",
+        "4697e74f65aa0b38",
+        "018c002c8fb171c9",
+        "5820b55587f5fc66",
+        "e761cd38777c368f"
+      ],
+      "id": "6bb37d39c767e70a",
+      "date": 1460032973055
+    },
+    {
+      "type": "edit",
+      "id": "f032683550ae51c1",
+      "item": {
+        "type": "paragraph",
+        "id": "f032683550ae51c1",
+        "text": "For example the following is true:"
+      },
+      "date": 1460032980804
+    },
+    {
+      "type": "edit",
+      "id": "6bb37d39c767e70a",
+      "item": {
+        "type": "code",
+        "id": "6bb37d39c767e70a",
+        "text": "put format (\"%3s\", \"H\") = \"  H\""
+      },
+      "date": 1460033015174
+    },
+    {
+      "type": "edit",
+      "id": "bac9c7abf6b51203",
+      "item": {
+        "type": "paragraph",
+        "id": "bac9c7abf6b51203",
+        "text": "Returns a formatted string that has been transformed according to the rules of the C \"printf()\"."
+      },
+      "date": 1465308123290,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1465308171325
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "557a7444904eb097",
+        "text": "put format(\"%03d\", someNum)"
+      },
+      "id": "557a7444904eb097",
+      "type": "add",
+      "after": "e761cd38777c368f",
+      "date": 1465308175252
+    },
+    {
+      "type": "edit",
+      "id": "557a7444904eb097",
+      "item": {
+        "type": "code",
+        "id": "557a7444904eb097",
+        "text": "put format(\"%03d\", someNum)"
+      },
+      "date": 1465308199945
+    },
+    {
+      "type": "move",
+      "order": [
+        "bac9c7abf6b51203",
+        "a50dac844a2fffeb",
+        "504c36884348bf14",
+        "557a7444904eb097",
+        "b80b19adb6d0bed3",
+        "e4563fb403746ebb",
+        "c36c9287a7ecac18",
+        "8221e91abe885b4b",
+        "870ee5ad5f826d0f",
+        "7e3f942ffc96518b",
+        "28d4324781472014",
+        "7ec16c24542ee14a",
+        "f032683550ae51c1",
+        "6bb37d39c767e70a",
+        "5aec07d6a3a49dbb",
+        "ca9957a96d431249",
+        "434e4a9c7ee59cd8",
+        "6d5cd16a795da21b",
+        "031b96fd2999ef14",
+        "ed41987be4c939e8",
+        "aa501bd606bc2901",
+        "2302b0addd9633c9",
+        "8ef1bc575770a445",
+        "85012c30f09e1563",
+        "34061892e3de8ff2",
+        "8df83148db8503c1",
+        "c17cf3ed8d3e4e39",
+        "ae0b9c72ef4ca052",
+        "445145db97e129f1",
+        "2bf93f69acc48c04",
+        "e85776b3bdba16ae",
+        "4697e74f65aa0b38",
+        "018c002c8fb171c9",
+        "5820b55587f5fc66",
+        "e761cd38777c368f"
+      ],
+      "id": "557a7444904eb097",
+      "date": 1465308209847,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "edit",
+      "id": "a50dac844a2fffeb",
+      "item": {
+        "type": "paragraph",
+        "id": "a50dac844a2fffeb",
+        "text": "Here is how you would pad a number (someNum) up to three trailing 0's:"
+      },
+      "date": 1465308247718
+    },
+    {
+      "type": "fork",
+      "date": 1465308249737
+    }
+  ]
+}

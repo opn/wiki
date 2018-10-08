@@ -1,0 +1,659 @@
+{
+  "title": "Wiki Relocation",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "bf447c03c08fa540",
+      "text": "Here I record and perhaps refine the steps required to relocate a wiki. The wiki pages themselves should move easily. But the external configuration adjustments will involve many steps."
+    },
+    {
+      "type": "paragraph",
+      "id": "31dedbe7ce58852d",
+      "text": "Test case. I would like to move xpdx.org from my old ruby server to my most modern bay.wiki.org site. I'm motivated by wanting to add the RSS plugin which uses server-side machinery not available in ruby."
+    },
+    {
+      "type": "paragraph",
+      "id": "8b0234cfd984695e",
+      "text": "I add xpdx.org to wiki.config.json. See [[Config Notes]]"
+    },
+    {
+      "type": "code",
+      "id": "a322514b5e7333fb",
+      "text": "{\n\t\"admin\": {\n\t\t\"twitter\":\"12381352\",\n\t\t\"persona\":\"ward@c2.com\"\n\t},\n\t\"farm\": true,\n\t\"security_type\": \"passportjs\",\n\t\"twitter_consumerKey\": \"eG2...\",\n\t\"twitter_consumerSecret\": \"ZnRQ...\",\n\t\"wikiDomains\": {\n\t\t\"159.203.254.26\": {},\n\t\t\"bay.wiki.org\": {},\n\t\t\"ports.fed.wiki.org\": {},\n\t\t\"xpdx.org\": {}\n\t}\n}\n"
+    },
+    {
+      "type": "code",
+      "id": "cc5c967cd787278e",
+      "text": "restart wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "2b4258d179f139c4",
+      "text": "I update nginx. /etc/nginx/sites-enabled/default"
+    },
+    {
+      "type": "code",
+      "id": "58b4acc8f2a0ec17",
+      "text": "server {\n    listen 80;\n    server_name xpdx.org *.xpdx.com *.wiki.org ..."
+    },
+    {
+      "type": "code",
+      "id": "ee0da235e910ec3e",
+      "text": "service nginx restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "5395f4f0a7a9601d",
+      "text": "See [[Federated Wiki on Digital Ocean]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "fce1803362565029",
+      "text": "I transfer the flat files with rsync or scp."
+    },
+    {
+      "type": "code",
+      "id": "63d3bacbc3d2c77e",
+      "text": "rsync -a fed.wiki.org:farm/xpdx.org .\nrsync -a xpdx.org root@bay.wiki.org:.wiki/"
+    },
+    {
+      "type": "code",
+      "id": "cbf6c49a89e99f16",
+      "text": "chown -R root:root .wiki/xpdx.org"
+    },
+    {
+      "type": "paragraph",
+      "id": "2f16f5f13562ded4",
+      "text": "I update the dns record at name.com. [https://www.name.com/account/domain/details/xpdx.org#dns site]"
+    },
+    {
+      "type": "paragraph",
+      "id": "6d06ca49e1e0c203",
+      "text": "I visit the new location, claim xpdx.org with that host's security, and add the RSS plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "19af0967da43b845",
+      "text": "See [[About Rostermatic Plugin]]"
+    },
+    {
+      "type": "reference",
+      "id": "4c18a015ab54c265",
+      "site": "xpdx.org",
+      "slug": "practice-now",
+      "title": "Practice Now",
+      "text": "Here I list my writings on the practices I find useful now. Read them, try them, and practice until they work for you. Add us to your blog reader."
+    },
+    {
+      "type": "paragraph",
+      "id": "83c7d91c4dff346c",
+      "text": "Now I must repeat the transfer and claim process for for each of xpdx.org's subdomains."
+    },
+    {
+      "type": "paragraph",
+      "id": "927db5fbbaac35af",
+      "text": "See [[Removing Unused Sites]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Relocation",
+        "story": []
+      },
+      "date": 1487428871589
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bf447c03c08fa540"
+      },
+      "id": "bf447c03c08fa540",
+      "type": "add",
+      "date": 1487428873421
+    },
+    {
+      "type": "edit",
+      "id": "bf447c03c08fa540",
+      "item": {
+        "type": "paragraph",
+        "id": "bf447c03c08fa540",
+        "text": "Here I record and perhaps refine the steps required to relocate a wiki. The wiki pages themselves should move easily. But the external configuration adjustments will involve many steps."
+      },
+      "date": 1487429072609
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "31dedbe7ce58852d"
+      },
+      "id": "31dedbe7ce58852d",
+      "type": "add",
+      "after": "bf447c03c08fa540",
+      "date": 1487429080411
+    },
+    {
+      "type": "edit",
+      "id": "31dedbe7ce58852d",
+      "item": {
+        "type": "paragraph",
+        "id": "31dedbe7ce58852d",
+        "text": "Test case. I would like to move xpdx.org from my old ruby server to my most modern bay.wiki.org site. I'm motivated by wanting to add the RSS plugin which uses server-side machinery not available in ruby."
+      },
+      "date": 1487429215846
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a322514b5e7333fb"
+      },
+      "id": "a322514b5e7333fb",
+      "type": "add",
+      "after": "31dedbe7ce58852d",
+      "date": 1487429332957
+    },
+    {
+      "type": "edit",
+      "id": "a322514b5e7333fb",
+      "item": {
+        "type": "code",
+        "id": "a322514b5e7333fb",
+        "text": "{\n\t\"admin\": {\"twitter\":\"12381352\", \"persona\":\"ward@c2.com\"},\n\t\"farm\": true,\n\t\"security_type\": \"passportjs\",\n\t\"twitter_consumerKey\": \"eG2...\",\n\t\"twitter_consumerSecret\": \"ZnRQ...\",\n\t\"wikiDomains\": {\n\t\t\"159.203.254.26\": {},\n\t\t\"bay.wiki.org\": {},\n\t\t\"ports.fed.wiki.org\": {},\n\t\t\"xpdx.org\": {}\n\t}\n}\n"
+      },
+      "date": 1487429394177
+    },
+    {
+      "type": "edit",
+      "id": "a322514b5e7333fb",
+      "item": {
+        "type": "code",
+        "id": "a322514b5e7333fb",
+        "text": "{\n\t\"admin\": {\n\"twitter\":\"12381352\", \"persona\":\"ward@c2.com\"},\n\t\"farm\": true,\n\t\"security_type\": \"passportjs\",\n\t\"twitter_consumerKey\": \"eG2...\",\n\t\"twitter_consumerSecret\": \"ZnRQ...\",\n\t\"wikiDomains\": {\n\t\t\"159.203.254.26\": {},\n\t\t\"bay.wiki.org\": {},\n\t\t\"ports.fed.wiki.org\": {},\n\t\t\"xpdx.org\": {}\n\t}\n}\n"
+      },
+      "date": 1487429408258
+    },
+    {
+      "type": "edit",
+      "id": "a322514b5e7333fb",
+      "item": {
+        "type": "code",
+        "id": "a322514b5e7333fb",
+        "text": "{\n\t\"admin\": {\n\t\t\"twitter\":\"12381352\",\n\t\t\"persona\":\"ward@c2.com\"\n\t},\n\t\"farm\": true,\n\t\"security_type\": \"passportjs\",\n\t\"twitter_consumerKey\": \"eG2...\",\n\t\"twitter_consumerSecret\": \"ZnRQ...\",\n\t\"wikiDomains\": {\n\t\t\"159.203.254.26\": {},\n\t\t\"bay.wiki.org\": {},\n\t\t\"ports.fed.wiki.org\": {},\n\t\t\"xpdx.org\": {}\n\t}\n}\n"
+      },
+      "date": 1487429444685
+    },
+    {
+      "type": "add",
+      "id": "8b0234cfd984695e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b0234cfd984695e",
+        "text": "I add xpdx.org to wiki.config.json"
+      },
+      "after": "31dedbe7ce58852d",
+      "date": 1487429487816
+    },
+    {
+      "type": "edit",
+      "id": "8b0234cfd984695e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b0234cfd984695e",
+        "text": "I add xpdx.org to wiki.config.json. See [[Config Notes]]"
+      },
+      "date": 1487429584886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2b4258d179f139c4"
+      },
+      "id": "2b4258d179f139c4",
+      "type": "add",
+      "after": "a322514b5e7333fb",
+      "date": 1487439955047
+    },
+    {
+      "type": "edit",
+      "id": "2b4258d179f139c4",
+      "item": {
+        "type": "paragraph",
+        "id": "2b4258d179f139c4",
+        "text": "I update nginx. See [[Federated Wiki on Digital Ocean]]"
+      },
+      "date": 1487439974646
+    },
+    {
+      "type": "edit",
+      "id": "2b4258d179f139c4",
+      "item": {
+        "type": "paragraph",
+        "id": "2b4258d179f139c4",
+        "text": "I update nginx. /etc/nginx/sites-enabled/default See [[Federated Wiki on Digital Ocean]]"
+      },
+      "date": 1487441866262
+    },
+    {
+      "type": "edit",
+      "id": "2b4258d179f139c4",
+      "item": {
+        "type": "paragraph",
+        "id": "2b4258d179f139c4",
+        "text": "I update nginx. vi /etc/nginx/sites-enabled/default See [[Federated Wiki on Digital Ocean]]"
+      },
+      "date": 1487441876095
+    },
+    {
+      "type": "edit",
+      "id": "2b4258d179f139c4",
+      "item": {
+        "type": "paragraph",
+        "id": "2b4258d179f139c4",
+        "text": "I update nginx. /etc/nginx/sites-enabled/default"
+      },
+      "date": 1487441892615
+    },
+    {
+      "type": "add",
+      "id": "5395f4f0a7a9601d",
+      "item": {
+        "type": "paragraph",
+        "id": "5395f4f0a7a9601d",
+        "text": "See [[Federated Wiki on Digital Ocean]]"
+      },
+      "after": "2b4258d179f139c4",
+      "date": 1487441893768
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "58b4acc8f2a0ec17"
+      },
+      "id": "58b4acc8f2a0ec17",
+      "type": "add",
+      "after": "5395f4f0a7a9601d",
+      "date": 1487441991817
+    },
+    {
+      "type": "edit",
+      "id": "58b4acc8f2a0ec17",
+      "item": {
+        "type": "code",
+        "id": "58b4acc8f2a0ec17",
+        "text": "server {\n    listen 80;\n\n    server_name *.xpdx.com *.wiki.org *.fed.wiki *.c2.com 159.203.254.26;\n\n..."
+      },
+      "date": 1487442002937
+    },
+    {
+      "type": "edit",
+      "id": "58b4acc8f2a0ec17",
+      "item": {
+        "type": "code",
+        "id": "58b4acc8f2a0ec17",
+        "text": "server {\n    listen 80;\n    server_name *.xpdx.com *.wiki.org *.fed.wiki ..."
+      },
+      "date": 1487442034986
+    },
+    {
+      "type": "move",
+      "order": [
+        "bf447c03c08fa540",
+        "31dedbe7ce58852d",
+        "8b0234cfd984695e",
+        "a322514b5e7333fb",
+        "2b4258d179f139c4",
+        "58b4acc8f2a0ec17",
+        "5395f4f0a7a9601d"
+      ],
+      "id": "5395f4f0a7a9601d",
+      "date": 1487442047229
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ee0da235e910ec3e"
+      },
+      "id": "ee0da235e910ec3e",
+      "type": "add",
+      "after": "5395f4f0a7a9601d",
+      "date": 1487442219731
+    },
+    {
+      "type": "edit",
+      "id": "ee0da235e910ec3e",
+      "item": {
+        "type": "code",
+        "id": "ee0da235e910ec3e",
+        "text": "service nginx restart"
+      },
+      "date": 1487442225716
+    },
+    {
+      "type": "move",
+      "order": [
+        "bf447c03c08fa540",
+        "31dedbe7ce58852d",
+        "8b0234cfd984695e",
+        "a322514b5e7333fb",
+        "2b4258d179f139c4",
+        "58b4acc8f2a0ec17",
+        "ee0da235e910ec3e",
+        "5395f4f0a7a9601d"
+      ],
+      "id": "ee0da235e910ec3e",
+      "date": 1487442230038
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc5c967cd787278e"
+      },
+      "id": "cc5c967cd787278e",
+      "type": "add",
+      "after": "5395f4f0a7a9601d",
+      "date": 1487442233649
+    },
+    {
+      "type": "edit",
+      "id": "cc5c967cd787278e",
+      "item": {
+        "type": "code",
+        "id": "cc5c967cd787278e",
+        "text": "restart wiki"
+      },
+      "date": 1487442241717
+    },
+    {
+      "type": "move",
+      "order": [
+        "bf447c03c08fa540",
+        "31dedbe7ce58852d",
+        "8b0234cfd984695e",
+        "a322514b5e7333fb",
+        "cc5c967cd787278e",
+        "2b4258d179f139c4",
+        "58b4acc8f2a0ec17",
+        "ee0da235e910ec3e",
+        "5395f4f0a7a9601d"
+      ],
+      "id": "cc5c967cd787278e",
+      "date": 1487442245219
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "63d3bacbc3d2c77e"
+      },
+      "id": "63d3bacbc3d2c77e",
+      "type": "add",
+      "after": "5395f4f0a7a9601d",
+      "date": 1487443182076
+    },
+    {
+      "type": "edit",
+      "id": "63d3bacbc3d2c77e",
+      "item": {
+        "type": "code",
+        "id": "63d3bacbc3d2c77e",
+        "text": "rsync -a fed.wiki.org:wiki/farm-8080/data/farm/xpdx.org ."
+      },
+      "date": 1487443188435
+    },
+    {
+      "type": "edit",
+      "id": "63d3bacbc3d2c77e",
+      "item": {
+        "type": "code",
+        "id": "63d3bacbc3d2c77e",
+        "text": "rsync -a fed.wiki.org:farm/xpdx.org ."
+      },
+      "date": 1487443223400
+    },
+    {
+      "type": "edit",
+      "id": "63d3bacbc3d2c77e",
+      "item": {
+        "type": "code",
+        "id": "63d3bacbc3d2c77e",
+        "text": "rsync -a fed.wiki.org:farm/xpdx.org .\nrsync -a xpdx.org root@bay.wiki.org:.wiki/"
+      },
+      "date": 1487443256102
+    },
+    {
+      "type": "edit",
+      "id": "63d3bacbc3d2c77e",
+      "item": {
+        "type": "code",
+        "id": "63d3bacbc3d2c77e",
+        "text": "rsync -a fed.wiki.org:farm/xpdx.org .\nrsync -a xpdx.org root@bay.wiki.org:.wiki/\nssh root@bay.wiki.org 'chown -R root:root .wiki/xpdx.org'"
+      },
+      "date": 1487443629586
+    },
+    {
+      "type": "edit",
+      "id": "63d3bacbc3d2c77e",
+      "item": {
+        "type": "code",
+        "id": "63d3bacbc3d2c77e",
+        "text": "rsync -a fed.wiki.org:farm/xpdx.org .\nrsync -a xpdx.org root@bay.wiki.org:.wiki/\nssh root@bay.wiki.org 'chown -R root .wiki/xpdx.org'"
+      },
+      "date": 1487443646990
+    },
+    {
+      "type": "add",
+      "id": "fce1803362565029",
+      "item": {
+        "type": "paragraph",
+        "id": "fce1803362565029",
+        "text": "I transfer the flat files for the site with rsync or scp."
+      },
+      "after": "5395f4f0a7a9601d",
+      "date": 1487443768803
+    },
+    {
+      "type": "edit",
+      "id": "fce1803362565029",
+      "item": {
+        "type": "paragraph",
+        "id": "fce1803362565029",
+        "text": "I transfer the flat files for the site with rsync or scp. "
+      },
+      "date": 1487443809159
+    },
+    {
+      "type": "edit",
+      "id": "63d3bacbc3d2c77e",
+      "item": {
+        "type": "code",
+        "id": "63d3bacbc3d2c77e",
+        "text": "rsync -a fed.wiki.org:farm/xpdx.org .\nrsync -a xpdx.org root@bay.wiki.org:.wiki/"
+      },
+      "date": 1487443871256
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cbf6c49a89e99f16"
+      },
+      "id": "cbf6c49a89e99f16",
+      "type": "add",
+      "after": "63d3bacbc3d2c77e",
+      "date": 1487443873013
+    },
+    {
+      "type": "edit",
+      "id": "cbf6c49a89e99f16",
+      "item": {
+        "type": "code",
+        "id": "cbf6c49a89e99f16",
+        "text": "chown -R root:root .wiki/xpdx.org"
+      },
+      "date": 1487443889681
+    },
+    {
+      "type": "edit",
+      "id": "fce1803362565029",
+      "item": {
+        "type": "paragraph",
+        "id": "fce1803362565029",
+        "text": "I transfer the flat files with rsync or scp."
+      },
+      "date": 1487443944818
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2f16f5f13562ded4"
+      },
+      "id": "2f16f5f13562ded4",
+      "type": "add",
+      "after": "cbf6c49a89e99f16",
+      "date": 1487444190069
+    },
+    {
+      "type": "edit",
+      "id": "2f16f5f13562ded4",
+      "item": {
+        "type": "paragraph",
+        "id": "2f16f5f13562ded4",
+        "text": "I update the dns record at name.com. [https://www.name.com/account/domain/details/xpdx.org#dns site]"
+      },
+      "date": 1487444225255
+    },
+    {
+      "type": "edit",
+      "id": "58b4acc8f2a0ec17",
+      "item": {
+        "type": "code",
+        "id": "58b4acc8f2a0ec17",
+        "text": "server {\n    listen 80;\n    server_name xpdx.org *.xpdx.com *.wiki.org ..."
+      },
+      "date": 1487444850730
+    },
+    {
+      "type": "add",
+      "id": "6d06ca49e1e0c203",
+      "item": {
+        "type": "paragraph",
+        "id": "6d06ca49e1e0c203",
+        "text": "I visit the new location and claim xpdx.org with the security configured there."
+      },
+      "after": "2f16f5f13562ded4",
+      "date": 1487445265343
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4c18a015ab54c265"
+      },
+      "id": "4c18a015ab54c265",
+      "type": "add",
+      "after": "6d06ca49e1e0c203",
+      "date": 1487445270279
+    },
+    {
+      "type": "edit",
+      "id": "4c18a015ab54c265",
+      "item": {
+        "type": "reference",
+        "id": "4c18a015ab54c265",
+        "site": "xpdx.org",
+        "slug": "practice-now",
+        "title": "Practice Now",
+        "text": "Here I will list my writings on the practices I find useful now. Read them, try them, and practice until they work for you. Add us to your blog reader."
+      },
+      "date": 1487445305816
+    },
+    {
+      "type": "edit",
+      "id": "6d06ca49e1e0c203",
+      "item": {
+        "type": "paragraph",
+        "id": "6d06ca49e1e0c203",
+        "text": "I visit the new location, claim xpdx.org with that host's security, and add the RSS plugin."
+      },
+      "date": 1487445391700
+    },
+    {
+      "type": "edit",
+      "id": "4c18a015ab54c265",
+      "item": {
+        "type": "reference",
+        "id": "4c18a015ab54c265",
+        "site": "xpdx.org",
+        "slug": "practice-now",
+        "title": "Practice Now",
+        "text": "Here I list my writings on the practices I find useful now. Read them, try them, and practice until they work for you. Add us to your blog reader."
+      },
+      "date": 1487445422094
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "83c7d91c4dff346c"
+      },
+      "id": "83c7d91c4dff346c",
+      "type": "add",
+      "after": "4c18a015ab54c265",
+      "date": 1487445885653
+    },
+    {
+      "type": "edit",
+      "id": "83c7d91c4dff346c",
+      "item": {
+        "type": "paragraph",
+        "id": "83c7d91c4dff346c",
+        "text": "Now I must repeat the process for subdomains."
+      },
+      "date": 1487445922059
+    },
+    {
+      "type": "edit",
+      "id": "83c7d91c4dff346c",
+      "item": {
+        "type": "paragraph",
+        "id": "83c7d91c4dff346c",
+        "text": "Now I must repeat the transfer and claim process for subdomains."
+      },
+      "date": 1487445950603
+    },
+    {
+      "type": "edit",
+      "id": "83c7d91c4dff346c",
+      "item": {
+        "type": "paragraph",
+        "id": "83c7d91c4dff346c",
+        "text": "Now I must repeat the transfer and claim process for for each of xpdx.org's subdomains."
+      },
+      "date": 1487445964194
+    },
+    {
+      "type": "add",
+      "id": "19af0967da43b845",
+      "item": {
+        "type": "paragraph",
+        "id": "19af0967da43b845",
+        "text": "See [[About Rostermatic Plugin]]"
+      },
+      "after": "6d06ca49e1e0c203",
+      "date": 1487446084746
+    },
+    {
+      "type": "add",
+      "id": "927db5fbbaac35af",
+      "item": {
+        "type": "paragraph",
+        "id": "927db5fbbaac35af",
+        "text": "See [[Removing Unused Sites]]"
+      },
+      "after": "83c7d91c4dff346c",
+      "date": 1487453022924
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1489236212705
+    }
+  ]
+}

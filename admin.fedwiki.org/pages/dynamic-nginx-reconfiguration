@@ -1,0 +1,718 @@
+{
+  "title": "Dynamic Nginx Reconfiguration",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "adf63d50cc5d6104",
+      "text": "You can find some good info on this here:\n"
+    },
+    {
+      "type": "markdown",
+      "id": "48f4cc0339481cdf",
+      "text": "- https://serverfault.com/questions/108261/how-to-make-a-modification-take-affect-without-restarting-nginx serverfault.com\n- https://stackoverflow.com/questions/8982717/is-there-any-way-to-configure-nginx-or-other-quick-reverse-proxy-dynamically"
+    },
+    {
+      "type": "markdown",
+      "id": "bb45d2f3fc3d0157",
+      "text": "Nginx has two methods of changing configuration:\n\n1. HUP signal to the master process results in \"reload\". Nginx starts a bunch of new workers and lets the old workers to shutdown gracefully, i.e. they finish existing requests. There is no interruption of service. This method of configuration change is very lightweight and quick, but has few limitations: you cannot change cache zones or re-compile Perl scripts.\n\n1. USR2 signal, then WINCH and then QUIT to the master process result in \"executable upgrade\" and this sequence lets completely re-read whole configuration and even upgrade the Nginx executable. It reloads disk caches as well (which maybe time consuming). This method results in no interruption of service too."
+    },
+    {
+      "type": "paragraph",
+      "id": "cc33524917dcc966",
+      "text": "[[Nginx]] supports the following signals :\n\n"
+    },
+    {
+      "type": "code",
+      "id": "a8d0bae0765b5733",
+      "text": "TERM, INT - Quick shutdown\nQUIT - Graceful shutdown\nHUP - Configuration reload: Start the new worker processes with a new configuration, Gracefully shutdown the old worker processes\nUSR1 - Reopen the log files\nUSR2 - Upgrade Executable on the fly\nWINCH - Gracefully shutdown the worker processes"
+    },
+    {
+      "type": "markdown",
+      "id": "a2acb73b4b50d035",
+      "text": "HUP is what you are looking for, so:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "2a423de27dfd9dc8",
+      "text": "sudo kill -HUP pid (nginx pid)\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8ae9482f887a7515",
+      "text": "- http://nginx.org/en/docs/control.html"
+    },
+    {
+      "type": "markdown",
+      "id": "b7d073e86941d39e",
+      "text": "# With Caddy\n"
+    },
+    {
+      "type": "markdown",
+      "id": "828cb2062b46cfcd",
+      "text": "If you can determine in advance where the proxy needs to go (i.e. from app state or some external check), you could generate your Caddyfile string in your application and feed it to the Caddy instance each time the requirements change (should be a graceful reload) - [https://caddy.community/t/caddy-as-a-library-dynamic-proxying/2664 caddy.community]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "44212bc7db01e4ed",
+      "text": "- Caddy as a library - [https://godoc.org/github.com/mholt/caddy godoc]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "2cb47e5dc1d5abd7",
+      "text": "If you can’t (i.e. you need to determine the destination from some aspect of the request itself), it’s not going to be pretty, but you could start Caddy and then start up your own localhost listener, proxying everything to yourself, inspecting the request, and proxying it onwards.\n\nThe second is a bit of a poor option because your app then needs to talk HTTP(S) anyway, so there’s little difference between this and having your own app without Caddy and just putting Caddy in front separately."
+    },
+    {
+      "type": "markdown",
+      "id": "5addfec884c4b74d",
+      "text": "# With Nginx Plus"
+    },
+    {
+      "type": "paragraph",
+      "id": "cbaaaa95ec0c98a0",
+      "text": "Update the list of available servers in your DNS and NGINX Plus automatically picks up the changes - [https://www.nginx.com/blog/dynamic-reconfiguration-with-nginx-plus/ nginx.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5aca29a52499dd12",
+      "text": "To use DNS‑based reconfiguration, create multiple A records with the same hostname but different IP addresses, as in this example from Digital Ocean. The result is similar to what happens with Round Robin DNS, except that in this case NGINX Plus doesn’t just use the first address in the list from DNS as browser clients tend to do. "
+    },
+    {
+      "type": "paragraph",
+      "id": "cde5ea77b37455b3",
+      "text": "Instead it applies the configured load‑balancing algorithm to all the servers in the list, which can be Least Connections, Round Robin, or any of its other load balancing algorithms. NGINX Plus is effectively using the DNS server as a database for upstream servers."
+    },
+    {
+      "type": "markdown",
+      "id": "106f5bacdf11db54",
+      "text": "# Using an HTTP‑Based API\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "0eb98956f770223f",
+      "text": "NGINX Plus also provides an HTTP interface for adding, removing, and modifying backend servers dynamically and without having to reload the configuration. This is useful for autoscaling and when you want to take a server down temporarily for maintenance. It’s especially great for transient changes, as changes made using this interface are not preserved when you restart NGINX Plus or reload its configuration - [https://www.nginx.com/blog/dynamic-reconfiguration-with-nginx-plus/ nginx.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "91e39e6cf1c64aff",
+      "text": "# See also\n"
+    },
+    {
+      "type": "markdown",
+      "id": "03ce1073fe34e1e8",
+      "text": "- [[Nginx Plus]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Dynamic Nginx Reconfiguration",
+        "story": []
+      },
+      "date": 1520512920076
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bb45d2f3fc3d0157"
+      },
+      "id": "bb45d2f3fc3d0157",
+      "type": "add",
+      "date": 1520512921726
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "paragraph",
+        "id": "bb45d2f3fc3d0157",
+        "text": "With NGINX Plus, your DNS server can keep the definitive list of the servers that belong to an upstream group. Update the list of available servers in your DNS and NGINX Plus automatically picks up the changes.\n\nTo use DNS‑based reconfiguration, create multiple A records with the same hostname but different IP addresses, as in this example from Digital Ocean. The result is similar to what happens with Round Robin DNS, except that in this case NGINX Plus doesn’t just use the first address in the list from DNS as browser clients tend to do. Instead it applies the configured load‑balancing algorithm to all the servers in the list, which can be Least Connections, Round Robin, or any of its other load balancing algorithms. NGINX Plus is effectively using the DNS server as a database for upstream servers."
+      },
+      "date": 1520512947200
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "paragraph",
+        "id": "bb45d2f3fc3d0157",
+        "text": "With NGINX Plus, your DNS server can keep the definitive list of the servers that belong to an upstream group. Update the list of available servers in your DNS and NGINX Plus automatically picks up the changes."
+      },
+      "date": 1520512956217
+    },
+    {
+      "type": "add",
+      "id": "5aca29a52499dd12",
+      "item": {
+        "type": "paragraph",
+        "id": "5aca29a52499dd12",
+        "text": "To use DNS‑based reconfiguration, create multiple A records with the same hostname but different IP addresses, as in this example from Digital Ocean. The result is similar to what happens with Round Robin DNS, except that in this case NGINX Plus doesn’t just use the first address in the list from DNS as browser clients tend to do. Instead it applies the configured load‑balancing algorithm to all the servers in the list, which can be Least Connections, Round Robin, or any of its other load balancing algorithms. NGINX Plus is effectively using the DNS server as a database for upstream servers."
+      },
+      "after": "bb45d2f3fc3d0157",
+      "date": 1520512962354
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "paragraph",
+        "id": "bb45d2f3fc3d0157",
+        "text": "Update the list of available servers in your DNS and NGINX Plus automatically picks up the changes - [https://www.nginx.com/blog/dynamic-reconfiguration-with-nginx-plus/ nginx.com]"
+      },
+      "date": 1520513002111
+    },
+    {
+      "type": "edit",
+      "id": "5aca29a52499dd12",
+      "item": {
+        "type": "paragraph",
+        "id": "5aca29a52499dd12",
+        "text": "To use DNS‑based reconfiguration, create multiple A records with the same hostname but different IP addresses, as in this example from Digital Ocean. The result is similar to what happens with Round Robin DNS, except that in this case NGINX Plus doesn’t just use the first address in the list from DNS as browser clients tend to do. "
+      },
+      "date": 1520513012746
+    },
+    {
+      "type": "add",
+      "id": "cde5ea77b37455b3",
+      "item": {
+        "type": "paragraph",
+        "id": "cde5ea77b37455b3",
+        "text": "Instead it applies the configured load‑balancing algorithm to all the servers in the list, which can be Least Connections, Round Robin, or any of its other load balancing algorithms. NGINX Plus is effectively using the DNS server as a database for upstream servers."
+      },
+      "after": "5aca29a52499dd12",
+      "date": 1520513015886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "106f5bacdf11db54"
+      },
+      "id": "106f5bacdf11db54",
+      "type": "add",
+      "after": "cde5ea77b37455b3",
+      "date": 1520513052755
+    },
+    {
+      "type": "edit",
+      "id": "106f5bacdf11db54",
+      "item": {
+        "type": "paragraph",
+        "id": "106f5bacdf11db54",
+        "text": "# On-The-Fly Configuration Using an HTTP‑Based API\n"
+      },
+      "date": 1520513067435
+    },
+    {
+      "type": "edit",
+      "id": "106f5bacdf11db54",
+      "item": {
+        "type": "markdown",
+        "id": "106f5bacdf11db54",
+        "text": "# On-The-Fly Configuration Using an HTTP‑Based API\n"
+      },
+      "date": 1520513069372
+    },
+    {
+      "type": "add",
+      "id": "0eb98956f770223f",
+      "item": {
+        "type": "paragraph",
+        "id": "0eb98956f770223f",
+        "text": "NGINX Plus also provides an HTTP interface for adding, removing, and modifying backend servers dynamically and without having to reload the configuration. This is useful for autoscaling and when you want to take a server down temporarily for maintenance. It’s especially great for transient changes, as changes made using this interface are not preserved when you restart NGINX Plus or reload its configuration."
+      },
+      "after": "106f5bacdf11db54",
+      "date": 1520513071365
+    },
+    {
+      "type": "edit",
+      "id": "106f5bacdf11db54",
+      "item": {
+        "type": "markdown",
+        "id": "106f5bacdf11db54",
+        "text": "# Using an HTTP‑Based API\n"
+      },
+      "date": 1520513083265
+    },
+    {
+      "type": "edit",
+      "id": "0eb98956f770223f",
+      "item": {
+        "type": "paragraph",
+        "id": "0eb98956f770223f",
+        "text": "NGINX Plus also provides an HTTP interface for adding, removing, and modifying backend servers dynamically and without having to reload the configuration. This is useful for autoscaling and when you want to take a server down temporarily for maintenance. It’s especially great for transient changes, as changes made using this interface are not preserved when you restart NGINX Plus or reload its configuration - [https://www.nginx.com/blog/dynamic-reconfiguration-with-nginx-plus/ nginx.com]"
+      },
+      "date": 1520513101626
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "paragraph",
+        "id": "bb45d2f3fc3d0157",
+        "text": "# With Nginx Plus"
+      },
+      "date": 1520513233439
+    },
+    {
+      "type": "add",
+      "id": "cbaaaa95ec0c98a0",
+      "item": {
+        "type": "paragraph",
+        "id": "cbaaaa95ec0c98a0",
+        "text": "Update the list of available servers in your DNS and NGINX Plus automatically picks up the changes - [https://www.nginx.com/blog/dynamic-reconfiguration-with-nginx-plus/ nginx.com]"
+      },
+      "after": "bb45d2f3fc3d0157",
+      "date": 1520513235326
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "paragraph",
+        "id": "bb45d2f3fc3d0157",
+        "text": "Nginx has two methods of changing configuration:\n\nHUP signal to the master process results in \"reload\". Nginx starts a bunch of new workers and lets the old workers to shutdown gracefully, i.e. they finish existing requests. There is no interruption of service. This method of configuration change is very lightweight and quick, but has few limitations: you cannot change cache zones or re-compile Perl scripts.\n\nUSR2 signal, then WINCH and then QUIT to the master process result in \"executable upgrade\" and this sequence lets completely re-read whole configuration and even upgrade the Nginx executable. It reloads disk caches as well (which maybe time consuming). This method results in no interruption of service too."
+      },
+      "date": 1520513237361
+    },
+    {
+      "type": "add",
+      "id": "b7d073e86941d39e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7d073e86941d39e",
+        "text": "# With Nginx Plus"
+      },
+      "after": "bb45d2f3fc3d0157",
+      "date": 1520513239366
+    },
+    {
+      "type": "edit",
+      "id": "b7d073e86941d39e",
+      "item": {
+        "type": "markdown",
+        "id": "b7d073e86941d39e",
+        "text": "# With Nginx Plus"
+      },
+      "date": 1520513240627
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "paragraph",
+        "id": "bb45d2f3fc3d0157",
+        "text": "Nginx has two methods of changing configuration:\n\n1. HUP signal to the master process results in \"reload\". Nginx starts a bunch of new workers and lets the old workers to shutdown gracefully, i.e. they finish existing requests. There is no interruption of service. This method of configuration change is very lightweight and quick, but has few limitations: you cannot change cache zones or re-compile Perl scripts.\n\n1. USR2 signal, then WINCH and then QUIT to the master process result in \"executable upgrade\" and this sequence lets completely re-read whole configuration and even upgrade the Nginx executable. It reloads disk caches as well (which maybe time consuming). This method results in no interruption of service too."
+      },
+      "date": 1520513260967
+    },
+    {
+      "type": "edit",
+      "id": "bb45d2f3fc3d0157",
+      "item": {
+        "type": "markdown",
+        "id": "bb45d2f3fc3d0157",
+        "text": "Nginx has two methods of changing configuration:\n\n1. HUP signal to the master process results in \"reload\". Nginx starts a bunch of new workers and lets the old workers to shutdown gracefully, i.e. they finish existing requests. There is no interruption of service. This method of configuration change is very lightweight and quick, but has few limitations: you cannot change cache zones or re-compile Perl scripts.\n\n1. USR2 signal, then WINCH and then QUIT to the master process result in \"executable upgrade\" and this sequence lets completely re-read whole configuration and even upgrade the Nginx executable. It reloads disk caches as well (which maybe time consuming). This method results in no interruption of service too."
+      },
+      "date": 1520513261893
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "91e39e6cf1c64aff"
+      },
+      "id": "91e39e6cf1c64aff",
+      "type": "add",
+      "after": "0eb98956f770223f",
+      "date": 1520513286681
+    },
+    {
+      "type": "edit",
+      "id": "91e39e6cf1c64aff",
+      "item": {
+        "type": "markdown",
+        "id": "91e39e6cf1c64aff",
+        "text": "# See also\n"
+      },
+      "date": 1520513305353
+    },
+    {
+      "type": "add",
+      "id": "ccb1cd6f39bcdad7",
+      "item": {
+        "type": "markdown",
+        "id": "ccb1cd6f39bcdad7",
+        "text": "- [[Dynamic Nginx Reconfiguration]]\n- [[Dynamic Nginx Reconfiguration]]"
+      },
+      "after": "91e39e6cf1c64aff",
+      "date": 1520513311662
+    },
+    {
+      "type": "edit",
+      "id": "ccb1cd6f39bcdad7",
+      "item": {
+        "type": "markdown",
+        "id": "ccb1cd6f39bcdad7",
+        "text": "- [[Adding a new site]]\n- [[Dynamic Nginx Reconfiguration]]"
+      },
+      "date": 1520513319969
+    },
+    {
+      "type": "remove",
+      "id": "ccb1cd6f39bcdad7",
+      "date": 1520513331837
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "adf63d50cc5d6104"
+      },
+      "id": "adf63d50cc5d6104",
+      "type": "add",
+      "after": "91e39e6cf1c64aff",
+      "date": 1520513520529
+    },
+    {
+      "type": "move",
+      "order": [
+        "adf63d50cc5d6104",
+        "bb45d2f3fc3d0157",
+        "b7d073e86941d39e",
+        "cbaaaa95ec0c98a0",
+        "5aca29a52499dd12",
+        "cde5ea77b37455b3",
+        "106f5bacdf11db54",
+        "0eb98956f770223f",
+        "91e39e6cf1c64aff"
+      ],
+      "id": "adf63d50cc5d6104",
+      "date": 1520513522780
+    },
+    {
+      "type": "edit",
+      "id": "adf63d50cc5d6104",
+      "item": {
+        "type": "paragraph",
+        "id": "adf63d50cc5d6104",
+        "text": "You can find some good info on this here:- [https://serverfault.com/questions/108261/how-to-make-a-modification-take-affect-without-restarting-nginx serverfault.com]"
+      },
+      "date": 1520513561377
+    },
+    {
+      "type": "edit",
+      "id": "adf63d50cc5d6104",
+      "item": {
+        "type": "markdown",
+        "id": "adf63d50cc5d6104",
+        "text": "You can find some good info on this here:- [https://serverfault.com/questions/108261/how-to-make-a-modification-take-affect-without-restarting-nginx serverfault.com]"
+      },
+      "date": 1520513563139
+    },
+    {
+      "type": "edit",
+      "id": "adf63d50cc5d6104",
+      "item": {
+        "type": "markdown",
+        "id": "adf63d50cc5d6104",
+        "text": "You can find some good info on this here:\n"
+      },
+      "date": 1520513567492
+    },
+    {
+      "type": "add",
+      "id": "48f4cc0339481cdf",
+      "item": {
+        "type": "markdown",
+        "id": "48f4cc0339481cdf",
+        "text": "- https://serverfault.com/questions/108261/how-to-make-a-modification-take-affect-without-restarting-nginx serverfault.com]"
+      },
+      "after": "adf63d50cc5d6104",
+      "date": 1520513578019
+    },
+    {
+      "type": "edit",
+      "id": "48f4cc0339481cdf",
+      "item": {
+        "type": "markdown",
+        "id": "48f4cc0339481cdf",
+        "text": "- https://serverfault.com/questions/108261/how-to-make-a-modification-take-affect-without-restarting-nginx serverfault.com\n- https://stackoverflow.com/questions/8982717/is-there-any-way-to-configure-nginx-or-other-quick-reverse-proxy-dynamically"
+      },
+      "date": 1520513601842
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc33524917dcc966"
+      },
+      "id": "cc33524917dcc966",
+      "type": "add",
+      "after": "91e39e6cf1c64aff",
+      "date": 1520513669466
+    },
+    {
+      "type": "move",
+      "order": [
+        "adf63d50cc5d6104",
+        "48f4cc0339481cdf",
+        "bb45d2f3fc3d0157",
+        "cc33524917dcc966",
+        "b7d073e86941d39e",
+        "cbaaaa95ec0c98a0",
+        "5aca29a52499dd12",
+        "cde5ea77b37455b3",
+        "106f5bacdf11db54",
+        "0eb98956f770223f",
+        "91e39e6cf1c64aff"
+      ],
+      "id": "cc33524917dcc966",
+      "date": 1520513672254
+    },
+    {
+      "type": "edit",
+      "id": "cc33524917dcc966",
+      "item": {
+        "type": "paragraph",
+        "id": "cc33524917dcc966",
+        "text": "nginx supports the following signals :\n\nTERM, INT - Quick shutdown\nQUIT - Graceful shutdown\nHUP - Configuration reload: Start the new worker processes with a new configuration, Gracefully shutdown the old worker processes\nUSR1 - Reopen the log files\nUSR2 - Upgrade Executable on the fly\nWINCH - Gracefully shutdown the worker processes\n"
+      },
+      "date": 1520513704158
+    },
+    {
+      "type": "add",
+      "id": "a2acb73b4b50d035",
+      "item": {
+        "type": "factory",
+        "id": "a2acb73b4b50d035",
+        "text": "HUP is what you are looking for, so sudo kill -HUP pid (nginx pid)\n\n- http://nginx.org/en/docs/control.html"
+      },
+      "after": "cc33524917dcc966",
+      "date": 1520513704945
+    },
+    {
+      "type": "edit",
+      "id": "cc33524917dcc966",
+      "item": {
+        "type": "paragraph",
+        "id": "cc33524917dcc966",
+        "text": "[[Nginx]] supports the following signals :\n\n"
+      },
+      "date": 1520513724543
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a8d0bae0765b5733"
+      },
+      "id": "a8d0bae0765b5733",
+      "type": "add",
+      "after": "91e39e6cf1c64aff",
+      "date": 1520513726298
+    },
+    {
+      "type": "move",
+      "order": [
+        "adf63d50cc5d6104",
+        "48f4cc0339481cdf",
+        "bb45d2f3fc3d0157",
+        "a8d0bae0765b5733",
+        "cc33524917dcc966",
+        "a2acb73b4b50d035",
+        "b7d073e86941d39e",
+        "cbaaaa95ec0c98a0",
+        "5aca29a52499dd12",
+        "cde5ea77b37455b3",
+        "106f5bacdf11db54",
+        "0eb98956f770223f",
+        "91e39e6cf1c64aff"
+      ],
+      "id": "a8d0bae0765b5733",
+      "date": 1520513730327
+    },
+    {
+      "type": "move",
+      "order": [
+        "adf63d50cc5d6104",
+        "48f4cc0339481cdf",
+        "bb45d2f3fc3d0157",
+        "cc33524917dcc966",
+        "a8d0bae0765b5733",
+        "a2acb73b4b50d035",
+        "b7d073e86941d39e",
+        "cbaaaa95ec0c98a0",
+        "5aca29a52499dd12",
+        "cde5ea77b37455b3",
+        "106f5bacdf11db54",
+        "0eb98956f770223f",
+        "91e39e6cf1c64aff"
+      ],
+      "id": "cc33524917dcc966",
+      "date": 1520513732243
+    },
+    {
+      "type": "edit",
+      "id": "a8d0bae0765b5733",
+      "item": {
+        "type": "code",
+        "id": "a8d0bae0765b5733",
+        "text": "TERM, INT - Quick shutdown\nQUIT - Graceful shutdown\nHUP - Configuration reload: Start the new worker processes with a new configuration, Gracefully shutdown the old worker processes\nUSR1 - Reopen the log files\nUSR2 - Upgrade Executable on the fly\nWINCH - Gracefully shutdown the worker processes"
+      },
+      "date": 1520513734247
+    },
+    {
+      "type": "edit",
+      "id": "a2acb73b4b50d035",
+      "item": {
+        "type": "markdown",
+        "id": "a2acb73b4b50d035",
+        "text": "HUP is what you are looking for, so:\n\n"
+      },
+      "date": 1520513746912
+    },
+    {
+      "type": "add",
+      "id": "8ae9482f887a7515",
+      "item": {
+        "type": "markdown",
+        "id": "8ae9482f887a7515",
+        "text": "- http://nginx.org/en/docs/control.html"
+      },
+      "after": "a2acb73b4b50d035",
+      "date": 1520513747974
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2a423de27dfd9dc8"
+      },
+      "id": "2a423de27dfd9dc8",
+      "type": "add",
+      "after": "91e39e6cf1c64aff",
+      "date": 1520513749890
+    },
+    {
+      "type": "move",
+      "order": [
+        "adf63d50cc5d6104",
+        "48f4cc0339481cdf",
+        "bb45d2f3fc3d0157",
+        "cc33524917dcc966",
+        "a8d0bae0765b5733",
+        "a2acb73b4b50d035",
+        "2a423de27dfd9dc8",
+        "8ae9482f887a7515",
+        "b7d073e86941d39e",
+        "cbaaaa95ec0c98a0",
+        "5aca29a52499dd12",
+        "cde5ea77b37455b3",
+        "106f5bacdf11db54",
+        "0eb98956f770223f",
+        "91e39e6cf1c64aff"
+      ],
+      "id": "2a423de27dfd9dc8",
+      "date": 1520513752054
+    },
+    {
+      "type": "edit",
+      "id": "2a423de27dfd9dc8",
+      "item": {
+        "type": "code",
+        "id": "2a423de27dfd9dc8",
+        "text": "sudo kill -HUP pid (nginx pid)\n"
+      },
+      "date": 1520513754168
+    },
+    {
+      "type": "edit",
+      "id": "b7d073e86941d39e",
+      "item": {
+        "type": "markdown",
+        "id": "b7d073e86941d39e",
+        "text": "# With Caddy\n"
+      },
+      "date": 1520515093143
+    },
+    {
+      "type": "add",
+      "id": "5addfec884c4b74d",
+      "item": {
+        "type": "markdown",
+        "id": "5addfec884c4b74d",
+        "text": "# With Nginx Plus"
+      },
+      "after": "b7d073e86941d39e",
+      "date": 1520515096337
+    },
+    {
+      "type": "add",
+      "id": "828cb2062b46cfcd",
+      "item": {
+        "type": "markdown",
+        "id": "828cb2062b46cfcd",
+        "text": "If you can determine in advance where the proxy needs to go (i.e. from app state or some external check), you could generate your Caddyfile string in your application and feed it to the Caddy instance each time the requirements change (should be a graceful reload).\n\nIf you can’t (i.e. you need to determine the destination from some aspect of the request itself), it’s not going to be pretty, but you could start Caddy and then start up your own localhost listener, proxying everything to yourself, inspecting the request, and proxying it onwards.\n\nThe second is a bit of a poor option because your app then needs to talk HTTP(S) anyway, so there’s little difference between this and having your own app without Caddy and just putting Caddy in front separately."
+      },
+      "after": "b7d073e86941d39e",
+      "date": 1520515105113
+    },
+    {
+      "type": "edit",
+      "id": "828cb2062b46cfcd",
+      "item": {
+        "type": "markdown",
+        "id": "828cb2062b46cfcd",
+        "text": "If you can determine in advance where the proxy needs to go (i.e. from app state or some external check), you could generate your Caddyfile string in your application and feed it to the Caddy instance each time the requirements change (should be a graceful reload) - [https://caddy.community/t/caddy-as-a-library-dynamic-proxying/2664 caddy.community]\n\nIf you can’t (i.e. you need to determine the destination from some aspect of the request itself), it’s not going to be pretty, but you could start Caddy and then start up your own localhost listener, proxying everything to yourself, inspecting the request, and proxying it onwards.\n\nThe second is a bit of a poor option because your app then needs to talk HTTP(S) anyway, so there’s little difference between this and having your own app without Caddy and just putting Caddy in front separately."
+      },
+      "date": 1520515129307
+    },
+    {
+      "type": "edit",
+      "id": "828cb2062b46cfcd",
+      "item": {
+        "type": "markdown",
+        "id": "828cb2062b46cfcd",
+        "text": "If you can determine in advance where the proxy needs to go (i.e. from app state or some external check), you could generate your Caddyfile string in your application and feed it to the Caddy instance each time the requirements change (should be a graceful reload) - [https://caddy.community/t/caddy-as-a-library-dynamic-proxying/2664 caddy.community]\n"
+      },
+      "date": 1520515171847
+    },
+    {
+      "type": "add",
+      "id": "44212bc7db01e4ed",
+      "item": {
+        "type": "markdown",
+        "id": "44212bc7db01e4ed",
+        "text": "- Caddy as a library - [https://godoc.org/github.com/mholt/caddy godoc]\n"
+      },
+      "after": "828cb2062b46cfcd",
+      "date": 1520515189544
+    },
+    {
+      "type": "add",
+      "id": "2cb47e5dc1d5abd7",
+      "item": {
+        "type": "markdown",
+        "id": "2cb47e5dc1d5abd7",
+        "text": "If you can’t (i.e. you need to determine the destination from some aspect of the request itself), it’s not going to be pretty, but you could start Caddy and then start up your own localhost listener, proxying everything to yourself, inspecting the request, and proxying it onwards.\n\nThe second is a bit of a poor option because your app then needs to talk HTTP(S) anyway, so there’s little difference between this and having your own app without Caddy and just putting Caddy in front separately."
+      },
+      "after": "44212bc7db01e4ed",
+      "date": 1520515190382
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "03ce1073fe34e1e8"
+      },
+      "id": "03ce1073fe34e1e8",
+      "type": "add",
+      "after": "91e39e6cf1c64aff",
+      "date": 1520515722987
+    },
+    {
+      "type": "edit",
+      "id": "03ce1073fe34e1e8",
+      "item": {
+        "type": "markdown",
+        "id": "03ce1073fe34e1e8",
+        "text": "- [[Nginx Plus]]"
+      },
+      "date": 1520515735339
+    }
+  ]
+}

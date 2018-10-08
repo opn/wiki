@@ -1,0 +1,453 @@
+{
+  "title": "Transporter Security",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "6d8f71aa1120b86f",
+      "text": "We aim to restrict the ability to author new static sites to logged in users of particular web sites."
+    },
+    {
+      "type": "paragraph",
+      "id": "739d6046a61b5759",
+      "text": "At the moment the [[About HTML Plugin]] does not send and standardised information along with the form post - so we cannot use this for security purposes."
+    },
+    {
+      "type": "paragraph",
+      "id": "bb1d729c6c1b2620",
+      "text": "The current [[About Transport Plugin]] mechanism sends the following information to the server:"
+    },
+    {
+      "type": "code",
+      "id": "e4f5bb74212c1dc2",
+      "text": "{\"text\":\"http://splash.fedwiki.org/transporter-security.html\",\"html\":\"<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html;charset=UTF-8\\\"><a href=\\\"http://splash.fedwiki.org/transporter-security.html\\\" date-slug=\\\"transporter-security\\\" target=\\\"splash.fedwiki.org\\\">splash.fedwiki.org </a>\",\"url\":\"http://splash.fedwiki.org/transporter-security.html\"}"
+    },
+    {
+      "type": "paragraph",
+      "id": "682bcf0ecdac155b",
+      "text": "In particular this includes information about the web page the transporter is on - as in:"
+    },
+    {
+      "type": "code",
+      "id": "6777420d1684b992",
+      "text": "\"url\":\"http://splash.fedwiki.org/transporter-security.html\""
+    },
+    {
+      "type": "paragraph",
+      "id": "b541209b15aeb384",
+      "text": "This allows us to restrict access to a transporter to a particular domain or wiki page. however this can easily be spoofed by anyone with access to a programming language on any machine - its just an HTTP POST request."
+    },
+    {
+      "type": "paragraph",
+      "id": "59db1922b3bf0178",
+      "text": "We are currently looking at server side posting and other security methods. however for now we can rely on wiki's ability to allow a logged in user to author wiki content to provide security."
+    },
+    {
+      "type": "markdown",
+      "id": "563589629c5cf23d",
+      "text": "# Authored JSON"
+    },
+    {
+      "type": "paragraph",
+      "id": "ad581fe72584869e",
+      "text": "The transporter can read a specific json url, and look for content which authorises the action. As only a particular author has write access to that site we can use this information to provide authorisation."
+    },
+    {
+      "type": "paragraph",
+      "id": "916569d12c549213",
+      "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin to author json content on a server that we can check. "
+    },
+    {
+      "type": "paragraph",
+      "id": "6af2c1edcfa3524b",
+      "text": "Below is an example markdown section:"
+    },
+    {
+      "type": "markdown",
+      "id": "0a68f7f2fb40405b",
+      "text": "# Authoring Tools\n\nThis is an experimental section that enables us to update the Feast.fm web site - [https://feast.fm feast.fm]\n \n- [x] Allow website update"
+    },
+    {
+      "type": "paragraph",
+      "id": "e72cefae47066a0d",
+      "text": "Only a logged in user can change the stored value on the server, and the transporter can simply poll the json url for the page and look for a positive result:"
+    },
+    {
+      "type": "html",
+      "id": "c0add1bb4bf61dd0",
+      "text": "<form \n  action=\"https://rest.livecode.world/feast/write\"\n  style=\"background-color:#eee; padding:15px;\">\n<center>\nUpdate FEAST.fm website<br><br>\n\n<input\n  name=url\n  type=hidden\n  value=\"http://david.feast.fm/feast.json\">\n<input\n  type=submit\n  value=submit>\n</center>\n</form>"
+    },
+    {
+      "type": "markdown",
+      "id": "19b82c055cb30792",
+      "text": "# Code"
+    },
+    {
+      "type": "paragraph",
+      "id": "8bdd8bdae35f87ea",
+      "text": "The code for checking the wiki page array for a named checkbox value can be found here - [https://gist.github.com/opn/aa72250686f4198632dcca6ee0755255 gist]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Transporter Security",
+        "story": []
+      },
+      "date": 1498231670541
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6d8f71aa1120b86f"
+      },
+      "id": "6d8f71aa1120b86f",
+      "type": "add",
+      "date": 1498231671630
+    },
+    {
+      "type": "edit",
+      "id": "6d8f71aa1120b86f",
+      "item": {
+        "type": "paragraph",
+        "id": "6d8f71aa1120b86f",
+        "text": "We aim to restrict the ability to author new static sites to logged in users of particular web sites."
+      },
+      "date": 1498231772795
+    },
+    {
+      "type": "add",
+      "id": "739d6046a61b5759",
+      "item": {
+        "type": "paragraph",
+        "id": "739d6046a61b5759",
+        "text": "At the moment the [[About HTML Plugin]] does not send and standardised information along with the form post - so we cannot use this for security purposes."
+      },
+      "after": "6d8f71aa1120b86f",
+      "date": 1498231823623
+    },
+    {
+      "type": "add",
+      "id": "bb1d729c6c1b2620",
+      "item": {
+        "type": "paragraph",
+        "id": "bb1d729c6c1b2620",
+        "text": "The current [[About Transporter Plugin]] mechanism sends the following information to the server:"
+      },
+      "after": "739d6046a61b5759",
+      "date": 1498231893358
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e4f5bb74212c1dc2"
+      },
+      "id": "e4f5bb74212c1dc2",
+      "type": "add",
+      "after": "bb1d729c6c1b2620",
+      "date": 1498231894301
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "682bcf0ecdac155b"
+      },
+      "id": "682bcf0ecdac155b",
+      "type": "add",
+      "after": "e4f5bb74212c1dc2",
+      "date": 1498231895295
+    },
+    {
+      "type": "edit",
+      "id": "e4f5bb74212c1dc2",
+      "item": {
+        "type": "code",
+        "id": "e4f5bb74212c1dc2",
+        "text": "{\"text\":\"http://splash.fedwiki.org/transporter-security.html\",\"html\":\"<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html;charset=UTF-8\\\"><a href=\\\"http://splash.fedwiki.org/transporter-security.html\\\" date-slug=\\\"transporter-security\\\" target=\\\"splash.fedwiki.org\\\">splash.fedwiki.org </a>\",\"url\":\"http://splash.fedwiki.org/transporter-security.html\"}"
+      },
+      "date": 1498231934424
+    },
+    {
+      "type": "edit",
+      "id": "682bcf0ecdac155b",
+      "item": {
+        "type": "paragraph",
+        "id": "682bcf0ecdac155b",
+        "text": "In particular this includes information about the web page the transporter is on - as in:"
+      },
+      "date": 1498231964948
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6777420d1684b992"
+      },
+      "id": "6777420d1684b992",
+      "type": "add",
+      "after": "682bcf0ecdac155b",
+      "date": 1498231965944
+    },
+    {
+      "type": "edit",
+      "id": "6777420d1684b992",
+      "item": {
+        "type": "code",
+        "id": "6777420d1684b992",
+        "text": "\"url\":\"http://splash.fedwiki.org/transporter-security.html\""
+      },
+      "date": 1498231967894
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b541209b15aeb384"
+      },
+      "id": "b541209b15aeb384",
+      "type": "add",
+      "after": "6777420d1684b992",
+      "date": 1498231973300
+    },
+    {
+      "type": "edit",
+      "id": "b541209b15aeb384",
+      "item": {
+        "type": "paragraph",
+        "id": "b541209b15aeb384",
+        "text": "This allows us to restrict access to a transporter to a particular domain or wiki page. however this can easily be spoofed by anyone with access to a programming language on any machine - its just an HTTP POST request."
+      },
+      "date": 1498232106222
+    },
+    {
+      "type": "add",
+      "id": "59db1922b3bf0178",
+      "item": {
+        "type": "paragraph",
+        "id": "59db1922b3bf0178",
+        "text": "We are currently looking at server side posting and other security methods. however for now we can rely on wiki's ability to allow a logged in user to author wiki content to provide security."
+      },
+      "after": "b541209b15aeb384",
+      "date": 1498232180730
+    },
+    {
+      "type": "add",
+      "id": "563589629c5cf23d",
+      "item": {
+        "type": "paragraph",
+        "id": "563589629c5cf23d",
+        "text": "# Authored JSON"
+      },
+      "after": "59db1922b3bf0178",
+      "date": 1498232193108
+    },
+    {
+      "type": "edit",
+      "id": "563589629c5cf23d",
+      "item": {
+        "type": "markdown",
+        "id": "563589629c5cf23d",
+        "text": "# Authored JSON"
+      },
+      "date": 1498232194424
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ad581fe72584869e"
+      },
+      "id": "ad581fe72584869e",
+      "type": "add",
+      "after": "563589629c5cf23d",
+      "date": 1498232195832
+    },
+    {
+      "type": "edit",
+      "id": "ad581fe72584869e",
+      "item": {
+        "type": "paragraph",
+        "id": "ad581fe72584869e",
+        "text": "The transporter can read a specific json url, and look for content which authorises the action. As only a particular author has write access to that site we can use this information to provide authorisation."
+      },
+      "date": 1498232260631
+    },
+    {
+      "type": "add",
+      "id": "12622ebe06a875ae",
+      "item": {
+        "type": "paragraph",
+        "id": "12622ebe06a875ae",
+        "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin:- [ ] Check me to allow authoring"
+      },
+      "after": "ad581fe72584869e",
+      "date": 1498232317799
+    },
+    {
+      "type": "edit",
+      "id": "12622ebe06a875ae",
+      "item": {
+        "type": "markdown",
+        "id": "12622ebe06a875ae",
+        "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin:- [ ] Check me to allow authoring"
+      },
+      "date": 1498232318892
+    },
+    {
+      "type": "edit",
+      "id": "12622ebe06a875ae",
+      "item": {
+        "type": "markdown",
+        "id": "12622ebe06a875ae",
+        "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin:\n\n- [ ] Check me to allow authoring"
+      },
+      "date": 1498232322775
+    },
+    {
+      "type": "edit",
+      "id": "12622ebe06a875ae",
+      "item": {
+        "type": "markdown",
+        "id": "12622ebe06a875ae",
+        "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin:\n\n- [x] Check me to allow authoring"
+      },
+      "date": 1498232324614
+    },
+    {
+      "type": "edit",
+      "id": "12622ebe06a875ae",
+      "item": {
+        "type": "markdown",
+        "id": "12622ebe06a875ae",
+        "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin:\n\n- [ ] Check me to allow authoring"
+      },
+      "date": 1498232325384
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e72cefae47066a0d"
+      },
+      "id": "e72cefae47066a0d",
+      "type": "add",
+      "after": "12622ebe06a875ae",
+      "date": 1498232329293
+    },
+    {
+      "type": "edit",
+      "id": "e72cefae47066a0d",
+      "item": {
+        "type": "paragraph",
+        "id": "e72cefae47066a0d",
+        "text": "Only a logged in user can change the stored value on the server, and the transporter can simply poll the json url for the page and look for a positive result:"
+      },
+      "date": 1498232384787
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "c0add1bb4bf61dd0",
+        "text": "<form \n  action=\"https://rest.livecode.world/feast/write\"\n  style=\"background-color:#eee; padding:15px;\">\n<center>\nUpdate FEAST.fm website<br><br>\n\n<input\n  name=url\n  type=hidden\n  value=\"http://david.feast.fm/feast.json\">\n<input\n  type=submit\n  value=submit>\n</center>\n</form>"
+      },
+      "after": "e72cefae47066a0d",
+      "id": "c0add1bb4bf61dd0",
+      "date": 1498232445784
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "0a68f7f2fb40405b",
+        "text": "# Authoring Tools\n\nThis is an experimental section that enables us to update the Feast.fm web site - [https://feast.fm feast.fm]\n \n- [x] Allow website update"
+      },
+      "after": "12622ebe06a875ae",
+      "id": "0a68f7f2fb40405b",
+      "date": 1498232465087
+    },
+    {
+      "type": "remove",
+      "id": "12622ebe06a875ae",
+      "date": 1498232481394
+    },
+    {
+      "type": "add",
+      "id": "916569d12c549213",
+      "item": {
+        "type": "paragraph",
+        "id": "916569d12c549213",
+        "text": "Specifically we can use the [[Wiki Checkbox]] ability of the markdown plugin to author json content on a server that we can check. "
+      },
+      "after": "ad581fe72584869e",
+      "date": 1498232519175
+    },
+    {
+      "type": "add",
+      "id": "6af2c1edcfa3524b",
+      "item": {
+        "type": "paragraph",
+        "id": "6af2c1edcfa3524b",
+        "text": "Below is an example:"
+      },
+      "after": "916569d12c549213",
+      "date": 1498232519727
+    },
+    {
+      "type": "edit",
+      "id": "6af2c1edcfa3524b",
+      "item": {
+        "type": "paragraph",
+        "id": "6af2c1edcfa3524b",
+        "text": "Below is an example markdown section:"
+      },
+      "date": 1498232527871
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "19b82c055cb30792"
+      },
+      "id": "19b82c055cb30792",
+      "type": "add",
+      "after": "c0add1bb4bf61dd0",
+      "date": 1498232529485
+    },
+    {
+      "type": "edit",
+      "id": "19b82c055cb30792",
+      "item": {
+        "type": "markdown",
+        "id": "19b82c055cb30792",
+        "text": "# Code"
+      },
+      "date": 1498232535431
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8bdd8bdae35f87ea"
+      },
+      "id": "8bdd8bdae35f87ea",
+      "type": "add",
+      "after": "19b82c055cb30792",
+      "date": 1498232538504
+    },
+    {
+      "type": "edit",
+      "id": "8bdd8bdae35f87ea",
+      "item": {
+        "type": "paragraph",
+        "id": "8bdd8bdae35f87ea",
+        "text": "The code for checking the wiki page array for a named checkbox value can be found here - [https://gist.github.com/opn/aa72250686f4198632dcca6ee0755255 gist]"
+      },
+      "date": 1498234989866
+    },
+    {
+      "type": "edit",
+      "id": "bb1d729c6c1b2620",
+      "item": {
+        "type": "paragraph",
+        "id": "bb1d729c6c1b2620",
+        "text": "The current [[About Transport Plugin]] mechanism sends the following information to the server:"
+      },
+      "date": 1498235085901
+    }
+  ]
+}

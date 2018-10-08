@@ -1,0 +1,202 @@
+{
+  "journal": [
+    {
+      "date": 1457895937960,
+      "type": "create",
+      "item": {
+        "story": [
+          {
+            "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] from the data displayed on [[CCC-TV]] site - [https://media.ccc.de/v/30C3_-_5278_-_en_-_saal_6_-_201312301300_-_the_philosophy_of_hacking_-_groente#video media.ccc.de]. ",
+            "type": "paragraph",
+            "id": "728921eae995ab44"
+          },
+          {
+            "text": "Simply drag and drop a video page url from this site onto the transporter:",
+            "type": "paragraph",
+            "id": "aa55c73a9ad4b99a"
+          },
+          {
+            "text": "POST https://livecode.world/mediawiki/importpage",
+            "type": "transport",
+            "id": "10ea2af363e51a5f"
+          },
+          {
+            "text": "# About",
+            "type": "markdown",
+            "id": "9546dbda40035b5a"
+          },
+          {
+            "text": "This plugin is an experimental web page scraper coded in [[LiveCode]]. The web service does the following things:",
+            "type": "paragraph",
+            "id": "f9842d5b2be9e775"
+          },
+          {
+            "text": "* Fetches the HTML of the video page\n* Runs this through html-[[tidy]] using [[shell()]] to create a valid [[xml]]/[[xhtml]] document\n* Painfully steps through the xhtml to find the relevant sections\n• Constructs the [[wiki page json]]",
+            "type": "markdown",
+            "id": "334c2012ca8b4ccb"
+          },
+          {
+            "text": "# Code",
+            "type": "markdown",
+            "id": "d9f45aae0a436d21"
+          },
+          {
+            "type": "factory",
+            "id": "8869c0772777be8e"
+          },
+          {
+            "text": "# To Do",
+            "type": "markdown",
+            "id": "5a4d4c50029ad335"
+          },
+          {
+            "text": "It should be enhanced to:\n* Use [[XPath]] rather than relying on the order of the [[xml]] sections\n* Spit out the Fedwiki, and helper code into libraries",
+            "type": "markdown",
+            "id": "1e7deed8de779e92"
+          }
+        ],
+        "title": "Youtube Transporter"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1459898072905,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1459898095240
+    },
+    {
+      "type": "fork",
+      "site": "plugin.fedwiki.org",
+      "date": 1459898164279
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1502171093068
+    }
+  ],
+  "title": "Youtube Transporter",
+  "story": [
+    {
+      "text": "This [[Transporter]] allows you to import videos from [[Youtube]], complete with all their metadata. It also allows you to import playlists, channels, and all uploads from a user.",
+      "id": "728921eae995ab44",
+      "type": "paragraph"
+    },
+    {
+      "text": "Simply drag and drop a page url from [[Youtube]] onto the transporter:",
+      "id": "aa55c73a9ad4b99a",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube",
+      "id": "10ea2af363e51a5f",
+      "type": "transport"
+    },
+    {
+      "text": "The transporter above is limited for convenience to only a maximum of 10 videos imported at a time. ",
+      "id": "9c87c71c62825b8f",
+      "type": "paragraph"
+    },
+    {
+      "text": "To create a [[Video Index Page]] of all the videos for a channel, user, or playlist, use the \"recentFirst\" version of the [[tranpsorter]] below:",
+      "id": "b3b61ee5ff7857c1",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube/recentFirst",
+      "id": "cb0754ba72e26390",
+      "type": "transport"
+    },
+    {
+      "text": "If you want to list all the videos for a channel, user, or playlist, use the \"oldestFirst\" version of the [[transporter]] below:",
+      "id": "62a48afe4f02773b",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube/oldestFirst",
+      "id": "bf7405ed9533dbd3",
+      "type": "transport"
+    },
+    {
+      "text": "Warning: the \"fetchAll\" version of the [[transporter]] below can import hundreds of videos if your list is large:",
+      "id": "902128dd7307a555",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube/fetchAll",
+      "id": "9e994ad77e1681f0",
+      "type": "transport"
+    },
+    {
+      "text": "# Work In Progress",
+      "id": "9546dbda40035b5a",
+      "type": "markdown"
+    },
+    {
+      "text": "The \"fetchThumb\" transporter creates a thumbnail image and link when a video url is dropped onto it. It should create a small video index such as those displayed on Youtube - but for that I need some more HTML and CSS skills. It is done is usch a way that it is easy to extend to create indexes with thumbanils for all types of list.",
+      "id": "4d3fac567f0addbc",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube/fetchThumb",
+      "id": "df94860bed064db4",
+      "type": "transport"
+    },
+    {
+      "text": "It is also possible to show an index as numbered or as below with bullets, and to choose which way it is sorted. belwo we show recent bullets first:",
+      "id": "ad8998b5fcf4f905",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube/recentBullets",
+      "id": "dd272817c3c76800",
+      "type": "transport"
+    },
+    {
+      "text": "This version creates a markdown list. The code is there to generate lists in markdown sorted in either direction.",
+      "id": "8b3ea16736a35112",
+      "type": "paragraph"
+    },
+    {
+      "text": "POST https://livecode.world/youtube/recentMarkdown",
+      "id": "ade68ca5493648c3",
+      "type": "transport"
+    },
+    {
+      "text": "# Code",
+      "id": "d9f45aae0a436d21",
+      "type": "markdown"
+    },
+    {
+      "text": "The code is based on:\n* Youtube V3 API - [https://developers.google.com/youtube/v3/docs/ developers.google.com]\n* Check API usage - [https://console.developers.google.com/apis/api/youtube/usage?project=youtube-tranporter&duration=P30D console.developers.google.com]",
+      "id": "334c2012ca8b4ccb",
+      "type": "markdown"
+    },
+    {
+      "type": "factory",
+      "prompt": "Unexpected Item\nWe can't make sense of the drop.\nTry something else or see [[About Factory Plugin]].",
+      "punt": {
+        "url": "https://www.youtube.com/playlist?list=PLPj3KCksGbSY-RaXfrGPnY8uEOl6uylky",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36"
+      },
+      "id": "d330205810afa8a1"
+    },
+    {
+      "text": "# To Do",
+      "id": "5a4d4c50029ad335",
+      "type": "markdown"
+    },
+    {
+      "text": "It should be enhanced to:\n- [ ] Use pretty thumbnails in the index.\n- [ ] Create index pages in a better way",
+      "id": "1e7deed8de779e92",
+      "type": "markdown"
+    }
+  ]
+}

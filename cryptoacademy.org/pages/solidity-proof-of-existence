@@ -1,0 +1,88 @@
+{
+  "title": "Solidity Proof of Existence",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "683d47ab06433260",
+      "text": "NoterEth, pronounced \"Notaryth\", is a prototype notary and \"Proof of Existence\" DAPP. By submitting hashes of documents you can proof on a later date that you were privileged to certain information at a point in history. The transfer of documents can enable other contracts to allow certain access based on who owns a hash - [https://github.com/maran/notareth GitHub]\n"
+    },
+    {
+      "type": "code",
+      "id": "feae96b81b087e8e",
+      "text": "contract Etherdoc {\n    address owner;\n    \n    function Etherdoc(){\n        owner = msg.sender; \n    }\n    \n    // In case you sent funds by accident\n    function empty(){\n     uint256 balance = address(this).balance;\n     address(owner).send(balance);\n    }\n    \n    function newDocument(bytes32 hash) returns (bool success){\n        if (documentExists(hash)) {\n            success = false;\n        }else{\n\n            createHistory(hash, msg.sender, msg.sender);\n            usedHashes[hash] = true;\n            success = true;\n        }\n        return true;\n    }\n    function createHistory (bytes32 hash, address from, address to) internal{\n            ++latestDocument;\n            documentHashMap[hash] = to;\n            usedHashes[hash] = true;\n            history[latestDocument] = DocumentTransfer(block.number, hash, from, to);\n            DocumentEvent(block.number, hash, from,to);\n    }\n    \n    function transferDocument(bytes32 hash, address recipient) returns (bool success){\n        success = false;\n           \n        if (documentExists(hash)){\n            if (documentHashMap[hash] == msg.sender){\n                createHistory(hash, msg.sender, recipient);\n                success = true;\n            }\n        }\n         \n        return success;\n    }\n    \n    function documentExists(bytes32 hash) constant returns (bool exists){\n        if (usedHashes[hash]) {\n            exists = true;\n        }else{\n            exists= false;\n        }\n        return exists;\n    }\n    \n    function getDocument(uint docId) constant returns (uint blockNumber, bytes32 hash, address from, address to){\n        DocumentTransfer doc = history[docId];\n        blockNumber = doc.blockNumber;\n        hash = doc.hash;\n        from = doc.from;\n        to = doc.to;\n    }\n    \n    event DocumentEvent(uint blockNumber, bytes32 indexed hash, address indexed from, address indexed to);\n    \n    struct DocumentTransfer {\n        uint blockNumber;\n        bytes32 hash;\n        address from;\n        address to;\n    }\n    \n    function getLatest() constant returns (uint latest){\n        return latestDocument;\n    }\n    \n    uint latestDocument;\n    \n    mapping(uint => DocumentTransfer) public history;\n    mapping(bytes32 => bool) public usedHashes;\n    mapping(bytes32 => address) public documentHashMap;\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Solidity Proof of Existence",
+        "story": []
+      },
+      "date": 1449177798477
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "feae96b81b087e8e"
+      },
+      "id": "feae96b81b087e8e",
+      "type": "add",
+      "date": 1449177799353
+    },
+    {
+      "type": "edit",
+      "id": "feae96b81b087e8e",
+      "item": {
+        "type": "code",
+        "id": "feae96b81b087e8e",
+        "text": "contract Etherdoc {\n    address owner;\n    \n    function Etherdoc(){\n        owner = msg.sender; \n    }\n    \n    // In case you sent funds by accident\n    function empty(){\n     uint256 balance = address(this).balance;\n     address(owner).send(balance);\n    }\n    \n    function newDocument(bytes32 hash) returns (bool success){\n        if (documentExists(hash)) {\n            success = false;\n        }else{\n\n            createHistory(hash, msg.sender, msg.sender);\n            usedHashes[hash] = true;\n            success = true;\n        }\n        return true;\n    }\n    function createHistory (bytes32 hash, address from, address to) internal{\n            ++latestDocument;\n            documentHashMap[hash] = to;\n            usedHashes[hash] = true;\n            history[latestDocument] = DocumentTransfer(block.number, hash, from, to);\n            DocumentEvent(block.number, hash, from,to);\n    }\n    \n    function transferDocument(bytes32 hash, address recipient) returns (bool success){\n        success = false;\n           \n        if (documentExists(hash)){\n            if (documentHashMap[hash] == msg.sender){\n                createHistory(hash, msg.sender, recipient);\n                success = true;\n            }\n        }\n         \n        return success;\n    }\n    \n    function documentExists(bytes32 hash) constant returns (bool exists){\n        if (usedHashes[hash]) {\n            exists = true;\n        }else{\n            exists= false;\n        }\n        return exists;\n    }\n    \n    function getDocument(uint docId) constant returns (uint blockNumber, bytes32 hash, address from, address to){\n        DocumentTransfer doc = history[docId];\n        blockNumber = doc.blockNumber;\n        hash = doc.hash;\n        from = doc.from;\n        to = doc.to;\n    }\n    \n    event DocumentEvent(uint blockNumber, bytes32 indexed hash, address indexed from, address indexed to);\n    \n    struct DocumentTransfer {\n        uint blockNumber;\n        bytes32 hash;\n        address from;\n        address to;\n    }\n    \n    function getLatest() constant returns (uint latest){\n        return latestDocument;\n    }\n    \n    uint latestDocument;\n    \n    mapping(uint => DocumentTransfer) public history;\n    mapping(bytes32 => bool) public usedHashes;\n    mapping(bytes32 => address) public documentHashMap;\n}"
+      },
+      "date": 1449177802341
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "683d47ab06433260"
+      },
+      "id": "683d47ab06433260",
+      "type": "add",
+      "after": "feae96b81b087e8e",
+      "date": 1449177834462
+    },
+    {
+      "type": "edit",
+      "id": "683d47ab06433260",
+      "item": {
+        "type": "paragraph",
+        "id": "683d47ab06433260",
+        "text": "NoterEth, pronounced \"Notaryth\", is a prototype notary and \"Proof of Existence\" DAPP. By submitting hashes of documents you can proof on a later date that you were privileged to certain information at a point in history. The transfer of documents can enable other contracts to allow certain access based on who owns a hash.\n"
+      },
+      "date": 1449177847376
+    },
+    {
+      "type": "move",
+      "order": [
+        "683d47ab06433260",
+        "feae96b81b087e8e"
+      ],
+      "id": "683d47ab06433260",
+      "date": 1449177851695
+    },
+    {
+      "type": "edit",
+      "id": "683d47ab06433260",
+      "item": {
+        "type": "paragraph",
+        "id": "683d47ab06433260",
+        "text": "NoterEth, pronounced \"Notaryth\", is a prototype notary and \"Proof of Existence\" DAPP. By submitting hashes of documents you can proof on a later date that you were privileged to certain information at a point in history. The transfer of documents can enable other contracts to allow certain access based on who owns a hash - [https://github.com/maran/notareth GitHub]\n"
+      },
+      "date": 1449181575280
+    },
+    {
+      "type": "fork",
+      "site": "ksenya.cryptoacademy.org",
+      "date": 1450793627472
+    }
+  ]
+}

@@ -1,0 +1,1019 @@
+{
+  "title": "Search Index",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "996c6c5837d4578e",
+      "text": "We consider how we might index and query multiple sites within a distributed search database routinely hosted in federated wiki page server/editors."
+    },
+    {
+      "type": "paragraph",
+      "id": "311054c25d737e97",
+      "text": "See [[Distributed Search]] which describes the social structure within which search is only one component."
+    },
+    {
+      "type": "paragraph",
+      "id": "0967ce2816691ed8",
+      "text": "See [[Distributed Hash Table]] for related peer-to-peer research spawned by Napster."
+    },
+    {
+      "type": "reference",
+      "id": "8406579d0aa914be",
+      "site": "future.fedwiki.org",
+      "slug": "about-search-plugin",
+      "title": "About Search Plugin",
+      "text": "Search retrieves page references from information recorded by federated wiki search services."
+    },
+    {
+      "type": "reference",
+      "id": "a4a172ff466105f1",
+      "site": "ward.asia.wiki.org",
+      "slug": "neo4j",
+      "title": "Neo4J",
+      "text": "Neo4j is an open-source graph database implemented in Java and accessible from software written in other languages using the Cypher query language through a transactional HTTP endpoint. [https://en.wikipedia.org/wiki/Neo4j wikipedia] [http://neo4j.com/ site]"
+    },
+    {
+      "type": "reference",
+      "id": "8e85b53490f59c26",
+      "site": "neo4j.bay.wiki.org",
+      "slug": "testing-cypher-plugin",
+      "title": "Testing Cypher Plugin",
+      "text": "The combination of LINKS and KNOWS fishes out the participants in a wiki conversation. [https://github.com/WardCunningham/wiki-plugin-cypher/blob/master/server/server.coffee#L14-L26 github]"
+    },
+    {
+      "type": "markdown",
+      "id": "312cd8f30cf13cd7",
+      "text": "# Indices"
+    },
+    {
+      "type": "paragraph",
+      "id": "b03a9b79626a17a7",
+      "text": "We want to find site/slugs for pages containing various keys, including words, ids, links and sites."
+    },
+    {
+      "type": "paragraph",
+      "id": "cf4788afbb5f5318",
+      "text": "We will maintain indices on each kind of key mapping key to multiple site/slug values."
+    },
+    {
+      "type": "paragraph",
+      "id": "ef95f5702411b2b3",
+      "text": "On each action, the old and new page will be analyzed for keys and the indexes updated to reflect changes."
+    },
+    {
+      "type": "paragraph",
+      "id": "6acf936d3bffcb73",
+      "text": "Aside: Some optimization may be possible when only keys are added. If a new sentence is added to a paragraph, but no text deleted, then words and link indices could grow but no index will shrink and the full page content need not be reanalyzed."
+    },
+    {
+      "type": "paragraph",
+      "id": "8901c76d6465d316",
+      "text": "We will query for collections of whole keys in an individual index. This could be optimized by sorting the keys and continuing an index traversal."
+    },
+    {
+      "type": "paragraph",
+      "id": "db07fb86544ba803",
+      "text": "We can estimate the size of indices from data collected with the [[Ruby Sitemap Scrape]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "326189ddc24f02a3",
+      "text": "See [[Multiway Trees]] for Knuth's treatment of the ubiquitous b-tree."
+    },
+    {
+      "type": "markdown",
+      "id": "8eafe0d5fde410fb",
+      "text": "# Distribution"
+    },
+    {
+      "type": "paragraph",
+      "id": "1029eecf1c4a2ebb",
+      "text": "We believe some extension of neighborhood will be semantically useful and have described a version of 'region' where sites mentioned on a server are included out to one (possibly more) levels of indirection."
+    },
+    {
+      "type": "paragraph",
+      "id": "719b174efd19e546",
+      "text": "We must consider whether a region is an artifact of indexing or search."
+    },
+    {
+      "type": "paragraph",
+      "id": "6e25de7041ca0505",
+      "text": "If we index a region then as sites enter and exit the region (due to editing on the server) we must add or remove large numbers of index entries."
+    },
+    {
+      "type": "paragraph",
+      "id": "03cb096a23be8ac7",
+      "text": "If we search by region then we must relay every query to the included sites with the possible optimization of recognizing sites hosted on the same server and thus in the same index."
+    },
+    {
+      "type": "paragraph",
+      "id": "cb1ddf5ed0bea68e",
+      "text": "Distributing search has the disadvantage that small sites with read-only content might not accept responsibility for search benefiting users of other sites. It would be better if full featured sites could carry the larger burden."
+    },
+    {
+      "type": "markdown",
+      "id": "423255431106151b",
+      "text": "# Services"
+    },
+    {
+      "type": "paragraph",
+      "id": "d35dbd5deaee9435",
+      "text": "A complete search service will include scraping and query processing along the lines already implemented in the [[Ruby Sitemap Scrape]] and related mechanisms."
+    },
+    {
+      "type": "markdown",
+      "id": "c59545f35d4cbd94",
+      "text": "# Implementation"
+    },
+    {
+      "type": "paragraph",
+      "id": "cf5d61195e8cc717",
+      "text": "Comprehensive search solutions provide configurable machinery for all aspects of analysis, indexing, storage and query that one would expect of a centralized search service."
+    },
+    {
+      "type": "paragraph",
+      "id": "4d7f476232104e8b",
+      "text": "Of these issues we consider indexing to be the dominant technical challenge not addressed by mechanisms already largely in place."
+    },
+    {
+      "type": "paragraph",
+      "id": "d72ebf831c43d8c3",
+      "text": "At the core of all search is the log(n) behavior of an inverted index typically implemented with some version of the ubiquitous b-tree. [https://en.wikipedia.org/wiki/B-tree wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bcb8ddf28da09459",
+      "text": "We will succeed making search service widely distributed so long as its cost is modest and installation effortless. Small pure-javascript is preferred."
+    },
+    {
+      "type": "paragraph",
+      "id": "89bbd80ca92f2b54",
+      "text": "Strata looks attractive. It is a database primitive interface to a b‑tree. One can use Strata to create different types database strategies. [https://www.npmjs.com/package/b-tree npm]"
+    },
+    {
+      "type": "paragraph",
+      "id": "bd89b26487e5fea8",
+      "text": "We may not need independent storage for leaf nodes, the value of key-value pairs. The b-tree index storage might find that site-slug pairs are sufficiently indirect to serve as leaf pointers."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Search Index",
+        "story": []
+      },
+      "date": 1448576784592
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "996c6c5837d4578e"
+      },
+      "id": "996c6c5837d4578e",
+      "type": "add",
+      "date": 1448576803863
+    },
+    {
+      "type": "edit",
+      "id": "996c6c5837d4578e",
+      "item": {
+        "type": "paragraph",
+        "id": "996c6c5837d4578e",
+        "text": "We consider how we might index multiple sites within a distributed search database routinely hosted in federated wiki page server/editors."
+      },
+      "date": 1448577142323
+    },
+    {
+      "type": "add",
+      "id": "b03a9b79626a17a7",
+      "item": {
+        "type": "paragraph",
+        "id": "b03a9b79626a17a7",
+        "text": "We want to find site/slugs for pages containing various keys, including words, ids, links and sites."
+      },
+      "after": "996c6c5837d4578e",
+      "date": 1448577410645
+    },
+    {
+      "type": "add",
+      "id": "cf4788afbb5f5318",
+      "item": {
+        "type": "paragraph",
+        "id": "cf4788afbb5f5318",
+        "text": "We will maintain indices on each kind of key mapping key to multiple site/slug values."
+      },
+      "after": "b03a9b79626a17a7",
+      "date": 1448577696241
+    },
+    {
+      "type": "add",
+      "id": "ef95f5702411b2b3",
+      "item": {
+        "type": "paragraph",
+        "id": "ef95f5702411b2b3",
+        "text": "On each action, the old and new page will be analyzed for keys and the indexes updated to reflect changes."
+      },
+      "after": "cf4788afbb5f5318",
+      "date": 1448577988094
+    },
+    {
+      "type": "add",
+      "id": "6acf936d3bffcb73",
+      "item": {
+        "type": "paragraph",
+        "id": "6acf936d3bffcb73",
+        "text": "Some optimization may be possible when only keys are added. If a new sentence is added to a paragraph, but no text deleted, then words and link indices could grow but no index will shrink and the full page content need not be reanalyzed."
+      },
+      "after": "ef95f5702411b2b3",
+      "date": 1448578199105
+    },
+    {
+      "type": "edit",
+      "id": "6acf936d3bffcb73",
+      "item": {
+        "type": "paragraph",
+        "id": "6acf936d3bffcb73",
+        "text": "Aside: Some optimization may be possible when only keys are added. If a new sentence is added to a paragraph, but no text deleted, then words and link indices could grow but no index will shrink and the full page content need not be reanalyzed."
+      },
+      "date": 1448578215744
+    },
+    {
+      "type": "add",
+      "id": "312cd8f30cf13cd7",
+      "item": {
+        "type": "paragraph",
+        "id": "312cd8f30cf13cd7",
+        "text": "# indices"
+      },
+      "after": "996c6c5837d4578e",
+      "date": 1448579879178
+    },
+    {
+      "type": "add",
+      "id": "8901c76d6465d316",
+      "item": {
+        "type": "paragraph",
+        "id": "8901c76d6465d316",
+        "text": "We will query for whole keys for ids, links and sites. We might query for partial "
+      },
+      "after": "6acf936d3bffcb73",
+      "date": 1448580032380
+    },
+    {
+      "type": "edit",
+      "id": "8901c76d6465d316",
+      "item": {
+        "type": "paragraph",
+        "id": "8901c76d6465d316",
+        "text": "We will query for collections of whole keys in an individual index. This could be optimized by sorting the keys and continuing an index traversal."
+      },
+      "date": 1448580140114
+    },
+    {
+      "type": "add",
+      "id": "db07fb86544ba803",
+      "item": {
+        "type": "paragraph",
+        "id": "db07fb86544ba803",
+        "text": "We can estimate the size of indices from data collected with the [[Ruby Sitemap Scrape]]."
+      },
+      "after": "8901c76d6465d316",
+      "date": 1448580205301
+    },
+    {
+      "type": "add",
+      "id": "8eafe0d5fde410fb",
+      "item": {
+        "type": "paragraph",
+        "id": "8eafe0d5fde410fb",
+        "text": "# Distribution"
+      },
+      "after": "db07fb86544ba803",
+      "date": 1448582564940
+    },
+    {
+      "type": "add",
+      "id": "1029eecf1c4a2ebb",
+      "item": {
+        "type": "paragraph",
+        "id": "1029eecf1c4a2ebb",
+        "text": "We believe some extension of neighborhood will be semantically useful and have described a version of 'region' where sites mentioned on a server are included out to one (possibly more) levels of indirection."
+      },
+      "after": "8eafe0d5fde410fb",
+      "date": 1448582732679
+    },
+    {
+      "type": "add",
+      "id": "719b174efd19e546",
+      "item": {
+        "type": "paragraph",
+        "id": "719b174efd19e546",
+        "text": "We must consider whether a region is an artifact of indexing or search."
+      },
+      "after": "1029eecf1c4a2ebb",
+      "date": 1448582808061
+    },
+    {
+      "type": "add",
+      "id": "6e25de7041ca0505",
+      "item": {
+        "type": "paragraph",
+        "id": "6e25de7041ca0505",
+        "text": "If we index a region then as sites enter and exit the region (due to editing on the server) we must add or remove large numbers of index entries."
+      },
+      "after": "719b174efd19e546",
+      "date": 1448582909304
+    },
+    {
+      "type": "add",
+      "id": "03cb096a23be8ac7",
+      "item": {
+        "type": "paragraph",
+        "id": "03cb096a23be8ac7",
+        "text": "If we search by region then we must relay every query to the included sites with the possible optimization of recognizing sites hosted on the same server and thus in the same index."
+      },
+      "after": "6e25de7041ca0505",
+      "date": 1448583068893
+    },
+    {
+      "type": "edit",
+      "id": "312cd8f30cf13cd7",
+      "item": {
+        "type": "markdown",
+        "id": "312cd8f30cf13cd7",
+        "text": "# indices"
+      },
+      "date": 1448583143458
+    },
+    {
+      "type": "edit",
+      "id": "8eafe0d5fde410fb",
+      "item": {
+        "type": "markdown",
+        "id": "8eafe0d5fde410fb",
+        "text": "# Distribution"
+      },
+      "date": 1448583145857
+    },
+    {
+      "type": "add",
+      "id": "423255431106151b",
+      "item": {
+        "type": "paragraph",
+        "id": "423255431106151b",
+        "text": "# Services"
+      },
+      "after": "03cb096a23be8ac7",
+      "date": 1448583960314
+    },
+    {
+      "type": "add",
+      "id": "d35dbd5deaee9435",
+      "item": {
+        "type": "paragraph",
+        "id": "d35dbd5deaee9435",
+        "text": "A complete search service will include scraping and query processing along the lines already implemented in the [[Ruby Sitemap Scrape]] and related mechanisms."
+      },
+      "after": "423255431106151b",
+      "date": 1448584054362
+    },
+    {
+      "type": "edit",
+      "id": "423255431106151b",
+      "item": {
+        "type": "markdown",
+        "id": "423255431106151b",
+        "text": "# Services"
+      },
+      "date": 1448584058632
+    },
+    {
+      "type": "edit",
+      "id": "312cd8f30cf13cd7",
+      "item": {
+        "type": "markdown",
+        "id": "312cd8f30cf13cd7",
+        "text": "# Indices"
+      },
+      "date": 1448584066943
+    },
+    {
+      "type": "add",
+      "id": "c59545f35d4cbd94",
+      "item": {
+        "type": "paragraph",
+        "id": "c59545f35d4cbd94",
+        "text": "# Implementation"
+      },
+      "after": "d35dbd5deaee9435",
+      "date": 1448584321312
+    },
+    {
+      "type": "add",
+      "id": "4d7f476232104e8b",
+      "item": {
+        "type": "paragraph",
+        "id": "4d7f476232104e8b",
+        "text": "Of these issues we consider indexing to be the dominant technical challenge. Comprehensive search solutions provide configurable machinery for all aspects of analysis, indexing, storage and query."
+      },
+      "after": "c59545f35d4cbd94",
+      "date": 1448584515610
+    },
+    {
+      "type": "add",
+      "id": "bcb8ddf28da09459",
+      "item": {
+        "type": "paragraph",
+        "id": "bcb8ddf28da09459",
+        "text": "We will succeed making search service widely distributed so long as its cost is modest and installation effortless. Small, pure javascript, is preferred."
+      },
+      "after": "4d7f476232104e8b",
+      "date": 1448584632840
+    },
+    {
+      "type": "edit",
+      "id": "c59545f35d4cbd94",
+      "item": {
+        "type": "markdown",
+        "id": "c59545f35d4cbd94",
+        "text": "# Implementation"
+      },
+      "date": 1448584649588
+    },
+    {
+      "type": "add",
+      "id": "cb1ddf5ed0bea68e",
+      "item": {
+        "type": "paragraph",
+        "id": "cb1ddf5ed0bea68e",
+        "text": "Distributing search has the disadvantage that small sites with read-only content might not accept responsibility for search benefiting users of other sites."
+      },
+      "after": "03cb096a23be8ac7",
+      "date": 1448584769258
+    },
+    {
+      "type": "edit",
+      "id": "cb1ddf5ed0bea68e",
+      "item": {
+        "type": "paragraph",
+        "id": "cb1ddf5ed0bea68e",
+        "text": "Distributing search has the disadvantage that small sites with read-only content might not accept responsibility for search benefiting users of other sites. It would be better if full featured sites could carry the larger burden."
+      },
+      "date": 1448584797623
+    },
+    {
+      "type": "add",
+      "id": "89bbd80ca92f2b54",
+      "item": {
+        "type": "paragraph",
+        "id": "89bbd80ca92f2b54",
+        "text": "At the core of search lies the inverted index that supports content addressing. The ubiquitous b-tree provides the go to solution for this particular function. We find one recently introduced pure javascript package on npm. [https://www.npmjs.com/package/b-tree npm]"
+      },
+      "after": "bcb8ddf28da09459",
+      "date": 1448585015055
+    },
+    {
+      "type": "edit",
+      "id": "89bbd80ca92f2b54",
+      "item": {
+        "type": "paragraph",
+        "id": "89bbd80ca92f2b54",
+        "text": "At the core of search lies the inverted index that supports content addressing. The ubiquitous b-tree provides the go to solution for this particular function. We find one recently introduced pure javascript package. [https://www.npmjs.com/package/b-tree npm]"
+      },
+      "date": 1448585023726
+    },
+    {
+      "type": "add",
+      "id": "bd89b26487e5fea8",
+      "item": {
+        "type": "paragraph",
+        "id": "bd89b26487e5fea8",
+        "text": "It is possible that we need no independent storage for leaf nodes (the value of key-value pairs). The b-tree index storage might find that site-slug pairs are sufficiently indirect to serve as pointers."
+      },
+      "after": "89bbd80ca92f2b54",
+      "date": 1448585713930
+    },
+    {
+      "type": "edit",
+      "id": "bd89b26487e5fea8",
+      "item": {
+        "type": "paragraph",
+        "id": "bd89b26487e5fea8",
+        "text": "We may not need independent storage for leaf nodes, the value of key-value pairs. The b-tree index storage might find that site-slug pairs are sufficiently indirect to serve as pointers."
+      },
+      "date": 1448585768861
+    },
+    {
+      "type": "edit",
+      "id": "bd89b26487e5fea8",
+      "item": {
+        "type": "paragraph",
+        "id": "bd89b26487e5fea8",
+        "text": "We may not need independent storage for leaf nodes, the value of key-value pairs. The b-tree index storage might find that site-slug pairs are sufficiently indirect to serve as leaf pointers."
+      },
+      "date": 1448585801424
+    },
+    {
+      "type": "edit",
+      "id": "4d7f476232104e8b",
+      "item": {
+        "type": "paragraph",
+        "id": "4d7f476232104e8b",
+        "text": "Of these issues we consider indexing to be the dominant technical challenge. Comprehensive search solutions provide configurable machinery for all aspects of analysis, indexing, storage and query. At the core of each is the log(n) behavior of the b-tree. [https://en.wikipedia.org/wiki/B-tree wikipedia]"
+      },
+      "date": 1448586336330
+    },
+    {
+      "type": "edit",
+      "id": "4d7f476232104e8b",
+      "item": {
+        "type": "paragraph",
+        "id": "4d7f476232104e8b",
+        "text": "Of these issues we consider indexing to be the dominant technical challenge. Comprehensive search solutions provide configurable machinery for all aspects of analysis, indexing, storage and query."
+      },
+      "date": 1448586379214
+    },
+    {
+      "type": "add",
+      "id": "d72ebf831c43d8c3",
+      "item": {
+        "type": "paragraph",
+        "id": "d72ebf831c43d8c3",
+        "text": "At the core of each is the log(n) behavior of an inverted index typically implemented with some version of the ubiquitous b-tree. [https://en.wikipedia.org/wiki/B-tree wikipedia]"
+      },
+      "after": "4d7f476232104e8b",
+      "date": 1448586436215
+    },
+    {
+      "type": "edit",
+      "id": "89bbd80ca92f2b54",
+      "item": {
+        "type": "paragraph",
+        "id": "89bbd80ca92f2b54",
+        "text": "We find one recently introduced pure javascript package. [https://www.npmjs.com/package/b-tree npm]"
+      },
+      "date": 1448586454594
+    },
+    {
+      "type": "edit",
+      "id": "89bbd80ca92f2b54",
+      "item": {
+        "type": "paragraph",
+        "id": "89bbd80ca92f2b54",
+        "text": "Strata looks attractive. It is a database primitive not supposed to be used a as a general purpose database by it's lonesome, but an interface to a b‑tree and it's concepts that you can use to create different types database strategies. [https://www.npmjs.com/package/b-tree npm]"
+      },
+      "date": 1448586565482
+    },
+    {
+      "type": "edit",
+      "id": "89bbd80ca92f2b54",
+      "item": {
+        "type": "paragraph",
+        "id": "89bbd80ca92f2b54",
+        "text": "Strata looks attractive. It is a database primitive interface to a b‑tree. One can use Strata to create different types database strategies. [https://www.npmjs.com/package/b-tree npm]"
+      },
+      "date": 1448586628458
+    },
+    {
+      "type": "add",
+      "id": "311054c25d737e97",
+      "item": {
+        "type": "paragraph",
+        "id": "311054c25d737e97",
+        "text": "See [[Distributed Search]]"
+      },
+      "after": "996c6c5837d4578e",
+      "date": 1448632443098
+    },
+    {
+      "type": "edit",
+      "id": "996c6c5837d4578e",
+      "item": {
+        "type": "paragraph",
+        "id": "996c6c5837d4578e",
+        "text": "We consider how we might index and query multiple sites within a distributed search database routinely hosted in federated wiki page server/editors."
+      },
+      "date": 1448632485134
+    },
+    {
+      "type": "edit",
+      "id": "4d7f476232104e8b",
+      "item": {
+        "type": "paragraph",
+        "id": "4d7f476232104e8b",
+        "text": "Of these issues we consider indexing to be the dominant technical challenge."
+      },
+      "date": 1448632746613
+    },
+    {
+      "type": "add",
+      "id": "cf5d61195e8cc717",
+      "item": {
+        "type": "paragraph",
+        "id": "cf5d61195e8cc717",
+        "text": "Comprehensive search solutions provide configurable machinery for all aspects of analysis, indexing, storage and query that would expect of a centralized search service."
+      },
+      "after": "4d7f476232104e8b",
+      "date": 1448632748964
+    },
+    {
+      "type": "edit",
+      "id": "cf5d61195e8cc717",
+      "item": {
+        "type": "paragraph",
+        "id": "cf5d61195e8cc717",
+        "text": "Comprehensive search solutions provide configurable machinery for all aspects of analysis, indexing, storage and query that one would expect of a centralized search service."
+      },
+      "date": 1448632768022
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "311054c25d737e97",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8"
+      ],
+      "id": "cf5d61195e8cc717",
+      "date": 1448632772869
+    },
+    {
+      "type": "edit",
+      "id": "4d7f476232104e8b",
+      "item": {
+        "type": "paragraph",
+        "id": "4d7f476232104e8b",
+        "text": "Of these issues we consider indexing to be the dominant technical challenge not addressed by mechanisms already largely in place."
+      },
+      "date": 1448632864988
+    },
+    {
+      "type": "edit",
+      "id": "d72ebf831c43d8c3",
+      "item": {
+        "type": "paragraph",
+        "id": "d72ebf831c43d8c3",
+        "text": "At the core of all search is the log(n) behavior of an inverted index typically implemented with some version of the ubiquitous b-tree. [https://en.wikipedia.org/wiki/B-tree wikipedia]"
+      },
+      "date": 1448632884252
+    },
+    {
+      "type": "add",
+      "id": "0967ce2816691ed8",
+      "item": {
+        "type": "paragraph",
+        "id": "0967ce2816691ed8",
+        "text": "See [[Distributed Hash Tables"
+      },
+      "after": "bd89b26487e5fea8",
+      "date": 1448635283490
+    },
+    {
+      "type": "edit",
+      "id": "0967ce2816691ed8",
+      "item": {
+        "type": "paragraph",
+        "id": "0967ce2816691ed8",
+        "text": "See [[Distributed Hash Table]] for related peer-to-peer research spawned by Napster."
+      },
+      "date": 1448635374859
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8",
+        "311054c25d737e97",
+        "0967ce2816691ed8"
+      ],
+      "id": "311054c25d737e97",
+      "date": 1448636152313
+    },
+    {
+      "type": "edit",
+      "id": "311054c25d737e97",
+      "item": {
+        "type": "paragraph",
+        "id": "311054c25d737e97",
+        "text": "See [[Distributed Search]] which describes the social structure within which search is only one component."
+      },
+      "date": 1448636218720
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "311054c25d737e97",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8",
+        "0967ce2816691ed8"
+      ],
+      "id": "311054c25d737e97",
+      "date": 1448636265610
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "311054c25d737e97",
+        "0967ce2816691ed8",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8"
+      ],
+      "id": "0967ce2816691ed8",
+      "date": 1448636273960
+    },
+    {
+      "type": "edit",
+      "id": "bcb8ddf28da09459",
+      "item": {
+        "type": "paragraph",
+        "id": "bcb8ddf28da09459",
+        "text": "We will succeed making search service widely distributed so long as its cost is modest and installation effortless. Small, pure-javascript is preferred."
+      },
+      "date": 1448640455555
+    },
+    {
+      "type": "edit",
+      "id": "bcb8ddf28da09459",
+      "item": {
+        "type": "paragraph",
+        "id": "bcb8ddf28da09459",
+        "text": "We will succeed making search service widely distributed so long as its cost is modest and installation effortless. Small pure-javascript is preferred."
+      },
+      "date": 1448640473746
+    },
+    {
+      "type": "add",
+      "id": "326189ddc24f02a3",
+      "item": {
+        "type": "paragraph",
+        "id": "326189ddc24f02a3",
+        "text": "See [[Multiway Trees]] for Knuth's treatment of the ubiquitous b-tree."
+      },
+      "after": "db07fb86544ba803",
+      "date": 1450030581675
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1457359057030
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a4a172ff466105f1"
+      },
+      "id": "a4a172ff466105f1",
+      "type": "add",
+      "after": "bd89b26487e5fea8",
+      "date": 1457359059242
+    },
+    {
+      "type": "edit",
+      "id": "a4a172ff466105f1",
+      "item": {
+        "type": "reference",
+        "id": "a4a172ff466105f1",
+        "site": "ward.asia.wiki.org",
+        "slug": "neo4j",
+        "title": "Neo4J",
+        "text": "Neo4j is an open-source graph database implemented in Java and accessible from software written in other languages using the Cypher query language through a transactional HTTP endpoint. [https://en.wikipedia.org/wiki/Neo4j wikipedia] [http://neo4j.com/ site]"
+      },
+      "date": 1457359065221
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "311054c25d737e97",
+        "0967ce2816691ed8",
+        "a4a172ff466105f1",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "326189ddc24f02a3",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8"
+      ],
+      "id": "a4a172ff466105f1",
+      "date": 1457359081631
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8406579d0aa914be"
+      },
+      "id": "8406579d0aa914be",
+      "type": "add",
+      "after": "bd89b26487e5fea8",
+      "date": 1457359196251
+    },
+    {
+      "type": "edit",
+      "id": "8406579d0aa914be",
+      "item": {
+        "type": "reference",
+        "id": "8406579d0aa914be",
+        "site": "future.fedwiki.org",
+        "slug": "about-search-plugin",
+        "title": "About Search Plugin",
+        "text": "Search retrieves page references from information recorded by federated wiki search services."
+      },
+      "date": 1457359198783
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "311054c25d737e97",
+        "0967ce2816691ed8",
+        "8406579d0aa914be",
+        "a4a172ff466105f1",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "326189ddc24f02a3",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8"
+      ],
+      "id": "8406579d0aa914be",
+      "date": 1457359206845
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8e85b53490f59c26"
+      },
+      "id": "8e85b53490f59c26",
+      "type": "add",
+      "after": "bd89b26487e5fea8",
+      "date": 1457359282692
+    },
+    {
+      "type": "edit",
+      "id": "8e85b53490f59c26",
+      "item": {
+        "type": "reference",
+        "id": "8e85b53490f59c26",
+        "site": "neo4j.bay.wiki.org",
+        "slug": "testing-cypher-plugin",
+        "title": "Testing Cypher Plugin",
+        "text": "The combination of LINKS and KNOWS fishes out the participants in a wiki conversation. [https://github.com/WardCunningham/wiki-plugin-cypher/blob/master/server/server.coffee#L14-L26 github]"
+      },
+      "date": 1457359287040
+    },
+    {
+      "type": "move",
+      "order": [
+        "996c6c5837d4578e",
+        "311054c25d737e97",
+        "0967ce2816691ed8",
+        "8406579d0aa914be",
+        "a4a172ff466105f1",
+        "8e85b53490f59c26",
+        "312cd8f30cf13cd7",
+        "b03a9b79626a17a7",
+        "cf4788afbb5f5318",
+        "ef95f5702411b2b3",
+        "6acf936d3bffcb73",
+        "8901c76d6465d316",
+        "db07fb86544ba803",
+        "326189ddc24f02a3",
+        "8eafe0d5fde410fb",
+        "1029eecf1c4a2ebb",
+        "719b174efd19e546",
+        "6e25de7041ca0505",
+        "03cb096a23be8ac7",
+        "cb1ddf5ed0bea68e",
+        "423255431106151b",
+        "d35dbd5deaee9435",
+        "c59545f35d4cbd94",
+        "cf5d61195e8cc717",
+        "4d7f476232104e8b",
+        "d72ebf831c43d8c3",
+        "bcb8ddf28da09459",
+        "89bbd80ca92f2b54",
+        "bd89b26487e5fea8"
+      ],
+      "id": "8e85b53490f59c26",
+      "date": 1457359295890
+    }
+  ]
+}

@@ -1,0 +1,367 @@
+{
+  "title": "Stateful REST",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "ef708c00712283ee",
+      "text": "This is a no-no. As per the REST architecture, a RESTful Web Service should not keep a client state on the server. This restriction is called [[Statelessness]]. "
+    },
+    {
+      "type": "markdown",
+      "id": "05a6064c2388fde4",
+      "text": "# No client session state on the server\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "5b53c9bfe2829d8f",
+      "text": "By stateless it means that the server does not store any state about the client session on the server side."
+    },
+    {
+      "type": "paragraph",
+      "id": "4cd2111afc850157",
+      "text": "The client session is stored on the client. The server is stateless means that every server can service any client at any time, there is no session affinity or sticky sessions. The relevant session information is stored on the client and passed to the server as needed - [http://stackoverflow.com/questions/3105296/if-rest-applications-are-supposed-to-be-stateless-how-do-you-manage-sessions stackoverflow]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8cd4df41c3ce52ac",
+      "text": "The client's application state should never be stored on the server, but passed around from the client to every place that needs it.\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "e46ec77d8e751d1b",
+      "text": "That is where the ST in REST comes from, State Transfer. You transfer the state around instead of having the server store it. This is the only way to scale to millions of concurrent users. If for no other reason than because millions of sessions is millions of sessions."
+    },
+    {
+      "type": "paragraph",
+      "id": "515de9ce4748f272",
+      "text": "Even for a service that you think will only need in the 10's of thousands of concurrent users, you still should make your service stateless. Tens of thousands is still tens of thousands and there will be time and space cost associated with it."
+    },
+    {
+      "type": "paragraph",
+      "id": "38e7cc0999a94566",
+      "text": "Stateless is how the HTTP protocol and the web in general was designed to operate and is an overall simpler implementation and you have a single code path instead of a bunch of server side logic to maintain a bunch of session state."
+    },
+    {
+      "type": "markdown",
+      "id": "e1ba2c16713c7f6f",
+      "text": "# Advantages of Statelessness"
+    },
+    {
+      "type": "markdown",
+      "id": "f8c0de6c0d78c3ff",
+      "text": "Following are the benefits of statelessness in RESTful Web Services:\n\n- Web services can treat each method request independently.\n- Web services need not maintain the client's previous interactions. It simplifies the application design.\n- As HTTP is itself a statelessness protocol, RESTful Web Services work seamlessly with the HTTP protocols.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "bccb56af0371060a",
+      "text": "# Disadvantages of Statelessness"
+    },
+    {
+      "type": "markdown",
+      "id": "bfa44d250c8c3006",
+      "text": "Following are the disadvantages of statelessness in RESTful Web Services:\n\n- Web services need to get extra information in each request and then interpret to get the client's state in case the client interactions are to be taken care of."
+    },
+    {
+      "type": "markdown",
+      "id": "6d9c8ddee69ae04d",
+      "text": "# See also\n\n- [[Stateful REST]]\n- [[RESTful Security]]\n- [[REST]]\n- [[RESTful]]\n- [[DreamFactory]]\n- [[RESTBase]]\n- [[REST API]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Stateful REST",
+        "story": []
+      },
+      "date": 1493381014270
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ef708c00712283ee"
+      },
+      "id": "ef708c00712283ee",
+      "type": "add",
+      "date": 1493381016328
+    },
+    {
+      "type": "edit",
+      "id": "ef708c00712283ee",
+      "item": {
+        "type": "paragraph",
+        "id": "ef708c00712283ee",
+        "text": "As per the REST architecture, a RESTful Web Service should not keep a client state on the server. This restriction is called Statelessness. It is the responsibility of the client to pass its context to the server and then the server can store this context to process the client's further request. For example, session maintained by server is identified by session identifier passed by the client."
+      },
+      "date": 1493381101231
+    },
+    {
+      "type": "add",
+      "id": "77bba96b7f79e2f5",
+      "item": {
+        "type": "paragraph",
+        "id": "77bba96b7f79e2f5",
+        "text": "RESTful Web Services should adhere to this restriction. We have seen this in the RESTful Web Services - Methods chapter, that the web service methods are not storing any information from the client they are invoked from."
+      },
+      "after": "ef708c00712283ee",
+      "date": 1493381104758
+    },
+    {
+      "type": "add",
+      "id": "e1ba2c16713c7f6f",
+      "item": {
+        "type": "paragraph",
+        "id": "e1ba2c16713c7f6f",
+        "text": "# Advantages of Statelessness"
+      },
+      "after": "77bba96b7f79e2f5",
+      "date": 1493381108426
+    },
+    {
+      "type": "add",
+      "id": "f8c0de6c0d78c3ff",
+      "item": {
+        "type": "paragraph",
+        "id": "f8c0de6c0d78c3ff",
+        "text": "Following are the benefits of statelessness in RESTful Web Services:\n\n- Web services can treat each method request independently.\n- Web services need not maintain the client's previous interactions. It simplifies the application design.\n- As HTTP is itself a statelessness protocol, RESTful Web Services work seamlessly with the HTTP protocols.\n\n"
+      },
+      "after": "e1ba2c16713c7f6f",
+      "date": 1493381111711
+    },
+    {
+      "type": "add",
+      "id": "bccb56af0371060a",
+      "item": {
+        "type": "paragraph",
+        "id": "bccb56af0371060a",
+        "text": "# Disadvantages of Statelessness"
+      },
+      "after": "f8c0de6c0d78c3ff",
+      "date": 1493381113441
+    },
+    {
+      "type": "add",
+      "id": "bfa44d250c8c3006",
+      "item": {
+        "type": "paragraph",
+        "id": "bfa44d250c8c3006",
+        "text": "Following are the disadvantages of statelessness in RESTful Web Services:\n\n- Web services need to get extra information in each request and then interpret to get the client's state in case the client interactions are to be taken care of."
+      },
+      "after": "bccb56af0371060a",
+      "date": 1493381114906
+    },
+    {
+      "type": "edit",
+      "id": "e1ba2c16713c7f6f",
+      "item": {
+        "type": "markdown",
+        "id": "e1ba2c16713c7f6f",
+        "text": "# Advantages of Statelessness"
+      },
+      "date": 1493381116354
+    },
+    {
+      "type": "edit",
+      "id": "f8c0de6c0d78c3ff",
+      "item": {
+        "type": "markdown",
+        "id": "f8c0de6c0d78c3ff",
+        "text": "Following are the benefits of statelessness in RESTful Web Services:\n\n- Web services can treat each method request independently.\n- Web services need not maintain the client's previous interactions. It simplifies the application design.\n- As HTTP is itself a statelessness protocol, RESTful Web Services work seamlessly with the HTTP protocols.\n\n"
+      },
+      "date": 1493381117118
+    },
+    {
+      "type": "edit",
+      "id": "bccb56af0371060a",
+      "item": {
+        "type": "markdown",
+        "id": "bccb56af0371060a",
+        "text": "# Disadvantages of Statelessness"
+      },
+      "date": 1493381118235
+    },
+    {
+      "type": "edit",
+      "id": "bfa44d250c8c3006",
+      "item": {
+        "type": "markdown",
+        "id": "bfa44d250c8c3006",
+        "text": "Following are the disadvantages of statelessness in RESTful Web Services:\n\n- Web services need to get extra information in each request and then interpret to get the client's state in case the client interactions are to be taken care of."
+      },
+      "date": 1493381118956
+    },
+    {
+      "type": "edit",
+      "id": "ef708c00712283ee",
+      "item": {
+        "type": "paragraph",
+        "id": "ef708c00712283ee",
+        "text": "As per the REST architecture, a RESTful Web Service should not keep a client state on the server. This restriction is called [[Statelessness]]. It is the responsibility of the client to pass its context to the server and then the server can store this context to process the client's further request. For example, session maintained by server is identified by session identifier passed by the client."
+      },
+      "date": 1493381137261
+    },
+    {
+      "type": "edit",
+      "id": "ef708c00712283ee",
+      "item": {
+        "type": "paragraph",
+        "id": "ef708c00712283ee",
+        "text": "As per the REST architecture, a RESTful Web Service should not keep a client state on the server. This restriction is called [[Statelessness]]. "
+      },
+      "date": 1493382315244
+    },
+    {
+      "type": "add",
+      "id": "05a6064c2388fde4",
+      "item": {
+        "type": "paragraph",
+        "id": "05a6064c2388fde4",
+        "text": "It is the responsibility of the client to pass its context to the server and then the server can store this context to process the client's further request. For example, session maintained by server is identified by session identifier passed by the client."
+      },
+      "after": "ef708c00712283ee",
+      "date": 1493382316422
+    },
+    {
+      "type": "edit",
+      "id": "ef708c00712283ee",
+      "item": {
+        "type": "paragraph",
+        "id": "ef708c00712283ee",
+        "text": "This is a no-no. As per the REST architecture, a RESTful Web Service should not keep a client state on the server. This restriction is called [[Statelessness]]. "
+      },
+      "date": 1493382337152
+    },
+    {
+      "type": "edit",
+      "id": "05a6064c2388fde4",
+      "item": {
+        "type": "paragraph",
+        "id": "05a6064c2388fde4",
+        "text": "No client session state on the server:\n\nBy stateless it means that the server does not store any state about the client session on the server side.\n\nThe client session is stored on the client. The server is stateless means that every server can service any client at any time, there is no session affinity or sticky sessions. The relevant session information is stored on the client and passed to the server as needed.\n\nThat does not preclude other services that the web server talks to from maintain state about business objects such as shopping carts, just not about the client's current application/session state.\n\nThe client's application state should never be stored on the server, but passed around from the client to every place that needs it.\n\nThat is where the ST in REST comes from, State Transfer. You transfer the state around instead of having the server store it. This is the only way to scale to millions of concurrent users. If for no other reason than because millions of sessions is millions of sessions.\n\nThe load of session management is amortized across all the clients, the clients store their session state and the servers can service many orders of magnitude or more clients in a stateless fashion.\n\nEven for a service that you think will only need in the 10's of thousands of concurrent users, you still should make your service stateless. Tens of thousands is still tens of thousands and there will be time and space cost associated with it.\n\nStateless is how the HTTP protocol and the web in general was designed to operate and is an overall simpler implementation and you have a single code path instead of a bunch of server side logic to maintain a bunch of session state."
+      },
+      "date": 1493382411805
+    },
+    {
+      "type": "remove",
+      "id": "77bba96b7f79e2f5",
+      "date": 1493382415313
+    },
+    {
+      "type": "edit",
+      "id": "05a6064c2388fde4",
+      "item": {
+        "type": "paragraph",
+        "id": "05a6064c2388fde4",
+        "text": "# No client session state on the server\n\n"
+      },
+      "date": 1493382434393
+    },
+    {
+      "type": "edit",
+      "id": "05a6064c2388fde4",
+      "item": {
+        "type": "markdown",
+        "id": "05a6064c2388fde4",
+        "text": "# No client session state on the server\n\n"
+      },
+      "date": 1493382435576
+    },
+    {
+      "type": "add",
+      "id": "5b53c9bfe2829d8f",
+      "item": {
+        "type": "paragraph",
+        "id": "5b53c9bfe2829d8f",
+        "text": "By stateless it means that the server does not store any state about the client session on the server side."
+      },
+      "after": "05a6064c2388fde4",
+      "date": 1493382439601
+    },
+    {
+      "type": "add",
+      "id": "4cd2111afc850157",
+      "item": {
+        "type": "paragraph",
+        "id": "4cd2111afc850157",
+        "text": "The client session is stored on the client. The server is stateless means that every server can service any client at any time, there is no session affinity or sticky sessions. The relevant session information is stored on the client and passed to the server as needed."
+      },
+      "after": "5b53c9bfe2829d8f",
+      "date": 1493382451242
+    },
+    {
+      "type": "add",
+      "id": "8cd4df41c3ce52ac",
+      "item": {
+        "type": "paragraph",
+        "id": "8cd4df41c3ce52ac",
+        "text": "The client's application state should never be stored on the server, but passed around from the client to every place that needs it.\n\n"
+      },
+      "after": "4cd2111afc850157",
+      "date": 1493382480123
+    },
+    {
+      "type": "add",
+      "id": "e46ec77d8e751d1b",
+      "item": {
+        "type": "paragraph",
+        "id": "e46ec77d8e751d1b",
+        "text": "That is where the ST in REST comes from, State Transfer. You transfer the state around instead of having the server store it. This is the only way to scale to millions of concurrent users. If for no other reason than because millions of sessions is millions of sessions."
+      },
+      "after": "8cd4df41c3ce52ac",
+      "date": 1493382481650
+    },
+    {
+      "type": "add",
+      "id": "515de9ce4748f272",
+      "item": {
+        "type": "paragraph",
+        "id": "515de9ce4748f272",
+        "text": "Even for a service that you think will only need in the 10's of thousands of concurrent users, you still should make your service stateless. Tens of thousands is still tens of thousands and there will be time and space cost associated with it."
+      },
+      "after": "e46ec77d8e751d1b",
+      "date": 1493382500211
+    },
+    {
+      "type": "add",
+      "id": "38e7cc0999a94566",
+      "item": {
+        "type": "paragraph",
+        "id": "38e7cc0999a94566",
+        "text": "Stateless is how the HTTP protocol and the web in general was designed to operate and is an overall simpler implementation and you have a single code path instead of a bunch of server side logic to maintain a bunch of session state."
+      },
+      "after": "515de9ce4748f272",
+      "date": 1493382502765
+    },
+    {
+      "type": "edit",
+      "id": "4cd2111afc850157",
+      "item": {
+        "type": "paragraph",
+        "id": "4cd2111afc850157",
+        "text": "The client session is stored on the client. The server is stateless means that every server can service any client at any time, there is no session affinity or sticky sessions. The relevant session information is stored on the client and passed to the server as needed - [http://stackoverflow.com/questions/3105296/if-rest-applications-are-supposed-to-be-stateless-how-do-you-manage-sessions stckoverflow]"
+      },
+      "date": 1493382538007
+    },
+    {
+      "type": "edit",
+      "id": "4cd2111afc850157",
+      "item": {
+        "type": "paragraph",
+        "id": "4cd2111afc850157",
+        "text": "The client session is stored on the client. The server is stateless means that every server can service any client at any time, there is no session affinity or sticky sessions. The relevant session information is stored on the client and passed to the server as needed - [http://stackoverflow.com/questions/3105296/if-rest-applications-are-supposed-to-be-stateless-how-do-you-manage-sessions stackoverflow]"
+      },
+      "date": 1493382544991
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "6d9c8ddee69ae04d",
+        "text": "# See also\n\n- [[Stateful REST]]\n- [[RESTful Security]]\n- [[REST]]\n- [[RESTful]]\n- [[DreamFactory]]\n- [[RESTBase]]\n- [[REST API]]"
+      },
+      "after": "bfa44d250c8c3006",
+      "id": "6d9c8ddee69ae04d",
+      "date": 1493382565156
+    }
+  ]
+}

@@ -1,0 +1,1626 @@
+{
+  "title": "Wiki Admin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "0451f8f90c9a59f1",
+      "text": "An administrator is identified by the --admin parameter when starting wiki. The admin value would depend on how individuals are identified by the security module in use."
+    },
+    {
+      "type": "code",
+      "id": "1cfe7c6c3602055c",
+      "text": "wiki -f --admin ward@c2.com"
+    },
+    {
+      "type": "paragraph",
+      "id": "8f312fc481cdbb7f",
+      "text": "To set an admin user:"
+    },
+    {
+      "type": "code",
+      "id": "c83c04b7bc8cf741",
+      "text": "node index.js --config ../../config.json --admin admin-id"
+    },
+    {
+      "type": "paragraph",
+      "id": "1d399544524196b7",
+      "text": "Changes will apply to the origin site and all other sites hosted by the same server should that be a wiki farm."
+    },
+    {
+      "type": "paragraph",
+      "id": "49ee9abb9e20c943",
+      "text": "We consider how a production server could be managed with Shell plugin markup. Only a logged in administrator can run these scripts. See also [[Config Notes]]"
+    },
+    {
+      "type": "code",
+      "id": "6aa7312703437dd1",
+      "text": "cd /usr/local/lib/node_modules/wiki\nnpm i wiki-plugin-shell\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "d3c95c7413473538",
+      "text": "See [[About Shell Plugin]]"
+    },
+    {
+      "type": "shell",
+      "id": "5ab60946ef8c71c6",
+      "text": "echo hello world"
+    },
+    {
+      "type": "paragraph",
+      "id": "4b34e609edb4d8fc",
+      "text": "What versions are available to wiki. The running wiki might be serving fewer than these if plugins have been installed since restart."
+    },
+    {
+      "type": "shell",
+      "id": "61b056f6c63c22be",
+      "text": "wiki -v"
+    },
+    {
+      "type": "paragraph",
+      "id": "b99544f6bfbed582",
+      "text": "We can look into the node_modules directory of wiki when it is installed in the usual place. There might be links if plugins are developmental versions."
+    },
+    {
+      "type": "shell",
+      "id": "a832777944c36045",
+      "text": "cd `npm prefix -g`/lib/node_modules/wiki\nls -l node_modules |\\\n  cut -c 33- |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+    },
+    {
+      "type": "paragraph",
+      "id": "9e7e5e329a6118f0",
+      "text": "Look for plugins that have been installed or linked locally. "
+    },
+    {
+      "type": "shell",
+      "id": "81ff3e38823ab378",
+      "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\n(cd $node; ls -d wiki-plugin-* )>/tmp/$$.node\n(cd $wiki; ls -d wiki-plugin-* )>/tmp/$$.wiki\ndiff /tmp/$$.node /tmp/$$.wiki | grep '<'"
+    },
+    {
+      "type": "paragraph",
+      "id": "fbaf0bc50dc47845",
+      "text": "Add missing plugins by linking to wiki's global install."
+    },
+    {
+      "type": "shell",
+      "id": "c32b10c089c07b38",
+      "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-slide\n) |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+    },
+    {
+      "type": "paragraph",
+      "id": "a695adf6ff1c778e",
+      "text": "Add missing plugins by installing recent from npm."
+    },
+    {
+      "type": "paragraph",
+      "id": "3e040cb1514b7c86",
+      "text": "See [[About Plugmatic Plugin]]"
+    },
+    {
+      "type": "shell",
+      "id": "3020636cf8e7276f",
+      "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss\nnpm i wiki-plugin-json\nnpm i wiki-plugin-map\nnpm i wiki-plugin-graph\nnpm i wiki-plugin-plugins\nnpm i wiki-plugin-morseteacher\nnpm i wiki-plugin-rostermatic\nnpm i wiki-plugin-plugmatic"
+    },
+    {
+      "type": "paragraph",
+      "id": "091e9d9cbc95eb23",
+      "text": "And a few more plugins we forgot."
+    },
+    {
+      "type": "shell",
+      "id": "3698806a1222dc5e",
+      "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-tab"
+    },
+    {
+      "type": "reference",
+      "id": "250fcc3a3d30bd9e",
+      "site": "admin.fedwiki.org",
+      "slug": "config-notes",
+      "title": "Config Notes",
+      "text": "We note the paths where important server files get installed. See also [[Wiki Admin]], [[Wiki Relocation]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Admin",
+        "story": []
+      },
+      "date": 1464301676110
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8f312fc481cdbb7f"
+      },
+      "id": "8f312fc481cdbb7f",
+      "type": "add",
+      "date": 1464301677926
+    },
+    {
+      "type": "edit",
+      "id": "8f312fc481cdbb7f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f312fc481cdbb7f",
+        "text": "We run shell scripts here. This could work better."
+      },
+      "date": 1464301700518
+    },
+    {
+      "type": "add",
+      "id": "d3c95c7413473538",
+      "item": {
+        "type": "paragraph",
+        "id": "d3c95c7413473538",
+        "text": "See [[About Shell Plugin]]"
+      },
+      "after": "8f312fc481cdbb7f",
+      "date": 1464301716823
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "time date"
+      },
+      "after": "d3c95c7413473538",
+      "id": "a832777944c36045",
+      "date": 1464301733427
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "ssh asia 'pwd'"
+      },
+      "date": 1464301756578
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "ssh asia.wiki.org 'pwd'"
+      },
+      "date": 1464301775739
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a70c499e96bd6d7d"
+      },
+      "id": "a70c499e96bd6d7d",
+      "type": "add",
+      "after": "a832777944c36045",
+      "date": 1464302065842
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "su -l ward\npwd"
+      },
+      "date": 1464302068349
+    },
+    {
+      "type": "remove",
+      "id": "a70c499e96bd6d7d",
+      "date": 1464302081613
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0db740624a6643bc"
+      },
+      "id": "0db740624a6643bc",
+      "type": "add",
+      "after": "a832777944c36045",
+      "date": 1464302164161
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "echo hello\nsu -l ward\npwd"
+      },
+      "date": 1464302166800
+    },
+    {
+      "type": "remove",
+      "id": "0db740624a6643bc",
+      "date": 1464302167742
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "echo hello"
+      },
+      "date": 1464302231757
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "date"
+      },
+      "date": 1464302267734
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "echo hello\ndate"
+      },
+      "date": 1464302285961
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "echo hello\nsu ward\ndate"
+      },
+      "date": 1464302296481
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "echo hello\ndate"
+      },
+      "date": 1464302325297
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "echo hello\ndate\npwd"
+      },
+      "date": 1464830771569
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/wiki\nls -l node_modules"
+      },
+      "date": 1468786944492
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules"
+      },
+      "date": 1468786985478
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut +3"
+      },
+      "date": 1468787042430
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -f 3"
+      },
+      "date": 1468787074670
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -f 3 -s '\\s'"
+      },
+      "date": 1468787101715
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -f 3 -d '\\s'"
+      },
+      "date": 1468787126494
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -f 3 -d ' '"
+      },
+      "date": 1468787138206
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -f 4 -d ' '"
+      },
+      "date": 1468787149734
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -f 4-9 -d ' '"
+      },
+      "date": 1468787182075
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules "
+      },
+      "date": 1468787210092
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -c 20-200"
+      },
+      "date": 1468787310249
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -c 30-200"
+      },
+      "date": 1468787326426
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -c 33-200"
+      },
+      "date": 1468787337891
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "61b056f6c63c22be"
+      },
+      "id": "61b056f6c63c22be",
+      "type": "add",
+      "after": "a832777944c36045",
+      "date": 1468787404268
+    },
+    {
+      "type": "edit",
+      "id": "61b056f6c63c22be",
+      "item": {
+        "type": "shell",
+        "id": "61b056f6c63c22be",
+        "text": "wiki -v"
+      },
+      "date": 1468787418360
+    },
+    {
+      "type": "add",
+      "id": "4b34e609edb4d8fc",
+      "item": {
+        "type": "paragraph",
+        "id": "4b34e609edb4d8fc",
+        "text": "What versions are available to wiki. The running wiki might be serving fewer than these if plugins have been installed since restart."
+      },
+      "after": "d3c95c7413473538",
+      "date": 1468787542031
+    },
+    {
+      "type": "move",
+      "order": [
+        "8f312fc481cdbb7f",
+        "d3c95c7413473538",
+        "4b34e609edb4d8fc",
+        "61b056f6c63c22be",
+        "a832777944c36045"
+      ],
+      "id": "61b056f6c63c22be",
+      "date": 1468787546376
+    },
+    {
+      "type": "add",
+      "id": "b99544f6bfbed582",
+      "item": {
+        "type": "paragraph",
+        "id": "b99544f6bfbed582",
+        "text": "We can look into the node_modules directory of wiki when it is installed in the usual place."
+      },
+      "after": "4b34e609edb4d8fc",
+      "date": 1468787606253
+    },
+    {
+      "type": "move",
+      "order": [
+        "8f312fc481cdbb7f",
+        "d3c95c7413473538",
+        "4b34e609edb4d8fc",
+        "61b056f6c63c22be",
+        "b99544f6bfbed582",
+        "a832777944c36045"
+      ],
+      "id": "b99544f6bfbed582",
+      "date": 1468787613245
+    },
+    {
+      "type": "edit",
+      "id": "b99544f6bfbed582",
+      "item": {
+        "type": "paragraph",
+        "id": "b99544f6bfbed582",
+        "text": "We can look into the node_modules directory of wiki when it is installed in the usual place. There might be links if plugins are developmental versions."
+      },
+      "date": 1468787656794
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/libx/node_modules/wiki\nls -l node_modules | cut -c 33-200"
+      },
+      "date": 1468787730535
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/libx/node_modules/wiki\npwd\nls -l node_modules | cut -c 33-200"
+      },
+      "date": 1468787755442
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki\npwd\nls -l node_modules | cut -c 33-200"
+      },
+      "date": 1468787768814
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki; pwd\nls -l node_modules | cut -c 33-200"
+      },
+      "date": 1468787785694
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9e7e5e329a6118f0"
+      },
+      "id": "9e7e5e329a6118f0",
+      "type": "add",
+      "after": "a832777944c36045",
+      "date": 1468787862036
+    },
+    {
+      "type": "edit",
+      "id": "9e7e5e329a6118f0",
+      "item": {
+        "type": "paragraph",
+        "id": "9e7e5e329a6118f0",
+        "text": "Can we access server variables?"
+      },
+      "date": 1468787883790
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "81ff3e38823ab378"
+      },
+      "id": "81ff3e38823ab378",
+      "type": "add",
+      "after": "9e7e5e329a6118f0",
+      "date": 1468787886215
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "echo $PATH"
+      },
+      "date": 1468787901478
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "echo $PATH\nexport"
+      },
+      "date": 1468787973421
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd /usr/local/lib/node_modules/wiki; pwd\nls -l node_modules | cut -c 33-"
+      },
+      "date": 1468788213785
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "echo $PATH\nexport\nrestart wiki"
+      },
+      "date": 1468788411492
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "echo $PATH\nexport"
+      },
+      "date": 1468788428157
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "pwd"
+      },
+      "date": 1468790341452
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "pwd\nnpm local"
+      },
+      "date": 1468790366108
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "pwd\nnpm prefix"
+      },
+      "date": 1468790985547
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "pwd\ncd `npm prefix`/lib/wiki\npwd"
+      },
+      "date": 1468791019560
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "pwd\ncd `npm prefix -g`/lib/wiki\npwd"
+      },
+      "date": 1468791035963
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "pwd\ncd `npm prefix -g`/lib/node_modules/wiki\npwd"
+      },
+      "date": 1468791063637
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nls -l node_modules | cut -c 33-"
+      },
+      "date": 1468791135927
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix`/lib/node_modules/wiki\npwd"
+      },
+      "date": 1468791198838
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix`/lib\nls -l node_modules"
+      },
+      "date": 1468791231823
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix`\nls -l node_modules"
+      },
+      "date": 1468791288981
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix`\nls -l node_modules | cut -c 33-"
+      },
+      "date": 1468791426266
+    },
+    {
+      "type": "edit",
+      "id": "9e7e5e329a6118f0",
+      "item": {
+        "type": "paragraph",
+        "id": "9e7e5e329a6118f0",
+        "text": "Look for plugins that have been installed or linked locally. "
+      },
+      "date": 1468791622181
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fbaf0bc50dc47845"
+      },
+      "id": "fbaf0bc50dc47845",
+      "type": "add",
+      "after": "81ff3e38823ab378",
+      "date": 1468791654718
+    },
+    {
+      "type": "edit",
+      "id": "fbaf0bc50dc47845",
+      "item": {
+        "type": "paragraph",
+        "id": "fbaf0bc50dc47845",
+        "text": "Add missing plugins by linking from local to wiki's global install."
+      },
+      "date": 1468791687448
+    },
+    {
+      "type": "edit",
+      "id": "fbaf0bc50dc47845",
+      "item": {
+        "type": "paragraph",
+        "id": "fbaf0bc50dc47845",
+        "text": "Add missing plugins by linking to wiki's global install."
+      },
+      "date": 1468791699013
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "45ea22bbeb7b9f52"
+      },
+      "id": "45ea22bbeb7b9f52",
+      "type": "add",
+      "after": "fbaf0bc50dc47845",
+      "date": 1468791701036
+    },
+    {
+      "type": "remove",
+      "id": "45ea22bbeb7b9f52",
+      "date": 1468791712727
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c32b10c089c07b38"
+      },
+      "id": "c32b10c089c07b38",
+      "type": "add",
+      "after": "fbaf0bc50dc47845",
+      "date": 1468791723471
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm link wiki-plugin-morseteacher"
+      },
+      "date": 1468791743296
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\n) | perl -pe 's/->/\\n  /g'"
+      },
+      "date": 1468791838218
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\n) | perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1468791904860
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nls -l node_modules | cut -c 33- | | perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1468792010249
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nls -l node_modules | cut -c 33- |  perl -pe 's/->/\\n  ���/g'"
+      },
+      "date": 1468792023356
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-plugins\n) | perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1468792095433
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nls -l node_modules | cut -c 33- |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1468792143157
+    },
+    {
+      "type": "edit",
+      "id": "a832777944c36045",
+      "item": {
+        "type": "shell",
+        "id": "a832777944c36045",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nls -l node_modules |\\\n  cut -c 33- |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1468792191331
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-plugins\n) |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1468792381972
+    },
+    {
+      "type": "edit",
+      "id": "8f312fc481cdbb7f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f312fc481cdbb7f",
+        "text": "We consider how a production server could be managed with Shell plugin markup. "
+      },
+      "date": 1468795037334
+    },
+    {
+      "type": "edit",
+      "id": "8f312fc481cdbb7f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f312fc481cdbb7f",
+        "text": "We consider how a production server could be managed with Shell plugin markup. Only a logged in administrator can run these scripts."
+      },
+      "date": 1468795070142
+    },
+    {
+      "type": "fork",
+      "site": "localhost",
+      "date": 1469901036492
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd /usr/local/lib/node_modules/wiki\nls -l node_modules | cut -c 33-"
+      },
+      "date": 1469901036139,
+      "error": {
+        "type": "error",
+        "msg": "Not Found",
+        "response": "Page not found"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1469901124087
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd /usr/local/lib/\nls -l node_modules | cut -c 33-"
+      },
+      "date": 1469901216677
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix -g`/lib\nls -l node_modules | cut -c 33-"
+      },
+      "date": 1469901245458
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix -g`/lib\nls -l node_modules | cut -c 35-"
+      },
+      "date": 1469901260053
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix -g`/lib\nls -l node_modules wiki-plugin-* | cut -c 35-"
+      },
+      "date": 1469905958446
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix -g`/lib\nls -l node_modules/wiki-plugin-* | cut -c 35-"
+      },
+      "date": 1469905973069
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "cd `npm prefix -g`/lib\nls -l node_modules/wiki-plugin-*"
+      },
+      "date": 1469906012397
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\ndiff \\\n<(ls $node/wiki-plugin-*) \\\n<(ls $wiki/wiki-plugin-*)"
+      },
+      "date": 1469906621122
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\ndiff \\\n<(ls $node/wiki-plugin-*) \\\n<(ls $wiki/wiki-plugin-*)"
+      },
+      "date": 1469906636048
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\ndiff \\\n<( ls $node/wiki-plugin-* ) \\\n<( ls $wiki/wiki-plugin-* )"
+      },
+      "date": 1469906785208
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\ndiff <( ls $node/wiki-plugin-* ) <( ls $wiki/wiki-plugin-* )"
+      },
+      "date": 1469906882627
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\necho 'diff <( ls $node/wiki-plugin-* ) <( ls $wiki/wiki-plugin-* )' | bash"
+      },
+      "date": 1469906978025
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\nbash diff <( ls $node/wiki-plugin-* ) <( ls $wiki/wiki-plugin-* )'"
+      },
+      "date": 1469907039381
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\ndiff <( ls $node/wiki-plugin-* ) <( ls $wiki/wiki-plugin-* )'"
+      },
+      "date": 1469907058127
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\nset +o posix\ndiff <( ls $node/wiki-plugin-* ) <( ls $wiki/wiki-plugin-* )'"
+      },
+      "date": 1469907174051
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\nls $node/wiki-plugin-* >/tmp/$$.node\nls $wiki/wiki-plugin-* >/tmp/$$.wiki\ndiff /tmp/$$.node /tmp/$$.wiki"
+      },
+      "date": 1469907345829
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\nls -d $node/wiki-plugin-* >/tmp/$$.node\nls -d $wiki/wiki-plugin-* >/tmp/$$.wiki\ndiff /tmp/$$.node /tmp/$$.wiki"
+      },
+      "date": 1469907377638
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\n(cd $node; ls -d wiki-plugin-* )>/tmp/$$.node\n(cd $wiki; ls -d wiki-plugin-* )>/tmp/$$.wiki\ndiff /tmp/$$.node /tmp/$$.wiki"
+      },
+      "date": 1469907454865
+    },
+    {
+      "type": "edit",
+      "id": "81ff3e38823ab378",
+      "item": {
+        "type": "shell",
+        "id": "81ff3e38823ab378",
+        "text": "node=`npm prefix -g`/lib/node_modules\nwiki=$node/wiki/node_modules\n(cd $node; ls -d wiki-plugin-* )>/tmp/$$.node\n(cd $wiki; ls -d wiki-plugin-* )>/tmp/$$.wiki\ndiff /tmp/$$.node /tmp/$$.wiki | grep '<'"
+      },
+      "date": 1469907569388
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-plugins\nnpm link wiki-pluign-cytodemo\nnpm link wiki-plugin-graph\nnpm link wiki-plugin-slide\n) |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1469907651271
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-plugins\nnpm link wiki-plugin-graph\nnpm link wiki-plugin-slide\n) |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1469907715126
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a695adf6ff1c778e"
+      },
+      "id": "a695adf6ff1c778e",
+      "type": "add",
+      "after": "c32b10c089c07b38",
+      "date": 1469907906111
+    },
+    {
+      "type": "edit",
+      "id": "a695adf6ff1c778e",
+      "item": {
+        "type": "paragraph",
+        "id": "a695adf6ff1c778e",
+        "text": "Add missing plugins by installing recent from npm."
+      },
+      "date": 1469907926014
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3020636cf8e7276f"
+      },
+      "id": "3020636cf8e7276f",
+      "type": "add",
+      "after": "a695adf6ff1c778e",
+      "date": 1469907936720
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemp"
+      },
+      "date": 1469907976090
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo"
+      },
+      "date": 1469908009969
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare"
+      },
+      "date": 1469912118541
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-map"
+      },
+      "date": 1469917292907
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare"
+      },
+      "date": 1469917580085
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-morseteacher\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-plugins\nnpm link wiki-plugin-graph\nnpm link wiki-plugin-slide\nnpm link wiki-plugin-map\n) |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1469917593457
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss"
+      },
+      "date": 1470584193450
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5ab60946ef8c71c6"
+      },
+      "id": "5ab60946ef8c71c6",
+      "type": "add",
+      "after": "3020636cf8e7276f",
+      "date": 1472917794063
+    },
+    {
+      "type": "edit",
+      "id": "5ab60946ef8c71c6",
+      "item": {
+        "type": "shell",
+        "id": "5ab60946ef8c71c6",
+        "text": "echo hello world"
+      },
+      "date": 1472917812396
+    },
+    {
+      "type": "move",
+      "order": [
+        "8f312fc481cdbb7f",
+        "d3c95c7413473538",
+        "5ab60946ef8c71c6",
+        "4b34e609edb4d8fc",
+        "61b056f6c63c22be",
+        "b99544f6bfbed582",
+        "a832777944c36045",
+        "9e7e5e329a6118f0",
+        "81ff3e38823ab378",
+        "fbaf0bc50dc47845",
+        "c32b10c089c07b38",
+        "a695adf6ff1c778e",
+        "3020636cf8e7276f"
+      ],
+      "id": "5ab60946ef8c71c6",
+      "date": 1472917900703
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss\nnpm i wiki-plugin-json"
+      },
+      "date": 1472917922000
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6aa7312703437dd1"
+      },
+      "id": "6aa7312703437dd1",
+      "type": "add",
+      "after": "3020636cf8e7276f",
+      "date": 1475206781546
+    },
+    {
+      "type": "edit",
+      "id": "6aa7312703437dd1",
+      "item": {
+        "type": "code",
+        "id": "6aa7312703437dd1",
+        "text": "cd /usr/local/lib/node_modules/wiki\nnpm i wiki-plugin-shell\n"
+      },
+      "date": 1475206798859
+    },
+    {
+      "type": "move",
+      "order": [
+        "8f312fc481cdbb7f",
+        "6aa7312703437dd1",
+        "d3c95c7413473538",
+        "5ab60946ef8c71c6",
+        "4b34e609edb4d8fc",
+        "61b056f6c63c22be",
+        "b99544f6bfbed582",
+        "a832777944c36045",
+        "9e7e5e329a6118f0",
+        "81ff3e38823ab378",
+        "fbaf0bc50dc47845",
+        "c32b10c089c07b38",
+        "a695adf6ff1c778e",
+        "3020636cf8e7276f"
+      ],
+      "id": "6aa7312703437dd1",
+      "date": 1475206811459
+    },
+    {
+      "type": "edit",
+      "id": "8f312fc481cdbb7f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f312fc481cdbb7f",
+        "text": "We consider how a production server could be managed with Shell plugin markup. Only a logged in administrator can run these scripts. See also [[Config Notes]]"
+      },
+      "date": 1480281451718
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss\nnpm i wiki-plugin-json\nnpm i wiki-plugin-map\nnpm i wiki-plugin-graph\nnpm i wiki-plugin-plugins"
+      },
+      "date": 1480281633488
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss\nnpm i wiki-plugin-json\nnpm i wiki-plugin-map\nnpm i wiki-plugin-graph\nnpm i wiki-plugin-plugins\nnpm i wiki-plugin-morseteacher"
+      },
+      "date": 1480281687904
+    },
+    {
+      "type": "edit",
+      "id": "c32b10c089c07b38",
+      "item": {
+        "type": "shell",
+        "id": "c32b10c089c07b38",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\n(\nnpm link wiki-plugin-microtalk\nnpm link wiki-plugin-slide\n) |\\\n  perl -pe 's/->/\\n  ⇒/g'"
+      },
+      "date": 1480281708061
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss\nnpm i wiki-plugin-json\nnpm i wiki-plugin-map\nnpm i wiki-plugin-graph\nnpm i wiki-plugin-plugins\nnpm i wiki-plugin-morseteacher\nnpm i wiki-plugin-rostermatic"
+      },
+      "date": 1480281735438
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org"
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3698806a1222dc5e"
+      },
+      "id": "3698806a1222dc5e",
+      "type": "add",
+      "after": "3020636cf8e7276f",
+      "date": 1480810109491
+    },
+    {
+      "type": "edit",
+      "id": "3698806a1222dc5e",
+      "item": {
+        "type": "shell",
+        "id": "3698806a1222dc5e",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-plugmatic"
+      },
+      "date": 1480810141609
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "091e9d9cbc95eb23"
+      },
+      "id": "091e9d9cbc95eb23",
+      "type": "add",
+      "after": "3698806a1222dc5e",
+      "date": 1480810160841
+    },
+    {
+      "type": "edit",
+      "id": "091e9d9cbc95eb23",
+      "item": {
+        "type": "paragraph",
+        "id": "091e9d9cbc95eb23",
+        "text": "And a few more plugins we forgot."
+      },
+      "date": 1480810172091
+    },
+    {
+      "type": "move",
+      "order": [
+        "8f312fc481cdbb7f",
+        "6aa7312703437dd1",
+        "d3c95c7413473538",
+        "5ab60946ef8c71c6",
+        "4b34e609edb4d8fc",
+        "61b056f6c63c22be",
+        "b99544f6bfbed582",
+        "a832777944c36045",
+        "9e7e5e329a6118f0",
+        "81ff3e38823ab378",
+        "fbaf0bc50dc47845",
+        "c32b10c089c07b38",
+        "a695adf6ff1c778e",
+        "3020636cf8e7276f",
+        "091e9d9cbc95eb23",
+        "3698806a1222dc5e"
+      ],
+      "id": "091e9d9cbc95eb23",
+      "date": 1480810177366
+    },
+    {
+      "type": "fork",
+      "site": "localhost",
+      "date": 1480952169718
+    },
+    {
+      "type": "add",
+      "id": "3e040cb1514b7c86",
+      "item": {
+        "type": "paragraph",
+        "id": "3e040cb1514b7c86",
+        "text": "See [[About Plugmatic Plugin]]"
+      },
+      "after": "a695adf6ff1c778e",
+      "date": 1480952579393
+    },
+    {
+      "type": "edit",
+      "id": "3020636cf8e7276f",
+      "item": {
+        "type": "shell",
+        "id": "3020636cf8e7276f",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-cytodemo\nnpm i wiki-plugin-bikeshare\nnpm i wiki-plugin-rss\nnpm i wiki-plugin-json\nnpm i wiki-plugin-map\nnpm i wiki-plugin-graph\nnpm i wiki-plugin-plugins\nnpm i wiki-plugin-morseteacher\nnpm i wiki-plugin-rostermatic\nnpm i wiki-plugin-plugmatic"
+      },
+      "date": 1485138609418
+    },
+    {
+      "type": "edit",
+      "id": "3698806a1222dc5e",
+      "item": {
+        "type": "shell",
+        "id": "3698806a1222dc5e",
+        "text": "cd `npm prefix -g`/lib/node_modules/wiki\nnpm i wiki-plugin-tab"
+      },
+      "date": 1485138619304
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1489236168908
+    },
+    {
+      "type": "edit",
+      "id": "8f312fc481cdbb7f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f312fc481cdbb7f",
+        "text": "adsf"
+      },
+      "date": 1504801870129
+    },
+    {
+      "type": "add",
+      "id": "49ee9abb9e20c943",
+      "item": {
+        "type": "paragraph",
+        "id": "49ee9abb9e20c943",
+        "text": "We consider how a production server could be managed with Shell plugin markup. Only a logged in administrator can run these scripts. See also [[Config Notes]]"
+      },
+      "after": "8f312fc481cdbb7f",
+      "date": 1504801871438
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c83c04b7bc8cf741"
+      },
+      "id": "c83c04b7bc8cf741",
+      "type": "add",
+      "after": "3698806a1222dc5e",
+      "date": 1504801873633
+    },
+    {
+      "type": "edit",
+      "id": "c83c04b7bc8cf741",
+      "item": {
+        "type": "code",
+        "id": "c83c04b7bc8cf741",
+        "text": "node index.js --config ../../config.json --admin admin-id"
+      },
+      "date": 1504801880993
+    },
+    {
+      "type": "move",
+      "order": [
+        "8f312fc481cdbb7f",
+        "c83c04b7bc8cf741",
+        "49ee9abb9e20c943",
+        "6aa7312703437dd1",
+        "d3c95c7413473538",
+        "5ab60946ef8c71c6",
+        "4b34e609edb4d8fc",
+        "61b056f6c63c22be",
+        "b99544f6bfbed582",
+        "a832777944c36045",
+        "9e7e5e329a6118f0",
+        "81ff3e38823ab378",
+        "fbaf0bc50dc47845",
+        "c32b10c089c07b38",
+        "a695adf6ff1c778e",
+        "3e040cb1514b7c86",
+        "3020636cf8e7276f",
+        "091e9d9cbc95eb23",
+        "3698806a1222dc5e"
+      ],
+      "id": "c83c04b7bc8cf741",
+      "date": 1504801887464
+    },
+    {
+      "type": "edit",
+      "id": "8f312fc481cdbb7f",
+      "item": {
+        "type": "paragraph",
+        "id": "8f312fc481cdbb7f",
+        "text": "To set an admin user:"
+      },
+      "date": 1504801896488
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0451f8f90c9a59f1",
+        "text": "An administrator is identified by the --admin parameter when starting wiki. The admin value would depend on how individuals are identified by the security module in use."
+      },
+      "id": "0451f8f90c9a59f1",
+      "date": 1504802089181
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "1cfe7c6c3602055c",
+        "text": "wiki -f --admin ward@c2.com"
+      },
+      "after": "0451f8f90c9a59f1",
+      "id": "1cfe7c6c3602055c",
+      "date": 1504802093213
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1d399544524196b7",
+        "text": "Changes will apply to the origin site and all other sites hosted by the same server should that be a wiki farm."
+      },
+      "after": "c83c04b7bc8cf741",
+      "id": "1d399544524196b7",
+      "date": 1504802112771
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "250fcc3a3d30bd9e"
+      },
+      "id": "250fcc3a3d30bd9e",
+      "type": "add",
+      "after": "3698806a1222dc5e",
+      "date": 1504802559059
+    },
+    {
+      "type": "edit",
+      "id": "250fcc3a3d30bd9e",
+      "item": {
+        "type": "reference",
+        "id": "250fcc3a3d30bd9e",
+        "site": "admin.fedwiki.org",
+        "slug": "config-notes",
+        "title": "Config Notes",
+        "text": "We note the paths where important server files get installed. See also [[Wiki Admin]], [[Wiki Relocation]]"
+      },
+      "date": 1504802561572
+    },
+    {
+      "type": "fork",
+      "site": "admin.fedwiki.org",
+      "date": 1517179759285
+    }
+  ]
+}

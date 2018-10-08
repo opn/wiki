@@ -1,0 +1,44 @@
+{
+  "title": "Safe Remote Purchase",
+  "story": [
+    {
+      "type": "code",
+      "id": "9db436a492c6226d",
+      "text": "contract Purchase\n{\n    uint public value;\n    address public seller;\n    address public buyer;\n    enum State { Created, Locked, Inactive }\n    State public state;\n    function Purchase()\n    {\n        seller = msg.sender;\n        value = msg.value / 2;\n        if (2 * value != msg.value) throw;\n    }\n    modifier require(bool _condition)\n    {\n        if (!_condition) throw;\n        _\n    }\n    modifier onlyBuyer()\n    {\n        if (msg.sender != buyer) throw;\n        _\n    }\n    modifier onlySeller()\n    {\n        if (msg.sender != seller) throw;\n        _\n    }\n    modifier inState(State _state)\n    {\n        if (state != _state) throw;\n        _\n    }\n    event aborted();\n    event purchaseConfirmed();\n    event itemReceived();\n\n    /// Abort the purchase and reclaim the ether.\n    /// Can only be called by the seller before\n    /// the contract is locked.\n    function abort()\n        onlySeller\n        inState(State.Created)\n    {\n        aborted();\n        seller.send(this.balance);\n        state = State.Inactive;\n    }\n    /// Confirm the purchase as buyer.\n    /// Transaction has to include `2 * value` ether.\n    /// The ether will be locked until confirmReceived\n    /// is called.\n    function confirmPurchase()\n        inState(State.Created)\n        require(msg.value == 2 * value)\n    {\n        purchaseConfirmed();\n        buyer = msg.sender;\n        state = State.Locked;\n    }\n    /// Confirm that you (the buyer) received the item.\n    /// This will release the locked ether.\n    function confirmReceived()\n        onlyBuyer\n        inState(State.Locked)\n    {\n        itemReceived();\n        buyer.send(value); // We ignore the return value on purpose\n        seller.send(this.balance);\n        state = State.Inactive;\n    }\n    function() { throw; }\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Safe Remote Purchase",
+        "story": []
+      },
+      "date": 1448996340120
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9db436a492c6226d"
+      },
+      "id": "9db436a492c6226d",
+      "type": "add",
+      "date": 1448996342436
+    },
+    {
+      "type": "edit",
+      "id": "9db436a492c6226d",
+      "item": {
+        "type": "code",
+        "id": "9db436a492c6226d",
+        "text": "contract Purchase\n{\n    uint public value;\n    address public seller;\n    address public buyer;\n    enum State { Created, Locked, Inactive }\n    State public state;\n    function Purchase()\n    {\n        seller = msg.sender;\n        value = msg.value / 2;\n        if (2 * value != msg.value) throw;\n    }\n    modifier require(bool _condition)\n    {\n        if (!_condition) throw;\n        _\n    }\n    modifier onlyBuyer()\n    {\n        if (msg.sender != buyer) throw;\n        _\n    }\n    modifier onlySeller()\n    {\n        if (msg.sender != seller) throw;\n        _\n    }\n    modifier inState(State _state)\n    {\n        if (state != _state) throw;\n        _\n    }\n    event aborted();\n    event purchaseConfirmed();\n    event itemReceived();\n\n    /// Abort the purchase and reclaim the ether.\n    /// Can only be called by the seller before\n    /// the contract is locked.\n    function abort()\n        onlySeller\n        inState(State.Created)\n    {\n        aborted();\n        seller.send(this.balance);\n        state = State.Inactive;\n    }\n    /// Confirm the purchase as buyer.\n    /// Transaction has to include `2 * value` ether.\n    /// The ether will be locked until confirmReceived\n    /// is called.\n    function confirmPurchase()\n        inState(State.Created)\n        require(msg.value == 2 * value)\n    {\n        purchaseConfirmed();\n        buyer = msg.sender;\n        state = State.Locked;\n    }\n    /// Confirm that you (the buyer) received the item.\n    /// This will release the locked ether.\n    function confirmReceived()\n        onlyBuyer\n        inState(State.Locked)\n    {\n        itemReceived();\n        buyer.send(value); // We ignore the return value on purpose\n        seller.send(this.balance);\n        state = State.Inactive;\n    }\n    function() { throw; }\n}"
+      },
+      "date": 1448996346657
+    },
+    {
+      "type": "fork",
+      "site": "ksenya.cryptoacademy.org",
+      "date": 1450794746905
+    }
+  ]
+}

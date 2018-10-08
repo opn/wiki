@@ -1,0 +1,2298 @@
+{
+  "title": "Neo4J",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "afc8faf5bf99c607",
+      "text": "Neo4j is an open-source graph database implemented in Java and accessible from software written in other languages using the Cypher query language through a transactional HTTP endpoint. [https://en.wikipedia.org/wiki/Neo4j wikipedia] [http://neo4j.com/ site]"
+    },
+    {
+      "type": "paragraph",
+      "id": "0d4cc80cedf557cf",
+      "text": "See [[Neo4J Resources]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3ce5d417a30b8d82",
+      "text": "See [[Neo4J Production]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "037e6afd39c4fd31",
+      "text": "See [[Neo4J Optimization]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "b3ccef17e6e5ecbc",
+      "text": "I've sought the kind assistance of work colleague, Erika Arnold, author of wikiGraph, a shortest-path visualizing application for Wikipedia based on Neo4J. [http://www.erikaarnold.com/#/wikigraph/ page]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4ab05bd79071d356",
+      "text": "Here I follow her approach. "
+    },
+    {
+      "type": "markdown",
+      "id": "afc3b4fc581e74e8",
+      "text": "# Load"
+    },
+    {
+      "type": "paragraph",
+      "id": "8c6952c6342e9f22",
+      "text": "Build node and relation csv files from [[Search Index Downloads]] with a ruby converter that assigns numeric ids to sites, pages and titles. [https://github.com/WardCunningham/search/blob/master/neo-batch.rb github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "19cb558b639d4758",
+      "text": "Runtime 3.5 min, 8 mb output. We now repeat this build after every scrap. Look for new data at 1:00 & 7:00, am & pm, pacific time. [http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4548dec0c8fdf39d",
+      "text": "Build a graph database from csv files with neo4j's import command. [http://neo4j.com/docs/stable/import-tool-examples.html docs] "
+    },
+    {
+      "type": "code",
+      "id": "ae4067729aedf28b",
+      "text": "neo4j-import \\\n  --into wiki.db \\\n  --nodes nodes.csv \\\n  --relationships rels.csv"
+    },
+    {
+      "type": "markdown",
+      "id": "0402dd46d18b639b",
+      "text": "IMPORT DONE in 10s 298ms.\n  92237 nodes\n  321452 relationships\n  92237 properties\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "3f4246b7092264d5",
+      "text": "Find where  neo4j resources have been installed."
+    },
+    {
+      "type": "code",
+      "id": "8954f7a4831598aa",
+      "text": "locate neo4j"
+    },
+    {
+      "type": "paragraph",
+      "id": "06ca86a36806e252",
+      "text": "Move the constructed db to the server's realm."
+    },
+    {
+      "type": "code",
+      "id": "90fce726ebc6a8aa",
+      "text": "cd /var/lib/neo4j/data\nsudo mv ~/neo-wiki/wiki.db .\nchmod -R a+w wiki.db"
+    },
+    {
+      "type": "paragraph",
+      "id": "9a2baf187dcbab06",
+      "text": "Edit the config and restarted the server."
+    },
+    {
+      "type": "code",
+      "id": "0f800d3bf753ce02",
+      "text": "cd /var/lib/neo4j/conf\nsudo vi neo4j-server.properties\nsudo service neo4j-service restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "b8d95ef363adeb8c",
+      "text": "Open an ssh tunnel to the remote server."
+    },
+    {
+      "type": "code",
+      "id": "fac43d944be3212a",
+      "text": "ssh -L 7474:localhost:7474 bay.wiki.org"
+    },
+    {
+      "type": "paragraph",
+      "id": "fb60a519f46484a1",
+      "text": "Then view the graph using the builtin app. [http://localhost:7474 localhost]"
+    },
+    {
+      "type": "markdown",
+      "id": "7f5bb86358d2cd25",
+      "text": "# Query"
+    },
+    {
+      "type": "paragraph",
+      "id": "4e20e455cbf83ff1",
+      "text": "It's hard to know what to look for until you have a real need and some experience formulating queries. I read docs and tried things. Some impressed me enough to save the svg."
+    },
+    {
+      "type": "paragraph",
+      "id": "537d1aec4c16304d",
+      "text": "For fast queries find a good place to start and then traverse from there. I picked .org sites and looked for links to titles about Education. [http://c2.com/wiki/neo4j/education.svg svg]"
+    },
+    {
+      "type": "code",
+      "id": "16802dc2b5b935b5",
+      "text": "match (s:Site)-[HAS]->(p:Page)-[LINK]->(t:Title)\nwhere s.title =~ '.*org'\nand t.title =~ '.*Education.*'\nreturn s,p,t\nlimit 100"
+    },
+    {
+      "type": "paragraph",
+      "id": "c9e82f12e39c3876",
+      "text": "I try retrieving nodes by the shape of their relations alone. This is slow. I find sites that have/link the same title. [http://c2.com/wiki/neo4j/mike.svg svg]"
+    },
+    {
+      "type": "code",
+      "id": "662142f84fce9768",
+      "text": "match (a)-->(b)-->(c)<--(d)<--(e) return * limit 300"
+    },
+    {
+      "type": "paragraph",
+      "id": "c8e523e12835a80c",
+      "text": "Top page counts for happening sites."
+    },
+    {
+      "type": "code",
+      "id": "9c7020b68ae8c2b8",
+      "text": "match (s:Site)-->(p) \nwhere s.title =~ '.*fedwikihappening.net' \nwith s.title as site, count(p) as pages \nwhere pages >= 100 \nreturn pages, site\norder by pages desc"
+    },
+    {
+      "type": "markdown",
+      "id": "b7a3364f42c67a5e",
+      "text": "pages,site\n3089,don.ny2.fedwikihappening.net\n294,machines.alyson.sf.fedwikihappening.net\n225,frances.uk.fedwikihappening.net\n220,kate.au.fedwikihappening.net\n216,maha.uk.fedwikihappening.net\n178,tim.au.fedwikihappening.net\n164,chamboonline.sf2.fedwikihappening.net\n147,jon.sf.fedwikihappening.net\n140,jenny.uk.fedwikihappening.net\n134,thoka.uk2.fedwikihappening.net\n134,sarah.uk.fedwikihappening.net\n133,alyson.sf.fedwikihappening.net\n119,audrey.sf.fedwikihappening.net\n106,cogdog.sf.fedwikihappening.net"
+    },
+    {
+      "type": "paragraph",
+      "id": "bc3119cc89b72937",
+      "text": "Shortest path between titles with sites that hold the pages along the way. [http://c2.com/wiki/neo4j/way.svg svg]"
+    },
+    {
+      "type": "code",
+      "id": "6e961279452364e0",
+      "text": "match \n(here:Title \n  { title:\"How Life Works\" }),\n(want:Title \n  { title:\"Federated Wiki On Digital Ocean\" }),\npaths = allShortestPaths((here)-[*]-(want))\nwith nodes(paths) as way\nmatch (s:Site)-->(p:Page)\nwhere p in way\nreturn * limit 40"
+    },
+    {
+      "type": "paragraph",
+      "id": "bdf940896746351b",
+      "text": "But wait, this path goes through unrelated 'scratch' pages. It also disregards the relations' direction. We need to constrain the path to sites we know. "
+    },
+    {
+      "type": "markdown",
+      "id": "6cc0b386731b54e2",
+      "text": "# Knows"
+    },
+    {
+      "type": "paragraph",
+      "id": "e53fa254ee0845d4",
+      "text": "Revise the batch import to include sites found on each page as KNOWS between a Page and neighborhood Sites.  [https://github.com/WardCunningham/search/compare/c443cdb45cb89b1215db56c235ebb0d3bd02be9e...8f27aa1d229553a73d21887bbfa39496a1b2fb1a github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "316aaaba081f5f53",
+      "text": "Add directional HAS|KNOWS pattern to the shortest path to constrain result to operationally discoverable sites. I add Titles to the path ends with IS relations. This adds a bit of ambiguity as to which page we're starting at. [http://c2.com/wiki/neo4j/known.svg svg]"
+    },
+    {
+      "type": "code",
+      "id": "21c436ea5280f788",
+      "text": "match \n(here:Title \n  { title:\"Hacker Beach\" })<-[h:IS]-(start),\n(end)-[w:IS]->(want:Title \n  { title:\"Naval Undersea Museum\" }),\npaths = shortestPath((start)-[:HAS|:KNOWS*]->(end)\nreturn  here, h, want, w, paths limit 40"
+    },
+    {
+      "type": "paragraph",
+      "id": "57a6467e3a42b737",
+      "text": "I've tested the path by clicking through it. It works."
+    },
+    {
+      "type": "paragraph",
+      "id": "e6521631b8f123cf",
+      "text": "We can find the sites with the most neighbors by counting distinct KNOWS relations. "
+    },
+    {
+      "type": "code",
+      "id": "917f243207627e7e",
+      "text": "match\n  (s:Site)-[h:HAS]->(p:Page)-[k:KNOWS]->(n:Site)\nwith\n  s.title as site,\n  count(DISTINCT n.title) as neighbors\nreturn *\norder by neighbors desc\nlimit 20"
+    },
+    {
+      "type": "paragraph",
+      "id": "f28c3866f0fd2a7d",
+      "text": "The numbers are much higher than we might expect. This is because we conflate forks, references and rosters while we scrape. For the graph database we should do better."
+    },
+    {
+      "type": "markdown",
+      "id": "145f06c7f8b4aa51",
+      "text": "526\tdon.ny2.fedwikihappening.net\n407\tward.asia.wiki.org\n363\tsearch.fed.wiki.org:3030\n170\tjournal.hapgood.net\n160\tdavid.viral.academy\n157\tc0de.academy\n131\twiki.viral.academy\n128\tdavid.bovill.me\n125\tforage.ward.fed.wiki.org\n115\tward.fed.wiki.org\n110\tmachines.hapgood.net\n108\tfedwiki.jeffist.com\n96\ttim.federatedwiki.org\n94\tchamboonline.sf2.fedwikihappening.net\n92\tsfw.mcmorgan.org\n92\tedfedwiki.com\n90\tsarah.uk.fedwikihappening.net\n88\tjenny.uk.fedwikihappening.net\n87\tmaha.uk.fedwikihappening.net\n86\ttim.au.fedwikihappening.net"
+    },
+    {
+      "type": "paragraph",
+      "id": "3794f44d48312998",
+      "text": "This agrees with the command line word count of the site wide rollup of site.txt files."
+    },
+    {
+      "type": "code",
+      "id": "07db5c5f3fab32fe",
+      "text": "ls | while read i\ndo wc -l $i/sites.txt\ndone | sort -n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2dad0c5d04b29776",
+      "text": "We can write a meaningful who-links-here that will resolve to the page at least as a twin.  [http://c2.com/wiki/neo4j/who2.svg svg]"
+    },
+    {
+      "type": "code",
+      "id": "57d0ba2087466201",
+      "text": "match\n  (s0:Site {title:'ward.asia.wiki.org'})-[:HAS]->\n  (p0:Page {title: 'federation-search'})-[:IS]->\n  (t0:Title)<-[a:LINK]-(p1:Page)<-[b:HAS]-(s1:Site)\nwhere\n  (p1)-[:KNOWS]->(s0)\nreturn\n  a,b"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Neo4J",
+        "story": []
+      },
+      "date": 1450547803245
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "afc8faf5bf99c607"
+      },
+      "id": "afc8faf5bf99c607",
+      "type": "add",
+      "date": 1450547845813
+    },
+    {
+      "type": "edit",
+      "id": "afc8faf5bf99c607",
+      "item": {
+        "type": "paragraph",
+        "id": "afc8faf5bf99c607",
+        "text": "Neo4j is an open-source graph database implemented in Java and accessible from software written in other languages using the Cypher query language through a transactional HTTP endpoint."
+      },
+      "date": 1450547852299
+    },
+    {
+      "type": "edit",
+      "id": "afc8faf5bf99c607",
+      "item": {
+        "type": "paragraph",
+        "id": "afc8faf5bf99c607",
+        "text": "Neo4j is an open-source graph database implemented in Java and accessible from software written in other languages using the Cypher query language through a transactional HTTP endpoint. [https://en.wikipedia.org/wiki/Neo4j wikipedia]"
+      },
+      "date": 1450547866786
+    },
+    {
+      "type": "edit",
+      "id": "afc8faf5bf99c607",
+      "item": {
+        "type": "paragraph",
+        "id": "afc8faf5bf99c607",
+        "text": "Neo4j is an open-source graph database implemented in Java and accessible from software written in other languages using the Cypher query language through a transactional HTTP endpoint. [https://en.wikipedia.org/wiki/Neo4j wikipedia] [http://neo4j.com/ site]"
+      },
+      "date": 1450547955518
+    },
+    {
+      "type": "add",
+      "id": "377dce49dd0f2f1a",
+      "item": {
+        "type": "paragraph",
+        "id": "377dce49dd0f2f1a",
+        "text": "How To Install Neo4J on an Ubuntu VPS. "
+      },
+      "after": "afc8faf5bf99c607",
+      "date": 1450548017792
+    },
+    {
+      "type": "edit",
+      "id": "377dce49dd0f2f1a",
+      "item": {
+        "type": "paragraph",
+        "id": "377dce49dd0f2f1a",
+        "text": "How To Install Neo4J on an Ubuntu VPS.  [https://www.digitalocean.com/community/tutorials/how-to-install-neo4j-on-an-ubuntu-vps digialocean]"
+      },
+      "date": 1450548038889
+    },
+    {
+      "type": "fork",
+      "site": "bay.wiki.org"
+    },
+    {
+      "type": "edit",
+      "id": "377dce49dd0f2f1a",
+      "item": {
+        "type": "paragraph",
+        "id": "377dce49dd0f2f1a",
+        "text": "How To Install Neo4J on an Ubuntu VPS.  [https://www.digitalocean.com/community/tutorials/how-to-install-neo4j-on-an-ubuntu-vps post]"
+      },
+      "date": 1450578351932
+    },
+    {
+      "type": "add",
+      "id": "8c6952c6342e9f22",
+      "item": {
+        "type": "paragraph",
+        "id": "8c6952c6342e9f22",
+        "text": "Built a test database and imported it with the import command. ["
+      },
+      "after": "377dce49dd0f2f1a",
+      "date": 1450824644869
+    },
+    {
+      "type": "edit",
+      "id": "8c6952c6342e9f22",
+      "item": {
+        "type": "paragraph",
+        "id": "8c6952c6342e9f22",
+        "text": "Built a test database and imported it with the import command. [http://neo4j.com/docs/stable/import-tool-examples.html docs]"
+      },
+      "date": 1450824689199
+    },
+    {
+      "type": "add",
+      "id": "9a2baf187dcbab06",
+      "item": {
+        "type": "paragraph",
+        "id": "9a2baf187dcbab06",
+        "text": "Edited the config and restarted the server."
+      },
+      "after": "8c6952c6342e9f22",
+      "date": 1450824717200
+    },
+    {
+      "type": "add",
+      "id": "b8d95ef363adeb8c",
+      "item": {
+        "type": "paragraph",
+        "id": "b8d95ef363adeb8c",
+        "text": "Opened an ssh tunnel to the remote server."
+      },
+      "after": "9a2baf187dcbab06",
+      "date": 1450824731190
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fac43d944be3212a"
+      },
+      "id": "fac43d944be3212a",
+      "type": "add",
+      "after": "b8d95ef363adeb8c",
+      "date": 1450824766532
+    },
+    {
+      "type": "edit",
+      "id": "fac43d944be3212a",
+      "item": {
+        "type": "code",
+        "id": "fac43d944be3212a",
+        "text": "ssh -L 7474:localhost:7474 bay.wiki.org"
+      },
+      "date": 1450824770449
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fb60a519f46484a1"
+      },
+      "id": "fb60a519f46484a1",
+      "type": "add",
+      "after": "fac43d944be3212a",
+      "date": 1450824785046
+    },
+    {
+      "type": "edit",
+      "id": "fb60a519f46484a1",
+      "item": {
+        "type": "paragraph",
+        "id": "fb60a519f46484a1",
+        "text": "Then viewed the graph using the builtin browser. [http://localhost:7474 browse]"
+      },
+      "date": 1450824848427
+    },
+    {
+      "type": "move",
+      "order": [
+        "377dce49dd0f2f1a",
+        "afc8faf5bf99c607",
+        "8c6952c6342e9f22",
+        "9a2baf187dcbab06",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "afc8faf5bf99c607",
+      "date": 1450824960598
+    },
+    {
+      "type": "edit",
+      "id": "fb60a519f46484a1",
+      "item": {
+        "type": "paragraph",
+        "id": "fb60a519f46484a1",
+        "text": "Then viewed the graph using the builtin app. [http://localhost:7474 localhost]"
+      },
+      "date": 1450831976643
+    },
+    {
+      "type": "add",
+      "id": "06ca86a36806e252",
+      "item": {
+        "type": "paragraph",
+        "id": "06ca86a36806e252",
+        "text": "Move the constructed db to the server's realm."
+      },
+      "after": "8c6952c6342e9f22",
+      "date": 1450832160956
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "90fce726ebc6a8aa"
+      },
+      "id": "90fce726ebc6a8aa",
+      "type": "add",
+      "after": "fb60a519f46484a1",
+      "date": 1450832163866
+    },
+    {
+      "type": "move",
+      "order": [
+        "377dce49dd0f2f1a",
+        "afc8faf5bf99c607",
+        "8c6952c6342e9f22",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "90fce726ebc6a8aa",
+      "date": 1450832169253
+    },
+    {
+      "type": "edit",
+      "id": "90fce726ebc6a8aa",
+      "item": {
+        "type": "code",
+        "id": "90fce726ebc6a8aa",
+        "text": "mv test.db\nchmod -R a+w test.db"
+      },
+      "date": 1450832532272
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0f800d3bf753ce02"
+      },
+      "id": "0f800d3bf753ce02",
+      "type": "add",
+      "after": "fb60a519f46484a1",
+      "date": 1450838950363
+    },
+    {
+      "type": "move",
+      "order": [
+        "377dce49dd0f2f1a",
+        "afc8faf5bf99c607",
+        "8c6952c6342e9f22",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "0f800d3bf753ce02",
+      "date": 1450838955803
+    },
+    {
+      "type": "edit",
+      "id": "0f800d3bf753ce02",
+      "item": {
+        "type": "code",
+        "id": "0f800d3bf753ce02",
+        "text": "cd /var/lib/neo4j/conf\n"
+      },
+      "date": 1450838983217
+    },
+    {
+      "type": "edit",
+      "id": "0f800d3bf753ce02",
+      "item": {
+        "type": "code",
+        "id": "0f800d3bf753ce02",
+        "text": "cd /var/lib/neo4j/conf\nsudo service neo4j-service restart"
+      },
+      "date": 1450839013714
+    },
+    {
+      "type": "edit",
+      "id": "0f800d3bf753ce02",
+      "item": {
+        "type": "code",
+        "id": "0f800d3bf753ce02",
+        "text": "cd /var/lib/neo4j/conf\nsudo vi neo4j-server.properties\nsudo service neo4j-service restart"
+      },
+      "date": 1450839205339
+    },
+    {
+      "type": "add",
+      "id": "afc3b4fc581e74e8",
+      "item": {
+        "type": "paragraph",
+        "id": "afc3b4fc581e74e8",
+        "text": "# Learn"
+      },
+      "after": "8c6952c6342e9f22",
+      "date": 1450878302347
+    },
+    {
+      "type": "move",
+      "order": [
+        "377dce49dd0f2f1a",
+        "afc8faf5bf99c607",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "afc3b4fc581e74e8",
+      "date": 1450878342176
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "377dce49dd0f2f1a",
+      "date": 1450878345314
+    },
+    {
+      "type": "add",
+      "id": "b3ccef17e6e5ecbc",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ccef17e6e5ecbc",
+        "text": "I've sought the assistance of Erika Arnold, a work colleague and author of wiki"
+      },
+      "after": "afc3b4fc581e74e8",
+      "date": 1450878436860
+    },
+    {
+      "type": "edit",
+      "id": "b3ccef17e6e5ecbc",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ccef17e6e5ecbc",
+        "text": "I've sought the kind assistance of Erika Arnold, a work colleague and author of wikiGraph, a shortest-path finding/visualizing application for Wikipedia based on Neo4J. [http://www.erikaarnold.com/#/wikigraph/ page]"
+      },
+      "date": 1450878545564
+    },
+    {
+      "type": "edit",
+      "id": "afc3b4fc581e74e8",
+      "item": {
+        "type": "markdown",
+        "id": "afc3b4fc581e74e8",
+        "text": "# Learn"
+      },
+      "date": 1450878551199
+    },
+    {
+      "type": "edit",
+      "id": "b3ccef17e6e5ecbc",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ccef17e6e5ecbc",
+        "text": "I've sought the kind assistance of Erika Arnold, a work colleague and author of wikiGraph, a shortest-path visualizing application for Wikipedia based on Neo4J. I follow her approach. [http://www.erikaarnold.com/#/wikigraph/ page]"
+      },
+      "date": 1450878877367
+    },
+    {
+      "type": "edit",
+      "id": "90fce726ebc6a8aa",
+      "item": {
+        "type": "code",
+        "id": "90fce726ebc6a8aa",
+        "text": "sudo mv ~/neo-wiki/wiki.db .\nchmod -R a+w test.db"
+      },
+      "date": 1450902332654
+    },
+    {
+      "type": "edit",
+      "id": "90fce726ebc6a8aa",
+      "item": {
+        "type": "code",
+        "id": "90fce726ebc6a8aa",
+        "text": "cd /var/lib/neo4j/data\nsudo mv ~/neo-wiki/wiki.db .\nchmod -R a+w test.db"
+      },
+      "date": 1450902353400
+    },
+    {
+      "type": "edit",
+      "id": "90fce726ebc6a8aa",
+      "item": {
+        "type": "code",
+        "id": "90fce726ebc6a8aa",
+        "text": "cd /var/lib/neo4j/data\nsudo mv ~/neo-wiki/wiki.db .\nchmod -R a+w wiki.db"
+      },
+      "date": 1450902364074
+    },
+    {
+      "type": "add",
+      "id": "3f4246b7092264d5",
+      "item": {
+        "type": "paragraph",
+        "id": "3f4246b7092264d5",
+        "text": "Find resources."
+      },
+      "after": "8c6952c6342e9f22",
+      "date": 1450902502686
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8a032e566c6ed09"
+      },
+      "id": "c8a032e566c6ed09",
+      "type": "add",
+      "after": "fb60a519f46484a1",
+      "date": 1450902507652
+    },
+    {
+      "type": "add",
+      "id": "56f666df4e1303cc",
+      "item": {
+        "type": "paragraph",
+        "id": "56f666df4e1303cc",
+        "text": "locate neo4j"
+      },
+      "after": "3f4246b7092264d5",
+      "date": 1450902524351
+    },
+    {
+      "type": "remove",
+      "id": "c8a032e566c6ed09",
+      "date": 1450902530436
+    },
+    {
+      "type": "remove",
+      "id": "56f666df4e1303cc",
+      "date": 1450903826665
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8954f7a4831598aa"
+      },
+      "id": "8954f7a4831598aa",
+      "type": "add",
+      "after": "fb60a519f46484a1",
+      "date": 1450903831199
+    },
+    {
+      "type": "edit",
+      "id": "8954f7a4831598aa",
+      "item": {
+        "type": "code",
+        "id": "8954f7a4831598aa",
+        "text": "locate neo4j"
+      },
+      "date": 1450903835035
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "afc3b4fc581e74e8",
+        "b3ccef17e6e5ecbc",
+        "8c6952c6342e9f22",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "8954f7a4831598aa",
+      "date": 1450903840678
+    },
+    {
+      "type": "edit",
+      "id": "3f4246b7092264d5",
+      "item": {
+        "type": "paragraph",
+        "id": "3f4246b7092264d5",
+        "text": "Find where  neo4j resources have been installed."
+      },
+      "date": 1450903864556
+    },
+    {
+      "type": "edit",
+      "id": "9a2baf187dcbab06",
+      "item": {
+        "type": "paragraph",
+        "id": "9a2baf187dcbab06",
+        "text": "Edit the config and restarted the server."
+      },
+      "date": 1450904011833
+    },
+    {
+      "type": "edit",
+      "id": "b8d95ef363adeb8c",
+      "item": {
+        "type": "paragraph",
+        "id": "b8d95ef363adeb8c",
+        "text": "Open an ssh tunnel to the remote server."
+      },
+      "date": 1450904017847
+    },
+    {
+      "type": "edit",
+      "id": "b3ccef17e6e5ecbc",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ccef17e6e5ecbc",
+        "text": "I've sought the kind assistance of Erika Arnold, a work colleague and author of wikiGraph, a shortest-path visualizing application for Wikipedia based on Neo4J. Here I follow her approach. [http://www.erikaarnold.com/#/wikigraph/ page]"
+      },
+      "date": 1450904116027
+    },
+    {
+      "type": "edit",
+      "id": "b3ccef17e6e5ecbc",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ccef17e6e5ecbc",
+        "text": "I've sought the kind assistance of Erika Arnold, a work colleague and author of wikiGraph, a shortest-path visualizing application for Wikipedia based on Neo4J. [http://www.erikaarnold.com/#/wikigraph/ page]"
+      },
+      "date": 1450904135174
+    },
+    {
+      "type": "add",
+      "id": "4ab05bd79071d356",
+      "item": {
+        "type": "paragraph",
+        "id": "4ab05bd79071d356",
+        "text": "Here I follow her approach. "
+      },
+      "after": "b3ccef17e6e5ecbc",
+      "date": 1450904139340
+    },
+    {
+      "type": "edit",
+      "id": "b3ccef17e6e5ecbc",
+      "item": {
+        "type": "paragraph",
+        "id": "b3ccef17e6e5ecbc",
+        "text": "I've sought the kind assistance of work colleague, Erika Arnold, author of wikiGraph, a shortest-path visualizing application for Wikipedia based on Neo4J. [http://www.erikaarnold.com/#/wikigraph/ page]"
+      },
+      "date": 1450904187916
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ae4067729aedf28b"
+      },
+      "id": "ae4067729aedf28b",
+      "type": "add",
+      "after": "fb60a519f46484a1",
+      "date": 1450904606116
+    },
+    {
+      "type": "edit",
+      "id": "ae4067729aedf28b",
+      "item": {
+        "type": "code",
+        "id": "ae4067729aedf28b",
+        "text": "neo4j-import --into wiki.db \\\n  --nodes nodes.csv \\\n  --relationships rels.csv\nchmod -R a+w wiki.db\n"
+      },
+      "date": 1450904641526
+    },
+    {
+      "type": "edit",
+      "id": "ae4067729aedf28b",
+      "item": {
+        "type": "code",
+        "id": "ae4067729aedf28b",
+        "text": "neo4j-import \\\n  --into wiki.db \\\n  --nodes nodes.csv \\\n  --relationships rels.csv\nchmod -R a+w wiki.db\n"
+      },
+      "date": 1450904662900
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "afc3b4fc581e74e8",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "8c6952c6342e9f22",
+        "ae4067729aedf28b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1"
+      ],
+      "id": "ae4067729aedf28b",
+      "date": 1450904671474
+    },
+    {
+      "type": "edit",
+      "id": "ae4067729aedf28b",
+      "item": {
+        "type": "code",
+        "id": "ae4067729aedf28b",
+        "text": "neo4j-import \\\n  --into wiki.db \\\n  --nodes nodes.csv \\\n  --relationships rels.csv"
+      },
+      "date": 1450904689211
+    },
+    {
+      "type": "add",
+      "id": "7f5bb86358d2cd25",
+      "item": {
+        "type": "paragraph",
+        "id": "7f5bb86358d2cd25",
+        "text": "# Query"
+      },
+      "after": "fb60a519f46484a1",
+      "date": 1450965115865
+    },
+    {
+      "type": "add",
+      "id": "c9e82f12e39c3876",
+      "item": {
+        "type": "paragraph",
+        "id": "c9e82f12e39c3876",
+        "text": "Find titles cited by two sites."
+      },
+      "after": "7f5bb86358d2cd25",
+      "date": 1450965286550
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "662142f84fce9768"
+      },
+      "id": "662142f84fce9768",
+      "type": "add",
+      "after": "c9e82f12e39c3876",
+      "date": 1450965289168
+    },
+    {
+      "type": "edit",
+      "id": "662142f84fce9768",
+      "item": {
+        "type": "code",
+        "id": "662142f84fce9768",
+        "text": "match (a)-->(b)-->(c)<--(d)<--(e) return * limit 300"
+      },
+      "date": 1450965294607
+    },
+    {
+      "type": "edit",
+      "id": "7f5bb86358d2cd25",
+      "item": {
+        "type": "markdown",
+        "id": "7f5bb86358d2cd25",
+        "text": "# Query"
+      },
+      "date": 1450965303638
+    },
+    {
+      "type": "edit",
+      "id": "c9e82f12e39c3876",
+      "item": {
+        "type": "paragraph",
+        "id": "c9e82f12e39c3876",
+        "text": "Find sites that have/link the same title."
+      },
+      "date": 1450966771799
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "16802dc2b5b935b5"
+      },
+      "id": "16802dc2b5b935b5",
+      "type": "add",
+      "after": "662142f84fce9768",
+      "date": 1450967287393
+    },
+    {
+      "type": "edit",
+      "id": "16802dc2b5b935b5",
+      "item": {
+        "type": "code",
+        "id": "16802dc2b5b935b5",
+        "text": "match (s:Site)-[HAS]->(p:Page)-[LINK]->(t:Title)\nwhere s.title =~ '.*org'\nand t.title =~ '.*Education.*'\nreturn s,p,t\nlimit 100"
+      },
+      "date": 1450967291626
+    },
+    {
+      "type": "edit",
+      "id": "c9e82f12e39c3876",
+      "item": {
+        "type": "paragraph",
+        "id": "c9e82f12e39c3876",
+        "text": "Find sites that have/link the same title. [http://c2.com/wiki/neo4j/mike.svg svg]"
+      },
+      "date": 1450967502542
+    },
+    {
+      "type": "add",
+      "id": "4e20e455cbf83ff1",
+      "item": {
+        "type": "paragraph",
+        "id": "4e20e455cbf83ff1",
+        "text": "It's hard to know what to look for until you have a real need and some experience formulating queries. I read docs and tried things. Some impressed me."
+      },
+      "after": "c9e82f12e39c3876",
+      "date": 1450967998560
+    },
+    {
+      "type": "add",
+      "id": "537d1aec4c16304d",
+      "item": {
+        "type": "paragraph",
+        "id": "537d1aec4c16304d",
+        "text": "For fast queries one must find a good place to start and then traverse from there. I picked .org sites and looked for links to titles about Education. [http://c2.com/wiki/neo4j/education.svg svg]"
+      },
+      "after": "4e20e455cbf83ff1",
+      "date": 1450968114258
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "afc3b4fc581e74e8",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "8c6952c6342e9f22",
+        "ae4067729aedf28b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "c9e82f12e39c3876",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "662142f84fce9768"
+      ],
+      "id": "16802dc2b5b935b5",
+      "date": 1450968121772
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "afc3b4fc581e74e8",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "8c6952c6342e9f22",
+        "ae4067729aedf28b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "c9e82f12e39c3876",
+        "662142f84fce9768"
+      ],
+      "id": "c9e82f12e39c3876",
+      "date": 1450968126251
+    },
+    {
+      "type": "edit",
+      "id": "c9e82f12e39c3876",
+      "item": {
+        "type": "paragraph",
+        "id": "c9e82f12e39c3876",
+        "text": "One can retrieve nodes by the shape of their relations alone though this take noticable compute time. Without saying as much I find sites that have/link the same title. [http://c2.com/wiki/neo4j/mike.svg svg]"
+      },
+      "date": 1450968450683
+    },
+    {
+      "type": "edit",
+      "id": "c9e82f12e39c3876",
+      "item": {
+        "type": "paragraph",
+        "id": "c9e82f12e39c3876",
+        "text": "I try retrieving nodes by the shape of their relations alone. This is slow. I find sites that have/link the same title. [http://c2.com/wiki/neo4j/mike.svg svg]"
+      },
+      "date": 1450968497895
+    },
+    {
+      "type": "edit",
+      "id": "537d1aec4c16304d",
+      "item": {
+        "type": "paragraph",
+        "id": "537d1aec4c16304d",
+        "text": "For fast queries find a good place to start and then traverse from there. I picked .org sites and looked for links to titles about Education. [http://c2.com/wiki/neo4j/education.svg svg]"
+      },
+      "date": 1450968526170
+    },
+    {
+      "type": "edit",
+      "id": "4e20e455cbf83ff1",
+      "item": {
+        "type": "paragraph",
+        "id": "4e20e455cbf83ff1",
+        "text": "It's hard to know what to look for until you have a real need and some experience formulating queries. I read docs and tried things. Some impressed me enough to save the svg."
+      },
+      "date": 1450968580755
+    },
+    {
+      "type": "edit",
+      "id": "fb60a519f46484a1",
+      "item": {
+        "type": "paragraph",
+        "id": "fb60a519f46484a1",
+        "text": "Then view the graph using the builtin app. [http://localhost:7474 localhost]"
+      },
+      "date": 1450968594329
+    },
+    {
+      "type": "edit",
+      "id": "afc3b4fc581e74e8",
+      "item": {
+        "type": "markdown",
+        "id": "afc3b4fc581e74e8",
+        "text": "# Load"
+      },
+      "date": 1450968624916
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "ae4067729aedf28b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "c9e82f12e39c3876",
+        "662142f84fce9768"
+      ],
+      "id": "afc3b4fc581e74e8",
+      "date": 1450968633358
+    },
+    {
+      "type": "edit",
+      "id": "8c6952c6342e9f22",
+      "item": {
+        "type": "paragraph",
+        "id": "8c6952c6342e9f22",
+        "text": "Built a test database and imported it with the import command. [http://neo4j.com/docs/stable/import-tool-examples.html docs] [http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+      },
+      "date": 1450968863982
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8e523e12835a80c"
+      },
+      "id": "c8e523e12835a80c",
+      "type": "add",
+      "after": "662142f84fce9768",
+      "date": 1450977107875
+    },
+    {
+      "type": "edit",
+      "id": "c8e523e12835a80c",
+      "item": {
+        "type": "paragraph",
+        "id": "c8e523e12835a80c",
+        "text": "Top page counts for happening sites."
+      },
+      "date": 1450977165152
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc12331e2d1b4952"
+      },
+      "id": "cc12331e2d1b4952",
+      "type": "add",
+      "after": "c8e523e12835a80c",
+      "date": 1450977167507
+    },
+    {
+      "type": "remove",
+      "id": "cc12331e2d1b4952",
+      "date": 1450977184082
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b7a3364f42c67a5e"
+      },
+      "id": "b7a3364f42c67a5e",
+      "type": "add",
+      "after": "c8e523e12835a80c",
+      "date": 1450977185988
+    },
+    {
+      "type": "edit",
+      "id": "b7a3364f42c67a5e",
+      "item": {
+        "type": "markdown",
+        "id": "b7a3364f42c67a5e",
+        "text": "s.title,count(p)\ndon.ny2.fedwikihappening.net,3089\nmachines.alyson.sf.fedwikihappening.net,294\nfrances.uk.fedwikihappening.net,225\nkate.au.fedwikihappening.net,220\nmaha.uk.fedwikihappening.net,216\ntim.au.fedwikihappening.net,178\nchamboonline.sf2.fedwikihappening.net,164\njon.sf.fedwikihappening.net,147\njenny.uk.fedwikihappening.net,140\nthoka.uk2.fedwikihappening.net,134\nsarah.uk.fedwikihappening.net,134\nalyson.sf.fedwikihappening.net,133\naudrey.sf.fedwikihappening.net,119\ncogdog.sf.fedwikihappening.net,106\ncj13.sf2.fedwikihappening.net,91\nmura.uk.fedwikihappening.net,84\nnick.uk.fedwikihappening.net,73\ndirectory.fedwikihappening.net,70\ncogdoghappening.sf2.fedwikihappening.net,42\nx28de.uk2.fedwikihappening.net,38\nmcmorgan.ny2.fedwikihappening.net,38\ncatherine.uk.fedwikihappening.net,36\ndaveh70.ny2.fedwikihappening.net,35\nalex.au.fedwikihappening.net,27\nanderhaff.ny2.fedwikihappening.net,26\npodehaye.uk2.fedwikihappening.net,23\ndogtrax.ny2.fedwikihappening.net,20\nclay.ny.fedwikihappening.net,18\ntelliowkuwp.ny2.fedwikihappening.net,17\nhwangmoretime.sf2.fedwikihappening.net,17\njrdingwall.sf2.fedwikihappening.net,16\nassignments.ny2.fedwikihappening.net,14\ndongorges.ny2.fedwikihappening.net,14\nottonomy.sf2.fedwikihappening.net,13\nsteve.ny.fedwikihappening.net,11\ndonalholland.ny2.fedwikihappening.net,11\nkeith.ny.fedwikihappening.net,10\n"
+      },
+      "date": 1450977189743
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9c7020b68ae8c2b8"
+      },
+      "id": "9c7020b68ae8c2b8",
+      "type": "add",
+      "after": "b7a3364f42c67a5e",
+      "date": 1450977262923
+    },
+    {
+      "type": "edit",
+      "id": "9c7020b68ae8c2b8",
+      "item": {
+        "type": "code",
+        "id": "9c7020b68ae8c2b8",
+        "text": "match (s:Site)-->(p)\nwhere s.title =~ '.*fedwikihappening.net'\nreturn s.title,count(p)\norder by count(p) desc"
+      },
+      "date": 1450977291380
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "377dce49dd0f2f1a",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "ae4067729aedf28b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "c9e82f12e39c3876",
+        "662142f84fce9768",
+        "c8e523e12835a80c",
+        "9c7020b68ae8c2b8",
+        "b7a3364f42c67a5e"
+      ],
+      "id": "9c7020b68ae8c2b8",
+      "date": 1450977300261
+    },
+    {
+      "type": "edit",
+      "id": "9c7020b68ae8c2b8",
+      "item": {
+        "type": "code",
+        "id": "9c7020b68ae8c2b8",
+        "text": "match (s:Site)-->(p) \nwhere s.title =~ '.*fedwikihappening.net' \nwith s.title as site, count(p) as pages \nwhere pages>=100 \nreturn * \norder by pages desc"
+      },
+      "date": 1450978062286
+    },
+    {
+      "type": "edit",
+      "id": "9c7020b68ae8c2b8",
+      "item": {
+        "type": "code",
+        "id": "9c7020b68ae8c2b8",
+        "text": "match (s:Site)-->(p) \nwhere s.title =~ '.*fedwikihappening.net' \nwith s.title as site, count(p) as pages \nwhere pages>=100 \nreturn pages, site\norder by pages desc"
+      },
+      "date": 1450978091495
+    },
+    {
+      "type": "edit",
+      "id": "b7a3364f42c67a5e",
+      "item": {
+        "type": "markdown",
+        "id": "b7a3364f42c67a5e",
+        "text": "pages,site\n3089,don.ny2.fedwikihappening.net\n294,machines.alyson.sf.fedwikihappening.net\n225,frances.uk.fedwikihappening.net\n220,kate.au.fedwikihappening.net\n216,maha.uk.fedwikihappening.net\n178,tim.au.fedwikihappening.net\n164,chamboonline.sf2.fedwikihappening.net\n147,jon.sf.fedwikihappening.net\n140,jenny.uk.fedwikihappening.net\n134,thoka.uk2.fedwikihappening.net\n134,sarah.uk.fedwikihappening.net\n133,alyson.sf.fedwikihappening.net\n119,audrey.sf.fedwikihappening.net\n106,cogdog.sf.fedwikihappening.net"
+      },
+      "date": 1450978199612
+    },
+    {
+      "type": "edit",
+      "id": "9c7020b68ae8c2b8",
+      "item": {
+        "type": "code",
+        "id": "9c7020b68ae8c2b8",
+        "text": "match (s:Site)-->(p) \nwhere s.title =~ '.*fedwikihappening.net' \nwith s.title as site, count(p) as pages \nwhere pages >= 100 \nreturn pages, site\norder by pages desc"
+      },
+      "date": 1450978643707
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bc3119cc89b72937"
+      },
+      "id": "bc3119cc89b72937",
+      "type": "add",
+      "after": "b7a3364f42c67a5e",
+      "date": 1450982039116
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages citing them. Answers whos' scratch pages made the connections?"
+      },
+      "date": 1450982208766
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a8d30df76764edc4"
+      },
+      "id": "a8d30df76764edc4",
+      "type": "add",
+      "after": "bc3119cc89b72937",
+      "date": 1450982218721
+    },
+    {
+      "type": "remove",
+      "id": "a8d30df76764edc4",
+      "date": 1450982229242
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6e961279452364e0"
+      },
+      "id": "6e961279452364e0",
+      "type": "add",
+      "after": "bc3119cc89b72937",
+      "date": 1450982245072
+    },
+    {
+      "type": "edit",
+      "id": "6e961279452364e0",
+      "item": {
+        "type": "code",
+        "id": "6e961279452364e0",
+        "text": "match (here:Title { title:\"How Life Works\" }),\n(want:Title { title:\"Federated Wiki On Digital Ocean\" }),\npaths = allShortestPaths((here)-[*]-(want))\nwith nodes(paths) as way\nmatch (s:Site)-->(p:Page)\nwhere p in way\nreturn * limit 40"
+      },
+      "date": 1450982284636
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages citing them. Answers whos' scratch pages made the connection possible."
+      },
+      "date": 1450982361181
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages citing them. Answers whos' scratch pages made the connection possible. [http://c2.com/web/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1450982526535
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages citing them. Answers whos' scratch pages made the connection possible. [http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1450982551653
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages along the way.[http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1450982817958
+    },
+    {
+      "type": "edit",
+      "id": "6e961279452364e0",
+      "item": {
+        "type": "code",
+        "id": "6e961279452364e0",
+        "text": "match \n(here:Title \n  { title:\"How Life Works\" }),\n(want:Title \n  { title:\"Federated Wiki On Digital Ocean\" }),\npaths = allShortestPaths((here)-[*]-(want))\nwith nodes(paths) as way\nmatch (s:Site)-->(p:Page)\nwhere p in way\nreturn * limit 40"
+      },
+      "date": 1450982871949
+    },
+    {
+      "type": "edit",
+      "id": "6e961279452364e0",
+      "item": {
+        "type": "code",
+        "id": "6e961279452364e0",
+        "text": "match \n(here:Title \n  { title:\"How Life Works\" }),\n(want:Title {title:\"Federated Wiki On Digital Ocean\"}),\npaths = allShortestPaths((here)-[*]-(want))\nwith nodes(paths) as way\nmatch (s:Site)-->(p:Page)\nwhere p in way\nreturn * limit 40"
+      },
+      "date": 1450982900336
+    },
+    {
+      "type": "edit",
+      "id": "6e961279452364e0",
+      "item": {
+        "type": "code",
+        "id": "6e961279452364e0",
+        "text": "match \n(here:Title \n  { title:\"How Life Works\" }),\n(want:Title \n  { title:\"Federated Wiki On Digital Ocean\" }),\npaths = allShortestPaths((here)-[*]-(want))\nwith nodes(paths) as way\nmatch (s:Site)-->(p:Page)\nwhere p in way\nreturn * limit 40"
+      },
+      "date": 1450982931147
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages along the way. [http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1450990447037
+    },
+    {
+      "type": "add",
+      "id": "0d4cc80cedf557cf",
+      "item": {
+        "type": "paragraph",
+        "id": "0d4cc80cedf557cf",
+        "text": "See [[Neo4J Resources]]"
+      },
+      "after": "afc8faf5bf99c607",
+      "date": 1451004658897
+    },
+    {
+      "type": "remove",
+      "id": "377dce49dd0f2f1a",
+      "date": 1451050024871
+    },
+    {
+      "type": "edit",
+      "id": "8c6952c6342e9f22",
+      "item": {
+        "type": "paragraph",
+        "id": "8c6952c6342e9f22",
+        "text": "Build node and relation csv files from [[Search Index Downloads]] with a ruby converter that assigns numeric ids to sites, pages and titles. "
+      },
+      "date": 1451067859386
+    },
+    {
+      "type": "edit",
+      "id": "8c6952c6342e9f22",
+      "item": {
+        "type": "paragraph",
+        "id": "8c6952c6342e9f22",
+        "text": "Build node and relation csv files from [[Search Index Downloads]] with a ruby converter that assigns numeric ids to sites, pages and titles. [http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+      },
+      "date": 1451067883213
+    },
+    {
+      "type": "add",
+      "id": "4548dec0c8fdf39d",
+      "item": {
+        "type": "paragraph",
+        "id": "4548dec0c8fdf39d",
+        "text": "Build a graph database from csv files with neo4j's import command. [http://neo4j.com/docs/stable/import-tool-examples.html docs] "
+      },
+      "after": "8c6952c6342e9f22",
+      "date": 1451068001115
+    },
+    {
+      "type": "edit",
+      "id": "8c6952c6342e9f22",
+      "item": {
+        "type": "paragraph",
+        "id": "8c6952c6342e9f22",
+        "text": "Build node and relation csv files from [[Search Index Downloads]] with a ruby converter that assigns numeric ids to sites, pages and titles. [https://github.com/WardCunningham/search/blob/master/neo-batch.rb github]"
+      },
+      "date": 1451068179888
+    },
+    {
+      "type": "add",
+      "id": "19cb558b639d4758",
+      "item": {
+        "type": "paragraph",
+        "id": "19cb558b639d4758",
+        "text": "Runtime 3.5 minutes. [http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+      },
+      "after": "8c6952c6342e9f22",
+      "date": 1451068187937
+    },
+    {
+      "type": "edit",
+      "id": "19cb558b639d4758",
+      "item": {
+        "type": "paragraph",
+        "id": "19cb558b639d4758",
+        "text": "Runtime 3.5 minutes, 8 mb.[http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+      },
+      "date": 1451068678341
+    },
+    {
+      "type": "edit",
+      "id": "19cb558b639d4758",
+      "item": {
+        "type": "paragraph",
+        "id": "19cb558b639d4758",
+        "text": "Runtime 3.5 min, 8 mb output. [http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+      },
+      "date": 1451068700412
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0402dd46d18b639b"
+      },
+      "id": "0402dd46d18b639b",
+      "type": "add",
+      "after": "6e961279452364e0",
+      "date": 1451071538923
+    },
+    {
+      "type": "edit",
+      "id": "0402dd46d18b639b",
+      "item": {
+        "type": "markdown",
+        "id": "0402dd46d18b639b",
+        "text": "IMPORT DONE in 10s 298ms. Imported:\n  92237 nodes\n  321452 relationships\n  92237 properties\n"
+      },
+      "date": 1451071547306
+    },
+    {
+      "type": "edit",
+      "id": "0402dd46d18b639b",
+      "item": {
+        "type": "markdown",
+        "id": "0402dd46d18b639b",
+        "text": "IMPORT DONE in 10s 298ms.\n  92237 nodes\n  321452 relationships\n  92237 properties\n"
+      },
+      "date": 1451071568823
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "0d4cc80cedf557cf",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "19cb558b639d4758",
+        "4548dec0c8fdf39d",
+        "ae4067729aedf28b",
+        "0402dd46d18b639b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "c9e82f12e39c3876",
+        "662142f84fce9768",
+        "c8e523e12835a80c",
+        "9c7020b68ae8c2b8",
+        "b7a3364f42c67a5e",
+        "bc3119cc89b72937",
+        "6e961279452364e0"
+      ],
+      "id": "0402dd46d18b639b",
+      "date": 1451071582075
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e53fa254ee0845d4"
+      },
+      "id": "e53fa254ee0845d4",
+      "type": "add",
+      "after": "6e961279452364e0",
+      "date": 1451104211503
+    },
+    {
+      "type": "edit",
+      "id": "e53fa254ee0845d4",
+      "item": {
+        "type": "paragraph",
+        "id": "e53fa254ee0845d4",
+        "text": "Shortest path constrained to discoverable sites."
+      },
+      "date": 1451104403923
+    },
+    {
+      "type": "edit",
+      "id": "e53fa254ee0845d4",
+      "item": {
+        "type": "paragraph",
+        "id": "e53fa254ee0845d4",
+        "text": "Shortest path constrained to discoverable sites. [http://c2.com/wiki/neo4j/known.svg svg]"
+      },
+      "date": 1451104577741
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "21c436ea5280f788"
+      },
+      "id": "21c436ea5280f788",
+      "type": "add",
+      "after": "e53fa254ee0845d4",
+      "date": 1451104790307
+    },
+    {
+      "type": "edit",
+      "id": "21c436ea5280f788",
+      "item": {
+        "type": "code",
+        "id": "21c436ea5280f788",
+        "text": "match \n(here:Title \n  { title:\"Hacker Beach\" })<-[h:IS]-(start),\n(end)-[w:IS]->(want:Title \n  { title:\"Naval Undersea Museum\" }),\npaths = shortestPath((start)-[:HAS|:KNOWS*]->(end)\nreturn  here, h, want, w, paths limit 40"
+      },
+      "date": 1451104851225
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages along the way. But wait, this path goes through unrelated 'scratch' pages. [http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1451105073865
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages along the way. But wait, this path goes through unrelated 'scratch' pages. It also disregards the relations' direction. [http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1451105208348
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages along the way. But wait, this path goes through unrelated 'scratch' pages. It also disregards the relations' direction. We need to constrain the path to sites we know. [http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1451105288492
+    },
+    {
+      "type": "edit",
+      "id": "e53fa254ee0845d4",
+      "item": {
+        "type": "paragraph",
+        "id": "e53fa254ee0845d4",
+        "text": "Revise batch relations to include links found on each page as KNOWS between pages and neighborhood sites. [https://github.com/WardCunningham/search/compare/c443cdb45cb89b1215db56c235ebb0d3bd02be9e...8f27aa1d229553a73d21887bbfa39496a1b2fb1a github]"
+      },
+      "date": 1451110330980
+    },
+    {
+      "type": "add",
+      "id": "316aaaba081f5f53",
+      "item": {
+        "type": "paragraph",
+        "id": "316aaaba081f5f53",
+        "text": "Shortest path constrained to discoverable sites. [http://c2.com/wiki/neo4j/known.svg svg]"
+      },
+      "after": "e53fa254ee0845d4",
+      "date": 1451110332468
+    },
+    {
+      "type": "edit",
+      "id": "e53fa254ee0845d4",
+      "item": {
+        "type": "paragraph",
+        "id": "e53fa254ee0845d4",
+        "text": "Revise batch import to include links found on each page as KNOWS between pages and neighborhood sites. [https://github.com/WardCunningham/search/compare/c443cdb45cb89b1215db56c235ebb0d3bd02be9e...8f27aa1d229553a73d21887bbfa39496a1b2fb1a github]"
+      },
+      "date": 1451110391006
+    },
+    {
+      "type": "edit",
+      "id": "e53fa254ee0845d4",
+      "item": {
+        "type": "paragraph",
+        "id": "e53fa254ee0845d4",
+        "text": "Revise batch import to include sites found on each page as KNOWS between a Page and neighborhood Sites.  [https://github.com/WardCunningham/search/compare/c443cdb45cb89b1215db56c235ebb0d3bd02be9e...8f27aa1d229553a73d21887bbfa39496a1b2fb1a github]"
+      },
+      "date": 1451110485981
+    },
+    {
+      "type": "edit",
+      "id": "e53fa254ee0845d4",
+      "item": {
+        "type": "paragraph",
+        "id": "e53fa254ee0845d4",
+        "text": "Revise the batch import to include sites found on each page as KNOWS between a Page and neighborhood Sites.  [https://github.com/WardCunningham/search/compare/c443cdb45cb89b1215db56c235ebb0d3bd02be9e...8f27aa1d229553a73d21887bbfa39496a1b2fb1a github]"
+      },
+      "date": 1451110525482
+    },
+    {
+      "type": "edit",
+      "id": "316aaaba081f5f53",
+      "item": {
+        "type": "paragraph",
+        "id": "316aaaba081f5f53",
+        "text": "Add directional HAS|KNOWS pattern to the shortest path to constrain result to operationally discoverable sites. [http://c2.com/wiki/neo4j/known.svg svg]"
+      },
+      "date": 1451110987075
+    },
+    {
+      "type": "edit",
+      "id": "316aaaba081f5f53",
+      "item": {
+        "type": "paragraph",
+        "id": "316aaaba081f5f53",
+        "text": "Add directional HAS|KNOWS pattern to the shortest path to constrain result to operationally discoverable sites. We add Titles to the path ends with IS relations. This adds a bit of ambiguity as to which page we're starting at. [http://c2.com/wiki/neo4j/known.svg svg]"
+      },
+      "date": 1451111322822
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57a6467e3a42b737"
+      },
+      "id": "57a6467e3a42b737",
+      "type": "add",
+      "after": "21c436ea5280f788",
+      "date": 1451112257621
+    },
+    {
+      "type": "edit",
+      "id": "57a6467e3a42b737",
+      "item": {
+        "type": "paragraph",
+        "id": "57a6467e3a42b737",
+        "text": "I've tested the found path. It works."
+      },
+      "date": 1451112290256
+    },
+    {
+      "type": "edit",
+      "id": "bc3119cc89b72937",
+      "item": {
+        "type": "paragraph",
+        "id": "bc3119cc89b72937",
+        "text": "Shortest path between titles with sites that hold the pages along the way. [http://c2.com/wiki/neo4j/way.svg svg]"
+      },
+      "date": 1451112814218
+    },
+    {
+      "type": "add",
+      "id": "bdf940896746351b",
+      "item": {
+        "type": "paragraph",
+        "id": "bdf940896746351b",
+        "text": "But wait, this path goes through unrelated 'scratch' pages. It also disregards the relations' direction. We need to constrain the path to sites we know. "
+      },
+      "after": "bc3119cc89b72937",
+      "date": 1451112816560
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "0d4cc80cedf557cf",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "19cb558b639d4758",
+        "4548dec0c8fdf39d",
+        "ae4067729aedf28b",
+        "0402dd46d18b639b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "c9e82f12e39c3876",
+        "662142f84fce9768",
+        "c8e523e12835a80c",
+        "9c7020b68ae8c2b8",
+        "b7a3364f42c67a5e",
+        "bc3119cc89b72937",
+        "6e961279452364e0",
+        "bdf940896746351b",
+        "e53fa254ee0845d4",
+        "316aaaba081f5f53",
+        "21c436ea5280f788",
+        "57a6467e3a42b737"
+      ],
+      "id": "bdf940896746351b",
+      "date": 1451112820837
+    },
+    {
+      "type": "add",
+      "id": "6cc0b386731b54e2",
+      "item": {
+        "type": "paragraph",
+        "id": "6cc0b386731b54e2",
+        "text": "# Knows"
+      },
+      "after": "bdf940896746351b",
+      "date": 1451112840700
+    },
+    {
+      "type": "edit",
+      "id": "6cc0b386731b54e2",
+      "item": {
+        "type": "markdown",
+        "id": "6cc0b386731b54e2",
+        "text": "# Knows"
+      },
+      "date": 1451112844129
+    },
+    {
+      "type": "edit",
+      "id": "57a6467e3a42b737",
+      "item": {
+        "type": "paragraph",
+        "id": "57a6467e3a42b737",
+        "text": "I've tested the found path in wiki. It works."
+      },
+      "date": 1451112870840
+    },
+    {
+      "type": "edit",
+      "id": "316aaaba081f5f53",
+      "item": {
+        "type": "paragraph",
+        "id": "316aaaba081f5f53",
+        "text": "Add directional HAS|KNOWS pattern to the shortest path to constrain result to operationally discoverable sites. I add Titles to the path ends with IS relations. This adds a bit of ambiguity as to which page we're starting at. [http://c2.com/wiki/neo4j/known.svg svg]"
+      },
+      "date": 1451112884239
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e6521631b8f123cf"
+      },
+      "id": "e6521631b8f123cf",
+      "type": "add",
+      "after": "57a6467e3a42b737",
+      "date": 1451115174575
+    },
+    {
+      "type": "edit",
+      "id": "e6521631b8f123cf",
+      "item": {
+        "type": "paragraph",
+        "id": "e6521631b8f123cf",
+        "text": "We can find the sites with the most neighbors."
+      },
+      "date": 1451115222922
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "917f243207627e7e"
+      },
+      "id": "917f243207627e7e",
+      "type": "add",
+      "after": "e6521631b8f123cf",
+      "date": 1451115227835
+    },
+    {
+      "type": "edit",
+      "id": "917f243207627e7e",
+      "item": {
+        "type": "code",
+        "id": "917f243207627e7e",
+        "text": "match\n(s:Site)-[h:HAS]->(p:Page)-[k:KNOWS]->(n:Site)\nwith s.title as site, count(DISTINCT n.title) as neighbors\nreturn *\norder by neighbors desc\nlimit 20"
+      },
+      "date": 1451115240309
+    },
+    {
+      "type": "edit",
+      "id": "917f243207627e7e",
+      "item": {
+        "type": "code",
+        "id": "917f243207627e7e",
+        "text": "match\n  (s:Site)-[h:HAS]->(p:Page)-[k:KNOWS]->(n:Site)\nwith s.title as site,\n  count(DISTINCT n.title) as neighbors\nreturn *\norder by neighbors desc\nlimit 20"
+      },
+      "date": 1451115267611
+    },
+    {
+      "type": "edit",
+      "id": "917f243207627e7e",
+      "item": {
+        "type": "code",
+        "id": "917f243207627e7e",
+        "text": "match\n  (s:Site)-[h:HAS]->(p:Page)-[k:KNOWS]->(n:Site)\nwith\n  s.title as site,\n  count(DISTINCT n.title) as neighbors\nreturn *\norder by neighbors desc\nlimit 20"
+      },
+      "date": 1451115303464
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "145f06c7f8b4aa51"
+      },
+      "id": "145f06c7f8b4aa51",
+      "type": "add",
+      "after": "917f243207627e7e",
+      "date": 1451115341671
+    },
+    {
+      "type": "edit",
+      "id": "145f06c7f8b4aa51",
+      "item": {
+        "type": "markdown",
+        "id": "145f06c7f8b4aa51",
+        "text": "526\tdon.ny2.fedwikihappening.net\n407\tward.asia.wiki.org\n363\tsearch.fed.wiki.org:3030\n170\tjournal.hapgood.net\n160\tdavid.viral.academy\n157\tc0de.academy\n131\twiki.viral.academy\n128\tdavid.bovill.me\n125\tforage.ward.fed.wiki.org\n115\tward.fed.wiki.org\n110\tmachines.hapgood.net\n108\tfedwiki.jeffist.com\n96\ttim.federatedwiki.org\n94\tchamboonline.sf2.fedwikihappening.net\n92\tsfw.mcmorgan.org\n92\tedfedwiki.com\n90\tsarah.uk.fedwikihappening.net\n88\tjenny.uk.fedwikihappening.net\n87\tmaha.uk.fedwikihappening.net\n86\ttim.au.fedwikihappening.net"
+      },
+      "date": 1451115346476
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3794f44d48312998"
+      },
+      "id": "3794f44d48312998",
+      "type": "add",
+      "after": "145f06c7f8b4aa51",
+      "date": 1451115362597
+    },
+    {
+      "type": "edit",
+      "id": "3794f44d48312998",
+      "item": {
+        "type": "paragraph",
+        "id": "3794f44d48312998",
+        "text": "This agrees with word count of the site wide rollup of site.txt files."
+      },
+      "date": 1451115490780
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a9d5d8e87a12dd47"
+      },
+      "id": "a9d5d8e87a12dd47",
+      "type": "add",
+      "after": "3794f44d48312998",
+      "date": 1451115497154
+    },
+    {
+      "type": "remove",
+      "id": "a9d5d8e87a12dd47",
+      "date": 1451115504473
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "07db5c5f3fab32fe"
+      },
+      "id": "07db5c5f3fab32fe",
+      "type": "add",
+      "after": "3794f44d48312998",
+      "date": 1451115520612
+    },
+    {
+      "type": "edit",
+      "id": "07db5c5f3fab32fe",
+      "item": {
+        "type": "code",
+        "id": "07db5c5f3fab32fe",
+        "text": "ls | while read i; do wc -l $i/sites.txt; done | sort -n"
+      },
+      "date": 1451115526824
+    },
+    {
+      "type": "edit",
+      "id": "07db5c5f3fab32fe",
+      "item": {
+        "type": "code",
+        "id": "07db5c5f3fab32fe",
+        "text": "ls | while read i\ndo wc -l $i/sites.txt\ndone | sort -n"
+      },
+      "date": 1451115566281
+    },
+    {
+      "type": "edit",
+      "id": "3794f44d48312998",
+      "item": {
+        "type": "paragraph",
+        "id": "3794f44d48312998",
+        "text": "This agrees with the command line word count of the site wide rollup of site.txt files."
+      },
+      "date": 1451115632284
+    },
+    {
+      "type": "edit",
+      "id": "e6521631b8f123cf",
+      "item": {
+        "type": "paragraph",
+        "id": "e6521631b8f123cf",
+        "text": "We can find the sites with the most neighbors by counting distinct KNOWS relations. The numbers are much higher than we might expect. This is because we conflate forks, references and rosters while we scrape. For the graph database we should do better."
+      },
+      "date": 1451116457588
+    },
+    {
+      "type": "edit",
+      "id": "e6521631b8f123cf",
+      "item": {
+        "type": "paragraph",
+        "id": "e6521631b8f123cf",
+        "text": "We can find the sites with the most neighbors by counting distinct KNOWS relations. "
+      },
+      "date": 1451116470370
+    },
+    {
+      "type": "add",
+      "id": "f28c3866f0fd2a7d",
+      "item": {
+        "type": "paragraph",
+        "id": "f28c3866f0fd2a7d",
+        "text": "The numbers are much higher than we might expect. This is because we conflate forks, references and rosters while we scrape. For the graph database we should do better."
+      },
+      "after": "e6521631b8f123cf",
+      "date": 1451116472572
+    },
+    {
+      "type": "move",
+      "order": [
+        "afc8faf5bf99c607",
+        "0d4cc80cedf557cf",
+        "b3ccef17e6e5ecbc",
+        "4ab05bd79071d356",
+        "afc3b4fc581e74e8",
+        "8c6952c6342e9f22",
+        "19cb558b639d4758",
+        "4548dec0c8fdf39d",
+        "ae4067729aedf28b",
+        "0402dd46d18b639b",
+        "3f4246b7092264d5",
+        "8954f7a4831598aa",
+        "06ca86a36806e252",
+        "90fce726ebc6a8aa",
+        "9a2baf187dcbab06",
+        "0f800d3bf753ce02",
+        "b8d95ef363adeb8c",
+        "fac43d944be3212a",
+        "fb60a519f46484a1",
+        "7f5bb86358d2cd25",
+        "4e20e455cbf83ff1",
+        "537d1aec4c16304d",
+        "16802dc2b5b935b5",
+        "c9e82f12e39c3876",
+        "662142f84fce9768",
+        "c8e523e12835a80c",
+        "9c7020b68ae8c2b8",
+        "b7a3364f42c67a5e",
+        "bc3119cc89b72937",
+        "6e961279452364e0",
+        "bdf940896746351b",
+        "6cc0b386731b54e2",
+        "e53fa254ee0845d4",
+        "316aaaba081f5f53",
+        "21c436ea5280f788",
+        "57a6467e3a42b737",
+        "e6521631b8f123cf",
+        "917f243207627e7e",
+        "f28c3866f0fd2a7d",
+        "145f06c7f8b4aa51",
+        "3794f44d48312998",
+        "07db5c5f3fab32fe"
+      ],
+      "id": "f28c3866f0fd2a7d",
+      "date": 1451116476050
+    },
+    {
+      "type": "edit",
+      "id": "57a6467e3a42b737",
+      "item": {
+        "type": "paragraph",
+        "id": "57a6467e3a42b737",
+        "text": "I've tested the path found in wiki. It works."
+      },
+      "date": 1451116664971
+    },
+    {
+      "type": "edit",
+      "id": "57a6467e3a42b737",
+      "item": {
+        "type": "paragraph",
+        "id": "57a6467e3a42b737",
+        "text": "I've tested the path returned by clicking through it in wiki. It works."
+      },
+      "date": 1451116716659
+    },
+    {
+      "type": "edit",
+      "id": "57a6467e3a42b737",
+      "item": {
+        "type": "paragraph",
+        "id": "57a6467e3a42b737",
+        "text": "I've tested the path found by clicking through in wiki. It works."
+      },
+      "date": 1451116777871
+    },
+    {
+      "type": "edit",
+      "id": "57a6467e3a42b737",
+      "item": {
+        "type": "paragraph",
+        "id": "57a6467e3a42b737",
+        "text": "I've tested the path by clicking through it. It works."
+      },
+      "date": 1451116798434
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2dad0c5d04b29776"
+      },
+      "id": "2dad0c5d04b29776",
+      "type": "add",
+      "after": "07db5c5f3fab32fe",
+      "date": 1451163106852
+    },
+    {
+      "type": "edit",
+      "id": "2dad0c5d04b29776",
+      "item": {
+        "type": "paragraph",
+        "id": "2dad0c5d04b29776",
+        "text": "We can now write a more meaningful who-links-here."
+      },
+      "date": 1451163125438
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57d0ba2087466201"
+      },
+      "id": "57d0ba2087466201",
+      "type": "add",
+      "after": "2dad0c5d04b29776",
+      "date": 1451163128793
+    },
+    {
+      "type": "edit",
+      "id": "57d0ba2087466201",
+      "item": {
+        "type": "code",
+        "id": "57d0ba2087466201",
+        "text": "match\n  (s0:Site {title:'ward.asia.wiki.org'})-[:HAS]->\n  (p0:Page {title: 'federation-search'})-[:IS]->\n  (t0:Title)<-[a:LINK]-(p1:Page)<-[b:HAS]-(s1:Site)\nwhere\n  (p1)-[:KNOWS]->(s0)\nreturn\n  a,b"
+      },
+      "date": 1451163146160
+    },
+    {
+      "type": "edit",
+      "id": "2dad0c5d04b29776",
+      "item": {
+        "type": "paragraph",
+        "id": "2dad0c5d04b29776",
+        "text": "We can now write a more meaningful who-links-here. "
+      },
+      "date": 1451163411743
+    },
+    {
+      "type": "edit",
+      "id": "2dad0c5d04b29776",
+      "item": {
+        "type": "paragraph",
+        "id": "2dad0c5d04b29776",
+        "text": "We can now write a more meaningful who-links-here.  [http://c2.com/wiki/neo4j/who2.svg svg]"
+      },
+      "date": 1451163460122
+    },
+    {
+      "type": "edit",
+      "id": "2dad0c5d04b29776",
+      "item": {
+        "type": "paragraph",
+        "id": "2dad0c5d04b29776",
+        "text": "We can write a more meaningful who-links-here.  [http://c2.com/wiki/neo4j/who2.svg svg]"
+      },
+      "date": 1451163467389
+    },
+    {
+      "type": "edit",
+      "id": "2dad0c5d04b29776",
+      "item": {
+        "type": "paragraph",
+        "id": "2dad0c5d04b29776",
+        "text": "We can write a more meaningful who-links-here that will resolve to the page at least as a twin.  [http://c2.com/wiki/neo4j/who2.svg svg]"
+      },
+      "date": 1451163555852
+    },
+    {
+      "type": "edit",
+      "id": "2dad0c5d04b29776",
+      "item": {
+        "type": "paragraph",
+        "id": "2dad0c5d04b29776",
+        "text": "We can write a meaningful who-links-here that will resolve to the page at least as a twin.  [http://c2.com/wiki/neo4j/who2.svg svg]"
+      },
+      "date": 1451163568882
+    },
+    {
+      "type": "edit",
+      "id": "19cb558b639d4758",
+      "item": {
+        "type": "paragraph",
+        "id": "19cb558b639d4758",
+        "text": "Runtime 3.5 min, 8 mb output. We now repeat this build after every scrap. Look for new data at 1:00 & 7:00, am & pm, pacific time. [http://search.fed.wiki.org:3030/nodes.csv nodes.csv] [http://search.fed.wiki.org:3030/rels.csv rels.csv]"
+      },
+      "date": 1451177002773
+    },
+    {
+      "type": "add",
+      "id": "3ce5d417a30b8d82",
+      "item": {
+        "type": "paragraph",
+        "id": "3ce5d417a30b8d82",
+        "text": "[[See Neo4J Production]]"
+      },
+      "after": "0d4cc80cedf557cf",
+      "date": 1453680247826
+    },
+    {
+      "type": "edit",
+      "id": "3ce5d417a30b8d82",
+      "item": {
+        "type": "paragraph",
+        "id": "3ce5d417a30b8d82",
+        "text": "See [[Neo4J Production]]"
+      },
+      "date": 1453680257442
+    },
+    {
+      "type": "add",
+      "id": "037e6afd39c4fd31",
+      "item": {
+        "type": "paragraph",
+        "id": "037e6afd39c4fd31",
+        "text": "See [[Neo4J Optimization]]"
+      },
+      "after": "3ce5d417a30b8d82",
+      "date": 1454816332768
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1459634530199
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "ec16e4b4650f3358",
+        "type": "reference",
+        "site": "c0de.academy",
+        "slug": "neo4j-resources",
+        "title": "Neo4J Resources",
+        "text": "This graph database has worked well enough that we want to be good at applying it. There are documents that might help."
+      },
+      "after": "afc8faf5bf99c607",
+      "id": "ec16e4b4650f3358",
+      "date": 1472668277362
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1500113678017
+    },
+    {
+      "type": "fork",
+      "date": 1503049997936
+    },
+    {
+      "type": "fork",
+      "site": "graph.fedwiki.org",
+      "date": 1511883050919
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1512315603309
+    },
+    {
+      "type": "remove",
+      "id": "ec16e4b4650f3358",
+      "date": 1512315625977
+    }
+  ]
+}

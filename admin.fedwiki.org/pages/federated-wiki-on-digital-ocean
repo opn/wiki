@@ -1,0 +1,2119 @@
+{
+  "title": "Federated Wiki on Digital Ocean",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e2e374d79763def7",
+      "text": "At some point you may want to run your own Federated Wiki site, or perhaps set one up  for friends or a class. We've had good luck installing on Digital Ocean, which currently offers very cheap hosting and a much simpler setup than services such as Amazon Web Services."
+    },
+    {
+      "type": "markdown",
+      "id": "c2da89c4f35bb9f4",
+      "text": "*Much of the content here is also applicable when installing Federated Wiki on other platforms.*"
+    },
+    {
+      "type": "markdown",
+      "id": "7b82cc0ce0c3588d",
+      "text": "## Before You Start"
+    },
+    {
+      "type": "paragraph",
+      "id": "1d2e1204f25d04a1",
+      "text": "Before you start there are some things to consider. You will very probably want a name to access your Federated Wiki, you will need to get yourself a domain, ask a friend or colleague for a domain name registrar that they use and like/trust."
+    },
+    {
+      "type": "paragraph",
+      "id": "c0ce40dc8008e374",
+      "text": "Digital Ocean provides some tutorials to walk you though the various steps, we will be referring to them as we step through initial server setup, and installing the Federated Wiki server."
+    },
+    {
+      "type": "video",
+      "id": "e4cbb52eea058ac5",
+      "text": "YOUTUBE fzKv4qUltBY\nReal time run through of installing Fedwiki on [[Digital Ocean]] under [[Nginx]]."
+    },
+    {
+      "type": "markdown",
+      "id": "005f3a7d5e277f7b",
+      "text": "## Creating a Server"
+    },
+    {
+      "type": "paragraph",
+      "id": "5fdeb29acf5eaa5c",
+      "text": "First, sign up for Digital Ocean. [https://www.digitalocean.com/ html]"
+    },
+    {
+      "type": "markdown",
+      "id": "b598cdc6bfecbd2b",
+      "text": "Once the sign up is complete you will have the option to create a new `droplet`."
+    },
+    {
+      "type": "markdown",
+      "id": "c402607981402272",
+      "text": "The following will help you when following the [https://www.digitalocean.com/community/tutorials/how-to-create-your-first-digitalocean-droplet-virtual-server tutorial].\n* A name for the droplet, e.g. `fedwiki`, \n* Choose a size, for a personal site or a small group site, we've found the $5/month option works perfectly fine.\n* A datacenter, choose one that is in the same area as you.\n* Choose an image, we will choose `Ubuntu 14.04.3 x32` which is the current 'Long Term Support' version of Ubuntu *supported until during 2019*. With less than 3GB of memory, it is recommended to use a 32-bit operating system.\n* It is recommended to use a SSH key to connect to the server, if you don't already have one click on `New SSH Key` to create one. [https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets tutorial]"
+    },
+    {
+      "type": "paragraph",
+      "id": "75e736f407628194",
+      "text": "You should now have created a droplet, and be connected to it."
+    },
+    {
+      "type": "markdown",
+      "id": "ccb446d45faa1932",
+      "text": "## Server Setup"
+    },
+    {
+      "type": "paragraph",
+      "id": "d0c5ab32ee91a2ea",
+      "text": "We are going to follow the steps in the `New Ubuntu 14.04 Server Checklist`"
+    },
+    {
+      "type": "markdown",
+      "id": "4a44da3aedd8f744",
+      "text": "* How To Connect To Your Droplet With SSH, *you should already be connected, but this covers the process in detail* [https://www.digitalocean.com/community/tutorials/how-to-connect-to-your-droplet-with-ssh tutorial]\n* Initial Server Setup with Ubuntu 14.04 (ssh, sudo) [https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04 tutorial]\n* Additional Recommended Steps for New Ubuntu 14.04 servers (ufw, ntp, swap) [https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers tutorial]"
+    },
+    {
+      "type": "markdown",
+      "id": "118f9d76f3602959",
+      "text": "In the second tutorial replace `demo` with `wiki`. We will use this `wiki` account to run our Federated Wiki server later."
+    },
+    {
+      "type": "paragraph",
+      "id": "66472954b64bd5b5",
+      "text": "We will also setup the server to install patches automatically."
+    },
+    {
+      "type": "markdown",
+      "id": "b6e047fde2b7b20b",
+      "text": "The recommended method for performing unattended upgrades is to use the `unattended-upgrades` package. Configuration is covered in in a  [https://help.ubuntu.com/community/AutomaticSecurityUpdates tutorial] and [https://help.ubuntu.com/12.04/serverguide/automatic-updates.html guide]."
+    },
+    {
+      "type": "paragraph",
+      "id": "9ac6b8e9e97e5e6c",
+      "text": "Some upgrades can require a server reboot, it is best to configure unattended upgrades to do this automatically."
+    },
+    {
+      "type": "markdown",
+      "id": "f8515ba519add7d4",
+      "text": "In `/etc/apt/apt.conf.d/50unattended-upgrades` check that `Unattended-Upgrade::Automatic-Reboot` is `true`.\n\n**Also** ensure the `update-notifier-common` package is installed."
+    },
+    {
+      "type": "markdown",
+      "id": "6b097c6282da66ba",
+      "text": "Also in `/etc/apt/apt.conf.d/50unattended-upgrades` you can uncomment the line"
+    },
+    {
+      "type": "code",
+      "id": "61a2f212ca21f0df",
+      "text": "\"${distro_id} ${distro_codename}-updates\";"
+    },
+    {
+      "type": "paragraph",
+      "id": "cc27db44d998a24c",
+      "text": "to apply updates as well as security patches. This will be needed if you choose to update Node.js automatically."
+    },
+    {
+      "type": "paragraph",
+      "id": "83be0de7ea0abd47",
+      "text": "There is a [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-14-04 tutorial] on setting up a Node.js for production. While we broadly follow it, there are some slight variations in the steps below."
+    },
+    {
+      "type": "markdown",
+      "id": "3d1cde0b53c6794f",
+      "text": "## Node.js Install"
+    },
+    {
+      "type": "image",
+      "id": "0e9152f771e4b539",
+      "url": "data:image/jpeg;base64,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f880/wC+RUlFAEfkxf8APNP++RR5MX/PNP8AvkVJRQBH5MX/ADzT/vkUeTF/zzT/AL5FSUUAR+TF/wA80/75FHkxf880/wC+RUlFAEfkxf8APNP++RTljRTlUUH2FOooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAK6pODHuccfe56/pSLFcBFBmy205+uOP61ZooAreXc+XgSKWx1/E/8A1qVo5yz/ALwBTjbjjFWKKAI2V/NUhhsA5FMZJyx2uAN4P/Ae/ap6KAIFWfehZhgFt3PUdu1MMdz+8xKOT8vsOfb6flVqigCs8dwTJtkXBIKgnt3pWjuPmxIB8+Rz2/KrFFAFZ47khtsqjnj6c/4j8qUpPkYcf6zJ56rzx0+lWKKAIz5hZCAAOdwzURjufLI8xd+Fwc/TPb61ZooArPHckybZFwcbAe36UNHcEnEij58jn+HHSrNFAEEqTMzeW4VSuB7Hn/61M8u65/ernYR+POO30/KrVFAEEaTCUM7gpswVHr60KkwKbmBxndz19+n14qeigCs0dwXkIlAUgbcdjx/9epWEnmhlYbApG09zUlFAEcSyDf5jBssSuOwqSiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z",
+      "caption": "Uploaded image",
+      "text": "Node.js Long Term Support Release Schedule [https://github.com/nodejs/LTS/ github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "9d7e0ff4ce276359",
+      "text": "We will install Node.js using the package manager. [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions guide]."
+    },
+    {
+      "type": "paragraph",
+      "id": "a7ecda85ea157903",
+      "text": "Some of the Federated Wiki components include native code, so also install the optional build tools."
+    },
+    {
+      "type": "paragraph",
+      "id": "aa653b75e1e5c65f",
+      "text": "You will want to monitor for Node.js Security Updates, [https://groups.google.com/forum/#!forum/nodejs-sec forum], or [http://blog.nodejs.org blog]."
+    },
+    {
+      "type": "paragraph",
+      "id": "3f88b44b1e7e3fc1",
+      "text": "To install a security update, manually run the following commands:"
+    },
+    {
+      "type": "code",
+      "id": "b9f651300e3a84d2",
+      "text": "sudo apt-get update\nsudo apt-get upgrade"
+    },
+    {
+      "type": "paragraph",
+      "id": "9aac674e4925ed4e",
+      "text": "This will also apply any other available updates at the same time."
+    },
+    {
+      "type": "paragraph",
+      "id": "01347b9ddfce363d",
+      "text": "Alternatively you could configure the unattended upgrade process to also apply Node.js updates."
+    },
+    {
+      "type": "markdown",
+      "id": "81886ecc9e55eeee",
+      "text": "## Nginx Install"
+    },
+    {
+      "type": "paragraph",
+      "id": "4a4e8cb2f1b45db5",
+      "text": "We will use Nginx as a reverse proxy in front of the Federated Wiki server. "
+    },
+    {
+      "type": "markdown",
+      "id": "434e8ef08c44f954",
+      "text": "* How to Install Nginx on Ubuntu 14.04 LTS [https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-14-04-lts tutorial]"
+    },
+    {
+      "type": "paragraph",
+      "id": "46bcbf2c4d0accbe",
+      "text": "The tutorial walks you though installing Nginx, and the basics of managing the Nginx process."
+    },
+    {
+      "type": "markdown",
+      "id": "29f0e62fee7a4ec8",
+      "text": "### Federated Wiki Install, and Configuration"
+    },
+    {
+      "type": "paragraph",
+      "id": "32c09e0b80a2abbb",
+      "text": "We will now install the Federated Wiki software, configure it to restart automatically when the server is restarted, and configure Nginx to forward requests to it."
+    },
+    {
+      "type": "paragraph",
+      "id": "9366cb4f896cbc1c",
+      "text": "Federated Wiki is installed, and updated, by typing:"
+    },
+    {
+      "type": "code",
+      "id": "cc0884cbef7bf3a8",
+      "text": "sudo npm install -g wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "03ff25c40edb1fc8",
+      "text": "Add independent plugins to this install by adding more modules to the wiki where it has been globally installed."
+    },
+    {
+      "type": "code",
+      "id": "f853ab752a9cdb2b",
+      "text": "cd /usr/lib/node_modules/wiki\nsudo npm install wiki-plugin-transport\nsudo npm install wiki-plugin-search"
+    },
+    {
+      "type": "markdown",
+      "id": "0c24bd6bdc19a717",
+      "text": "The [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-14-04 tutorial] uses the `pm2` process manager. Below are instructions for using `init` as a simpler alternative."
+    },
+    {
+      "type": "markdown",
+      "id": "e93c9f1a449ed163",
+      "text": "We can set up a Federated Wiki farm, that will automatically start when then the machine is restarted and we can start, and stop, using `sudo start wiki` and `sudo stop wiki`, by running the following commands, replacing `<user>` with the user you want to run wiki as:"
+    },
+    {
+      "type": "code",
+      "id": "7e995c353dd2808f",
+      "text": "initscript=\"\nstart on started networking\nstop on stopping networking\n\nrespawn\nexec sudo -H -u wiki wiki -f\n\"\n\necho \"$initscript\" | sudo tee /etc/init/wiki.conf > /dev/null\n"
+    },
+    {
+      "type": "markdown",
+      "id": "d6bc5a39fb001e56",
+      "text": "If we start the Federated Wiki, `sudo start wiki`, we can check that it is running by typing `curl http://127.0.0.1:3000/` which should return the text `Found. Redirecting to welcome-vistors.html`."
+    },
+    {
+      "type": "paragraph",
+      "id": "04583e7d0f3507b1",
+      "text": "We now need to configure Nginx to pass requests to the federated wiki software."
+    },
+    {
+      "type": "markdown",
+      "id": "13049c7a8324909f",
+      "text": "In `/etc/nginx/sites-available/default` we add"
+    },
+    {
+      "type": "code",
+      "id": "c40af8cd1ca8f59c",
+      "text": "map $http_upgrade $connection_upgrade {\n\tdefault upgrade;\n\t''\tclose;\n}"
+    },
+    {
+      "type": "markdown",
+      "id": "d70917e6169e68e8",
+      "text": "before the `server` definition."
+    },
+    {
+      "type": "markdown",
+      "id": "7456fd9dd30ca90d",
+      "text": "Following the tutorial, replace `example.com` with your domain name. This can contain a list, or wildcard, so that multiple names can be passed to the Wiki Farm. If for example I had registered the domain `example.wiki`, and wanted Federated Wiki sites to be any domain ending `example.wiki` I would use"
+    },
+    {
+      "type": "code",
+      "id": "79cbf5000c8b47e2",
+      "text": "server_name *.example.wiki;"
+    },
+    {
+      "type": "paragraph",
+      "id": "e4d6e8e7c5d86f13",
+      "text": "if I also wanted a wiki site at `example.wiki` I would need to use"
+    },
+    {
+      "type": "code",
+      "id": "7d81d65b6f4b1154",
+      "text": "server_name example.wiki *.example.wiki;"
+    },
+    {
+      "type": "paragraph",
+      "id": "1959daf7f50604b1",
+      "text": "We also need to use a slightly different location than that shown in the tutorial. Our modified server definition will look like that below:"
+    },
+    {
+      "type": "code",
+      "id": "874459be727e1697",
+      "text": "server {\n  listen 80;\n  server_name example.wiki *.example.wiki;\n\n  location / {\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n    proxy_set_header Host $host;\n    proxy_set_header X-NginX-Proxy true;\n\n    proxy_pass http://127.0.0.1:3000;\n    proxy_redirect off;\n\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade $http_upgrade;\n    proxy_set_header Connection $connection_upgrade;\n  }\n}\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "e91b30890bfacbe4",
+      "text": "We also add a default route, to catch any requests for HOSTs we do not recognise."
+    },
+    {
+      "type": "code",
+      "id": "6f4c9c678d78e126",
+      "text": "server {\n  listen 80 default_server;\n  listen [::]:80 default_server ipv6only=on;\n  server_name _;\n  return 444;\n}\n"
+    },
+    {
+      "type": "markdown",
+      "id": "8a9e3db8d1428486",
+      "text": "It is also good practice to not advertise which version of Nginx we are running. This is done by turning off server tokens. In `/etc/nginx/nginx.conf` uncomment the line `server_tokens off;`.\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "fceb6be3f26076b8",
+      "text": "Of course DNS would need to be setup to point the names we wish to use to our droplet, see [https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars tutorial] and [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-host-name-with-digitalocean tutorial]."
+    },
+    {
+      "type": "paragraph",
+      "id": "fcdefc91616bcb98",
+      "text": "Restart Nginx:"
+    },
+    {
+      "type": "code",
+      "id": "b76c33217bf4f44f",
+      "text": "sudo service nginx restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "709aafc37b2fa90d",
+      "text": "You should now be able to access our new Federated Wiki site."
+    },
+    {
+      "type": "paragraph",
+      "id": "ddd49dee08bbbd29",
+      "text": "Next access your new Federated Wiki sites, sign in and claim them."
+    },
+    {
+      "type": "markdown",
+      "id": "2ba176123b71368d",
+      "text": "You will want to periodically: \n\n* Backup your wiki pages, \n* check for updates to Node.js and wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "bcceb5fd507241eb",
+      "text": "Set up an SSL certificate using LetsEncrypt. [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04 tutorial]"
+    },
+    {
+      "type": "html",
+      "id": "c7cd0efd84eadbc4",
+      "text": "<H3>Adding additional domains via certbot"
+    },
+    {
+      "type": "code",
+      "id": "d43ccc26ff85e2e6",
+      "text": "# certbot cerificates"
+    },
+    {
+      "type": "code",
+      "id": "98a54dcca56a9c88",
+      "text": "Saving debug log to /var/log/letsencrypt/letsencrypt.log\n\n-------------------------------------------------------------------------------\nFound the following certs:\n  Certificate Name: zzzoo.org\n    Domains: zzzoo.org wiki.zzzoo.org\n    Expiry Date: 2017-09-09 18:50:00+00:00 (VALID: 86 days)\n    Certificate Path: /etc/letsencrypt/live/zzzoo.org/fullchain.pem\n    Private Key Path: /etc/letsencrypt/live/zzzoo.org/privkey.pem\n-------------------------------------------------------------------------------\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "fc64c11869581636",
+      "text": "Pick out the certificate name (zzzoo.org in this case) and the existing domains (zzzoo.org and wiki.zzzoo.org) from the output of the command."
+    },
+    {
+      "type": "code",
+      "id": "7f563896d4979ac8",
+      "text": "# service nginx stop"
+    },
+    {
+      "type": "code",
+      "id": "742a2dc5806cfb1c",
+      "text": "# certbot certonly --cert-name zzzoo.org \\\n  -d zzzoo.org \\\n  -d wiki.zzzoo.org \\\n  -d inc.zzzoo.org \\\n  -d fed.zzzoo.org \\\n  -d alan.zzzoo.org"
+    },
+    {
+      "type": "paragraph",
+      "id": "138c7f7ecee3a934",
+      "text": "In the above command, add a \"-d\" line for each existing domain, as well as all the new ones. Each of the domains needs to have an active A record in its DNS entry."
+    },
+    {
+      "type": "paragraph",
+      "id": "a79d5316896a0365",
+      "text": "Choose to spin up a local server, and accept the update."
+    },
+    {
+      "type": "code",
+      "id": "63ad968517daf18e",
+      "text": "# service nginx start"
+    },
+    {
+      "type": "html",
+      "id": "9978f8921e240151",
+      "text": "<h3>Example configuration file"
+    },
+    {
+      "type": "paragraph",
+      "id": "d6744ed321f6ae41",
+      "text": "By trial and error I have managed to put together a config for a farm, shown  below, with the secret stuff blocked out."
+    },
+    {
+      "type": "code",
+      "id": "4f6756e343b4b10b",
+      "text": "{\n  \"farm\": true,\n  \"security_type\": \"passportjs\",\n  \"google_clientID\": \"CLIENTID\",\n  \"google_clientSecret\": \"CLIENTSECRET\",\n  \"wikiDomains\": {\n    \"wiki.zzzoo.org\": {\n      \"url\":\"https://wiki.zzzoo.org\"\n     },\n    \"inc.zzzoo.org\": {\n      \"url\":\"https://inc.zzzoo.org\"\n     },\n    \"alan.zzzoo.org\": {\n      \"url\":\"https://alan.zzzoo.org\"\n     },\n    \"fed.zzzoo.org\": {\n      \"url\":\"https://fed.zzzoo.org\"\n     }\n  }\n}\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Federated Wiki on Digital Ocean",
+        "story": []
+      },
+      "date": 1448722577983
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e2e374d79763def7",
+        "text": "At some point you may want to run your own Federated Wiki site, or perhaps set one up  for friends or a class. We've had good luck installing on Digital Ocean, which currently offers very cheap hosting and a much simpler setup than services such as Amazon Web Services."
+      },
+      "id": "e2e374d79763def7",
+      "date": 1448722636136
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c2da89c4f35bb9f4",
+        "text": "*Much of the content here is also applicable when installing Federated Wiki on other platforms.*"
+      },
+      "after": "e2e374d79763def7",
+      "id": "c2da89c4f35bb9f4",
+      "date": 1448722649427
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "7b82cc0ce0c3588d",
+        "text": "## Before You Start"
+      },
+      "after": "c2da89c4f35bb9f4",
+      "id": "7b82cc0ce0c3588d",
+      "date": 1448722652475
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1d2e1204f25d04a1",
+        "text": "Before you start there are some things to consider. You will very probably not want a name to access your Federated Wiki, you will need to get yourself a domain, ask a friend or colleague for a domain name registrar that they use and like/trust."
+      },
+      "after": "7b82cc0ce0c3588d",
+      "id": "1d2e1204f25d04a1",
+      "date": 1448722654747
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c0ce40dc8008e374",
+        "text": "Digital Ocean provides some tutorials to walk you though the various steps, we will be referring to them as we step through initial server setup, and installing the Federated Wiki server."
+      },
+      "after": "1d2e1204f25d04a1",
+      "id": "c0ce40dc8008e374",
+      "date": 1448722658055
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "005f3a7d5e277f7b",
+        "text": "## Creating a Server"
+      },
+      "after": "c0ce40dc8008e374",
+      "id": "005f3a7d5e277f7b",
+      "date": 1448722662646
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5fdeb29acf5eaa5c",
+        "text": "First, sign up for Digital Ocean, this referral link will give you $10 credit. [https://www.digitalocean.com/?refcode=f8a7ca84709f html]"
+      },
+      "after": "005f3a7d5e277f7b",
+      "id": "5fdeb29acf5eaa5c",
+      "date": 1448722666920
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "b598cdc6bfecbd2b",
+        "text": "Once the sign up is complete you will have the option to create a new `droplet`."
+      },
+      "after": "5fdeb29acf5eaa5c",
+      "id": "b598cdc6bfecbd2b",
+      "date": 1448722670778
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c402607981402272",
+        "text": "The following will help you when following the [https://www.digitalocean.com/community/tutorials/how-to-create-your-first-digitalocean-droplet-virtual-server tutorial].\n* A name for the droplet, e.g. `fedwiki`, \n* Choose a size, for a personal site or a small group site, we've found the $5/month option works perfectly fine.\n* A datacenter, choose one that is in the same area as you.\n* Choose an image, we will choose `Ubuntu 14.04.3 x32` which is the current 'Long Term Support' version of Ubuntu *supported until during 2019*. With less than 3GB of memory, it is recommended to use a 32-bit operating system.\n* It is recommended to use a SSH key to connect to the server, click on `New SSH Key` to create one. [https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets tutorial]"
+      },
+      "after": "b598cdc6bfecbd2b",
+      "id": "c402607981402272",
+      "date": 1448722679756
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "75e736f407628194",
+        "text": "You should now have created a droplet, and be connected to it."
+      },
+      "after": "c402607981402272",
+      "id": "75e736f407628194",
+      "date": 1448722685572
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "ccb446d45faa1932",
+        "text": "## Server Setup"
+      },
+      "after": "75e736f407628194",
+      "id": "ccb446d45faa1932",
+      "date": 1448722688452
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d0c5ab32ee91a2ea",
+        "text": "We are going to follow the steps in the `New Ubuntu 14.04 Server Checklist`"
+      },
+      "after": "ccb446d45faa1932",
+      "id": "d0c5ab32ee91a2ea",
+      "date": 1448722692648
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "4a44da3aedd8f744",
+        "text": "* How To Connect To Your Droplet With SSH, *you should already be connected, but this covers the process in detail* [https://www.digitalocean.com/community/tutorials/how-to-connect-to-your-droplet-with-ssh tutorial]\n* Initial Server Setup with Ubuntu 14.04 [https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04 tutorial]\n* Additional Recommended Steps for New Ubuntu 14.04 servers [https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers tutorial]"
+      },
+      "after": "d0c5ab32ee91a2ea",
+      "id": "4a44da3aedd8f744",
+      "date": 1448722697363
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "66472954b64bd5b5",
+        "text": "We will also setup the server to install patches automatically."
+      },
+      "after": "4a44da3aedd8f744",
+      "id": "66472954b64bd5b5",
+      "date": 1448722702767
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "b6e047fde2b7b20b",
+        "text": "The recommended method for performing unattended upgrades is to use the `unattended-upgrades` package. Configuration is covered in in a  [https://help.ubuntu.com/community/AutomaticSecurityUpdates tutorial] and [https://help.ubuntu.com/12.04/serverguide/automatic-updates.html guide]."
+      },
+      "after": "66472954b64bd5b5",
+      "id": "b6e047fde2b7b20b",
+      "date": 1448722706162
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9ac6b8e9e97e5e6c",
+        "text": "Some upgrades can require a server reboot, it is best to configure unattended upgrades to do this automatically."
+      },
+      "after": "b6e047fde2b7b20b",
+      "id": "9ac6b8e9e97e5e6c",
+      "date": 1448722710360
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "f8515ba519add7d4",
+        "text": "In `/etc/apt/apt.conf.d/50unattended-upgrades` check that `Unattended-Upgrade::Automatic-Reboot` is `true`.\n\n**Also** ensure the `update-notifier-common` package is installed."
+      },
+      "after": "9ac6b8e9e97e5e6c",
+      "id": "f8515ba519add7d4",
+      "date": 1448722714532
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "6b097c6282da66ba",
+        "text": "Also in `/etc/apt/apt.conf.d/50unattended-upgrades` you can uncomment the line"
+      },
+      "after": "f8515ba519add7d4",
+      "id": "6b097c6282da66ba",
+      "date": 1448722717669
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "61a2f212ca21f0df",
+        "text": "\"${distro_id} ${distro_codename}-updates\";"
+      },
+      "after": "6b097c6282da66ba",
+      "id": "61a2f212ca21f0df",
+      "date": 1448722720942
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "cc27db44d998a24c",
+        "text": "to apply updates as well as security patches. This will be needed if you choose to update Node.js automatically."
+      },
+      "after": "61a2f212ca21f0df",
+      "id": "cc27db44d998a24c",
+      "date": 1448722723890
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "83be0de7ea0abd47",
+        "text": "There is a [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-14-04 tutorial] no setting up a Node.js for production. While we broadly follow it, there are some slight variations in the steps below."
+      },
+      "after": "cc27db44d998a24c",
+      "id": "83be0de7ea0abd47",
+      "date": 1448722730035
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "3d1cde0b53c6794f",
+        "text": "## Node.js Install"
+      },
+      "after": "83be0de7ea0abd47",
+      "id": "3d1cde0b53c6794f",
+      "date": 1448722733081
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9d7e0ff4ce276359",
+        "text": "We will install Node.js using the package manager. [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions guide]."
+      },
+      "after": "3d1cde0b53c6794f",
+      "id": "9d7e0ff4ce276359",
+      "date": 1448722739077
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "image",
+        "id": "0e9152f771e4b539",
+        "url": "data:image/jpeg;base64,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f880/wC+RUlFAEfkxf8APNP++RR5MX/PNP8AvkVJRQBH5MX/ADzT/vkUeTF/zzT/AL5FSUUAR+TF/wA80/75FHkxf880/wC+RUlFAEfkxf8APNP++RTljRTlUUH2FOooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAK6pODHuccfe56/pSLFcBFBmy205+uOP61ZooAreXc+XgSKWx1/E/8A1qVo5yz/ALwBTjbjjFWKKAI2V/NUhhsA5FMZJyx2uAN4P/Ae/ap6KAIFWfehZhgFt3PUdu1MMdz+8xKOT8vsOfb6flVqigCs8dwTJtkXBIKgnt3pWjuPmxIB8+Rz2/KrFFAFZ47khtsqjnj6c/4j8qUpPkYcf6zJ56rzx0+lWKKAIz5hZCAAOdwzURjufLI8xd+Fwc/TPb61ZooArPHckybZFwcbAe36UNHcEnEij58jn+HHSrNFAEEqTMzeW4VSuB7Hn/61M8u65/ernYR+POO30/KrVFAEEaTCUM7gpswVHr60KkwKbmBxndz19+n14qeigCs0dwXkIlAUgbcdjx/9epWEnmhlYbApG09zUlFAEcSyDf5jBssSuOwqSiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z",
+        "caption": "Uploaded image",
+        "text": "Node.js Long Term Support Release Schedule [https://github.com/nodejs/LTS/ github]"
+      },
+      "after": "3d1cde0b53c6794f",
+      "id": "0e9152f771e4b539",
+      "date": 1448722746031
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a7ecda85ea157903",
+        "text": "Some of the Federated Wiki components include native code, so also install the optional build tools."
+      },
+      "after": "9d7e0ff4ce276359",
+      "id": "a7ecda85ea157903",
+      "date": 1448722748977
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "aa653b75e1e5c65f",
+        "text": "You will want to monitor for Node.js Security Updates, [https://groups.google.com/forum/#!forum/nodejs-sec forum], or [http://blog.nodejs.org blog]."
+      },
+      "after": "a7ecda85ea157903",
+      "id": "aa653b75e1e5c65f",
+      "date": 1448722753118
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3f88b44b1e7e3fc1",
+        "text": "To install a security update, manually run the following commands:"
+      },
+      "after": "aa653b75e1e5c65f",
+      "id": "3f88b44b1e7e3fc1",
+      "date": 1448722757010
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "b9f651300e3a84d2",
+        "text": "sudo apt-get update\nsudo apt-get upgrade"
+      },
+      "after": "3f88b44b1e7e3fc1",
+      "id": "b9f651300e3a84d2",
+      "date": 1448722760441
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9aac674e4925ed4e",
+        "text": "This will also apply any other available updates at the same time."
+      },
+      "after": "b9f651300e3a84d2",
+      "id": "9aac674e4925ed4e",
+      "date": 1448722764272
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "01347b9ddfce363d",
+        "text": "Alternatively you could configure the unattended upgrade process to also apply Node.js updates."
+      },
+      "after": "9aac674e4925ed4e",
+      "id": "01347b9ddfce363d",
+      "date": 1448722766969
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "81886ecc9e55eeee",
+        "text": "## Nginx Install"
+      },
+      "after": "01347b9ddfce363d",
+      "id": "81886ecc9e55eeee",
+      "date": 1448722770027
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4a4e8cb2f1b45db5",
+        "text": "We will use Nginx as a reverse proxy in front of the Federated Wiki server. "
+      },
+      "after": "81886ecc9e55eeee",
+      "id": "4a4e8cb2f1b45db5",
+      "date": 1448722774067
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "434e8ef08c44f954",
+        "text": "* How to Install Nginx on Ubuntu 14.04 LTS [https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-14-04-lts tutorial]"
+      },
+      "after": "4a4e8cb2f1b45db5",
+      "id": "434e8ef08c44f954",
+      "date": 1448722777902
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "46bcbf2c4d0accbe",
+        "text": "The tutorial walks you though installing Nginx, and the basics of managing the Nginx process."
+      },
+      "after": "434e8ef08c44f954",
+      "id": "46bcbf2c4d0accbe",
+      "date": 1448722780897
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "29f0e62fee7a4ec8",
+        "text": "### Federated Wiki Install, and Configuration"
+      },
+      "after": "46bcbf2c4d0accbe",
+      "id": "29f0e62fee7a4ec8",
+      "date": 1448722784719
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "32c09e0b80a2abbb",
+        "text": "We will now install the Federated Wiki software, configure it to restart automatically when the server is restarted, and configure Nginx to forward requests to it."
+      },
+      "after": "29f0e62fee7a4ec8",
+      "id": "32c09e0b80a2abbb",
+      "date": 1448722788432
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9366cb4f896cbc1c",
+        "text": "Federated Wiki is installed, and updated, by typing:"
+      },
+      "after": "32c09e0b80a2abbb",
+      "id": "9366cb4f896cbc1c",
+      "date": 1448722791953
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "cc0884cbef7bf3a8",
+        "text": "sudo npm install -g wiki"
+      },
+      "after": "9366cb4f896cbc1c",
+      "id": "cc0884cbef7bf3a8",
+      "date": 1448722796498
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "0c24bd6bdc19a717",
+        "text": "The [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-14-04 tutorial] uses the `pm2` process manager. Below are instructions for using `init` as a simpler alternative."
+      },
+      "after": "cc0884cbef7bf3a8",
+      "id": "0c24bd6bdc19a717",
+      "date": 1448722802551
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "e93c9f1a449ed163",
+        "text": "We can set up a Federated Wiki farm, that will automatically start when then the machine is restarted and we can start `sudo start wiki` and stop `sudo stop wiki`, but running the following commands:"
+      },
+      "after": "0c24bd6bdc19a717",
+      "id": "e93c9f1a449ed163",
+      "date": 1448722805768
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7e995c353dd2808f",
+        "text": "initscript=\"\nstart on started networking\nstop on stopping networking\n\nrespawn\nenv HOME='/root'\n\nexec wiki -f\n\"\n\necho \"$initscript\" | sudo tee /etc/init/wiki.conf > /dev/null\n"
+      },
+      "after": "e93c9f1a449ed163",
+      "id": "7e995c353dd2808f",
+      "date": 1448722816258
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "d6bc5a39fb001e56",
+        "text": "If we start the Federated Wiki, `sudo start wiki`, we can check that it is running by typing `curl http://127.0.0.1:3000/` which should return the text `Found. Redirecting to welcome-vistors.html`."
+      },
+      "after": "7e995c353dd2808f",
+      "id": "d6bc5a39fb001e56",
+      "date": 1448722820159
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "04583e7d0f3507b1",
+        "text": "We now need to configure Nginx to pass requests to the federated wiki software."
+      },
+      "after": "d6bc5a39fb001e56",
+      "id": "04583e7d0f3507b1",
+      "date": 1448722824681
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "13049c7a8324909f",
+        "text": "In `/etc/nginx/sites-available/default` we add"
+      },
+      "after": "04583e7d0f3507b1",
+      "id": "13049c7a8324909f",
+      "date": 1448722834199
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "c40af8cd1ca8f59c",
+        "text": "map $http_upgrade $connection_upgrade {\n\tdefault upgrade;\n\t''\tclose;\n}"
+      },
+      "after": "13049c7a8324909f",
+      "id": "c40af8cd1ca8f59c",
+      "date": 1448722838034
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "d70917e6169e68e8",
+        "text": "before the `server` definition."
+      },
+      "after": "c40af8cd1ca8f59c",
+      "id": "d70917e6169e68e8",
+      "date": 1448722841600
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "7456fd9dd30ca90d",
+        "text": "Following the tutorial, replace `example.com` with your domain name. This can contain a list, or wildcard, so that multiple names can be passed to the Wiki Farm. If for example I had registered the domain `example.com`, and wanted Federated Wiki sites to be any domain ending `wiki.example.com` I would use"
+      },
+      "after": "d70917e6169e68e8",
+      "id": "7456fd9dd30ca90d",
+      "date": 1448722846629
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "79cbf5000c8b47e2",
+        "text": "server_name *.wiki.example.com;"
+      },
+      "after": "7456fd9dd30ca90d",
+      "id": "79cbf5000c8b47e2",
+      "date": 1448722850802
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e4d6e8e7c5d86f13",
+        "text": "if I also wanted a wiki site at `wiki.example.com` I would need to use"
+      },
+      "after": "79cbf5000c8b47e2",
+      "id": "e4d6e8e7c5d86f13",
+      "date": 1448722854166
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7d81d65b6f4b1154",
+        "text": "server_name wiki.example.com *.wiki.example.com;"
+      },
+      "after": "e4d6e8e7c5d86f13",
+      "id": "7d81d65b6f4b1154",
+      "date": 1448722857631
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1959daf7f50604b1",
+        "text": "We also need to use a slightly different location than that shown in the tutorial"
+      },
+      "after": "7d81d65b6f4b1154",
+      "id": "1959daf7f50604b1",
+      "date": 1448722861591
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "874459be727e1697",
+        "text": "location / {\n  proxy_set_header X-Real-IP $remote_addr;\n  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n  proxy_set_header Host $host;\n  proxy_set_header X-NginX-Proxy true;\n\n  proxy_pass http://127.0.0.1:3000;\n  proxy_redirect off;\n\n  proxy_http_version 1.1;\n  proxy_set_header Upgrade $http_upgrade;\n  proxy_set_header Connection $connection_upgrade;\n}\n"
+      },
+      "after": "1959daf7f50604b1",
+      "id": "874459be727e1697",
+      "date": 1448722869282
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e91b30890bfacbe4",
+        "text": "We also add a default route, to catch any requests for HOSTs we do not recognise."
+      },
+      "after": "874459be727e1697",
+      "id": "e91b30890bfacbe4",
+      "date": 1448722888499
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6f4c9c678d78e126",
+        "text": "server {\n  listen 80 default_server;\n  server_name _;\n  return 444;\n}\n"
+      },
+      "after": "e91b30890bfacbe4",
+      "id": "6f4c9c678d78e126",
+      "date": 1448722892748
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "8a9e3db8d1428486",
+        "text": "It is also good practice to not advertise which version of Nginx we are running. This is done by turning off server tokens. In `/etc/nginx/nginx.conf` uncomment the line `server_tokens off;`.\n"
+      },
+      "after": "6f4c9c678d78e126",
+      "id": "8a9e3db8d1428486",
+      "date": 1448722895792
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fceb6be3f26076b8",
+        "text": "Of course DNS would need to be setup to point the names we wish to use to our droplet, see [https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars tutorial] and [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-host-name-with-digitalocean tutorial]."
+      },
+      "after": "8a9e3db8d1428486",
+      "id": "fceb6be3f26076b8",
+      "date": 1448722899932
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fcdefc91616bcb98",
+        "text": "Restart Nginx:"
+      },
+      "after": "fceb6be3f26076b8",
+      "id": "fcdefc91616bcb98",
+      "date": 1448722904162
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "b76c33217bf4f44f",
+        "text": "sudo service nginx restart"
+      },
+      "after": "fcdefc91616bcb98",
+      "id": "b76c33217bf4f44f",
+      "date": 1448722908011
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "709aafc37b2fa90d",
+        "text": "You should now be able to access our new Federated Wiki site."
+      },
+      "after": "b76c33217bf4f44f",
+      "id": "709aafc37b2fa90d",
+      "date": 1448722911980
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ddd49dee08bbbd29",
+        "text": "Next access your new Federated Wiki sites, signin and claim them."
+      },
+      "after": "709aafc37b2fa90d",
+      "id": "ddd49dee08bbbd29",
+      "date": 1448722920812
+    },
+    {
+      "type": "edit",
+      "id": "ddd49dee08bbbd29",
+      "item": {
+        "type": "paragraph",
+        "id": "ddd49dee08bbbd29",
+        "text": "Next access your new Federated Wiki sites, sign in and claim them."
+      },
+      "date": 1448722932376
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "2ba176123b71368d",
+        "text": "You will want to periodically: \n\n* Backup your wiki pages, \n* check for updates to Node.js and wiki"
+      },
+      "after": "ddd49dee08bbbd29",
+      "id": "2ba176123b71368d",
+      "date": 1448722937150
+    },
+    {
+      "type": "edit",
+      "id": "1d2e1204f25d04a1",
+      "item": {
+        "type": "paragraph",
+        "id": "1d2e1204f25d04a1",
+        "text": "Before you start there are some things to consider. You will very probably want a name to access your Federated Wiki, you will need to get yourself a domain, ask a friend or colleague for a domain name registrar that they use and like/trust."
+      },
+      "date": 1448723383539
+    },
+    {
+      "type": "edit",
+      "id": "5fdeb29acf5eaa5c",
+      "item": {
+        "type": "paragraph",
+        "id": "5fdeb29acf5eaa5c",
+        "text": "First, sign up for Digital Ocean. [https://www.digitalocean.com/ html]"
+      },
+      "date": 1448723686753
+    },
+    {
+      "type": "edit",
+      "id": "c402607981402272",
+      "item": {
+        "type": "markdown",
+        "id": "c402607981402272",
+        "text": "The following will help you when following the [https://www.digitalocean.com/community/tutorials/how-to-create-your-first-digitalocean-droplet-virtual-server tutorial].\n* A name for the droplet, e.g. `fedwiki`, \n* Choose a size, for a personal site or a small group site, we've found the $5/month option works perfectly fine.\n* A datacenter, choose one that is in the same area as you.\n* Choose an image, we will choose `Ubuntu 14.04.3 x32` which is the current 'Long Term Support' version of Ubuntu *supported until during 2019*. With less than 3GB of memory, it is recommended to use a 32-bit operating system.\n* It is recommended to use a SSH key to connect to the server, if you don't already have one click on `New SSH Key` to create one. [https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets tutorial]"
+      },
+      "date": 1448778849523
+    },
+    {
+      "type": "edit",
+      "id": "4a44da3aedd8f744",
+      "item": {
+        "type": "markdown",
+        "id": "4a44da3aedd8f744",
+        "text": "* How To Connect To Your Droplet With SSH, *you should already be connected, but this covers the process in detail* [https://www.digitalocean.com/community/tutorials/how-to-connect-to-your-droplet-with-ssh tutorial]\n* Initial Server Setup with Ubuntu 14.04 (ssh, sudo) [https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-14-04 tutorial]\n* Additional Recommended Steps for New Ubuntu 14.04 servers (ufw, ntp, swap) [https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers tutorial]"
+      },
+      "date": 1448779033852
+    },
+    {
+      "type": "edit",
+      "id": "7e995c353dd2808f",
+      "item": {
+        "type": "code",
+        "id": "7e995c353dd2808f",
+        "text": "initscript=\"\nstart on started networking\nstop on stopping networking\n\nrespawn\nenv HOME='/root'\n\nexec sudo -H -u <user> wiki -f\n\"\n\necho \"$initscript\" | sudo tee /etc/init/wiki.conf > /dev/null\n"
+      },
+      "date": 1448780778389
+    },
+    {
+      "type": "edit",
+      "id": "e93c9f1a449ed163",
+      "item": {
+        "type": "markdown",
+        "id": "e93c9f1a449ed163",
+        "text": "We can set up a Federated Wiki farm, that will automatically start when then the machine is restarted and we can start `sudo start wiki` and stop `sudo stop wiki`, but running the following commands, replacing `<user>` with the user you want to run wiki as:"
+      },
+      "date": 1448780819164
+    },
+    {
+      "type": "edit",
+      "id": "e93c9f1a449ed163",
+      "item": {
+        "type": "markdown",
+        "id": "e93c9f1a449ed163",
+        "text": "We can set up a Federated Wiki farm, that will automatically start when then the machine is restarted and we can start, and stop, using `sudo start wiki` and `sudo stop wiki`, by running the following commands, replacing `<user>` with the user you want to run wiki as:"
+      },
+      "date": 1448781380048
+    },
+    {
+      "type": "edit",
+      "id": "7e995c353dd2808f",
+      "item": {
+        "type": "code",
+        "id": "7e995c353dd2808f",
+        "text": "initscript=\"\nstart on started networking\nstop on stopping networking\n\nrespawn\nenv HOME='/root'\n\nexec sudo -H -u wiki wiki -f\n\"\n\necho \"$initscript\" | sudo tee /etc/init/wiki.conf > /dev/null\n"
+      },
+      "date": 1448781389198
+    },
+    {
+      "type": "add",
+      "id": "118f9d76f3602959",
+      "item": {
+        "type": "paragraph",
+        "id": "118f9d76f3602959",
+        "text": "In the second tutorial replace `demo` with `wiki`. We will use this `wiki` account to run our Federated Wiki server later."
+      },
+      "after": "4a44da3aedd8f744",
+      "date": 1448781578009
+    },
+    {
+      "type": "edit",
+      "id": "118f9d76f3602959",
+      "item": {
+        "type": "markdown",
+        "id": "118f9d76f3602959",
+        "text": "In the second tutorial replace `demo` with `wiki`. We will use this `wiki` account to run our Federated Wiki server later."
+      },
+      "date": 1448781579383
+    },
+    {
+      "type": "edit",
+      "id": "7e995c353dd2808f",
+      "item": {
+        "type": "code",
+        "id": "7e995c353dd2808f",
+        "text": "initscript=\"\nstart on started networking\nstop on stopping networking\n\nrespawn\nexec sudo -H -u wiki wiki -f\n\"\n\necho \"$initscript\" | sudo tee /etc/init/wiki.conf > /dev/null\n"
+      },
+      "date": 1448795249365
+    },
+    {
+      "type": "edit",
+      "id": "7456fd9dd30ca90d",
+      "item": {
+        "type": "markdown",
+        "id": "7456fd9dd30ca90d",
+        "text": "Following the tutorial, replace `example.com` with your domain name. This can contain a list, or wildcard, so that multiple names can be passed to the Wiki Farm. If for example I had registered the domain `example.wiki`, and wanted Federated Wiki sites to be any domain ending `example.wiki` I would use"
+      },
+      "date": 1448795841011
+    },
+    {
+      "type": "edit",
+      "id": "79cbf5000c8b47e2",
+      "item": {
+        "type": "code",
+        "id": "79cbf5000c8b47e2",
+        "text": "server_name *.example.wiki;"
+      },
+      "date": 1448795852780
+    },
+    {
+      "type": "edit",
+      "id": "e4d6e8e7c5d86f13",
+      "item": {
+        "type": "paragraph",
+        "id": "e4d6e8e7c5d86f13",
+        "text": "if I also wanted a wiki site at `example.wiki` I would need to use"
+      },
+      "date": 1448795865400
+    },
+    {
+      "type": "edit",
+      "id": "7d81d65b6f4b1154",
+      "item": {
+        "type": "code",
+        "id": "7d81d65b6f4b1154",
+        "text": "server_name example.wiki *.example.wiki;"
+      },
+      "date": 1448795884870
+    },
+    {
+      "type": "edit",
+      "id": "6f4c9c678d78e126",
+      "item": {
+        "type": "code",
+        "id": "6f4c9c678d78e126",
+        "text": "server {\n  listen 80 default_server;\n  listen [::]:80 default_server ipv6only=on;\n  server_name _;\n  return 444;\n}\n"
+      },
+      "date": 1448795934829
+    },
+    {
+      "type": "edit",
+      "id": "1959daf7f50604b1",
+      "item": {
+        "type": "paragraph",
+        "id": "1959daf7f50604b1",
+        "text": "We also need to use a slightly different location than that shown in the tutorial. Our modified server definition will look like that below:"
+      },
+      "date": 1448796141107
+    },
+    {
+      "type": "edit",
+      "id": "874459be727e1697",
+      "item": {
+        "type": "code",
+        "id": "874459be727e1697",
+        "text": "server {\n  listen 80;\nlocation / {\n  proxy_set_header X-Real-IP $remote_addr;\n  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n  proxy_set_header Host $host;\n  proxy_set_header X-NginX-Proxy true;\n\n  proxy_pass http://127.0.0.1:3000;\n  proxy_redirect off;\n\n  proxy_http_version 1.1;\n  proxy_set_header Upgrade $http_upgrade;\n  proxy_set_header Connection $connection_upgrade;\n}\n"
+      },
+      "date": 1448796170891
+    },
+    {
+      "type": "edit",
+      "id": "874459be727e1697",
+      "item": {
+        "type": "code",
+        "id": "874459be727e1697",
+        "text": "server {\n  listen 80;\n  server_name example.wiki *.example.wiki\n\n  location / {\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n    proxy_set_header Host $host;\n    proxy_set_header X-NginX-Proxy true;\n\n    proxy_pass http://127.0.0.1:3000;\n    proxy_redirect off;\n\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade $http_upgrade;\n    proxy_set_header Connection $connection_upgrade;\n  }\n}\n"
+      },
+      "date": 1448796233447
+    },
+    {
+      "type": "fork",
+      "site": "goals.pod.rodwell.me",
+      "date": 1448810125194
+    },
+    {
+      "type": "edit",
+      "id": "83be0de7ea0abd47",
+      "item": {
+        "type": "paragraph",
+        "id": "83be0de7ea0abd47",
+        "text": "There is a [https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-14-04 tutorial] on setting up a Node.js for production. While we broadly follow it, there are some slight variations in the steps below."
+      },
+      "date": 1448810176162
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "03ff25c40edb1fc8"
+      },
+      "id": "03ff25c40edb1fc8",
+      "type": "add",
+      "after": "2ba176123b71368d",
+      "date": 1448851953301
+    },
+    {
+      "type": "edit",
+      "id": "03ff25c40edb1fc8",
+      "item": {
+        "type": "paragraph",
+        "id": "03ff25c40edb1fc8",
+        "text": "Add independent plugins to this install by adding more modules to the wiki itself."
+      },
+      "date": 1448852004945
+    },
+    {
+      "type": "move",
+      "order": [
+        "e2e374d79763def7",
+        "c2da89c4f35bb9f4",
+        "7b82cc0ce0c3588d",
+        "1d2e1204f25d04a1",
+        "c0ce40dc8008e374",
+        "005f3a7d5e277f7b",
+        "5fdeb29acf5eaa5c",
+        "b598cdc6bfecbd2b",
+        "c402607981402272",
+        "75e736f407628194",
+        "ccb446d45faa1932",
+        "d0c5ab32ee91a2ea",
+        "4a44da3aedd8f744",
+        "118f9d76f3602959",
+        "66472954b64bd5b5",
+        "b6e047fde2b7b20b",
+        "9ac6b8e9e97e5e6c",
+        "f8515ba519add7d4",
+        "6b097c6282da66ba",
+        "61a2f212ca21f0df",
+        "cc27db44d998a24c",
+        "83be0de7ea0abd47",
+        "3d1cde0b53c6794f",
+        "0e9152f771e4b539",
+        "9d7e0ff4ce276359",
+        "a7ecda85ea157903",
+        "aa653b75e1e5c65f",
+        "3f88b44b1e7e3fc1",
+        "b9f651300e3a84d2",
+        "9aac674e4925ed4e",
+        "01347b9ddfce363d",
+        "81886ecc9e55eeee",
+        "4a4e8cb2f1b45db5",
+        "434e8ef08c44f954",
+        "46bcbf2c4d0accbe",
+        "29f0e62fee7a4ec8",
+        "32c09e0b80a2abbb",
+        "9366cb4f896cbc1c",
+        "cc0884cbef7bf3a8",
+        "03ff25c40edb1fc8",
+        "0c24bd6bdc19a717",
+        "e93c9f1a449ed163",
+        "7e995c353dd2808f",
+        "d6bc5a39fb001e56",
+        "04583e7d0f3507b1",
+        "13049c7a8324909f",
+        "c40af8cd1ca8f59c",
+        "d70917e6169e68e8",
+        "7456fd9dd30ca90d",
+        "79cbf5000c8b47e2",
+        "e4d6e8e7c5d86f13",
+        "7d81d65b6f4b1154",
+        "1959daf7f50604b1",
+        "874459be727e1697",
+        "e91b30890bfacbe4",
+        "6f4c9c678d78e126",
+        "8a9e3db8d1428486",
+        "fceb6be3f26076b8",
+        "fcdefc91616bcb98",
+        "b76c33217bf4f44f",
+        "709aafc37b2fa90d",
+        "ddd49dee08bbbd29",
+        "2ba176123b71368d"
+      ],
+      "id": "03ff25c40edb1fc8",
+      "date": 1448852019098
+    },
+    {
+      "type": "add",
+      "id": "282d575d21b71109",
+      "item": {
+        "type": "paragraph",
+        "id": "282d575d21b71109",
+        "text": "# install"
+      },
+      "after": "03ff25c40edb1fc8",
+      "date": 1448852030901
+    },
+    {
+      "type": "remove",
+      "id": "282d575d21b71109",
+      "date": 1448852039518
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f853ab752a9cdb2b"
+      },
+      "id": "f853ab752a9cdb2b",
+      "type": "add",
+      "after": "2ba176123b71368d",
+      "date": 1448852043908
+    },
+    {
+      "type": "edit",
+      "id": "f853ab752a9cdb2b",
+      "item": {
+        "type": "code",
+        "id": "f853ab752a9cdb2b",
+        "text": "cd /usr/lib/node_modules/wiki\nnpm install wiki-plugin-transport\nnpm install wiki-plugin-search"
+      },
+      "date": 1448852075768
+    },
+    {
+      "type": "move",
+      "order": [
+        "e2e374d79763def7",
+        "c2da89c4f35bb9f4",
+        "7b82cc0ce0c3588d",
+        "1d2e1204f25d04a1",
+        "c0ce40dc8008e374",
+        "005f3a7d5e277f7b",
+        "5fdeb29acf5eaa5c",
+        "b598cdc6bfecbd2b",
+        "c402607981402272",
+        "75e736f407628194",
+        "ccb446d45faa1932",
+        "d0c5ab32ee91a2ea",
+        "4a44da3aedd8f744",
+        "118f9d76f3602959",
+        "66472954b64bd5b5",
+        "b6e047fde2b7b20b",
+        "9ac6b8e9e97e5e6c",
+        "f8515ba519add7d4",
+        "6b097c6282da66ba",
+        "61a2f212ca21f0df",
+        "cc27db44d998a24c",
+        "83be0de7ea0abd47",
+        "3d1cde0b53c6794f",
+        "0e9152f771e4b539",
+        "9d7e0ff4ce276359",
+        "a7ecda85ea157903",
+        "aa653b75e1e5c65f",
+        "3f88b44b1e7e3fc1",
+        "b9f651300e3a84d2",
+        "9aac674e4925ed4e",
+        "01347b9ddfce363d",
+        "81886ecc9e55eeee",
+        "4a4e8cb2f1b45db5",
+        "434e8ef08c44f954",
+        "46bcbf2c4d0accbe",
+        "29f0e62fee7a4ec8",
+        "32c09e0b80a2abbb",
+        "9366cb4f896cbc1c",
+        "cc0884cbef7bf3a8",
+        "03ff25c40edb1fc8",
+        "f853ab752a9cdb2b",
+        "0c24bd6bdc19a717",
+        "e93c9f1a449ed163",
+        "7e995c353dd2808f",
+        "d6bc5a39fb001e56",
+        "04583e7d0f3507b1",
+        "13049c7a8324909f",
+        "c40af8cd1ca8f59c",
+        "d70917e6169e68e8",
+        "7456fd9dd30ca90d",
+        "79cbf5000c8b47e2",
+        "e4d6e8e7c5d86f13",
+        "7d81d65b6f4b1154",
+        "1959daf7f50604b1",
+        "874459be727e1697",
+        "e91b30890bfacbe4",
+        "6f4c9c678d78e126",
+        "8a9e3db8d1428486",
+        "fceb6be3f26076b8",
+        "fcdefc91616bcb98",
+        "b76c33217bf4f44f",
+        "709aafc37b2fa90d",
+        "ddd49dee08bbbd29",
+        "2ba176123b71368d"
+      ],
+      "id": "f853ab752a9cdb2b",
+      "date": 1448852086008
+    },
+    {
+      "type": "edit",
+      "id": "03ff25c40edb1fc8",
+      "item": {
+        "type": "paragraph",
+        "id": "03ff25c40edb1fc8",
+        "text": "Add independent plugins to this install by adding more modules to the wiki where it has been globally installed."
+      },
+      "date": 1448852130820
+    },
+    {
+      "type": "edit",
+      "id": "f853ab752a9cdb2b",
+      "item": {
+        "type": "code",
+        "id": "f853ab752a9cdb2b",
+        "text": "cd /usr/lib/node_modules/wiki\nsudo npm install wiki-plugin-transport\nsudo npm install wiki-plugin-search"
+      },
+      "date": 1448852149163
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1448870848985
+    },
+    {
+      "type": "edit",
+      "id": "874459be727e1697",
+      "item": {
+        "type": "code",
+        "id": "874459be727e1697",
+        "text": "server {\n  listen 80;\n  server_name example.wiki *.example.wiki;\n\n  location / {\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n    proxy_set_header Host $host;\n    proxy_set_header X-NginX-Proxy true;\n\n    proxy_pass http://127.0.0.1:3000;\n    proxy_redirect off;\n\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade $http_upgrade;\n    proxy_set_header Connection $connection_upgrade;\n  }\n}\n"
+      },
+      "date": 1450455543692
+    },
+    {
+      "type": "fork",
+      "site": "goals.pod.rodwell.me",
+      "date": 1450516148646
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e4cbb52eea058ac5"
+      },
+      "id": "e4cbb52eea058ac5",
+      "type": "add",
+      "after": "2ba176123b71368d",
+      "date": 1450516156362
+    },
+    {
+      "type": "move",
+      "order": [
+        "e2e374d79763def7",
+        "c2da89c4f35bb9f4",
+        "7b82cc0ce0c3588d",
+        "1d2e1204f25d04a1",
+        "c0ce40dc8008e374",
+        "e4cbb52eea058ac5",
+        "005f3a7d5e277f7b",
+        "5fdeb29acf5eaa5c",
+        "b598cdc6bfecbd2b",
+        "c402607981402272",
+        "75e736f407628194",
+        "ccb446d45faa1932",
+        "d0c5ab32ee91a2ea",
+        "4a44da3aedd8f744",
+        "118f9d76f3602959",
+        "66472954b64bd5b5",
+        "b6e047fde2b7b20b",
+        "9ac6b8e9e97e5e6c",
+        "f8515ba519add7d4",
+        "6b097c6282da66ba",
+        "61a2f212ca21f0df",
+        "cc27db44d998a24c",
+        "83be0de7ea0abd47",
+        "3d1cde0b53c6794f",
+        "0e9152f771e4b539",
+        "9d7e0ff4ce276359",
+        "a7ecda85ea157903",
+        "aa653b75e1e5c65f",
+        "3f88b44b1e7e3fc1",
+        "b9f651300e3a84d2",
+        "9aac674e4925ed4e",
+        "01347b9ddfce363d",
+        "81886ecc9e55eeee",
+        "4a4e8cb2f1b45db5",
+        "434e8ef08c44f954",
+        "46bcbf2c4d0accbe",
+        "29f0e62fee7a4ec8",
+        "32c09e0b80a2abbb",
+        "9366cb4f896cbc1c",
+        "cc0884cbef7bf3a8",
+        "03ff25c40edb1fc8",
+        "f853ab752a9cdb2b",
+        "0c24bd6bdc19a717",
+        "e93c9f1a449ed163",
+        "7e995c353dd2808f",
+        "d6bc5a39fb001e56",
+        "04583e7d0f3507b1",
+        "13049c7a8324909f",
+        "c40af8cd1ca8f59c",
+        "d70917e6169e68e8",
+        "7456fd9dd30ca90d",
+        "79cbf5000c8b47e2",
+        "e4d6e8e7c5d86f13",
+        "7d81d65b6f4b1154",
+        "1959daf7f50604b1",
+        "874459be727e1697",
+        "e91b30890bfacbe4",
+        "6f4c9c678d78e126",
+        "8a9e3db8d1428486",
+        "fceb6be3f26076b8",
+        "fcdefc91616bcb98",
+        "b76c33217bf4f44f",
+        "709aafc37b2fa90d",
+        "ddd49dee08bbbd29",
+        "2ba176123b71368d"
+      ],
+      "id": "e4cbb52eea058ac5",
+      "date": 1450516188746
+    },
+    {
+      "type": "edit",
+      "id": "e4cbb52eea058ac5",
+      "item": {
+        "type": "video",
+        "id": "e4cbb52eea058ac5",
+        "text": "YOUTUBE fzKv4qUltBY\n(double-click to edit caption)\n"
+      },
+      "date": 1450516223244
+    },
+    {
+      "type": "edit",
+      "id": "e4cbb52eea058ac5",
+      "item": {
+        "type": "video",
+        "id": "e4cbb52eea058ac5",
+        "text": "YOUTUBE fzKv4qUltBY\nReal time run through of installing Fedwiki on [[Digital Ocean]] under [[Nginx]]."
+      },
+      "date": 1450516304637
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1497540506050
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bcceb5fd507241eb"
+      },
+      "id": "bcceb5fd507241eb",
+      "type": "add",
+      "after": "2ba176123b71368d",
+      "date": 1497540530021
+    },
+    {
+      "type": "edit",
+      "id": "bcceb5fd507241eb",
+      "item": {
+        "type": "paragraph",
+        "id": "bcceb5fd507241eb",
+        "text": "Set up an SSL certificate using LetsEncrypt. ["
+      },
+      "date": 1497540558796
+    },
+    {
+      "type": "edit",
+      "id": "bcceb5fd507241eb",
+      "item": {
+        "type": "paragraph",
+        "id": "bcceb5fd507241eb",
+        "text": "Set up an SSL certificate using LetsEncrypt. [https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04 tutorial]"
+      },
+      "date": 1497540573515
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c7cd0efd84eadbc4"
+      },
+      "id": "c7cd0efd84eadbc4",
+      "type": "add",
+      "after": "bcceb5fd507241eb",
+      "date": 1497551888819
+    },
+    {
+      "type": "edit",
+      "id": "c7cd0efd84eadbc4",
+      "item": {
+        "type": "html",
+        "id": "c7cd0efd84eadbc4",
+        "text": "<H3>Adding additional domains via certbot"
+      },
+      "date": 1497551908564
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5f5524b8867b328c"
+      },
+      "id": "5f5524b8867b328c",
+      "type": "add",
+      "after": "c7cd0efd84eadbc4",
+      "date": 1497551911654
+    },
+    {
+      "type": "remove",
+      "id": "5f5524b8867b328c",
+      "date": 1497551922567
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9ab0646b9f652157"
+      },
+      "id": "9ab0646b9f652157",
+      "type": "add",
+      "after": "c7cd0efd84eadbc4",
+      "date": 1497551924532
+    },
+    {
+      "type": "remove",
+      "id": "9ab0646b9f652157",
+      "date": 1497551932153
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "98a54dcca56a9c88"
+      },
+      "id": "98a54dcca56a9c88",
+      "type": "add",
+      "after": "c7cd0efd84eadbc4",
+      "date": 1497551940556
+    },
+    {
+      "type": "edit",
+      "id": "98a54dcca56a9c88",
+      "item": {
+        "type": "code",
+        "id": "98a54dcca56a9c88",
+        "text": "# certbot certificate "
+      },
+      "date": 1497551959868
+    },
+    {
+      "type": "edit",
+      "id": "98a54dcca56a9c88",
+      "item": {
+        "type": "code",
+        "id": "98a54dcca56a9c88",
+        "text": "# certbot certificates\nSaving debug log to /var/log/letsencrypt/letsencrypt.log\n\n-------------------------------------------------------------------------------\nFound the following certs:\n  Certificate Name: zzzoo.org\n    Domains: zzzoo.org wiki.zzzoo.org\n    Expiry Date: 2017-09-09 18:50:00+00:00 (VALID: 86 days)\n    Certificate Path: /etc/letsencrypt/live/zzzoo.org/fullchain.pem\n    Private Key Path: /etc/letsencrypt/live/zzzoo.org/privkey.pem\n-------------------------------------------------------------------------------\n"
+      },
+      "date": 1497552040398
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d43ccc26ff85e2e6"
+      },
+      "id": "d43ccc26ff85e2e6",
+      "type": "add",
+      "after": "98a54dcca56a9c88",
+      "date": 1497552061374
+    },
+    {
+      "type": "edit",
+      "id": "d43ccc26ff85e2e6",
+      "item": {
+        "type": "code",
+        "id": "d43ccc26ff85e2e6",
+        "text": "# certbot cerificates"
+      },
+      "date": 1497552074754
+    },
+    {
+      "type": "move",
+      "order": [
+        "e2e374d79763def7",
+        "c2da89c4f35bb9f4",
+        "7b82cc0ce0c3588d",
+        "1d2e1204f25d04a1",
+        "c0ce40dc8008e374",
+        "e4cbb52eea058ac5",
+        "005f3a7d5e277f7b",
+        "5fdeb29acf5eaa5c",
+        "b598cdc6bfecbd2b",
+        "c402607981402272",
+        "75e736f407628194",
+        "ccb446d45faa1932",
+        "d0c5ab32ee91a2ea",
+        "4a44da3aedd8f744",
+        "118f9d76f3602959",
+        "66472954b64bd5b5",
+        "b6e047fde2b7b20b",
+        "9ac6b8e9e97e5e6c",
+        "f8515ba519add7d4",
+        "6b097c6282da66ba",
+        "61a2f212ca21f0df",
+        "cc27db44d998a24c",
+        "83be0de7ea0abd47",
+        "3d1cde0b53c6794f",
+        "0e9152f771e4b539",
+        "9d7e0ff4ce276359",
+        "a7ecda85ea157903",
+        "aa653b75e1e5c65f",
+        "3f88b44b1e7e3fc1",
+        "b9f651300e3a84d2",
+        "9aac674e4925ed4e",
+        "01347b9ddfce363d",
+        "81886ecc9e55eeee",
+        "4a4e8cb2f1b45db5",
+        "434e8ef08c44f954",
+        "46bcbf2c4d0accbe",
+        "29f0e62fee7a4ec8",
+        "32c09e0b80a2abbb",
+        "9366cb4f896cbc1c",
+        "cc0884cbef7bf3a8",
+        "03ff25c40edb1fc8",
+        "f853ab752a9cdb2b",
+        "0c24bd6bdc19a717",
+        "e93c9f1a449ed163",
+        "7e995c353dd2808f",
+        "d6bc5a39fb001e56",
+        "04583e7d0f3507b1",
+        "13049c7a8324909f",
+        "c40af8cd1ca8f59c",
+        "d70917e6169e68e8",
+        "7456fd9dd30ca90d",
+        "79cbf5000c8b47e2",
+        "e4d6e8e7c5d86f13",
+        "7d81d65b6f4b1154",
+        "1959daf7f50604b1",
+        "874459be727e1697",
+        "e91b30890bfacbe4",
+        "6f4c9c678d78e126",
+        "8a9e3db8d1428486",
+        "fceb6be3f26076b8",
+        "fcdefc91616bcb98",
+        "b76c33217bf4f44f",
+        "709aafc37b2fa90d",
+        "ddd49dee08bbbd29",
+        "2ba176123b71368d",
+        "bcceb5fd507241eb",
+        "c7cd0efd84eadbc4",
+        "d43ccc26ff85e2e6",
+        "98a54dcca56a9c88"
+      ],
+      "id": "d43ccc26ff85e2e6",
+      "date": 1497552078402
+    },
+    {
+      "type": "edit",
+      "id": "98a54dcca56a9c88",
+      "item": {
+        "type": "code",
+        "id": "98a54dcca56a9c88",
+        "text": "Saving debug log to /var/log/letsencrypt/letsencrypt.log\n\n-------------------------------------------------------------------------------\nFound the following certs:\n  Certificate Name: zzzoo.org\n    Domains: zzzoo.org wiki.zzzoo.org\n    Expiry Date: 2017-09-09 18:50:00+00:00 (VALID: 86 days)\n    Certificate Path: /etc/letsencrypt/live/zzzoo.org/fullchain.pem\n    Private Key Path: /etc/letsencrypt/live/zzzoo.org/privkey.pem\n-------------------------------------------------------------------------------\n"
+      },
+      "date": 1497552086140
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fc64c11869581636"
+      },
+      "id": "fc64c11869581636",
+      "type": "add",
+      "after": "98a54dcca56a9c88",
+      "date": 1497552107563
+    },
+    {
+      "type": "edit",
+      "id": "fc64c11869581636",
+      "item": {
+        "type": "paragraph",
+        "id": "fc64c11869581636",
+        "text": "Pick out the certificate name (zzzoo.org in this case) and the existing domains (zzzoo.org and wiki.zzzoo.org) from the output of the command."
+      },
+      "date": 1497552181907
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "742a2dc5806cfb1c"
+      },
+      "id": "742a2dc5806cfb1c",
+      "type": "add",
+      "after": "fc64c11869581636",
+      "date": 1497552203880
+    },
+    {
+      "type": "edit",
+      "id": "742a2dc5806cfb1c",
+      "item": {
+        "type": "code",
+        "id": "742a2dc5806cfb1c",
+        "text": "# certbot"
+      },
+      "date": 1497552216067
+    },
+    {
+      "type": "edit",
+      "id": "742a2dc5806cfb1c",
+      "item": {
+        "type": "code",
+        "id": "742a2dc5806cfb1c",
+        "text": "# certbot certonly --cert-name zzzoo.org \\\n  -d zzzoo.org \\\n  -d wiki.zzzoo.org \\\n  -d inc.zzzoo.org \\\n  -d fed.zzzoo.org \\\n  -d alan.zzzoo.org"
+      },
+      "date": 1497552272138
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "138c7f7ecee3a934"
+      },
+      "id": "138c7f7ecee3a934",
+      "type": "add",
+      "after": "742a2dc5806cfb1c",
+      "date": 1497552282945
+    },
+    {
+      "type": "edit",
+      "id": "138c7f7ecee3a934",
+      "item": {
+        "type": "paragraph",
+        "id": "138c7f7ecee3a934",
+        "text": "In the above command, add a \"-d\" line for each existing domain, as well as all the new ones. Each of the domains needs to have an active A record in its DNS entry."
+      },
+      "date": 1497552339635
+    },
+    {
+      "type": "edit",
+      "id": "742a2dc5806cfb1c",
+      "item": {
+        "type": "code",
+        "id": "742a2dc5806cfb1c",
+        "text": "# certbot certonly --cert-name zzzoo.org \\\n  --webroot --webroot-path=/var/www/html \\\n  -d zzzoo.org \\\n  -d wiki.zzzoo.org \\\n  -d inc.zzzoo.org \\\n  -d fed.zzzoo.org \\\n  -d alan.zzzoo.org"
+      },
+      "date": 1497552677998
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7f563896d4979ac8"
+      },
+      "id": "7f563896d4979ac8",
+      "type": "add",
+      "after": "138c7f7ecee3a934",
+      "date": 1497556894251
+    },
+    {
+      "type": "edit",
+      "id": "7f563896d4979ac8",
+      "item": {
+        "type": "code",
+        "id": "7f563896d4979ac8",
+        "text": "# service nginx stop"
+      },
+      "date": 1497556913924
+    },
+    {
+      "type": "move",
+      "order": [
+        "e2e374d79763def7",
+        "c2da89c4f35bb9f4",
+        "7b82cc0ce0c3588d",
+        "1d2e1204f25d04a1",
+        "c0ce40dc8008e374",
+        "e4cbb52eea058ac5",
+        "005f3a7d5e277f7b",
+        "5fdeb29acf5eaa5c",
+        "b598cdc6bfecbd2b",
+        "c402607981402272",
+        "75e736f407628194",
+        "ccb446d45faa1932",
+        "d0c5ab32ee91a2ea",
+        "4a44da3aedd8f744",
+        "118f9d76f3602959",
+        "66472954b64bd5b5",
+        "b6e047fde2b7b20b",
+        "9ac6b8e9e97e5e6c",
+        "f8515ba519add7d4",
+        "6b097c6282da66ba",
+        "61a2f212ca21f0df",
+        "cc27db44d998a24c",
+        "83be0de7ea0abd47",
+        "3d1cde0b53c6794f",
+        "0e9152f771e4b539",
+        "9d7e0ff4ce276359",
+        "a7ecda85ea157903",
+        "aa653b75e1e5c65f",
+        "3f88b44b1e7e3fc1",
+        "b9f651300e3a84d2",
+        "9aac674e4925ed4e",
+        "01347b9ddfce363d",
+        "81886ecc9e55eeee",
+        "4a4e8cb2f1b45db5",
+        "434e8ef08c44f954",
+        "46bcbf2c4d0accbe",
+        "29f0e62fee7a4ec8",
+        "32c09e0b80a2abbb",
+        "9366cb4f896cbc1c",
+        "cc0884cbef7bf3a8",
+        "03ff25c40edb1fc8",
+        "f853ab752a9cdb2b",
+        "0c24bd6bdc19a717",
+        "e93c9f1a449ed163",
+        "7e995c353dd2808f",
+        "d6bc5a39fb001e56",
+        "04583e7d0f3507b1",
+        "13049c7a8324909f",
+        "c40af8cd1ca8f59c",
+        "d70917e6169e68e8",
+        "7456fd9dd30ca90d",
+        "79cbf5000c8b47e2",
+        "e4d6e8e7c5d86f13",
+        "7d81d65b6f4b1154",
+        "1959daf7f50604b1",
+        "874459be727e1697",
+        "e91b30890bfacbe4",
+        "6f4c9c678d78e126",
+        "8a9e3db8d1428486",
+        "fceb6be3f26076b8",
+        "fcdefc91616bcb98",
+        "b76c33217bf4f44f",
+        "709aafc37b2fa90d",
+        "ddd49dee08bbbd29",
+        "2ba176123b71368d",
+        "bcceb5fd507241eb",
+        "c7cd0efd84eadbc4",
+        "d43ccc26ff85e2e6",
+        "98a54dcca56a9c88",
+        "fc64c11869581636",
+        "7f563896d4979ac8",
+        "742a2dc5806cfb1c",
+        "138c7f7ecee3a934"
+      ],
+      "id": "7f563896d4979ac8",
+      "date": 1497556921958
+    },
+    {
+      "type": "edit",
+      "id": "742a2dc5806cfb1c",
+      "item": {
+        "type": "code",
+        "id": "742a2dc5806cfb1c",
+        "text": "# certbot certonly --cert-name zzzoo.org \\\n  -d zzzoo.org \\\n  -d wiki.zzzoo.org \\\n  -d inc.zzzoo.org \\\n  -d fed.zzzoo.org \\\n  -d alan.zzzoo.org"
+      },
+      "date": 1497556930567
+    },
+    {
+      "type": "add",
+      "id": "a79d5316896a0365",
+      "item": {
+        "type": "paragraph",
+        "id": "a79d5316896a0365",
+        "text": "Choose to spin up a local server, and accept the update."
+      },
+      "after": "138c7f7ecee3a934",
+      "date": 1497556965601
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "63ad968517daf18e"
+      },
+      "id": "63ad968517daf18e",
+      "type": "add",
+      "after": "a79d5316896a0365",
+      "date": 1497556970414
+    },
+    {
+      "type": "edit",
+      "id": "63ad968517daf18e",
+      "item": {
+        "type": "code",
+        "id": "63ad968517daf18e",
+        "text": "# service nginx start"
+      },
+      "date": 1497556983828
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "9978f8921e240151",
+        "text": "<h3>Example configuration file"
+      },
+      "after": "63ad968517daf18e",
+      "id": "9978f8921e240151",
+      "date": 1497613592078
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d6744ed321f6ae41",
+        "text": "By trial and error I have managed to put together a config for a farm, shown  below, with the secret stuff blocked out."
+      },
+      "after": "9978f8921e240151",
+      "id": "d6744ed321f6ae41",
+      "date": 1497613596897
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "4f6756e343b4b10b",
+        "text": "{\n  \"farm\": true,\n  \"security_type\": \"passportjs\",\n  \"google_clientID\": \"CLIENTID\",\n  \"google_clientSecret\": \"CLIENTSECRET\",\n  \"wikiDomains\": {\n    \"wiki.zzzoo.org\": {\n      \"url\":\"https://wiki.zzzoo.org\"\n     },\n    \"inc.zzzoo.org\": {\n      \"url\":\"https://inc.zzzoo.org\"\n     },\n    \"alan.zzzoo.org\": {\n      \"url\":\"https://alan.zzzoo.org\"\n     },\n    \"fed.zzzoo.org\": {\n      \"url\":\"https://fed.zzzoo.org\"\n     }\n  }\n}\n"
+      },
+      "after": "d6744ed321f6ae41",
+      "id": "4f6756e343b4b10b",
+      "date": 1497613599780
+    },
+    {
+      "type": "fork",
+      "site": "wiki.zzzoo.org",
+      "date": 1497796134727
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1497880611680
+    }
+  ]
+}

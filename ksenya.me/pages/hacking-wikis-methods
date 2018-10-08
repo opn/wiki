@@ -1,0 +1,2670 @@
+{
+  "title": "Hacking Wiki's Methods",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "93bd372715f31c9a",
+      "text": "The Method plugin has already grown complex interacting across pages and between other plugins. Here I consider how I approached a large increment in functionality when I added units and expressions."
+    },
+    {
+      "type": "paragraph",
+      "id": "e591e7d6fcfa467f",
+      "text": "A method sums a column of numbers."
+    },
+    {
+      "type": "method",
+      "id": "aaef6ab7ae8a028a",
+      "text": "2 Family\n3 Friends\n5 Children\nSUM For Dinner"
+    },
+    {
+      "type": "paragraph",
+      "id": "5359c1955afec33c",
+      "text": "See [[About Method Plugin]]."
+    },
+    {
+      "type": "html",
+      "id": "e6b2e07d9a42e879",
+      "text": "<h3> Context"
+    },
+    {
+      "type": "paragraph",
+      "id": "6635b10a1e87dda1",
+      "text": "A Method looks above and to the left for other sources of variable bindings. These could be other Methods, Data sets or any item advertising radarData. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L389-L395 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "570e2f483e8a632e",
+      "text": "A Method offers its output as radarData to be consumed by, say, Radar plugins. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L389-L395 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "802e7e2469420895",
+      "text": "A Method plugin can be instantiated independent of a displayed page and \"force fed\" items to be evaluated. The Rollup and Reduce plugins use this mechanism."
+    },
+    {
+      "type": "paragraph",
+      "id": "2aa84399a8d4ed47",
+      "text": "See [[About Reduce Plugin]], [https://github.com/fedwiki/wiki-plugin-reduce/blob/1ac5bdb6ac69ded484935854c85c9aaaae80de25/client/reduce.coffee#L97-L120 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2b888e30424eb171",
+      "text": "The page load refresh is careful to sequentially evaluate Methods for the top to bottom, left to right flow of data holds. [https://github.com/fedwiki/wiki-client/blob/a54316b63b7412cf3fbf48f4009db501a16ee915/lib/refresh.coffee#L160-L167 github]"
+    },
+    {
+      "type": "html",
+      "id": "d47f6b10590ea97a",
+      "text": "<h3> Specification"
+    },
+    {
+      "type": "paragraph",
+      "id": "fe21004eb5a0d507",
+      "text": "I wrote casual specifications of both unit and equation extensions to Method and asked that Michael Mehaffy, the first intended user, review these. I created checklists from these while coding."
+    },
+    {
+      "type": "paragraph",
+      "id": "0e4ff6ca8ba2eb41",
+      "text": "See [[Method Unit Conversions]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "a53e9d1ed01d4188",
+      "text": "See [[Method Expressions]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "cf419d60a86a0c03",
+      "text": "See [[Method Unit Coding]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "9c18f158f84af056",
+      "text": "I wrote Mocha tests for calculations that were already known to work. I ran these through the runtests.html interface available on the Ruby/Sinatra server implementation. I ran these from localhost using Mocha's grep option to focus on Method. [http://localhost:1111/runtests.html?grep=method localhost]"
+    },
+    {
+      "type": "paragraph",
+      "id": "aa091b280c6047b9",
+      "text": "Given some conversion factors. [http://www.oregonlive.com/gasprices/ gas]"
+    },
+    {
+      "type": "method",
+      "id": "34a03307fc9384e8",
+      "text": "3.59 Gas Price (dollars) given (gallons)\n24 Fuel Economy (miles) given (gallons)\n1.60934 Metric Distance (km) given (miles)"
+    },
+    {
+      "type": "paragraph",
+      "id": "1309effff7fc453e",
+      "text": "Estimate gas money required for a drive from Vancouver to Portland and beyond. [http://goo.gl/maps/WKpWt maps]"
+    },
+    {
+      "type": "method",
+      "id": "782a1ac832c7d6de",
+      "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)"
+    },
+    {
+      "type": "paragraph",
+      "id": "1ab617507b09bd3c",
+      "text": "See [[Method Control Loops]] for more emerging features."
+    },
+    {
+      "type": "html",
+      "id": "4cb9a4f95b30ea82",
+      "text": "<h3> Code"
+    },
+    {
+      "type": "paragraph",
+      "id": "8b15372316d3ec9e",
+      "text": "Units. Utility functions that extract values and units from objects, parse labels as units, and perform likely coercions.  All new except for asValue which anticipated units. This could reasonably be another module. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L139 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "fe17a4449d38fe9a",
+      "text": "Calculation. Functions to perform sums, products and related operations with attention to units. Only here do we know what kind of coercion will be applied. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+    },
+    {
+      "type": "method",
+      "id": "7c867ac6911b4ae1",
+      "text": "Driving from Vancouver (km)\nDriving to S.F. (miles)\nCosts Money (dollars)\nCALC dollars / ( from + to )\nSHOW Gas Money"
+    },
+    {
+      "type": "paragraph",
+      "id": "4f08665880653adf",
+      "text": "Expression. A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. All new. Variables are retrieved from local bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L194-L248 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ad532f2f9e34da6b",
+      "text": "Interpreter. The \"middle-school\" evaluator looks for operation keywords, line by line, with long labels for variable names. Accumulates \"local\" bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L378 github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "6159595073489254",
+      "text": "Interface. The emit and bind of the wiki interface as well as the module interface used by the tests. Prints extra if \"debug\" variable exists and is non-zero. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L380-L434 github]"
+    },
+    {
+      "type": "html",
+      "id": "67fb56c0f6a8cbce",
+      "text": "<h3> Development"
+    },
+    {
+      "type": "paragraph",
+      "id": "548d0dc1f3a3680e",
+      "text": "We will use at least two repos during development: one to build the plugin, the other to serve the built plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "449c6a43c82e465f",
+      "text": "Clone the Method repo. Expose this location for linking. Start grunt doing builds. You will do your editing here. Watch for test results on save."
+    },
+    {
+      "type": "code",
+      "id": "24204bd2c81d3379",
+      "text": "git clone ... wiki-plugin-method.git\ncd wiki-plugin-method\nnpm install\nnpm link\ngrunt watch"
+    },
+    {
+      "type": "paragraph",
+      "id": "8ad4bfee4a5652c6",
+      "text": "Clone a test version of the server. Link it to the plugin directory. Start the server. Browse. [http://localhost:3030 localhost]"
+    },
+    {
+      "type": "code",
+      "id": "6c94ed8f754113a1",
+      "text": "git clone ... wiki-node.git\ncd wiki-node\nnpm link ../wiki-plugin-method\nnode bin/server.js -p 3030 &\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "6578067257139e79",
+      "text": "Hard link plugin documentation to your server pages."
+    },
+    {
+      "type": "code",
+      "id": "04b493635814b5fb",
+      "text": "cd wiki-plugin-method\nln pages/about-method-plugin ~/.wiki/pages"
+    },
+    {
+      "type": "paragraph",
+      "id": "56062cb3bfce865e",
+      "text": "Write tests. Pass them. Revise documentation. Commit to a branch. Push to github and issue pull request."
+    },
+    {
+      "type": "code",
+      "id": "93ffd43274416147",
+      "text": "git checkout -b you/feature\ngit commit -a -m \"your feature explained\"\ngit push origin you/feature"
+    },
+    {
+      "type": "paragraph",
+      "id": "3e6eff675af6317f",
+      "text": "We will merge your feature. Test it. Bump the version. Publish. Update the repo tags."
+    },
+    {
+      "type": "code",
+      "id": "7c849e15199bd029",
+      "text": "cd wiki-plugin-method\ngit pull\ngrunt test\nnpm version patch\nnpm plublish\ngit push --tags"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Hacking Wiki's Methods",
+        "story": []
+      },
+      "date": 1390421020713
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "93bd372715f31c9a"
+      },
+      "id": "93bd372715f31c9a",
+      "type": "add",
+      "date": 1390421022496
+    },
+    {
+      "type": "edit",
+      "id": "93bd372715f31c9a",
+      "item": {
+        "type": "paragraph",
+        "id": "93bd372715f31c9a",
+        "text": "The Method plugin has already grown complex interacting across pages and between other plugins. Here I consider how I approached a large increment in functionality when I added units and expressions."
+      },
+      "date": 1390421129974
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e6b2e07d9a42e879"
+      },
+      "id": "e6b2e07d9a42e879",
+      "type": "add",
+      "after": "93bd372715f31c9a",
+      "date": 1390449528324
+    },
+    {
+      "type": "edit",
+      "id": "e6b2e07d9a42e879",
+      "item": {
+        "type": "paragraph",
+        "id": "e6b2e07d9a42e879",
+        "text": "<h3> Context"
+      },
+      "date": 1390449543709
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "6635b10a1e87dda1",
+        "text": ""
+      },
+      "id": "6635b10a1e87dda1",
+      "type": "add",
+      "after": "e6b2e07d9a42e879",
+      "date": 1390449544215
+    },
+    {
+      "type": "edit",
+      "id": "6635b10a1e87dda1",
+      "item": {
+        "type": "paragraph",
+        "id": "6635b10a1e87dda1",
+        "text": "A Method looks above and to the left for other sources of variable bindings. These could be other Methods, Data sets or any item advertising radarData."
+      },
+      "date": 1390449813284
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "570e2f483e8a632e",
+        "text": ""
+      },
+      "id": "570e2f483e8a632e",
+      "type": "add",
+      "after": "6635b10a1e87dda1",
+      "date": 1390449813796
+    },
+    {
+      "type": "edit",
+      "id": "570e2f483e8a632e",
+      "item": {
+        "type": "paragraph",
+        "id": "570e2f483e8a632e",
+        "text": "A Method offers its output as radarData to be consumed by, say, Radar plugins."
+      },
+      "date": 1390449847494
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "802e7e2469420895",
+        "text": ""
+      },
+      "id": "802e7e2469420895",
+      "type": "add",
+      "after": "570e2f483e8a632e",
+      "date": 1390449848000
+    },
+    {
+      "type": "edit",
+      "id": "802e7e2469420895",
+      "item": {
+        "type": "paragraph",
+        "id": "802e7e2469420895",
+        "text": "A Method plugin can be instantiated independent of a displayed page and \"force fed\" items to be evaluated. The Rollup and Reduce plugins use this \"eval\" capability to evaluate Methods on pages they fetch directly from servers."
+      },
+      "date": 1390450216570
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0811767d1efd11d4",
+        "text": ""
+      },
+      "id": "0811767d1efd11d4",
+      "type": "add",
+      "after": "802e7e2469420895",
+      "date": 1390450217076
+    },
+    {
+      "type": "remove",
+      "id": "0811767d1efd11d4",
+      "date": 1390450231166
+    },
+    {
+      "type": "edit",
+      "id": "802e7e2469420895",
+      "item": {
+        "type": "paragraph",
+        "id": "802e7e2469420895",
+        "text": "A Method plugin can be instantiated independent of a displayed page and \"force fed\" items to be evaluated. The Rollup and Reduce plugins thus evaluate off screen pages."
+      },
+      "date": 1390450275736
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d5bc472d2591d262",
+        "text": ""
+      },
+      "id": "d5bc472d2591d262",
+      "type": "add",
+      "after": "802e7e2469420895",
+      "date": 1390450287032
+    },
+    {
+      "type": "remove",
+      "id": "d5bc472d2591d262",
+      "date": 1390450302646
+    },
+    {
+      "type": "edit",
+      "id": "802e7e2469420895",
+      "item": {
+        "type": "paragraph",
+        "id": "802e7e2469420895",
+        "text": "A Method plugin can be instantiated independent of a displayed page and \"force fed\" items to be evaluated. The Rollup and Reduce plugins use this mechanism."
+      },
+      "date": 1390450344230
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2b888e30424eb171",
+        "text": ""
+      },
+      "id": "2b888e30424eb171",
+      "type": "add",
+      "after": "802e7e2469420895",
+      "date": 1390450344736
+    },
+    {
+      "type": "edit",
+      "id": "2b888e30424eb171",
+      "item": {
+        "type": "paragraph",
+        "id": "2b888e30424eb171",
+        "text": "The page load refresh is careful to sequentially evaluate Methods so that the top to bottom, left to right flow of data holds."
+      },
+      "date": 1390450455379
+    },
+    {
+      "type": "edit",
+      "id": "2b888e30424eb171",
+      "item": {
+        "type": "paragraph",
+        "id": "2b888e30424eb171",
+        "text": "The page load refresh is careful to sequentially evaluate Methods for the top to bottom, left to right flow of data holds."
+      },
+      "date": 1390450532305
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d47f6b10590ea97a"
+      },
+      "id": "d47f6b10590ea97a",
+      "type": "add",
+      "after": "2b888e30424eb171",
+      "date": 1390450540043
+    },
+    {
+      "type": "edit",
+      "id": "d47f6b10590ea97a",
+      "item": {
+        "type": "paragraph",
+        "id": "d47f6b10590ea97a",
+        "text": "<h3> Method"
+      },
+      "date": 1390450558616
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "fe21004eb5a0d507",
+        "text": ""
+      },
+      "id": "fe21004eb5a0d507",
+      "type": "add",
+      "after": "d47f6b10590ea97a",
+      "date": 1390450559121
+    },
+    {
+      "type": "edit",
+      "id": "fe21004eb5a0d507",
+      "item": {
+        "type": "paragraph",
+        "id": "fe21004eb5a0d507",
+        "text": "I wrote casual specifications of both unit and equation extensions to Method and asked that Michael Mehaffy, the first intended user, review these."
+      },
+      "date": 1390450614268
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "db8cd8c373dded18",
+        "text": ""
+      },
+      "id": "db8cd8c373dded18",
+      "type": "add",
+      "after": "fe21004eb5a0d507",
+      "date": 1390450614774
+    },
+    {
+      "type": "remove",
+      "id": "db8cd8c373dded18",
+      "date": 1390450623815
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0e4ff6ca8ba2eb41",
+        "text": ""
+      },
+      "id": "0e4ff6ca8ba2eb41",
+      "type": "add",
+      "after": "fe21004eb5a0d507",
+      "date": 1390450639397
+    },
+    {
+      "type": "edit",
+      "id": "0e4ff6ca8ba2eb41",
+      "item": {
+        "type": "paragraph",
+        "id": "0e4ff6ca8ba2eb41",
+        "text": "See [[Method Unit Converstions]]."
+      },
+      "date": 1390450654300
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a53e9d1ed01d4188",
+        "text": ""
+      },
+      "id": "a53e9d1ed01d4188",
+      "type": "add",
+      "after": "0e4ff6ca8ba2eb41",
+      "date": 1390450654806
+    },
+    {
+      "type": "edit",
+      "id": "a53e9d1ed01d4188",
+      "item": {
+        "type": "paragraph",
+        "id": "a53e9d1ed01d4188",
+        "text": "See [[Method Expressions]]."
+      },
+      "date": 1390450669500
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4034360545d9c483",
+        "text": ""
+      },
+      "id": "4034360545d9c483",
+      "type": "add",
+      "after": "a53e9d1ed01d4188",
+      "date": 1390450670005
+    },
+    {
+      "type": "remove",
+      "id": "4034360545d9c483",
+      "date": 1390450671906
+    },
+    {
+      "type": "edit",
+      "id": "d47f6b10590ea97a",
+      "item": {
+        "type": "paragraph",
+        "id": "d47f6b10590ea97a",
+        "text": "<h3> Specification"
+      },
+      "date": 1390450687595
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8e77575eac5a098b"
+      },
+      "id": "8e77575eac5a098b",
+      "type": "add",
+      "after": "a53e9d1ed01d4188",
+      "date": 1390450698445
+    },
+    {
+      "type": "remove",
+      "id": "8e77575eac5a098b",
+      "date": 1390450754558
+    },
+    {
+      "type": "edit",
+      "id": "0e4ff6ca8ba2eb41",
+      "item": {
+        "type": "paragraph",
+        "id": "0e4ff6ca8ba2eb41",
+        "text": "See [[Method Unit Converstions]] and [[Method Unit Coding]]."
+      },
+      "date": 1390450785463
+    },
+    {
+      "type": "edit",
+      "id": "fe21004eb5a0d507",
+      "item": {
+        "type": "paragraph",
+        "id": "fe21004eb5a0d507",
+        "text": "I wrote casual specifications of both unit and equation extensions to Method and asked that Michael Mehaffy, the first intended user, review these. I created checklists from these while coding."
+      },
+      "date": 1390450809000
+    },
+    {
+      "type": "edit",
+      "id": "0e4ff6ca8ba2eb41",
+      "item": {
+        "type": "paragraph",
+        "id": "0e4ff6ca8ba2eb41",
+        "text": "See [[Method Unit Converstions]]."
+      },
+      "date": 1390450820993
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "cf419d60a86a0c03",
+        "text": "[[Method Unit Coding]]."
+      },
+      "id": "cf419d60a86a0c03",
+      "type": "add",
+      "after": "0e4ff6ca8ba2eb41",
+      "date": 1390450821498
+    },
+    {
+      "type": "edit",
+      "id": "cf419d60a86a0c03",
+      "item": {
+        "type": "paragraph",
+        "id": "cf419d60a86a0c03",
+        "text": "See [[Method Unit Coding]]."
+      },
+      "date": 1390450823943
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "9c18f158f84af056",
+        "text": ""
+      },
+      "id": "9c18f158f84af056",
+      "type": "add",
+      "after": "a53e9d1ed01d4188",
+      "date": 1390450851038
+    },
+    {
+      "type": "edit",
+      "id": "9c18f158f84af056",
+      "item": {
+        "type": "paragraph",
+        "id": "9c18f158f84af056",
+        "text": "I wrote Mocha tests for calculations that were already known to work. I ran these through the runtests.html interface available on the Ruby/Sinatra server implementation."
+      },
+      "date": 1390451005852
+    },
+    {
+      "type": "edit",
+      "id": "0e4ff6ca8ba2eb41",
+      "item": {
+        "type": "paragraph",
+        "id": "0e4ff6ca8ba2eb41",
+        "text": "See [[Method Unit Converstion]]."
+      },
+      "date": 1390451108326
+    },
+    {
+      "type": "edit",
+      "id": "0e4ff6ca8ba2eb41",
+      "item": {
+        "type": "paragraph",
+        "id": "0e4ff6ca8ba2eb41",
+        "text": "See [[Method Unit Conversions]]."
+      },
+      "date": 1390451137129
+    },
+    {
+      "type": "edit",
+      "id": "9c18f158f84af056",
+      "item": {
+        "type": "paragraph",
+        "id": "9c18f158f84af056",
+        "text": "I wrote Mocha tests for calculations that were already known to work. I ran these through the runtests.html interface available on the Ruby/Sinatra server implementation. I ran these from localhost using Mocha's grep option to focus on Method. [http://localhost:1111/runtests.html?grep=method mocha]"
+      },
+      "date": 1390451322352
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "35ea9d4e1921f975",
+        "text": ""
+      },
+      "id": "35ea9d4e1921f975",
+      "type": "add",
+      "after": "9c18f158f84af056",
+      "date": 1390451412157
+    },
+    {
+      "type": "edit",
+      "id": "35ea9d4e1921f975",
+      "item": {
+        "type": "paragraph",
+        "id": "35ea9d4e1921f975",
+        "text": "I worked test-driven through my checklists. "
+      },
+      "date": 1390451499844
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4cb9a4f95b30ea82"
+      },
+      "id": "4cb9a4f95b30ea82",
+      "type": "add",
+      "after": "35ea9d4e1921f975",
+      "date": 1390452305653
+    },
+    {
+      "type": "edit",
+      "id": "4cb9a4f95b30ea82",
+      "item": {
+        "type": "paragraph",
+        "id": "4cb9a4f95b30ea82",
+        "text": "<h3> Code"
+      },
+      "date": 1390452333244
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": ""
+      },
+      "id": "fe17a4449d38fe9a",
+      "type": "add",
+      "after": "4cb9a4f95b30ea82",
+      "date": 1390452333754
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "[https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L140-L194 github]"
+      },
+      "date": 1390452361620
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "Calculation. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L140-L194 github]"
+      },
+      "date": 1390452410436
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "8b15372316d3ec9e",
+        "text": ""
+      },
+      "id": "8b15372316d3ec9e",
+      "type": "add",
+      "after": "4cb9a4f95b30ea82",
+      "date": 1390452460231
+    },
+    {
+      "type": "edit",
+      "id": "8b15372316d3ec9e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b15372316d3ec9e",
+        "text": "Units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390452472370
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": ""
+      },
+      "id": "4f08665880653adf",
+      "type": "add",
+      "after": "fe17a4449d38fe9a",
+      "date": 1390452514223
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "Expression. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390452522979
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": ""
+      },
+      "id": "ad532f2f9e34da6b",
+      "type": "add",
+      "after": "4f08665880653adf",
+      "date": 1390452565678
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "Interpreter. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L379 github]"
+      },
+      "date": 1390452580283
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "6159595073489254",
+        "text": ""
+      },
+      "id": "6159595073489254",
+      "type": "add",
+      "after": "ad532f2f9e34da6b",
+      "date": 1390452669385
+    },
+    {
+      "type": "edit",
+      "id": "6159595073489254",
+      "item": {
+        "type": "paragraph",
+        "id": "6159595073489254",
+        "text": "Interface. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L380-L434 github]"
+      },
+      "date": 1390452680846
+    },
+    {
+      "type": "edit",
+      "id": "8b15372316d3ec9e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b15372316d3ec9e",
+        "text": "<b>Units.</b> Utility functions that extract values and units from objects, parse labels as units, and perform likely coercions. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390453014057
+    },
+    {
+      "type": "edit",
+      "id": "8b15372316d3ec9e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b15372316d3ec9e",
+        "text": "<b>Units.</b> Utility functions that extract values and units from objects, parse labels as units, and perform likely coercions. This could reasonably be another module. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390453074489
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L140-L194 github]"
+      },
+      "date": 1390453271877
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "<b>Expression.</b> A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar.[https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390453612539
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "<b>Expression.</b> A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. Variables are retrieved from bindings local to the Method.[https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390453651790
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "<b>Expression.</b> A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. Variables are retrieved from local bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L140 github]"
+      },
+      "date": 1390453672210
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "<b>Interpreter.</b> The \"middle-school\" evaluator looks for keywords, line by line, with long labels for variable names. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L379 github]"
+      },
+      "date": 1390453901358
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "<b>Interpreter.</b> The \"middle-school\" evaluator looks for operation keywords, line by line, with long labels for variable names. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L379 github]"
+      },
+      "date": 1390453952135
+    },
+    {
+      "type": "edit",
+      "id": "6159595073489254",
+      "item": {
+        "type": "paragraph",
+        "id": "6159595073489254",
+        "text": "<b>Interface.</b> The emit and bind of the wiki interface as well as the module interface used by the tests. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L380-L434 github]"
+      },
+      "date": 1390454082631
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "aaef6ab7ae8a028a"
+      },
+      "id": "aaef6ab7ae8a028a",
+      "type": "add",
+      "after": "6159595073489254",
+      "date": 1390577569136
+    },
+    {
+      "type": "edit",
+      "id": "aaef6ab7ae8a028a",
+      "item": {
+        "type": "method",
+        "id": "aaef6ab7ae8a028a",
+        "text": "2 Family\n3 Friends\n5 Children\nSUM For Dinner"
+      },
+      "date": 1390577575262
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2b888e30424eb171",
+        "aaef6ab7ae8a028a",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "35ea9d4e1921f975",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "aaef6ab7ae8a028a",
+      "date": 1390577584904
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "34a03307fc9384e8"
+      },
+      "id": "34a03307fc9384e8",
+      "type": "add",
+      "after": "6159595073489254",
+      "date": 1390577643760
+    },
+    {
+      "type": "edit",
+      "id": "34a03307fc9384e8",
+      "item": {
+        "type": "method",
+        "id": "34a03307fc9384e8",
+        "text": "3.59 Gas Price (dollars) given (gallons)\n24 Fuel Economy (miles) given (gallons)\n1.60934 Metric Distance (km) given (miles)"
+      },
+      "date": 1390577648651
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2b888e30424eb171",
+        "aaef6ab7ae8a028a",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "35ea9d4e1921f975",
+        "34a03307fc9384e8",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "34a03307fc9384e8",
+      "date": 1390577661856
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "782a1ac832c7d6de"
+      },
+      "id": "782a1ac832c7d6de",
+      "type": "add",
+      "after": "6159595073489254",
+      "date": 1390577689053
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)"
+      },
+      "date": 1390577693864
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2b888e30424eb171",
+        "aaef6ab7ae8a028a",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "35ea9d4e1921f975",
+        "34a03307fc9384e8",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "782a1ac832c7d6de",
+      "date": 1390577698685
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e591e7d6fcfa467f",
+        "text": ""
+      },
+      "id": "e591e7d6fcfa467f",
+      "type": "add",
+      "after": "93bd372715f31c9a",
+      "date": 1390577754298
+    },
+    {
+      "type": "edit",
+      "id": "e591e7d6fcfa467f",
+      "item": {
+        "type": "paragraph",
+        "id": "e591e7d6fcfa467f",
+        "text": "A method sums a column of numbers."
+      },
+      "date": 1390577763320
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "35ea9d4e1921f975",
+        "34a03307fc9384e8",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "aaef6ab7ae8a028a",
+      "date": 1390577767439
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "aa091b280c6047b9",
+        "text": ""
+      },
+      "id": "aa091b280c6047b9",
+      "type": "add",
+      "after": "35ea9d4e1921f975",
+      "date": 1390577919321
+    },
+    {
+      "type": "edit",
+      "id": "aa091b280c6047b9",
+      "item": {
+        "type": "paragraph",
+        "id": "aa091b280c6047b9",
+        "text": "Given some conversion factors. [http://www.oregonlive.com/gasprices/ gas]"
+      },
+      "date": 1390577922826
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1309effff7fc453e",
+        "text": ""
+      },
+      "id": "1309effff7fc453e",
+      "type": "add",
+      "after": "aa091b280c6047b9",
+      "date": 1390577943099
+    },
+    {
+      "type": "edit",
+      "id": "1309effff7fc453e",
+      "item": {
+        "type": "paragraph",
+        "id": "1309effff7fc453e",
+        "text": "We'll work out units planning our next trip. [http://goo.gl/maps/WKpWt maps]"
+      },
+      "date": 1390577944375
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "35ea9d4e1921f975",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "1309effff7fc453e",
+      "date": 1390577947745
+    },
+    {
+      "type": "remove",
+      "id": "35ea9d4e1921f975",
+      "date": 1390577984776
+    },
+    {
+      "type": "edit",
+      "id": "1309effff7fc453e",
+      "item": {
+        "type": "paragraph",
+        "id": "1309effff7fc453e",
+        "text": "Estimate gas money for a drive down the coast. [http://goo.gl/maps/WKpWt maps]"
+      },
+      "date": 1390578063408
+    },
+    {
+      "type": "edit",
+      "id": "1309effff7fc453e",
+      "item": {
+        "type": "paragraph",
+        "id": "1309effff7fc453e",
+        "text": "Estimate gas money for a drive from Vancouver to Portland and beyond. [http://goo.gl/maps/WKpWt maps]"
+      },
+      "date": 1390578133893
+    },
+    {
+      "type": "edit",
+      "id": "1309effff7fc453e",
+      "item": {
+        "type": "paragraph",
+        "id": "1309effff7fc453e",
+        "text": "Estimate gas money required for a drive from Vancouver to Portland and beyond. [http://goo.gl/maps/WKpWt maps]"
+      },
+      "date": 1390578148569
+    },
+    {
+      "type": "edit",
+      "id": "2b888e30424eb171",
+      "item": {
+        "type": "paragraph",
+        "id": "2b888e30424eb171",
+        "text": "The page load refresh is careful to sequentially evaluate Methods for the top to bottom, left to right flow of data holds. [https://github.com/fedwiki/wiki-client/blob/a54316b63b7412cf3fbf48f4009db501a16ee915/lib/refresh.coffee#L160-L167 github]"
+      },
+      "date": 1390578592922
+    },
+    {
+      "type": "edit",
+      "id": "6635b10a1e87dda1",
+      "item": {
+        "type": "paragraph",
+        "id": "6635b10a1e87dda1",
+        "text": "A Method looks above and to the left for other sources of variable bindings. These could be other Methods, Data sets or any item advertising radarData. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L389-L395 github]"
+      },
+      "date": 1390578687134
+    },
+    {
+      "type": "edit",
+      "id": "570e2f483e8a632e",
+      "item": {
+        "type": "paragraph",
+        "id": "570e2f483e8a632e",
+        "text": "A Method offers its output as radarData to be consumed by, say, Radar plugins. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L389-L395 github]"
+      },
+      "date": 1390578741514
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "2aa84399a8d4ed47",
+        "text": ""
+      },
+      "id": "2aa84399a8d4ed47",
+      "type": "add",
+      "after": "802e7e2469420895",
+      "date": 1390579108195
+    },
+    {
+      "type": "edit",
+      "id": "2aa84399a8d4ed47",
+      "item": {
+        "type": "paragraph",
+        "id": "2aa84399a8d4ed47",
+        "text": "See [[About Reduce Plugin]], [https://github.com/fedwiki/wiki-plugin-reduce/blob/1ac5bdb6ac69ded484935854c85c9aaaae80de25/client/reduce.coffee#L97-L120 github]"
+      },
+      "date": 1390579126215
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "<b>Expression.</b> A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. Variables are retrieved from local bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L194-L249 github]"
+      },
+      "date": 1390579399880
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "<b>Expression.</b> A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. Variables are retrieved from local bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L194-L248 github]"
+      },
+      "date": 1390579454907
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390579538642
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "<b>Interpreter.</b> The \"middle-school\" evaluator looks for operation keywords, line by line, with long labels for variable names. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L378 github]"
+      },
+      "date": 1390579617903
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC Cost / (km + miles)"
+      },
+      "date": 1390580185344
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC Money / (km + miles)"
+      },
+      "date": 1390580203633
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC Money / (from + to)"
+      },
+      "date": 1390580235718
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC dollars / (from + to)"
+      },
+      "date": 1390580280587
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC dollars / (from + to)\nCALC dollars / (to + from)"
+      },
+      "date": 1390580384690
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC dollars / (from + to)"
+      },
+      "date": 1390580399528
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC dollars / ( from + to )"
+      },
+      "date": 1390580484202
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC dollars / ( from + to )\nSHOW Trip Expense"
+      },
+      "date": 1390580637641
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)\nCALC dollars / ( from + to )"
+      },
+      "date": 1390580651638
+    },
+    {
+      "type": "edit",
+      "id": "6159595073489254",
+      "item": {
+        "type": "paragraph",
+        "id": "6159595073489254",
+        "text": "<b>Interface.</b> The emit and bind of the wiki interface as well as the module interface used by the tests. Prints extra if \"debug\" exists and is non-zero.[https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L380-L434 github]"
+      },
+      "date": 1390580849393
+    },
+    {
+      "type": "edit",
+      "id": "6159595073489254",
+      "item": {
+        "type": "paragraph",
+        "id": "6159595073489254",
+        "text": "<b>Interface.</b> The emit and bind of the wiki interface as well as the module interface used by the tests. Prints extra if \"debug\" variable exists and is non-zero. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L380-L434 github]"
+      },
+      "date": 1390580864835
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "<b>Interpreter.</b> The \"middle-school\" evaluator looks for operation keywords, line by line, with long labels for variable names. Extra code to recognize units.[https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L378 github]"
+      },
+      "date": 1390580993191
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "<b>Interpreter.</b> The \"middle-school\" evaluator looks for operation keywords, line by line, with long labels for variable names. Accumulates \"local\" bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L378 github]"
+      },
+      "date": 1390581070011
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "<b>Expression.</b> A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. All new. Variables are retrieved from local bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L194-L248 github]"
+      },
+      "date": 1390581123715
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. All new, except asValue which anticipated units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581167776
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. All new except asValue which anticipated units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581178801
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. All new except for asValue which anticipated units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581191001
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581273001
+    },
+    {
+      "type": "edit",
+      "id": "8b15372316d3ec9e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b15372316d3ec9e",
+        "text": "<b>Units.</b> Utility functions that extract values and units from objects, parse labels as units, and perform likely coercions.  All new except for asValue which anticipated units. This could reasonably be another module. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L139 github]"
+      },
+      "date": 1390581298064
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. The type of coercion depends on the operation, sum and product are different. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581426311
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. The type of coercion depends on the operation, sum vs. product. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581443243
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "<b>Calculation.</b> Functions to perform sums, products and related operations with attention to units. Only here do we know what kind of coercion will be applied. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1390581511567
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7c867ac6911b4ae1"
+      },
+      "id": "7c867ac6911b4ae1",
+      "type": "add",
+      "after": "6159595073489254",
+      "date": 1390582547336
+    },
+    {
+      "type": "edit",
+      "id": "7c867ac6911b4ae1",
+      "item": {
+        "type": "method",
+        "id": "7c867ac6911b4ae1",
+        "text": "CALC dollars / ( from + to )"
+      },
+      "date": 1390582580338
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "7c867ac6911b4ae1",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "7c867ac6911b4ae1",
+      "date": 1390582585825
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)"
+      },
+      "date": 1390582629118
+    },
+    {
+      "type": "edit",
+      "id": "7c867ac6911b4ae1",
+      "item": {
+        "type": "method",
+        "id": "7c867ac6911b4ae1",
+        "text": "Driving from Vancouver (km)\nDriving to S.F. (miles)\nCosts Money (dollars)\nCALC dollars / ( from + to \nSHOW Gas Money"
+      },
+      "date": 1390582695644
+    },
+    {
+      "type": "edit",
+      "id": "7c867ac6911b4ae1",
+      "item": {
+        "type": "method",
+        "id": "7c867ac6911b4ae1",
+        "text": "Driving from Vancouver (km)\nDriving to S.F. (miles)\nCosts Money (dollars)\nCALC dollars / ( from + to )\nSHOW Gas Money"
+      },
+      "date": 1390582702529
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "7c867ac6911b4ae1",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "7c867ac6911b4ae1",
+      "date": 1390582714151
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "7c867ac6911b4ae1",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "7c867ac6911b4ae1",
+      "date": 1390582876894
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "7c867ac6911b4ae1",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254"
+      ],
+      "id": "7c867ac6911b4ae1",
+      "date": 1390582884308
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)"
+      },
+      "date": 1390685763984
+    },
+    {
+      "type": "edit",
+      "id": "782a1ac832c7d6de",
+      "item": {
+        "type": "method",
+        "id": "782a1ac832c7d6de",
+        "text": "505 Driving from Vancouver (km)\n635 Driving to S.F. (miles)\nSUM Burns Gas (gallons)\nSUM Costs Money (dollars)"
+      },
+      "date": 1390685784389
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "67fb56c0f6a8cbce",
+        "text": ""
+      },
+      "id": "67fb56c0f6a8cbce",
+      "type": "add",
+      "after": "6159595073489254",
+      "date": 1390686131302
+    },
+    {
+      "type": "edit",
+      "id": "67fb56c0f6a8cbce",
+      "item": {
+        "type": "paragraph",
+        "id": "67fb56c0f6a8cbce",
+        "text": "<h3> Development"
+      },
+      "date": 1390686140751
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": ""
+      },
+      "id": "449c6a43c82e465f",
+      "type": "add",
+      "after": "67fb56c0f6a8cbce",
+      "date": 1390686141259
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "npm install wiki"
+      },
+      "date": 1390686199109
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "npm install wiki-node"
+      },
+      "date": 1390686234061
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b845de4ca333558f",
+        "text": ""
+      },
+      "id": "b845de4ca333558f",
+      "type": "add",
+      "after": "449c6a43c82e465f",
+      "date": 1390686234566
+    },
+    {
+      "type": "remove",
+      "id": "b845de4ca333558f",
+      "date": 1390686238382
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "Clone the Method repo and start grunt watching for new code."
+      },
+      "date": 1390686364706
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "Clone the Method repo. Start grunt doing builds."
+      },
+      "date": 1390686388600
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "24204bd2c81d3379"
+      },
+      "id": "24204bd2c81d3379",
+      "type": "add",
+      "after": "449c6a43c82e465f",
+      "date": 1390686392966
+    },
+    {
+      "type": "edit",
+      "id": "24204bd2c81d3379",
+      "item": {
+        "type": "code",
+        "id": "24204bd2c81d3379",
+        "text": "git clone ... wiki-plugin-method.git\ncd wiki-plugin-git\ngrunt watch\n\n\n"
+      },
+      "date": 1390686492850
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "Clone the Method repo. Start grunt doing builds. You will do your editing here."
+      },
+      "date": 1390686506411
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "Clone the Method repo. Start grunt doing builds. You will do your editing here. Watch for test results with each save."
+      },
+      "date": 1390686531139
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "Clone the Method repo. Start grunt doing builds. You will do your editing here. Watch for test results on save."
+      },
+      "date": 1390686546457
+    },
+    {
+      "type": "edit",
+      "id": "24204bd2c81d3379",
+      "item": {
+        "type": "code",
+        "id": "24204bd2c81d3379",
+        "text": "git clone ... wiki-plugin-method.git\ncd wiki-plugin-git\ngrunt watch"
+      },
+      "date": 1390686554797
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8ad4bfee4a5652c6"
+      },
+      "id": "8ad4bfee4a5652c6",
+      "type": "add",
+      "after": "24204bd2c81d3379",
+      "date": 1390686577182
+    },
+    {
+      "type": "edit",
+      "id": "8ad4bfee4a5652c6",
+      "item": {
+        "type": "paragraph",
+        "id": "8ad4bfee4a5652c6",
+        "text": "Clone a test version of the server. Link it to the plugin directory. Start the server."
+      },
+      "date": 1390686645014
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "77acc3d6d7613f0c",
+        "text": ""
+      },
+      "id": "77acc3d6d7613f0c",
+      "type": "add",
+      "after": "8ad4bfee4a5652c6",
+      "date": 1390686645521
+    },
+    {
+      "type": "remove",
+      "id": "77acc3d6d7613f0c",
+      "date": 1390686648191
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e967270c166e825e"
+      },
+      "id": "e967270c166e825e",
+      "type": "add",
+      "after": "8ad4bfee4a5652c6",
+      "date": 1390686651378
+    },
+    {
+      "type": "edit",
+      "id": "e967270c166e825e",
+      "item": {
+        "type": "method",
+        "id": "e967270c166e825e",
+        "text": "git clone ... wiki-node.git\ncd wiki-node\nnode bin/server.js -p 3030 &\nnpm link ../wiki-plugin-method"
+      },
+      "date": 1390686804052
+    },
+    {
+      "type": "remove",
+      "id": "e967270c166e825e",
+      "date": 1390686820618
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6c94ed8f754113a1"
+      },
+      "id": "6c94ed8f754113a1",
+      "type": "add",
+      "after": "8ad4bfee4a5652c6",
+      "date": 1390686823949
+    },
+    {
+      "type": "edit",
+      "id": "6c94ed8f754113a1",
+      "item": {
+        "type": "code",
+        "id": "6c94ed8f754113a1",
+        "text": "git clone ... wiki-node.git\ncd wiki-node\nnode bin/server.js -p 3030 &\nnpm link ../wiki-plugin-method"
+      },
+      "date": 1390686828589
+    },
+    {
+      "type": "edit",
+      "id": "6c94ed8f754113a1",
+      "item": {
+        "type": "code",
+        "id": "6c94ed8f754113a1",
+        "text": "git clone ... wiki-node.git\ncd wiki-node\nnpm link ../wiki-plugin-method\nnode bin/server.js -p 3030 &\n"
+      },
+      "date": 1390686851947
+    },
+    {
+      "type": "edit",
+      "id": "24204bd2c81d3379",
+      "item": {
+        "type": "code",
+        "id": "24204bd2c81d3379",
+        "text": "git clone ... wiki-plugin-method.git\ncd wiki-plugin-method\ngrunt watch"
+      },
+      "date": 1390686866770
+    },
+    {
+      "type": "edit",
+      "id": "8ad4bfee4a5652c6",
+      "item": {
+        "type": "paragraph",
+        "id": "8ad4bfee4a5652c6",
+        "text": "Clone a test version of the server. Link it to the plugin directory. Start the server. Browse. [http://localhost:3030 localhost]"
+      },
+      "date": 1390686920503
+    },
+    {
+      "type": "edit",
+      "id": "24204bd2c81d3379",
+      "item": {
+        "type": "code",
+        "id": "24204bd2c81d3379",
+        "text": "git clone ... wiki-plugin-method.git\ncd wiki-plugin-method\nnpm link\ngrunt watch"
+      },
+      "date": 1390686999551
+    },
+    {
+      "type": "edit",
+      "id": "449c6a43c82e465f",
+      "item": {
+        "type": "paragraph",
+        "id": "449c6a43c82e465f",
+        "text": "Clone the Method repo. Expose this location for linking. Start grunt doing builds. You will do your editing here. Watch for test results on save."
+      },
+      "date": 1390687036940
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6578067257139e79"
+      },
+      "id": "6578067257139e79",
+      "type": "add",
+      "after": "6c94ed8f754113a1",
+      "date": 1390687206889
+    },
+    {
+      "type": "edit",
+      "id": "6578067257139e79",
+      "item": {
+        "type": "paragraph",
+        "id": "6578067257139e79",
+        "text": "Write tests. Pass them. Commit to a branch. Push to github then issue pull request."
+      },
+      "date": 1390687423360
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "93ffd43274416147"
+      },
+      "id": "93ffd43274416147",
+      "type": "add",
+      "after": "6578067257139e79",
+      "date": 1390687426598
+    },
+    {
+      "type": "edit",
+      "id": "93ffd43274416147",
+      "item": {
+        "type": "code",
+        "id": "93ffd43274416147",
+        "text": "git branch you/feature\ngit checkout you/feature"
+      },
+      "date": 1390687477969
+    },
+    {
+      "type": "edit",
+      "id": "93ffd43274416147",
+      "item": {
+        "type": "code",
+        "id": "93ffd43274416147",
+        "text": "git checkout -b you/feature\ngit commit -a -m \"your feature explained\"\ngit push origin you/feature"
+      },
+      "date": 1390687595089
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3e6eff675af6317f"
+      },
+      "id": "3e6eff675af6317f",
+      "type": "add",
+      "after": "93ffd43274416147",
+      "date": 1390687683072
+    },
+    {
+      "type": "edit",
+      "id": "3e6eff675af6317f",
+      "item": {
+        "type": "paragraph",
+        "id": "3e6eff675af6317f",
+        "text": "We will merge your feature. Test it. Bump the version. Publish. Update the repo."
+      },
+      "date": 1390687903731
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e0e5da4e5107d5ac",
+        "text": ""
+      },
+      "id": "e0e5da4e5107d5ac",
+      "type": "add",
+      "after": "3e6eff675af6317f",
+      "date": 1390687904245
+    },
+    {
+      "type": "edit",
+      "id": "e0e5da4e5107d5ac",
+      "item": {
+        "type": "paragraph",
+        "id": "e0e5da4e5107d5ac",
+        "text": "cd wiki-plugin-method"
+      },
+      "date": 1390687938810
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0ab75a261bf1964f",
+        "text": ""
+      },
+      "id": "0ab75a261bf1964f",
+      "type": "add",
+      "after": "e0e5da4e5107d5ac",
+      "date": 1390687939317
+    },
+    {
+      "type": "remove",
+      "id": "0ab75a261bf1964f",
+      "date": 1390687945419
+    },
+    {
+      "type": "remove",
+      "id": "e0e5da4e5107d5ac",
+      "date": 1390687950688
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7c849e15199bd029"
+      },
+      "id": "7c849e15199bd029",
+      "type": "add",
+      "after": "3e6eff675af6317f",
+      "date": 1390687953045
+    },
+    {
+      "type": "edit",
+      "id": "7c849e15199bd029",
+      "item": {
+        "type": "code",
+        "id": "7c849e15199bd029",
+        "text": "cd wiki-plugin-method\ngit pull\ngrunt test\nnpm version patch\nnpm plublish\ngit push --tags"
+      },
+      "date": 1390688020318
+    },
+    {
+      "type": "edit",
+      "id": "3e6eff675af6317f",
+      "item": {
+        "type": "paragraph",
+        "id": "3e6eff675af6317f",
+        "text": "We will merge your feature. Test it. Bump the version. Publish. Update the repo tags."
+      },
+      "date": 1390688027965
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "548d0dc1f3a3680e",
+        "text": ""
+      },
+      "id": "548d0dc1f3a3680e",
+      "type": "add",
+      "after": "67fb56c0f6a8cbce",
+      "date": 1390688055285
+    },
+    {
+      "type": "edit",
+      "id": "548d0dc1f3a3680e",
+      "item": {
+        "type": "paragraph",
+        "id": "548d0dc1f3a3680e",
+        "text": "We will use at least two repos during development: one to build the plugin, the other to serve our experimental builds."
+      },
+      "date": 1390688377268
+    },
+    {
+      "type": "edit",
+      "id": "548d0dc1f3a3680e",
+      "item": {
+        "type": "paragraph",
+        "id": "548d0dc1f3a3680e",
+        "text": "We will use at least two repos during development: one to build the plugin, the other to serve our build plugin."
+      },
+      "date": 1390688395131
+    },
+    {
+      "type": "edit",
+      "id": "24204bd2c81d3379",
+      "item": {
+        "type": "code",
+        "id": "24204bd2c81d3379",
+        "text": "git clone ... wiki-plugin-method.git\ncd wiki-plugin-method\nnpm install\nnpm link\ngrunt watch"
+      },
+      "date": 1390759276096
+    },
+    {
+      "type": "edit",
+      "id": "6578067257139e79",
+      "item": {
+        "type": "paragraph",
+        "id": "6578067257139e79",
+        "text": "Hard link plugin documentation to your server pages."
+      },
+      "date": 1390773356295
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "56062cb3bfce865e",
+        "text": "Write tests. Pass them. Commit to a branch. Push to github then issue pull request."
+      },
+      "id": "56062cb3bfce865e",
+      "type": "add",
+      "after": "6578067257139e79",
+      "date": 1390773356808
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "04b493635814b5fb"
+      },
+      "id": "04b493635814b5fb",
+      "type": "add",
+      "after": "7c849e15199bd029",
+      "date": 1390773363338
+    },
+    {
+      "type": "edit",
+      "id": "04b493635814b5fb",
+      "item": {
+        "type": "code",
+        "id": "04b493635814b5fb",
+        "text": "ln pages/about-method-plugin ~/.wiki/pages"
+      },
+      "date": 1390773416272
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "7c867ac6911b4ae1",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254",
+        "67fb56c0f6a8cbce",
+        "548d0dc1f3a3680e",
+        "449c6a43c82e465f",
+        "24204bd2c81d3379",
+        "8ad4bfee4a5652c6",
+        "6c94ed8f754113a1",
+        "6578067257139e79",
+        "04b493635814b5fb",
+        "56062cb3bfce865e",
+        "93ffd43274416147",
+        "3e6eff675af6317f",
+        "7c849e15199bd029"
+      ],
+      "id": "04b493635814b5fb",
+      "date": 1390773422964
+    },
+    {
+      "type": "edit",
+      "id": "56062cb3bfce865e",
+      "item": {
+        "type": "paragraph",
+        "id": "56062cb3bfce865e",
+        "text": "Write tests. Pass them. Revise documentation. Commit to a branch. Push to github then issue pull request."
+      },
+      "date": 1390773453624
+    },
+    {
+      "type": "edit",
+      "id": "04b493635814b5fb",
+      "item": {
+        "type": "code",
+        "id": "04b493635814b5fb",
+        "text": "cd wiki-plugin-method\nln pages/about-method-plugin ~/.wiki/pages"
+      },
+      "date": 1390773517473
+    },
+    {
+      "type": "edit",
+      "id": "548d0dc1f3a3680e",
+      "item": {
+        "type": "paragraph",
+        "id": "548d0dc1f3a3680e",
+        "text": "We will use at least two repos during development: one to build the plugin, the other to serve the built plugin."
+      },
+      "date": 1390773793461
+    },
+    {
+      "type": "edit",
+      "id": "56062cb3bfce865e",
+      "item": {
+        "type": "paragraph",
+        "id": "56062cb3bfce865e",
+        "text": "Write tests. Pass them. Revise documentation. Commit to a branch. Push to github and issue pull request."
+      },
+      "date": 1390773836708
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5359c1955afec33c",
+        "text": ""
+      },
+      "id": "5359c1955afec33c",
+      "type": "add",
+      "after": "e591e7d6fcfa467f",
+      "date": 1390773943935
+    },
+    {
+      "type": "edit",
+      "id": "5359c1955afec33c",
+      "item": {
+        "type": "paragraph",
+        "id": "5359c1955afec33c",
+        "text": "See [[About Method Plugin]]"
+      },
+      "date": 1390773957057
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "5359c1955afec33c",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "cf419d60a86a0c03",
+        "a53e9d1ed01d4188",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "7c867ac6911b4ae1",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254",
+        "67fb56c0f6a8cbce",
+        "548d0dc1f3a3680e",
+        "449c6a43c82e465f",
+        "24204bd2c81d3379",
+        "8ad4bfee4a5652c6",
+        "6c94ed8f754113a1",
+        "6578067257139e79",
+        "04b493635814b5fb",
+        "56062cb3bfce865e",
+        "93ffd43274416147",
+        "3e6eff675af6317f",
+        "7c849e15199bd029"
+      ],
+      "id": "5359c1955afec33c",
+      "date": 1390773961932
+    },
+    {
+      "type": "edit",
+      "id": "5359c1955afec33c",
+      "item": {
+        "type": "paragraph",
+        "id": "5359c1955afec33c",
+        "text": "See [[About Method Plugin]]."
+      },
+      "date": 1390773991879
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "5359c1955afec33c",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "a53e9d1ed01d4188",
+        "cf419d60a86a0c03",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "7c867ac6911b4ae1",
+        "fe17a4449d38fe9a",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254",
+        "67fb56c0f6a8cbce",
+        "548d0dc1f3a3680e",
+        "449c6a43c82e465f",
+        "24204bd2c81d3379",
+        "8ad4bfee4a5652c6",
+        "6c94ed8f754113a1",
+        "6578067257139e79",
+        "04b493635814b5fb",
+        "56062cb3bfce865e",
+        "93ffd43274416147",
+        "3e6eff675af6317f",
+        "7c849e15199bd029"
+      ],
+      "id": "a53e9d1ed01d4188",
+      "date": 1390970403432
+    },
+    {
+      "type": "edit",
+      "id": "9c18f158f84af056",
+      "item": {
+        "type": "paragraph",
+        "id": "9c18f158f84af056",
+        "text": "I wrote Mocha tests for calculations that were already known to work. I ran these through the runtests.html interface available on the Ruby/Sinatra server implementation. I ran these from localhost using Mocha's grep option to focus on Method. [http://localhost:1111/runtests.html?grep=method localhost]"
+      },
+      "date": 1391302412564
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "5359c1955afec33c",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "a53e9d1ed01d4188",
+        "cf419d60a86a0c03",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "7c867ac6911b4ae1",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254",
+        "67fb56c0f6a8cbce",
+        "548d0dc1f3a3680e",
+        "449c6a43c82e465f",
+        "24204bd2c81d3379",
+        "8ad4bfee4a5652c6",
+        "6c94ed8f754113a1",
+        "6578067257139e79",
+        "04b493635814b5fb",
+        "56062cb3bfce865e",
+        "93ffd43274416147",
+        "3e6eff675af6317f",
+        "7c849e15199bd029"
+      ],
+      "id": "7c867ac6911b4ae1",
+      "date": 1391933956389
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "1ab617507b09bd3c",
+        "text": ""
+      },
+      "id": "1ab617507b09bd3c",
+      "type": "add",
+      "after": "1309effff7fc453e",
+      "date": 1395612197627
+    },
+    {
+      "type": "edit",
+      "id": "1ab617507b09bd3c",
+      "item": {
+        "type": "paragraph",
+        "id": "1ab617507b09bd3c",
+        "text": "See [[Control Loop Methods]]"
+      },
+      "date": 1395612217934
+    },
+    {
+      "type": "edit",
+      "id": "1ab617507b09bd3c",
+      "item": {
+        "type": "paragraph",
+        "id": "1ab617507b09bd3c",
+        "text": "See [[Method Control Loops]] for more evolving specifications."
+      },
+      "date": 1395612269357
+    },
+    {
+      "type": "move",
+      "order": [
+        "93bd372715f31c9a",
+        "e591e7d6fcfa467f",
+        "aaef6ab7ae8a028a",
+        "5359c1955afec33c",
+        "e6b2e07d9a42e879",
+        "6635b10a1e87dda1",
+        "570e2f483e8a632e",
+        "802e7e2469420895",
+        "2aa84399a8d4ed47",
+        "2b888e30424eb171",
+        "d47f6b10590ea97a",
+        "fe21004eb5a0d507",
+        "0e4ff6ca8ba2eb41",
+        "a53e9d1ed01d4188",
+        "cf419d60a86a0c03",
+        "9c18f158f84af056",
+        "aa091b280c6047b9",
+        "34a03307fc9384e8",
+        "1309effff7fc453e",
+        "782a1ac832c7d6de",
+        "1ab617507b09bd3c",
+        "4cb9a4f95b30ea82",
+        "8b15372316d3ec9e",
+        "fe17a4449d38fe9a",
+        "7c867ac6911b4ae1",
+        "4f08665880653adf",
+        "ad532f2f9e34da6b",
+        "6159595073489254",
+        "67fb56c0f6a8cbce",
+        "548d0dc1f3a3680e",
+        "449c6a43c82e465f",
+        "24204bd2c81d3379",
+        "8ad4bfee4a5652c6",
+        "6c94ed8f754113a1",
+        "6578067257139e79",
+        "04b493635814b5fb",
+        "56062cb3bfce865e",
+        "93ffd43274416147",
+        "3e6eff675af6317f",
+        "7c849e15199bd029"
+      ],
+      "id": "1ab617507b09bd3c",
+      "date": 1395612274898
+    },
+    {
+      "type": "edit",
+      "id": "1ab617507b09bd3c",
+      "item": {
+        "type": "paragraph",
+        "id": "1ab617507b09bd3c",
+        "text": "See [[Method Control Loops]] for more emerging specifications."
+      },
+      "date": 1395612320939
+    },
+    {
+      "type": "edit",
+      "id": "1ab617507b09bd3c",
+      "item": {
+        "type": "paragraph",
+        "id": "1ab617507b09bd3c",
+        "text": "See [[Method Control Loops]] for more emerging features."
+      },
+      "date": 1395612338843
+    },
+    {
+      "type": "edit",
+      "id": "e6b2e07d9a42e879",
+      "item": {
+        "type": "html",
+        "id": "e6b2e07d9a42e879",
+        "text": "<h3> Context"
+      },
+      "date": 1418517402425
+    },
+    {
+      "type": "edit",
+      "id": "d47f6b10590ea97a",
+      "item": {
+        "type": "html",
+        "id": "d47f6b10590ea97a",
+        "text": "<h3> Specification"
+      },
+      "date": 1418517409083
+    },
+    {
+      "type": "edit",
+      "id": "4cb9a4f95b30ea82",
+      "item": {
+        "type": "html",
+        "id": "4cb9a4f95b30ea82",
+        "text": "<h3> Code"
+      },
+      "date": 1418517417766
+    },
+    {
+      "type": "edit",
+      "id": "8b15372316d3ec9e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b15372316d3ec9e",
+        "text": "Units. Utility functions that extract values and units from objects, parse labels as units, and perform likely coercions.  All new except for asValue which anticipated units. This could reasonably be another module. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L2-L139 github]"
+      },
+      "date": 1418517446465
+    },
+    {
+      "type": "edit",
+      "id": "fe17a4449d38fe9a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe17a4449d38fe9a",
+        "text": "Calculation. Functions to perform sums, products and related operations with attention to units. Only here do we know what kind of coercion will be applied. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L141-L193 github]"
+      },
+      "date": 1418517456093
+    },
+    {
+      "type": "edit",
+      "id": "4f08665880653adf",
+      "item": {
+        "type": "paragraph",
+        "id": "4f08665880653adf",
+        "text": "Expression. A lexer/parser/evaluator that calls calculation functions as specified by the expression grammar. All new. Variables are retrieved from local bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L194-L248 github]"
+      },
+      "date": 1418517466362
+    },
+    {
+      "type": "edit",
+      "id": "ad532f2f9e34da6b",
+      "item": {
+        "type": "paragraph",
+        "id": "ad532f2f9e34da6b",
+        "text": "Interpreter. The \"middle-school\" evaluator looks for operation keywords, line by line, with long labels for variable names. Accumulates \"local\" bindings. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L249-L378 github]"
+      },
+      "date": 1418517476680
+    },
+    {
+      "type": "edit",
+      "id": "6159595073489254",
+      "item": {
+        "type": "paragraph",
+        "id": "6159595073489254",
+        "text": "Interface. The emit and bind of the wiki interface as well as the module interface used by the tests. Prints extra if \"debug\" variable exists and is non-zero. [https://github.com/fedwiki/wiki-plugin-method/blob/fec681fac1518507f334be334de76984bf974510/client/method.coffee#L380-L434 github]"
+      },
+      "date": 1418517488074
+    },
+    {
+      "type": "edit",
+      "id": "67fb56c0f6a8cbce",
+      "item": {
+        "type": "html",
+        "id": "67fb56c0f6a8cbce",
+        "text": "<h3> Development"
+      },
+      "date": 1418517491492
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1419702336589
+    },
+    {
+      "type": "fork",
+      "site": "forage.ward.fed.wiki.org",
+      "date": 1434726307706
+    }
+  ]
+}

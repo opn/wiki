@@ -1,0 +1,108 @@
+{
+  "title": "Voting Contract",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "43c9318e61b5b499",
+      "text": "The following contract is quite complex, but showcases a lot of Solidity’s features. It implements a voting contract. Of course, the main problems of electronic voting is how to assign voting rights to the correct persons and how to prevent manipulation - [https://ethereum.github.io/solidity//docs/voting/ github.io]"
+    },
+    {
+      "type": "code",
+      "id": "f08883c5aa69640c",
+      "text": "/// @title Voting with delegation.\ncontract Ballot\n{\n    // This declares a new complex type which will\n    // be used for variables later.\n    // It will represent a single voter.\n    struct Voter\n    {\n        uint weight; // weight is accumulated by delegation\n        bool voted;  // if true, that person already voted\n        address delegate; // person delegated to\n        uint vote;   // index of the voted proposal\n    }\n    // This is a type for a single proposal.\n    struct Proposal\n    {\n        bytes32 name;   // short name (up to 32 bytes)\n        uint voteCount; // number of accumulated votes\n    }\n\n    address public chairperson;\n    // This declares a state variable that\n    // stores a `Voter` struct for each possible address.\n    mapping(address => Voter) public voters;\n    // A dynamically-sized array of `Proposal` structs.\n    Proposal[] public proposals;\n\n    /// Create a new ballot to choose one of `proposalNames`.\n    function Ballot(bytes32[] proposalNames)\n    {\n        chairperson = msg.sender;\n        voters[chairperson].weight = 1;\n        // For each of the provided proposal names,\n        // create a new proposal object and add it\n        // to the end of the array.\n        for (uint i = 0; i < proposalNames.length; i++)\n            // `Proposal({...})` creates a temporary\n            // Proposal object and `proposal.push(...)`\n            // appends it to the end of `proposals`.\n            proposals.push(Proposal({\n                name: proposalNames[i],\n                voteCount: 0\n            }));\n    }\n\n    // Give `voter` the right to vote on this ballot.\n    // May only be called by `chairperson`.\n    function giveRightToVote(address voter)\n    {\n        if (msg.sender != chairperson || voters[voter].voted)\n            // `throw` terminates and reverts all changes to\n            // the state and to Ether balances. It is often\n            // a good idea to use this if functions are\n            // called incorrectly. But watch out, this\n            // will also consume all provided gas.\n            throw;\n        voters[voter].weight = 1;\n    }\n\n    /// Delegate your vote to the voter `to`.\n    function delegate(address to)\n    {\n        // assigns reference\n        Voter sender = voters[msg.sender];\n        if (sender.voted)\n            throw;\n        // Forward the delegation as long as\n        // `to` also delegated.\n        while (voters[to].delegate != address(0) &&\n               voters[to].delegate != msg.sender)\n            to = voters[to].delegate;\n        // We found a loop in the delegation, not allowed.\n        if (to == msg.sender)\n            throw;\n        // Since `sender` is a reference, this\n        // modifies `voters[msg.sender].voted`\n        sender.voted = true;\n        sender.delegate = to;\n        Voter delegate = voters[to];\n        if (delegate.voted)\n            // If the delegate already voted,\n            // directly add to the number of votes \n            proposals[delegate.vote].voteCount += sender.weight;\n        else\n            // If the delegate did not vote yet,\n            // add to her weight.\n            delegate.weight += sender.weight;\n    }\n\n    /// Give your vote (including votes delegated to you)\n    /// to proposal `proposals[proposal].name`.\n    function vote(uint proposal)\n    {\n        Voter sender = voters[msg.sender];\n        if (sender.voted) throw;\n        sender.voted = true;\n        sender.vote = proposal;\n        // If `proposal` is out of the range of the array,\n        // this will throw automatically and revert all\n        // changes.\n        proposals[proposal].voteCount += sender.weight;\n    }\n\n    /// @dev Computes the winning proposal taking all\n    /// previous votes into account.\n    function winningProposal() constant\n            returns (uint winningProposal)\n    {\n        uint winningVoteCount = 0;\n        for (uint p = 0; p < proposals.length; p++)\n        {\n            if (proposals[p].voteCount > winningVoteCount)\n            {\n                winningVoteCount = proposals[p].voteCount;\n                winningProposal = p;\n            }\n        }\n    }\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Voting Contract",
+        "story": []
+      },
+      "date": 1448992393594
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "49acb3f35513951b"
+      },
+      "id": "49acb3f35513951b",
+      "type": "add",
+      "date": 1448992394645
+    },
+    {
+      "type": "remove",
+      "id": "49acb3f35513951b",
+      "date": 1448992402358
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "43c9318e61b5b499"
+      },
+      "id": "43c9318e61b5b499",
+      "type": "add",
+      "date": 1448992419900
+    },
+    {
+      "type": "edit",
+      "id": "43c9318e61b5b499",
+      "item": {
+        "type": "paragraph",
+        "id": "43c9318e61b5b499",
+        "text": "The following contract is quite complex, but showcases a lot of Solidity’s features. It implements a voting contract. Of course, the main problems of electronic voting is how to assign voting rights to the correct persons and how to prevent manipulation -"
+      },
+      "date": 1448992424721
+    },
+    {
+      "type": "edit",
+      "id": "43c9318e61b5b499",
+      "item": {
+        "type": "paragraph",
+        "id": "43c9318e61b5b499",
+        "text": "The following contract is quite complex, but showcases a lot of Solidity’s features. It implements a voting contract. Of course, the main problems of electronic voting is how to assign voting rights to the correct persons and how to prevent manipulation - [https://ethereum.github.io/solidity//docs/voting/ github.io]"
+      },
+      "date": 1448992440784
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "492b1ac0c48d05a4"
+      },
+      "id": "492b1ac0c48d05a4",
+      "type": "add",
+      "after": "43c9318e61b5b499",
+      "date": 1448992442344
+    },
+    {
+      "type": "remove",
+      "id": "492b1ac0c48d05a4",
+      "date": 1448992445553
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f08883c5aa69640c"
+      },
+      "id": "f08883c5aa69640c",
+      "type": "add",
+      "after": "43c9318e61b5b499",
+      "date": 1448992457533
+    },
+    {
+      "type": "edit",
+      "id": "f08883c5aa69640c",
+      "item": {
+        "type": "code",
+        "id": "f08883c5aa69640c",
+        "text": "/// @title Voting with delegation.\ncontract Ballot\n{\n    // This declares a new complex type which will\n    // be used for variables later.\n    // It will represent a single voter.\n    struct Voter\n    {\n        uint weight; // weight is accumulated by delegation\n        bool voted;  // if true, that person already voted\n        address delegate; // person delegated to\n        uint vote;   // index of the voted proposal\n    }\n    // This is a type for a single proposal.\n    struct Proposal\n    {\n        bytes32 name;   // short name (up to 32 bytes)\n        uint voteCount; // number of accumulated votes\n    }\n\n    address public chairperson;\n    // This declares a state variable that\n    // stores a `Voter` struct for each possible address.\n    mapping(address => Voter) public voters;\n    // A dynamically-sized array of `Proposal` structs.\n    Proposal[] public proposals;\n\n    /// Create a new ballot to choose one of `proposalNames`.\n    function Ballot(bytes32[] proposalNames)\n    {\n        chairperson = msg.sender;\n        voters[chairperson].weight = 1;\n        // For each of the provided proposal names,\n        // create a new proposal object and add it\n        // to the end of the array.\n        for (uint i = 0; i < proposalNames.length; i++)\n            // `Proposal({...})` creates a temporary\n            // Proposal object and `proposal.push(...)`\n            // appends it to the end of `proposals`.\n            proposals.push(Proposal({\n                name: proposalNames[i],\n                voteCount: 0\n            }));\n    }\n\n    // Give `voter` the right to vote on this ballot.\n    // May only be called by `chairperson`.\n    function giveRightToVote(address voter)\n    {\n        if (msg.sender != chairperson || voters[voter].voted)\n            // `throw` terminates and reverts all changes to\n            // the state and to Ether balances. It is often\n            // a good idea to use this if functions are\n            // called incorrectly. But watch out, this\n            // will also consume all provided gas.\n            throw;\n        voters[voter].weight = 1;\n    }\n\n    /// Delegate your vote to the voter `to`.\n    function delegate(address to)\n    {\n        // assigns reference\n        Voter sender = voters[msg.sender];\n        if (sender.voted)\n            throw;\n        // Forward the delegation as long as\n        // `to` also delegated.\n        while (voters[to].delegate != address(0) &&\n               voters[to].delegate != msg.sender)\n            to = voters[to].delegate;\n        // We found a loop in the delegation, not allowed.\n        if (to == msg.sender)\n            throw;\n        // Since `sender` is a reference, this\n        // modifies `voters[msg.sender].voted`\n        sender.voted = true;\n        sender.delegate = to;\n        Voter delegate = voters[to];\n        if (delegate.voted)\n            // If the delegate already voted,\n            // directly add to the number of votes \n            proposals[delegate.vote].voteCount += sender.weight;\n        else\n            // If the delegate did not vote yet,\n            // add to her weight.\n            delegate.weight += sender.weight;\n    }\n\n    /// Give your vote (including votes delegated to you)\n    /// to proposal `proposals[proposal].name`.\n    function vote(uint proposal)\n    {\n        Voter sender = voters[msg.sender];\n        if (sender.voted) throw;\n        sender.voted = true;\n        sender.vote = proposal;\n        // If `proposal` is out of the range of the array,\n        // this will throw automatically and revert all\n        // changes.\n        proposals[proposal].voteCount += sender.weight;\n    }\n\n    /// @dev Computes the winning proposal taking all\n    /// previous votes into account.\n    function winningProposal() constant\n            returns (uint winningProposal)\n    {\n        uint winningVoteCount = 0;\n        for (uint p = 0; p < proposals.length; p++)\n        {\n            if (proposals[p].voteCount > winningVoteCount)\n            {\n                winningVoteCount = proposals[p].voteCount;\n                winningProposal = p;\n            }\n        }\n    }\n}"
+      },
+      "date": 1448992461096
+    },
+    {
+      "type": "fork",
+      "site": "ksenya.cryptoacademy.org",
+      "date": 1450794724204
+    }
+  ]
+}

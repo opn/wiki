@@ -1,0 +1,479 @@
+{
+  "title": "Livecode .htaccess",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "5d89b030f6ae4a8e",
+      "text": "Here we look at some [[.htaccess]] file examples for Livecode server."
+    },
+    {
+      "type": "paragraph",
+      "id": "a192bc0c54dec40e",
+      "text": "By default, the index.lc file will be included in your URLs:"
+    },
+    {
+      "type": "code",
+      "id": "c2c58a48321b0adf",
+      "text": "example.com/index.lc/news/article/my_article"
+    },
+    {
+      "type": "paragraph",
+      "id": "88e6dd107c470e54",
+      "text": "You can easily remove this file by using a .htaccess file with some simple rules. Here is an example of such a file, using the \"negative\" method in which everything is redirected except the specified items - [https://revigniter.com/userGuide/general/urls.html revigniter.com] \n\n"
+    },
+    {
+      "type": "code",
+      "id": "69d63e2c3fdd428c",
+      "text": "<IfModule mod_rewrite.c>\n\tRewriteEngine on\n\tRewriteBase /\n\tRewriteCond %{REQUEST_FILENAME} !-f\n\tRewriteCond %{REQUEST_FILENAME} !-d\n\tRewriteCond $1 !^(index\\.lc|image|img|assets|robots\\.txt|css|js)\n\tRewriteRule ^(.*)$ index.lc?/$1 [L]\n</IfModule>"
+    },
+    {
+      "type": "paragraph",
+      "id": "512ee4dc2c6f1ad5",
+      "text": "In the above example, any HTTP request other than those for index.lc, images, assets, robots.txt, css and js is treated as a request for your index.lc file."
+    },
+    {
+      "type": "paragraph",
+      "id": "c33d6be60cf64c62",
+      "text": "If your default controller is not loaded when the URI contains no data please read about URIs in your application/config/config.lc file and choose another protocol to retrieve the URI string."
+    },
+    {
+      "type": "html",
+      "id": "f20ea32055bb5b03",
+      "text": "<b>Note:</b> Adapt RewriteBase to the path to revIgniter. Typically this is /. If you place revIgniter into a subfolder, RewriteBase would be something like:"
+    },
+    {
+      "type": "code",
+      "id": "4169b0ec965f864c",
+      "text": "/yourSubfolder/yourOtherSubfolder/"
+    },
+    {
+      "type": "html",
+      "id": "035935d64a57bb94",
+      "text": "<b>Note:</b> To enable the rewrite engine for .htaccess files you need to set \"RewriteEngine On\" and \"Options FollowSymLinks\" must be enabled in the Apache server configuration (httpd.conf) file. See [http://httpd.apache.org/docs/current/mod/mod_rewrite.html apache.org]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "577f13b30d3ab704",
+      "text": "# Multiple Application servers\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "db32a7a62bdf44cc",
+      "text": "If you would like to share a common revIgniter installation to manage several different applications simply put all of the directories located inside your application folder into their own sub-folder - [https://revigniter.com/userGuide/general/managing_apps.html revigniter.com]\n\nFor example, let's say you want to create two applications, \"foo\" and \"bar\". You will structure your application folder like this:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "a5145a4ad017050d",
+      "text": "To exclude index.lc and bar.lc from your URLs you need to modify the mod_rewrite rules explained in revIgniter URLs like this:\n\n<IfModule mod_rewrite.c>\nRewriteEngine on\nRewriteBase /\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteCond $1 !^(index\\.lc|bar\\.lc|image|img|assets|robots\\.txt|css|js|bar)\nRewriteRule ^(.*)$ index.lc?/$1 [L]\n\nRewriteCond $1 !^(bar\\.lc|index\\.lc|image|img|assets|robots\\.txt|css|js)\nRewriteRule ^bar/?$ bar.lc?/ [L]\nRewriteRule ^(bar)/(.*)$ bar.lc?/$2 [L]\n</IfModule>"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Livecode .htaccess",
+        "story": []
+      },
+      "date": 1497914233835
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5d89b030f6ae4a8e"
+      },
+      "id": "5d89b030f6ae4a8e",
+      "type": "add",
+      "date": 1497914235125
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "69d63e2c3fdd428c"
+      },
+      "id": "69d63e2c3fdd428c",
+      "type": "add",
+      "after": "5d89b030f6ae4a8e",
+      "date": 1497914236247
+    },
+    {
+      "type": "edit",
+      "id": "69d63e2c3fdd428c",
+      "item": {
+        "type": "code",
+        "id": "69d63e2c3fdd428c",
+        "text": "<IfModule mod_rewrite.c>\n\tRewriteEngine on\n\tRewriteBase /\n\tRewriteCond %{REQUEST_FILENAME} !-f\n\tRewriteCond %{REQUEST_FILENAME} !-d\n\tRewriteCond $1 !^(index\\.lc|image|img|assets|robots\\.txt|css|js)\n\tRewriteRule ^(.*)$ index.lc?/$1 [L]\n</IfModule>"
+      },
+      "date": 1497914238523
+    },
+    {
+      "type": "edit",
+      "id": "5d89b030f6ae4a8e",
+      "item": {
+        "type": "paragraph",
+        "id": "5d89b030f6ae4a8e",
+        "text": "Here we look at some [[.htaccess]] file examples for Livecode server."
+      },
+      "date": 1497914269787
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a192bc0c54dec40e"
+      },
+      "id": "a192bc0c54dec40e",
+      "type": "add",
+      "after": "69d63e2c3fdd428c",
+      "date": 1497914271794
+    },
+    {
+      "type": "move",
+      "order": [
+        "5d89b030f6ae4a8e",
+        "a192bc0c54dec40e",
+        "69d63e2c3fdd428c"
+      ],
+      "id": "a192bc0c54dec40e",
+      "date": 1497914273066
+    },
+    {
+      "type": "edit",
+      "id": "a192bc0c54dec40e",
+      "item": {
+        "type": "paragraph",
+        "id": "a192bc0c54dec40e",
+        "text": "By default, the index.lc file will be included in your URLs:\n\nexample.com/index.lc/news/article/my_article\nYou can easily remove this file by using a .htaccess file with some simple rules. Here is an example of such a file, using the \"negative\" method in which everything is redirected except the specified items:\n\n"
+      },
+      "date": 1497914292917
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "512ee4dc2c6f1ad5"
+      },
+      "id": "512ee4dc2c6f1ad5",
+      "type": "add",
+      "after": "69d63e2c3fdd428c",
+      "date": 1497914358371
+    },
+    {
+      "type": "edit",
+      "id": "512ee4dc2c6f1ad5",
+      "item": {
+        "type": "paragraph",
+        "id": "512ee4dc2c6f1ad5",
+        "text": "In the above example, any HTTP request other than those for index.lc, images, assets, robots.txt, css and js is treated as a request for your index.lc file.\n\nIf your default controller is not loaded when the URI contains no data please read about URIs in your application/config/config.lc file and choose another protocol to retrieve the URI string.\n\nNote: Adapt RewriteBase to the path to revIgniter. Typically this is /. If you place revIgniter into a subfolder, RewriteBase would be something like /yourSubfolder/yourOtherSubfolder/.\nNote: To enable the rewrite engine for .htaccess files you need to set \"RewriteEngine On\" and \"Options FollowSymLinks\" must be enabled in the Apache server configuration (httpd.conf) file. See http://httpd.apache.org/docs/current/mod/mod_rewrite.html\n"
+      },
+      "date": 1497914362379
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "577f13b30d3ab704"
+      },
+      "id": "577f13b30d3ab704",
+      "type": "add",
+      "after": "512ee4dc2c6f1ad5",
+      "date": 1497914390301
+    },
+    {
+      "type": "edit",
+      "id": "577f13b30d3ab704",
+      "item": {
+        "type": "markdown",
+        "id": "577f13b30d3ab704",
+        "text": "# Multiple Application servers\n"
+      },
+      "date": 1497914404309
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a5145a4ad017050d"
+      },
+      "id": "a5145a4ad017050d",
+      "type": "add",
+      "after": "577f13b30d3ab704",
+      "date": 1497914405876
+    },
+    {
+      "type": "edit",
+      "id": "a5145a4ad017050d",
+      "item": {
+        "type": "code",
+        "id": "a5145a4ad017050d",
+        "text": "To exclude index.lc and bar.lc from your URLs you need to modify the mod_rewrite rules explained in revIgniter URLs like this:\n\n<IfModule mod_rewrite.c>\nRewriteEngine on\nRewriteBase /\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteCond $1 !^(index\\.lc|bar\\.lc|image|img|assets|robots\\.txt|css|js|bar)\nRewriteRule ^(.*)$ index.lc?/$1 [L]\n\nRewriteCond $1 !^(bar\\.lc|index\\.lc|image|img|assets|robots\\.txt|css|js)\nRewriteRule ^bar/?$ bar.lc?/ [L]\nRewriteRule ^(bar)/(.*)$ bar.lc?/$2 [L]\n</IfModule>"
+      },
+      "date": 1497914407696
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "db32a7a62bdf44cc"
+      },
+      "id": "db32a7a62bdf44cc",
+      "type": "add",
+      "after": "a5145a4ad017050d",
+      "date": 1497914411062
+    },
+    {
+      "type": "move",
+      "order": [
+        "5d89b030f6ae4a8e",
+        "a192bc0c54dec40e",
+        "69d63e2c3fdd428c",
+        "512ee4dc2c6f1ad5",
+        "577f13b30d3ab704",
+        "db32a7a62bdf44cc",
+        "a5145a4ad017050d"
+      ],
+      "id": "db32a7a62bdf44cc",
+      "date": 1497914412342
+    },
+    {
+      "type": "edit",
+      "id": "db32a7a62bdf44cc",
+      "item": {
+        "type": "paragraph",
+        "id": "db32a7a62bdf44cc",
+        "text": "If you would like to share a common revIgniter installation to manage several different applications simply put all of the directories located inside your application folder into their own sub-folder.\n\nFor example, let's say you want to create two applications, \"foo\" and \"bar\". You will structure your application folder like this:\n\n"
+      },
+      "date": 1497914435223
+    },
+    {
+      "type": "edit",
+      "id": "db32a7a62bdf44cc",
+      "item": {
+        "type": "paragraph",
+        "id": "db32a7a62bdf44cc",
+        "text": "If you would like to share a common revIgniter installation to manage several different applications simply put all of the directories located inside your application folder into their own sub-folder - [https://revigniter.com/userGuide/general/managing_apps.html revigniter.com]\n\nFor example, let's say you want to create two applications, \"foo\" and \"bar\". You will structure your application folder like this:\n\n"
+      },
+      "date": 1497914454226
+    },
+    {
+      "type": "edit",
+      "id": "a192bc0c54dec40e",
+      "item": {
+        "type": "paragraph",
+        "id": "a192bc0c54dec40e",
+        "text": "By default, the index.lc file will be included in your URLs:\n\nexample.com/index.lc/news/article/my_article"
+      },
+      "date": 1497914475778
+    },
+    {
+      "type": "add",
+      "id": "88e6dd107c470e54",
+      "item": {
+        "type": "paragraph",
+        "id": "88e6dd107c470e54",
+        "text": "You can easily remove this file by using a .htaccess file with some simple rules. Here is an example of such a file, using the \"negative\" method in which everything is redirected except the specified items - [https://revigniter.com/userGuide/general/urls.html revigniter.com] \n\n"
+      },
+      "after": "a192bc0c54dec40e",
+      "date": 1497914491125
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c2c58a48321b0adf"
+      },
+      "id": "c2c58a48321b0adf",
+      "type": "add",
+      "after": "a5145a4ad017050d",
+      "date": 1497914494667
+    },
+    {
+      "type": "move",
+      "order": [
+        "5d89b030f6ae4a8e",
+        "c2c58a48321b0adf",
+        "a192bc0c54dec40e",
+        "88e6dd107c470e54",
+        "69d63e2c3fdd428c",
+        "512ee4dc2c6f1ad5",
+        "577f13b30d3ab704",
+        "db32a7a62bdf44cc",
+        "a5145a4ad017050d"
+      ],
+      "id": "c2c58a48321b0adf",
+      "date": 1497914499584
+    },
+    {
+      "type": "edit",
+      "id": "a192bc0c54dec40e",
+      "item": {
+        "type": "paragraph",
+        "id": "a192bc0c54dec40e",
+        "text": "By default, the index.lc file will be included in your URLs:"
+      },
+      "date": 1497914504821
+    },
+    {
+      "type": "edit",
+      "id": "c2c58a48321b0adf",
+      "item": {
+        "type": "code",
+        "id": "c2c58a48321b0adf",
+        "text": "example.com/index.lc/news/article/my_article"
+      },
+      "date": 1497914508013
+    },
+    {
+      "type": "move",
+      "order": [
+        "5d89b030f6ae4a8e",
+        "a192bc0c54dec40e",
+        "c2c58a48321b0adf",
+        "88e6dd107c470e54",
+        "69d63e2c3fdd428c",
+        "512ee4dc2c6f1ad5",
+        "577f13b30d3ab704",
+        "db32a7a62bdf44cc",
+        "a5145a4ad017050d"
+      ],
+      "id": "c2c58a48321b0adf",
+      "date": 1497914509760
+    },
+    {
+      "type": "edit",
+      "id": "512ee4dc2c6f1ad5",
+      "item": {
+        "type": "paragraph",
+        "id": "512ee4dc2c6f1ad5",
+        "text": "In the above example, any HTTP request other than those for index.lc, images, assets, robots.txt, css and js is treated as a request for your index.lc file."
+      },
+      "date": 1497914525878
+    },
+    {
+      "type": "add",
+      "id": "c33d6be60cf64c62",
+      "item": {
+        "type": "paragraph",
+        "id": "c33d6be60cf64c62",
+        "text": "If your default controller is not loaded when the URI contains no data please read about URIs in your application/config/config.lc file and choose another protocol to retrieve the URI string."
+      },
+      "after": "512ee4dc2c6f1ad5",
+      "date": 1497914531298
+    },
+    {
+      "type": "add",
+      "id": "f20ea32055bb5b03",
+      "item": {
+        "type": "paragraph",
+        "id": "f20ea32055bb5b03",
+        "text": "Note: Adapt RewriteBase to the path to revIgniter. Typically this is /. If you place revIgniter into a subfolder, RewriteBase would be something like /yourSubfolder/yourOtherSubfolder/."
+      },
+      "after": "c33d6be60cf64c62",
+      "date": 1497914536648
+    },
+    {
+      "type": "add",
+      "id": "035935d64a57bb94",
+      "item": {
+        "type": "paragraph",
+        "id": "035935d64a57bb94",
+        "text": "Note: To enable the rewrite engine for .htaccess files you need to set \"RewriteEngine On\" and \"Options FollowSymLinks\" must be enabled in the Apache server configuration (httpd.conf) file. See [http://httpd.apache.org/docs/current/mod/mod_rewrite.html apache.org]\n"
+      },
+      "after": "f20ea32055bb5b03",
+      "date": 1497914558507
+    },
+    {
+      "type": "edit",
+      "id": "035935d64a57bb94",
+      "item": {
+        "type": "paragraph",
+        "id": "035935d64a57bb94",
+        "text": "<b>Note:</b> To enable the rewrite engine for .htaccess files you need to set \"RewriteEngine On\" and \"Options FollowSymLinks\" must be enabled in the Apache server configuration (httpd.conf) file. See [http://httpd.apache.org/docs/current/mod/mod_rewrite.html apache.org]\n"
+      },
+      "date": 1497914582542
+    },
+    {
+      "type": "edit",
+      "id": "035935d64a57bb94",
+      "item": {
+        "type": "html",
+        "id": "035935d64a57bb94",
+        "text": "<b>Note:</b> To enable the rewrite engine for .htaccess files you need to set \"RewriteEngine On\" and \"Options FollowSymLinks\" must be enabled in the Apache server configuration (httpd.conf) file. See [http://httpd.apache.org/docs/current/mod/mod_rewrite.html apache.org]\n"
+      },
+      "date": 1497914583473
+    },
+    {
+      "type": "edit",
+      "id": "f20ea32055bb5b03",
+      "item": {
+        "type": "paragraph",
+        "id": "f20ea32055bb5b03",
+        "text": "<b>Note:</b> Adapt RewriteBase to the path to revIgniter. Typically this is /. If you place revIgniter into a subfolder, RewriteBase would be something like:"
+      },
+      "date": 1497914610566
+    },
+    {
+      "type": "edit",
+      "id": "f20ea32055bb5b03",
+      "item": {
+        "type": "html",
+        "id": "f20ea32055bb5b03",
+        "text": "<b>Note:</b> Adapt RewriteBase to the path to revIgniter. Typically this is /. If you place revIgniter into a subfolder, RewriteBase would be something like:"
+      },
+      "date": 1497914612242
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4169b0ec965f864c"
+      },
+      "id": "4169b0ec965f864c",
+      "type": "add",
+      "after": "a5145a4ad017050d",
+      "date": 1497914614364
+    },
+    {
+      "type": "edit",
+      "id": "4169b0ec965f864c",
+      "item": {
+        "type": "code",
+        "id": "4169b0ec965f864c",
+        "text": "/yourSubfolder/yourOtherSubfolder/"
+      },
+      "date": 1497914617287
+    },
+    {
+      "type": "move",
+      "order": [
+        "5d89b030f6ae4a8e",
+        "a192bc0c54dec40e",
+        "c2c58a48321b0adf",
+        "88e6dd107c470e54",
+        "69d63e2c3fdd428c",
+        "512ee4dc2c6f1ad5",
+        "c33d6be60cf64c62",
+        "f20ea32055bb5b03",
+        "035935d64a57bb94",
+        "577f13b30d3ab704",
+        "db32a7a62bdf44cc",
+        "4169b0ec965f864c",
+        "a5145a4ad017050d"
+      ],
+      "id": "4169b0ec965f864c",
+      "date": 1497914623310
+    },
+    {
+      "type": "move",
+      "order": [
+        "5d89b030f6ae4a8e",
+        "a192bc0c54dec40e",
+        "c2c58a48321b0adf",
+        "88e6dd107c470e54",
+        "69d63e2c3fdd428c",
+        "512ee4dc2c6f1ad5",
+        "c33d6be60cf64c62",
+        "f20ea32055bb5b03",
+        "4169b0ec965f864c",
+        "035935d64a57bb94",
+        "577f13b30d3ab704",
+        "db32a7a62bdf44cc",
+        "a5145a4ad017050d"
+      ],
+      "id": "4169b0ec965f864c",
+      "date": 1497914645644
+    }
+  ]
+}

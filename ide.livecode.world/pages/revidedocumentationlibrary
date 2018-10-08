@@ -1,0 +1,528 @@
+{
+  "title": "revidedocumentationlibrary",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d4e2fbb214b280ea",
+      "text": "This library contains the code to interface with the the [[Livecode Dictionary]]."
+    },
+    {
+      "type": "markdown",
+      "id": "8c504eeb6a50da4e",
+      "text": "* [[ideDocsFetchLCSData]]\n* [[ideDocsFetchLCSDataOfType]]\n* [[ideDocsFetchLCSElementOfType]]\n* [[ideDocsFetchLibraryNames]]\n* [[ideDocsFetchLCSEntries]]\n"
+    },
+    {
+      "type": "code",
+      "id": "dbd0de12db7a17c1",
+      "text": "/* \nFetch the data for LiveCode builder dictionary entries with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to a LiveCode builder dictionary entry with the given name.\n*/\nfunction ideDocsFetchLCBData pEntryName\n   return ideDocsFetchData(pEntryName, \"LiveCode Builder\")\nend ideDocsFetchLCBData"
+    },
+    {
+      "type": "code",
+      "id": "7b29e3d07272355b",
+      "text": "/* \nFetch the data for the LiveCode builder dictionary entry with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique LiveCode builder dictionary entry with the \ngiven name and type.\n*/\nfunction ideDocsFetchLCBDataOfType pEntryName, pType\n   return ideDocsFetchDataOfType(pEntryName, \"LiveCode Builder\", pType)\nend ideDocsFetchLCBDataOfType"
+    },
+    {
+      "type": "code",
+      "id": "e9f1d4c7691796bc",
+      "text": "/* \nFetch a specific element of the array of data for the LiveCode builder dictionary entry \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the LiveCode builder dictionary entry with the given name and type.\n*/\nfunction ideDocsFetchLCBElementOfType pEntryName, pType, pElement\n   return ideDocsFetchElementOfType(pEntryName, \"LiveCode Builder\", pType, pElement)\nend ideDocsFetchLCBElementOfType"
+    },
+    {
+      "type": "code",
+      "id": "13376b7278721406",
+      "text": "/* \nFetch the data for entries in the API for extension <pID> with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the API for the given extension with the given name.\n*/\nfunction ideDocsFetchExtensionData pID, pEntryName\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\n   return ideDocsFetchData(pEntryName, tLibraryName)\nend ideDocsFetchExtensionData"
+    },
+    {
+      "type": "code",
+      "id": "b6801b99d325d9be",
+      "text": "/* \nFetch the data for the entry in the API for extension <pID> with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique entry in the API for the given extension with the \ngiven name and type.\n*/\nfunction ideDocsFetchExtensionDataOfType pID, pEntryName, pType\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\n   return ideDocsFetchDataOfType(pEntryName, tLibraryName, pType)\nend ideDocsFetchExtensionDataOfType"
+    },
+    {
+      "type": "code",
+      "id": "b32bb0b0a95ccb4b",
+      "text": "/* \nFetch a specific element of the array of data for the entry in the API for extension <pID>  \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the entry in the API for the given extension with the given name and type.\n*/\nfunction ideDocsFetchExtensionElementOfType pID, pEntryName, pType, pElement\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\t\n   return ideDocsFetchElementOfType(pEntryName, tLibraryName, pType, pElement)\nend ideDocsFetchExtensionElementOfType"
+    },
+    {
+      "type": "code",
+      "id": "0cde436cfe8b83dd",
+      "text": "/* \nFetch the data for all entries in the LiveCode builder dictionary\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the LiveCode builder dictionary.\n*/\nfunction ideDocsFetchLCBEntries\n   return ideDocsFetchLibraryEntries(\"LiveCode Builder\")\nend ideDocsFetchLCBEntries"
+    },
+    {
+      "type": "code",
+      "id": "52415aa17dbe5a96",
+      "text": "/* \nFetch the data for all entries in the API for extension <pID>  \n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the API for the given extension.\n*/\nfunction ideDocsFetchExtensionEntries pID\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\t\n   return ideDocsFetchLibraryEntries(tLibraryName)\nend ideDocsFetchExtensionEntries"
+    },
+    {
+      "type": "code",
+      "id": "b141ebfba6739702",
+      "text": "on ideDocsUpdateDatabase pLibraryA\n   ideDocsInitialize\n   \n   local tResult\n   revExecuteSQL sConnection,\"BEGIN TRANSACTION\"\n   dispatch \"revDocsUpdateDatabase\" to stack \"revDocsParser\" with sConnection, pLibraryA\n   put the result into tResult\n   \n   if tResult is not empty then\n      revExecuteSQL sConnection,\"ROLLBACK\"\n      return tResult\n   end if\n    \n   revExecuteSQL sConnection, \"COMMIT\"\n   return empty\nend ideDocsUpdateDatabase"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "revidedocumentationlibrary",
+        "story": []
+      },
+      "date": 1458338808238
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d4e2fbb214b280ea"
+      },
+      "id": "d4e2fbb214b280ea",
+      "type": "add",
+      "date": 1458338809655
+    },
+    {
+      "type": "edit",
+      "id": "d4e2fbb214b280ea",
+      "item": {
+        "type": "paragraph",
+        "id": "d4e2fbb214b280ea",
+        "text": "This library contains the code to interface with the the [[Livecode Dictionary]]."
+      },
+      "date": 1458338841803
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "27f02318a5a9e1a0"
+      },
+      "id": "27f02318a5a9e1a0",
+      "type": "add",
+      "after": "d4e2fbb214b280ea",
+      "date": 1458338843234
+    },
+    {
+      "type": "edit",
+      "id": "27f02318a5a9e1a0",
+      "item": {
+        "type": "code",
+        "id": "27f02318a5a9e1a0",
+        "text": "revidedocumentationlibrary"
+      },
+      "date": 1458338859733
+    },
+    {
+      "type": "edit",
+      "id": "27f02318a5a9e1a0",
+      "item": {
+        "type": "code",
+        "id": "27f02318a5a9e1a0",
+        "text": "/* \nFetch the data for LiveCode script dictionary entries with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to a  LiveCode script dictionary entry with the given name.\n*/\nfunction ideDocsFetchLCSData pEntryName\n   return ideDocsFetchData(pEntryName, \"LiveCode Script\")\nend ideDocsFetchLCSData\n\n/* \nFetch the data for the LiveCode script dictionary entry with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique LiveCode script dictionary entry with the \ngiven name and type.\n*/\nfunction ideDocsFetchLCSDataOfType pEntryName, pType\n   return ideDocsFetchDataOfType(pEntryName, \"LiveCode Script\", pType)\nend ideDocsFetchLCSDataOfType\n\n/* \nFetch a specific element of the array of data for the LiveCode script dictionary entry \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the LiveCode script dictionary entry with the given name and type.\n*/\nfunction ideDocsFetchLCSElementOfType pEntryName, pType, pElement\n   return ideDocsFetchElementOfType(pEntryName, \"LiveCode Script\", pType, pElement)\nend ideDocsFetchLCSElementOfType\n\n/* \nFetch the data for LiveCode builder dictionary entries with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to a LiveCode builder dictionary entry with the given name.\n*/\nfunction ideDocsFetchLCBData pEntryName\n   return ideDocsFetchData(pEntryName, \"LiveCode Builder\")\nend ideDocsFetchLCBData\n\n/* \nFetch the data for the LiveCode builder dictionary entry with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique LiveCode builder dictionary entry with the \ngiven name and type.\n*/\nfunction ideDocsFetchLCBDataOfType pEntryName, pType\n   return ideDocsFetchDataOfType(pEntryName, \"LiveCode Builder\", pType)\nend ideDocsFetchLCBDataOfType\n\n/* \nFetch a specific element of the array of data for the LiveCode builder dictionary entry \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the LiveCode builder dictionary entry with the given name and type.\n*/\nfunction ideDocsFetchLCBElementOfType pEntryName, pType, pElement\n   return ideDocsFetchElementOfType(pEntryName, \"LiveCode Builder\", pType, pElement)\nend ideDocsFetchLCBElementOfType\n\n/* \nFetch the data for entries in the API for extension <pID> with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the API for the given extension with the given name.\n*/\nfunction ideDocsFetchExtensionData pID, pEntryName\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\n   return ideDocsFetchData(pEntryName, tLibraryName)\nend ideDocsFetchExtensionData\n\n/* \nFetch the data for the entry in the API for extension <pID> with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique entry in the API for the given extension with the \ngiven name and type.\n*/\nfunction ideDocsFetchExtensionDataOfType pID, pEntryName, pType\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\n   return ideDocsFetchDataOfType(pEntryName, tLibraryName, pType)\nend ideDocsFetchExtensionDataOfType\n\n/* \nFetch a specific element of the array of data for the entry in the API for extension <pID>  \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the entry in the API for the given extension with the given name and type.\n*/\nfunction ideDocsFetchExtensionElementOfType pID, pEntryName, pType, pElement\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\t\n   return ideDocsFetchElementOfType(pEntryName, tLibraryName, pType, pElement)\nend ideDocsFetchExtensionElementOfType\n\n/*\nReturns a list of library names, one per line, which have API entries in the dictionary.\n*/\nfunction ideDocsFetchLibraryNames\n   # Ensure we have a connection\n   try\n      ideDocsInitialize\n   catch tError\n      return tError\n   end try\n   \n   local tRecordSet, tData, tDataSet, tSQL\n   put \"SELECT library_name FROM libraries\" into tSQL\n   put revQueryDatabase(sConnection, tSQL) into tRecordSet\n   if the result is not a number then\n      return \"error fetching library names\" & return & the result\n   end if\n   \n   # Get the docs data from the record set\n   local tCount, tMoreRecords\n   put true into tMoreRecords\n   repeat while tMoreRecords\n      add 1 to tCount\n      get revDatabaseColumnNamed(tRecordSet, \"library_name\", \"tData\")\n      put tData into tDataSet[tCount]\n      revMoveToNextRecord tRecordSet\n      put the result into tMoreRecords\n   end repeat\n   \n   # Close the record set\n   revCloseCursor tRecordSet\n   \n   combine tDataSet with return\n   return tDataSet\nend ideDocsFetchLibraryNames\n\nprivate function ideDocsFetchLibraryEntries pLibraryName\n   return __ideDocsFetchData(\"\", pLibraryName, \"\")\nend ideDocsFetchLibraryEntries\n\n/* \nFetch the data for all entries in the LiveCode script dictionary\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the LiveCode script dictionary.\n*/\nfunction ideDocsFetchLCSEntries\n   return ideDocsFetchLibraryEntries(\"LiveCode Script\")\nend ideDocsFetchLCSEntries\n\n/* \nFetch the data for all entries in the LiveCode builder dictionary\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the LiveCode builder dictionary.\n*/\nfunction ideDocsFetchLCBEntries\n   return ideDocsFetchLibraryEntries(\"LiveCode Builder\")\nend ideDocsFetchLCBEntries\n\n/* \nFetch the data for all entries in the API for extension <pID>  \n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the API for the given extension.\n*/\nfunction ideDocsFetchExtensionEntries pID\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\t\n   return ideDocsFetchLibraryEntries(tLibraryName)\nend ideDocsFetchExtensionEntries\n\non ideDocsUpdateDatabase pLibraryA\n   ideDocsInitialize\n   \n   local tResult\n   revExecuteSQL sConnection,\"BEGIN TRANSACTION\"\n   dispatch \"revDocsUpdateDatabase\" to stack \"revDocsParser\" with sConnection, pLibraryA\n   put the result into tResult\n   \n   if tResult is not empty then\n      revExecuteSQL sConnection,\"ROLLBACK\"\n      return tResult\n   end if\n    \n   revExecuteSQL sConnection, \"COMMIT\"\n   return empty\nend ideDocsUpdateDatabase"
+      },
+      "date": 1458338895625
+    },
+    {
+      "type": "edit",
+      "id": "27f02318a5a9e1a0",
+      "item": {
+        "type": "code",
+        "id": "27f02318a5a9e1a0",
+        "text": "/* \nFetch the data for LiveCode script dictionary entries with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to a  LiveCode script dictionary entry with the given name.\n*/\nfunction ideDocsFetchLCSData pEntryName\n   return ideDocsFetchData(pEntryName, \"LiveCode Script\")\nend ideDocsFetchLCSData\n\n"
+      },
+      "date": 1458338920374
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "10e30e7b8450e638"
+      },
+      "id": "10e30e7b8450e638",
+      "type": "add",
+      "after": "27f02318a5a9e1a0",
+      "date": 1458338923428
+    },
+    {
+      "type": "edit",
+      "id": "10e30e7b8450e638",
+      "item": {
+        "type": "code",
+        "id": "10e30e7b8450e638",
+        "text": "/* \nFetch the data for the LiveCode script dictionary entry with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique LiveCode script dictionary entry with the \ngiven name and type.\n*/\nfunction ideDocsFetchLCSDataOfType pEntryName, pType\n   return ideDocsFetchDataOfType(pEntryName, \"LiveCode Script\", pType)\nend ideDocsFetchLCSDataOfType"
+      },
+      "date": 1458338938368
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9ba93a10e10b0775"
+      },
+      "id": "9ba93a10e10b0775",
+      "type": "add",
+      "after": "10e30e7b8450e638",
+      "date": 1458338951015
+    },
+    {
+      "type": "edit",
+      "id": "9ba93a10e10b0775",
+      "item": {
+        "type": "code",
+        "id": "9ba93a10e10b0775",
+        "text": "/* \nFetch a specific element of the array of data for the LiveCode script dictionary entry \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the LiveCode script dictionary entry with the given name and type.\n*/\nfunction ideDocsFetchLCSElementOfType pEntryName, pType, pElement\n   return ideDocsFetchElementOfType(pEntryName, \"LiveCode Script\", pType, pElement)\nend ideDocsFetchLCSElementOfType"
+      },
+      "date": 1458338965240
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dbd0de12db7a17c1"
+      },
+      "id": "dbd0de12db7a17c1",
+      "type": "add",
+      "after": "9ba93a10e10b0775",
+      "date": 1458338967803
+    },
+    {
+      "type": "edit",
+      "id": "dbd0de12db7a17c1",
+      "item": {
+        "type": "code",
+        "id": "dbd0de12db7a17c1",
+        "text": "/* \nFetch the data for LiveCode builder dictionary entries with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to a LiveCode builder dictionary entry with the given name.\n*/\nfunction ideDocsFetchLCBData pEntryName\n   return ideDocsFetchData(pEntryName, \"LiveCode Builder\")\nend ideDocsFetchLCBData"
+      },
+      "date": 1458338980137
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7b29e3d07272355b"
+      },
+      "id": "7b29e3d07272355b",
+      "type": "add",
+      "after": "dbd0de12db7a17c1",
+      "date": 1458338982999
+    },
+    {
+      "type": "edit",
+      "id": "7b29e3d07272355b",
+      "item": {
+        "type": "code",
+        "id": "7b29e3d07272355b",
+        "text": "/* \nFetch the data for the LiveCode builder dictionary entry with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique LiveCode builder dictionary entry with the \ngiven name and type.\n*/\nfunction ideDocsFetchLCBDataOfType pEntryName, pType\n   return ideDocsFetchDataOfType(pEntryName, \"LiveCode Builder\", pType)\nend ideDocsFetchLCBDataOfType"
+      },
+      "date": 1458339000290
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e9f1d4c7691796bc"
+      },
+      "id": "e9f1d4c7691796bc",
+      "type": "add",
+      "after": "7b29e3d07272355b",
+      "date": 1458339002950
+    },
+    {
+      "type": "edit",
+      "id": "e9f1d4c7691796bc",
+      "item": {
+        "type": "code",
+        "id": "e9f1d4c7691796bc",
+        "text": "/* \nFetch a specific element of the array of data for the LiveCode builder dictionary entry \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the LiveCode builder dictionary entry with the given name and type.\n*/\nfunction ideDocsFetchLCBElementOfType pEntryName, pType, pElement\n   return ideDocsFetchElementOfType(pEntryName, \"LiveCode Builder\", pType, pElement)\nend ideDocsFetchLCBElementOfType"
+      },
+      "date": 1458339019827
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "13376b7278721406"
+      },
+      "id": "13376b7278721406",
+      "type": "add",
+      "after": "e9f1d4c7691796bc",
+      "date": 1458339022162
+    },
+    {
+      "type": "edit",
+      "id": "13376b7278721406",
+      "item": {
+        "type": "code",
+        "id": "13376b7278721406",
+        "text": "/* \nFetch the data for entries in the API for extension <pID> with name <pEntryName>\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the API for the given extension with the given name.\n*/\nfunction ideDocsFetchExtensionData pID, pEntryName\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\n   return ideDocsFetchData(pEntryName, tLibraryName)\nend ideDocsFetchExtensionData"
+      },
+      "date": 1458339033915
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b6801b99d325d9be"
+      },
+      "id": "b6801b99d325d9be",
+      "type": "add",
+      "after": "13376b7278721406",
+      "date": 1458339036620
+    },
+    {
+      "type": "edit",
+      "id": "b6801b99d325d9be",
+      "item": {
+        "type": "code",
+        "id": "b6801b99d325d9be",
+        "text": "/* \nFetch the data for the entry in the API for extension <pID> with name <pEntryName>\nand type <pType>\n\nReturns:\nAn array\nof data pertaining to the unique entry in the API for the given extension with the \ngiven name and type.\n*/\nfunction ideDocsFetchExtensionDataOfType pID, pEntryName, pType\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\n   return ideDocsFetchDataOfType(pEntryName, tLibraryName, pType)\nend ideDocsFetchExtensionDataOfType"
+      },
+      "date": 1458339049524
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b32bb0b0a95ccb4b"
+      },
+      "id": "b32bb0b0a95ccb4b",
+      "type": "add",
+      "after": "b6801b99d325d9be",
+      "date": 1458339051496
+    },
+    {
+      "type": "edit",
+      "id": "b32bb0b0a95ccb4b",
+      "item": {
+        "type": "code",
+        "id": "b32bb0b0a95ccb4b",
+        "text": "/* \nFetch a specific element of the array of data for the entry in the API for extension <pID>  \nwith name <pEntryName> and type <pType>.\n\nReturns:\nEither a string or an array\nof data describing the element of the array of data\npertaining to the entry in the API for the given extension with the given name and type.\n*/\nfunction ideDocsFetchExtensionElementOfType pID, pEntryName, pType, pElement\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\t\n   return ideDocsFetchElementOfType(pEntryName, tLibraryName, pType, pElement)\nend ideDocsFetchExtensionElementOfType"
+      },
+      "date": 1458339065852
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "57e75df204e5b821"
+      },
+      "id": "57e75df204e5b821",
+      "type": "add",
+      "after": "b32bb0b0a95ccb4b",
+      "date": 1458339068639
+    },
+    {
+      "type": "edit",
+      "id": "57e75df204e5b821",
+      "item": {
+        "type": "code",
+        "id": "57e75df204e5b821",
+        "text": "/*\nReturns a list of library names, one per line, which have API entries in the dictionary.\n*/\nfunction ideDocsFetchLibraryNames\n   # Ensure we have a connection\n   try\n      ideDocsInitialize\n   catch tError\n      return tError\n   end try\n   \n   local tRecordSet, tData, tDataSet, tSQL\n   put \"SELECT library_name FROM libraries\" into tSQL\n   put revQueryDatabase(sConnection, tSQL) into tRecordSet\n   if the result is not a number then\n      return \"error fetching library names\" & return & the result\n   end if\n   \n   # Get the docs data from the record set\n   local tCount, tMoreRecords\n   put true into tMoreRecords\n   repeat while tMoreRecords\n      add 1 to tCount\n      get revDatabaseColumnNamed(tRecordSet, \"library_name\", \"tData\")\n      put tData into tDataSet[tCount]\n      revMoveToNextRecord tRecordSet\n      put the result into tMoreRecords\n   end repeat\n   \n   # Close the record set\n   revCloseCursor tRecordSet\n   \n   combine tDataSet with return\n   return tDataSet\nend ideDocsFetchLibraryNames"
+      },
+      "date": 1458339084143
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9adfcc0f2af60031"
+      },
+      "id": "9adfcc0f2af60031",
+      "type": "add",
+      "after": "57e75df204e5b821",
+      "date": 1458339086640
+    },
+    {
+      "type": "edit",
+      "id": "9adfcc0f2af60031",
+      "item": {
+        "type": "code",
+        "id": "9adfcc0f2af60031",
+        "text": "/* \nFetch the data for all entries in the LiveCode script dictionary\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the LiveCode script dictionary.\n*/\nfunction ideDocsFetchLCSEntries\n   return ideDocsFetchLibraryEntries(\"LiveCode Script\")\nend ideDocsFetchLCSEntries"
+      },
+      "date": 1458339115365
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0cde436cfe8b83dd"
+      },
+      "id": "0cde436cfe8b83dd",
+      "type": "add",
+      "after": "9adfcc0f2af60031",
+      "date": 1458339119681
+    },
+    {
+      "type": "edit",
+      "id": "0cde436cfe8b83dd",
+      "item": {
+        "type": "code",
+        "id": "0cde436cfe8b83dd",
+        "text": "/* \nFetch the data for all entries in the LiveCode builder dictionary\n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the LiveCode builder dictionary.\n*/\nfunction ideDocsFetchLCBEntries\n   return ideDocsFetchLibraryEntries(\"LiveCode Builder\")\nend ideDocsFetchLCBEntries"
+      },
+      "date": 1458339157671
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "52415aa17dbe5a96"
+      },
+      "id": "52415aa17dbe5a96",
+      "type": "add",
+      "after": "0cde436cfe8b83dd",
+      "date": 1458339159885
+    },
+    {
+      "type": "edit",
+      "id": "52415aa17dbe5a96",
+      "item": {
+        "type": "code",
+        "id": "52415aa17dbe5a96",
+        "text": "/* \nFetch the data for all entries in the API for extension <pID>  \n\nReturns:\nA numerically keyed array, each element of which is the array\nof data \npertaining to an entry in the API for the given extension.\n*/\nfunction ideDocsFetchExtensionEntries pID\n   local tLibraryName\n   put revIDEExtensionProperty(pID, \"title\") into tLibraryName\t\n   return ideDocsFetchLibraryEntries(tLibraryName)\nend ideDocsFetchExtensionEntries"
+      },
+      "date": 1458339180417
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b141ebfba6739702"
+      },
+      "id": "b141ebfba6739702",
+      "type": "add",
+      "after": "52415aa17dbe5a96",
+      "date": 1458339182871
+    },
+    {
+      "type": "edit",
+      "id": "b141ebfba6739702",
+      "item": {
+        "type": "code",
+        "id": "b141ebfba6739702",
+        "text": "on ideDocsUpdateDatabase pLibraryA\n   ideDocsInitialize\n   \n   local tResult\n   revExecuteSQL sConnection,\"BEGIN TRANSACTION\"\n   dispatch \"revDocsUpdateDatabase\" to stack \"revDocsParser\" with sConnection, pLibraryA\n   put the result into tResult\n   \n   if tResult is not empty then\n      revExecuteSQL sConnection,\"ROLLBACK\"\n      return tResult\n   end if\n    \n   revExecuteSQL sConnection, \"COMMIT\"\n   return empty\nend ideDocsUpdateDatabase"
+      },
+      "date": 1458339187882
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8c504eeb6a50da4e"
+      },
+      "id": "8c504eeb6a50da4e",
+      "type": "add",
+      "after": "b141ebfba6739702",
+      "date": 1458339442555
+    },
+    {
+      "type": "edit",
+      "id": "8c504eeb6a50da4e",
+      "item": {
+        "type": "markdown",
+        "id": "8c504eeb6a50da4e",
+        "text": "* [[function ideDocsFetchLCSEntries]]\n"
+      },
+      "date": 1458339482151
+    },
+    {
+      "type": "edit",
+      "id": "8c504eeb6a50da4e",
+      "item": {
+        "type": "markdown",
+        "id": "8c504eeb6a50da4e",
+        "text": "* [[ideDocsFetchLCSEntries]]\n"
+      },
+      "date": 1458339494652
+    },
+    {
+      "type": "move",
+      "order": [
+        "d4e2fbb214b280ea",
+        "27f02318a5a9e1a0",
+        "10e30e7b8450e638",
+        "9ba93a10e10b0775",
+        "dbd0de12db7a17c1",
+        "7b29e3d07272355b",
+        "e9f1d4c7691796bc",
+        "13376b7278721406",
+        "b6801b99d325d9be",
+        "b32bb0b0a95ccb4b",
+        "57e75df204e5b821",
+        "8c504eeb6a50da4e",
+        "9adfcc0f2af60031",
+        "0cde436cfe8b83dd",
+        "52415aa17dbe5a96",
+        "b141ebfba6739702"
+      ],
+      "id": "8c504eeb6a50da4e",
+      "date": 1458339513443
+    },
+    {
+      "type": "remove",
+      "id": "9adfcc0f2af60031",
+      "date": 1458339516635
+    },
+    {
+      "type": "edit",
+      "id": "8c504eeb6a50da4e",
+      "item": {
+        "type": "markdown",
+        "id": "8c504eeb6a50da4e",
+        "text": "* [[ideDocsFetchLibraryNames]]\n* [[ideDocsFetchLCSEntries]]\n"
+      },
+      "date": 1458339630849
+    },
+    {
+      "type": "remove",
+      "id": "57e75df204e5b821",
+      "date": 1458339645969
+    },
+    {
+      "type": "edit",
+      "id": "8c504eeb6a50da4e",
+      "item": {
+        "type": "markdown",
+        "id": "8c504eeb6a50da4e",
+        "text": "* [[ideDocsFetchLCSData]]\n* [[ideDocsFetchLibraryNames]]\n* [[ideDocsFetchLCSEntries]]\n"
+      },
+      "date": 1458340089042
+    },
+    {
+      "type": "move",
+      "order": [
+        "d4e2fbb214b280ea",
+        "8c504eeb6a50da4e",
+        "27f02318a5a9e1a0",
+        "10e30e7b8450e638",
+        "9ba93a10e10b0775",
+        "dbd0de12db7a17c1",
+        "7b29e3d07272355b",
+        "e9f1d4c7691796bc",
+        "13376b7278721406",
+        "b6801b99d325d9be",
+        "b32bb0b0a95ccb4b",
+        "0cde436cfe8b83dd",
+        "52415aa17dbe5a96",
+        "b141ebfba6739702"
+      ],
+      "id": "8c504eeb6a50da4e",
+      "date": 1458340098749
+    },
+    {
+      "type": "remove",
+      "id": "27f02318a5a9e1a0",
+      "date": 1458340112233
+    },
+    {
+      "type": "edit",
+      "id": "8c504eeb6a50da4e",
+      "item": {
+        "type": "markdown",
+        "id": "8c504eeb6a50da4e",
+        "text": "* [[ideDocsFetchLCSData]]\n* [[ideDocsFetchLCSDataOfType]]\n* [[ideDocsFetchLibraryNames]]\n* [[ideDocsFetchLCSEntries]]\n"
+      },
+      "date": 1458340408494
+    },
+    {
+      "type": "remove",
+      "id": "10e30e7b8450e638",
+      "date": 1458340417930
+    },
+    {
+      "type": "edit",
+      "id": "8c504eeb6a50da4e",
+      "item": {
+        "type": "markdown",
+        "id": "8c504eeb6a50da4e",
+        "text": "* [[ideDocsFetchLCSData]]\n* [[ideDocsFetchLCSDataOfType]]\n* [[ideDocsFetchLCSElementOfType]]\n* [[ideDocsFetchLibraryNames]]\n* [[ideDocsFetchLCSEntries]]\n"
+      },
+      "date": 1458340474024
+    },
+    {
+      "type": "remove",
+      "id": "9ba93a10e10b0775",
+      "date": 1458340517004
+    }
+  ]
+}

@@ -1,0 +1,827 @@
+{
+  "title": " Installation DAQ",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b046bc3fe6e5918c",
+      "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+    },
+    {
+      "type": "paragraph",
+      "id": "217db8acb4682c63",
+      "text": "Github references can fail to install active plugins. It is easier and more robust to use [[npm]] should your custom package be available as an npm package."
+    },
+    {
+      "type": "reference",
+      "id": "7accd0c77b40a573",
+      "site": "plugin.fedwiki.org",
+      "slug": "install-a-plugin-with-npm",
+      "title": "Install A Plugin With NPM",
+      "text": "Should you need to install a custom plugin that is not part of the default wiki install just follow the following instructions:"
+    },
+    {
+      "type": "paragraph",
+      "id": "7eb7bc4761288f7e",
+      "text": "After that try to load the server again.\n\nAnother way to achieve the same is to edit the package.json directly and use the following:"
+    },
+    {
+      "type": "code",
+      "id": "a0964d4f019c001f",
+      "text": "\"wiki-plugin-plugins\": \"0.0.1\",\n\"wiki-plugin-transport\": \"0.0.5\""
+    },
+    {
+      "type": "paragraph",
+      "id": "4ab3e8c495a4e128",
+      "text": "then run npm install and load the server.\n\nThe problem with the approach you tried is that if you use the plugins sources directly, some of the files needed by the wiki client and server are not yet generated, you would need to cd to the plugins folders and run something like grunt build to generate them. This is not needed if you use the published npm packages because those files are already generated and included the in the npm packages."
+    },
+    {
+      "type": "markdown",
+      "id": "92eed5ffb87da94b",
+      "text": "# When in doubt - restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "8c01a1c4dbea17ce",
+      "text": "A good quick hack for when things go wrong is to remove the offending package with npm uninstall -g <packageName> and start again. For instance with my customised version of wiki I get good results when I mess up with:"
+    },
+    {
+      "type": "code",
+      "id": "6b9e2c6397807ee6",
+      "text": "npm uninstall -g wiki\nnpm install -g git://github.com/ViralAcademy/wiki.git\n"
+    },
+    {
+      "type": "markdown",
+      "id": "6b3b50f828777ebd",
+      "text": "# Permission Errors"
+    },
+    {
+      "type": "paragraph",
+      "id": "c87b8f2e9f4342c4",
+      "text": "You can run into permission errors:"
+    },
+    {
+      "type": "code",
+      "id": "937c77aee394e8d7",
+      "text": "git clone git@github.com:github:ViralAcademy/wiki Permission denied (publickey).\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki fatal: Could not read from remote repository.\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki \nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki Please make sure you have the correct access rights\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki and the repository exists."
+    },
+    {
+      "type": "paragraph",
+      "id": "f7ed60020d183d5a",
+      "text": "In which case - you need to check the ssh keys on your server: see [https://help.github.com/articles/error-permission-denied-publickey/ help.github.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "95eba38919432aac",
+      "text": "https://help.github.com/articles/error-permission-denied-publickey/"
+    },
+    {
+      "type": "paragraph",
+      "id": "76a7afa9e9d9b332",
+      "text": "The node package manager (npm) has commands that will install plugins and update the package.json at the same time. You can add plugins and decide later if you want to keep them through other updates."
+    },
+    {
+      "type": "code",
+      "id": "49efec42e51ff94f",
+      "text": "npm prefix\ncd <prefix>/wiki\nnpm install wiki-plugin-search --save"
+    },
+    {
+      "type": "markdown",
+      "id": "e0a4c98c9d49c357",
+      "text": "# Missing Package Errors"
+    },
+    {
+      "type": "paragraph",
+      "id": "94a80985859ca468",
+      "text": "You can also run into errors with missing dependencies. I'm not sure (yet) how to fix these - but it would appear that a simple npm install -g <packageName> for the missign deps would fix things?"
+    },
+    {
+      "type": "code",
+      "id": "37d8cb8d3737d613",
+      "text": "npm ERR! code 1\ndavid-2:nodeschool BabyBlue$ npm install -g git://github.com/ViralAcademy/wiki.git\nnpm WARN install:cookie ENOENT: no such file or directory, rename '/usr/local/lib/node_modules/wiki/node_modules/express/node_modules/cookie' -> '/usr/local/lib/node_modules/wiki/node_modules/express/node_modules/cookie'\nnpm WARN install:qs ENOENT: no such file or directory, rename '/usr/local/lib/node_modules/wiki/node_modules/express/node_modules/qs' -> '/usr/lo"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": " Installation DAQ",
+        "story": []
+      },
+      "date": 1448969316778
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b046bc3fe6e5918c"
+      },
+      "id": "b046bc3fe6e5918c",
+      "type": "add",
+      "date": 1448969318347
+    },
+    {
+      "type": "edit",
+      "id": "b046bc3fe6e5918c",
+      "item": {
+        "type": "paragraph",
+        "id": "b046bc3fe6e5918c",
+        "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+      },
+      "date": 1448969341429
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "6b3b50f828777ebd",
+        "text": "# Errors"
+      },
+      "after": "b046bc3fe6e5918c",
+      "id": "6b3b50f828777ebd",
+      "date": 1448969344807
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "937c77aee394e8d7",
+        "text": "git clone git@github.com:github:ViralAcademy/wiki Permission denied (publickey).\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki fatal: Could not read from remote repository.\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki \nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki Please make sure you have the correct access rights\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki and the repository exists."
+      },
+      "after": "6b3b50f828777ebd",
+      "id": "937c77aee394e8d7",
+      "date": 1448969349594
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c87b8f2e9f4342c4",
+        "text": "You can run into permission errors:"
+      },
+      "after": "6b3b50f828777ebd",
+      "id": "c87b8f2e9f4342c4",
+      "date": 1448969352611
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f7ed60020d183d5a",
+        "text": "In which case - you need to check the ssh keys on your server: see [https://help.github.com/articles/error-permission-denied-publickey/ help.github.com]"
+      },
+      "after": "937c77aee394e8d7",
+      "id": "f7ed60020d183d5a",
+      "date": 1448969357563
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "95eba38919432aac",
+        "text": "https://help.github.com/articles/error-permission-denied-publickey/"
+      },
+      "after": "f7ed60020d183d5a",
+      "id": "95eba38919432aac",
+      "date": 1448969361449
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "76a7afa9e9d9b332",
+        "text": "The node package manager (npm) has commands that will install plugins and update the package.json at the same time. You can add plugins and decide later if you want to keep them through other updates."
+      },
+      "after": "95eba38919432aac",
+      "id": "76a7afa9e9d9b332",
+      "date": 1448969367347
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "49efec42e51ff94f",
+        "text": "npm prefix\ncd <prefix>/wiki\nnpm install wiki-plugin-search --save"
+      },
+      "after": "76a7afa9e9d9b332",
+      "id": "49efec42e51ff94f",
+      "date": 1448969371933
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e0a4c98c9d49c357"
+      },
+      "id": "e0a4c98c9d49c357",
+      "type": "add",
+      "after": "49efec42e51ff94f",
+      "date": 1448971526200
+    },
+    {
+      "type": "edit",
+      "id": "e0a4c98c9d49c357",
+      "item": {
+        "type": "paragraph",
+        "id": "e0a4c98c9d49c357",
+        "text": "# Missing Package Errors"
+      },
+      "date": 1448971537305
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "37d8cb8d3737d613"
+      },
+      "id": "37d8cb8d3737d613",
+      "type": "add",
+      "after": "94a80985859ca468",
+      "date": 1448971605616
+    },
+    {
+      "type": "add",
+      "id": "94a80985859ca468",
+      "item": {
+        "type": "paragraph",
+        "id": "94a80985859ca468",
+        "text": "You can also run into errors with missing dependencies. I'm not sure (yet) how to fix these - but it would appear that a simple npm install -g <packageName> for the missign deps would fix things?"
+      },
+      "after": "e0a4c98c9d49c357",
+      "date": 1448971606773
+    },
+    {
+      "type": "edit",
+      "id": "37d8cb8d3737d613",
+      "item": {
+        "type": "code",
+        "id": "37d8cb8d3737d613",
+        "text": "npm ERR! code 1\ndavid-2:nodeschool BabyBlue$ npm install -g git://github.com/ViralAcademy/wiki.git\nnpm WARN install:cookie ENOENT: no such file or directory, rename '/usr/local/lib/node_modules/wiki/node_modules/express/node_modules/cookie' -> '/usr/local/lib/node_modules/wiki/node_modules/express/node_modules/cookie'\nnpm WARN install:qs ENOENT: no such file or directory, rename '/usr/local/lib/node_modules/wiki/node_modules/express/node_modules/qs' -> '/usr/lo"
+      },
+      "date": 1448971608680
+    },
+    {
+      "type": "edit",
+      "id": "e0a4c98c9d49c357",
+      "item": {
+        "type": "markdown",
+        "id": "e0a4c98c9d49c357",
+        "text": "# Missing Package Errors"
+      },
+      "date": 1448971609967
+    },
+    {
+      "type": "edit",
+      "id": "6b3b50f828777ebd",
+      "item": {
+        "type": "markdown",
+        "id": "6b3b50f828777ebd",
+        "text": "# Permission Errors"
+      },
+      "date": 1448971621165
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "92eed5ffb87da94b"
+      },
+      "id": "92eed5ffb87da94b",
+      "type": "add",
+      "after": "37d8cb8d3737d613",
+      "date": 1448971624033
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "92eed5ffb87da94b",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "92eed5ffb87da94b",
+      "date": 1448971627633
+    },
+    {
+      "type": "edit",
+      "id": "92eed5ffb87da94b",
+      "item": {
+        "type": "paragraph",
+        "id": "92eed5ffb87da94b",
+        "text": "# When in doubt - restart"
+      },
+      "date": 1448971645237
+    },
+    {
+      "type": "add",
+      "id": "8c01a1c4dbea17ce",
+      "item": {
+        "type": "paragraph",
+        "id": "8c01a1c4dbea17ce",
+        "text": "A good quick hack for when things go wrong is to remove the offending package with npm uninstall -g <packageName> and start again. For instance with wiki:"
+      },
+      "after": "92eed5ffb87da94b",
+      "date": 1448971708759
+    },
+    {
+      "type": "edit",
+      "id": "92eed5ffb87da94b",
+      "item": {
+        "type": "markdown",
+        "id": "92eed5ffb87da94b",
+        "text": "# When in doubt - restart"
+      },
+      "date": 1448971710583
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6b9e2c6397807ee6"
+      },
+      "id": "6b9e2c6397807ee6",
+      "type": "add",
+      "after": "37d8cb8d3737d613",
+      "date": 1448971713006
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "92eed5ffb87da94b",
+        "6b9e2c6397807ee6",
+        "8c01a1c4dbea17ce",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "6b9e2c6397807ee6",
+      "date": 1448971716839
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "92eed5ffb87da94b",
+        "8c01a1c4dbea17ce",
+        "6b9e2c6397807ee6",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "8c01a1c4dbea17ce",
+      "date": 1448971719877
+    },
+    {
+      "type": "edit",
+      "id": "6b9e2c6397807ee6",
+      "item": {
+        "type": "code",
+        "id": "6b9e2c6397807ee6",
+        "text": "npm uninstall -g wiki\n"
+      },
+      "date": 1448971735347
+    },
+    {
+      "type": "edit",
+      "id": "6b9e2c6397807ee6",
+      "item": {
+        "type": "code",
+        "id": "6b9e2c6397807ee6",
+        "text": "npm uninstall -g wiki\nnpm install -g git://github.com/ViralAcademy/wiki.git\n"
+      },
+      "date": 1448971788026
+    },
+    {
+      "type": "edit",
+      "id": "8c01a1c4dbea17ce",
+      "item": {
+        "type": "paragraph",
+        "id": "8c01a1c4dbea17ce",
+        "text": "A good quick hack for when things go wrong is to remove the offending package with npm uninstall -g <packageName> and start again. For instance with my customised version of wiki I get good results when I mess up with:"
+      },
+      "date": 1448971815033
+    },
+    {
+      "type": "fork",
+      "site": "plugin.fedwiki.org",
+      "date": 1449883214949
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "701ad5bffaab9fff"
+      },
+      "id": "701ad5bffaab9fff",
+      "type": "add",
+      "after": "37d8cb8d3737d613",
+      "site": "plugin.fedwiki.org",
+      "date": 1449883214947
+    },
+    {
+      "type": "fork",
+      "date": 1449883570550
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "701ad5bffaab9fff",
+        "92eed5ffb87da94b",
+        "8c01a1c4dbea17ce",
+        "6b9e2c6397807ee6",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "701ad5bffaab9fff",
+      "date": 1449883576909
+    },
+    {
+      "type": "edit",
+      "id": "701ad5bffaab9fff",
+      "item": {
+        "type": "paragraph",
+        "id": "701ad5bffaab9fff",
+        "text": "Github references can fail to install active plugins when referenced as described. A better way to do this, first delete your node_modules/ folder, remove the references to the plugins from the package.json file and then install the plugins with the npm command:"
+      },
+      "date": 1449883583978
+    },
+    {
+      "type": "edit",
+      "id": "701ad5bffaab9fff",
+      "item": {
+        "type": "paragraph",
+        "id": "701ad5bffaab9fff",
+        "text": "Github references can fail to install active plugins when referenced as described. A better way to do this, first delete your node_modules/ folder, remove the references to the plugins from the package.json file and then install the plugins with the npm command:"
+      },
+      "date": 1449883605254
+    },
+    {
+      "type": "add",
+      "id": "4647453a3a05bda0",
+      "item": {
+        "type": "markdown",
+        "id": "4647453a3a05bda0",
+        "text": "# Use NPM Packages"
+      },
+      "after": "701ad5bffaab9fff",
+      "date": 1449883632121
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "4647453a3a05bda0",
+        "701ad5bffaab9fff",
+        "92eed5ffb87da94b",
+        "8c01a1c4dbea17ce",
+        "6b9e2c6397807ee6",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "4647453a3a05bda0",
+      "date": 1449883636027
+    },
+    {
+      "type": "edit",
+      "id": "4647453a3a05bda0",
+      "item": {
+        "type": "markdown",
+        "id": "4647453a3a05bda0",
+        "text": "# Use NPM Packages"
+      },
+      "date": 1449883637140
+    },
+    {
+      "type": "edit",
+      "id": "701ad5bffaab9fff",
+      "item": {
+        "type": "paragraph",
+        "id": "701ad5bffaab9fff",
+        "text": "Github references can fail to install active plugins when referenced as described. A better way to do this, first delete your node_modules/ folder, remove the references to the plugins from the package.json file and then install the plugins with the npm command:"
+      },
+      "date": 1449883649073
+    },
+    {
+      "type": "add",
+      "id": "2c298e73bf12600f",
+      "item": {
+        "type": "paragraph",
+        "id": "2c298e73bf12600f",
+        "text": ""
+      },
+      "after": "701ad5bffaab9fff",
+      "date": 1449883654217
+    },
+    {
+      "type": "add",
+      "id": "7eb7bc4761288f7e",
+      "item": {
+        "type": "paragraph",
+        "id": "7eb7bc4761288f7e",
+        "text": "After that try to load the server again.\n\nAnother way to achieve the same is to edit the package.json directly and use the following:"
+      },
+      "after": "2c298e73bf12600f",
+      "date": 1449883658977
+    },
+    {
+      "type": "add",
+      "id": "0e00c333966c91ee",
+      "item": {
+        "type": "paragraph",
+        "id": "0e00c333966c91ee",
+        "text": ""
+      },
+      "after": "7eb7bc4761288f7e",
+      "date": 1449883663785
+    },
+    {
+      "type": "add",
+      "id": "4ab3e8c495a4e128",
+      "item": {
+        "type": "paragraph",
+        "id": "4ab3e8c495a4e128",
+        "text": "then run npm install and load the server.\n\nThe problem with the approach you tried is that if you use the plugins sources directly, some of the files needed by the wiki client and server are not yet generated, you would need to cd to the plugins folders and run something like grunt build to generate them. This is not needed if you use the published npm packages because those files are already generated and included the in the npm packages."
+      },
+      "after": "0e00c333966c91ee",
+      "date": 1449883682403
+    },
+    {
+      "type": "edit",
+      "id": "701ad5bffaab9fff",
+      "item": {
+        "type": "paragraph",
+        "id": "701ad5bffaab9fff",
+        "text": "Github references can fail to install active plugins when referenced as described. A better way to do this, first delete your node_modules/ folder, remove the references to the plugins from the package.json file and then install the plugins with the npm command:"
+      },
+      "date": 1449883744532
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "f3f2430b7a5ed719",
+        "text": "npm install --save wiki-plugin-plugins\nnpm install --save wiki-plugin-transport\nnpm install"
+      },
+      "id": "f3f2430b7a5ed719",
+      "type": "add",
+      "after": "37d8cb8d3737d613",
+      "date": 1449883748566
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "a0964d4f019c001f",
+        "text": "\"wiki-plugin-plugins\": \"0.0.1\",\n\"wiki-plugin-transport\": \"0.0.5\""
+      },
+      "id": "a0964d4f019c001f",
+      "type": "add",
+      "after": "f3f2430b7a5ed719",
+      "date": 1449883750091
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "4647453a3a05bda0",
+        "701ad5bffaab9fff",
+        "f3f2430b7a5ed719",
+        "2c298e73bf12600f",
+        "7eb7bc4761288f7e",
+        "0e00c333966c91ee",
+        "4ab3e8c495a4e128",
+        "92eed5ffb87da94b",
+        "8c01a1c4dbea17ce",
+        "6b9e2c6397807ee6",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613",
+        "a0964d4f019c001f"
+      ],
+      "id": "f3f2430b7a5ed719",
+      "date": 1449883756066
+    },
+    {
+      "type": "remove",
+      "id": "2c298e73bf12600f",
+      "date": 1449883760075
+    },
+    {
+      "type": "edit",
+      "id": "f3f2430b7a5ed719",
+      "item": {
+        "type": "code",
+        "id": "f3f2430b7a5ed719",
+        "text": "npm install --save wiki-plugin-plugins\nnpm install --save wiki-plugin-transport\nnpm install"
+      },
+      "date": 1449883768893
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "4647453a3a05bda0",
+        "701ad5bffaab9fff",
+        "f3f2430b7a5ed719",
+        "7eb7bc4761288f7e",
+        "a0964d4f019c001f",
+        "0e00c333966c91ee",
+        "4ab3e8c495a4e128",
+        "92eed5ffb87da94b",
+        "8c01a1c4dbea17ce",
+        "6b9e2c6397807ee6",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "a0964d4f019c001f",
+      "date": 1449883777694
+    },
+    {
+      "type": "remove",
+      "id": "0e00c333966c91ee",
+      "date": 1449883781125,
+      "error": {
+        "type": "error",
+        "msg": "",
+        "response": ""
+      }
+    },
+    {
+      "type": "edit",
+      "id": "a0964d4f019c001f",
+      "item": {
+        "type": "code",
+        "id": "a0964d4f019c001f",
+        "text": "\"wiki-plugin-plugins\": \"0.0.1\",\n\"wiki-plugin-transport\": \"0.0.5\""
+      },
+      "date": 1449883783477
+    },
+    {
+      "type": "fork",
+      "date": 1449883785955
+    },
+    {
+      "type": "edit",
+      "id": "701ad5bffaab9fff",
+      "item": {
+        "type": "paragraph",
+        "id": "701ad5bffaab9fff",
+        "text": "To [[Install A Plugin With NPM]] which is a relatively straight formward option "
+      },
+      "date": 1468608864084
+    },
+    {
+      "type": "add",
+      "id": "217db8acb4682c63",
+      "item": {
+        "type": "paragraph",
+        "id": "217db8acb4682c63",
+        "text": "Github references can fail to install active plugins when referenced as described. A better way to do this, first delete your node_modules/ folder, remove the references to the plugins from the package.json file and then install the plugins with the npm command:"
+      },
+      "after": "701ad5bffaab9fff",
+      "date": 1468608865223
+    },
+    {
+      "type": "edit",
+      "id": "701ad5bffaab9fff",
+      "item": {
+        "type": "paragraph",
+        "id": "701ad5bffaab9fff",
+        "text": "Should you need to install a custom plugin that is not part of the default wiki install just follow the following instructions:"
+      },
+      "date": 1468608952795
+    },
+    {
+      "type": "edit",
+      "id": "4647453a3a05bda0",
+      "item": {
+        "type": "markdown",
+        "id": "4647453a3a05bda0",
+        "text": "# [[Install A Plugin With NPM]]"
+      },
+      "date": 1468608958388
+    },
+    {
+      "type": "remove",
+      "id": "701ad5bffaab9fff",
+      "date": 1468608968331
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "7accd0c77b40a573"
+      },
+      "after": "4647453a3a05bda0",
+      "id": "7accd0c77b40a573",
+      "date": 1468608971936
+    },
+    {
+      "type": "edit",
+      "id": "7accd0c77b40a573",
+      "item": {
+        "type": "reference",
+        "id": "7accd0c77b40a573",
+        "site": "plugin.fedwiki.org",
+        "slug": "install-a-plugin-with-npm",
+        "title": "Install A Plugin With NPM",
+        "text": "Should you need to install a custom plugin that is not part of the default wiki install just follow the following instructions:"
+      },
+      "date": 1468608977497
+    },
+    {
+      "type": "move",
+      "order": [
+        "b046bc3fe6e5918c",
+        "4647453a3a05bda0",
+        "217db8acb4682c63",
+        "7accd0c77b40a573",
+        "f3f2430b7a5ed719",
+        "7eb7bc4761288f7e",
+        "a0964d4f019c001f",
+        "4ab3e8c495a4e128",
+        "92eed5ffb87da94b",
+        "8c01a1c4dbea17ce",
+        "6b9e2c6397807ee6",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "95eba38919432aac",
+        "76a7afa9e9d9b332",
+        "49efec42e51ff94f",
+        "e0a4c98c9d49c357",
+        "94a80985859ca468",
+        "37d8cb8d3737d613"
+      ],
+      "id": "217db8acb4682c63",
+      "date": 1468608987209
+    },
+    {
+      "type": "edit",
+      "id": "217db8acb4682c63",
+      "item": {
+        "type": "paragraph",
+        "id": "217db8acb4682c63",
+        "text": "Github references can fail to install active plugins. It is easier and more robust to use [[npm]] should your custom package be available as an npm package."
+      },
+      "date": 1468609066376
+    },
+    {
+      "type": "remove",
+      "id": "f3f2430b7a5ed719",
+      "date": 1468609119832
+    },
+    {
+      "type": "remove",
+      "id": "4647453a3a05bda0",
+      "date": 1468648809307
+    }
+  ]
+}

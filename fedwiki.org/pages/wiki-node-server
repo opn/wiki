@@ -1,0 +1,874 @@
+{
+  "title": "Wiki Node Server",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "eb17cc97fcf348f9",
+      "text": "Federated wiki node.js server as a npm module (referred to as [[wiki-node-server]]) - [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee github]."
+    },
+    {
+      "type": "paragraph",
+      "id": "5bbd8fb2e6155493",
+      "text": "The integrated package (including [[Plugins]] is now published as [[wiki-server]] - [https://github.com/fedwiki/wiki-node github]"
+    },
+    {
+      "type": "reference",
+      "id": "7a2aacfedd69a9da",
+      "site": "future.fedwiki.org",
+      "slug": "wiki-server",
+      "title": "wiki-server",
+      "text": "The [[Wiki Server]] is the integrated project on Github, and referred to simply as \"wiki\" with [[npm]], which integrates all the individual [[Plugins]] and the [[wiki-node-server]] component to create a functioning [[Fedwiki Server]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "1b399f4e4fa77f8e",
+      "text": "\n\n"
+    },
+    {
+      "type": "html",
+      "id": "93e9cefcee1ff07d",
+      "text": "<H3>Server Options</H3>\n\nOptions for the server can be passed in many ways:\n<ul>\n<li>  As command line flags\n<li>  As a configuration JSON file specified with --config\n<li>  As a config.json file in the root folder or cwd.\n<li>  As env vars prefixed with wiki_\n</ul>"
+    },
+    {
+      "type": "paragraph",
+      "id": "22631721876c942c",
+      "text": "Higher in the list takes precedence. The server will then try to guess all unspecified options."
+    },
+    {
+      "type": "html",
+      "id": "b9cd2ac101bb85c9",
+      "text": "<H3>Neighborhood Seeding"
+    },
+    {
+      "type": "paragraph",
+      "id": "c2264cc4f505d833",
+      "text": "Two options are added for seeding a [[neighborhood]].\n\nWhen running a server farm --autoseed will populate the [[neighborhood]] with the other sites in the farm that have been visited.\n\nAdding --neighbours 'comma separated list of sites' will add those sites to the [[neighborhood]]."
+    },
+    {
+      "type": "reference",
+      "id": "da8a889d827ba3fd",
+      "site": "fedwiki.org",
+      "slug": "wiki-farm-security",
+      "title": "Wiki Farm Security",
+      "text": "A loose discussion of [[Wiki Farm]] security. A more technical discussion may well evolve over at [https://github.com/fedwiki/wiki-node-server/issues/97#issuecomment-74984127 GitHub]."
+    },
+    {
+      "type": "reference",
+      "id": "3272344f57ab7730",
+      "site": "fedwiki.org",
+      "slug": "anatomy-of-a-server",
+      "title": "Anatomy of a Server",
+      "text": "Here we describe the essential elements that make up a [[Wiki Node Server]]:\n"
+    },
+    {
+      "type": "reference",
+      "id": "4d6f38cce2f66f1b",
+      "site": "fedwiki.org",
+      "slug": "federated-wiki---node-server-components",
+      "title": "Federated Wiki - node server components",
+      "text": "While there are many components, the main two are <i>wiki</i>, and <i>wiki-server</i>."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Node Server",
+        "story": []
+      },
+      "date": 1437493447108
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eb17cc97fcf348f9"
+      },
+      "id": "eb17cc97fcf348f9",
+      "type": "add",
+      "date": 1437493449173
+    },
+    {
+      "type": "edit",
+      "id": "eb17cc97fcf348f9",
+      "item": {
+        "type": "paragraph",
+        "id": "eb17cc97fcf348f9",
+        "text": " - [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee github]."
+      },
+      "date": 1437493463806
+    },
+    {
+      "type": "edit",
+      "id": "eb17cc97fcf348f9",
+      "item": {
+        "type": "paragraph",
+        "id": "eb17cc97fcf348f9",
+        "text": "Federated wiki node.js server as a npm module - [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee github]."
+      },
+      "date": 1437493624701
+    },
+    {
+      "type": "add",
+      "id": "5bbd8fb2e6155493",
+      "item": {
+        "type": "paragraph",
+        "id": "5bbd8fb2e6155493",
+        "text": "This package is now published as wiki-server. The wiki package which depends on this package, to provide the federated wiki server, can be found as [fedwiki/wiki-node]."
+      },
+      "after": "eb17cc97fcf348f9",
+      "date": 1437493631441
+    },
+    {
+      "type": "add",
+      "id": "57a9bd220eb00563",
+      "item": {
+        "type": "paragraph",
+        "id": "57a9bd220eb00563",
+        "text": "<H3>Goals"
+      },
+      "after": "5bbd8fb2e6155493",
+      "date": 1437493637106
+    },
+    {
+      "type": "add",
+      "id": "30e15e35692ae4ec",
+      "item": {
+        "type": "paragraph",
+        "id": "30e15e35692ae4ec",
+        "text": "Federated wiki's single-page application reads page content from many sources and writes updates to a few. Read-write server backends are maintained in ruby (sinatra) and node (express). Read-only servers have been realized with static files and cgi scripts. Encouraging experiments have exploited exotic service architectures such as CCNx content-addressable networks."
+      },
+      "after": "57a9bd220eb00563",
+      "date": 1437493646381
+    },
+    {
+      "type": "edit",
+      "id": "57a9bd220eb00563",
+      "item": {
+        "type": "html",
+        "id": "57a9bd220eb00563",
+        "text": "<H3>Goals"
+      },
+      "date": 1437493647610
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6e0341a4729a921c"
+      },
+      "id": "6e0341a4729a921c",
+      "type": "add",
+      "after": "30e15e35692ae4ec",
+      "date": 1437493774915
+    },
+    {
+      "type": "edit",
+      "id": "6e0341a4729a921c",
+      "item": {
+        "type": "paragraph",
+        "id": "6e0341a4729a921c",
+        "text": "Installation."
+      },
+      "date": 1437493794337
+    },
+    {
+      "type": "add",
+      "id": "b1803d7fe0af94a8",
+      "item": {
+        "type": "paragraph",
+        "id": "b1803d7fe0af94a8",
+        "text": "The quickest way to set up wiki on your local machine is to install it globally with npm:"
+      },
+      "after": "6e0341a4729a921c",
+      "date": 1437493797448
+    },
+    {
+      "type": "add",
+      "id": "54f8bfedc7ecb94c",
+      "item": {
+        "type": "paragraph",
+        "id": "54f8bfedc7ecb94c",
+        "text": "\n$ npm install -g wiki\n$ wiki\n\n"
+      },
+      "after": "b1803d7fe0af94a8",
+      "date": 1437493800608
+    },
+    {
+      "type": "add",
+      "id": "06641e4109854a24",
+      "item": {
+        "type": "paragraph",
+        "id": "06641e4109854a24",
+        "text": "Visit localhost:3000 to see your wiki. If you choose a host visible to the internet then others in the federation can use your work.\n"
+      },
+      "after": "54f8bfedc7ecb94c",
+      "date": 1437493810824
+    },
+    {
+      "type": "add",
+      "id": "d917702b238c5783",
+      "item": {
+        "type": "paragraph",
+        "id": "d917702b238c5783",
+        "text": "<H3>Updating the Server Software"
+      },
+      "after": "06641e4109854a24",
+      "date": 1437493812776
+    },
+    {
+      "type": "add",
+      "id": "68ca0423b641d9fe",
+      "item": {
+        "type": "paragraph",
+        "id": "68ca0423b641d9fe",
+        "text": "From time to time some of the packages that makeup the wiki software will be updated. To see if updates are available for any of the wiki packages, run:"
+      },
+      "after": "d917702b238c5783",
+      "date": 1437493816447
+    },
+    {
+      "type": "add",
+      "id": "1b399f4e4fa77f8e",
+      "item": {
+        "type": "paragraph",
+        "id": "1b399f4e4fa77f8e",
+        "text": "\n$ npm outdated --silent -g | grep '^Package\\|^wiki'\n\n"
+      },
+      "after": "68ca0423b641d9fe",
+      "date": 1437493819190
+    },
+    {
+      "type": "add",
+      "id": "b404256d57b951ff",
+      "item": {
+        "type": "paragraph",
+        "id": "b404256d57b951ff",
+        "text": "If there are any updates available, the globally installed wiki can be updated by re-installing it:"
+      },
+      "after": "1b399f4e4fa77f8e",
+      "date": 1437493824265
+    },
+    {
+      "type": "add",
+      "id": "a1de54a232d59514",
+      "item": {
+        "type": "paragraph",
+        "id": "a1de54a232d59514",
+        "text": "\n$ npm install -g wiki\n\n"
+      },
+      "after": "b404256d57b951ff",
+      "date": 1437493826816
+    },
+    {
+      "type": "add",
+      "id": "c137af1ee94c8b0d",
+      "item": {
+        "type": "paragraph",
+        "id": "c137af1ee94c8b0d",
+        "text": "We have to install as running npm update -g wiki will only work if the wiki package itself has been updated.\n\nAn alternative approach would be to run npm update in the directory containing the wiki install. The location for running this will vary depending on which platform you are on.\n\nIf you installed the wiki package locally, rather than globally, you can run npm outdated --silent | grep '^Package\\|^wiki' and npm update in the directory you installed the wiki package.\n"
+      },
+      "after": "a1de54a232d59514",
+      "date": 1437493840908
+    },
+    {
+      "type": "edit",
+      "id": "6e0341a4729a921c",
+      "item": {
+        "type": "html",
+        "id": "6e0341a4729a921c",
+        "text": "Installation."
+      },
+      "date": 1437493843712
+    },
+    {
+      "type": "add",
+      "id": "93e9cefcee1ff07d",
+      "item": {
+        "type": "paragraph",
+        "id": "93e9cefcee1ff07d",
+        "text": "<H3>Server Options\n\nOptions for the server can be passed in many ways:\n\n    As command line flags\n    As a configuration JSON file specified with --config\n    As a config.json file in the root folder or cwd.\n    As env vars prefixed with wiki_\n\nHigher in the list takes precedence. The server will then try to guess all unspecified options.\nNeighborhood Seeding\n\nTwo options are added for seeding a neighborhood.\n\nWhen running a server farm --autoseed will populate the neighborhood with the other sites in the farm that have been visited.\n\nAdding --neighbours 'comma separated list of sites' will add those sites to the neighborhood."
+      },
+      "after": "c137af1ee94c8b0d",
+      "date": 1437493845453
+    },
+    {
+      "type": "edit",
+      "id": "6e0341a4729a921c",
+      "item": {
+        "type": "html",
+        "id": "6e0341a4729a921c",
+        "text": "<H3>Installation"
+      },
+      "date": 1437493852604
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0ca7a1dfd856739f"
+      },
+      "id": "0ca7a1dfd856739f",
+      "type": "add",
+      "after": "93e9cefcee1ff07d",
+      "date": 1437493857367
+    },
+    {
+      "type": "move",
+      "order": [
+        "eb17cc97fcf348f9",
+        "5bbd8fb2e6155493",
+        "57a9bd220eb00563",
+        "30e15e35692ae4ec",
+        "6e0341a4729a921c",
+        "b1803d7fe0af94a8",
+        "54f8bfedc7ecb94c",
+        "06641e4109854a24",
+        "0ca7a1dfd856739f",
+        "d917702b238c5783",
+        "68ca0423b641d9fe",
+        "1b399f4e4fa77f8e",
+        "b404256d57b951ff",
+        "a1de54a232d59514",
+        "c137af1ee94c8b0d",
+        "93e9cefcee1ff07d"
+      ],
+      "id": "0ca7a1dfd856739f",
+      "date": 1437493860698
+    },
+    {
+      "type": "edit",
+      "id": "d917702b238c5783",
+      "item": {
+        "type": "html",
+        "id": "d917702b238c5783",
+        "text": "<H3>Updating the Server Software"
+      },
+      "date": 1437493863595
+    },
+    {
+      "type": "edit",
+      "id": "93e9cefcee1ff07d",
+      "item": {
+        "type": "html",
+        "id": "93e9cefcee1ff07d",
+        "text": "<H3>Server Options\n\nOptions for the server can be passed in many ways:\n\n    As command line flags\n    As a configuration JSON file specified with --config\n    As a config.json file in the root folder or cwd.\n    As env vars prefixed with wiki_\n\nHigher in the list takes precedence. The server will then try to guess all unspecified options.\nNeighborhood Seeding\n\nTwo options are added for seeding a neighborhood.\n\nWhen running a server farm --autoseed will populate the neighborhood with the other sites in the farm that have been visited.\n\nAdding --neighbours 'comma separated list of sites' will add those sites to the neighborhood."
+      },
+      "date": 1437493865840
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "22631721876c942c"
+      },
+      "id": "22631721876c942c",
+      "type": "add",
+      "after": "93e9cefcee1ff07d",
+      "date": 1437493924496
+    },
+    {
+      "type": "edit",
+      "id": "93e9cefcee1ff07d",
+      "item": {
+        "type": "html",
+        "id": "93e9cefcee1ff07d",
+        "text": "<H3>Server Options\n\nOptions for the server can be passed in many ways:\n<ul>\n<li>  As command line flags\n<li>  As a configuration JSON file specified with --config\n<li>  As a config.json file in the root folder or cwd.\n<li>  As env vars prefixed with wiki_\n</ul>"
+      },
+      "date": 1437493927807
+    },
+    {
+      "type": "edit",
+      "id": "22631721876c942c",
+      "item": {
+        "type": "paragraph",
+        "id": "22631721876c942c",
+        "text": "\n\nHigher in the list takes precedence. The server will then try to guess all unspecified options.\nNeighborhood Seeding\n\nTwo options are added for seeding a neighborhood.\n\nWhen running a server farm --autoseed will populate the neighborhood with the other sites in the farm that have been visited.\n\nAdding --neighbours 'comma separated list of sites' will add those sites to the neighborhood."
+      },
+      "date": 1437493929948
+    },
+    {
+      "type": "edit",
+      "id": "93e9cefcee1ff07d",
+      "item": {
+        "type": "html",
+        "id": "93e9cefcee1ff07d",
+        "text": "<H3>Server Options</H3>\n\nOptions for the server can be passed in many ways:\n<ul>\n<li>  As command line flags\n<li>  As a configuration JSON file specified with --config\n<li>  As a config.json file in the root folder or cwd.\n<li>  As env vars prefixed with wiki_\n</ul>"
+      },
+      "date": 1437493936429
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "224b6348649138fa"
+      },
+      "id": "224b6348649138fa",
+      "type": "add",
+      "after": "22631721876c942c",
+      "date": 1437493940792
+    },
+    {
+      "type": "move",
+      "order": [
+        "eb17cc97fcf348f9",
+        "5bbd8fb2e6155493",
+        "57a9bd220eb00563",
+        "30e15e35692ae4ec",
+        "6e0341a4729a921c",
+        "b1803d7fe0af94a8",
+        "54f8bfedc7ecb94c",
+        "224b6348649138fa",
+        "06641e4109854a24",
+        "0ca7a1dfd856739f",
+        "d917702b238c5783",
+        "68ca0423b641d9fe",
+        "1b399f4e4fa77f8e",
+        "b404256d57b951ff",
+        "a1de54a232d59514",
+        "c137af1ee94c8b0d",
+        "93e9cefcee1ff07d",
+        "22631721876c942c"
+      ],
+      "id": "224b6348649138fa",
+      "date": 1437493947078
+    },
+    {
+      "type": "remove",
+      "id": "54f8bfedc7ecb94c",
+      "date": 1437493953320
+    },
+    {
+      "type": "edit",
+      "id": "224b6348649138fa",
+      "item": {
+        "type": "code",
+        "id": "224b6348649138fa",
+        "text": "$ npm install -g wiki\n$ wiki"
+      },
+      "date": 1437493956694
+    },
+    {
+      "type": "edit",
+      "id": "224b6348649138fa",
+      "item": {
+        "type": "code",
+        "id": "224b6348649138fa",
+        "text": "npm install -g wiki\nwiki"
+      },
+      "date": 1437493969101
+    },
+    {
+      "type": "edit",
+      "id": "1b399f4e4fa77f8e",
+      "item": {
+        "type": "paragraph",
+        "id": "1b399f4e4fa77f8e",
+        "text": "$ npm outdated --silent -g | grep '^Package\\|^wiki'\n\n"
+      },
+      "date": 1437493978416
+    },
+    {
+      "type": "move",
+      "order": [
+        "eb17cc97fcf348f9",
+        "5bbd8fb2e6155493",
+        "57a9bd220eb00563",
+        "30e15e35692ae4ec",
+        "6e0341a4729a921c",
+        "b1803d7fe0af94a8",
+        "224b6348649138fa",
+        "06641e4109854a24",
+        "d917702b238c5783",
+        "68ca0423b641d9fe",
+        "1b399f4e4fa77f8e",
+        "0ca7a1dfd856739f",
+        "b404256d57b951ff",
+        "a1de54a232d59514",
+        "c137af1ee94c8b0d",
+        "93e9cefcee1ff07d",
+        "22631721876c942c"
+      ],
+      "id": "0ca7a1dfd856739f",
+      "date": 1437493983155
+    },
+    {
+      "type": "edit",
+      "id": "0ca7a1dfd856739f",
+      "item": {
+        "type": "code",
+        "id": "0ca7a1dfd856739f",
+        "text": "$ npm outdated --silent -g | grep '^Package\\|^wiki'"
+      },
+      "date": 1437493985720
+    },
+    {
+      "type": "edit",
+      "id": "1b399f4e4fa77f8e",
+      "item": {
+        "type": "paragraph",
+        "id": "1b399f4e4fa77f8e",
+        "text": "\n\n"
+      },
+      "date": 1437493989355
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "94db81817892f5e8"
+      },
+      "id": "94db81817892f5e8",
+      "type": "add",
+      "after": "22631721876c942c",
+      "date": 1437493994636
+    },
+    {
+      "type": "move",
+      "order": [
+        "eb17cc97fcf348f9",
+        "5bbd8fb2e6155493",
+        "57a9bd220eb00563",
+        "30e15e35692ae4ec",
+        "6e0341a4729a921c",
+        "b1803d7fe0af94a8",
+        "224b6348649138fa",
+        "06641e4109854a24",
+        "d917702b238c5783",
+        "68ca0423b641d9fe",
+        "1b399f4e4fa77f8e",
+        "0ca7a1dfd856739f",
+        "b404256d57b951ff",
+        "94db81817892f5e8",
+        "a1de54a232d59514",
+        "c137af1ee94c8b0d",
+        "93e9cefcee1ff07d",
+        "22631721876c942c"
+      ],
+      "id": "94db81817892f5e8",
+      "date": 1437493999557
+    },
+    {
+      "type": "remove",
+      "id": "a1de54a232d59514",
+      "date": 1437494011847
+    },
+    {
+      "type": "edit",
+      "id": "94db81817892f5e8",
+      "item": {
+        "type": "code",
+        "id": "94db81817892f5e8",
+        "text": "$ npm install -g wiki\n\n"
+      },
+      "date": 1437494015896
+    },
+    {
+      "type": "edit",
+      "id": "5bbd8fb2e6155493",
+      "item": {
+        "type": "paragraph",
+        "id": "5bbd8fb2e6155493",
+        "text": "The integrated package (including [[Plugins]] is now published as [[wiki-server]] - [https://github.com/fedwiki/wiki-node fsda]"
+      },
+      "date": 1437494123333
+    },
+    {
+      "type": "add",
+      "id": "52944a634cec6220",
+      "item": {
+        "type": "paragraph",
+        "id": "52944a634cec6220",
+        "text": " The wiki-node-server package which depends on this package, to provide the federated wiki server, can be found as [fedwiki/wiki-node]."
+      },
+      "after": "5bbd8fb2e6155493",
+      "date": 1437494125117
+    },
+    {
+      "type": "edit",
+      "id": "5bbd8fb2e6155493",
+      "item": {
+        "type": "paragraph",
+        "id": "5bbd8fb2e6155493",
+        "text": "The integrated package (including [[Plugins]] is now published as [[wiki-server]] - [https://github.com/fedwiki/wiki-node github]"
+      },
+      "date": 1437494131061
+    },
+    {
+      "type": "remove",
+      "id": "52944a634cec6220",
+      "date": 1437494202110
+    },
+    {
+      "type": "edit",
+      "id": "eb17cc97fcf348f9",
+      "item": {
+        "type": "paragraph",
+        "id": "eb17cc97fcf348f9",
+        "text": "Federated wiki node.js server as a npm module (referred to as wiki-node) - [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee github]."
+      },
+      "date": 1437494243507
+    },
+    {
+      "type": "add",
+      "id": "e1574c1bfdcea0a6",
+      "item": {
+        "type": "paragraph",
+        "id": "e1574c1bfdcea0a6",
+        "text": "The [[Wiki Server]] is the integrated project on Github, and referred to simply as \"wiki\" with [[npm]], which integrates all the individual [[Plugins]] and the [[Wiki Node Server]] coponent to create a functioning [[Fedwiki Server]]."
+      },
+      "after": "eb17cc97fcf348f9",
+      "date": 1437494438590
+    },
+    {
+      "type": "remove",
+      "id": "e1574c1bfdcea0a6",
+      "date": 1437494448053
+    },
+    {
+      "type": "edit",
+      "id": "eb17cc97fcf348f9",
+      "item": {
+        "type": "paragraph",
+        "id": "eb17cc97fcf348f9",
+        "text": "Federated wiki node.js server as a npm module (referred to as [[wiki-node-server]]) - [https://github.com/fedwiki/wiki-node-server/blob/5869e11954da3f79056ee440244a66558b233494/lib/server.coffee github]."
+      },
+      "date": 1437494525200
+    },
+    {
+      "type": "remove",
+      "id": "6e0341a4729a921c",
+      "date": 1437494736187
+    },
+    {
+      "type": "remove",
+      "id": "b1803d7fe0af94a8",
+      "date": 1437494749816
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7a2aacfedd69a9da"
+      },
+      "id": "7a2aacfedd69a9da",
+      "type": "add",
+      "after": "22631721876c942c",
+      "date": 1437494757670
+    },
+    {
+      "type": "move",
+      "order": [
+        "eb17cc97fcf348f9",
+        "5bbd8fb2e6155493",
+        "57a9bd220eb00563",
+        "30e15e35692ae4ec",
+        "7a2aacfedd69a9da",
+        "224b6348649138fa",
+        "06641e4109854a24",
+        "d917702b238c5783",
+        "68ca0423b641d9fe",
+        "1b399f4e4fa77f8e",
+        "0ca7a1dfd856739f",
+        "b404256d57b951ff",
+        "94db81817892f5e8",
+        "c137af1ee94c8b0d",
+        "93e9cefcee1ff07d",
+        "22631721876c942c"
+      ],
+      "id": "7a2aacfedd69a9da",
+      "date": 1437494762640
+    },
+    {
+      "type": "edit",
+      "id": "7a2aacfedd69a9da",
+      "item": {
+        "type": "reference",
+        "id": "7a2aacfedd69a9da",
+        "site": "future.fedwiki.org",
+        "slug": "wiki-server",
+        "title": "wiki-server",
+        "text": "The [[Wiki Server]] is the integrated project on Github, and referred to simply as \"wiki\" with [[npm]], which integrates all the individual [[Plugins]] and the [[wiki-node-server]] component to create a functioning [[Fedwiki Server]]."
+      },
+      "date": 1437494764727
+    },
+    {
+      "type": "remove",
+      "id": "224b6348649138fa",
+      "date": 1437494768362
+    },
+    {
+      "type": "remove",
+      "id": "06641e4109854a24",
+      "date": 1437494770618
+    },
+    {
+      "type": "remove",
+      "id": "d917702b238c5783",
+      "date": 1437494776297
+    },
+    {
+      "type": "remove",
+      "id": "68ca0423b641d9fe",
+      "date": 1437494780686
+    },
+    {
+      "type": "remove",
+      "id": "0ca7a1dfd856739f",
+      "date": 1437494786312
+    },
+    {
+      "type": "remove",
+      "id": "b404256d57b951ff",
+      "date": 1437494790135
+    },
+    {
+      "type": "remove",
+      "id": "c137af1ee94c8b0d",
+      "date": 1437494795320
+    },
+    {
+      "type": "remove",
+      "id": "94db81817892f5e8",
+      "date": 1437494803696
+    },
+    {
+      "type": "edit",
+      "id": "22631721876c942c",
+      "item": {
+        "type": "paragraph",
+        "id": "22631721876c942c",
+        "text": "\nHigher in the list takes precedence. The server will then try to guess all unspecified options.\n<H3>Neighborhood Seeding"
+      },
+      "date": 1437494943407
+    },
+    {
+      "type": "add",
+      "id": "c2264cc4f505d833",
+      "item": {
+        "type": "paragraph",
+        "id": "c2264cc4f505d833",
+        "text": "Two options are added for seeding a neighborhood.\n\nWhen running a server farm --autoseed will populate the neighborhood with the other sites in the farm that have been visited.\n\nAdding --neighbours 'comma separated list of sites' will add those sites to the neighborhood."
+      },
+      "after": "22631721876c942c",
+      "date": 1437494946311
+    },
+    {
+      "type": "edit",
+      "id": "c2264cc4f505d833",
+      "item": {
+        "type": "paragraph",
+        "id": "c2264cc4f505d833",
+        "text": "Two options are added for seeding a [[neighborhood]].\n\nWhen running a server farm --autoseed will populate the [[neighborhood]] with the other sites in the farm that have been visited.\n\nAdding --neighbours 'comma separated list of sites' will add those sites to the [[neighborhood]]."
+      },
+      "date": 1437494969811
+    },
+    {
+      "type": "edit",
+      "id": "22631721876c942c",
+      "item": {
+        "type": "paragraph",
+        "id": "22631721876c942c",
+        "text": "Higher in the list takes precedence. The server will then try to guess all unspecified options."
+      },
+      "date": 1437494976110
+    },
+    {
+      "type": "add",
+      "id": "b9cd2ac101bb85c9",
+      "item": {
+        "type": "paragraph",
+        "id": "b9cd2ac101bb85c9",
+        "text": "<H3>Neighborhood Seeding"
+      },
+      "after": "22631721876c942c",
+      "date": 1437494978416
+    },
+    {
+      "type": "edit",
+      "id": "b9cd2ac101bb85c9",
+      "item": {
+        "type": "html",
+        "id": "b9cd2ac101bb85c9",
+        "text": "<H3>Neighborhood Seeding"
+      },
+      "date": 1437494980592
+    },
+    {
+      "type": "remove",
+      "id": "57a9bd220eb00563",
+      "date": 1437495024395
+    },
+    {
+      "type": "remove",
+      "id": "30e15e35692ae4ec",
+      "date": 1437495026736
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org"
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "da8a889d827ba3fd"
+      },
+      "id": "da8a889d827ba3fd",
+      "type": "add",
+      "after": "c2264cc4f505d833",
+      "date": 1448811393467
+    },
+    {
+      "type": "edit",
+      "id": "da8a889d827ba3fd",
+      "item": {
+        "type": "reference",
+        "id": "da8a889d827ba3fd",
+        "site": "fedwiki.org",
+        "slug": "wiki-farm-security",
+        "title": "Wiki Farm Security",
+        "text": "A loose discussion of [[Wiki Farm]] security. A more technical discussion may well evolve over at [https://github.com/fedwiki/wiki-node-server/issues/97#issuecomment-74984127 GitHub]."
+      },
+      "date": 1448811396595
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3272344f57ab7730"
+      },
+      "id": "3272344f57ab7730",
+      "type": "add",
+      "after": "da8a889d827ba3fd",
+      "date": 1448811402947
+    },
+    {
+      "type": "edit",
+      "id": "3272344f57ab7730",
+      "item": {
+        "type": "reference",
+        "id": "3272344f57ab7730",
+        "site": "fedwiki.org",
+        "slug": "anatomy-of-a-server",
+        "title": "Anatomy of a Server",
+        "text": "Here we describe the essential elements that make up a [[Wiki Node Server]]:\n"
+      },
+      "date": 1448811405194
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4d6f38cce2f66f1b"
+      },
+      "id": "4d6f38cce2f66f1b",
+      "type": "add",
+      "after": "3272344f57ab7730",
+      "date": 1448811418294
+    },
+    {
+      "type": "edit",
+      "id": "4d6f38cce2f66f1b",
+      "item": {
+        "type": "reference",
+        "id": "4d6f38cce2f66f1b",
+        "site": "fedwiki.org",
+        "slug": "federated-wiki---node-server-components",
+        "title": "Federated Wiki - node server components",
+        "text": "While there are many components, the main two are <i>wiki</i>, and <i>wiki-server</i>."
+      },
+      "date": 1448811420874
+    }
+  ]
+}

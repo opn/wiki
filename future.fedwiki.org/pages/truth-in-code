@@ -1,0 +1,383 @@
+{
+  "title": "Truth in Code",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b7bd5fb15e3ef82e",
+      "text": "Truth is an important concept in code and logic. It's history of implementation however is unreasonably amusing. So much so that I think these \"facts\" need checking."
+    },
+    {
+      "type": "paragraph",
+      "id": "ae35f4f945f137b6",
+      "text": "/bin/true is a script which just returns true so you can do something like - [http://www.quora.com/What-is-the-dumbest-code-ever-made-that-has-become-famous quora.com]"
+    },
+    {
+      "type": "code",
+      "id": "ea68d25caee6f698",
+      "text": "while true\ndo\n   something\ndone"
+    },
+    {
+      "type": "paragraph",
+      "id": "5bdcf4d265ea40a0",
+      "text": "Originally it was a shell script which exit'd zero (which is 'true' in shell script world), basically:"
+    },
+    {
+      "type": "code",
+      "id": "52ea7a11ac9ef65d",
+      "text": "#!/bin/sh\nexit 0"
+    },
+    {
+      "type": "paragraph",
+      "id": "22bab3a036dbb507",
+      "text": "At some point in its sorry existence AT&T added a long copyright and other info (yes, they copyrighted 'exit 0'). Something like:"
+    },
+    {
+      "type": "code",
+      "id": "5f030bdd477f49ee",
+      "text": "#!/sbin/sh\n# Tag 0x00000f00\n# Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T\n# All Rights Reserved\n\n# THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T\n# The copyright notice above does not evidence any\n# actual or intended publication of such source code.\n\n#ident  \"@(#)true:true.sh       1.4\"\n#ident  \"$Revision: 1.6 $\"\nexit 0"
+    },
+    {
+      "type": "paragraph",
+      "id": "3d4ac952b4bfbb40",
+      "text": "Then someone noticed that an empty script exits 0 so you don't even need the 'exit 0'.\n\nThe copyright stayed however, a file which was empty except for the copyright. So an empty file was now the property of AT&T, unpublished of course. Talk about much ado about nothing!\n\nNow (checking Linux) it seems to actually be a binary because I guess someone decided that runs faster. The source version from GNU coreutils 8.23  for true.c is 80 lines long and the binary is 125KB (27KB stripped):"
+    },
+    {
+      "type": "code",
+      "id": "02cb443bf1df3300",
+      "text": "/* Exit with a status code indicating success.\n   Copyright (C) 1999-2014 Free Software Foundation, Inc.\n\n   This program is free software: you can redistribute it and/or modify\n   it under the terms of the GNU General Public License as published by\n   the Free Software Foundation, either version 3 of the License, or\n   (at your option) any later version.\n\n   This program is distributed in the hope that it will be useful,\n   but WITHOUT ANY WARRANTY; without even the implied warranty of\n   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n   GNU General Public License for more details.\n\n   You should have received a copy of the GNU General Public License\n   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */\n\n#include <config.h>\n#include <stdio.h>\n#include <sys/types.h>\n#include \"system.h\"\n\n/* Act like \"true\" by default; false.c overrides this.  */\n#ifndef EXIT_STATUS\n# define EXIT_STATUS EXIT_SUCCESS\n#endif\n\n#if EXIT_STATUS == EXIT_SUCCESS\n# define PROGRAM_NAME \"true\"\n#else\n# define PROGRAM_NAME \"false\"\n#endif\n\n#define AUTHORS proper_name (\"Jim Meyering\")\n\nvoid\nusage (int status)\n{\n  printf (_(\"\\\nUsage: %s [ignored command line arguments]\\n\\\n  or:  %s OPTION\\n\\\n\"),\n          program_name, program_name);\n  printf (\"%s\\n\\n\",\n          _(EXIT_STATUS == EXIT_SUCCESS\n            ? N_(\"Exit with a status code indicating success.\")\n            : N_(\"Exit with a status code indicating failure.\")));\n  fputs (HELP_OPTION_DESCRIPTION, stdout);\n  fputs (VERSION_OPTION_DESCRIPTION, stdout);\n  printf (USAGE_BUILTIN_WARNING, PROGRAM_NAME);\n  emit_ancillary_info ();\n  exit (status);\n}\n\nint\nmain (int argc, char **argv)\n{\n  /* Recognize --help or --version only if it's the only command-line\n     argument.  */\n  if (argc == 2)\n    {\n      initialize_main (&argc, &argv);\n      set_program_name (argv[0]);\n      setlocale (LC_ALL, \"\");\n      bindtextdomain (PACKAGE, LOCALEDIR);\n      textdomain (PACKAGE);\n\n      /* Note true(1) will return EXIT_FAILURE in the\n         edge case where writes fail with GNU specific options.  */\n      atexit (close_stdout);\n\n      if (STREQ (argv[1], \"--help\"))\n        usage (EXIT_STATUS);\n      if (STREQ (argv[1], \"--version\"))\n        version_etc (stdout, PROGRAM_NAME, PACKAGE_NAME, Version, AUTHORS,\n                     (char *) NULL);\n    }\n\n  exit (EXIT_STATUS);\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Truth in Code",
+        "story": []
+      },
+      "date": 1439105751320
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ea68d25caee6f698"
+      },
+      "id": "ea68d25caee6f698",
+      "type": "add",
+      "date": 1439105752616
+    },
+    {
+      "type": "edit",
+      "id": "ea68d25caee6f698",
+      "item": {
+        "type": "code",
+        "id": "ea68d25caee6f698",
+        "text": "while true\n\ndo\n\n   something\n\ndone"
+      },
+      "date": 1439105756360
+    },
+    {
+      "type": "edit",
+      "id": "ea68d25caee6f698",
+      "item": {
+        "type": "code",
+        "id": "ea68d25caee6f698",
+        "text": "while true\ndo\n   something\ndone"
+      },
+      "date": 1439105763258
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5bdcf4d265ea40a0"
+      },
+      "id": "5bdcf4d265ea40a0",
+      "type": "add",
+      "after": "ea68d25caee6f698",
+      "date": 1439105766828
+    },
+    {
+      "type": "move",
+      "order": [
+        "5bdcf4d265ea40a0",
+        "ea68d25caee6f698"
+      ],
+      "id": "5bdcf4d265ea40a0",
+      "date": 1439105769589
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "52ea7a11ac9ef65d"
+      },
+      "id": "52ea7a11ac9ef65d",
+      "type": "add",
+      "after": "ea68d25caee6f698",
+      "date": 1439106101635
+    },
+    {
+      "type": "edit",
+      "id": "52ea7a11ac9ef65d",
+      "item": {
+        "type": "code",
+        "id": "52ea7a11ac9ef65d",
+        "text": "#!/bin/sh\nexit 0"
+      },
+      "date": 1439106107190
+    },
+    {
+      "type": "edit",
+      "id": "5bdcf4d265ea40a0",
+      "item": {
+        "type": "paragraph",
+        "id": "5bdcf4d265ea40a0",
+        "text": "Originally it was a shell script which exit'd zero (which is 'true' in shell script world), basically:"
+      },
+      "date": 1439106125290
+    },
+    {
+      "type": "move",
+      "order": [
+        "ea68d25caee6f698",
+        "5bdcf4d265ea40a0",
+        "52ea7a11ac9ef65d"
+      ],
+      "id": "5bdcf4d265ea40a0",
+      "date": 1439106127812
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b7bd5fb15e3ef82e"
+      },
+      "id": "b7bd5fb15e3ef82e",
+      "type": "add",
+      "after": "52ea7a11ac9ef65d",
+      "date": 1439106129264
+    },
+    {
+      "type": "move",
+      "order": [
+        "b7bd5fb15e3ef82e",
+        "ea68d25caee6f698",
+        "5bdcf4d265ea40a0",
+        "52ea7a11ac9ef65d"
+      ],
+      "id": "b7bd5fb15e3ef82e",
+      "date": 1439106131037
+    },
+    {
+      "type": "edit",
+      "id": "b7bd5fb15e3ef82e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7bd5fb15e3ef82e",
+        "text": "/bin/true is a script which just returns true so you can do something like:"
+      },
+      "date": 1439106170295
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5f030bdd477f49ee"
+      },
+      "id": "5f030bdd477f49ee",
+      "type": "add",
+      "after": "52ea7a11ac9ef65d",
+      "date": 1439106239488
+    },
+    {
+      "type": "edit",
+      "id": "5f030bdd477f49ee",
+      "item": {
+        "type": "code",
+        "id": "5f030bdd477f49ee",
+        "text": "#!/sbin/sh\n#Tag 0x00000f00\n#       Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T\n#         All Rights Reserved\n\n#       THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T\n#       The copyright notice above does not evidence any\n#       actual or intended publication of such source code.\n#ident  \"@(#)true:true.sh       1.4\"\n#ident  \"$Revision: 1.6 $\"\nexit 0"
+      },
+      "date": 1439106274908
+    },
+    {
+      "type": "edit",
+      "id": "5f030bdd477f49ee",
+      "item": {
+        "type": "code",
+        "id": "5f030bdd477f49ee",
+        "text": "#!/sbin/sh\n#Tag 0x00000f00\n#  Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T\n#    All Rights Reserved\n\n#  THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T\n#  The copyright notice above does not evidence any\n#  actual or intended publication of such source code.\n\n#ident  \"@(#)true:true.sh       1.4\"\n#ident  \"$Revision: 1.6 $\"\nexit 0"
+      },
+      "date": 1439106342665
+    },
+    {
+      "type": "edit",
+      "id": "5f030bdd477f49ee",
+      "item": {
+        "type": "code",
+        "id": "5f030bdd477f49ee",
+        "text": "#!/sbin/sh\n#Tag 0x00000f00\n# Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T\n# All Rights Reserved\n\n# THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T\n# The copyright notice above does not evidence any\n# actual or intended publication of such source code.\n\n#ident  \"@(#)true:true.sh       1.4\"\n#ident  \"$Revision: 1.6 $\"\nexit 0"
+      },
+      "date": 1439106362147
+    },
+    {
+      "type": "edit",
+      "id": "5f030bdd477f49ee",
+      "item": {
+        "type": "code",
+        "id": "5f030bdd477f49ee",
+        "text": "#!/sbin/sh\n# Tag 0x00000f00\n# Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T\n# All Rights Reserved\n\n# THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF AT&T\n# The copyright notice above does not evidence any\n# actual or intended publication of such source code.\n\n#ident  \"@(#)true:true.sh       1.4\"\n#ident  \"$Revision: 1.6 $\"\nexit 0"
+      },
+      "date": 1439106380844
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "22bab3a036dbb507"
+      },
+      "id": "22bab3a036dbb507",
+      "type": "add",
+      "after": "5f030bdd477f49ee",
+      "date": 1439106688045
+    },
+    {
+      "type": "edit",
+      "id": "22bab3a036dbb507",
+      "item": {
+        "type": "paragraph",
+        "id": "22bab3a036dbb507",
+        "text": "At some point in its sorry existence AT&T added a long copyright and other info (yes, they copyrighted 'exit 0'). Something like:"
+      },
+      "date": 1439106690720
+    },
+    {
+      "type": "move",
+      "order": [
+        "b7bd5fb15e3ef82e",
+        "ea68d25caee6f698",
+        "5bdcf4d265ea40a0",
+        "52ea7a11ac9ef65d",
+        "22bab3a036dbb507",
+        "5f030bdd477f49ee"
+      ],
+      "id": "22bab3a036dbb507",
+      "date": 1439106692882
+    },
+    {
+      "type": "edit",
+      "id": "b7bd5fb15e3ef82e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7bd5fb15e3ef82e",
+        "text": "/bin/true is a script which just returns true so you can do something like - [http://www.quora.com/What-is-the-dumbest-code-ever-made-that-has-become-famous quora.com]"
+      },
+      "date": 1439106752946
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3d4ac952b4bfbb40"
+      },
+      "id": "3d4ac952b4bfbb40",
+      "type": "add",
+      "after": "5f030bdd477f49ee",
+      "date": 1439106803967
+    },
+    {
+      "type": "edit",
+      "id": "3d4ac952b4bfbb40",
+      "item": {
+        "type": "paragraph",
+        "id": "3d4ac952b4bfbb40",
+        "text": "Then someone noticed that an empty script exits 0 so you don't even need the 'exit 0'.\n\nThe copyright stayed however, a file which was empty except for the copyright. So an empty file was now the property of AT&T, unpublished of course. Talk about much ado about nothing!\n\nNow (checking Linux) it seems to actually be a binary because I guess someone decided that runs faster. The source version from GNU coreutils 8.23  for true.c is 80 lines long and the binary is 125KB (27KB stripped):"
+      },
+      "date": 1439106813209
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "02cb443bf1df3300"
+      },
+      "id": "02cb443bf1df3300",
+      "type": "add",
+      "after": "3d4ac952b4bfbb40",
+      "date": 1439106815474
+    },
+    {
+      "type": "edit",
+      "id": "02cb443bf1df3300",
+      "item": {
+        "type": "code",
+        "id": "02cb443bf1df3300",
+        "text": "/* Exit with a status code indicating success.\n   Copyright (C) 1999-2014 Free Software Foundation, Inc.\n\n   This program is free software: you can redistribute it and/or modify\n   it under the terms of the GNU General Public License as published by\n   the Free Software Foundation, either version 3 of the License, or\n   (at your option) any later version.\n\n   This program is distributed in the hope that it will be useful,\n   but WITHOUT ANY WARRANTY; without even the implied warranty of\n   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n   GNU General Public License for more details.\n\n   You should have received a copy of the GNU General Public License\n   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */\n\n#include <config.h>\n#include <stdio.h>\n#include <sys/types.h>\n#include \"system.h\"\n\n/* Act like \"true\" by default; false.c overrides this.  */\n#ifndef EXIT_STATUS\n# define EXIT_STATUS EXIT_SUCCESS\n#endif\n\n#if EXIT_STATUS == EXIT_SUCCESS\n# define PROGRAM_NAME \"true\"\n#else\n# define PROGRAM_NAME \"false\"\n#endif\n\n#define AUTHORS proper_name (\"Jim Meyering\")\n\nvoid\nusage (int status)\n{\n  printf (_(\"\\\nUsage: %s [ignored command line arguments]\\n\\\n  or:  %s OPTION\\n\\\n\"),\n          program_name, program_name);\n  printf (\"%s\\n\\n\",\n          _(EXIT_STATUS == EXIT_SUCCESS\n            ? N_(\"Exit with a status code indicating success.\")\n            : N_(\"Exit with a status code indicating failure.\")));\n  fputs (HELP_OPTION_DESCRIPTION, stdout);\n  fputs (VERSION_OPTION_DESCRIPTION, stdout);\n  printf (USAGE_BUILTIN_WARNING, PROGRAM_NAME);\n  emit_ancillary_info ();\n  exit (status);\n}\n\nint\nmain (int argc, char **argv)\n{\n  /* Recognize --help or --version only if it's the only command-line\n     argument.  */\n  if (argc == 2)\n    {\n      initialize_main (&argc, &argv);\n      set_program_name (argv[0]);\n      setlocale (LC_ALL, \"\");\n      bindtextdomain (PACKAGE, LOCALEDIR);\n      textdomain (PACKAGE);\n\n      /* Note true(1) will return EXIT_FAILURE in the\n         edge case where writes fail with GNU specific options.  */\n      atexit (close_stdout);\n\n      if (STREQ (argv[1], \"--help\"))\n        usage (EXIT_STATUS);\n      if (STREQ (argv[1], \"--version\"))\n        version_etc (stdout, PROGRAM_NAME, PACKAGE_NAME, Version, AUTHORS,\n                     (char *) NULL);\n    }\n\n  exit (EXIT_STATUS);\n}"
+      },
+      "date": 1439107012504
+    },
+    {
+      "type": "fork",
+      "site": "forage.david.bovill.me"
+    },
+    {
+      "type": "edit",
+      "id": "b7bd5fb15e3ef82e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7bd5fb15e3ef82e",
+        "text": "Truth is an important concept in code and logic. It's history of implementation however is unreasonably amusing."
+      },
+      "date": 1439107354172
+    },
+    {
+      "type": "add",
+      "id": "dac10eb0fc985238",
+      "item": {
+        "type": "paragraph",
+        "id": "dac10eb0fc985238",
+        "text": "/bin/true is a script which just returns true so you can do something like - [http://www.quora.com/What-is-the-dumbest-code-ever-made-that-has-become-famous quora.com]"
+      },
+      "after": "b7bd5fb15e3ef82e",
+      "date": 1439107357146
+    },
+    {
+      "type": "remove",
+      "id": "dac10eb0fc985238",
+      "date": 1439107361363
+    },
+    {
+      "type": "edit",
+      "id": "b7bd5fb15e3ef82e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7bd5fb15e3ef82e",
+        "text": "Truth is an important concept in code and logic. It's history of implementation however is unreasonably amusing. /bin/true is a script which just returns true so you can do something like - [http://www.quora.com/What-is-the-dumbest-code-ever-made-that-has-become-famous quora.com]"
+      },
+      "date": 1439107364186
+    },
+    {
+      "type": "edit",
+      "id": "b7bd5fb15e3ef82e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7bd5fb15e3ef82e",
+        "text": "Truth is an important concept in code and logic. It's history of implementation however is unreasonably amusing. "
+      },
+      "date": 1439107411227
+    },
+    {
+      "type": "add",
+      "id": "ae35f4f945f137b6",
+      "item": {
+        "type": "paragraph",
+        "id": "ae35f4f945f137b6",
+        "text": "/bin/true is a script which just returns true so you can do something like - [http://www.quora.com/What-is-the-dumbest-code-ever-made-that-has-become-famous quora.com]"
+      },
+      "after": "b7bd5fb15e3ef82e",
+      "date": 1439107413088
+    },
+    {
+      "type": "edit",
+      "id": "b7bd5fb15e3ef82e",
+      "item": {
+        "type": "paragraph",
+        "id": "b7bd5fb15e3ef82e",
+        "text": "Truth is an important concept in code and logic. It's history of implementation however is unreasonably amusing. So much so that I think these \"facts\" need checking."
+      },
+      "date": 1439107473397
+    }
+  ]
+}

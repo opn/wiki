@@ -1,0 +1,105 @@
+{
+  "title": "Nginx Configuration",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a1fd5be10c6dea9d",
+      "text": "First we need to change in our NGINX config file, open NGINX config file in your editor, i primary use [[nano]]:"
+    },
+    {
+      "type": "code",
+      "id": "ff05855f58656f35",
+      "text": "nano /usr/local/etc/nginx/nginx.conf  "
+    },
+    {
+      "type": "paragraph",
+      "id": "4bcb0861e05443bf",
+      "text": "My nginx.conf file look like this:"
+    },
+    {
+      "type": "code",
+      "id": "68acdeb845d6d34c",
+      "text": "#user  nobody;\nworker_processes  1;\n\n#error_log  logs/error.log;\n#error_log  logs/error.log  notice;\n#error_log  logs/error.log  info;\n\nevents {  \n    worker_connections  1024;\n}\n\n\nhttp {  \n    include       mime.types;\n    include       sites-enabled/*; # load virtuals config\n    sendfile        on;\n    keepalive_timeout  65;\n\n    # gzip  on;\n    # gzip_disable \"MSIE [1-6]\\.(?!.*SV1)\";\n\n    server {\n        listen       8080;\n        server_name  localhost;\n\n        location / {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.php;\n        }\n\n        # configure *.PHP requests\n\n        location ~ \\.php$ {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.html index.htm index.php;\n            fastcgi_param PATH_INFO $fastcgi_path_info;\n            fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n            fastcgi_pass 127.0.0.1:9000;\n            fastcgi_index index.php;\n            fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n            fastcgi_intercept_errors on;\n            include fastcgi_params;\n        }\n    }\n}"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Nginx Configuration",
+        "story": []
+      },
+      "date": 1502226362586
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "9a6cdaf824dd1d05",
+        "text": "# [[Nginx Configuration]]\nFirst we need to change in our NGINX config file, open NGINX config file in your editor, i primary use [[nano]]:"
+      },
+      "id": "9a6cdaf824dd1d05",
+      "date": 1502226366574
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "ff05855f58656f35",
+        "text": "nano /usr/local/etc/nginx/nginx.conf  "
+      },
+      "after": "9a6cdaf824dd1d05",
+      "id": "ff05855f58656f35",
+      "date": 1502226374606
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4bcb0861e05443bf",
+        "text": "My nginx.conf file look like this:"
+      },
+      "after": "ff05855f58656f35",
+      "id": "4bcb0861e05443bf",
+      "date": 1502226376529
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "68acdeb845d6d34c",
+        "text": "#user  nobody;\nworker_processes  1;\n\n#error_log  logs/error.log;\n#error_log  logs/error.log  notice;\n#error_log  logs/error.log  info;\n\nevents {  \n    worker_connections  1024;\n}\n\n\nhttp {  \n    include       mime.types;\n    include       sites-enabled/*; # load virtuals config\n    sendfile        on;\n    keepalive_timeout  65;\n\n    # gzip  on;\n    # gzip_disable \"MSIE [1-6]\\.(?!.*SV1)\";\n\n    server {\n        listen       8080;\n        server_name  localhost;\n\n        location / {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.php;\n        }\n\n        # configure *.PHP requests\n\n        location ~ \\.php$ {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.html index.htm index.php;\n            fastcgi_param PATH_INFO $fastcgi_path_info;\n            fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n            fastcgi_pass 127.0.0.1:9000;\n            fastcgi_index index.php;\n            fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n            fastcgi_intercept_errors on;\n            include fastcgi_params;\n        }\n    }\n}"
+      },
+      "after": "4bcb0861e05443bf",
+      "id": "68acdeb845d6d34c",
+      "date": 1502226379624
+    },
+    {
+      "type": "remove",
+      "id": "9a6cdaf824dd1d05",
+      "date": 1502226588977
+    },
+    {
+      "type": "add",
+      "id": "a1fd5be10c6dea9d",
+      "item": {
+        "type": "paragraph",
+        "id": "a1fd5be10c6dea9d",
+        "text": "First we need to change in our NGINX config file, open NGINX config file in your editor, i primary use [[nano]]:"
+      },
+      "after": "4bcb0861e05443bf",
+      "date": 1502226595043
+    },
+    {
+      "type": "move",
+      "order": [
+        "a1fd5be10c6dea9d",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c"
+      ],
+      "id": "a1fd5be10c6dea9d",
+      "date": 1502226596676
+    }
+  ]
+}

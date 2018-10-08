@@ -1,0 +1,241 @@
+{
+  "title": "RDF-Dataset-Normalization",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e110a6f6a465f3ec",
+      "text": "This document outlines an algorithm for normalizing RDF datasets such that these operations can be performed - [http://json-ld.github.io/normalization/spec/#normalization json-ld.github.io]"
+    },
+    {
+      "type": "markdown",
+      "id": "323f9a51e4cc20f3",
+      "text": "# Background"
+    },
+    {
+      "type": "paragraph",
+      "id": "2eb262da141484df",
+      "text": "RDF [RDF-CONCEPTS] describes a graph-based data model for making claims about the world and provides the foundation for reasoning upon that graph of information. "
+    },
+    {
+      "type": "paragraph",
+      "id": "31a62c8b6fbf9627",
+      "text": "At times, it becomes necessary to compare the differences between sets of graphs, digitally sign them, or generate short identifiers for graphs via hashing algorithms."
+    },
+    {
+      "type": "paragraph",
+      "id": "9acc8663de1946e9",
+      "text": "When data scientists discuss normalization, they do so in the context of achieving a particular set of goals. Since the same information may sometimes be expressed in a variety of different ways, it often becomes necessary to be able to transform each of these different ways into a single, standard format. With a standard format, the differences between two different sets of data can be easily determined, a cryptographically-strong hash identifier can be generated for a particular set of data, and a particular set of data may be digitally-signed for later verification.\n\nIn particular, this specification is about normalizing RDF datasets, which are collections of graphs. Since a directed graph can express the same information in more than one way, it requires normalization to achieve the aforementioned goals and any others that may arise via surrendipity.\n\nMost RDF datasets can be normalized fairly quickly, in terms of algorithmic time complexity. However, those that contain nodes that do not have globally unique identifiers pose a greater challenge. Normalizing these datasets presents the graph isomorphism problem, a problem that is believed to be difficult to solve quickly. More formally, it is believed to be an NP-Intermediate problem, that is, neither known to be solvable in polynomial time nor NP-complete. Fortunately, existing real world data is rarely modeled in a way that manifests this problem and new data can be modeled to avoid it. In fact, software systems can detect a problematic dataset and may choose to assume it's an attempted denial of service attack, rather than a real input, and abort.\n\nThis document outlines an algorithm for generating a normalized RDF dataset given an RDF dataset as input. The algorithm is called the Universal RDF Dataset Normalization Algorithm 2015 or URDNA2015."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "RDF-Dataset-Normalization",
+        "story": []
+      },
+      "date": 1452622908687
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2eb262da141484df"
+      },
+      "id": "2eb262da141484df",
+      "type": "add",
+      "date": 1452622909740
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "https://web-payments.org/specs/source/ld-signatures/#bib-RDF-DATASET-NORMALIZATION"
+      },
+      "date": 1452622914349
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "The term Linked Data is used to describe a recommended best practice for exposing, sharing, and connecting information on the Web using standards, such as URLs, to identify things and their properties. When information is presented as Linked Data, other related information can be easily discovered and new information can be easily linked to it. Linked Data is extensible in a decentralized way, greatly reducing barriers to large scale integration. With the increase in usage of Linked Data for a variety of applications, there is a need to be able to verify the authenticity and integrity of Linked Data documents. This specification adds authentication and integrity protection to Linked Data documents through the use of public/private key cryptography without sacrificing Linked Data features such as extensibility and composability - [https://web-payments.org/specs/source/ld-signatures/#bib-RDF-DATASET-NORMALIZATION web-payments.org]"
+      },
+      "date": 1452622971405
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "The term Linked Data is used to describe a recommended best practice for exposing, sharing, and connecting information on the Web using standards, such as URLs, to identify things and their properties. "
+      },
+      "date": 1452622977684
+    },
+    {
+      "type": "add",
+      "id": "5fcda9cc75fc6fa1",
+      "item": {
+        "type": "paragraph",
+        "id": "5fcda9cc75fc6fa1",
+        "text": "When information is presented as Linked Data, other related information can be easily discovered and new information can be easily linked to it. Linked Data is extensible in a decentralized way, greatly reducing barriers to large scale integration. "
+      },
+      "after": "2eb262da141484df",
+      "date": 1452622980789
+    },
+    {
+      "type": "add",
+      "id": "788d636352c91944",
+      "item": {
+        "type": "paragraph",
+        "id": "788d636352c91944",
+        "text": "With the increase in usage of Linked Data for a variety of applications, there is a need to be able to verify the authenticity and integrity of Linked Data documents. "
+      },
+      "after": "5fcda9cc75fc6fa1",
+      "date": 1452622984260
+    },
+    {
+      "type": "add",
+      "id": "666bb75a5f8774e4",
+      "item": {
+        "type": "paragraph",
+        "id": "666bb75a5f8774e4",
+        "text": "This specification adds authentication and integrity protection to Linked Data documents through the use of public/private key cryptography without sacrificing Linked Data features such as extensibility and composability - [https://web-payments.org/specs/source/ld-signatures/#bib-RDF-DATASET-NORMALIZATION web-payments.org]"
+      },
+      "after": "788d636352c91944",
+      "date": 1452622988254
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "The term [[Linked Data]] is used to describe a recommended best practice for exposing, sharing, and connecting information on the Web using standards, such as URLs, to identify things and their properties. "
+      },
+      "date": 1452623019334
+    },
+    {
+      "type": "remove",
+      "id": "666bb75a5f8774e4",
+      "date": 1452623219986
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "- [http://json-ld.github.io/normalization/spec/#normalization json-ld.github.io]"
+      },
+      "date": 1452623254221
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "RDF [RDF-CONCEPTS] describes a graph-based data model for making claims about the world and provides the foundation for reasoning upon that graph of information. At times, it becomes necessary to compare the differences between sets of graphs, digitally sign them, or generate short identifiers for graphs via hashing algorithms. This document outlines an algorithm for normalizing RDF datasets such that these operations can be performed - [http://json-ld.github.io/normalization/spec/#normalization json-ld.github.io]"
+      },
+      "date": 1452623272917
+    },
+    {
+      "type": "remove",
+      "id": "5fcda9cc75fc6fa1",
+      "date": 1452623276956
+    },
+    {
+      "type": "remove",
+      "id": "788d636352c91944",
+      "date": 1452623278828
+    },
+    {
+      "type": "edit",
+      "id": "2eb262da141484df",
+      "item": {
+        "type": "paragraph",
+        "id": "2eb262da141484df",
+        "text": "RDF [RDF-CONCEPTS] describes a graph-based data model for making claims about the world and provides the foundation for reasoning upon that graph of information. "
+      },
+      "date": 1452623287909
+    },
+    {
+      "type": "add",
+      "id": "31a62c8b6fbf9627",
+      "item": {
+        "type": "paragraph",
+        "id": "31a62c8b6fbf9627",
+        "text": "At times, it becomes necessary to compare the differences between sets of graphs, digitally sign them, or generate short identifiers for graphs via hashing algorithms. "
+      },
+      "after": "2eb262da141484df",
+      "date": 1452623300005
+    },
+    {
+      "type": "add",
+      "id": "e110a6f6a465f3ec",
+      "item": {
+        "type": "paragraph",
+        "id": "e110a6f6a465f3ec",
+        "text": "This document outlines an algorithm for normalizing RDF datasets such that these operations can be performed - [http://json-ld.github.io/normalization/spec/#normalization json-ld.github.io]"
+      },
+      "after": "31a62c8b6fbf9627",
+      "date": 1452623306222
+    },
+    {
+      "type": "move",
+      "order": [
+        "e110a6f6a465f3ec",
+        "2eb262da141484df",
+        "31a62c8b6fbf9627"
+      ],
+      "id": "e110a6f6a465f3ec",
+      "date": 1452623307749
+    },
+    {
+      "type": "add",
+      "id": "323f9a51e4cc20f3",
+      "item": {
+        "type": "paragraph",
+        "id": "323f9a51e4cc20f3",
+        "text": "# Background"
+      },
+      "after": "e110a6f6a465f3ec",
+      "date": 1452623315543
+    },
+    {
+      "type": "edit",
+      "id": "323f9a51e4cc20f3",
+      "item": {
+        "type": "markdown",
+        "id": "323f9a51e4cc20f3",
+        "text": "# Background"
+      },
+      "date": 1452623316745
+    },
+    {
+      "type": "edit",
+      "id": "31a62c8b6fbf9627",
+      "item": {
+        "type": "paragraph",
+        "id": "31a62c8b6fbf9627",
+        "text": "At times, it becomes necessary to compare the differences between sets of graphs, digitally sign them, or generate short identifiers for graphs via hashing algorithms."
+      },
+      "date": 1452623377560
+    },
+    {
+      "type": "add",
+      "id": "9acc8663de1946e9",
+      "item": {
+        "type": "paragraph",
+        "id": "9acc8663de1946e9",
+        "text": "When data scientists discuss normalization, they do so in the context of achieving a particular set of goals. Since the same information may sometimes be expressed in a variety of different ways, it often becomes necessary to be able to transform each of these different ways into a single, standard format. With a standard format, the differences between two different sets of data can be easily determined, a cryptographically-strong hash identifier can be generated for a particular set of data, and a particular set of data may be digitally-signed for later verification.\n\nIn particular, this specification is about normalizing RDF datasets, which are collections of graphs. Since a directed graph can express the same information in more than one way, it requires normalization to achieve the aforementioned goals and any others that may arise via surrendipity.\n\nMost RDF datasets can be normalized fairly quickly, in terms of algorithmic time complexity. However, those that contain nodes that do not have globally unique identifiers pose a greater challenge. Normalizing these datasets presents the graph isomorphism problem, a problem that is believed to be difficult to solve quickly. More formally, it is believed to be an NP-Intermediate problem, that is, neither known to be solvable in polynomial time nor NP-complete. Fortunately, existing real world data is rarely modeled in a way that manifests this problem and new data can be modeled to avoid it. In fact, software systems can detect a problematic dataset and may choose to assume it's an attempted denial of service attack, rather than a real input, and abort.\n\nThis document outlines an algorithm for generating a normalized RDF dataset given an RDF dataset as input. The algorithm is called the Universal RDF Dataset Normalization Algorithm 2015 or URDNA2015."
+      },
+      "after": "31a62c8b6fbf9627",
+      "date": 1452623379979
+    }
+  ]
+}

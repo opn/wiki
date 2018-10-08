@@ -1,0 +1,535 @@
+{
+  "title": "Apparatus",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "68895a322c2f41ae",
+      "text": "I admire Apparatus which was brought to my attention by Bret Victor, whom I also admire.  Been thinking about how I might connect apparatus to wiki. [https://aprt.us site]"
+    },
+    {
+      "type": "paragraph",
+      "id": "5e73bc39a78d6d3d",
+      "text": "Reviewing commits from earlier this year, I noticed a thing about a \"viewer\".  Not much in the way of docs, but looks like there are tests.  So... create a plugin which includes the viewer. [https://github.com/cdglabs/apparatus/commit/8409a20fbded9d3f1dd1af516c34279bf0043808 commit]"
+    },
+    {
+      "type": "paragraph",
+      "id": "b982453c970a1c57",
+      "text": "Apparatus itself wants a whole browser for editing.  Graphics editing inside a wiki page seems quite limiting -- not enough screen real estate.  But while I was browsing the code and tests, I did find docs about self-hosting an installation.  I containerized apparatus for use in a local installation: [[Container dobbs/apparatus]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "694b2e03659f9b8f",
+      "text": "Which would emit an iFrame embedding the example diagram \"Wheel Diagram\".  [http://aprt.us/editor/?load=doc/examples/Wheel%20Diagram.json diagram]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ab2dd0b43638e0f9",
+      "text": "Many months ago I created a model in aprt.us to help explain why programming around time is so painful.  Well, maybe I created that more so I could have a tool to think with next time I needed to reason about time-related code.  Either way, I learned how to save and load my explorable.  So... maybe create a transporter for moving a saved model into a wiki"
+    },
+    {
+      "type": "pagefold",
+      "id": "87c24181fe2e34d4",
+      "text": "."
+    },
+    {
+      "type": "paragraph",
+      "id": "bd3e238023a1b978",
+      "text": "Here we sketch a proof-of-concept for an apparatus plugin.  It will require some interaction from you, Dear Reader.  Copy the code block below and paste it into your web browser's javascript console."
+    },
+    {
+      "type": "html",
+      "id": "1a6802950db64692",
+      "text": "<div id=\"aprtus-poc\" style=\"font-style: italic;\">\nThis placeholder will be replaced when you paste the code below.\n</div>"
+    },
+    {
+      "type": "code",
+      "id": "c03915e9bbd409e6",
+      "text": "decorate = (url, boundsX, boundsY) => {\n  return [\n   url,\n   'fullScreen=1',\n   'viewOnly=1',\n   'editLink=1',\n   'regionOfInterest={\"x\": [' + new String(boundsX) + '],\"y\": [' + new String(boundsY) + ']}'\n  ].join('&')\n}\n\nemit = (url, boundsX = [-4,4], boundsY = [-3,3]) => {\n  $('#aprtus-poc').html('<iframe src=\"\" width=\"430\" height=\"300\" style=\"border: none;\">')\n  var decoratedUrl = decorate(url, boundsX, boundsY)\n  console.log(decoratedUrl)\n  $('#aprtus-poc iframe').attr(\n    'src',\n    decoratedUrl\n  )\n} \n\nemit(\n  '//aprt.us/editor/?load=doc/examples/Wheel+Diagram.json',\n  [-6,6],\n  [-3,3]\n)"
+    },
+    {
+      "type": "paragraph",
+      "id": "007699b254b781bc",
+      "text": "There are many choices to make."
+    },
+    {
+      "type": "paragraph",
+      "id": "e089238f855a360d",
+      "text": "This currently imagines a markup like the following:"
+    },
+    {
+      "type": "code",
+      "id": "fa81e312ada8d2ac",
+      "text": "APPARATUS //aprt.us/editor/\nDIAGRAM doc/examples/Wheel Diagram.json\nBOUNDS_X -6, 6\nBOUNDS_Y -3, 3\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "a60d416eedee5ad5",
+      "text": "Which would emit an iFrame embedding the example diagram \"Wheel Diagram\".  [http://aprt.us/editor/?load=doc/examples/Wheel%20Diagram.json diagram]"
+    },
+    {
+      "type": "paragraph",
+      "id": "55938653bdf56954",
+      "text": "The apparatus editor offers ways to save a diagram to one's laptop and to reload it into an editor later.  I have also discovered how to host my own apparatus in a container, and where to save diagrams where the editor can load them like it does with the examples on the web site."
+    },
+    {
+      "type": "paragraph",
+      "id": "13783ac1df1e22c7",
+      "text": "It begs questions about how to simplify a workflow for saving and publishing diagrams."
+    },
+    {
+      "type": "paragraph",
+      "id": "5a6ef94679b1a698",
+      "text": "Since the apparatus data structure is json, can the json plugin be combined in some way?"
+    },
+    {
+      "type": "paragraph",
+      "id": "efb6a758f55cd05c",
+      "text": "I'm not crazy about that markup.  I would like the compute the dimensions of the iframe from the proportions in BOUNDS_X and BOUNDS_Y.  But I also wish the viewer could read the bounds from the diagram's .json."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Apparatus",
+        "story": []
+      },
+      "date": 1503538949292
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "68895a322c2f41ae",
+        "text": "I admire Apparatus which was brought to my attention by Bret Victor, whom I also admire.  Been thinking about how I might connect apparatus to wiki. [https://aprt.us site]"
+      },
+      "id": "68895a322c2f41ae",
+      "date": 1503538958059
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5e73bc39a78d6d3d",
+        "text": "Reviewing commits from earlier this year, I noticed a thing about a \"viewer\".  Not much in the way of docs, but looks like there are tests.  So... create a plugin which includes the viewer. [https://github.com/cdglabs/apparatus/commit/8409a20fbded9d3f1dd1af516c34279bf0043808 commit]"
+      },
+      "after": "68895a322c2f41ae",
+      "id": "5e73bc39a78d6d3d",
+      "date": 1503538965149
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b982453c970a1c57",
+        "text": "Apparatus itself wants a whole browser for editing.  Graphics editing inside a wiki page seems quite limiting -- not enough screen real estate.  But while I was browsing the code and tests, I did find docs about self-hosting an installation.  I containerized apparatus for use in a local installation: [[Container dobbs/apparatus]]"
+      },
+      "after": "5e73bc39a78d6d3d",
+      "id": "b982453c970a1c57",
+      "date": 1503538970973
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ab2dd0b43638e0f9",
+        "text": "Many months ago I created a model in aprt.us to help explain why programming around time is so painful.  Well, maybe I created that more so I could have a tool to think with next time I needed to reason about time-related code.  Either way, I learned how to save and load my explorable.  So... maybe create a transporter for moving a saved model into a wiki"
+      },
+      "after": "b982453c970a1c57",
+      "id": "ab2dd0b43638e0f9",
+      "date": 1503538975713
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bd3e238023a1b978",
+        "text": "Based on today's (2017-08-16) hangout, there may soon be a good home within wiki for storing assets.  So the transporter could save the .json file from apparatus into this assets folder, and the plugin with the viewer could load that .json from there."
+      },
+      "after": "ab2dd0b43638e0f9",
+      "id": "bd3e238023a1b978",
+      "date": 1503538978881
+    },
+    {
+      "type": "edit",
+      "id": "bd3e238023a1b978",
+      "item": {
+        "type": "paragraph",
+        "id": "bd3e238023a1b978",
+        "text": "Here we sketch a proof-of-concept for an apparatus plugin.  It will require some interaction from you, Dear Reader.  Copy the code block below and paste it into your web browser's javascript console."
+      },
+      "date": 1511484610946
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1a6802950db64692"
+      },
+      "id": "1a6802950db64692",
+      "type": "add",
+      "after": "bd3e238023a1b978",
+      "date": 1511484612353
+    },
+    {
+      "type": "edit",
+      "id": "1a6802950db64692",
+      "item": {
+        "type": "html",
+        "id": "1a6802950db64692",
+        "text": "<div id=\"aprtus-poc\">\nThis placeholder will be replaced when you paste the code below.\n</div>"
+      },
+      "date": 1511484670609
+    },
+    {
+      "type": "edit",
+      "id": "1a6802950db64692",
+      "item": {
+        "type": "html",
+        "id": "1a6802950db64692",
+        "text": "<div id=\"aprtus-poc\" style=\"font-style: italic;\">\nThis placeholder will be replaced when you paste the code below.\n</div>"
+      },
+      "date": 1511484716724
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c03915e9bbd409e6"
+      },
+      "id": "c03915e9bbd409e6",
+      "type": "add",
+      "after": "1a6802950db64692",
+      "date": 1511484738289
+    },
+    {
+      "type": "edit",
+      "id": "c03915e9bbd409e6",
+      "item": {
+        "type": "code",
+        "id": "c03915e9bbd409e6",
+        "text": "decorate = (url, boundsX, boundsY) => {\n  return [\n   url,\n   'fullScreen=1',\n   'viewOnly=1',\n   'editLink=1',\n   'regionOfInterest={\"x\": [' + new String([-6, 6]) + '],\"y\": [' + new String([-3, 3]) + ']}'\n  ].join('&')\n}\n\nemit = (url, boundsX = [-4,4], boundsY = [-3,3]) => {\n  $('#apparatus').html('<iframe src=\"\" width=\"430\" height=\"300\" style=\"border: none;\">')\n  var decoratedUrl = decorate(url, boundsX, boundsY)\n  console.log(decoratedUrl)\n  $('#apparatus iframe').attr(\n    'src',\n    decoratedUrl\n  )\n} \n\nemit(\n  'http://aprt.us/editor/?load=doc/examples/Wheel+Diagram.json',\n  [-6,6],\n  [-3,3]\n)"
+      },
+      "date": 1511484751106
+    },
+    {
+      "type": "edit",
+      "id": "c03915e9bbd409e6",
+      "item": {
+        "type": "code",
+        "id": "c03915e9bbd409e6",
+        "text": "decorate = (url, boundsX, boundsY) => {\n  return [\n   url,\n   'fullScreen=1',\n   'viewOnly=1',\n   'editLink=1',\n   'regionOfInterest={\"x\": [' + new String([-6, 6]) + '],\"y\": [' + new String([-3, 3]) + ']}'\n  ].join('&')\n}\n\nemit = (url, boundsX = [-4,4], boundsY = [-3,3]) => {\n  $('#apparatus').html('<iframe src=\"\" width=\"430\" height=\"300\" style=\"border: none;\">')\n  var decoratedUrl = decorate(url, boundsX, boundsY)\n  console.log(decoratedUrl)\n  $('#apparatus iframe').attr(\n    'src',\n    decoratedUrl\n  )\n} \n\nemit(\n  '//aprt.us/editor/?load=doc/examples/Wheel+Diagram.json',\n  [-6,6],\n  [-3,3]\n)"
+      },
+      "date": 1511484845865
+    },
+    {
+      "type": "edit",
+      "id": "c03915e9bbd409e6",
+      "item": {
+        "type": "code",
+        "id": "c03915e9bbd409e6",
+        "text": "decorate = (url, boundsX, boundsY) => {\n  return [\n   url,\n   'fullScreen=1',\n   'viewOnly=1',\n   'editLink=1',\n   'regionOfInterest={\"x\": [' + new String([-6, 6]) + '],\"y\": [' + new String([-3, 3]) + ']}'\n  ].join('&')\n}\n\nemit = (url, boundsX = [-4,4], boundsY = [-3,3]) => {\n  $('#aprtus-poc').html('<iframe src=\"\" width=\"430\" height=\"300\" style=\"border: none;\">')\n  var decoratedUrl = decorate(url, boundsX, boundsY)\n  console.log(decoratedUrl)\n  $('#aprtus-poc iframe').attr(\n    'src',\n    decoratedUrl\n  )\n} \n\nemit(\n  '//aprt.us/editor/?load=doc/examples/Wheel+Diagram.json',\n  [-6,6],\n  [-3,3]\n)"
+      },
+      "date": 1511485021924
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "87c24181fe2e34d4"
+      },
+      "id": "87c24181fe2e34d4",
+      "type": "add",
+      "after": "c03915e9bbd409e6",
+      "date": 1511485407318
+    },
+    {
+      "type": "edit",
+      "id": "87c24181fe2e34d4",
+      "item": {
+        "type": "pagefold",
+        "id": "87c24181fe2e34d4",
+        "text": "."
+      },
+      "date": 1511485411217
+    },
+    {
+      "type": "move",
+      "order": [
+        "68895a322c2f41ae",
+        "5e73bc39a78d6d3d",
+        "b982453c970a1c57",
+        "ab2dd0b43638e0f9",
+        "87c24181fe2e34d4",
+        "bd3e238023a1b978",
+        "1a6802950db64692",
+        "c03915e9bbd409e6"
+      ],
+      "id": "87c24181fe2e34d4",
+      "date": 1511485420835
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "007699b254b781bc"
+      },
+      "id": "007699b254b781bc",
+      "type": "add",
+      "after": "c03915e9bbd409e6",
+      "date": 1511485440237
+    },
+    {
+      "type": "edit",
+      "id": "007699b254b781bc",
+      "item": {
+        "type": "paragraph",
+        "id": "007699b254b781bc",
+        "text": "There are many choices to make.  This currently imagines a markup like the following:"
+      },
+      "date": 1511485512497
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fa81e312ada8d2ac"
+      },
+      "id": "fa81e312ada8d2ac",
+      "type": "add",
+      "after": "c74664ae58665e27",
+      "date": 1511485525279
+    },
+    {
+      "type": "edit",
+      "id": "fa81e312ada8d2ac",
+      "item": {
+        "type": "code",
+        "id": "fa81e312ada8d2ac",
+        "text": "APPARATUS //aprt.us/editor/\n\nBOUNDS_X -6, 6\nBOUNDS_Y -3, 3"
+      },
+      "date": 1511485625039
+    },
+    {
+      "type": "edit",
+      "id": "fa81e312ada8d2ac",
+      "item": {
+        "type": "code",
+        "id": "fa81e312ada8d2ac",
+        "text": "APPARATUS //aprt.us/editor/\nDIAGRAM doc/examples/Wheel Diagram.json\nBOUNDS_X -6, 6\nBOUNDS_Y -3, 3\n"
+      },
+      "date": 1511485668271
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "694b2e03659f9b8f"
+      },
+      "id": "694b2e03659f9b8f",
+      "type": "add",
+      "after": "fa81e312ada8d2ac",
+      "date": 1511485718107
+    },
+    {
+      "type": "edit",
+      "id": "694b2e03659f9b8f",
+      "item": {
+        "type": "paragraph",
+        "id": "694b2e03659f9b8f",
+        "text": "Which would emit an iFrame embedding the example diagram \"Wheel Diagram\".  [http://aprt.us/editor/?load=doc/examples/Wheel%20Diagram.json diagram]"
+      },
+      "date": 1511485796742
+    },
+    {
+      "type": "edit",
+      "id": "007699b254b781bc",
+      "item": {
+        "type": "paragraph",
+        "id": "007699b254b781bc",
+        "text": "There are many choices to make."
+      },
+      "date": 1511485806772
+    },
+    {
+      "type": "add",
+      "id": "e089238f855a360d",
+      "item": {
+        "type": "paragraph",
+        "id": "e089238f855a360d",
+        "text": "This currently imagines a markup like the following:"
+      },
+      "after": "007699b254b781bc",
+      "date": 1511485807174
+    },
+    {
+      "type": "add",
+      "id": "efb6a758f55cd05c",
+      "item": {
+        "type": "paragraph",
+        "id": "efb6a758f55cd05c",
+        "text": "I'm not crazy about that markup.  But "
+      },
+      "after": "694b2e03659f9b8f",
+      "date": 1511486546615
+    },
+    {
+      "type": "edit",
+      "id": "c03915e9bbd409e6",
+      "item": {
+        "type": "code",
+        "id": "c03915e9bbd409e6",
+        "text": "decorate = (url, boundsX, boundsY) => {\n  return [\n   url,\n   'fullScreen=1',\n   'viewOnly=1',\n   'editLink=1',\n   'regionOfInterest={\"x\": [' + new String(boundsX) + '],\"y\": [' + new String(boundsY) + ']}'\n  ].join('&')\n}\n\nemit = (url, boundsX = [-4,4], boundsY = [-3,3]) => {\n  $('#aprtus-poc').html('<iframe src=\"\" width=\"430\" height=\"300\" style=\"border: none;\">')\n  var decoratedUrl = decorate(url, boundsX, boundsY)\n  console.log(decoratedUrl)\n  $('#aprtus-poc iframe').attr(\n    'src',\n    decoratedUrl\n  )\n} \n\nemit(\n  '//aprt.us/editor/?load=doc/examples/Wheel+Diagram.json',\n  [-6,6],\n  [-3,3]\n)"
+      },
+      "date": 1511486563506
+    },
+    {
+      "type": "move",
+      "order": [
+        "694b2e03659f9b8f",
+        "efb6a758f55cd05c",
+        "68895a322c2f41ae",
+        "5e73bc39a78d6d3d",
+        "b982453c970a1c57",
+        "ab2dd0b43638e0f9",
+        "87c24181fe2e34d4",
+        "bd3e238023a1b978",
+        "1a6802950db64692",
+        "c03915e9bbd409e6",
+        "007699b254b781bc",
+        "e089238f855a360d",
+        "fa81e312ada8d2ac"
+      ],
+      "id": "fa81e312ada8d2ac",
+      "date": 1511486690129
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a60d416eedee5ad5"
+      },
+      "id": "a60d416eedee5ad5",
+      "type": "add",
+      "after": "fa81e312ada8d2ac",
+      "date": 1511486770450
+    },
+    {
+      "type": "edit",
+      "id": "a60d416eedee5ad5",
+      "item": {
+        "type": "paragraph",
+        "id": "a60d416eedee5ad5",
+        "text": "The "
+      },
+      "date": 1511486845138
+    },
+    {
+      "type": "edit",
+      "id": "a60d416eedee5ad5",
+      "item": {
+        "type": "paragraph",
+        "id": "a60d416eedee5ad5",
+        "text": "The apparatus editor offers ways to save a diagram to one's laptop and to reload it into an editor later.  I have also discovered how to host my own apparatus in a container, and where to save diagrams where the editor can load them like it does with the examples on the web site."
+      },
+      "date": 1511487436086
+    },
+    {
+      "type": "add",
+      "id": "13783ac1df1e22c7",
+      "item": {
+        "type": "paragraph",
+        "id": "13783ac1df1e22c7",
+        "text": "It begs questions about how to simplify a workflow for saving and publishing diagrams."
+      },
+      "after": "a60d416eedee5ad5",
+      "date": 1511487515258
+    },
+    {
+      "type": "add",
+      "id": "5a6ef94679b1a698",
+      "item": {
+        "type": "paragraph",
+        "id": "5a6ef94679b1a698",
+        "text": "Since the apparatus data structure is json, can the json plugin be combined in some way?"
+      },
+      "after": "13783ac1df1e22c7",
+      "date": 1511487670592
+    },
+    {
+      "type": "move",
+      "order": [
+        "efb6a758f55cd05c",
+        "68895a322c2f41ae",
+        "5e73bc39a78d6d3d",
+        "b982453c970a1c57",
+        "694b2e03659f9b8f",
+        "ab2dd0b43638e0f9",
+        "87c24181fe2e34d4",
+        "bd3e238023a1b978",
+        "1a6802950db64692",
+        "c03915e9bbd409e6",
+        "007699b254b781bc",
+        "e089238f855a360d",
+        "fa81e312ada8d2ac",
+        "a60d416eedee5ad5",
+        "13783ac1df1e22c7",
+        "5a6ef94679b1a698"
+      ],
+      "id": "694b2e03659f9b8f",
+      "date": 1511488019333
+    },
+    {
+      "type": "move",
+      "order": [
+        "68895a322c2f41ae",
+        "5e73bc39a78d6d3d",
+        "b982453c970a1c57",
+        "694b2e03659f9b8f",
+        "ab2dd0b43638e0f9",
+        "87c24181fe2e34d4",
+        "bd3e238023a1b978",
+        "1a6802950db64692",
+        "c03915e9bbd409e6",
+        "007699b254b781bc",
+        "e089238f855a360d",
+        "fa81e312ada8d2ac",
+        "a60d416eedee5ad5",
+        "13783ac1df1e22c7",
+        "5a6ef94679b1a698",
+        "efb6a758f55cd05c"
+      ],
+      "id": "efb6a758f55cd05c",
+      "date": 1511488076304
+    },
+    {
+      "type": "edit",
+      "id": "a60d416eedee5ad5",
+      "item": {
+        "type": "paragraph",
+        "id": "a60d416eedee5ad5",
+        "text": "Which would emit an iFrame embedding the example diagram \"Wheel Diagram\".  [http://aprt.us/editor/?load=doc/examples/Wheel%20Diagram.json diagram]"
+      },
+      "date": 1511488171963
+    },
+    {
+      "type": "add",
+      "id": "55938653bdf56954",
+      "item": {
+        "type": "paragraph",
+        "id": "55938653bdf56954",
+        "text": "The apparatus editor offers ways to save a diagram to one's laptop and to reload it into an editor later.  I have also discovered how to host my own apparatus in a container, and where to save diagrams where the editor can load them like it does with the examples on the web site."
+      },
+      "after": "a60d416eedee5ad5",
+      "date": 1511488173563
+    },
+    {
+      "type": "edit",
+      "id": "efb6a758f55cd05c",
+      "item": {
+        "type": "paragraph",
+        "id": "efb6a758f55cd05c",
+        "text": "I'm not crazy about that markup.  I would like the compute the dimensions of the iframe from the proportions in BOUNDS_X and BOUNDS_Y.  But I also wish the viewer could read the bounds from the diagram's .json."
+      },
+      "date": 1511488410295
+    },
+    {
+      "type": "fork",
+      "site": "wiki.dbbs.co",
+      "date": 1511554763917
+    }
+  ]
+}

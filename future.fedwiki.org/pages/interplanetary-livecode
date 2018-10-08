@@ -1,0 +1,759 @@
+{
+  "title": "Interplanetary Livecode",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "be2abda5c8f73d44",
+      "text": "Here we describe how we will make a Livecode based Fedwiki app that runs in a pure decentralised mode on [[IPFS]]."
+    },
+    {
+      "type": "markdown",
+      "id": "1777a604ba339fa0",
+      "text": "# Features\nThe strengths of this approach is that we have immediately a set of features we can build upon the recent advances in open source P2P technologies we now have at our disposal:"
+    },
+    {
+      "type": "markdown",
+      "id": "a76c5907e366286f",
+      "text": "* [[Decentralised Streaming Media]]\n* [[Authoring Power]]\n* [[Shell Power]]\n* [[Polyglot programming]]\n* [[Literate Wiki]]\n* [[Fully Decentralised]]\n* [[Native Crypto]]"
+    },
+    {
+      "type": "markdown",
+      "id": "01c2ef296ad818ba",
+      "text": "# Each user runs IPFS daemon locally"
+    },
+    {
+      "type": "paragraph",
+      "id": "0529c7a08c878983",
+      "text": "In this way they have their own [[IPNS]] mutable page that we can use as a Fedwiki style sitemap, in which domains and slugs map to and [[IPFS Multihash]]. "
+    },
+    {
+      "type": "paragraph",
+      "id": "9e5304db238fc6cc",
+      "text": "In the sense of Livecode we have stack and card names mapping to domains and page-slugs. This means that we can define a simple array based mapping for:"
+    },
+    {
+      "type": "code",
+      "id": "5cead47f6f215f5f",
+      "text": "go to stack \"Test\""
+    },
+    {
+      "type": "paragraph",
+      "id": "b29f95c474d5ce63",
+      "text": "to:"
+    },
+    {
+      "type": "code",
+      "id": "ca77e5ad88db1213",
+      "text": "go to stack url merge (\"http://localhost:8080/ipfs/[[multiHash]]\")"
+    },
+    {
+      "type": "paragraph",
+      "id": "c9615e68d8f85568",
+      "text": "where [[multiHash]] is replaced by an [[IPFS]] multiHash that is guaranteed to uniquely point to the content - that is the exact version of the [[stack]] specified."
+    },
+    {
+      "type": "markdown",
+      "id": "ad282d144e3b6acd",
+      "text": "# Stackfiles and site maps\n\nIn this context the concept of the [[stackfiles]] property in [[Livecode]] should be updated to include the notion of a reference to any [[URI]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "2d2bb1a927ffc58b",
+      "text": "This is essentially the technique we use in [[Wiki Sitemaps]], and more of less exactly the same technique I used in the  medical hypertext system I built  in 1989 with HyperCard where each card had a mini sitemap that would translate linked text to a card name, with the default being the plain card name."
+    },
+    {
+      "type": "paragraph",
+      "id": "a521d0f6f1659d67",
+      "text": "Here we want to do something more interesting. We seek to bring in the concept of revisions, mutability and immutability. These are both logical concepts, but also essential to the act of publishing."
+    },
+    {
+      "type": "markdown",
+      "id": "caa855301a2ad096",
+      "text": "# Mutable Home"
+    },
+    {
+      "type": "paragraph",
+      "id": "cb969fcdffa63594",
+      "text": "Each user has it's own name-space based on the users public key. This [[namespace]] uniquely identifies the ([[Pseudonymous]]) user, who through [[IPNS]] has the ability to update references to content under this namespace."
+    },
+    {
+      "type": "paragraph",
+      "id": "d4b9cbfe02873e7e",
+      "text": "This is equivalent (in HyperCard terms) to a [[Home Stack]] on IPFS. In wiki we can think of this as the site-owners [[Welcome Visitors Page]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "1d49401311796d0a",
+      "text": "When we visit this page, we can download the site-map which contains references to all other pages that the author of the site call upon (ie references)."
+    },
+    {
+      "type": "markdown",
+      "id": "908fd847b89b95ec",
+      "text": "# Stacks are sites"
+    },
+    {
+      "type": "paragraph",
+      "id": "1c7508c47c409b95",
+      "text": "In this context we can define a stack as equivalent to a wiki-site, with cards being equivalent to pages. A Livecode stack can then be defined in terms of JSON, or the LiveCode binary, and we should standardise a minimal file format that captures the power of this representation for the [[Permanent Web]]."
+    },
+    {
+      "type": "markdown",
+      "id": "9ac6d3106b13b0d7",
+      "text": "# IPFS and the Web"
+    },
+    {
+      "type": "paragraph",
+      "id": "77469f6e0aa0553d",
+      "text": "How do these two platforms relate? One way to see this is to use the WWW as a place for mutable chaos, and use IPFS for publishing stuff you want to last."
+    },
+    {
+      "type": "paragraph",
+      "id": "aacff2f8833037a9",
+      "text": "When you are ready to publish, when you think the content is good enough to last the test of time, add it to IPFS."
+    },
+    {
+      "type": "paragraph",
+      "id": "3798ad5a80b2b40e",
+      "text": "Not everything on IPFS needs to be treated this way - we can also use IPFS for simple and temporary file sharing, but we can define a clear protocol for publishing on IPFS which includes time stamping and a sustainable business model."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Interplanetary Livecode",
+        "story": []
+      },
+      "date": 1467068364846
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "be2abda5c8f73d44"
+      },
+      "id": "be2abda5c8f73d44",
+      "type": "add",
+      "date": 1467068366598
+    },
+    {
+      "type": "edit",
+      "id": "be2abda5c8f73d44",
+      "item": {
+        "type": "paragraph",
+        "id": "be2abda5c8f73d44",
+        "text": "Here we describe how we will make a Livecode based Fedwiki app that runs in a pure decentralised mode on [[IPFS]]."
+      },
+      "date": 1467068424293
+    },
+    {
+      "type": "add",
+      "id": "01c2ef296ad818ba",
+      "item": {
+        "type": "paragraph",
+        "id": "01c2ef296ad818ba",
+        "text": "# Each user runs IPFS daemon locally"
+      },
+      "after": "be2abda5c8f73d44",
+      "date": 1467068458157
+    },
+    {
+      "type": "edit",
+      "id": "01c2ef296ad818ba",
+      "item": {
+        "type": "markdown",
+        "id": "01c2ef296ad818ba",
+        "text": "# Each user runs IPFS daemon locally"
+      },
+      "date": 1467068583498
+    },
+    {
+      "type": "add",
+      "id": "0529c7a08c878983",
+      "item": {
+        "type": "paragraph",
+        "id": "0529c7a08c878983",
+        "text": "In this way they have their own [[IPNS]] mutable page that we can use as a Fedwiki style sitemap, in which domains and slugs map to and [[IPFS Multihash]]. "
+      },
+      "after": "01c2ef296ad818ba",
+      "date": 1467068587003
+    },
+    {
+      "type": "add",
+      "id": "9e5304db238fc6cc",
+      "item": {
+        "type": "paragraph",
+        "id": "9e5304db238fc6cc",
+        "text": "In the sense of Livecode we have stack and card names mapping to domains and page-slugs. This means that we can define a simple array based mapping for:"
+      },
+      "after": "0529c7a08c878983",
+      "date": 1467068645017
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5cead47f6f215f5f"
+      },
+      "id": "5cead47f6f215f5f",
+      "type": "add",
+      "after": "9e5304db238fc6cc",
+      "date": 1467068646153
+    },
+    {
+      "type": "edit",
+      "id": "5cead47f6f215f5f",
+      "item": {
+        "type": "code",
+        "id": "5cead47f6f215f5f",
+        "text": "go to stack \"Test\""
+      },
+      "date": 1467068706972
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b29f95c474d5ce63"
+      },
+      "id": "b29f95c474d5ce63",
+      "type": "add",
+      "after": "5cead47f6f215f5f",
+      "date": 1467068709217
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca77e5ad88db1213"
+      },
+      "id": "ca77e5ad88db1213",
+      "type": "add",
+      "after": "b29f95c474d5ce63",
+      "date": 1467068715464
+    },
+    {
+      "type": "edit",
+      "id": "b29f95c474d5ce63",
+      "item": {
+        "type": "paragraph",
+        "id": "b29f95c474d5ce63",
+        "text": "to:"
+      },
+      "date": 1467068717104
+    },
+    {
+      "type": "edit",
+      "id": "ca77e5ad88db1213",
+      "item": {
+        "type": "code",
+        "id": "ca77e5ad88db1213",
+        "text": "go to stack url \"localhost"
+      },
+      "date": 1467068733071
+    },
+    {
+      "type": "edit",
+      "id": "ca77e5ad88db1213",
+      "item": {
+        "type": "code",
+        "id": "ca77e5ad88db1213",
+        "text": "go to stack url \"http://localhost:8080/ipfs/QmdbejVfgCQSEwhutDovDAv2gfKhGrXZTdrmBp179Dn3kK\""
+      },
+      "date": 1467068967736
+    },
+    {
+      "type": "edit",
+      "id": "ca77e5ad88db1213",
+      "item": {
+        "type": "code",
+        "id": "ca77e5ad88db1213",
+        "text": "go to stack url \"http://localhost:8080/ipfs/[[multiHash]]\""
+      },
+      "date": 1467100218196
+    },
+    {
+      "type": "edit",
+      "id": "ca77e5ad88db1213",
+      "item": {
+        "type": "code",
+        "id": "ca77e5ad88db1213",
+        "text": "go to stack url merge (\"http://localhost:8080/ipfs/[[multiHash]]\")"
+      },
+      "date": 1467100238529
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c9615e68d8f85568"
+      },
+      "id": "c9615e68d8f85568",
+      "type": "add",
+      "after": "ca77e5ad88db1213",
+      "date": 1467100241089
+    },
+    {
+      "type": "edit",
+      "id": "c9615e68d8f85568",
+      "item": {
+        "type": "paragraph",
+        "id": "c9615e68d8f85568",
+        "text": "where [[multiHash]] is replaced by an [[IPFS]] multiHash that is guaranteed to uniquely point to the content - that is the exact version of the [[stack]] specified."
+      },
+      "date": 1467100329810
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ad282d144e3b6acd"
+      },
+      "id": "ad282d144e3b6acd",
+      "type": "add",
+      "after": "c9615e68d8f85568",
+      "date": 1467100358210
+    },
+    {
+      "type": "edit",
+      "id": "ad282d144e3b6acd",
+      "item": {
+        "type": "markdown",
+        "id": "ad282d144e3b6acd",
+        "text": "# Stackfiles and site maps"
+      },
+      "date": 1467100379303
+    },
+    {
+      "type": "edit",
+      "id": "ad282d144e3b6acd",
+      "item": {
+        "type": "markdown",
+        "id": "ad282d144e3b6acd",
+        "text": "# Stackfiles and site maps\n\nIn this context the concept of the [[stackfiles]] property in [[Livecode]] should be updated to include the notion of a reference to any [[URI]]."
+      },
+      "date": 1467100483733
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2d2bb1a927ffc58b"
+      },
+      "id": "2d2bb1a927ffc58b",
+      "type": "add",
+      "after": "ad282d144e3b6acd",
+      "date": 1467102033527
+    },
+    {
+      "type": "edit",
+      "id": "2d2bb1a927ffc58b",
+      "item": {
+        "type": "paragraph",
+        "id": "2d2bb1a927ffc58b",
+        "text": "This is essentially the technique we use in [[Wiki Sitemaps]], and more of less exactly the same technique I used in the  medical hypertext system I built  in 1989 with HyperCard where each card had a mini sitemap that would translate linked text to a card name, with the default being the plain card name."
+      },
+      "date": 1467102171786
+    },
+    {
+      "type": "add",
+      "id": "a521d0f6f1659d67",
+      "item": {
+        "type": "paragraph",
+        "id": "a521d0f6f1659d67",
+        "text": "Here we want to do something more interesting. We seek to bring in the concept of revisions, mutability and immutability. These are both logical concepts, but also essential to the act of publishing."
+      },
+      "after": "2d2bb1a927ffc58b",
+      "date": 1467102232835
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9ac6d3106b13b0d7"
+      },
+      "id": "9ac6d3106b13b0d7",
+      "type": "add",
+      "after": "a521d0f6f1659d67",
+      "date": 1467102247533
+    },
+    {
+      "type": "edit",
+      "id": "9ac6d3106b13b0d7",
+      "item": {
+        "type": "paragraph",
+        "id": "9ac6d3106b13b0d7",
+        "text": "# IPFS and the Web"
+      },
+      "date": 1467102264760
+    },
+    {
+      "type": "edit",
+      "id": "9ac6d3106b13b0d7",
+      "item": {
+        "type": "markdown",
+        "id": "9ac6d3106b13b0d7",
+        "text": "# IPFS and the Web"
+      },
+      "date": 1467102268915
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "77469f6e0aa0553d"
+      },
+      "id": "77469f6e0aa0553d",
+      "type": "add",
+      "after": "9ac6d3106b13b0d7",
+      "date": 1467102270609
+    },
+    {
+      "type": "add",
+      "id": "caa855301a2ad096",
+      "item": {
+        "type": "paragraph",
+        "id": "caa855301a2ad096",
+        "text": "# Home"
+      },
+      "after": "a521d0f6f1659d67",
+      "date": 1467102318930
+    },
+    {
+      "type": "add",
+      "id": "cb969fcdffa63594",
+      "item": {
+        "type": "paragraph",
+        "id": "cb969fcdffa63594",
+        "text": "Each user has it's own name-space based on the users public key. This [[namespace]] uniquely identifies the ([[pseudonomous]]) user, who through [[IPNS]] has the ability to update references to content under this namespace."
+      },
+      "after": "caa855301a2ad096",
+      "date": 1467102504171
+    },
+    {
+      "type": "edit",
+      "id": "caa855301a2ad096",
+      "item": {
+        "type": "markdown",
+        "id": "caa855301a2ad096",
+        "text": "# Home"
+      },
+      "date": 1467102505204
+    },
+    {
+      "type": "edit",
+      "id": "cb969fcdffa63594",
+      "item": {
+        "type": "paragraph",
+        "id": "cb969fcdffa63594",
+        "text": "Each user has it's own name-space based on the users public key. This [[namespace]] uniquely identifies the ([[pseudonymous]]) user, who through [[IPNS]] has the ability to update references to content under this namespace."
+      },
+      "date": 1467102712522
+    },
+    {
+      "type": "edit",
+      "id": "cb969fcdffa63594",
+      "item": {
+        "type": "paragraph",
+        "id": "cb969fcdffa63594",
+        "text": "Each user has it's own name-space based on the users public key. This [[namespace]] uniquely identifies the ([[Pseudonymous]]) user, who through [[IPNS]] has the ability to update references to content under this namespace."
+      },
+      "date": 1467102721466
+    },
+    {
+      "type": "add",
+      "id": "d4b9cbfe02873e7e",
+      "item": {
+        "type": "paragraph",
+        "id": "d4b9cbfe02873e7e",
+        "text": "This is equivalent (in HyperCard terms) to a mutable [[Home Stack]] on IPFS. In wiki we can think of this as the site-owners [[Welcome Visitors Page]]."
+      },
+      "after": "cb969fcdffa63594",
+      "date": 1467102983779
+    },
+    {
+      "type": "edit",
+      "id": "caa855301a2ad096",
+      "item": {
+        "type": "markdown",
+        "id": "caa855301a2ad096",
+        "text": "# Mutable Home"
+      },
+      "date": 1467102991235
+    },
+    {
+      "type": "edit",
+      "id": "d4b9cbfe02873e7e",
+      "item": {
+        "type": "paragraph",
+        "id": "d4b9cbfe02873e7e",
+        "text": "This is equivalent (in HyperCard terms) to a [[Home Stack]] on IPFS. In wiki we can think of this as the site-owners [[Welcome Visitors Page]]."
+      },
+      "date": 1467103018057
+    },
+    {
+      "type": "add",
+      "id": "1d49401311796d0a",
+      "item": {
+        "type": "paragraph",
+        "id": "1d49401311796d0a",
+        "text": "When we visit this page, we can download the site-map which contains references to all other pages that the author of the site call upon (ie references)."
+      },
+      "after": "d4b9cbfe02873e7e",
+      "date": 1467103115615
+    },
+    {
+      "type": "add",
+      "id": "908fd847b89b95ec",
+      "item": {
+        "type": "paragraph",
+        "id": "908fd847b89b95ec",
+        "text": "# Stacks are sites"
+      },
+      "after": "1d49401311796d0a",
+      "date": 1467103133907
+    },
+    {
+      "type": "add",
+      "id": "1c7508c47c409b95",
+      "item": {
+        "type": "paragraph",
+        "id": "1c7508c47c409b95",
+        "text": "In this context we can define a stack as equivalent to a wiki-site, with cards being equivalent to pages. A Livecode stack can then be defined in terms of JSON, or the LiveCode binary, and we should standardise a minimal file format that captures the power of this representation for the [[Permanent Web]]."
+      },
+      "after": "908fd847b89b95ec",
+      "date": 1467103234979
+    },
+    {
+      "type": "edit",
+      "id": "908fd847b89b95ec",
+      "item": {
+        "type": "markdown",
+        "id": "908fd847b89b95ec",
+        "text": "# Stacks are sites"
+      },
+      "date": 1467103238091
+    },
+    {
+      "type": "add",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "paragraph",
+        "id": "1777a604ba339fa0",
+        "text": "# Authoring Power"
+      },
+      "after": "1c7508c47c409b95",
+      "date": 1467103526806
+    },
+    {
+      "type": "add",
+      "id": "c85fccd17c69af71",
+      "item": {
+        "type": "paragraph",
+        "id": "c85fccd17c69af71",
+        "text": "# Shell Power"
+      },
+      "after": "1777a604ba339fa0",
+      "date": 1467103546926
+    },
+    {
+      "type": "add",
+      "id": "a1ccfcfe49399a3c",
+      "item": {
+        "type": "paragraph",
+        "id": "a1ccfcfe49399a3c",
+        "text": "# Polyglot programming"
+      },
+      "after": "c85fccd17c69af71",
+      "date": 1467103558788
+    },
+    {
+      "type": "add",
+      "id": "69163f8054a16e2c",
+      "item": {
+        "type": "paragraph",
+        "id": "69163f8054a16e2c",
+        "text": "# Literate Wiki"
+      },
+      "after": "a1ccfcfe49399a3c",
+      "date": 1467103565976
+    },
+    {
+      "type": "add",
+      "id": "3c8719c4eef40f75",
+      "item": {
+        "type": "paragraph",
+        "id": "3c8719c4eef40f75",
+        "text": "# Fully Decentralised"
+      },
+      "after": "69163f8054a16e2c",
+      "date": 1467103585885
+    },
+    {
+      "type": "add",
+      "id": "519c640139ca47cf",
+      "item": {
+        "type": "paragraph",
+        "id": "519c640139ca47cf",
+        "text": "# Native Crypto"
+      },
+      "after": "3c8719c4eef40f75",
+      "date": 1467103606044
+    },
+    {
+      "type": "remove",
+      "id": "519c640139ca47cf",
+      "date": 1467103626676
+    },
+    {
+      "type": "remove",
+      "id": "3c8719c4eef40f75",
+      "date": 1467103641772
+    },
+    {
+      "type": "remove",
+      "id": "69163f8054a16e2c",
+      "date": 1467103650147
+    },
+    {
+      "type": "remove",
+      "id": "a1ccfcfe49399a3c",
+      "date": 1467103657957
+    },
+    {
+      "type": "remove",
+      "id": "c85fccd17c69af71",
+      "date": 1467103668284
+    },
+    {
+      "type": "edit",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "paragraph",
+        "id": "1777a604ba339fa0",
+        "text": "* [[Authoring Power]]* [[Shell Power]]* [[Polyglot programming]]* [[Literate Wiki]]* [[Fully Decentralised]]* [[Native Crypto]]"
+      },
+      "date": 1467103674317
+    },
+    {
+      "type": "edit",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "markdown",
+        "id": "1777a604ba339fa0",
+        "text": "* [[Authoring Power]]* [[Shell Power]]* [[Polyglot programming]]* [[Literate Wiki]]* [[Fully Decentralised]]* [[Native Crypto]]"
+      },
+      "date": 1467103676504
+    },
+    {
+      "type": "edit",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "markdown",
+        "id": "1777a604ba339fa0",
+        "text": "# Features\n\n* [[Authoring Power]]\n* [[Shell Power]]\n* [[Polyglot programming]]\n* [[Literate Wiki]]\n* [[Fully Decentralised]]\n* [[Native Crypto]]"
+      },
+      "date": 1467103733604
+    },
+    {
+      "type": "move",
+      "order": [
+        "be2abda5c8f73d44",
+        "1777a604ba339fa0",
+        "01c2ef296ad818ba",
+        "0529c7a08c878983",
+        "9e5304db238fc6cc",
+        "5cead47f6f215f5f",
+        "b29f95c474d5ce63",
+        "ca77e5ad88db1213",
+        "c9615e68d8f85568",
+        "ad282d144e3b6acd",
+        "2d2bb1a927ffc58b",
+        "a521d0f6f1659d67",
+        "caa855301a2ad096",
+        "cb969fcdffa63594",
+        "d4b9cbfe02873e7e",
+        "1d49401311796d0a",
+        "908fd847b89b95ec",
+        "1c7508c47c409b95",
+        "9ac6d3106b13b0d7",
+        "77469f6e0aa0553d"
+      ],
+      "id": "1777a604ba339fa0",
+      "date": 1467103739724
+    },
+    {
+      "type": "edit",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "markdown",
+        "id": "1777a604ba339fa0",
+        "text": "# Features\n\n* [[Decentralised Streaming Media]]\n* [[Authoring Power]]\n* [[Shell Power]]\n* [[Polyglot programming]]\n* [[Literate Wiki]]\n* [[Fully Decentralised]]\n* [[Native Crypto]]"
+      },
+      "date": 1467103785706
+    },
+    {
+      "type": "edit",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "markdown",
+        "id": "1777a604ba339fa0",
+        "text": "# Features\nThe strengths of this approach is that we have immediately a set of features we can build upon the recent advances in open source P2P technologies we now have at our disposal:\n\n* [[Decentralised Streaming Media]]\n* [[Authoring Power]]\n* [[Shell Power]]\n* [[Polyglot programming]]\n* [[Literate Wiki]]\n* [[Fully Decentralised]]\n* [[Native Crypto]]"
+      },
+      "date": 1467103894131
+    },
+    {
+      "type": "edit",
+      "id": "1777a604ba339fa0",
+      "item": {
+        "type": "markdown",
+        "id": "1777a604ba339fa0",
+        "text": "# Features\nThe strengths of this approach is that we have immediately a set of features we can build upon the recent advances in open source P2P technologies we now have at our disposal:"
+      },
+      "date": 1467103901937
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "a76c5907e366286f"
+      },
+      "after": "1777a604ba339fa0",
+      "id": "a76c5907e366286f",
+      "date": 1467103909364
+    },
+    {
+      "type": "edit",
+      "id": "a76c5907e366286f",
+      "item": {
+        "type": "markdown",
+        "id": "a76c5907e366286f",
+        "text": "* [[Decentralised Streaming Media]]\n* [[Authoring Power]]\n* [[Shell Power]]\n* [[Polyglot programming]]\n* [[Literate Wiki]]\n* [[Fully Decentralised]]\n* [[Native Crypto]]"
+      },
+      "date": 1467103912395
+    },
+    {
+      "type": "edit",
+      "id": "77469f6e0aa0553d",
+      "item": {
+        "type": "paragraph",
+        "id": "77469f6e0aa0553d",
+        "text": "How do these two platforms relate? One way to see this is to use the WWW as a place for mutable chaos, and use IPFS for publishing stuff you want to last."
+      },
+      "date": 1467104097748
+    },
+    {
+      "type": "add",
+      "id": "aacff2f8833037a9",
+      "item": {
+        "type": "paragraph",
+        "id": "aacff2f8833037a9",
+        "text": "When you are ready to publish, when you think the content is good enough to last the test of time, add it to IPFS."
+      },
+      "after": "77469f6e0aa0553d",
+      "date": 1467104180022
+    },
+    {
+      "type": "add",
+      "id": "3798ad5a80b2b40e",
+      "item": {
+        "type": "paragraph",
+        "id": "3798ad5a80b2b40e",
+        "text": "Not everything on IPFS needs to be treated this way - we can also use IPFS for simple and temporary file sharing, but we can define a clear protocol for publishing on IPFS which includes time stamping and a sustainable business model."
+      },
+      "after": "aacff2f8833037a9",
+      "date": 1467104554611
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+{
+  "title": "Spotlight boolean Operators",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d8b171f4dc08ba93",
+      "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+    },
+    {
+      "type": "markdown",
+      "id": "c5f2cec581be5e25",
+      "text": "* |, the pipe character, means Boolean OR\n* - means to exclude a term\n* () create groups"
+    },
+    {
+      "type": "paragraph",
+      "id": "64aea62bf7a66d4c",
+      "text": "Working with these operators can be tricky. Whitespace is significant when building queries. To get all documents with \"invoice\" or \"o'reilly\", I write\n\n"
+    },
+    {
+      "type": "code",
+      "id": "da685198578a2302",
+      "text": "mdfind \"invoice|o'reilly\""
+    },
+    {
+      "type": "paragraph",
+      "id": "b028472fdbd1bec7",
+      "text": "with no spaces between the terms. If I want to find all documents with \"invoice\" but not \"apress\", it's:"
+    },
+    {
+      "type": "code",
+      "id": "242e0cea92b8fe5a",
+      "text": "mdfind \"invoice(-apress)\""
+    },
+    {
+      "type": "paragraph",
+      "id": "471696d9b7bc5467",
+      "text": "with no intervening spaces, and parentheses around the term I want to exclude. To get a list of invoices or contracts from O'Reilly, I'd use:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "25e2097679929559",
+      "text": "mdfind \"(invoice|contract) o'reilly\"\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "b3e0c344a038d4d5",
+      "text": "Note that in all these examples that have more than a single word, I'm using double quotes around the search term. This makes the Unix shell pass our multiple words as a single parameter. Otherwise, mdfind uses only the last word, so that:"
+    },
+    {
+      "type": "code",
+      "id": "5cf510f30a5ee80f",
+      "text": "mdfind invoice contract"
+    },
+    {
+      "type": "paragraph",
+      "id": "ee5be6e6cec5e474",
+      "text": "is the same as\n\n"
+    },
+    {
+      "type": "code",
+      "id": "ca9656b07759a0a3",
+      "text": "mdfind contract\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "b7f0eb0e44639731",
+      "text": "It also prevents the shell from intercepting characters that it would use as special, like the parentheses, and passes them unmolested to mdfind. This is especially important if I try to search for \"O'Reilly\". Without quotes, I get this:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "3558c5a0a54fee07",
+      "text": "mdfind O'Reilly\n>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "0bf8ef042294eee8",
+      "text": "The angle bracket is the shell telling me \"You started a quoted string, and now I'm waiting for you to finish it.\" It will sit and wait for input until it sees another single quote, or I type Ctrl-C to cancel. The shell has interpreted the single quote in \"O'Reilly\" as the start of a quoted string. Instead, I want\n\n"
+    },
+    {
+      "type": "code",
+      "id": "86ccecd08c7e84a5",
+      "text": "mdfind \"O'Reilly\""
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Spotlight boolean Operators",
+        "story": []
+      },
+      "date": 1471622854708
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# [[Spotlight boolean Operators]]\n\nAll words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "id": "4bac73c4d516827e",
+      "date": 1471622858988
+    },
+    {
+      "type": "edit",
+      "id": "4bac73c4d516827e",
+      "item": {
+        "type": "markdown",
+        "id": "4bac73c4d516827e",
+        "text": "# [[Spotlight boolean Operators]]\n\n"
+      },
+      "date": 1471622865385
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d8b171f4dc08ba93"
+      },
+      "id": "d8b171f4dc08ba93",
+      "type": "add",
+      "after": "4bac73c4d516827e",
+      "date": 1471622879862
+    },
+    {
+      "type": "edit",
+      "id": "d8b171f4dc08ba93",
+      "item": {
+        "type": "paragraph",
+        "id": "d8b171f4dc08ba93",
+        "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "date": 1471622882895
+    },
+    {
+      "type": "remove",
+      "id": "4bac73c4d516827e",
+      "date": 1471622885864
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "78fe7b5e180798e7"
+      },
+      "id": "78fe7b5e180798e7",
+      "type": "add",
+      "after": "d8b171f4dc08ba93",
+      "date": 1471622886709
+    },
+    {
+      "type": "edit",
+      "id": "78fe7b5e180798e7",
+      "item": {
+        "type": "reference",
+        "id": "78fe7b5e180798e7",
+        "site": "osx.c0de.academy",
+        "slug": "spotlight-boolean-operators",
+        "title": "Spotlight boolean Operators",
+        "text": "All words passed in a query string to mdfind are implicitly ANDed together. That is, \"invoice apress\" means both words must appear. Spotlight allows other Boolean operators as well:"
+      },
+      "date": 1471622888035
+    },
+    {
+      "type": "remove",
+      "id": "78fe7b5e180798e7",
+      "date": 1471622894208
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c5f2cec581be5e25",
+        "text": "* |, the pipe character, means Boolean OR\n* - means to exclude a term\n* () create groups"
+      },
+      "after": "d8b171f4dc08ba93",
+      "id": "c5f2cec581be5e25",
+      "date": 1471622935709
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "64aea62bf7a66d4c",
+        "text": "Working with these operators can be tricky. Whitespace is significant when building queries. To get all documents with \"invoice\" or \"o'reilly\", I write\n\n"
+      },
+      "after": "c5f2cec581be5e25",
+      "id": "64aea62bf7a66d4c",
+      "date": 1471622942357
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "da685198578a2302",
+        "text": "mdfind \"invoice|o'reilly\""
+      },
+      "after": "64aea62bf7a66d4c",
+      "id": "da685198578a2302",
+      "date": 1471622944984
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b028472fdbd1bec7",
+        "text": "with no spaces between the terms. If I want to find all documents with \"invoice\" but not \"apress\", it's:"
+      },
+      "after": "da685198578a2302",
+      "id": "b028472fdbd1bec7",
+      "date": 1471622948023
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "242e0cea92b8fe5a",
+        "text": "mdfind \"invoice(-apress)\""
+      },
+      "after": "b028472fdbd1bec7",
+      "id": "242e0cea92b8fe5a",
+      "date": 1471622951100
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "471696d9b7bc5467",
+        "text": "with no intervening spaces, and parentheses around the term I want to exclude. To get a list of invoices or contracts from O'Reilly, I'd use\n\n"
+      },
+      "after": "242e0cea92b8fe5a",
+      "id": "471696d9b7bc5467",
+      "date": 1471622954166
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b3e0c344a038d4d5",
+        "text": "Note that in all these examples that have more than a single word, I'm using double quotes around the search term. This makes the Unix shell pass our multiple words as a single parameter. Otherwise, mdfind uses only the last word, so that"
+      },
+      "after": "471696d9b7bc5467",
+      "id": "b3e0c344a038d4d5",
+      "date": 1471622959110
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "25e2097679929559",
+        "text": "mdfind \"(invoice|contract) o'reilly\"\n"
+      },
+      "after": "471696d9b7bc5467",
+      "id": "25e2097679929559",
+      "date": 1471622962328
+    },
+    {
+      "type": "edit",
+      "id": "471696d9b7bc5467",
+      "item": {
+        "type": "paragraph",
+        "id": "471696d9b7bc5467",
+        "text": "with no intervening spaces, and parentheses around the term I want to exclude. To get a list of invoices or contracts from O'Reilly, I'd use:\n\n"
+      },
+      "date": 1471622965813
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "5cf510f30a5ee80f",
+        "text": "mdfind invoice contract"
+      },
+      "after": "b3e0c344a038d4d5",
+      "id": "5cf510f30a5ee80f",
+      "date": 1471622969362
+    },
+    {
+      "type": "edit",
+      "id": "b3e0c344a038d4d5",
+      "item": {
+        "type": "paragraph",
+        "id": "b3e0c344a038d4d5",
+        "text": "Note that in all these examples that have more than a single word, I'm using double quotes around the search term. This makes the Unix shell pass our multiple words as a single parameter. Otherwise, mdfind uses only the last word, so that:"
+      },
+      "date": 1471622972308
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ee5be6e6cec5e474",
+        "text": "is the same as\n\n"
+      },
+      "after": "5cf510f30a5ee80f",
+      "id": "ee5be6e6cec5e474",
+      "date": 1471622975949
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "ca9656b07759a0a3",
+        "text": "mdfind contract\n"
+      },
+      "after": "ee5be6e6cec5e474",
+      "id": "ca9656b07759a0a3",
+      "date": 1471622979329
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b7f0eb0e44639731",
+        "text": "It also prevents the shell from intercepting characters that it would use as special, like the parentheses, and passes them unmolested to mdfind. This is especially important if I try to search for \"O'Reilly\". Without quotes, I get this:\n\n"
+      },
+      "after": "ca9656b07759a0a3",
+      "id": "b7f0eb0e44639731",
+      "date": 1471622983252
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "0bf8ef042294eee8",
+        "text": "The angle bracket is the shell telling me \"You started a quoted string, and now I'm waiting for you to finish it.\" It will sit and wait for input until it sees another single quote, or I type Ctrl-C to cancel. The shell has interpreted the single quote in \"O'Reilly\" as the start of a quoted string. Instead, I want\n\n"
+      },
+      "after": "b7f0eb0e44639731",
+      "id": "0bf8ef042294eee8",
+      "date": 1471622988871
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "86ccecd08c7e84a5",
+        "text": "mdfind \"O'Reilly\""
+      },
+      "after": "0bf8ef042294eee8",
+      "id": "86ccecd08c7e84a5",
+      "date": 1471622996614
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "3558c5a0a54fee07",
+        "text": "mdfind O'Reilly\n>\n"
+      },
+      "after": "b7f0eb0e44639731",
+      "id": "3558c5a0a54fee07",
+      "date": 1471623000877
+    }
+  ]
+}

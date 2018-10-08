@@ -1,0 +1,155 @@
+{
+  "title": "rigGetFileNames",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a530ce64366c10f5",
+      "text": "Reads the specified directory and builds an array containing the filenames. Any sub-folders contained within the specified path are read as well if desired."
+    },
+    {
+      "type": "markdown",
+      "id": "4f2d37c0e1152063",
+      "text": "__Requires:__ rigListFilesWithPaths(), rigListFiles()\n__Format:__  rigGetFileNames(param1, param2, param3)\n__Parameters:__ string <pSourceDir> path to source, bool <pIncludePath> whether to include the path as part of the filename, bool <pRecursion>\n__Return:__ array"
+    },
+    {
+      "type": "code",
+      "id": "d80acba3cababbf1",
+      "text": "function rigGetFileNames pSourceDir pIncludePath pRecursion\n   -- from filehelper.lc\n   if pRecursion is TRUE then\n      put TRUE into tRecursion\n   else\n      put FALSE into tRecursion\n   end if\n   \n   # BUILD FILES LIST\n   if pIncludePath is TRUE then\n      put rigListFilesWithPaths(pSourceDir, tRecursion) into tFilesList\n   else\n      put rigListFiles(pSourceDir, tRecursion) into tFilesList\n   end if\n   \n   # BUILD ARRAY\n   put 0 into tCount\n   repeat for each line thisLine in tFilesList\n      add 1 to tCount\n      put thisLine into tFilesListArray[tCount]\n   end repeat\n   \n   return tFilesListArray\nend rigGetFileNames"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "rigGetFileNames",
+        "story": []
+      },
+      "date": 1459903215083
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4f2d37c0e1152063"
+      },
+      "id": "4f2d37c0e1152063",
+      "type": "add",
+      "date": 1459903216657
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4b91fed917d99e5d"
+      },
+      "id": "4b91fed917d99e5d",
+      "type": "add",
+      "after": "4f2d37c0e1152063",
+      "date": 1459903319616
+    },
+    {
+      "type": "remove",
+      "id": "4b91fed917d99e5d",
+      "date": 1459903321939
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d80acba3cababbf1"
+      },
+      "id": "d80acba3cababbf1",
+      "type": "add",
+      "after": "4f2d37c0e1152063",
+      "date": 1459903323093
+    },
+    {
+      "type": "edit",
+      "id": "d80acba3cababbf1",
+      "item": {
+        "type": "code",
+        "id": "d80acba3cababbf1",
+        "text": "---------------------------------------------------------------------\n--| FUNCTION rigGetFileNames\n--|\n--| Author: rabit\n--| Version:  1.0\n--| Created: 09-07-09\n--| Last Mod: 09-07-09\n--| Requires: rigListFilesWithPaths(), rigListFiles()\n--|\n--| Summary: Reads the specified directory and builds an array containing the filenames.  \n--|                    Any sub-folders contained within the specified path are read as well if desired.\n--| \n--| Format:  rigGetFileNames(param1, param2, param3)\n--|\n--| Parameters: string <pSourceDir> path to source, bool <pIncludePath> whether to include the path as part of the filename, bool <pRecursion>\n--|\n--| Return: array\n----------------------------------------------------------------------\n\nfunction rigGetFileNames pSourceDir pIncludePath pRecursion\n\tif pRecursion is TRUE then\n\t\tput TRUE into tRecursion\n\telse\n\t\tput FALSE into tRecursion\n\tend if\n\n\t# BUILD FILES LIST\n\tif pIncludePath is TRUE then\n\t\tput rigListFilesWithPaths(pSourceDir, tRecursion) into tFilesList\n\telse\n\t\tput rigListFiles(pSourceDir, tRecursion) into tFilesList\n\tend if\n\n\t# BUILD ARRAY\n\tput 0 into tCount\n\trepeat for each line thisLine in tFilesList\n\t\tadd 1 to tCount\n\t\tput thisLine into tFilesListArray[tCount]\n\tend repeat\n\n\treturn tFilesListArray\nend rigGetFileNames"
+      },
+      "date": 1459903326136
+    },
+    {
+      "type": "edit",
+      "id": "d80acba3cababbf1",
+      "item": {
+        "type": "code",
+        "id": "d80acba3cababbf1",
+        "text": "function rigGetFileNames pSourceDir pIncludePath pRecursion\n\tif pRecursion is TRUE then\n\t\tput TRUE into tRecursion\n\telse\n\t\tput FALSE into tRecursion\n\tend if\n\n\t# BUILD FILES LIST\n\tif pIncludePath is TRUE then\n\t\tput rigListFilesWithPaths(pSourceDir, tRecursion) into tFilesList\n\telse\n\t\tput rigListFiles(pSourceDir, tRecursion) into tFilesList\n\tend if\n\n\t# BUILD ARRAY\n\tput 0 into tCount\n\trepeat for each line thisLine in tFilesList\n\t\tadd 1 to tCount\n\t\tput thisLine into tFilesListArray[tCount]\n\tend repeat\n\n\treturn tFilesListArray\nend rigGetFileNames"
+      },
+      "date": 1459903395944
+    },
+    {
+      "type": "edit",
+      "id": "4f2d37c0e1152063",
+      "item": {
+        "type": "paragraph",
+        "id": "4f2d37c0e1152063",
+        "text": "Requires: rigListFilesWithPaths(), rigListFiles()\nFormat:  rigGetFileNames(param1, param2, param3)\nParameters: string <pSourceDir> path to source, bool <pIncludePath> whether to include the path as part of the filename, bool <pRecursion>\nReturn: array"
+      },
+      "date": 1459903439527
+    },
+    {
+      "type": "add",
+      "id": "a530ce64366c10f5",
+      "item": {
+        "type": "paragraph",
+        "id": "a530ce64366c10f5",
+        "text": "Reads the specified directory and builds an array containing the filenames. Any sub-folders contained within the specified path are read as well if desired."
+      },
+      "after": "4f2d37c0e1152063",
+      "date": 1459903452113
+    },
+    {
+      "type": "move",
+      "order": [
+        "a530ce64366c10f5",
+        "4f2d37c0e1152063",
+        "d80acba3cababbf1"
+      ],
+      "id": "a530ce64366c10f5",
+      "date": 1459903453421
+    },
+    {
+      "type": "edit",
+      "id": "4f2d37c0e1152063",
+      "item": {
+        "type": "paragraph",
+        "id": "4f2d37c0e1152063",
+        "text": "* Requires: rigListFilesWithPaths(), rigListFiles()\nFormat:  rigGetFileNames(param1, param2, param3)\nParameters: string <pSourceDir> path to source, bool <pIncludePath> whether to include the path as part of the filename, bool <pRecursion>\nReturn: array"
+      },
+      "date": 1459903477183
+    },
+    {
+      "type": "edit",
+      "id": "4f2d37c0e1152063",
+      "item": {
+        "type": "markdown",
+        "id": "4f2d37c0e1152063",
+        "text": "* Requires: rigListFilesWithPaths(), rigListFiles()\nFormat:  rigGetFileNames(param1, param2, param3)\nParameters: string <pSourceDir> path to source, bool <pIncludePath> whether to include the path as part of the filename, bool <pRecursion>\nReturn: array"
+      },
+      "date": 1459903478359
+    },
+    {
+      "type": "edit",
+      "id": "4f2d37c0e1152063",
+      "item": {
+        "type": "markdown",
+        "id": "4f2d37c0e1152063",
+        "text": "__Requires:__ rigListFilesWithPaths(), rigListFiles()\n__Format:__  rigGetFileNames(param1, param2, param3)\n__Parameters:__ string <pSourceDir> path to source, bool <pIncludePath> whether to include the path as part of the filename, bool <pRecursion>\n__Return:__ array"
+      },
+      "date": 1459903503306
+    },
+    {
+      "type": "edit",
+      "id": "d80acba3cababbf1",
+      "item": {
+        "type": "code",
+        "id": "d80acba3cababbf1",
+        "text": "function rigGetFileNames pSourceDir pIncludePath pRecursion\n   -- from filehelper.lc\n   if pRecursion is TRUE then\n      put TRUE into tRecursion\n   else\n      put FALSE into tRecursion\n   end if\n   \n   # BUILD FILES LIST\n   if pIncludePath is TRUE then\n      put rigListFilesWithPaths(pSourceDir, tRecursion) into tFilesList\n   else\n      put rigListFiles(pSourceDir, tRecursion) into tFilesList\n   end if\n   \n   # BUILD ARRAY\n   put 0 into tCount\n   repeat for each line thisLine in tFilesList\n      add 1 to tCount\n      put thisLine into tFilesListArray[tCount]\n   end repeat\n   \n   return tFilesListArray\nend rigGetFileNames"
+      },
+      "date": 1459903693065
+    }
+  ]
+}

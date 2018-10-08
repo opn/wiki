@@ -1,0 +1,460 @@
+{
+  "title": "Permissions",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "36995d3035cc312f",
+      "text": "Here we collect some notes with regard to dealing with permissions on a Digital ocean Ubuntu server."
+    },
+    {
+      "type": "markdown",
+      "id": "66a64be828acca13",
+      "text": "# How to edit and add files to “/var/www”"
+    },
+    {
+      "type": "paragraph",
+      "id": "ab41aa5faec5f7b7",
+      "text": "If you make /var/www writeable by its group and add the user to the group, that user will not have to use sudo. Try this:"
+    },
+    {
+      "type": "code",
+      "id": "602753bd6077d2ed",
+      "text": "sudo adduser <username> www-data\nsudo chown -R www-data:www-data /var/www\nsudo chmod -R g+rwX /var/www"
+    },
+    {
+      "type": "paragraph",
+      "id": "9c77f8afc444ed0e",
+      "text": "The user should then be able to edit /var/www/ files without hassle."
+    },
+    {
+      "type": "paragraph",
+      "id": "e56f992769f05232",
+      "text": "The first line adds the user to the www-data group, the second line clears up any files with messed up ownership, and the third makes it so that all users who are members of the www-data group can read and write all files in /var/www."
+    },
+    {
+      "type": "paragraph",
+      "id": "19f3061fefc4be22",
+      "text": "If you are logged in as <username> you need to log out and log back in for the group membership to take effect."
+    },
+    {
+      "type": "markdown",
+      "id": "de0efe2d2f9b8c0d",
+      "text": "# Enable scripts to write to a folder"
+    },
+    {
+      "type": "paragraph",
+      "id": "5e5a1ec7739b26ff",
+      "text": "You can give the web server user write permission to a folder. Usually the web server user is something like nobody and not in the same group as the owner of the folder, so that means making cgi-bin world-writable:\n"
+    },
+    {
+      "type": "code",
+      "id": "c17fefc062def861",
+      "text": "chmod a+rwx somefolder"
+    },
+    {
+      "type": "paragraph",
+      "id": "63d10b79bd94c489",
+      "text": "This is a really bad idea. Now any user on your server, or any script that doesn't check its filenames properly, might create a file in this folder.\n\nRun-time-written files should go in a separate ‘data’ folder, outside the cgi-bin (and preferably outside the web root, bound with an Alias), with Apache set to disallow any kind of script or htaccess from that folder. You can then set ‘data’ 777, or, possibly better, have it owned by the web server user instead."
+    },
+    {
+      "type": "markdown",
+      "id": "c206e8f4707c230d",
+      "text": "# See also"
+    },
+    {
+      "type": "reference",
+      "id": "5cea23e941db2938",
+      "site": "ocean.admin.fedwiki.org",
+      "slug": "group-write-permissions",
+      "title": "Group Write Permissions",
+      "text": "Some quick notes on adding several people to a new group so that you can give them [[Permissions]] to a folder."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Permissions",
+        "story": []
+      },
+      "date": 1466548540480
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "36995d3035cc312f"
+      },
+      "id": "36995d3035cc312f",
+      "type": "add",
+      "date": 1466548541583
+    },
+    {
+      "type": "edit",
+      "id": "36995d3035cc312f",
+      "item": {
+        "type": "paragraph",
+        "id": "36995d3035cc312f",
+        "text": "Here we collect some notes with regard to dealing with permissions on a Digital ocean Ubuntu server."
+      },
+      "date": 1466548571633
+    },
+    {
+      "type": "add",
+      "id": "c206e8f4707c230d",
+      "item": {
+        "type": "paragraph",
+        "id": "c206e8f4707c230d",
+        "text": "# See also"
+      },
+      "after": "36995d3035cc312f",
+      "date": 1466548576155
+    },
+    {
+      "type": "edit",
+      "id": "c206e8f4707c230d",
+      "item": {
+        "type": "markdown",
+        "id": "c206e8f4707c230d",
+        "text": "# See also"
+      },
+      "date": 1466548577624
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5cea23e941db2938"
+      },
+      "id": "5cea23e941db2938",
+      "type": "add",
+      "after": "c206e8f4707c230d",
+      "date": 1466548578879
+    },
+    {
+      "type": "edit",
+      "id": "5cea23e941db2938",
+      "item": {
+        "type": "reference",
+        "id": "5cea23e941db2938",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "group-write-permissions",
+        "title": "Group Write Permissions",
+        "text": "Some quick notes on adding several people to a new group so that you can give them [[Permissions]] to a folder."
+      },
+      "date": 1466548580772
+    },
+    {
+      "type": "add",
+      "id": "991245fe022f34a4",
+      "item": {
+        "type": "paragraph",
+        "id": "991245fe022f34a4",
+        "text": "chmod a+rwx"
+      },
+      "after": "36995d3035cc312f",
+      "date": 1466548588813
+    },
+    {
+      "type": "add",
+      "id": "de0efe2d2f9b8c0d",
+      "item": {
+        "type": "paragraph",
+        "id": "de0efe2d2f9b8c0d",
+        "text": "You can give the web server user write permission to the cgi-bin folder. Usually the web server user is something like nobody and not in the same group as the owner of the folder, so that means making cgi-bin world-writable:\n"
+      },
+      "after": "991245fe022f34a4",
+      "date": 1466548699219
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c17fefc062def861"
+      },
+      "id": "c17fefc062def861",
+      "type": "add",
+      "after": "5cea23e941db2938",
+      "date": 1466548701052
+    },
+    {
+      "type": "move",
+      "order": [
+        "36995d3035cc312f",
+        "c17fefc062def861",
+        "991245fe022f34a4",
+        "de0efe2d2f9b8c0d",
+        "c206e8f4707c230d",
+        "5cea23e941db2938"
+      ],
+      "id": "c17fefc062def861",
+      "date": 1466548703098
+    },
+    {
+      "type": "remove",
+      "id": "991245fe022f34a4",
+      "date": 1466548706833
+    },
+    {
+      "type": "edit",
+      "id": "c17fefc062def861",
+      "item": {
+        "type": "code",
+        "id": "c17fefc062def861",
+        "text": "chmod a+rwx"
+      },
+      "date": 1466548709887
+    },
+    {
+      "type": "move",
+      "order": [
+        "36995d3035cc312f",
+        "de0efe2d2f9b8c0d",
+        "c17fefc062def861",
+        "c206e8f4707c230d",
+        "5cea23e941db2938"
+      ],
+      "id": "de0efe2d2f9b8c0d",
+      "date": 1466548711767
+    },
+    {
+      "type": "edit",
+      "id": "de0efe2d2f9b8c0d",
+      "item": {
+        "type": "paragraph",
+        "id": "de0efe2d2f9b8c0d",
+        "text": "# Enable scripts to write to a folder"
+      },
+      "date": 1466548745442
+    },
+    {
+      "type": "add",
+      "id": "5e5a1ec7739b26ff",
+      "item": {
+        "type": "paragraph",
+        "id": "5e5a1ec7739b26ff",
+        "text": "You can give the web server user write permission to a folder. Usually the web server user is something like nobody and not in the same group as the owner of the folder, so that means making cgi-bin world-writable:\n"
+      },
+      "after": "de0efe2d2f9b8c0d",
+      "date": 1466548746083
+    },
+    {
+      "type": "edit",
+      "id": "de0efe2d2f9b8c0d",
+      "item": {
+        "type": "markdown",
+        "id": "de0efe2d2f9b8c0d",
+        "text": "# Enable scripts to write to a folder"
+      },
+      "date": 1466548747426
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "63d10b79bd94c489"
+      },
+      "id": "63d10b79bd94c489",
+      "type": "add",
+      "after": "5cea23e941db2938",
+      "date": 1466548773008
+    },
+    {
+      "type": "move",
+      "order": [
+        "36995d3035cc312f",
+        "de0efe2d2f9b8c0d",
+        "5e5a1ec7739b26ff",
+        "c17fefc062def861",
+        "63d10b79bd94c489",
+        "c206e8f4707c230d",
+        "5cea23e941db2938"
+      ],
+      "id": "63d10b79bd94c489",
+      "date": 1466548774666
+    },
+    {
+      "type": "edit",
+      "id": "63d10b79bd94c489",
+      "item": {
+        "type": "paragraph",
+        "id": "63d10b79bd94c489",
+        "text": "This is a really bad idea. Now any user on your server, or any script that doesn't check its filenames properly, might create a file in the cgi-bin, where it will be interpreted by Apache as a CGI script and executed. This is a good way to get your server owned.\n\nRun-time-written files should go in a separate ‘data’ folder, outside the cgi-bin (and preferably outside the web root, bound with an Alias), with Apache set to disallow any kind of script or htaccess from that folder. You can then set ‘data’ 777, or, possibly better, have it owned by the web server user instead."
+      },
+      "date": 1466548778277
+    },
+    {
+      "type": "edit",
+      "id": "63d10b79bd94c489",
+      "item": {
+        "type": "paragraph",
+        "id": "63d10b79bd94c489",
+        "text": "This is a really bad idea. Now any user on your server, or any script that doesn't check its filenames properly, might create a file in this folder.\n\nRun-time-written files should go in a separate ‘data’ folder, outside the cgi-bin (and preferably outside the web root, bound with an Alias), with Apache set to disallow any kind of script or htaccess from that folder. You can then set ‘data’ 777, or, possibly better, have it owned by the web server user instead."
+      },
+      "date": 1466548822374
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ab41aa5faec5f7b7"
+      },
+      "id": "ab41aa5faec5f7b7",
+      "type": "add",
+      "after": "5cea23e941db2938",
+      "date": 1466548843860
+    },
+    {
+      "type": "edit",
+      "id": "ab41aa5faec5f7b7",
+      "item": {
+        "type": "paragraph",
+        "id": "ab41aa5faec5f7b7",
+        "text": "\n144\ndown vote\nIf you make /var/www writeable by its group and add the user to the group, that user will not have to use sudo. Try this:\n\nsudo adduser <username> www-data\nsudo chown -R www-data:www-data /var/www\nsudo chmod -R g+rwX /var/www\nThe user should then be able to edit /var/www/ files without hassle.\n\nThe first line adds the user to the www-data group, the second line clears up any files with messed up ownership, and the third makes it so that all users who are members of the www-data group can read and write all files in /var/www.\n\nIf you are logged in as <username> you need to log out and log back in for the group membership to take effect."
+      },
+      "date": 1466548849224
+    },
+    {
+      "type": "add",
+      "id": "66a64be828acca13",
+      "item": {
+        "type": "paragraph",
+        "id": "66a64be828acca13",
+        "text": "# How to edit and add files to “/var/www”"
+      },
+      "after": "36995d3035cc312f",
+      "date": 1466548881464
+    },
+    {
+      "type": "move",
+      "order": [
+        "36995d3035cc312f",
+        "66a64be828acca13",
+        "ab41aa5faec5f7b7",
+        "de0efe2d2f9b8c0d",
+        "5e5a1ec7739b26ff",
+        "c17fefc062def861",
+        "63d10b79bd94c489",
+        "c206e8f4707c230d",
+        "5cea23e941db2938"
+      ],
+      "id": "ab41aa5faec5f7b7",
+      "date": 1466548886339
+    },
+    {
+      "type": "edit",
+      "id": "66a64be828acca13",
+      "item": {
+        "type": "markdown",
+        "id": "66a64be828acca13",
+        "text": "# How to edit and add files to “/var/www”"
+      },
+      "date": 1466548887588
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "602753bd6077d2ed"
+      },
+      "id": "602753bd6077d2ed",
+      "type": "add",
+      "after": "5cea23e941db2938",
+      "date": 1466548890608
+    },
+    {
+      "type": "move",
+      "order": [
+        "36995d3035cc312f",
+        "66a64be828acca13",
+        "602753bd6077d2ed",
+        "ab41aa5faec5f7b7",
+        "de0efe2d2f9b8c0d",
+        "5e5a1ec7739b26ff",
+        "c17fefc062def861",
+        "63d10b79bd94c489",
+        "c206e8f4707c230d",
+        "5cea23e941db2938"
+      ],
+      "id": "602753bd6077d2ed",
+      "date": 1466548893176
+    },
+    {
+      "type": "edit",
+      "id": "ab41aa5faec5f7b7",
+      "item": {
+        "type": "paragraph",
+        "id": "ab41aa5faec5f7b7",
+        "text": "If you make /var/www writeable by its group and add the user to the group, that user will not have to use sudo. Try this:"
+      },
+      "date": 1466548909641
+    },
+    {
+      "type": "add",
+      "id": "9c77f8afc444ed0e",
+      "item": {
+        "type": "paragraph",
+        "id": "9c77f8afc444ed0e",
+        "text": "The user should then be able to edit /var/www/ files without hassle."
+      },
+      "after": "ab41aa5faec5f7b7",
+      "date": 1466548912152
+    },
+    {
+      "type": "add",
+      "id": "e56f992769f05232",
+      "item": {
+        "type": "paragraph",
+        "id": "e56f992769f05232",
+        "text": "The first line adds the user to the www-data group, the second line clears up any files with messed up ownership, and the third makes it so that all users who are members of the www-data group can read and write all files in /var/www."
+      },
+      "after": "9c77f8afc444ed0e",
+      "date": 1466548915930
+    },
+    {
+      "type": "add",
+      "id": "19f3061fefc4be22",
+      "item": {
+        "type": "paragraph",
+        "id": "19f3061fefc4be22",
+        "text": "If you are logged in as <username> you need to log out and log back in for the group membership to take effect."
+      },
+      "after": "e56f992769f05232",
+      "date": 1466548919321
+    },
+    {
+      "type": "edit",
+      "id": "602753bd6077d2ed",
+      "item": {
+        "type": "code",
+        "id": "602753bd6077d2ed",
+        "text": "sudo adduser <username> www-data\nsudo chown -R www-data:www-data /var/www\nsudo chmod -R g+rwX /var/www"
+      },
+      "date": 1466548925250
+    },
+    {
+      "type": "move",
+      "order": [
+        "36995d3035cc312f",
+        "66a64be828acca13",
+        "ab41aa5faec5f7b7",
+        "602753bd6077d2ed",
+        "9c77f8afc444ed0e",
+        "e56f992769f05232",
+        "19f3061fefc4be22",
+        "de0efe2d2f9b8c0d",
+        "5e5a1ec7739b26ff",
+        "c17fefc062def861",
+        "63d10b79bd94c489",
+        "c206e8f4707c230d",
+        "5cea23e941db2938"
+      ],
+      "id": "602753bd6077d2ed",
+      "date": 1466548928515
+    },
+    {
+      "type": "edit",
+      "id": "c17fefc062def861",
+      "item": {
+        "type": "code",
+        "id": "c17fefc062def861",
+        "text": "chmod a+rwx somefolder"
+      },
+      "date": 1466549008278
+    }
+  ]
+}

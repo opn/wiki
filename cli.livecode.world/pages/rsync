@@ -1,0 +1,224 @@
+{
+  "title": "rsync",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "31c93b44c75b6a18",
+      "text": "Rsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "cc0868b9983d06c3",
+      "text": "It offers a large number of options that control every aspect of its behavior and  permit  very  flexible  specification of the set of files to be copied.  "
+    },
+    {
+      "type": "paragraph",
+      "id": "f4fb378957339035",
+      "text": "It is famous for its delta-transfer algorithm, which reduces the amount of data sent over the network by sending only the differences between the source files and the existing files in the destination."
+    },
+    {
+      "type": "paragraph",
+      "id": "2869eb9dc17aacc8",
+      "text": "Rsync is widely used for backups and  mirroring  and as an improved copy command for everyday use.\nrsync has way too many options. It really is worth reading through them but they are scary at first sight. The ones you care about in this context though are:"
+    },
+    {
+      "type": "paragraph",
+      "id": "ccb8fd406605716b",
+      "text": "    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "29f8dc54405d181c",
+      "text": "rsync -z MyBackups user@server:/path/to/backup/"
+    },
+    {
+      "type": "paragraph",
+      "id": "1444f404f240cc0e",
+      "text": "The files would be compressed while in transit and arrive decompressed at the destination."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "rsync",
+        "story": []
+      },
+      "date": 1450462299303
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "650ca8baa7f7d44a",
+        "text": "The best way, however, is probably rsync.\n\nRsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  "
+      },
+      "id": "650ca8baa7f7d44a",
+      "date": 1450462302545
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f4fb378957339035",
+        "text": "It is famous for its delta-transfer algorithm, which reduces the amount of data sent over the network by sending only the differences between the source files and the existing files in the destination."
+      },
+      "after": "650ca8baa7f7d44a",
+      "id": "f4fb378957339035",
+      "date": 1450462305332
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2869eb9dc17aacc8",
+        "text": "Rsync is widely used for backups and  mirroring  and as an improved copy command for everyday use.\nrsync has way too many options. It really is worth reading through them but they are scary at first sight. The ones you care about in this context though are:"
+      },
+      "after": "f4fb378957339035",
+      "id": "2869eb9dc17aacc8",
+      "date": 1450462307805
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb8fd406605716b",
+        "text": "\n    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\nrsync -z MyBackups user@server:/path/to/backup/\nThe files would be compressed while in transit and arrive decompressed at the destination.\n\nSome more choices:\n\nscp itself can compress the data\n\n -C      Compression enable.  Passes the -C flag to ssh(1) to\n         enable compression.\n\n$ scp -C source user@server:/path/to/backup"
+      },
+      "after": "2869eb9dc17aacc8",
+      "id": "ccb8fd406605716b",
+      "date": 1450462312547
+    },
+    {
+      "type": "edit",
+      "id": "ccb8fd406605716b",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb8fd406605716b",
+        "text": "    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\nrsync -z MyBackups user@server:/path/to/backup/\nThe files would be compressed while in transit and arrive decompressed at the destination."
+      },
+      "date": 1450462327881
+    },
+    {
+      "type": "edit",
+      "id": "650ca8baa7f7d44a",
+      "item": {
+        "type": "paragraph",
+        "id": "650ca8baa7f7d44a",
+        "text": "The best way, however, is probably rsync.\n\n"
+      },
+      "date": 1450462352063
+    },
+    {
+      "type": "add",
+      "id": "31c93b44c75b6a18",
+      "item": {
+        "type": "paragraph",
+        "id": "31c93b44c75b6a18",
+        "text": "Rsync is a fast and extraordinarily versatile  file  copying  tool. It can copy locally, to/from another host over any remote shell, or to/from a remote rsync daemon.  "
+      },
+      "after": "650ca8baa7f7d44a",
+      "date": 1450462353705
+    },
+    {
+      "type": "remove",
+      "id": "650ca8baa7f7d44a",
+      "date": 1450462356471
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "cc0868b9983d06c3",
+        "text": "It offers a large number of options that control every aspect of its behavior and  permit  very  flexible  specification of the set of files to be copied.  "
+      },
+      "after": "31c93b44c75b6a18",
+      "id": "cc0868b9983d06c3",
+      "date": 1450462364141
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7a66937640291d96"
+      },
+      "id": "7a66937640291d96",
+      "type": "add",
+      "after": "ccb8fd406605716b",
+      "date": 1450462368865
+    },
+    {
+      "type": "move",
+      "order": [
+        "31c93b44c75b6a18",
+        "cc0868b9983d06c3",
+        "f4fb378957339035",
+        "2869eb9dc17aacc8",
+        "7a66937640291d96",
+        "ccb8fd406605716b"
+      ],
+      "id": "7a66937640291d96",
+      "date": 1450462370483
+    },
+    {
+      "type": "edit",
+      "id": "ccb8fd406605716b",
+      "item": {
+        "type": "paragraph",
+        "id": "ccb8fd406605716b",
+        "text": "    -z, --compress              compress file data during the transfer\n        --compress-level=NUM    explicitly set compression level\n\n   -z, --compress\n          With this option, rsync compresses the file data as it is sent to the desti‐\n          nation machine, which reduces the amount of data being transmitted --  \n          something that is useful over a slow connection.\n\n          Note  that this option typically achieves better compression ratios than can\n          be achieved by using a compressing remote shell or a  compressing  transport\n          because  it takes advantage of the implicit information in the matching data\n          blocks that are not explicitly sent over the connection.\nSo, in your case, you would want something like this:\n\n"
+      },
+      "date": 1450462400106
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "29f8dc54405d181c"
+      },
+      "id": "29f8dc54405d181c",
+      "type": "add",
+      "after": "1444f404f240cc0e",
+      "date": 1450462403034
+    },
+    {
+      "type": "add",
+      "id": "1444f404f240cc0e",
+      "item": {
+        "type": "paragraph",
+        "id": "1444f404f240cc0e",
+        "text": "The files would be compressed while in transit and arrive decompressed at the destination."
+      },
+      "after": "ccb8fd406605716b",
+      "date": 1450462404281
+    },
+    {
+      "type": "edit",
+      "id": "29f8dc54405d181c",
+      "item": {
+        "type": "code",
+        "id": "29f8dc54405d181c",
+        "text": "rsync -z MyBackups user@server:/path/to/backup/"
+      },
+      "date": 1450462406836
+    },
+    {
+      "type": "move",
+      "order": [
+        "31c93b44c75b6a18",
+        "cc0868b9983d06c3",
+        "f4fb378957339035",
+        "2869eb9dc17aacc8",
+        "7a66937640291d96",
+        "ccb8fd406605716b",
+        "29f8dc54405d181c",
+        "1444f404f240cc0e"
+      ],
+      "id": "29f8dc54405d181c",
+      "date": 1450462408307
+    },
+    {
+      "type": "remove",
+      "id": "7a66937640291d96",
+      "date": 1450462419026
+    }
+  ]
+}

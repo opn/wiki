@@ -1,0 +1,1017 @@
+{
+  "title": "Moving Folders Across Servers",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "c76df828d45f903e",
+      "text": "Here we look at different ways to move Fedwiki content between servers. Data is Fedwiki is made as simple and portable as possible - [[Data Portability]] being a top [[ Federated Wiki Design Principles]]",
+      "alias": "d6c4804c029a2c30"
+    },
+    {
+      "type": "markdown",
+      "id": "dff1aa9cd00777aa",
+      "text": "# Fork"
+    },
+    {
+      "type": "paragraph",
+      "id": "d9bd442c42b9089b",
+      "text": "Create a new site and fork every page from another site."
+    },
+    {
+      "type": "paragraph",
+      "id": "256b104d54b54aad",
+      "text": "Use recent changes to keep track of progress. Reload the browser window to get current sitemaps. Look for and then fork pages that aren't yet copied."
+    },
+    {
+      "type": "paragraph",
+      "id": "c11f2667ab4b8339",
+      "text": "The journal will record each fork citing the other site."
+    },
+    {
+      "type": "markdown",
+      "id": "72613d289ad26921",
+      "text": "# Export"
+    },
+    {
+      "type": "paragraph",
+      "id": "3f98c7f89b8d3a00",
+      "text": "Create a new site from the exported backup of an old site."
+    },
+    {
+      "type": "paragraph",
+      "id": "d2635071e0f18f19",
+      "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. Type the export url in the browser's location bar. Save the resulting page as a desktop file."
+    },
+    {
+      "type": "code",
+      "id": "b865c99f0d2b0f40",
+      "text": "http://old.example.com/system/export.json"
+    },
+    {
+      "type": "paragraph",
+      "id": "8769a076aa6e6f93",
+      "text": "Drag the desktop export file to the browser window of the new site. A list of backed up pages will appear. Visit each and fork it to the new site."
+    },
+    {
+      "type": "paragraph",
+      "id": "ce0f1b332ae9dd95",
+      "text": "The journal will record each fork but not cite the old site."
+    },
+    {
+      "type": "markdown",
+      "id": "15c48228a7e2c547",
+      "text": "# Script"
+    },
+    {
+      "type": "paragraph",
+      "id": "b0412cd4f94fd549",
+      "text": "Create a new site and curl each page from the old site."
+    },
+    {
+      "type": "paragraph",
+      "id": "00c8637d3b7691e9",
+      "text": "Write a script on the new site that uses curl or wget commands to retrieve each page from the old site. Loop over each entry in the sitemap to retrieve every page."
+    },
+    {
+      "type": "paragraph",
+      "id": "3e924dead99d62eb",
+      "text": "Alternatively, curl the export.json from the source site and unpack that into individual files on the new site."
+    },
+    {
+      "type": "paragraph",
+      "id": "229ea04d3959c2d5",
+      "text": "Note: pages are referred to by slugs. These are suffixed with .json in urls but not as file names in the pages directory."
+    },
+    {
+      "type": "markdown",
+      "id": "94a9fca3db32ec05",
+      "text": "# Copy"
+    },
+    {
+      "type": "paragraph",
+      "id": "c86c39128df7493a",
+      "text": "Create a new site and scp all pages from the old site."
+    },
+    {
+      "type": "paragraph",
+      "id": "ab61592368e6726b",
+      "text": "Setup secure shell access to both old and new sites from a third computer such as a personal laptop. Use the command line utility to copy the pages directory."
+    },
+    {
+      "type": "code",
+      "id": "f288e58136128b0a",
+      "text": "scp oldwiki.com:.wiki/pages newwiki.com:.wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "983ca0a6d8666559",
+      "text": "Note: the paths specified will be longer if either or both servers are setup as farms."
+    },
+    {
+      "type": "paragraph",
+      "id": "40902fe83240cbec",
+      "text": "Alternatively, rsync can efficiently copy only files that have changed. This can be useful for publishing a privately maintained site to a public server."
+    },
+    {
+      "type": "code",
+      "id": "02efa5b0f56807a7",
+      "text": "rsync -a oldwiki.com:.wiki/pages newwiki.com:.wiki"
+    },
+    {
+      "type": "markdown",
+      "id": "ab1408302d27bd55",
+      "text": "# DNS"
+    },
+    {
+      "type": "paragraph",
+      "id": "fa94777e65c14fab",
+      "text": "One can move a site from one place to another without interfering with any reader's access to the content."
+    },
+    {
+      "type": "paragraph",
+      "id": "9fa1a00799b086dd",
+      "text": "First move the content by any of the above means. Then revise DNS (domain name service) to refer to the new site."
+    },
+    {
+      "type": "paragraph",
+      "id": "1970415ef093ffc0",
+      "text": "Note: DNS changes can take hours or longer to propagate through the internet. Be careful to not edit a moved site until your browser is accessing the new server."
+    },
+    {
+      "type": "markdown",
+      "id": "d09359ccceb62dc0",
+      "text": "# Considerations"
+    },
+    {
+      "type": "paragraph",
+      "id": "dea4f1c5d8d1222c",
+      "text": "Its wise to have current backups before experimenting with moving pages as text files."
+    },
+    {
+      "type": "paragraph",
+      "id": "8b9cb425cdf7de1e",
+      "text": "The copy approach can be used to copy the status directory as well as the pages directory. This will preserve claims and flags."
+    },
+    {
+      "type": "code",
+      "id": "bed6c1225950b247",
+      "text": "scp oldwiki.com:.wiki/ newwiki.com:.wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "0d13f874cf03ae85",
+      "text": "The script approach for writing and the copy approach for both reading and writing assumes that the server has been configured to store pages in flat files, the default."
+    },
+    {
+      "type": "paragraph",
+      "id": "d361ae75da0d6a43",
+      "text": "Only the fork approach meets the attribution requirement of the creative commons license when retrieving content from a site other than one's own."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Moving Folders Across Servers",
+        "story": []
+      },
+      "date": 1450460001972
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d6c4804c029a2c30"
+      },
+      "id": "d6c4804c029a2c30",
+      "type": "add",
+      "date": 1450460003078
+    },
+    {
+      "type": "edit",
+      "id": "d6c4804c029a2c30",
+      "item": {
+        "type": "paragraph",
+        "id": "d6c4804c029a2c30",
+        "text": "Here we look at different ways to move Fedwiki content between servers. Data is Fedwiki is made as simple and portable as possible - [[Data Portability]] being a top [[Design Priority]]"
+      },
+      "date": 1450460098325
+    },
+    {
+      "type": "edit",
+      "id": "d6c4804c029a2c30",
+      "item": {
+        "type": "paragraph",
+        "id": "d6c4804c029a2c30",
+        "text": "Here we look at different ways to move Fedwiki content between servers. Data is Fedwiki is made as simple and portable as possible - [[Data Portability]] being a top [[ Federated Wiki Design Principles]]"
+      },
+      "date": 1450460307814
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dff1aa9cd00777aa"
+      },
+      "id": "dff1aa9cd00777aa",
+      "type": "add",
+      "after": "d6c4804c029a2c30",
+      "date": 1450460331092
+    },
+    {
+      "type": "fork",
+      "site": "ocean.admin.fedwiki.org",
+      "date": 1450531973526
+    },
+    {
+      "type": "edit",
+      "id": "d6c4804c029a2c30",
+      "item": {
+        "type": "paragraph",
+        "id": "d6c4804c029a2c30",
+        "text": "Here we look at different ways to move whole wiki sites between servers."
+      },
+      "date": 1450532270215
+    },
+    {
+      "type": "edit",
+      "id": "dff1aa9cd00777aa",
+      "item": {
+        "type": "paragraph",
+        "id": "dff1aa9cd00777aa",
+        "text": "# Fork"
+      },
+      "date": 1450532315478
+    },
+    {
+      "type": "add",
+      "id": "d9bd442c42b9089b",
+      "item": {
+        "type": "paragraph",
+        "id": "d9bd442c42b9089b",
+        "text": "One strategy would be to create a new site and then fork every page from an existing site."
+      },
+      "after": "dff1aa9cd00777aa",
+      "date": 1450532420371
+    },
+    {
+      "type": "add",
+      "id": "256b104d54b54aad",
+      "item": {
+        "type": "paragraph",
+        "id": "256b104d54b54aad",
+        "text": "Use recent changes to keep track of progress. Reload the browser window to get current sitemaps. Look for and then fork pages that aren't yet copied."
+      },
+      "after": "d9bd442c42b9089b",
+      "date": 1450532593860
+    },
+    {
+      "type": "add",
+      "id": "c11f2667ab4b8339",
+      "item": {
+        "type": "paragraph",
+        "id": "c11f2667ab4b8339",
+        "text": "The fork actions will be recored"
+      },
+      "after": "256b104d54b54aad",
+      "date": 1450532631537
+    },
+    {
+      "type": "edit",
+      "id": "c11f2667ab4b8339",
+      "item": {
+        "type": "paragraph",
+        "id": "c11f2667ab4b8339",
+        "text": "The journal will record each fork."
+      },
+      "date": 1450532784372
+    },
+    {
+      "type": "edit",
+      "id": "dff1aa9cd00777aa",
+      "item": {
+        "type": "markdown",
+        "id": "dff1aa9cd00777aa",
+        "text": "# Fork"
+      },
+      "date": 1450532788578
+    },
+    {
+      "type": "add",
+      "id": "72613d289ad26921",
+      "item": {
+        "type": "paragraph",
+        "id": "72613d289ad26921",
+        "text": "# Export"
+      },
+      "after": "c11f2667ab4b8339",
+      "date": 1450532819870
+    },
+    {
+      "type": "add",
+      "id": "3f98c7f89b8d3a00",
+      "item": {
+        "type": "paragraph",
+        "id": "3f98c7f89b8d3a00",
+        "text": "One could create a new site from the exported backup of another site."
+      },
+      "after": "72613d289ad26921",
+      "date": 1450532983808
+    },
+    {
+      "type": "edit",
+      "id": "d9bd442c42b9089b",
+      "item": {
+        "type": "paragraph",
+        "id": "d9bd442c42b9089b",
+        "text": "One could create a new site and then fork every page from an existing site."
+      },
+      "date": 1450533002567
+    },
+    {
+      "type": "edit",
+      "id": "d9bd442c42b9089b",
+      "item": {
+        "type": "paragraph",
+        "id": "d9bd442c42b9089b",
+        "text": "Create a new site and then fork every page from an existing site."
+      },
+      "date": 1450533028259
+    },
+    {
+      "type": "edit",
+      "id": "3f98c7f89b8d3a00",
+      "item": {
+        "type": "paragraph",
+        "id": "3f98c7f89b8d3a00",
+        "text": "Create a new site from the exported backup of an old site."
+      },
+      "date": 1450533070467
+    },
+    {
+      "type": "edit",
+      "id": "d9bd442c42b9089b",
+      "item": {
+        "type": "paragraph",
+        "id": "d9bd442c42b9089b",
+        "text": "Create a new site and then fork every page from another site."
+      },
+      "date": 1450533083426
+    },
+    {
+      "type": "edit",
+      "id": "d9bd442c42b9089b",
+      "item": {
+        "type": "paragraph",
+        "id": "d9bd442c42b9089b",
+        "text": "Create a new site and fork every page from another site."
+      },
+      "date": 1450533094938
+    },
+    {
+      "type": "add",
+      "id": "d2635071e0f18f19",
+      "item": {
+        "type": "paragraph",
+        "id": "d2635071e0f18f19",
+        "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. [http:/system.export export]"
+      },
+      "after": "3f98c7f89b8d3a00",
+      "date": 1450533213501
+    },
+    {
+      "type": "edit",
+      "id": "d2635071e0f18f19",
+      "item": {
+        "type": "paragraph",
+        "id": "d2635071e0f18f19",
+        "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. [http://system.export export]"
+      },
+      "date": 1450533245835
+    },
+    {
+      "type": "edit",
+      "id": "d2635071e0f18f19",
+      "item": {
+        "type": "paragraph",
+        "id": "d2635071e0f18f19",
+        "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. [http://system/export export]"
+      },
+      "date": 1450533262536
+    },
+    {
+      "type": "edit",
+      "id": "d2635071e0f18f19",
+      "item": {
+        "type": "paragraph",
+        "id": "d2635071e0f18f19",
+        "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. [http:/system/export export]"
+      },
+      "date": 1450533285367
+    },
+    {
+      "type": "edit",
+      "id": "d2635071e0f18f19",
+      "item": {
+        "type": "paragraph",
+        "id": "d2635071e0f18f19",
+        "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. [http:/system/export.json export]"
+      },
+      "date": 1450533343020
+    },
+    {
+      "type": "edit",
+      "id": "d2635071e0f18f19",
+      "item": {
+        "type": "paragraph",
+        "id": "d2635071e0f18f19",
+        "text": "Most version of the node wiki server support exporting the complete contents of a site as a single text file. Type the export url in the browser's location bar. Save the resulting page as a desktop file."
+      },
+      "date": 1450533540692
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b865c99f0d2b0f40"
+      },
+      "id": "b865c99f0d2b0f40",
+      "type": "add",
+      "after": "d2635071e0f18f19",
+      "date": 1450533543300
+    },
+    {
+      "type": "edit",
+      "id": "b865c99f0d2b0f40",
+      "item": {
+        "type": "code",
+        "id": "b865c99f0d2b0f40",
+        "text": "http://old.example.com/system/export.json"
+      },
+      "date": 1450533567090
+    },
+    {
+      "type": "edit",
+      "id": "72613d289ad26921",
+      "item": {
+        "type": "markdown",
+        "id": "72613d289ad26921",
+        "text": "# Export"
+      },
+      "date": 1450533583368
+    },
+    {
+      "type": "edit",
+      "id": "c11f2667ab4b8339",
+      "item": {
+        "type": "paragraph",
+        "id": "c11f2667ab4b8339",
+        "text": "The journal will record each fork citing the other site."
+      },
+      "date": 1450533640893
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8769a076aa6e6f93"
+      },
+      "id": "8769a076aa6e6f93",
+      "type": "add",
+      "after": "b865c99f0d2b0f40",
+      "date": 1450533643709
+    },
+    {
+      "type": "edit",
+      "id": "8769a076aa6e6f93",
+      "item": {
+        "type": "paragraph",
+        "id": "8769a076aa6e6f93",
+        "text": "Drag the desktop export file to the browser window of the new site. A list of backed up pages will appear. Visit each and fork it to the new site."
+      },
+      "date": 1450533725095
+    },
+    {
+      "type": "add",
+      "id": "ce0f1b332ae9dd95",
+      "item": {
+        "type": "paragraph",
+        "id": "ce0f1b332ae9dd95",
+        "text": "The journal will record each fork but not cite the old site."
+      },
+      "after": "8769a076aa6e6f93",
+      "date": 1450533797561
+    },
+    {
+      "type": "add",
+      "id": "15c48228a7e2c547",
+      "item": {
+        "type": "paragraph",
+        "id": "15c48228a7e2c547",
+        "text": "# Script"
+      },
+      "after": "ce0f1b332ae9dd95",
+      "date": 1450533871982
+    },
+    {
+      "type": "add",
+      "id": "b0412cd4f94fd549",
+      "item": {
+        "type": "paragraph",
+        "id": "b0412cd4f94fd549",
+        "text": "Create a new site and curl each page from the old site."
+      },
+      "after": "15c48228a7e2c547",
+      "date": 1450533931278
+    },
+    {
+      "type": "add",
+      "id": "00c8637d3b7691e9",
+      "item": {
+        "type": "paragraph",
+        "id": "00c8637d3b7691e9",
+        "text": "Write a script on the new site that uses curl or wget commands to retrieve each page from the old site. Loop over each entry in the sitemap to retrieve every page."
+      },
+      "after": "b0412cd4f94fd549",
+      "date": 1450534071446
+    },
+    {
+      "type": "add",
+      "id": "3e924dead99d62eb",
+      "item": {
+        "type": "paragraph",
+        "id": "3e924dead99d62eb",
+        "text": "Alternatively, curl the export.json from the source site and unpack that into individual files on the new site."
+      },
+      "after": "00c8637d3b7691e9",
+      "date": 1450534193054
+    },
+    {
+      "type": "add",
+      "id": "229ea04d3959c2d5",
+      "item": {
+        "type": "paragraph",
+        "id": "229ea04d3959c2d5",
+        "text": "Note: pages are referred to by slugs. These are suffixed with .json in urls but not as file names in the pages directory."
+      },
+      "after": "3e924dead99d62eb",
+      "date": 1450534268294
+    },
+    {
+      "type": "edit",
+      "id": "15c48228a7e2c547",
+      "item": {
+        "type": "markdown",
+        "id": "15c48228a7e2c547",
+        "text": "# Script"
+      },
+      "date": 1450534272678
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "94a9fca3db32ec05"
+      },
+      "id": "94a9fca3db32ec05",
+      "type": "add",
+      "after": "229ea04d3959c2d5",
+      "date": 1450534324630
+    },
+    {
+      "type": "edit",
+      "id": "94a9fca3db32ec05",
+      "item": {
+        "type": "paragraph",
+        "id": "94a9fca3db32ec05",
+        "text": "# Copy"
+      },
+      "date": 1450534373027
+    },
+    {
+      "type": "add",
+      "id": "c86c39128df7493a",
+      "item": {
+        "type": "paragraph",
+        "id": "c86c39128df7493a",
+        "text": "Create a new site and scp all pages from the old site."
+      },
+      "after": "94a9fca3db32ec05",
+      "date": 1450534413465
+    },
+    {
+      "type": "add",
+      "id": "ab61592368e6726b",
+      "item": {
+        "type": "paragraph",
+        "id": "ab61592368e6726b",
+        "text": "Setup secure shell access to both old and new sites from a third computer such as a personal laptop. Use the command line utility to copy all of the pages."
+      },
+      "after": "c86c39128df7493a",
+      "date": 1450534527542
+    },
+    {
+      "type": "edit",
+      "id": "94a9fca3db32ec05",
+      "item": {
+        "type": "markdown",
+        "id": "94a9fca3db32ec05",
+        "text": "# Copy"
+      },
+      "date": 1450534532080
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f288e58136128b0a"
+      },
+      "id": "f288e58136128b0a",
+      "type": "add",
+      "after": "ab61592368e6726b",
+      "date": 1450534539226
+    },
+    {
+      "type": "edit",
+      "id": "f288e58136128b0a",
+      "item": {
+        "type": "code",
+        "id": "f288e58136128b0a",
+        "text": "scp old.example.com:.wiki/pages new.example.com:.wiki"
+      },
+      "date": 1450534592131
+    },
+    {
+      "type": "edit",
+      "id": "f288e58136128b0a",
+      "item": {
+        "type": "code",
+        "id": "f288e58136128b0a",
+        "text": "scp old.com:.wiki/pages new.com:.wiki"
+      },
+      "date": 1450534623393
+    },
+    {
+      "type": "edit",
+      "id": "f288e58136128b0a",
+      "item": {
+        "type": "code",
+        "id": "f288e58136128b0a",
+        "text": "scp oldwiki.com:.wiki/pages newwiki.com:.wiki"
+      },
+      "date": 1450534645632
+    },
+    {
+      "type": "edit",
+      "id": "ab61592368e6726b",
+      "item": {
+        "type": "paragraph",
+        "id": "ab61592368e6726b",
+        "text": "Setup secure shell access to both old and new sites from a third computer such as a personal laptop. Use the command line utility to copy the pages directory."
+      },
+      "date": 1450534743930
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "983ca0a6d8666559"
+      },
+      "id": "983ca0a6d8666559",
+      "type": "add",
+      "after": "f288e58136128b0a",
+      "date": 1450534791333
+    },
+    {
+      "type": "edit",
+      "id": "983ca0a6d8666559",
+      "item": {
+        "type": "paragraph",
+        "id": "983ca0a6d8666559",
+        "text": "Note: the paths specified will be longer if either or both servers are setup as farms."
+      },
+      "date": 1450534862272
+    },
+    {
+      "type": "add",
+      "id": "40902fe83240cbec",
+      "item": {
+        "type": "paragraph",
+        "id": "40902fe83240cbec",
+        "text": "Alternatively, rsync can efficiently copy only files that have changed. This can be useful for publishing a privately maintained site to a public server."
+      },
+      "after": "983ca0a6d8666559",
+      "date": 1450535034730
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "02efa5b0f56807a7"
+      },
+      "id": "02efa5b0f56807a7",
+      "type": "add",
+      "after": "40902fe83240cbec",
+      "date": 1450535107712
+    },
+    {
+      "type": "edit",
+      "id": "02efa5b0f56807a7",
+      "item": {
+        "type": "code",
+        "id": "02efa5b0f56807a7",
+        "text": "rsync -a oldwiki.com:.wiki/pages newwiki.com:.wiki"
+      },
+      "date": 1450535180334
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ab1408302d27bd55"
+      },
+      "id": "ab1408302d27bd55",
+      "type": "add",
+      "after": "02efa5b0f56807a7",
+      "date": 1450535274726
+    },
+    {
+      "type": "edit",
+      "id": "ab1408302d27bd55",
+      "item": {
+        "type": "paragraph",
+        "id": "ab1408302d27bd55",
+        "text": "# DNS"
+      },
+      "date": 1450535285979
+    },
+    {
+      "type": "add",
+      "id": "fa94777e65c14fab",
+      "item": {
+        "type": "paragraph",
+        "id": "fa94777e65c14fab",
+        "text": "One can move a site from one place to another without interfering with any reader's access to the content."
+      },
+      "after": "ab1408302d27bd55",
+      "date": 1450535500496
+    },
+    {
+      "type": "add",
+      "id": "9fa1a00799b086dd",
+      "item": {
+        "type": "paragraph",
+        "id": "9fa1a00799b086dd",
+        "text": "First move the content by any of the above means. Then revise DNS (domain name service) to refer to the new site."
+      },
+      "after": "fa94777e65c14fab",
+      "date": 1450535652877
+    },
+    {
+      "type": "add",
+      "id": "1970415ef093ffc0",
+      "item": {
+        "type": "paragraph",
+        "id": "1970415ef093ffc0",
+        "text": "Note: DNS changes can take hours or longer to propagate through the internet. Be careful to not edit a moved site until you are sure your browser is accessing the new server."
+      },
+      "after": "9fa1a00799b086dd",
+      "date": 1450535841621
+    },
+    {
+      "type": "edit",
+      "id": "1970415ef093ffc0",
+      "item": {
+        "type": "paragraph",
+        "id": "1970415ef093ffc0",
+        "text": "Note: DNS changes can take hours or longer to propagate through the internet. Be careful to not edit a moved site until your browser is accessing the new server."
+      },
+      "date": 1450535862014
+    },
+    {
+      "type": "edit",
+      "id": "ab1408302d27bd55",
+      "item": {
+        "type": "markdown",
+        "id": "ab1408302d27bd55",
+        "text": "# DNS"
+      },
+      "date": 1450535866911
+    },
+    {
+      "type": "add",
+      "id": "d09359ccceb62dc0",
+      "item": {
+        "type": "paragraph",
+        "id": "d09359ccceb62dc0",
+        "text": "# Variations"
+      },
+      "after": "1970415ef093ffc0",
+      "date": 1450536018754
+    },
+    {
+      "type": "edit",
+      "id": "d09359ccceb62dc0",
+      "item": {
+        "type": "markdown",
+        "id": "d09359ccceb62dc0",
+        "text": "# Variations"
+      },
+      "date": 1450536022851
+    },
+    {
+      "type": "edit",
+      "id": "d09359ccceb62dc0",
+      "item": {
+        "type": "markdown",
+        "id": "d09359ccceb62dc0",
+        "text": "# Considerations"
+      },
+      "date": 1450536065961
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dea4f1c5d8d1222c"
+      },
+      "id": "dea4f1c5d8d1222c",
+      "type": "add",
+      "after": "d09359ccceb62dc0",
+      "date": 1450536072346
+    },
+    {
+      "type": "edit",
+      "id": "dea4f1c5d8d1222c",
+      "item": {
+        "type": "paragraph",
+        "id": "dea4f1c5d8d1222c",
+        "text": "Its wise to have current backups before experimenting with moving pages as text files."
+      },
+      "date": 1450536174299
+    },
+    {
+      "type": "add",
+      "id": "0d13f874cf03ae85",
+      "item": {
+        "type": "paragraph",
+        "id": "0d13f874cf03ae85",
+        "text": "If a server has been setup to save pages in a database rather than as flat files then "
+      },
+      "after": "dea4f1c5d8d1222c",
+      "date": 1450536362977
+    },
+    {
+      "type": "edit",
+      "id": "0d13f874cf03ae85",
+      "item": {
+        "type": "paragraph",
+        "id": "0d13f874cf03ae85",
+        "text": "The script approach for writing and the copy approach for both reading and writing assumes that the server has been configured to store pages in flat files, the default."
+      },
+      "date": 1450536685040
+    },
+    {
+      "type": "add",
+      "id": "d361ae75da0d6a43",
+      "item": {
+        "type": "paragraph",
+        "id": "d361ae75da0d6a43",
+        "text": "Only the fork approach meets the attribution requirement of the creative commons license when retrieving content from a site other than one's own."
+      },
+      "after": "0d13f874cf03ae85",
+      "date": 1450536981921
+    },
+    {
+      "type": "add",
+      "id": "8b9cb425cdf7de1e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b9cb425cdf7de1e",
+        "text": "The copy approach can be used to copy"
+      },
+      "after": "dea4f1c5d8d1222c",
+      "date": 1450537066167
+    },
+    {
+      "type": "edit",
+      "id": "8b9cb425cdf7de1e",
+      "item": {
+        "type": "paragraph",
+        "id": "8b9cb425cdf7de1e",
+        "text": "The copy approach can be used to copy the status directory as well as the pages directory. This will preserve claims and flags."
+      },
+      "date": 1450537165681
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bed6c1225950b247"
+      },
+      "id": "bed6c1225950b247",
+      "type": "add",
+      "after": "d361ae75da0d6a43",
+      "date": 1450537219363
+    },
+    {
+      "type": "edit",
+      "id": "bed6c1225950b247",
+      "item": {
+        "type": "code",
+        "id": "bed6c1225950b247",
+        "text": "scp oldwiki.com:.wiki/ newwiki.com:.wiki"
+      },
+      "date": 1450537272883
+    },
+    {
+      "type": "move",
+      "order": [
+        "d6c4804c029a2c30",
+        "dff1aa9cd00777aa",
+        "d9bd442c42b9089b",
+        "256b104d54b54aad",
+        "c11f2667ab4b8339",
+        "72613d289ad26921",
+        "3f98c7f89b8d3a00",
+        "d2635071e0f18f19",
+        "b865c99f0d2b0f40",
+        "8769a076aa6e6f93",
+        "ce0f1b332ae9dd95",
+        "15c48228a7e2c547",
+        "b0412cd4f94fd549",
+        "00c8637d3b7691e9",
+        "3e924dead99d62eb",
+        "229ea04d3959c2d5",
+        "94a9fca3db32ec05",
+        "c86c39128df7493a",
+        "ab61592368e6726b",
+        "f288e58136128b0a",
+        "983ca0a6d8666559",
+        "40902fe83240cbec",
+        "02efa5b0f56807a7",
+        "ab1408302d27bd55",
+        "fa94777e65c14fab",
+        "9fa1a00799b086dd",
+        "1970415ef093ffc0",
+        "d09359ccceb62dc0",
+        "dea4f1c5d8d1222c",
+        "8b9cb425cdf7de1e",
+        "0d13f874cf03ae85",
+        "bed6c1225950b247",
+        "d361ae75da0d6a43"
+      ],
+      "id": "bed6c1225950b247",
+      "date": 1450537281719
+    },
+    {
+      "type": "move",
+      "order": [
+        "d6c4804c029a2c30",
+        "dff1aa9cd00777aa",
+        "d9bd442c42b9089b",
+        "256b104d54b54aad",
+        "c11f2667ab4b8339",
+        "72613d289ad26921",
+        "3f98c7f89b8d3a00",
+        "d2635071e0f18f19",
+        "b865c99f0d2b0f40",
+        "8769a076aa6e6f93",
+        "ce0f1b332ae9dd95",
+        "15c48228a7e2c547",
+        "b0412cd4f94fd549",
+        "00c8637d3b7691e9",
+        "3e924dead99d62eb",
+        "229ea04d3959c2d5",
+        "94a9fca3db32ec05",
+        "c86c39128df7493a",
+        "ab61592368e6726b",
+        "f288e58136128b0a",
+        "983ca0a6d8666559",
+        "40902fe83240cbec",
+        "02efa5b0f56807a7",
+        "ab1408302d27bd55",
+        "fa94777e65c14fab",
+        "9fa1a00799b086dd",
+        "1970415ef093ffc0",
+        "d09359ccceb62dc0",
+        "dea4f1c5d8d1222c",
+        "8b9cb425cdf7de1e",
+        "bed6c1225950b247",
+        "0d13f874cf03ae85",
+        "d361ae75da0d6a43"
+      ],
+      "id": "bed6c1225950b247",
+      "date": 1450537287042
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org"
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c76df828d45f903e",
+        "text": "Here we look at different ways to move Fedwiki content between servers. Data is Fedwiki is made as simple and portable as possible - [[Data Portability]] being a top [[ Federated Wiki Design Principles]]",
+        "alias": "d6c4804c029a2c30"
+      },
+      "id": "c76df828d45f903e",
+      "date": 1450611205020
+    },
+    {
+      "type": "remove",
+      "id": "d6c4804c029a2c30",
+      "date": 1450611208674
+    }
+  ]
+}

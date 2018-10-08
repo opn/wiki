@@ -1,0 +1,791 @@
+{
+  "title": "Vega",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "fbdb7de8d8f4fcc2",
+      "text": "Vega is a visualization grammar, a declarative format for creating, saving and sharing interactive visualization designs. "
+    },
+    {
+      "type": "paragraph",
+      "id": "7dd310019950ccf7",
+      "text": "You can find documentation and learning materials for getting up and running with Vega over at - [https://github.com/vega/vega/wiki github]"
+    },
+    {
+      "type": "markdown",
+      "id": "2a636f767d5ff9fc",
+      "text": "# Links"
+    },
+    {
+      "type": "markdown",
+      "id": "ba382cbf56e31e79",
+      "text": "* [http://vega.github.io/vega/ vega.io]\n* Online Vega editor - [http://vega.github.io/vega-editor/ vega.github.io]\n* Tutorial on [https://github.com/vega/vega/wiki/Tutorial githib]\n* Interactive tutorial on [https://www.mediawiki.org/wiki/Extension:Graph/Interactive_Graph_Tutorial mediawiki.org]"
+    },
+    {
+      "type": "markdown",
+      "id": "fb512e42e6ab93f9",
+      "text": "# Comparisson to D3"
+    },
+    {
+      "type": "paragraph",
+      "id": "fc3d3f50ed50eb10",
+      "text": "Vega is NOT intended as a \"replacement\" for [[D3]]. D3 is intentionally a low-level system. During the early design of D3, we even referred to it as a \"visualization kernel\" rather than a \"toolkit\" or \"framework\". "
+    },
+    {
+      "type": "paragraph",
+      "id": "1db36162c7a5a378",
+      "text": "In addition to custom design, [[D3]] is intended as a supporting layer for higher-level visualization tools. Vega is one such tool, and leverages D3 heavily within its implementation."
+    },
+    {
+      "type": "paragraph",
+      "id": "b7c46e2d0a944704",
+      "text": "Vega provides a higher-level visualization specification language on top of D3. By design, D3 will maintain an \"expressivity advantage\" and in many cases will be better suited for novel, highly interactive graphics. "
+    },
+    {
+      "type": "paragraph",
+      "id": "1cce9acea6f4f595",
+      "text": "On the other hand, we hope that Vega will be convenient for a wide range of common yet customizable visualizations. Vega's design builds on concepts we developed in both Protovis and D3, and is informed by years of research at Stanford and UW, and our experiences building data-driven applications at Trifacta."
+    },
+    {
+      "type": "markdown",
+      "id": "95a0ac74d34aadb3",
+      "text": "# Motivations for creating Vega"
+    },
+    {
+      "type": "markdown",
+      "id": "4595b2c01a2c58ca",
+      "text": "We had a number of motivations for creating Vega:\n* Support **fast and customizable design**\n* Make visualizations **more reusable and shareable**\n* Enable **programmatic generation of visualizations**\n* **Improve performance** and platform flexibility"
+    },
+    {
+      "type": "markdown",
+      "id": "84432b5386130cac",
+      "text": "# Fast and customizable design"
+    },
+    {
+      "type": "paragraph",
+      "id": "0f327fccf9de5dcf",
+      "text": "Following in the footsteps of Protovis, Vega provides a convenient language of graphical marks for creating custom graphics. These marks support a wide variety of chart types, without the artificial restrictions of monolithic chart widgets. Vega also provides an integrated workflow model of data transformations that supports custom processing and advanced layout algorithms."
+    },
+    {
+      "type": "markdown",
+      "id": "37315d26cdcca2b8",
+      "text": "# More reusable and shareable"
+    },
+    {
+      "type": "paragraph",
+      "id": "2d53d10d1785c1a1",
+      "text": "Each Vega specification defines a reusable and shareable chart component. Input data can also be included within a specification, resulting in stand-alone definitions. In essence, Vega provides a file-format for saving and sharing visualization designs."
+    },
+    {
+      "type": "markdown",
+      "id": "aa654e916f80888c",
+      "text": "# Programmatic generation of visualizations"
+    },
+    {
+      "type": "paragraph",
+      "id": "ef0a2189508f9ac6",
+      "text": "Once the learning curve has been climbed, manually writing D3 code is often both fun and efficient. However, D3 is not always the most convenient form for automatically generating visualizations. One goal of Vega is to provide a \"target language\" in which computer programs can dynamically generate visualizations. A program can construct a Vega specification (which is simply a JSON object) and then pass it off to the Vega runtime to visualize data."
+    },
+    {
+      "type": "markdown",
+      "id": "0325d459344eda9c",
+      "text": "# Improve Performance"
+    },
+    {
+      "type": "paragraph",
+      "id": "483c9462aca7c795",
+      "text": "D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. "
+    },
+    {
+      "type": "paragraph",
+      "id": "ab669221a9a8909a",
+      "text": "However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. "
+    },
+    {
+      "type": "paragraph",
+      "id": "ed91c66127e55ef7",
+      "text": "By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either [[HTML5 Canvas]] or [[SVG]]. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f72c37fe2f9f3693",
+      "text": "Canvas can provide improved rendering performance and scalability: often 2-10x faster than [[SVG]] for full-component redraws (though such comparisons require nuance). "
+    },
+    {
+      "type": "paragraph",
+      "id": "bb0d5113d5fa60c1",
+      "text": "SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as [[WebGL]]."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Vega",
+        "story": []
+      },
+      "date": 1455625186834
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fbdb7de8d8f4fcc2"
+      },
+      "id": "fbdb7de8d8f4fcc2",
+      "type": "add",
+      "date": 1455625188143
+    },
+    {
+      "type": "edit",
+      "id": "fbdb7de8d8f4fcc2",
+      "item": {
+        "type": "paragraph",
+        "id": "fbdb7de8d8f4fcc2",
+        "text": "- [https://github.com/vega/vega/wiki github]"
+      },
+      "date": 1455625202915
+    },
+    {
+      "type": "edit",
+      "id": "fbdb7de8d8f4fcc2",
+      "item": {
+        "type": "paragraph",
+        "id": "fbdb7de8d8f4fcc2",
+        "text": "Vega is a visualization grammar, a declarative format for creating, saving and sharing interactive visualization designs. "
+      },
+      "date": 1455625238174
+    },
+    {
+      "type": "add",
+      "id": "7dd310019950ccf7",
+      "item": {
+        "type": "paragraph",
+        "id": "7dd310019950ccf7",
+        "text": "You can find documentation and learning materials for getting up and running with Vega over at - [https://github.com/vega/vega/wiki github]"
+      },
+      "after": "fbdb7de8d8f4fcc2",
+      "date": 1455625266720
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2a636f767d5ff9fc"
+      },
+      "id": "2a636f767d5ff9fc",
+      "type": "add",
+      "after": "7dd310019950ccf7",
+      "date": 1455625301700
+    },
+    {
+      "type": "edit",
+      "id": "2a636f767d5ff9fc",
+      "item": {
+        "type": "paragraph",
+        "id": "2a636f767d5ff9fc",
+        "text": "There is an online Vega editor here - "
+      },
+      "date": 1455625319679
+    },
+    {
+      "type": "edit",
+      "id": "2a636f767d5ff9fc",
+      "item": {
+        "type": "paragraph",
+        "id": "2a636f767d5ff9fc",
+        "text": "There is an online Vega editor here - [http://vega.github.io/vega-editor/ vega.github.io]"
+      },
+      "date": 1455625333906
+    },
+    {
+      "type": "edit",
+      "id": "2a636f767d5ff9fc",
+      "item": {
+        "type": "paragraph",
+        "id": "2a636f767d5ff9fc",
+        "text": "# Links"
+      },
+      "date": 1455625354793
+    },
+    {
+      "type": "add",
+      "id": "ba382cbf56e31e79",
+      "item": {
+        "type": "paragraph",
+        "id": "ba382cbf56e31e79",
+        "text": "There is an;* online Vega editor here - [http://vega.github.io/vega-editor/ vega.github.io]"
+      },
+      "after": "2a636f767d5ff9fc",
+      "date": 1455625368884
+    },
+    {
+      "type": "edit",
+      "id": "ba382cbf56e31e79",
+      "item": {
+        "type": "markdown",
+        "id": "ba382cbf56e31e79",
+        "text": "There is an;* online Vega editor here - [http://vega.github.io/vega-editor/ vega.github.io]"
+      },
+      "date": 1455625369973
+    },
+    {
+      "type": "edit",
+      "id": "ba382cbf56e31e79",
+      "item": {
+        "type": "markdown",
+        "id": "ba382cbf56e31e79",
+        "text": "There is an:\n* Online Vega editor - [http://vega.github.io/vega-editor/ vega.github.io]\n* Tutorial [https://github.com/vega/vega/wiki/Tutorial githib]"
+      },
+      "date": 1455625405680
+    },
+    {
+      "type": "edit",
+      "id": "ba382cbf56e31e79",
+      "item": {
+        "type": "markdown",
+        "id": "ba382cbf56e31e79",
+        "text": "There is an:\n* Online Vega editor - [http://vega.github.io/vega-editor/ vega.github.io]\n* Tutorial on [https://github.com/vega/vega/wiki/Tutorial githib]"
+      },
+      "date": 1455625414145
+    },
+    {
+      "type": "edit",
+      "id": "2a636f767d5ff9fc",
+      "item": {
+        "type": "markdown",
+        "id": "2a636f767d5ff9fc",
+        "text": "# Links"
+      },
+      "date": 1455625416671
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fb512e42e6ab93f9"
+      },
+      "id": "fb512e42e6ab93f9",
+      "type": "add",
+      "after": "ba382cbf56e31e79",
+      "date": 1455625495834
+    },
+    {
+      "type": "edit",
+      "id": "fb512e42e6ab93f9",
+      "item": {
+        "type": "paragraph",
+        "id": "fb512e42e6ab93f9",
+        "text": "# Comparisson to [[D3]]"
+      },
+      "date": 1455625514067
+    },
+    {
+      "type": "add",
+      "id": "fc3d3f50ed50eb10",
+      "item": {
+        "type": "paragraph",
+        "id": "fc3d3f50ed50eb10",
+        "text": "Vega is NOT intended as a \"replacement\" for [[D3]]. D3 is intentionally a low-level system. During the early design of D3, we even referred to it as a \"visualization kernel\" rather than a \"toolkit\" or \"framework\". In addition to custom design, D3 is intended as a supporting layer for higher-level visualization tools. Vega is one such tool, and leverages D3 heavily within its implementation."
+      },
+      "after": "fb512e42e6ab93f9",
+      "date": 1455625532429
+    },
+    {
+      "type": "add",
+      "id": "b7c46e2d0a944704",
+      "item": {
+        "type": "paragraph",
+        "id": "b7c46e2d0a944704",
+        "text": "Vega provides a higher-level visualization specification language on top of D3. By design, D3 will maintain an \"expressivity advantage\" and in many cases will be better suited for novel, highly interactive graphics. On the other hand, we hope that Vega will be convenient for a wide range of common yet customizable visualizations. Vega's design builds on concepts we developed in both Protovis and D3, and is informed by years of research at Stanford and UW, and our experiences building data-driven applications at Trifacta."
+      },
+      "after": "fc3d3f50ed50eb10",
+      "date": 1455625552254
+    },
+    {
+      "type": "add",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "paragraph",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support fast and customizable design. Following in the footsteps of Protovis, Vega provides a convenient language of graphical marks for creating custom graphics. These marks support a wide variety of chart types, without the artificial restrictions of monolithic chart widgets. Vega also provides an integrated workflow model of data transformations that supports custom processing and advanced layout algorithms.\n* Make visualizations more reusable and shareable. Each Vega specification defines a reusable and shareable chart component. Input data can also be included within a specification, resulting in stand-alone definitions. In essence, Vega provides a file-format for saving and sharing visualization designs.\n* Enable programmatic generation of visualizations. Once the learning curve has been climbed, manually writing D3 code is often both fun and efficient. However, D3 is not always the most convenient form for automatically generating visualizations. One goal of Vega is to provide a \"target language\" in which computer programs can dynamically generate visualizations. A program can construct a Vega specification (which is simply a JSON object) and then pass it off to the Vega runtime to visualize data.\n* Improve performance and platform flexibility. D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either HTML5 Canvas or SVG. Canvas can provide improved rendering performance and scalability: often 2-10x faster than SVG for full-component redraws (though such comparisons require nuance). SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as WebGL."
+      },
+      "after": "b7c46e2d0a944704",
+      "date": 1455625579969
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support fast and customizable design. Following in the footsteps of Protovis, Vega provides a convenient language of graphical marks for creating custom graphics. These marks support a wide variety of chart types, without the artificial restrictions of monolithic chart widgets. Vega also provides an integrated workflow model of data transformations that supports custom processing and advanced layout algorithms.\n* Make visualizations more reusable and shareable. Each Vega specification defines a reusable and shareable chart component. Input data can also be included within a specification, resulting in stand-alone definitions. In essence, Vega provides a file-format for saving and sharing visualization designs.\n* Enable programmatic generation of visualizations. Once the learning curve has been climbed, manually writing D3 code is often both fun and efficient. However, D3 is not always the most convenient form for automatically generating visualizations. One goal of Vega is to provide a \"target language\" in which computer programs can dynamically generate visualizations. A program can construct a Vega specification (which is simply a JSON object) and then pass it off to the Vega runtime to visualize data.\n* Improve performance and platform flexibility. D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either HTML5 Canvas or SVG. Canvas can provide improved rendering performance and scalability: often 2-10x faster than SVG for full-component redraws (though such comparisons require nuance). SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as WebGL."
+      },
+      "date": 1455625580908
+    },
+    {
+      "type": "edit",
+      "id": "fb512e42e6ab93f9",
+      "item": {
+        "type": "markdown",
+        "id": "fb512e42e6ab93f9",
+        "text": "# Comparisson to [[D3]]"
+      },
+      "date": 1455625584414
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "84432b5386130cac"
+      },
+      "id": "84432b5386130cac",
+      "type": "add",
+      "after": "4595b2c01a2c58ca",
+      "date": 1455625626661
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support fast and customizable design. \n* Enable programmatic generation of visualizations. Once the learning curve has been climbed, manually writing D3 code is often both fun and efficient. However, D3 is not always the most convenient form for automatically generating visualizations. One goal of Vega is to provide a \"target language\" in which computer programs can dynamically generate visualizations. A program can construct a Vega specification (which is simply a JSON object) and then pass it off to the Vega runtime to visualize data.\n* Improve performance and platform flexibility. D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either HTML5 Canvas or SVG. Canvas can provide improved rendering performance and scalability: often 2-10x faster than SVG for full-component redraws (though such comparisons require nuance). SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as WebGL."
+      },
+      "date": 1455625631146
+    },
+    {
+      "type": "edit",
+      "id": "84432b5386130cac",
+      "item": {
+        "type": "paragraph",
+        "id": "84432b5386130cac",
+        "text": "Following in the footsteps of Protovis, Vega provides a convenient language of graphical marks for creating custom graphics. These marks support a wide variety of chart types, without the artificial restrictions of monolithic chart widgets. Vega also provides an integrated workflow model of data transformations that supports custom processing and advanced layout algorithms.\n* Make visualizations more reusable and shareable. Each Vega specification defines a reusable and shareable chart component. Input data can also be included within a specification, resulting in stand-alone definitions. In essence, Vega provides a file-format for saving and sharing visualization designs."
+      },
+      "date": 1455625633105
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "aa654e916f80888c"
+      },
+      "id": "aa654e916f80888c",
+      "type": "add",
+      "after": "84432b5386130cac",
+      "date": 1455625652312
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support fast and customizable design. \n* Enable programmatic generation of visualizations. \n* Improve performance and platform flexibility. D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either HTML5 Canvas or SVG. Canvas can provide improved rendering performance and scalability: often 2-10x faster than SVG for full-component redraws (though such comparisons require nuance). SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as WebGL."
+      },
+      "date": 1455625653555
+    },
+    {
+      "type": "edit",
+      "id": "aa654e916f80888c",
+      "item": {
+        "type": "paragraph",
+        "id": "aa654e916f80888c",
+        "text": "Once the learning curve has been climbed, manually writing D3 code is often both fun and efficient. However, D3 is not always the most convenient form for automatically generating visualizations. One goal of Vega is to provide a \"target language\" in which computer programs can dynamically generate visualizations. A program can construct a Vega specification (which is simply a JSON object) and then pass it off to the Vega runtime to visualize data."
+      },
+      "date": 1455625664264
+    },
+    {
+      "type": "edit",
+      "id": "aa654e916f80888c",
+      "item": {
+        "type": "paragraph",
+        "id": "aa654e916f80888c",
+        "text": "# Programmatic generation of visualizations"
+      },
+      "date": 1455625684808
+    },
+    {
+      "type": "edit",
+      "id": "aa654e916f80888c",
+      "item": {
+        "type": "markdown",
+        "id": "aa654e916f80888c",
+        "text": "# Programmatic generation of visualizations"
+      },
+      "date": 1455625686211
+    },
+    {
+      "type": "add",
+      "id": "ef0a2189508f9ac6",
+      "item": {
+        "type": "paragraph",
+        "id": "ef0a2189508f9ac6",
+        "text": "Once the learning curve has been climbed, manually writing D3 code is often both fun and efficient. However, D3 is not always the most convenient form for automatically generating visualizations. One goal of Vega is to provide a \"target language\" in which computer programs can dynamically generate visualizations. A program can construct a Vega specification (which is simply a JSON object) and then pass it off to the Vega runtime to visualize data."
+      },
+      "after": "aa654e916f80888c",
+      "date": 1455625687482
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support fast and customizable design. \n* Enable programmatic generation of visualizations. \n* Improve performance and platform flexibility"
+      },
+      "date": 1455625713980
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0325d459344eda9c"
+      },
+      "id": "0325d459344eda9c",
+      "type": "add",
+      "after": "ef0a2189508f9ac6",
+      "date": 1455625718305
+    },
+    {
+      "type": "edit",
+      "id": "0325d459344eda9c",
+      "item": {
+        "type": "paragraph",
+        "id": "0325d459344eda9c",
+        "text": "# Improve Performance"
+      },
+      "date": 1455625736650
+    },
+    {
+      "type": "edit",
+      "id": "0325d459344eda9c",
+      "item": {
+        "type": "markdown",
+        "id": "0325d459344eda9c",
+        "text": "# Improve Performance"
+      },
+      "date": 1455625739028
+    },
+    {
+      "type": "add",
+      "id": "483c9462aca7c795",
+      "item": {
+        "type": "paragraph",
+        "id": "483c9462aca7c795",
+        "text": "D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either HTML5 Canvas or SVG. Canvas can provide improved rendering performance and scalability: often 2-10x faster than SVG for full-component redraws (though such comparisons require nuance). SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as WebGL."
+      },
+      "after": "0325d459344eda9c",
+      "date": 1455625745246
+    },
+    {
+      "type": "edit",
+      "id": "84432b5386130cac",
+      "item": {
+        "type": "paragraph",
+        "id": "84432b5386130cac",
+        "text": "# Fast and customizable design"
+      },
+      "date": 1455625774580
+    },
+    {
+      "type": "edit",
+      "id": "84432b5386130cac",
+      "item": {
+        "type": "markdown",
+        "id": "84432b5386130cac",
+        "text": "# Fast and customizable design"
+      },
+      "date": 1455625775664
+    },
+    {
+      "type": "add",
+      "id": "0f327fccf9de5dcf",
+      "item": {
+        "type": "paragraph",
+        "id": "0f327fccf9de5dcf",
+        "text": "Following in the footsteps of Protovis, Vega provides a convenient language of graphical marks for creating custom graphics. These marks support a wide variety of chart types, without the artificial restrictions of monolithic chart widgets. Vega also provides an integrated workflow model of data transformations that supports custom processing and advanced layout algorithms.\n"
+      },
+      "after": "84432b5386130cac",
+      "date": 1455625784231
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support fast and customizable design\n* Make visualizations more reusable and shareable\n* Enable programmatic generation of visualizations\n* Improve performance and platform flexibility"
+      },
+      "date": 1455625820728
+    },
+    {
+      "type": "edit",
+      "id": "0f327fccf9de5dcf",
+      "item": {
+        "type": "paragraph",
+        "id": "0f327fccf9de5dcf",
+        "text": "Following in the footsteps of Protovis, Vega provides a convenient language of graphical marks for creating custom graphics. These marks support a wide variety of chart types, without the artificial restrictions of monolithic chart widgets. Vega also provides an integrated workflow model of data transformations that supports custom processing and advanced layout algorithms."
+      },
+      "date": 1455625870658
+    },
+    {
+      "type": "add",
+      "id": "37315d26cdcca2b8",
+      "item": {
+        "type": "paragraph",
+        "id": "37315d26cdcca2b8",
+        "text": "Each Vega specification defines a reusable and shareable chart component. Input data can also be included within a specification, resulting in stand-alone definitions. In essence, Vega provides a file-format for saving and sharing visualization designs."
+      },
+      "after": "0f327fccf9de5dcf",
+      "date": 1455625874910
+    },
+    {
+      "type": "edit",
+      "id": "37315d26cdcca2b8",
+      "item": {
+        "type": "paragraph",
+        "id": "37315d26cdcca2b8",
+        "text": "# more reusable and shareable"
+      },
+      "date": 1455625888098
+    },
+    {
+      "type": "add",
+      "id": "2d53d10d1785c1a1",
+      "item": {
+        "type": "paragraph",
+        "id": "2d53d10d1785c1a1",
+        "text": "Each Vega specification defines a reusable and shareable chart component. Input data can also be included within a specification, resulting in stand-alone definitions. In essence, Vega provides a file-format for saving and sharing visualization designs."
+      },
+      "after": "37315d26cdcca2b8",
+      "date": 1455625889482
+    },
+    {
+      "type": "edit",
+      "id": "37315d26cdcca2b8",
+      "item": {
+        "type": "paragraph",
+        "id": "37315d26cdcca2b8",
+        "text": "# More reusable and shareable"
+      },
+      "date": 1455625892502
+    },
+    {
+      "type": "edit",
+      "id": "37315d26cdcca2b8",
+      "item": {
+        "type": "markdown",
+        "id": "37315d26cdcca2b8",
+        "text": "# More reusable and shareable"
+      },
+      "date": 1455625893404
+    },
+    {
+      "type": "edit",
+      "id": "483c9462aca7c795",
+      "item": {
+        "type": "paragraph",
+        "id": "483c9462aca7c795",
+        "text": "D3 maintains a tight binding between data objects and Document Object Model (DOM) elements. This design decision carries a number of advantages, including use of CSS for styling, transparency, and ease of debugging. "
+      },
+      "date": 1455625905357
+    },
+    {
+      "type": "add",
+      "id": "ab669221a9a8909a",
+      "item": {
+        "type": "paragraph",
+        "id": "ab669221a9a8909a",
+        "text": "However, the core of D3 is limited to DOM-based displays. In contrast, Vega provides an abstraction layer for both rendering and event processing, which in turn provides flexibility. "
+      },
+      "after": "483c9462aca7c795",
+      "date": 1455625909725
+    },
+    {
+      "type": "add",
+      "id": "ed91c66127e55ef7",
+      "item": {
+        "type": "paragraph",
+        "id": "ed91c66127e55ef7",
+        "text": "By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either HTML5 Canvas or SVG. "
+      },
+      "after": "ab669221a9a8909a",
+      "date": 1455625915549
+    },
+    {
+      "type": "add",
+      "id": "f72c37fe2f9f3693",
+      "item": {
+        "type": "paragraph",
+        "id": "f72c37fe2f9f3693",
+        "text": "Canvas can provide improved rendering performance and scalability: often 2-10x faster than SVG for full-component redraws (though such comparisons require nuance). "
+      },
+      "after": "ed91c66127e55ef7",
+      "date": 1455625924717
+    },
+    {
+      "type": "add",
+      "id": "bb0d5113d5fa60c1",
+      "item": {
+        "type": "paragraph",
+        "id": "bb0d5113d5fa60c1",
+        "text": "SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as WebGL."
+      },
+      "after": "f72c37fe2f9f3693",
+      "date": 1455625934754
+    },
+    {
+      "type": "edit",
+      "id": "ed91c66127e55ef7",
+      "item": {
+        "type": "paragraph",
+        "id": "ed91c66127e55ef7",
+        "text": "By using an internal scenegraph (rather than the DOM), Vega can render visualizations using either [[HTML5 Canvas]] or [[SVG]]. "
+      },
+      "date": 1455625960067
+    },
+    {
+      "type": "edit",
+      "id": "f72c37fe2f9f3693",
+      "item": {
+        "type": "paragraph",
+        "id": "f72c37fe2f9f3693",
+        "text": "Canvas can provide improved rendering performance and scalability: often 2-10x faster than [[SVG]] for full-component redraws (though such comparisons require nuance). "
+      },
+      "date": 1455625969828
+    },
+    {
+      "type": "edit",
+      "id": "bb0d5113d5fa60c1",
+      "item": {
+        "type": "paragraph",
+        "id": "bb0d5113d5fa60c1",
+        "text": "SVG, on the other hand, can be used for infinitely zoomable, print-worthy vector graphics. Going forward, Vega can be extended to other rendering systems, such as [[WebGL]]."
+      },
+      "date": 1455625977932
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support **fast and customizable design**\n* Make visualizations more reusable and shareable\n* Enable programmatic generation of visualizations\n* Improve performance and platform flexibility"
+      },
+      "date": 1455626613697
+    },
+    {
+      "type": "edit",
+      "id": "4595b2c01a2c58ca",
+      "item": {
+        "type": "markdown",
+        "id": "4595b2c01a2c58ca",
+        "text": "We had a number of motivations for creating Vega:\n* Support **fast and customizable design**\n* Make visualizations **more reusable and shareable**\n* Enable **programmatic generation of visualizations**\n* **Improve performance** and platform flexibility"
+      },
+      "date": 1455626649946
+    },
+    {
+      "type": "add",
+      "id": "95a0ac74d34aadb3",
+      "item": {
+        "type": "paragraph",
+        "id": "95a0ac74d34aadb3",
+        "text": "# Motivations for creating Vega"
+      },
+      "after": "b7c46e2d0a944704",
+      "date": 1455626670195
+    },
+    {
+      "type": "edit",
+      "id": "95a0ac74d34aadb3",
+      "item": {
+        "type": "markdown",
+        "id": "95a0ac74d34aadb3",
+        "text": "# Motivations for creating Vega"
+      },
+      "date": 1455626671817
+    },
+    {
+      "type": "edit",
+      "id": "fc3d3f50ed50eb10",
+      "item": {
+        "type": "paragraph",
+        "id": "fc3d3f50ed50eb10",
+        "text": "Vega is NOT intended as a \"replacement\" for [[D3]]. D3 is intentionally a low-level system. During the early design of D3, we even referred to it as a \"visualization kernel\" rather than a \"toolkit\" or \"framework\". "
+      },
+      "date": 1455626693811
+    },
+    {
+      "type": "add",
+      "id": "1db36162c7a5a378",
+      "item": {
+        "type": "paragraph",
+        "id": "1db36162c7a5a378",
+        "text": "In addition to custom design, D3 is intended as a supporting layer for higher-level visualization tools. Vega is one such tool, and leverages D3 heavily within its implementation."
+      },
+      "after": "fc3d3f50ed50eb10",
+      "date": 1455626694572
+    },
+    {
+      "type": "edit",
+      "id": "b7c46e2d0a944704",
+      "item": {
+        "type": "paragraph",
+        "id": "b7c46e2d0a944704",
+        "text": "Vega provides a higher-level visualization specification language on top of D3. By design, D3 will maintain an \"expressivity advantage\" and in many cases will be better suited for novel, highly interactive graphics. "
+      },
+      "date": 1455626710220
+    },
+    {
+      "type": "add",
+      "id": "1cce9acea6f4f595",
+      "item": {
+        "type": "paragraph",
+        "id": "1cce9acea6f4f595",
+        "text": "On the other hand, we hope that Vega will be convenient for a wide range of common yet customizable visualizations. Vega's design builds on concepts we developed in both Protovis and D3, and is informed by years of research at Stanford and UW, and our experiences building data-driven applications at Trifacta."
+      },
+      "after": "b7c46e2d0a944704",
+      "date": 1455626717685
+    },
+    {
+      "type": "edit",
+      "id": "ba382cbf56e31e79",
+      "item": {
+        "type": "markdown",
+        "id": "ba382cbf56e31e79",
+        "text": "* [http://vega.github.io/vega/ vega.io]\n* Online Vega editor - [http://vega.github.io/vega-editor/ vega.github.io]\n* Tutorial on [https://github.com/vega/vega/wiki/Tutorial githib]"
+      },
+      "date": 1455630590502
+    },
+    {
+      "type": "edit",
+      "id": "ba382cbf56e31e79",
+      "item": {
+        "type": "markdown",
+        "id": "ba382cbf56e31e79",
+        "text": "* [http://vega.github.io/vega/ vega.io]\n* Online Vega editor - [http://vega.github.io/vega-editor/ vega.github.io]\n* Tutorial on [https://github.com/vega/vega/wiki/Tutorial githib]\n* Interactive tutorial on [https://www.mediawiki.org/wiki/Extension:Graph/Interactive_Graph_Tutorial mediawiki.org]"
+      },
+      "date": 1455630670631
+    },
+    {
+      "type": "edit",
+      "id": "fb512e42e6ab93f9",
+      "item": {
+        "type": "markdown",
+        "id": "fb512e42e6ab93f9",
+        "text": "# Comparisson to D3"
+      },
+      "date": 1455630825813
+    },
+    {
+      "type": "edit",
+      "id": "1db36162c7a5a378",
+      "item": {
+        "type": "paragraph",
+        "id": "1db36162c7a5a378",
+        "text": "In addition to custom design, [[D3]] is intended as a supporting layer for higher-level visualization tools. Vega is one such tool, and leverages D3 heavily within its implementation."
+      },
+      "date": 1455630838022
+    },
+    {
+      "type": "fork",
+      "site": "c0de.academy",
+      "date": 1509545127310
+    }
+  ]
+}

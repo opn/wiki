@@ -1,0 +1,2396 @@
+{
+  "title": "Nginx",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e0914b75562c175b",
+      "text": "It's straightforwards to install Nginx on OSX with [[bre]] - [http://www.parisnakitakejser.com/homebrew-install-nginx-and-php-fpm-on-mac-os-x/ parisnakitakejser.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "101c40181b331fe1",
+      "text": "# Installation on OSX"
+    },
+    {
+      "type": "paragraph",
+      "id": "c64eed4c99b6c7ac",
+      "text": "Installation on OSX is painless:"
+    },
+    {
+      "type": "code",
+      "id": "bdfbd96aa42ea5c8",
+      "text": "brew install nginx"
+    },
+    {
+      "type": "paragraph",
+      "id": "7ee479adc3d1700e",
+      "text": "However if you want to install modules like [[lua]] you can use the handy:"
+    },
+    {
+      "type": "reference",
+      "id": "de2539ba909536aa",
+      "site": "future.fedwiki.org",
+      "slug": "install-nginx-with-lua-support",
+      "title": "Install Nginx with LUA Support",
+      "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. "
+    },
+    {
+      "type": "markdown",
+      "id": "592e3e1e9a698f1c",
+      "text": "# Tidy your folders"
+    },
+    {
+      "type": "paragraph",
+      "id": "5e76d439f9271ee7",
+      "text": "You may want to set up these folders:"
+    },
+    {
+      "type": "code",
+      "id": "481f306b82191353",
+      "text": "/usr/local/etc/nginx/sites-enabled/\n/usr/local/etc/nginx/sites-enabled/"
+    },
+    {
+      "type": "paragraph",
+      "id": "83cd5c4b7b57aa5e",
+      "text": "And make some symbolic links:"
+    },
+    {
+      "type": "code",
+      "id": "854c18301aa261b0",
+      "text": "cd /usr/local/etc/nginx/sites-enabled\nln -s ../sites-available/default.conf\nln -s ../sites-available/default-ssl.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "b09859fa369997d6",
+      "text": "Use this command to get NGINX to start up when you boot up your OS X."
+    },
+    {
+      "type": "code",
+      "id": "0374a509d683c7d9",
+      "text": "ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents  "
+    },
+    {
+      "type": "paragraph",
+      "id": "4f6277d6e8641233",
+      "text": "The file locations on OSX for nginx as installed by default using [[homebrew]] are:"
+    },
+    {
+      "type": "code",
+      "id": "53b1671f6a810ebc",
+      "text": "/usr/local/etc/nginx/nginx.conf\n\n/usr/local/etc/nginx/sites-available/default.conf\n/usr/local/etc/nginx/sites-available/default-ssl.conf\n\n/Library/LaunchDaemons/homebrew.mxcl.nginx.plist\n"
+    },
+    {
+      "type": "markdown",
+      "id": "6a36438f7fe29df1",
+      "text": "# Controlling Nginx"
+    },
+    {
+      "type": "paragraph",
+      "id": "75ea9bc8eee42348",
+      "text": "If you need full control over your NGINX webserver you can use this commands to start, stop and restart NGINX."
+    },
+    {
+      "type": "code",
+      "id": "c595e5d029c780b4",
+      "text": "sudo nginx            # start  \nsudo nginx -s stop    # stop  \nsudo nginx -s reload  # restart  "
+    },
+    {
+      "type": "paragraph",
+      "id": "fe92d68f4c5ee74c",
+      "text": "Now its time to look about NGINX working, go to your browser and type"
+    },
+    {
+      "type": "code",
+      "id": "6934eeee41057940",
+      "text": " http://localhost:8080"
+    },
+    {
+      "type": "paragraph",
+      "id": "ea9db6a3ad5a5758",
+      "text": "To check which nginx processes are running try:"
+    },
+    {
+      "type": "code",
+      "id": "848f793b590c5948",
+      "text": "pgrep nginx"
+    },
+    {
+      "type": "paragraph",
+      "id": "6ca05f619e95e98a",
+      "text": "To see more clearly what these processes are:"
+    },
+    {
+      "type": "code",
+      "id": "9414785e160efbae",
+      "text": "ps waux | grep nginx\n...\nroot 91487 0.0 0.0 2463900 436  ...  nginx: master process nginx\n..."
+    },
+    {
+      "type": "paragraph",
+      "id": "07ed255d30c905e1",
+      "text": "to tell you if nginx is still running, and"
+    },
+    {
+      "type": "code",
+      "id": "a03a04b4e84437d3",
+      "text": " lsof -i 4tcp | grep 8080"
+    },
+    {
+      "type": "paragraph",
+      "id": "d754313eee7dc83a",
+      "text": "will tell you which process is holding the 8080 port if it's not nginx."
+    },
+    {
+      "type": "paragraph",
+      "id": "ad1b22f1a1e2cc21",
+      "text": "And you can kill the master process manually with (replace 91728 and enter the pid from the results above):"
+    },
+    {
+      "type": "code",
+      "id": "48ab24bf86d95302",
+      "text": "kill -QUIT 91728"
+    },
+    {
+      "type": "markdown",
+      "id": "9a6cdaf824dd1d05",
+      "text": "# Setting up NGINX\nFirst we need to change in our NGINX config file, open NGINX config file in your editor, i primary use [[nano]]:"
+    },
+    {
+      "type": "code",
+      "id": "ff05855f58656f35",
+      "text": "nano /usr/local/etc/nginx/nginx.conf  "
+    },
+    {
+      "type": "paragraph",
+      "id": "4bcb0861e05443bf",
+      "text": "My nginx.conf file look like this:"
+    },
+    {
+      "type": "code",
+      "id": "68acdeb845d6d34c",
+      "text": "#user  nobody;\nworker_processes  1;\n\n#error_log  logs/error.log;\n#error_log  logs/error.log  notice;\n#error_log  logs/error.log  info;\n\nevents {  \n    worker_connections  1024;\n}\n\n\nhttp {  \n    include       mime.types;\n    include       sites-enabled/*; # load virtuals config\n    sendfile        on;\n    keepalive_timeout  65;\n\n    # gzip  on;\n    # gzip_disable \"MSIE [1-6]\\.(?!.*SV1)\";\n\n    server {\n        listen       8080;\n        server_name  localhost;\n\n        location / {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.php;\n        }\n\n        # configure *.PHP requests\n\n        location ~ \\.php$ {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.html index.htm index.php;\n            fastcgi_param PATH_INFO $fastcgi_path_info;\n            fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n            fastcgi_pass 127.0.0.1:9000;\n            fastcgi_index index.php;\n            fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n            fastcgi_intercept_errors on;\n            include fastcgi_params;\n        }\n    }\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "678777d0b5ba815c",
+      "text": "Now you need to change {username} to your Mac OS X user, changes {webfolder} to this folder you want to have your site in."
+    },
+    {
+      "type": "markdown",
+      "id": "b7da64eb4259e65d",
+      "text": "# Setup Virtual Hosts\nFirst of all, you need to create 2 new folders to handle our next step:"
+    },
+    {
+      "type": "code",
+      "id": "9f740ffbba6e3349",
+      "text": "mkdir /usr/local/etc/nginx/sites-available  \nmkdir /usr/local/etc/nginx/sites-enabled  "
+    },
+    {
+      "type": "paragraph",
+      "id": "d865f0b15313fe25",
+      "text": "sites-available are all your virtual config files and sites-enabled hold a symbolic link from sites-available folder so you can remove and create new config if you want new sites added."
+    },
+    {
+      "type": "paragraph",
+      "id": "bfb34fc186bc0254",
+      "text": "Next step is create your first virtualhost file:"
+    },
+    {
+      "type": "code",
+      "id": "0ff043f8a07feccd",
+      "text": "nano /usr/local/etc/nginx/sites-available/{hostfile}  "
+    },
+    {
+      "type": "paragraph",
+      "id": "151882e56c1b7830",
+      "text": "Change {hostfile} to your domain eg. test.local "
+    },
+    {
+      "type": "paragraph",
+      "id": "b9f00cfa9edb6c64",
+      "text": "My virtualhost file look likes this:"
+    },
+    {
+      "type": "code",
+      "id": "5216badaf4625758",
+      "text": "server {  \n  listen                *:8080;\n  server_name           {test-domain};\n  #access_log           /Users/{username}/{webfolder}/{hostfile}/log/access.log;\n  #error_log            /Users/{username}/{webfolder}/{hostfile}/log/error.log;\n  root  /Users/{username}/{webfolder}/{hostfile};\n  index  index.html index.htm index.php;\n\n  location / {\n    try_files  $uri  $uri/  /index.php?$args;\n  }\n\n  location ~ \\.php$ {\n    try_files  $uri  $uri/  /index.php?$args;\n\n    fastcgi_param PATH_INFO $fastcgi_path_info;\n    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n    fastcgi_pass 127.0.0.1:9000;\n    fastcgi_index index.php;\n    fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n    fastcgi_intercept_errors on;\n    include fastcgi_params;\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "id": "330e516b54559ae5",
+      "text": "change {username}, {webfolder} and {hostfile} width there names your ealier have changes the names on."
+    },
+    {
+      "type": "paragraph",
+      "id": "00c156b2ba7851ae",
+      "text": "When you have save this folder you go to the sites-enabled and run the following command."
+    },
+    {
+      "type": "code",
+      "id": "85e146a006ee2950",
+      "text": "ln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  "
+    },
+    {
+      "type": "paragraph",
+      "id": "a60f1631414f27bf",
+      "text": "Restart you NGINX webserver now:"
+    },
+    {
+      "type": "code",
+      "id": "c8994fd84adc7d4d",
+      "text": "sudo nginx -s reload "
+    },
+    {
+      "type": "paragraph",
+      "id": "17bf4d8018c20cab",
+      "text": "Look in your browser about its working well:\n\n"
+    },
+    {
+      "type": "code",
+      "id": "26e171d810d9ec0d",
+      "text": "http://{hostfile}:8080"
+    },
+    {
+      "type": "paragraph",
+      "id": "b79389f41fe4a7ba",
+      "text": "Remember to changes your computers hostfile if not you have done that already in sudo nano /etc/hosts put this line in your hostfile"
+    },
+    {
+      "type": "code",
+      "id": "03b35b22ab016d56",
+      "text": "127.0.0.1 {test-domain} "
+    },
+    {
+      "type": "markdown",
+      "id": "a321576faf860059",
+      "text": "# fcgiwrap"
+    },
+    {
+      "type": "paragraph",
+      "id": "8974bf5da8d48c38",
+      "text": "You're going to need to install [[fcgiwrap]] to get [[nginx]] working with [[revIgniter]] - [https://www.nginx.com/resources/wiki/start/topics/examples/fcgiwrap/# nginx.com]"
+    },
+    {
+      "type": "code",
+      "id": "18e7e2b1a1b5004f",
+      "text": "brew install fcgiwrap"
+    },
+    {
+      "type": "markdown",
+      "id": "a3f5c33ad5523d4c",
+      "text": "# See also"
+    },
+    {
+      "type": "paragraph",
+      "id": "b4e8db29908d2761",
+      "text": "For a quick and dirty php setup see -  [http://masnun.com/2012/11/22/mac-osx-nginx-and-php-cgi-doing-it-the-quick-and-dirty-way.html masnun.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Nginx",
+        "story": []
+      },
+      "date": 1461352787044
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e0914b75562c175b",
+        "text": "It's straightforwards to install Nginx on OSX with [[bre]] - [http://www.parisnakitakejser.com/homebrew-install-nginx-and-php-fpm-on-mac-os-x/ parisnakitakejser.com]"
+      },
+      "id": "e0914b75562c175b",
+      "type": "add",
+      "date": 1461352788110
+    },
+    {
+      "type": "edit",
+      "id": "e0914b75562c175b",
+      "item": {
+        "type": "paragraph",
+        "id": "e0914b75562c175b",
+        "text": "It's straightforwards to install Nginx on OSX with [[bre]] - [http://www.parisnakitakejser.com/homebrew-install-nginx-and-php-fpm-on-mac-os-x/ parisnakitakejser.com]"
+      },
+      "date": 1461352839521
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "bdfbd96aa42ea5c8",
+        "text": "brew install nginx"
+      },
+      "id": "bdfbd96aa42ea5c8",
+      "type": "add",
+      "after": "e0914b75562c175b",
+      "date": 1461352840799
+    },
+    {
+      "type": "edit",
+      "id": "bdfbd96aa42ea5c8",
+      "item": {
+        "type": "code",
+        "id": "bdfbd96aa42ea5c8",
+        "text": "brew install nginx"
+      },
+      "date": 1461352850012
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "83cd5c4b7b57aa5e",
+        "text": "If you want NGINX to start you when you boot up your Mac OS X? Can you say to OS X you want NGINX to start up, use this command to get NGINX to start up when you boot up your OS X."
+      },
+      "id": "83cd5c4b7b57aa5e",
+      "type": "add",
+      "after": "bdfbd96aa42ea5c8",
+      "date": 1461352877994
+    },
+    {
+      "type": "edit",
+      "id": "83cd5c4b7b57aa5e",
+      "item": {
+        "type": "paragraph",
+        "id": "83cd5c4b7b57aa5e",
+        "text": "If you want NGINX to start you when you boot up your Mac OS X? Can you say to OS X you want NGINX to start up, use this command to get NGINX to start up when you boot up your OS X."
+      },
+      "date": 1461352907244
+    },
+    {
+      "type": "add",
+      "id": "81d8c64b2f24df30",
+      "item": {
+        "type": "paragraph",
+        "id": "81d8c64b2f24df30",
+        "text": ""
+      },
+      "after": "83cd5c4b7b57aa5e",
+      "date": 1461352912396
+    },
+    {
+      "type": "add",
+      "id": "4f6277d6e8641233",
+      "item": {
+        "type": "paragraph",
+        "id": "4f6277d6e8641233",
+        "text": "If you need full control over your NGINX webserver you can use this commands to start, stop and restart NGINX."
+      },
+      "after": "81d8c64b2f24df30",
+      "date": 1461352914792
+    },
+    {
+      "type": "add",
+      "id": "63827625840e45f0",
+      "item": {
+        "type": "paragraph",
+        "id": "63827625840e45f0",
+        "text": ""
+      },
+      "after": "4f6277d6e8641233",
+      "date": 1461352918686
+    },
+    {
+      "type": "add",
+      "id": "fe92d68f4c5ee74c",
+      "item": {
+        "type": "paragraph",
+        "id": "fe92d68f4c5ee74c",
+        "text": "Now its time to look about NGINX working, go to your browser and type"
+      },
+      "after": "63827625840e45f0",
+      "date": 1461352933052
+    },
+    {
+      "type": "add",
+      "id": "4b8b96be7fa84eed",
+      "item": {
+        "type": "paragraph",
+        "id": "4b8b96be7fa84eed",
+        "text": ""
+      },
+      "after": "fe92d68f4c5ee74c",
+      "date": 1461352935981
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "0374a509d683c7d9",
+        "text": "ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents  "
+      },
+      "id": "0374a509d683c7d9",
+      "type": "add",
+      "after": "ce37c4dbf0c17225",
+      "date": 1461352938558
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "81d8c64b2f24df30",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "63827625840e45f0",
+        "fe92d68f4c5ee74c",
+        "4b8b96be7fa84eed",
+        "ce37c4dbf0c17225"
+      ],
+      "id": "0374a509d683c7d9",
+      "date": 1461352941273,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "add",
+      "id": "ce37c4dbf0c17225",
+      "item": {
+        "type": "paragraph",
+        "id": "ce37c4dbf0c17225",
+        "text": " if you get NGINX welcome screen your NGINX work!"
+      },
+      "after": "4b8b96be7fa84eed",
+      "date": 1461352942455
+    },
+    {
+      "type": "remove",
+      "id": "81d8c64b2f24df30",
+      "date": 1461352944413
+    },
+    {
+      "type": "edit",
+      "id": "0374a509d683c7d9",
+      "item": {
+        "type": "code",
+        "id": "0374a509d683c7d9",
+        "text": "ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents  "
+      },
+      "date": 1461352947872
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "c595e5d029c780b4",
+        "text": "sudo nginx            # start  \nsudo nginx -s stop    # stop  \nsudo nginx -s reload  # restart  "
+      },
+      "id": "c595e5d029c780b4",
+      "type": "add",
+      "after": "ce37c4dbf0c17225",
+      "date": 1461352950198
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "63827625840e45f0",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "4b8b96be7fa84eed",
+        "ce37c4dbf0c17225"
+      ],
+      "id": "c595e5d029c780b4",
+      "date": 1461352951871
+    },
+    {
+      "type": "remove",
+      "id": "63827625840e45f0",
+      "date": 1461352956798
+    },
+    {
+      "type": "edit",
+      "id": "c595e5d029c780b4",
+      "item": {
+        "type": "code",
+        "id": "c595e5d029c780b4",
+        "text": "sudo nginx            # start  \nsudo nginx -s stop    # stop  \nsudo nginx -s reload  # restart  "
+      },
+      "date": 1461352960961
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "6934eeee41057940",
+        "text": " http://localhost:8080"
+      },
+      "id": "6934eeee41057940",
+      "type": "add",
+      "after": "ce37c4dbf0c17225",
+      "date": 1461352963242
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "4b8b96be7fa84eed",
+        "ce37c4dbf0c17225"
+      ],
+      "id": "6934eeee41057940",
+      "date": 1461352964633
+    },
+    {
+      "type": "remove",
+      "id": "4b8b96be7fa84eed",
+      "date": 1461352967678
+    },
+    {
+      "type": "edit",
+      "id": "6934eeee41057940",
+      "item": {
+        "type": "code",
+        "id": "6934eeee41057940",
+        "text": " http://localhost:8080"
+      },
+      "date": 1461352969960
+    },
+    {
+      "type": "fork",
+      "date": 1461352972191
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9a6cdaf824dd1d05"
+      },
+      "id": "9a6cdaf824dd1d05",
+      "type": "add",
+      "after": "ce37c4dbf0c17225",
+      "date": 1461353083405
+    },
+    {
+      "type": "edit",
+      "id": "9a6cdaf824dd1d05",
+      "item": {
+        "type": "paragraph",
+        "id": "9a6cdaf824dd1d05",
+        "text": "# Setting up NGINX\nFirst we need to change in our NGINX config file, open NGINX config file in your editor, i primary use [[nano]]:"
+      },
+      "date": 1461353106532
+    },
+    {
+      "type": "edit",
+      "id": "9a6cdaf824dd1d05",
+      "item": {
+        "type": "markdown",
+        "id": "9a6cdaf824dd1d05",
+        "text": "# Setting up NGINX\nFirst we need to change in our NGINX config file, open NGINX config file in your editor, i primary use [[nano]]:"
+      },
+      "date": 1461353107800
+    },
+    {
+      "type": "add",
+      "id": "354823efa776a3bd",
+      "item": {
+        "type": "paragraph",
+        "id": "354823efa776a3bd",
+        "text": "\nnano /usr/local/etc/nginx/nginx.conf  "
+      },
+      "after": "9a6cdaf824dd1d05",
+      "date": 1461353111253
+    },
+    {
+      "type": "add",
+      "id": "4bcb0861e05443bf",
+      "item": {
+        "type": "paragraph",
+        "id": "4bcb0861e05443bf",
+        "text": "My nginx.conf file look like this:"
+      },
+      "after": "354823efa776a3bd",
+      "date": 1461353114507
+    },
+    {
+      "type": "add",
+      "id": "c81d04b765d5f724",
+      "item": {
+        "type": "paragraph",
+        "id": "c81d04b765d5f724",
+        "text": "\n#user  nobody;\nworker_processes  1;\n\n#error_log  logs/error.log;\n#error_log  logs/error.log  notice;\n#error_log  logs/error.log  info;\n\nevents {  \n    worker_connections  1024;\n}\n\n\nhttp {  \n    include       mime.types;\n    include       sites-enabled/*; # load virtuals config\n    sendfile        on;\n    keepalive_timeout  65;\n\n    # gzip  on;\n    # gzip_disable \"MSIE [1-6]\\.(?!.*SV1)\";\n\n    server {\n        listen       8080;\n        server_name  localhost;\n\n        location / {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.php;\n        }\n\n        # configure *.PHP requests\n\n        location ~ \\.php$ {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.html index.htm index.php;\n            fastcgi_param PATH_INFO $fastcgi_path_info;\n            fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n            fastcgi_pass 127.0.0.1:9000;\n            fastcgi_index index.php;\n            fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n            fastcgi_intercept_errors on;\n            include fastcgi_params;\n        }\n    }\n}"
+      },
+      "after": "4bcb0861e05443bf",
+      "date": 1461353121549
+    },
+    {
+      "type": "add",
+      "id": "678777d0b5ba815c",
+      "item": {
+        "type": "paragraph",
+        "id": "678777d0b5ba815c",
+        "text": "Now you need to change {username} to your Mac OS X user, changes {webfolder} to this folder you want to have your site in."
+      },
+      "after": "c81d04b765d5f724",
+      "date": 1461353125872
+    },
+    {
+      "type": "add",
+      "id": "b7da64eb4259e65d",
+      "item": {
+        "type": "paragraph",
+        "id": "b7da64eb4259e65d",
+        "text": "# Setup Virtual Hosts\nFirst of all, you need to create 2 new folders to handle our next step:"
+      },
+      "after": "678777d0b5ba815c",
+      "date": 1461353150564
+    },
+    {
+      "type": "add",
+      "id": "ee76411c45838577",
+      "item": {
+        "type": "paragraph",
+        "id": "ee76411c45838577",
+        "text": "\nmkdir /usr/local/etc/nginx/sites-available  \nmkdir /usr/local/etc/nginx/sites-enabled  "
+      },
+      "after": "b7da64eb4259e65d",
+      "date": 1461353155647
+    },
+    {
+      "type": "add",
+      "id": "d865f0b15313fe25",
+      "item": {
+        "type": "paragraph",
+        "id": "d865f0b15313fe25",
+        "text": "sites-available are all your virtual config files and sites-enabled hold a symbolic link from sites-available folder so you can remove and create new config if you want new sites added."
+      },
+      "after": "ee76411c45838577",
+      "date": 1461353167525
+    },
+    {
+      "type": "add",
+      "id": "bfb34fc186bc0254",
+      "item": {
+        "type": "paragraph",
+        "id": "bfb34fc186bc0254",
+        "text": "Next step is create your first virtualhost file:"
+      },
+      "after": "d865f0b15313fe25",
+      "date": 1461353179374
+    },
+    {
+      "type": "add",
+      "id": "8ff779490b2bd0a9",
+      "item": {
+        "type": "paragraph",
+        "id": "8ff779490b2bd0a9",
+        "text": "\nnano /usr/local/etc/nginx/sites-available/{hostfile}  "
+      },
+      "after": "bfb34fc186bc0254",
+      "date": 1461353184006
+    },
+    {
+      "type": "add",
+      "id": "151882e56c1b7830",
+      "item": {
+        "type": "paragraph",
+        "id": "151882e56c1b7830",
+        "text": "Change {hostfile} to your domain eg. test.local "
+      },
+      "after": "8ff779490b2bd0a9",
+      "date": 1461353200734
+    },
+    {
+      "type": "add",
+      "id": "b9f00cfa9edb6c64",
+      "item": {
+        "type": "paragraph",
+        "id": "b9f00cfa9edb6c64",
+        "text": "My virtualhost file look likes this:"
+      },
+      "after": "151882e56c1b7830",
+      "date": 1461353203981
+    },
+    {
+      "type": "add",
+      "id": "be13e699ba4cc084",
+      "item": {
+        "type": "paragraph",
+        "id": "be13e699ba4cc084",
+        "text": "\nserver {  \n  listen                *:8080;\n  server_name           {test-domain};\n  #access_log           /Users/{username}/{webfolder}/{hostfile}/log/access.log;\n  #error_log            /Users/{username}/{webfolder}/{hostfile}/log/error.log;\n  root  /Users/{username}/{webfolder}/{hostfile};\n  index  index.html index.htm index.php;\n\n  location / {\n    try_files  $uri  $uri/  /index.php?$args;\n  }\n\n  location ~ \\.php$ {\n    try_files  $uri  $uri/  /index.php?$args;\n\n    fastcgi_param PATH_INFO $fastcgi_path_info;\n    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n    fastcgi_pass 127.0.0.1:9000;\n    fastcgi_index index.php;\n    fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n    fastcgi_intercept_errors on;\n    include fastcgi_params;\n  }\n}"
+      },
+      "after": "b9f00cfa9edb6c64",
+      "date": 1461353212814
+    },
+    {
+      "type": "add",
+      "id": "330e516b54559ae5",
+      "item": {
+        "type": "paragraph",
+        "id": "330e516b54559ae5",
+        "text": "change {username}, {webfolder} and {hostfile} width there names your ealier have changes the names on."
+      },
+      "after": "be13e699ba4cc084",
+      "date": 1461353217737
+    },
+    {
+      "type": "add",
+      "id": "00c156b2ba7851ae",
+      "item": {
+        "type": "paragraph",
+        "id": "00c156b2ba7851ae",
+        "text": "When you have save this folder you go to the sites-enabled and run the following command."
+      },
+      "after": "330e516b54559ae5",
+      "date": 1461353223431
+    },
+    {
+      "type": "add",
+      "id": "30988d2ef6edb4fc",
+      "item": {
+        "type": "paragraph",
+        "id": "30988d2ef6edb4fc",
+        "text": "\nln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  "
+      },
+      "after": "00c156b2ba7851ae",
+      "date": 1461353230662
+    },
+    {
+      "type": "add",
+      "id": "a60f1631414f27bf",
+      "item": {
+        "type": "paragraph",
+        "id": "a60f1631414f27bf",
+        "text": "Restart you NGINX webserver now:"
+      },
+      "after": "30988d2ef6edb4fc",
+      "date": 1461353239248
+    },
+    {
+      "type": "add",
+      "id": "823692e07e460fe4",
+      "item": {
+        "type": "paragraph",
+        "id": "823692e07e460fe4",
+        "text": "sudo nginx -s reload "
+      },
+      "after": "a60f1631414f27bf",
+      "date": 1461353242797
+    },
+    {
+      "type": "add",
+      "id": "17bf4d8018c20cab",
+      "item": {
+        "type": "paragraph",
+        "id": "17bf4d8018c20cab",
+        "text": "look in your browser about its working well http://{hostfile}:8080\n\n"
+      },
+      "after": "823692e07e460fe4",
+      "date": 1461353246804
+    },
+    {
+      "type": "add",
+      "id": "b79389f41fe4a7ba",
+      "item": {
+        "type": "paragraph",
+        "id": "b79389f41fe4a7ba",
+        "text": "Remember to changes your computers hostfile if not you have done that already in sudo nano /etc/hosts put this line in your hostfile"
+      },
+      "after": "17bf4d8018c20cab",
+      "date": 1461353257152
+    },
+    {
+      "type": "add",
+      "id": "a4b0adb1ae106cd5",
+      "item": {
+        "type": "paragraph",
+        "id": "a4b0adb1ae106cd5",
+        "text": "127.0.0.1 {test-domain} "
+      },
+      "after": "b79389f41fe4a7ba",
+      "date": 1461353262843
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ff05855f58656f35"
+      },
+      "id": "ff05855f58656f35",
+      "type": "add",
+      "after": "a4b0adb1ae106cd5",
+      "date": 1461353264490
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "354823efa776a3bd",
+        "4bcb0861e05443bf",
+        "c81d04b765d5f724",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "ee76411c45838577",
+        "ff05855f58656f35",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "8ff779490b2bd0a9",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "be13e699ba4cc084",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "30988d2ef6edb4fc",
+        "a60f1631414f27bf",
+        "823692e07e460fe4",
+        "17bf4d8018c20cab",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "ff05855f58656f35",
+      "date": 1461353268062
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "85e146a006ee2950"
+      },
+      "id": "85e146a006ee2950",
+      "type": "add",
+      "after": "a4b0adb1ae106cd5",
+      "date": 1461353270569
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "354823efa776a3bd",
+        "4bcb0861e05443bf",
+        "c81d04b765d5f724",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "ee76411c45838577",
+        "ff05855f58656f35",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "8ff779490b2bd0a9",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "be13e699ba4cc084",
+        "85e146a006ee2950",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "30988d2ef6edb4fc",
+        "a60f1631414f27bf",
+        "823692e07e460fe4",
+        "17bf4d8018c20cab",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "85e146a006ee2950",
+      "date": 1461353272162
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5216badaf4625758"
+      },
+      "id": "5216badaf4625758",
+      "type": "add",
+      "after": "a4b0adb1ae106cd5",
+      "date": 1461353274691
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "354823efa776a3bd",
+        "4bcb0861e05443bf",
+        "c81d04b765d5f724",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "ee76411c45838577",
+        "ff05855f58656f35",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "8ff779490b2bd0a9",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "be13e699ba4cc084",
+        "85e146a006ee2950",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "30988d2ef6edb4fc",
+        "a60f1631414f27bf",
+        "823692e07e460fe4",
+        "17bf4d8018c20cab",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "5216badaf4625758",
+      "date": 1461353277055
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "354823efa776a3bd",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "c81d04b765d5f724",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "ee76411c45838577",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "8ff779490b2bd0a9",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "be13e699ba4cc084",
+        "85e146a006ee2950",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "30988d2ef6edb4fc",
+        "a60f1631414f27bf",
+        "823692e07e460fe4",
+        "17bf4d8018c20cab",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "ff05855f58656f35",
+      "date": 1461353284242
+    },
+    {
+      "type": "remove",
+      "id": "354823efa776a3bd",
+      "date": 1461353301478
+    },
+    {
+      "type": "edit",
+      "id": "ff05855f58656f35",
+      "item": {
+        "type": "code",
+        "id": "ff05855f58656f35",
+        "text": "nano /usr/local/etc/nginx/nginx.conf  "
+      },
+      "date": 1461353303156
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "68acdeb845d6d34c"
+      },
+      "after": "4bcb0861e05443bf",
+      "id": "68acdeb845d6d34c",
+      "date": 1461353306282
+    },
+    {
+      "type": "remove",
+      "id": "c81d04b765d5f724",
+      "date": 1461353312719
+    },
+    {
+      "type": "edit",
+      "id": "68acdeb845d6d34c",
+      "item": {
+        "type": "code",
+        "id": "68acdeb845d6d34c",
+        "text": "#user  nobody;\nworker_processes  1;\n\n#error_log  logs/error.log;\n#error_log  logs/error.log  notice;\n#error_log  logs/error.log  info;\n\nevents {  \n    worker_connections  1024;\n}\n\n\nhttp {  \n    include       mime.types;\n    include       sites-enabled/*; # load virtuals config\n    sendfile        on;\n    keepalive_timeout  65;\n\n    # gzip  on;\n    # gzip_disable \"MSIE [1-6]\\.(?!.*SV1)\";\n\n    server {\n        listen       8080;\n        server_name  localhost;\n\n        location / {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.php;\n        }\n\n        # configure *.PHP requests\n\n        location ~ \\.php$ {\n            root  /Users/{username}/{webfolder};\n            try_files  $uri  $uri/  /index.php?$args ;\n            index  index.html index.htm index.php;\n            fastcgi_param PATH_INFO $fastcgi_path_info;\n            fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n            fastcgi_pass 127.0.0.1:9000;\n            fastcgi_index index.php;\n            fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n            fastcgi_intercept_errors on;\n            include fastcgi_params;\n        }\n    }\n}"
+      },
+      "date": 1461353314726
+    },
+    {
+      "type": "edit",
+      "id": "b7da64eb4259e65d",
+      "item": {
+        "type": "markdown",
+        "id": "b7da64eb4259e65d",
+        "text": "# Setup Virtual Hosts\nFirst of all, you need to create 2 new folders to handle our next step:"
+      },
+      "date": 1461353323795
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "9f740ffbba6e3349"
+      },
+      "after": "ee76411c45838577",
+      "id": "9f740ffbba6e3349",
+      "date": 1461353327453
+    },
+    {
+      "type": "remove",
+      "id": "ee76411c45838577",
+      "date": 1461353331483
+    },
+    {
+      "type": "edit",
+      "id": "9f740ffbba6e3349",
+      "item": {
+        "type": "code",
+        "id": "9f740ffbba6e3349",
+        "text": "mkdir /usr/local/etc/nginx/sites-available  \nmkdir /usr/local/etc/nginx/sites-enabled  "
+      },
+      "date": 1461353334590
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "0ff043f8a07feccd"
+      },
+      "after": "8ff779490b2bd0a9",
+      "id": "0ff043f8a07feccd",
+      "date": 1461353339388
+    },
+    {
+      "type": "remove",
+      "id": "8ff779490b2bd0a9",
+      "date": 1461353342396
+    },
+    {
+      "type": "edit",
+      "id": "0ff043f8a07feccd",
+      "item": {
+        "type": "code",
+        "id": "0ff043f8a07feccd",
+        "text": "nano /usr/local/etc/nginx/sites-available/{hostfile}  "
+      },
+      "date": 1461353344965
+    },
+    {
+      "type": "remove",
+      "id": "be13e699ba4cc084",
+      "date": 1461353351108
+    },
+    {
+      "type": "edit",
+      "id": "5216badaf4625758",
+      "item": {
+        "type": "code",
+        "id": "5216badaf4625758",
+        "text": "server {  \n  listen                *:8080;\n  server_name           {test-domain};\n  #access_log           /Users/{username}/{webfolder}/{hostfile}/log/access.log;\n  #error_log            /Users/{username}/{webfolder}/{hostfile}/log/error.log;\n  root  /Users/{username}/{webfolder}/{hostfile};\n  index  index.html index.htm index.php;\n\n  location / {\n    try_files  $uri  $uri/  /index.php?$args;\n  }\n\n  location ~ \\.php$ {\n    try_files  $uri  $uri/  /index.php?$args;\n\n    fastcgi_param PATH_INFO $fastcgi_path_info;\n    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n    fastcgi_pass 127.0.0.1:9000;\n    fastcgi_index index.php;\n    fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n    fastcgi_intercept_errors on;\n    include fastcgi_params;\n  }\n}"
+      },
+      "date": 1461353354319
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "30988d2ef6edb4fc",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "823692e07e460fe4",
+        "17bf4d8018c20cab",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "85e146a006ee2950",
+      "date": 1461353360902
+    },
+    {
+      "type": "remove",
+      "id": "30988d2ef6edb4fc",
+      "date": 1461353363940
+    },
+    {
+      "type": "edit",
+      "id": "85e146a006ee2950",
+      "item": {
+        "type": "code",
+        "id": "85e146a006ee2950",
+        "text": "ln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  "
+      },
+      "date": 1461353366600
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c8994fd84adc7d4d"
+      },
+      "id": "c8994fd84adc7d4d",
+      "type": "add",
+      "after": "a4b0adb1ae106cd5",
+      "date": 1461353370411
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "823692e07e460fe4",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "c8994fd84adc7d4d",
+      "date": 1461353372505
+    },
+    {
+      "type": "remove",
+      "id": "823692e07e460fe4",
+      "date": 1461353375341
+    },
+    {
+      "type": "edit",
+      "id": "c8994fd84adc7d4d",
+      "item": {
+        "type": "code",
+        "id": "c8994fd84adc7d4d",
+        "text": "sudo nginx -s reload "
+      },
+      "date": 1461353378294
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "26e171d810d9ec0d"
+      },
+      "id": "26e171d810d9ec0d",
+      "type": "add",
+      "after": "a4b0adb1ae106cd5",
+      "date": 1461353381171
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "a4b0adb1ae106cd5"
+      ],
+      "id": "26e171d810d9ec0d",
+      "date": 1461353382967
+    },
+    {
+      "type": "edit",
+      "id": "17bf4d8018c20cab",
+      "item": {
+        "type": "paragraph",
+        "id": "17bf4d8018c20cab",
+        "text": "Look in your browser about its working well:\n\n"
+      },
+      "date": 1461353396998
+    },
+    {
+      "type": "edit",
+      "id": "26e171d810d9ec0d",
+      "item": {
+        "type": "code",
+        "id": "26e171d810d9ec0d",
+        "text": "http://{hostfile}:8080"
+      },
+      "date": 1461353399825
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "03b35b22ab016d56"
+      },
+      "id": "03b35b22ab016d56",
+      "type": "add",
+      "after": "a4b0adb1ae106cd5",
+      "date": 1461353401186
+    },
+    {
+      "type": "remove",
+      "id": "a4b0adb1ae106cd5",
+      "date": 1461353404022
+    },
+    {
+      "type": "edit",
+      "id": "03b35b22ab016d56",
+      "item": {
+        "type": "code",
+        "id": "03b35b22ab016d56",
+        "text": "127.0.0.1 {test-domain} "
+      },
+      "date": 1461353407648
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a321576faf860059"
+      },
+      "id": "a321576faf860059",
+      "type": "add",
+      "after": "03b35b22ab016d56",
+      "date": 1461357368946
+    },
+    {
+      "type": "edit",
+      "id": "a321576faf860059",
+      "item": {
+        "type": "paragraph",
+        "id": "a321576faf860059",
+        "text": "# fcgiwrap"
+      },
+      "date": 1461357396090
+    },
+    {
+      "type": "add",
+      "id": "8974bf5da8d48c38",
+      "item": {
+        "type": "paragraph",
+        "id": "8974bf5da8d48c38",
+        "text": "You're going to need to install adfs"
+      },
+      "after": "a321576faf860059",
+      "date": 1461357407435
+    },
+    {
+      "type": "edit",
+      "id": "a321576faf860059",
+      "item": {
+        "type": "markdown",
+        "id": "a321576faf860059",
+        "text": "# fcgiwrap"
+      },
+      "date": 1461357411771
+    },
+    {
+      "type": "add",
+      "id": "513af421ae92058d",
+      "item": {
+        "type": "paragraph",
+        "id": "513af421ae92058d",
+        "text": "brew install fcgiwrap"
+      },
+      "after": "8974bf5da8d48c38",
+      "date": 1461357413341
+    },
+    {
+      "type": "edit",
+      "id": "8974bf5da8d48c38",
+      "item": {
+        "type": "paragraph",
+        "id": "8974bf5da8d48c38",
+        "text": "You're going to need to install [[fcgiwrap]] to get [[ngninx]] working with [[revIgniter]]:"
+      },
+      "date": 1461357438687
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "18e7e2b1a1b5004f"
+      },
+      "id": "18e7e2b1a1b5004f",
+      "type": "add",
+      "after": "513af421ae92058d",
+      "date": 1461357440189
+    },
+    {
+      "type": "remove",
+      "id": "513af421ae92058d",
+      "date": 1461357443364
+    },
+    {
+      "type": "edit",
+      "id": "18e7e2b1a1b5004f",
+      "item": {
+        "type": "code",
+        "id": "18e7e2b1a1b5004f",
+        "text": "brew install fcgiwrap"
+      },
+      "date": 1461357446230
+    },
+    {
+      "type": "edit",
+      "id": "8974bf5da8d48c38",
+      "item": {
+        "type": "paragraph",
+        "id": "8974bf5da8d48c38",
+        "text": "You're going to need to install [[fcgiwrap]] to get [[nginx]] working with [[revIgniter]] - [https://www.nginx.com/resources/wiki/start/topics/examples/fcgiwrap/# nginx.com]"
+      },
+      "date": 1461357495335
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a3f5c33ad5523d4c"
+      },
+      "id": "a3f5c33ad5523d4c",
+      "type": "add",
+      "after": "18e7e2b1a1b5004f",
+      "date": 1461357651336
+    },
+    {
+      "type": "edit",
+      "id": "a3f5c33ad5523d4c",
+      "item": {
+        "type": "paragraph",
+        "id": "a3f5c33ad5523d4c",
+        "text": "# See also"
+      },
+      "date": 1461357673236
+    },
+    {
+      "type": "add",
+      "id": "b4e8db29908d2761",
+      "item": {
+        "type": "paragraph",
+        "id": "b4e8db29908d2761",
+        "text": "For a quick and dirty php setup see -  [http://masnun.com/2012/11/22/mac-osx-nginx-and-php-cgi-doing-it-the-quick-and-dirty-way.html masnun.com]"
+      },
+      "after": "a3f5c33ad5523d4c",
+      "date": 1461357685284
+    },
+    {
+      "type": "edit",
+      "id": "a3f5c33ad5523d4c",
+      "item": {
+        "type": "markdown",
+        "id": "a3f5c33ad5523d4c",
+        "text": "# See also"
+      },
+      "date": 1461357687909
+    },
+    {
+      "type": "edit",
+      "id": "4f6277d6e8641233",
+      "item": {
+        "type": "paragraph",
+        "id": "4f6277d6e8641233",
+        "text": "The file locations on OSX for nginx as installed by default using [[homebrew]] are:"
+      },
+      "date": 1461421471236
+    },
+    {
+      "type": "add",
+      "id": "75ea9bc8eee42348",
+      "item": {
+        "type": "paragraph",
+        "id": "75ea9bc8eee42348",
+        "text": "If you need full control over your NGINX webserver you can use this commands to start, stop and restart NGINX."
+      },
+      "after": "4f6277d6e8641233",
+      "date": 1461421478138
+    },
+    {
+      "type": "add",
+      "id": "6a36438f7fe29df1",
+      "item": {
+        "type": "paragraph",
+        "id": "6a36438f7fe29df1",
+        "text": "# Controlling Nginx"
+      },
+      "after": "4f6277d6e8641233",
+      "date": 1461421491957
+    },
+    {
+      "type": "edit",
+      "id": "6a36438f7fe29df1",
+      "item": {
+        "type": "markdown",
+        "id": "6a36438f7fe29df1",
+        "text": "# Controlling Nginx"
+      },
+      "date": 1461421493091
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "53b1671f6a810ebc"
+      },
+      "after": "4f6277d6e8641233",
+      "id": "53b1671f6a810ebc",
+      "date": 1461421504432
+    },
+    {
+      "type": "edit",
+      "id": "53b1671f6a810ebc",
+      "item": {
+        "type": "code",
+        "id": "53b1671f6a810ebc",
+        "text": "nginx.conf to /usr/local/etc/nginx/\ndefault.conf and default-ssl.conf to /usr/local/etc/nginx/sites-available\nhomebrew.mxcl.nginx.plist to /Library/LaunchDaemons/\n"
+      },
+      "date": 1461421527659
+    },
+    {
+      "type": "edit",
+      "id": "83cd5c4b7b57aa5e",
+      "item": {
+        "type": "paragraph",
+        "id": "83cd5c4b7b57aa5e",
+        "text": "Use this command to get NGINX to start up when you boot up your OS X."
+      },
+      "date": 1461421662167
+    },
+    {
+      "type": "add",
+      "id": "592e3e1e9a698f1c",
+      "item": {
+        "type": "paragraph",
+        "id": "592e3e1e9a698f1c",
+        "text": "You may want to set up these folders:"
+      },
+      "after": "e0914b75562c175b",
+      "date": 1461421674550
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "481f306b82191353"
+      },
+      "after": "592e3e1e9a698f1c",
+      "id": "481f306b82191353",
+      "date": 1461421678102
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "bdfbd96aa42ea5c8",
+        "592e3e1e9a698f1c",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "bdfbd96aa42ea5c8",
+      "date": 1461421680734
+    },
+    {
+      "type": "add",
+      "id": "101c40181b331fe1",
+      "item": {
+        "type": "paragraph",
+        "id": "101c40181b331fe1",
+        "text": "# Installation on OSX"
+      },
+      "after": "e0914b75562c175b",
+      "date": 1461421694230
+    },
+    {
+      "type": "edit",
+      "id": "101c40181b331fe1",
+      "item": {
+        "type": "markdown",
+        "id": "101c40181b331fe1",
+        "text": "# Installation on OSX"
+      },
+      "date": 1461421695442
+    },
+    {
+      "type": "add",
+      "id": "c64eed4c99b6c7ac",
+      "item": {
+        "type": "paragraph",
+        "id": "c64eed4c99b6c7ac",
+        "text": "Installation on OSX is painless:"
+      },
+      "after": "e0914b75562c175b",
+      "date": 1461421710678
+    },
+    {
+      "type": "add",
+      "id": "7ee479adc3d1700e",
+      "item": {
+        "type": "paragraph",
+        "id": "7ee479adc3d1700e",
+        "text": "However if you want to install modules like [[lua]] you can use the handy:"
+      },
+      "after": "c64eed4c99b6c7ac",
+      "date": 1461421744656
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "7ee479adc3d1700e",
+        "101c40181b331fe1",
+        "c64eed4c99b6c7ac",
+        "bdfbd96aa42ea5c8",
+        "592e3e1e9a698f1c",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "c64eed4c99b6c7ac",
+      "date": 1461421746824
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "101c40181b331fe1",
+        "c64eed4c99b6c7ac",
+        "7ee479adc3d1700e",
+        "bdfbd96aa42ea5c8",
+        "592e3e1e9a698f1c",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "7ee479adc3d1700e",
+      "date": 1461421749130
+    },
+    {
+      "type": "edit",
+      "id": "592e3e1e9a698f1c",
+      "item": {
+        "type": "paragraph",
+        "id": "592e3e1e9a698f1c",
+        "text": "# Tidy your folders"
+      },
+      "date": 1461421760393
+    },
+    {
+      "type": "add",
+      "id": "5e76d439f9271ee7",
+      "item": {
+        "type": "paragraph",
+        "id": "5e76d439f9271ee7",
+        "text": "You may want to set up these folders:"
+      },
+      "after": "592e3e1e9a698f1c",
+      "date": 1461421763433
+    },
+    {
+      "type": "edit",
+      "id": "481f306b82191353",
+      "item": {
+        "type": "code",
+        "id": "481f306b82191353",
+        "text": "mkdir -p /usr/local/etc/nginx/sites-{enabled,available}\ncd /usr/local/etc/nginx/sites-enabled\nln -s ../sites-available/default.conf\nln -s ../sites-available/default-ssl.conf"
+      },
+      "date": 1461421766276
+    },
+    {
+      "type": "edit",
+      "id": "592e3e1e9a698f1c",
+      "item": {
+        "type": "markdown",
+        "id": "592e3e1e9a698f1c",
+        "text": "# Tidy your folders"
+      },
+      "date": 1461421767793
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "de2539ba909536aa",
+        "site": "future.fedwiki.org",
+        "slug": "install-nginx-with-lua-support",
+        "title": "Install Nginx with LUA Support",
+        "text": "The only issue is with that the default install of [[nginx]] with [[homebrew]] does not include [[LUA]] support. "
+      },
+      "after": "bdfbd96aa42ea5c8",
+      "id": "de2539ba909536aa",
+      "date": 1461421886501
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "101c40181b331fe1",
+        "c64eed4c99b6c7ac",
+        "bdfbd96aa42ea5c8",
+        "7ee479adc3d1700e",
+        "de2539ba909536aa",
+        "592e3e1e9a698f1c",
+        "5e76d439f9271ee7",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ce37c4dbf0c17225",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "bdfbd96aa42ea5c8",
+      "date": 1461421893622
+    },
+    {
+      "type": "edit",
+      "id": "481f306b82191353",
+      "item": {
+        "type": "code",
+        "id": "481f306b82191353",
+        "text": "/usr/local/etc/nginx/sites-enabled/\n/usr/local/etc/nginx/sites-enabled/"
+      },
+      "date": 1461422086446
+    },
+    {
+      "type": "edit",
+      "id": "83cd5c4b7b57aa5e",
+      "item": {
+        "type": "paragraph",
+        "id": "83cd5c4b7b57aa5e",
+        "text": "And make some symbolic links:Use this command to get NGINX to start up when you boot up your OS X."
+      },
+      "date": 1461422102397
+    },
+    {
+      "type": "edit",
+      "id": "83cd5c4b7b57aa5e",
+      "item": {
+        "type": "paragraph",
+        "id": "83cd5c4b7b57aa5e",
+        "text": "And make some symbolic links:"
+      },
+      "date": 1461422108348
+    },
+    {
+      "type": "add",
+      "id": "b09859fa369997d6",
+      "item": {
+        "type": "paragraph",
+        "id": "b09859fa369997d6",
+        "text": "Use this command to get NGINX to start up when you boot up your OS X."
+      },
+      "after": "83cd5c4b7b57aa5e",
+      "date": 1461422109629
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "854c18301aa261b0"
+      },
+      "after": "83cd5c4b7b57aa5e",
+      "id": "854c18301aa261b0",
+      "date": 1461422115501
+    },
+    {
+      "type": "edit",
+      "id": "854c18301aa261b0",
+      "item": {
+        "type": "code",
+        "id": "854c18301aa261b0",
+        "text": "cd /usr/local/etc/nginx/sites-enabled\nln -s ../sites-available/default.conf\nln -s ../sites-available/default-ssl.conf"
+      },
+      "date": 1461422118496
+    },
+    {
+      "type": "edit",
+      "id": "53b1671f6a810ebc",
+      "item": {
+        "type": "code",
+        "id": "53b1671f6a810ebc",
+        "text": "/usr/local/etc/nginx/nginx.conf\n\n/usr/local/etc/nginx/sites-available/default.conf\n/usr/local/etc/nginx/sites-available/default-ssl.conf\n\n/Library/LaunchDaemons/homebrew.mxcl.nginx.plist\n"
+      },
+      "date": 1461422217630
+    },
+    {
+      "type": "add",
+      "id": "ea9db6a3ad5a5758",
+      "item": {
+        "type": "paragraph",
+        "id": "ea9db6a3ad5a5758",
+        "text": "To check which nginx processes are running try:"
+      },
+      "after": "ce37c4dbf0c17225",
+      "date": 1461422950438
+    },
+    {
+      "type": "remove",
+      "id": "ce37c4dbf0c17225",
+      "date": 1461422954422
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "9414785e160efbae"
+      },
+      "after": "ea9db6a3ad5a5758",
+      "id": "9414785e160efbae",
+      "date": 1461422960034
+    },
+    {
+      "type": "edit",
+      "id": "9414785e160efbae",
+      "item": {
+        "type": "code",
+        "id": "9414785e160efbae",
+        "text": "ps waux | grep nginx"
+      },
+      "date": 1461422964737
+    },
+    {
+      "type": "edit",
+      "id": "9414785e160efbae",
+      "item": {
+        "type": "code",
+        "id": "9414785e160efbae",
+        "text": "ps waux | grep nginx\nnobody          91728   0.0  0.0  2464120    736   ??  S     9:17pm   0:00.01 nginx: worker process\nroot            91487   0.0  0.0  2463900    436   ??  Ss    8:23pm   0:00.01 nginx: master process nginx\nBabyBlue         5432   0.0  0.0  2443032    700 s007  R+    3:48pm   0:00.00 grep nginx\n"
+      },
+      "date": 1461422979842
+    },
+    {
+      "type": "edit",
+      "id": "9414785e160efbae",
+      "item": {
+        "type": "code",
+        "id": "9414785e160efbae",
+        "text": "ps waux | grep nginx\n...\nroot 91487 0.0 0.0 2463900 436  ...  nginx: master process nginx\n..."
+      },
+      "date": 1461423058556
+    },
+    {
+      "type": "add",
+      "id": "6ca05f619e95e98a",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca05f619e95e98a",
+        "text": "And you can kill the master process manually with:"
+      },
+      "after": "ea9db6a3ad5a5758",
+      "date": 1461423109212
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "48ab24bf86d95302"
+      },
+      "after": "6ca05f619e95e98a",
+      "id": "48ab24bf86d95302",
+      "date": 1461423113794
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "101c40181b331fe1",
+        "c64eed4c99b6c7ac",
+        "bdfbd96aa42ea5c8",
+        "7ee479adc3d1700e",
+        "de2539ba909536aa",
+        "592e3e1e9a698f1c",
+        "5e76d439f9271ee7",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "854c18301aa261b0",
+        "b09859fa369997d6",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ea9db6a3ad5a5758",
+        "9414785e160efbae",
+        "6ca05f619e95e98a",
+        "48ab24bf86d95302",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "9414785e160efbae",
+      "date": 1461423115694
+    },
+    {
+      "type": "edit",
+      "id": "48ab24bf86d95302",
+      "item": {
+        "type": "code",
+        "id": "48ab24bf86d95302",
+        "text": "kill -QUIT $( cat /usr/local/nginx/logs/nginx.pid )"
+      },
+      "date": 1461423141007
+    },
+    {
+      "type": "edit",
+      "id": "6ca05f619e95e98a",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca05f619e95e98a",
+        "text": "Or try:"
+      },
+      "date": 1461423276349
+    },
+    {
+      "type": "add",
+      "id": "07ed255d30c905e1",
+      "item": {
+        "type": "paragraph",
+        "id": "07ed255d30c905e1",
+        "text": "pgrep nginx will tell you if nginx is still running, and lsof -i 4tcp |grep 8080 will tell you which process is holding the 8080 port if it's not nginx."
+      },
+      "after": "6ca05f619e95e98a",
+      "date": 1461423280574
+    },
+    {
+      "type": "add",
+      "id": "ad1b22f1a1e2cc21",
+      "item": {
+        "type": "paragraph",
+        "id": "ad1b22f1a1e2cc21",
+        "text": "And you can kill the master process manually with:"
+      },
+      "after": "07ed255d30c905e1",
+      "date": 1461423282758
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "848f793b590c5948"
+      },
+      "after": "6ca05f619e95e98a",
+      "id": "848f793b590c5948",
+      "date": 1461423287539
+    },
+    {
+      "type": "edit",
+      "id": "07ed255d30c905e1",
+      "item": {
+        "type": "paragraph",
+        "id": "07ed255d30c905e1",
+        "text": "to tell you if nginx is still running, and"
+      },
+      "date": 1461423299510
+    },
+    {
+      "type": "add",
+      "id": "69aae27a0aaf34f7",
+      "item": {
+        "type": "paragraph",
+        "id": "69aae27a0aaf34f7",
+        "text": " lsof -i 4tcp |grep 8080"
+      },
+      "after": "07ed255d30c905e1",
+      "date": 1461423302695
+    },
+    {
+      "type": "add",
+      "id": "d754313eee7dc83a",
+      "item": {
+        "type": "paragraph",
+        "id": "d754313eee7dc83a",
+        "text": "will tell you which process is holding the 8080 port if it's not nginx."
+      },
+      "after": "69aae27a0aaf34f7",
+      "date": 1461423304831
+    },
+    {
+      "type": "edit",
+      "id": "848f793b590c5948",
+      "item": {
+        "type": "code",
+        "id": "848f793b590c5948",
+        "text": "pgrep nginx"
+      },
+      "date": 1461423309984
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "a03a04b4e84437d3"
+      },
+      "after": "07ed255d30c905e1",
+      "id": "a03a04b4e84437d3",
+      "date": 1461423316800
+    },
+    {
+      "type": "remove",
+      "id": "69aae27a0aaf34f7",
+      "date": 1461423320759
+    },
+    {
+      "type": "edit",
+      "id": "a03a04b4e84437d3",
+      "item": {
+        "type": "code",
+        "id": "a03a04b4e84437d3",
+        "text": " lsof -i 4tcp | grep 8080"
+      },
+      "date": 1461423326897
+    },
+    {
+      "type": "edit",
+      "id": "48ab24bf86d95302",
+      "item": {
+        "type": "code",
+        "id": "48ab24bf86d95302",
+        "text": "kill -QUIT $91728\n\nor use\n\nkill -QUIT $( cat /usr/local/nginx/logs/nginx.pid )"
+      },
+      "date": 1461423512054
+    },
+    {
+      "type": "edit",
+      "id": "48ab24bf86d95302",
+      "item": {
+        "type": "code",
+        "id": "48ab24bf86d95302",
+        "text": "kill -QUIT 91728\n\nor use\n\nkill -QUIT $( cat /usr/local/nginx/logs/nginx.pid )"
+      },
+      "date": 1461423640464
+    },
+    {
+      "type": "add",
+      "id": "aea0089a0e63b940",
+      "item": {
+        "type": "paragraph",
+        "id": "aea0089a0e63b940",
+        "text": "However if you instructed LaunchAgents to watch nginx - nginx will automatically be restarted."
+      },
+      "after": "d754313eee7dc83a",
+      "date": 1461423755685
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "101c40181b331fe1",
+        "c64eed4c99b6c7ac",
+        "bdfbd96aa42ea5c8",
+        "7ee479adc3d1700e",
+        "de2539ba909536aa",
+        "592e3e1e9a698f1c",
+        "5e76d439f9271ee7",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "854c18301aa261b0",
+        "b09859fa369997d6",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ea9db6a3ad5a5758",
+        "848f793b590c5948",
+        "9414785e160efbae",
+        "6ca05f619e95e98a",
+        "07ed255d30c905e1",
+        "a03a04b4e84437d3",
+        "d754313eee7dc83a",
+        "aea0089a0e63b940",
+        "ad1b22f1a1e2cc21",
+        "48ab24bf86d95302",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "848f793b590c5948",
+      "date": 1461423828110
+    },
+    {
+      "type": "move",
+      "order": [
+        "e0914b75562c175b",
+        "101c40181b331fe1",
+        "c64eed4c99b6c7ac",
+        "bdfbd96aa42ea5c8",
+        "7ee479adc3d1700e",
+        "de2539ba909536aa",
+        "592e3e1e9a698f1c",
+        "5e76d439f9271ee7",
+        "481f306b82191353",
+        "83cd5c4b7b57aa5e",
+        "854c18301aa261b0",
+        "b09859fa369997d6",
+        "0374a509d683c7d9",
+        "4f6277d6e8641233",
+        "53b1671f6a810ebc",
+        "6a36438f7fe29df1",
+        "75ea9bc8eee42348",
+        "c595e5d029c780b4",
+        "fe92d68f4c5ee74c",
+        "6934eeee41057940",
+        "ea9db6a3ad5a5758",
+        "848f793b590c5948",
+        "6ca05f619e95e98a",
+        "9414785e160efbae",
+        "07ed255d30c905e1",
+        "a03a04b4e84437d3",
+        "d754313eee7dc83a",
+        "aea0089a0e63b940",
+        "ad1b22f1a1e2cc21",
+        "48ab24bf86d95302",
+        "9a6cdaf824dd1d05",
+        "ff05855f58656f35",
+        "4bcb0861e05443bf",
+        "68acdeb845d6d34c",
+        "678777d0b5ba815c",
+        "b7da64eb4259e65d",
+        "9f740ffbba6e3349",
+        "d865f0b15313fe25",
+        "bfb34fc186bc0254",
+        "0ff043f8a07feccd",
+        "151882e56c1b7830",
+        "b9f00cfa9edb6c64",
+        "5216badaf4625758",
+        "330e516b54559ae5",
+        "00c156b2ba7851ae",
+        "85e146a006ee2950",
+        "a60f1631414f27bf",
+        "c8994fd84adc7d4d",
+        "17bf4d8018c20cab",
+        "26e171d810d9ec0d",
+        "b79389f41fe4a7ba",
+        "03b35b22ab016d56",
+        "a321576faf860059",
+        "8974bf5da8d48c38",
+        "18e7e2b1a1b5004f",
+        "a3f5c33ad5523d4c",
+        "b4e8db29908d2761"
+      ],
+      "id": "9414785e160efbae",
+      "date": 1461423832686
+    },
+    {
+      "type": "edit",
+      "id": "6ca05f619e95e98a",
+      "item": {
+        "type": "paragraph",
+        "id": "6ca05f619e95e98a",
+        "text": "To see more clearly what these processes are:"
+      },
+      "date": 1461423852230
+    },
+    {
+      "type": "remove",
+      "id": "aea0089a0e63b940",
+      "date": 1461423880549
+    },
+    {
+      "type": "edit",
+      "id": "48ab24bf86d95302",
+      "item": {
+        "type": "code",
+        "id": "48ab24bf86d95302",
+        "text": "kill -QUIT 91728\n\nor you may be able to use:\n\nkill -QUIT $( cat /usr/local/nginx/logs/nginx.pid )"
+      },
+      "date": 1461423897096
+    },
+    {
+      "type": "edit",
+      "id": "48ab24bf86d95302",
+      "item": {
+        "type": "code",
+        "id": "48ab24bf86d95302",
+        "text": "kill -QUIT 91728"
+      },
+      "date": 1461423910681
+    },
+    {
+      "type": "edit",
+      "id": "ad1b22f1a1e2cc21",
+      "item": {
+        "type": "paragraph",
+        "id": "ad1b22f1a1e2cc21",
+        "text": "And you can kill the master process manually with (enter the pid from the results above):"
+      },
+      "date": 1461423933176
+    },
+    {
+      "type": "edit",
+      "id": "ad1b22f1a1e2cc21",
+      "item": {
+        "type": "paragraph",
+        "id": "ad1b22f1a1e2cc21",
+        "text": "And you can kill the master process manually with (replace 91728 and enter the pid from the results above):"
+      },
+      "date": 1461423951963
+    }
+  ]
+}

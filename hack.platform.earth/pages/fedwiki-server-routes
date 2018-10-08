@@ -1,0 +1,460 @@
+{
+  "title": "Fedwiki Server Routes",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3c6cdc620136008a",
+      "text": "Here we examine the current fedwiki server routing:"
+    },
+    {
+      "type": "code",
+      "id": "22d0c87870c6d02b",
+      "text": "app.get ///^((/[a-zA-Z0-9:.-]+/[a-z0-9-]+(_rev\\d+)?)+)/?$///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "db02b1e3c1d2ea78",
+      "text": "This is the main route for initial contact, allowing links to a specific set of pages."
+    },
+    {
+      "type": "paragraph",
+      "id": "5f57fce4efc3dfbe",
+      "text": "N.B. Only renders the framework, individual pages (json) are fetched and rendered by the client code."
+    },
+    {
+      "type": "code",
+      "id": "ed78024db874b5ca",
+      "text": "app.get ///([a-z0-9-]+)\\.html$///, (req, res, next) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "98ba6818dc3f0c9a",
+      "text": "Returns a page with the requested fedwiki page rendered on the server. Server rendering does not include the page journal."
+    },
+    {
+      "type": "paragraph",
+      "id": "3ad263b775439467",
+      "text": "Essential for clients that do not support JavaScript, but also for search engines. Those clients that support Javascript will re-render the page, adding the journal."
+    },
+    {
+      "type": "code",
+      "id": "55ff6245b8564af9",
+      "text": "app.get ///system/factories.json///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "982455947020b7a1",
+      "text": "Returns a JSON structure detailing available plugins (name, title, and category). Used to build the plugin list shown with 'add paragraph'."
+    },
+    {
+      "type": "code",
+      "id": "7847852789076866",
+      "text": "app.get ///^/([a-z0-9-]+)\\.json$///, cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "044a2e76d1a9512a",
+      "text": "Returns the JSON for an individual page."
+    },
+    {
+      "type": "code",
+      "id": "6b9a66acfd3aeb54",
+      "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+)/([a-z0-9-]+)\\.json$///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "a0ba60d78821eb63",
+      "text": "Fetches a page JSON for a remote page."
+    },
+    {
+      "type": "code",
+      "id": "e504cbcf3d77c09d",
+      "text": "app.get '/favicon.png', cors, (req,res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "d7120bdb6b720eb2",
+      "text": "Gets a site's favicon."
+    },
+    {
+      "type": "code",
+      "id": "542150c33771bcea",
+      "text": "app.post '/favicon.png', authenticated, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "a3c2041cab472182",
+      "text": "Used to save a client created favicon."
+    },
+    {
+      "type": "code",
+      "id": "c26642e89d99a582",
+      "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+/favicon.png)$///, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "30adc32626cec318",
+      "text": "Fetches the favicon for a remote site."
+    },
+    {
+      "type": "code",
+      "id": "5d4b9257ad4151b4",
+      "text": "app.get '/system/slugs.json', cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "27acfb96a430e259",
+      "text": "Returns a list of pages available on server."
+    },
+    {
+      "type": "code",
+      "id": "b24b37a441212132",
+      "text": "app.get '/system/plugins.json', cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "76d3ce848ddb4388",
+      "text": "Returns a list of installed plugins."
+    },
+    {
+      "type": "code",
+      "id": "25c11cc9b5a9e311",
+      "text": "app.get '/system/sitemap.json', cors, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "06e79e7bbfc92b71",
+      "text": "Returns a sitemap, used by the client for amongst other things searching."
+    },
+    {
+      "type": "code",
+      "id": "64e618bedcb839d4",
+      "text": "app.put /^\\/page\\/([a-z0-9-]+)\\/action$/i, authenticated, (req, res) ->"
+    },
+    {
+      "type": "paragraph",
+      "id": "70844a6d9390527b",
+      "text": "perform an edit action on a page – apply a 'add', 'move', 'edit' or 'remove' on page item. Also create a new page, or fork from elsewhere."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Fedwiki Server Routes",
+        "story": []
+      },
+      "date": 1502465848794
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1520439425989
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3c6cdc620136008a"
+      },
+      "id": "3c6cdc620136008a",
+      "type": "add",
+      "date": 1520439427646
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "22d0c87870c6d02b",
+        "text": "app.get ///^((/[a-zA-Z0-9:.-]+/[a-z0-9-]+(_rev\\d+)?)+)/?$///, (req, res) ->"
+      },
+      "after": "3c6cdc620136008a",
+      "id": "22d0c87870c6d02b",
+      "date": 1520439434473
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "db02b1e3c1d2ea78",
+        "text": "This is the main route for initial contact, allowing links to a specific set of pages."
+      },
+      "after": "22d0c87870c6d02b",
+      "id": "db02b1e3c1d2ea78",
+      "date": 1520439437717
+    },
+    {
+      "type": "edit",
+      "id": "3c6cdc620136008a",
+      "item": {
+        "type": "paragraph",
+        "id": "3c6cdc620136008a",
+        "text": "Here we examine the current fedwiki server routing:"
+      },
+      "date": 1520439465327
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5f57fce4efc3dfbe",
+        "text": "N.B. Only renders the framework, individual pages (json) are fetched and rendered by the client code."
+      },
+      "after": "db02b1e3c1d2ea78",
+      "id": "5f57fce4efc3dfbe",
+      "date": 1520439472650
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "ed78024db874b5ca",
+        "text": "app.get ///([a-z0-9-]+)\\.html$///, (req, res, next) ->"
+      },
+      "after": "5f57fce4efc3dfbe",
+      "id": "ed78024db874b5ca",
+      "date": 1520439475388
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "98ba6818dc3f0c9a",
+        "text": "Returns a page with the requested fedwiki page rendered on the server. Server rendering does not include the page journal."
+      },
+      "after": "ed78024db874b5ca",
+      "id": "98ba6818dc3f0c9a",
+      "date": 1520439478070
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad263b775439467",
+        "text": "Essential for clients that do not support JavaScript, but also for search engines. Those clients that support Javascript will re-render the page, adding the journal."
+      },
+      "after": "98ba6818dc3f0c9a",
+      "id": "3ad263b775439467",
+      "date": 1520439481606
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "55ff6245b8564af9",
+        "text": "app.get ///system/factories.json///, (req, res) ->"
+      },
+      "after": "3ad263b775439467",
+      "id": "55ff6245b8564af9",
+      "date": 1520439483884
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "982455947020b7a1",
+        "text": "Returns a JSON structure detailing available plugins (name, title, and category). Used to build the plugin list shown with 'add paragraph'."
+      },
+      "after": "55ff6245b8564af9",
+      "id": "982455947020b7a1",
+      "date": 1520439487374
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7847852789076866",
+        "text": "app.get ///^/([a-z0-9-]+)\\.json$///, cors, (req, res) ->"
+      },
+      "after": "982455947020b7a1",
+      "id": "7847852789076866",
+      "date": 1520439496081
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "044a2e76d1a9512a",
+        "text": "Returns the JSON for an individual page."
+      },
+      "after": "7847852789076866",
+      "id": "044a2e76d1a9512a",
+      "date": 1520439499085
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6b9a66acfd3aeb54",
+        "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+)/([a-z0-9-]+)\\.json$///, (req, res) ->"
+      },
+      "after": "044a2e76d1a9512a",
+      "id": "6b9a66acfd3aeb54",
+      "date": 1520439502021
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a0ba60d78821eb63",
+        "text": "Fetches a page JSON for a remote page."
+      },
+      "after": "6b9a66acfd3aeb54",
+      "id": "a0ba60d78821eb63",
+      "date": 1520439505456
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "e504cbcf3d77c09d",
+        "text": "app.get '/favicon.png', cors, (req,res) ->"
+      },
+      "after": "a0ba60d78821eb63",
+      "id": "e504cbcf3d77c09d",
+      "date": 1520439508184
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d7120bdb6b720eb2",
+        "text": "Gets a site's favicon."
+      },
+      "after": "e504cbcf3d77c09d",
+      "id": "d7120bdb6b720eb2",
+      "date": 1520439511687
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a3c2041cab472182",
+        "text": "Used to save a client created favicon."
+      },
+      "after": "d7120bdb6b720eb2",
+      "id": "a3c2041cab472182",
+      "date": 1520439515334
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "542150c33771bcea",
+        "text": "app.post '/favicon.png', authenticated, (req, res) ->"
+      },
+      "after": "d7120bdb6b720eb2",
+      "id": "542150c33771bcea",
+      "date": 1520439520957
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "c26642e89d99a582",
+        "text": "app.get ///^/remote/([a-zA-Z0-9:\\.-]+/favicon.png)$///, (req, res) ->"
+      },
+      "after": "a3c2041cab472182",
+      "id": "c26642e89d99a582",
+      "date": 1520439523662
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "30adc32626cec318",
+        "text": "Fetches the favicon for a remote site."
+      },
+      "after": "c26642e89d99a582",
+      "id": "30adc32626cec318",
+      "date": 1520439527746
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "5d4b9257ad4151b4",
+        "text": "app.get '/system/slugs.json', cors, (req, res) ->"
+      },
+      "after": "30adc32626cec318",
+      "id": "5d4b9257ad4151b4",
+      "date": 1520439537844
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "27acfb96a430e259",
+        "text": "Returns a list of pages available on server."
+      },
+      "after": "5d4b9257ad4151b4",
+      "id": "27acfb96a430e259",
+      "date": 1520439542035
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "b24b37a441212132",
+        "text": "app.get '/system/plugins.json', cors, (req, res) ->"
+      },
+      "after": "27acfb96a430e259",
+      "id": "b24b37a441212132",
+      "date": 1520439548643
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "76d3ce848ddb4388",
+        "text": "Returns a list of installed plugins."
+      },
+      "after": "b24b37a441212132",
+      "id": "76d3ce848ddb4388",
+      "date": 1520439552070
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "25c11cc9b5a9e311",
+        "text": "app.get '/system/sitemap.json', cors, (req, res) ->"
+      },
+      "after": "76d3ce848ddb4388",
+      "id": "25c11cc9b5a9e311",
+      "date": 1520439556184
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "06e79e7bbfc92b71",
+        "text": "Returns a sitemap, used by the client for amongst other things searching."
+      },
+      "after": "25c11cc9b5a9e311",
+      "id": "06e79e7bbfc92b71",
+      "date": 1520439570731
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "64e618bedcb839d4",
+        "text": "app.put /^\\/page\\/([a-z0-9-]+)\\/action$/i, authenticated, (req, res) ->"
+      },
+      "after": "06e79e7bbfc92b71",
+      "id": "64e618bedcb839d4",
+      "date": 1520439575674
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "70844a6d9390527b",
+        "text": "perform an edit action on a page – apply a 'add', 'move', 'edit' or 'remove' on page item. Also create a new page, or fork from elsewhere."
+      },
+      "after": "64e618bedcb839d4",
+      "id": "70844a6d9390527b",
+      "date": 1520439582882
+    }
+  ]
+}

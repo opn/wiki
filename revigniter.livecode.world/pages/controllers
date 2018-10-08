@@ -1,0 +1,999 @@
+{
+  "title": "Controllers",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "0683043ef7880191",
+      "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "549ed459415b8c29",
+      "text": "Consider this URI:"
+    },
+    {
+      "type": "code",
+      "id": "d879e113f1eb927b",
+      "text": "example.com/index.lc/blog/"
+    },
+    {
+      "type": "paragraph",
+      "id": "e2b8364b215064e9",
+      "text": "In the above example, revIgniter would attempt to find a controller named blog.lc and load it. When a controller's name matches the first segment of a URI, it will be loaded."
+    },
+    {
+      "type": "markdown",
+      "id": "4a4e3b7bef413098",
+      "text": "# Let's try it:"
+    },
+    {
+      "type": "reference",
+      "id": "cfdb9c8ffd2374dd",
+      "site": "revigniter.livecode.world",
+      "slug": "hello-world",
+      "title": "Hello World!",
+      "text": "Let's create a simple controller so you can see it in action. Using your text editor, create a file called blog.lc, and put the following code in it:"
+    },
+    {
+      "type": "markdown",
+      "id": "1b606bef930d24e2",
+      "text": "# Good Practice"
+    },
+    {
+      "type": "paragraph",
+      "id": "a33648ce0ca145cd",
+      "text": "It is good practice, though not mandatory, to load all needed libraries, models, helpers and plugins in a handler named after the controller itself. "
+    },
+    {
+      "type": "paragraph",
+      "id": "08c3588a11987da9",
+      "text": "This handler, if present, is called first and automatically by the front controller. So, this is a good place to load required libraries, helpers, plugins, models, a database etc. "
+    },
+    {
+      "type": "paragraph",
+      "id": "e118c586b5d03443",
+      "text": "Let's say your controller is called \"blog.lc\", then your code would look like this:"
+    },
+    {
+      "type": "code",
+      "id": "d41bf15fc017de16",
+      "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,blog\" into gControllerHandlers\n\ncommand blog\n  # LOAD REQUIRED LIBRARIES, MODELS, HELPERS, PLUGINS\nend blog\n\ncommand index\n  # REMEMBER TO PUT ALL THE VARIABLES TO BE MERGED WITH VIEWS INTO THE ARRAY VARIABLE gData\n  -- do something here\nend index\n\n--| END OF blog.lc\n--| Location: ./system/application/controllers/blog.lc"
+    },
+    {
+      "type": "html",
+      "id": "cec79293b6479153",
+      "text": "<blockquote>\n<b style='color: purple'>Note: </b>Name conflicts\n<p>\nBe careful not to name the sub-folder the same as that of an existing controller, as the controller will take precedence and the subfolder route will be ignored.\n<p>\nFor instance if you have a sub-folder called \"feast\" and a controller called \"feast.lc\" then you need to rename the folder or controller in order not to confuse the routing."
+    },
+    {
+      "type": "markdown",
+      "id": "3b41e912bafd4e09",
+      "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Organizing Controllers into Sub-folders]]\n- [[Views]]\n- [[Controllers]]\n- [[Remapping Handler Calls]]\n- [[Private Handlers]]\n- [[Reserved Handler Names]]\n- [[URI Routing]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Controllers",
+        "story": []
+      },
+      "date": 1459806303686
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0683043ef7880191"
+      },
+      "id": "0683043ef7880191",
+      "type": "add",
+      "date": 1459806305405
+    },
+    {
+      "type": "edit",
+      "id": "0683043ef7880191",
+      "item": {
+        "type": "paragraph",
+        "id": "0683043ef7880191",
+        "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\nConsider this URI:\n\nexample.com/index.lc/blog/\nIn the above example, revIgniter would attempt to find a controller named blog.lc and load it.\n\nWhen a controller's name matches the first segment of a URI, it will be loaded.\n\nLet's try it:  Hello World!\n\nLet's create a simple controller so you can see it in action. Using your text editor, create a file called blog.lc, and put the following code in it:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\nThen save the file to your application/controllers/ folder.\n\nNow visit your site using a URL similar to this:\n\nexample.com/index.lc/blog/\nIf you did it right, you should see Hello World!.\n\nHandlers\n\nIn the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. Another way to show your \"Hello World!\" message would be this:\n\nexample.com/index.lc/blog/index/\nThe second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments\nImportant:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers.\nNow load the following URL to see the comments handler:\n\nexample.com/index.lc/blog/comments/\nYou should see your new message.\n\nNote:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error.\nPassing URI Segments to your Handlers\n\nIf your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:\n\nexample.com/index.lc/products/shoes/sandals/123\nThe function rigFetchSegment(3) will return \"sandals\" and rigFetchSegment(4) will return \"123\" (URI segments 3 and 4):\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,shoes\" into gControllerHandlers\n\ncommand shoes\n\tput rigFetchSegment(3) && rigFetchSegment(4)\nend shoes\nImportant:  If you are using the URI Routing feature, the re-routed segments must be retrieved using the rigFetchRsegment() function.\nDefining a Default Controller\n\nrevIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested. To specify a default controller, open your application/config/routes.lc file and set this variable:\n\nput \"Blog\" into gRoute[1][\"defaultController\"]\nWhere Blog is the name of the controller library you want used. If you now load your main index.lc file without specifying any URI segments you'll see your Hello World message by default.\n\nRemapping Handler Calls\n\nAs noted above, the second segment of the URI typically determines which handler in the controller gets called. revIgniter permits you to override this behavior through the use of the _remap handler:\n\ncommand _remap\n\t-- Some code here...\nend _remap\nImportant:  If your controller contains a handler named _remap, it will always get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which handler is called, allowing you to define your own handler routing rules.\nThe overridden handler call (typically the second segment of the URI) will be passed as a parameter to the _remap handler:\n\ncommand _remap pHandler\n\tif pHandler is \"someHandler\" then\n\t\tdo handler\n\telse\n\t\tdo defaultHandler\n\tend if\nend _remap\nProcessing Output\n\nrevIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. In some cases, however, you might want to post-process the finalized data in some way and send it to the browser yourself. revIgniter permits you to add a handler named _output to your controller that will receive the finalized output data.\n\nImportant:  If your controller contains a handler named _output, it will always be called by the output library instead of puting the finalized data directly. The first parameter of the handler will contain the finalized output.\n\nHere is an example:\n\ncommand _output pOutput\n\tput pOutput\nend _output\nPlease note that your _output handler will receive the data in its finalized state. Benchmark data will be rendered, cache files written (if you have caching enabled), and headers will be sent (if you use that feature) before it is handed off to the _output handler. If you are using this feature the page execution timer might not be perfectly accurate since it will not take into acccount any further processing you do. For an alternate way to control output before any of the final processing is done, please see the available handlers in the Output Library.\nPrivate Handlers\n\nIn some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. For example, if you were to have a handler like this:\n\ncommand _utility\n\t-- some code\nend _utility\nTrying to access it via the URL, like this, will not work:\n\nexample.com/index.lc/blog/_utility/\nOrganizing Your Controllers into Sub-folders\n\nIf you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this.\n\nSimply create folders within your application/controllers directory and place your controller libraries within them.\n\nNote:  When using this feature the first segment of your URI must specify the folder. For example, lets say you have a controller located here:\n\napplication/controllers/products/shoes.lc\nTo call the above controller your URI will look something like this:\n\nexample.com/index.lc/products/shoes/show/123\nEach of your sub-folders may contain a default controller which will be called if the URL contains only the sub-folder. Simply name your default controller as specified in your application/config/routes.lc file\n\nrevIgniter also permits you to remap your URIs using its URI Routing feature.\n\nReserved Handler Names\n\nSince your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library. See Reserved Names for a full list.\n\nGood Practice\n\nIt is good practice, though not mandatory, to load all needed libraries, models, helpers and plugins in a handler named after the controller itself. This handler, if present, is called first and automatically by the front controller. So, this is a good place to load required libraries, helpers, plugins, models, a database etc. Let's say your controller is called \"blog.lc\", then your code would look like this:\n\n"
+      },
+      "date": 1459806327306
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d41bf15fc017de16"
+      },
+      "id": "d41bf15fc017de16",
+      "type": "add",
+      "after": "0bd58bdfc56fc0da",
+      "date": 1459806331348
+    },
+    {
+      "type": "edit",
+      "id": "d41bf15fc017de16",
+      "item": {
+        "type": "code",
+        "id": "d41bf15fc017de16",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,blog\" into gControllerHandlers\n\n\ncommand blog\n\t# LOAD REQUIRED LIBRARIES, MODELS, HELPERS, PLUGINS\nend blog\n\ncommand index\n\t# REMEMBER TO PUT ALL THE VARIABLES TO BE MERGED WITH VIEWS INTO THE ARRAY VARIABLE gData\n\t-- do something here\nend index\n\n--| END OF blog.lc\n--| Location: ./system/application/controllers/blog.lc"
+      },
+      "date": 1459806342222
+    },
+    {
+      "type": "edit",
+      "id": "d41bf15fc017de16",
+      "item": {
+        "type": "code",
+        "id": "d41bf15fc017de16",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,blog\" into gControllerHandlers\n\ncommand blog\n  # LOAD REQUIRED LIBRARIES, MODELS, HELPERS, PLUGINS\nend blog\n\ncommand index\n  # REMEMBER TO PUT ALL THE VARIABLES TO BE MERGED WITH VIEWS INTO THE ARRAY VARIABLE gData\n  -- do something here\nend index\n\n--| END OF blog.lc\n--| Location: ./system/application/controllers/blog.lc"
+      },
+      "date": 1459806367573
+    },
+    {
+      "type": "edit",
+      "id": "0683043ef7880191",
+      "item": {
+        "type": "paragraph",
+        "id": "0683043ef7880191",
+        "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\nConsider this URI:\n\nexample.com/index.lc/blog/\nIn the above example, revIgniter would attempt to find a controller named blog.lc and load it.\n\nWhen a controller's name matches the first segment of a URI, it will be loaded.\n\nLet's try it:  Hello World!\n\nLet's create a simple controller so you can see it in action. Using your text editor, create a file called blog.lc, and put the following code in it:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\nThen save the file to your application/controllers/ folder.\n\nNow visit your site using a URL similar to this:\n\nexample.com/index.lc/blog/\nIf you did it right, you should see Hello World!.\n\nHandlers\n\nIn the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. Another way to show your \"Hello World!\" message would be this:\n\nexample.com/index.lc/blog/index/\nThe second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments\nImportant:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers.\nNow load the following URL to see the comments handler:\n\nexample.com/index.lc/blog/comments/\nYou should see your new message.\n\nNote:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error.\nPassing URI Segments to your Handlers\n\nIf your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:\n\nexample.com/index.lc/products/shoes/sandals/123\nThe function rigFetchSegment(3) will return \"sandals\" and rigFetchSegment(4) will return \"123\" (URI segments 3 and 4):\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,shoes\" into gControllerHandlers\n\ncommand shoes\n\tput rigFetchSegment(3) && rigFetchSegment(4)\nend shoes\nImportant:  If you are using the URI Routing feature, the re-routed segments must be retrieved using the rigFetchRsegment() function.\nDefining a Default Controller\n\nrevIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested. To specify a default controller, open your application/config/routes.lc file and set this variable:\n\nput \"Blog\" into gRoute[1][\"defaultController\"]\nWhere Blog is the name of the controller library you want used. If you now load your main index.lc file without specifying any URI segments you'll see your Hello World message by default.\n\nRemapping Handler Calls\n\nAs noted above, the second segment of the URI typically determines which handler in the controller gets called. revIgniter permits you to override this behavior through the use of the _remap handler:\n\ncommand _remap\n\t-- Some code here...\nend _remap\nImportant:  If your controller contains a handler named _remap, it will always get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which handler is called, allowing you to define your own handler routing rules.\nThe overridden handler call (typically the second segment of the URI) will be passed as a parameter to the _remap handler:\n\ncommand _remap pHandler\n\tif pHandler is \"someHandler\" then\n\t\tdo handler\n\telse\n\t\tdo defaultHandler\n\tend if\nend _remap\nProcessing Output\n\nrevIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. In some cases, however, you might want to post-process the finalized data in some way and send it to the browser yourself. revIgniter permits you to add a handler named _output to your controller that will receive the finalized output data.\n\nImportant:  If your controller contains a handler named _output, it will always be called by the output library instead of puting the finalized data directly. The first parameter of the handler will contain the finalized output.\n\nHere is an example:\n\ncommand _output pOutput\n\tput pOutput\nend _output\nPlease note that your _output handler will receive the data in its finalized state. Benchmark data will be rendered, cache files written (if you have caching enabled), and headers will be sent (if you use that feature) before it is handed off to the _output handler. If you are using this feature the page execution timer might not be perfectly accurate since it will not take into acccount any further processing you do. For an alternate way to control output before any of the final processing is done, please see the available handlers in the Output Library.\nPrivate Handlers\n\nIn some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. For example, if you were to have a handler like this:\n\ncommand _utility\n\t-- some code\nend _utility\nTrying to access it via the URL, like this, will not work:\n\nexample.com/index.lc/blog/_utility/\nOrganizing Your Controllers into Sub-folders\n\nIf you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this.\n\nSimply create folders within your application/controllers directory and place your controller libraries within them.\n\nNote:  When using this feature the first segment of your URI must specify the folder. For example, lets say you have a controller located here:\n\napplication/controllers/products/shoes.lc\nTo call the above controller your URI will look something like this:\n\nexample.com/index.lc/products/shoes/show/123\nEach of your sub-folders may contain a default controller which will be called if the URL contains only the sub-folder. Simply name your default controller as specified in your application/config/routes.lc file\n\nrevIgniter also permits you to remap your URIs using its URI Routing feature.\n\nReserved Handler Names\n\nSince your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library. See Reserved Names for a full list.\n\n"
+      },
+      "date": 1459806378433
+    },
+    {
+      "type": "add",
+      "id": "1b606bef930d24e2",
+      "item": {
+        "type": "paragraph",
+        "id": "1b606bef930d24e2",
+        "text": "# Good Practice\n\nIt is good practice, though not mandatory, to load all needed libraries, models, helpers and plugins in a handler named after the controller itself. This handler, if present, is called first and automatically by the front controller. So, this is a good place to load required libraries, helpers, plugins, models, a database etc. Let's say your controller is called \"blog.lc\", then your code would look like this:"
+      },
+      "after": "0683043ef7880191",
+      "date": 1459806384219
+    },
+    {
+      "type": "move",
+      "order": [
+        "1b606bef930d24e2",
+        "0683043ef7880191",
+        "d41bf15fc017de16"
+      ],
+      "id": "1b606bef930d24e2",
+      "date": 1459806400622
+    },
+    {
+      "type": "edit",
+      "id": "0683043ef7880191",
+      "item": {
+        "type": "paragraph",
+        "id": "0683043ef7880191",
+        "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\nConsider this URI:\n\nexample.com/index.lc/blog/\nIn the above example, revIgniter would attempt to find a controller named blog.lc and load it.\n\nWhen a controller's name matches the first segment of a URI, it will be loaded."
+      },
+      "date": 1459806414907
+    },
+    {
+      "type": "add",
+      "id": "4a4e3b7bef413098",
+      "item": {
+        "type": "paragraph",
+        "id": "4a4e3b7bef413098",
+        "text": "\nLet's try it:  Hello World!\n\nLet's create a simple controller so you can see it in action. Using your text editor, create a file called blog.lc, and put the following code in it:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\nThen save the file to your application/controllers/ folder.\n\nNow visit your site using a URL similar to this:\n\nexample.com/index.lc/blog/\nIf you did it right, you should see Hello World!.\n\nHandlers\n\nIn the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. Another way to show your \"Hello World!\" message would be this:\n\nexample.com/index.lc/blog/index/\nThe second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments\nImportant:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers.\nNow load the following URL to see the comments handler:\n\nexample.com/index.lc/blog/comments/\nYou should see your new message.\n\nNote:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error.\nPassing URI Segments to your Handlers\n\nIf your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:\n\nexample.com/index.lc/products/shoes/sandals/123\nThe function rigFetchSegment(3) will return \"sandals\" and rigFetchSegment(4) will return \"123\" (URI segments 3 and 4):\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,shoes\" into gControllerHandlers\n\ncommand shoes\n\tput rigFetchSegment(3) && rigFetchSegment(4)\nend shoes\nImportant:  If you are using the URI Routing feature, the re-routed segments must be retrieved using the rigFetchRsegment() function.\nDefining a Default Controller\n\nrevIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested. To specify a default controller, open your application/config/routes.lc file and set this variable:\n\nput \"Blog\" into gRoute[1][\"defaultController\"]\nWhere Blog is the name of the controller library you want used. If you now load your main index.lc file without specifying any URI segments you'll see your Hello World message by default.\n\nRemapping Handler Calls\n\nAs noted above, the second segment of the URI typically determines which handler in the controller gets called. revIgniter permits you to override this behavior through the use of the _remap handler:\n\ncommand _remap\n\t-- Some code here...\nend _remap\nImportant:  If your controller contains a handler named _remap, it will always get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which handler is called, allowing you to define your own handler routing rules.\nThe overridden handler call (typically the second segment of the URI) will be passed as a parameter to the _remap handler:\n\ncommand _remap pHandler\n\tif pHandler is \"someHandler\" then\n\t\tdo handler\n\telse\n\t\tdo defaultHandler\n\tend if\nend _remap\nProcessing Output\n\nrevIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. In some cases, however, you might want to post-process the finalized data in some way and send it to the browser yourself. revIgniter permits you to add a handler named _output to your controller that will receive the finalized output data.\n\nImportant:  If your controller contains a handler named _output, it will always be called by the output library instead of puting the finalized data directly. The first parameter of the handler will contain the finalized output.\n\nHere is an example:\n\ncommand _output pOutput\n\tput pOutput\nend _output\nPlease note that your _output handler will receive the data in its finalized state. Benchmark data will be rendered, cache files written (if you have caching enabled), and headers will be sent (if you use that feature) before it is handed off to the _output handler. If you are using this feature the page execution timer might not be perfectly accurate since it will not take into acccount any further processing you do. For an alternate way to control output before any of the final processing is done, please see the available handlers in the Output Library.\nPrivate Handlers\n\nIn some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. For example, if you were to have a handler like this:\n\ncommand _utility\n\t-- some code\nend _utility\nTrying to access it via the URL, like this, will not work:\n\nexample.com/index.lc/blog/_utility/\nOrganizing Your Controllers into Sub-folders\n\nIf you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this.\n\nSimply create folders within your application/controllers directory and place your controller libraries within them.\n\nNote:  When using this feature the first segment of your URI must specify the folder. For example, lets say you have a controller located here:\n\napplication/controllers/products/shoes.lc\nTo call the above controller your URI will look something like this:\n\nexample.com/index.lc/products/shoes/show/123\nEach of your sub-folders may contain a default controller which will be called if the URL contains only the sub-folder. Simply name your default controller as specified in your application/config/routes.lc file\n\nrevIgniter also permits you to remap your URIs using its URI Routing feature.\n\nReserved Handler Names\n\nSince your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library. See Reserved Names for a full list."
+      },
+      "after": "0683043ef7880191",
+      "date": 1459806416536
+    },
+    {
+      "type": "move",
+      "order": [
+        "0683043ef7880191",
+        "1b606bef930d24e2",
+        "4a4e3b7bef413098",
+        "d41bf15fc017de16"
+      ],
+      "id": "0683043ef7880191",
+      "date": 1459806418843
+    },
+    {
+      "type": "edit",
+      "id": "1b606bef930d24e2",
+      "item": {
+        "type": "paragraph",
+        "id": "1b606bef930d24e2",
+        "text": "# Good Practice"
+      },
+      "date": 1459806424882
+    },
+    {
+      "type": "add",
+      "id": "a33648ce0ca145cd",
+      "item": {
+        "type": "paragraph",
+        "id": "a33648ce0ca145cd",
+        "text": "It is good practice, though not mandatory, to load all needed libraries, models, helpers and plugins in a handler named after the controller itself. This handler, if present, is called first and automatically by the front controller. So, this is a good place to load required libraries, helpers, plugins, models, a database etc. Let's say your controller is called \"blog.lc\", then your code would look like this:"
+      },
+      "after": "1b606bef930d24e2",
+      "date": 1459806427763
+    },
+    {
+      "type": "edit",
+      "id": "1b606bef930d24e2",
+      "item": {
+        "type": "markdown",
+        "id": "1b606bef930d24e2",
+        "text": "# Good Practice"
+      },
+      "date": 1459806428886
+    },
+    {
+      "type": "edit",
+      "id": "4a4e3b7bef413098",
+      "item": {
+        "type": "paragraph",
+        "id": "4a4e3b7bef413098",
+        "text": "# Let's try it:  Hello World!"
+      },
+      "date": 1459806443468
+    },
+    {
+      "type": "add",
+      "id": "1d57d2f5a450798a",
+      "item": {
+        "type": "paragraph",
+        "id": "1d57d2f5a450798a",
+        "text": "Let's create a simple controller so you can see it in action. Using your text editor, create a file called blog.lc, and put the following code in it:"
+      },
+      "after": "4a4e3b7bef413098",
+      "date": 1459806447460
+    },
+    {
+      "type": "add",
+      "id": "7f879ce905cf287d",
+      "item": {
+        "type": "paragraph",
+        "id": "7f879ce905cf287d",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index"
+      },
+      "after": "1d57d2f5a450798a",
+      "date": 1459806454236
+    },
+    {
+      "type": "add",
+      "id": "aa85d3c2132f65b8",
+      "item": {
+        "type": "paragraph",
+        "id": "aa85d3c2132f65b8",
+        "text": "Then save the file to your application/controllers/ folder.\n\nNow visit your site using a URL similar to this:\n\nexample.com/index.lc/blog/\nIf you did it right, you should see Hello World!.\n\n"
+      },
+      "after": "7f879ce905cf287d",
+      "date": 1459806460116
+    },
+    {
+      "type": "add",
+      "id": "3719249937d8168b",
+      "item": {
+        "type": "paragraph",
+        "id": "3719249937d8168b",
+        "text": "# Handlers"
+      },
+      "after": "aa85d3c2132f65b8",
+      "date": 1459806463372
+    },
+    {
+      "type": "add",
+      "id": "e4e78a0e65c583f4",
+      "item": {
+        "type": "paragraph",
+        "id": "e4e78a0e65c583f4",
+        "text": "In the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. Another way to show your \"Hello World!\" message would be this:\n\nexample.com/index.lc/blog/index/\nThe second segment of the URI determines which handler in the controller gets called.\n\nLet's try it. Add a new handler to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,comments\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index\n\ncommand comments\n\tput \"Look at this!\"\nend comments\nImportant:  Don't forget to add the name of your new handler to the comma separated list of the variable gControllerHandlers.\nNow load the following URL to see the comments handler:\n\nexample.com/index.lc/blog/comments/\nYou should see your new message.\n\nNote:  There is currently a limitation with LiveCode Server which does not allow hyphens in handler names. So, don't use hyphens in your handler names as these yield an error.\nPassing URI Segments to your Handlers\n\nIf your URI contains more than two segments you can retrieve them using the rigFetchSegment() function.\n\nFor example, lets say you have a URI like this:\n\nexample.com/index.lc/products/shoes/sandals/123\nThe function rigFetchSegment(3) will return \"sandals\" and rigFetchSegment(4) will return \"123\" (URI segments 3 and 4):\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index,shoes\" into gControllerHandlers\n\ncommand shoes\n\tput rigFetchSegment(3) && rigFetchSegment(4)\nend shoes\nImportant:  If you are using the URI Routing feature, the re-routed segments must be retrieved using the rigFetchRsegment() function.\nDefining a Default Controller\n\nrevIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested. To specify a default controller, open your application/config/routes.lc file and set this variable:\n\nput \"Blog\" into gRoute[1][\"defaultController\"]\nWhere Blog is the name of the controller library you want used. If you now load your main index.lc file without specifying any URI segments you'll see your Hello World message by default.\n\nRemapping Handler Calls\n\nAs noted above, the second segment of the URI typically determines which handler in the controller gets called. revIgniter permits you to override this behavior through the use of the _remap handler:\n\ncommand _remap\n\t-- Some code here...\nend _remap\nImportant:  If your controller contains a handler named _remap, it will always get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which handler is called, allowing you to define your own handler routing rules.\nThe overridden handler call (typically the second segment of the URI) will be passed as a parameter to the _remap handler:\n\ncommand _remap pHandler\n\tif pHandler is \"someHandler\" then\n\t\tdo handler\n\telse\n\t\tdo defaultHandler\n\tend if\nend _remap\nProcessing Output\n\nrevIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. In some cases, however, you might want to post-process the finalized data in some way and send it to the browser yourself. revIgniter permits you to add a handler named _output to your controller that will receive the finalized output data.\n\nImportant:  If your controller contains a handler named _output, it will always be called by the output library instead of puting the finalized data directly. The first parameter of the handler will contain the finalized output.\n\nHere is an example:\n\ncommand _output pOutput\n\tput pOutput\nend _output\nPlease note that your _output handler will receive the data in its finalized state. Benchmark data will be rendered, cache files written (if you have caching enabled), and headers will be sent (if you use that feature) before it is handed off to the _output handler. If you are using this feature the page execution timer might not be perfectly accurate since it will not take into acccount any further processing you do. For an alternate way to control output before any of the final processing is done, please see the available handlers in the Output Library.\nPrivate Handlers\n\nIn some cases you may want certain handlers hidden from public access. To make a handler private, simply add an underscore as the name prefix and it will not be served via a URL request. For example, if you were to have a handler like this:\n\ncommand _utility\n\t-- some code\nend _utility\nTrying to access it via the URL, like this, will not work:\n\nexample.com/index.lc/blog/_utility/\nOrganizing Your Controllers into Sub-folders\n\nIf you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this.\n\nSimply create folders within your application/controllers directory and place your controller libraries within them.\n\nNote:  When using this feature the first segment of your URI must specify the folder. For example, lets say you have a controller located here:\n\napplication/controllers/products/shoes.lc\nTo call the above controller your URI will look something like this:\n\nexample.com/index.lc/products/shoes/show/123\nEach of your sub-folders may contain a default controller which will be called if the URL contains only the sub-folder. Simply name your default controller as specified in your application/config/routes.lc file\n\nrevIgniter also permits you to remap your URIs using its URI Routing feature.\n\nReserved Handler Names\n\nSince your controller script will extend the main application controller you must be careful not to name your handlers identically to the ones used by that library. See Reserved Names for a full list."
+      },
+      "after": "3719249937d8168b",
+      "date": 1459806466065
+    },
+    {
+      "type": "edit",
+      "id": "3719249937d8168b",
+      "item": {
+        "type": "markdown",
+        "id": "3719249937d8168b",
+        "text": "# Handlers"
+      },
+      "date": 1459806467096
+    },
+    {
+      "type": "edit",
+      "id": "4a4e3b7bef413098",
+      "item": {
+        "type": "markdown",
+        "id": "4a4e3b7bef413098",
+        "text": "# Let's try it:  Hello World!"
+      },
+      "date": 1459806468699
+    },
+    {
+      "type": "move",
+      "order": [
+        "0683043ef7880191",
+        "d41bf15fc017de16",
+        "1b606bef930d24e2",
+        "a33648ce0ca145cd",
+        "4a4e3b7bef413098",
+        "1d57d2f5a450798a",
+        "7f879ce905cf287d",
+        "aa85d3c2132f65b8",
+        "3719249937d8168b",
+        "e4e78a0e65c583f4"
+      ],
+      "id": "d41bf15fc017de16",
+      "date": 1459806486735
+    },
+    {
+      "type": "move",
+      "order": [
+        "0683043ef7880191",
+        "1b606bef930d24e2",
+        "a33648ce0ca145cd",
+        "d41bf15fc017de16",
+        "4a4e3b7bef413098",
+        "1d57d2f5a450798a",
+        "7f879ce905cf287d",
+        "aa85d3c2132f65b8",
+        "3719249937d8168b",
+        "e4e78a0e65c583f4"
+      ],
+      "id": "d41bf15fc017de16",
+      "date": 1459806498077
+    },
+    {
+      "type": "edit",
+      "id": "0683043ef7880191",
+      "item": {
+        "type": "paragraph",
+        "id": "0683043ef7880191",
+        "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\nConsider this URI:\n\nexample.com/index.lc/blog/"
+      },
+      "date": 1459806506149
+    },
+    {
+      "type": "add",
+      "id": "e2b8364b215064e9",
+      "item": {
+        "type": "paragraph",
+        "id": "e2b8364b215064e9",
+        "text": "In the above example, revIgniter would attempt to find a controller named blog.lc and load it.\n\nWhen a controller's name matches the first segment of a URI, it will be loaded."
+      },
+      "after": "0683043ef7880191",
+      "date": 1459806507747
+    },
+    {
+      "type": "edit",
+      "id": "0683043ef7880191",
+      "item": {
+        "type": "paragraph",
+        "id": "0683043ef7880191",
+        "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\nConsider this URI:"
+      },
+      "date": 1459806509372
+    },
+    {
+      "type": "add",
+      "id": "4f558ce42c4977fb",
+      "item": {
+        "type": "paragraph",
+        "id": "4f558ce42c4977fb",
+        "text": "example.com/index.lc/blog/"
+      },
+      "after": "0683043ef7880191",
+      "date": 1459806512638
+    },
+    {
+      "type": "edit",
+      "id": "0683043ef7880191",
+      "item": {
+        "type": "paragraph",
+        "id": "0683043ef7880191",
+        "text": "A Controller is simply a library file that is named in a way that can be associated with a URI.\n\n"
+      },
+      "date": 1459806515645
+    },
+    {
+      "type": "add",
+      "id": "549ed459415b8c29",
+      "item": {
+        "type": "paragraph",
+        "id": "549ed459415b8c29",
+        "text": "Consider this URI:"
+      },
+      "after": "0683043ef7880191",
+      "date": 1459806517270
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7b028722318a4148"
+      },
+      "id": "7b028722318a4148",
+      "type": "add",
+      "after": "e4e78a0e65c583f4",
+      "date": 1459806522958
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "d879e113f1eb927b"
+      },
+      "after": "549ed459415b8c29",
+      "id": "d879e113f1eb927b",
+      "date": 1459806609386
+    },
+    {
+      "type": "remove",
+      "id": "4f558ce42c4977fb",
+      "date": 1459806612744
+    },
+    {
+      "type": "edit",
+      "id": "d879e113f1eb927b",
+      "item": {
+        "type": "code",
+        "id": "d879e113f1eb927b",
+        "text": "example.com/index.lc/blog/"
+      },
+      "date": 1459806616114
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "3ab7ba40b951b794"
+      },
+      "after": "7f879ce905cf287d",
+      "id": "3ab7ba40b951b794",
+      "date": 1459806622995
+    },
+    {
+      "type": "remove",
+      "id": "7f879ce905cf287d",
+      "date": 1459806633000
+    },
+    {
+      "type": "edit",
+      "id": "3ab7ba40b951b794",
+      "item": {
+        "type": "code",
+        "id": "3ab7ba40b951b794",
+        "text": "<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Hello World!\"\nend index"
+      },
+      "date": 1459806637699
+    },
+    {
+      "type": "edit",
+      "id": "3ab7ba40b951b794",
+      "item": {
+        "type": "code",
+        "id": "3ab7ba40b951b794",
+        "text": "<?rev\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n  put \"Hello World!\"\nend index"
+      },
+      "date": 1459806652306
+    },
+    {
+      "type": "edit",
+      "id": "aa85d3c2132f65b8",
+      "item": {
+        "type": "paragraph",
+        "id": "aa85d3c2132f65b8",
+        "text": "Then save the file to your application/controllers/ folder.\n\nNow visit your site using a URL similar to this:\n\nexample.com/index.lc/blog/"
+      },
+      "date": 1459806681379
+    },
+    {
+      "type": "add",
+      "id": "b0ed20f0b3bff967",
+      "item": {
+        "type": "paragraph",
+        "id": "b0ed20f0b3bff967",
+        "text": "If you did it right, you should see Hello World!.\n\n"
+      },
+      "after": "aa85d3c2132f65b8",
+      "date": 1459806686561
+    },
+    {
+      "type": "edit",
+      "id": "aa85d3c2132f65b8",
+      "item": {
+        "type": "paragraph",
+        "id": "aa85d3c2132f65b8",
+        "text": "Then save the file to the folder:"
+      },
+      "date": 1459806693986
+    },
+    {
+      "type": "add",
+      "id": "677c36bc0c6e398c",
+      "item": {
+        "type": "paragraph",
+        "id": "677c36bc0c6e398c",
+        "text": " application/controllers/"
+      },
+      "after": "aa85d3c2132f65b8",
+      "date": 1459806699465
+    },
+    {
+      "type": "add",
+      "id": "cd5b2ac51fc4aedc",
+      "item": {
+        "type": "paragraph",
+        "id": "cd5b2ac51fc4aedc",
+        "text": "Now visit your site using a URL similar to this:"
+      },
+      "after": "677c36bc0c6e398c",
+      "date": 1459806705866
+    },
+    {
+      "type": "add",
+      "id": "22f9fae91cfc4d6e",
+      "item": {
+        "type": "paragraph",
+        "id": "22f9fae91cfc4d6e",
+        "text": "example.com/index.lc/blog/"
+      },
+      "after": "cd5b2ac51fc4aedc",
+      "date": 1459806709651
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "118d2ed31be7244c"
+      },
+      "after": "677c36bc0c6e398c",
+      "id": "118d2ed31be7244c",
+      "date": 1459806712766
+    },
+    {
+      "type": "remove",
+      "id": "677c36bc0c6e398c",
+      "date": 1459806715843
+    },
+    {
+      "type": "edit",
+      "id": "118d2ed31be7244c",
+      "item": {
+        "type": "code",
+        "id": "118d2ed31be7244c",
+        "text": "application/controllers/"
+      },
+      "date": 1459806720492
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "c21eea620b59e105"
+      },
+      "after": "cd5b2ac51fc4aedc",
+      "id": "c21eea620b59e105",
+      "date": 1459806726906
+    },
+    {
+      "type": "remove",
+      "id": "22f9fae91cfc4d6e",
+      "date": 1459806730947
+    },
+    {
+      "type": "edit",
+      "id": "c21eea620b59e105",
+      "item": {
+        "type": "code",
+        "id": "c21eea620b59e105",
+        "text": "example.com/index.lc/blog/"
+      },
+      "date": 1459806733901
+    },
+    {
+      "type": "edit",
+      "id": "4a4e3b7bef413098",
+      "item": {
+        "type": "markdown",
+        "id": "4a4e3b7bef413098",
+        "text": "# Let's try it:  [[Hello World!]]"
+      },
+      "date": 1459806763870
+    },
+    {
+      "type": "remove",
+      "id": "1d57d2f5a450798a",
+      "date": 1459806769981
+    },
+    {
+      "type": "remove",
+      "id": "3ab7ba40b951b794",
+      "date": 1459806772284
+    },
+    {
+      "type": "remove",
+      "id": "aa85d3c2132f65b8",
+      "date": 1459806774548
+    },
+    {
+      "type": "remove",
+      "id": "118d2ed31be7244c",
+      "date": 1459806777091
+    },
+    {
+      "type": "remove",
+      "id": "cd5b2ac51fc4aedc",
+      "date": 1459806779237
+    },
+    {
+      "type": "remove",
+      "id": "c21eea620b59e105",
+      "date": 1459806781709
+    },
+    {
+      "type": "remove",
+      "id": "b0ed20f0b3bff967",
+      "date": 1459806784061
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "cfdb9c8ffd2374dd"
+      },
+      "after": "4a4e3b7bef413098",
+      "id": "cfdb9c8ffd2374dd",
+      "date": 1459806786445
+    },
+    {
+      "type": "edit",
+      "id": "cfdb9c8ffd2374dd",
+      "item": {
+        "type": "reference",
+        "id": "cfdb9c8ffd2374dd",
+        "site": "revigniter.livecode.world",
+        "slug": "hello-world",
+        "title": "Hello World!",
+        "text": "Let's create a simple controller so you can see it in action. Using your text editor, create a file called blog.lc, and put the following code in it:"
+      },
+      "date": 1459806788419
+    },
+    {
+      "type": "edit",
+      "id": "4a4e3b7bef413098",
+      "item": {
+        "type": "markdown",
+        "id": "4a4e3b7bef413098",
+        "text": "# Let's try it:"
+      },
+      "date": 1459806795694
+    },
+    {
+      "type": "edit",
+      "id": "3719249937d8168b",
+      "item": {
+        "type": "markdown",
+        "id": "3719249937d8168b",
+        "text": "# [[Handlers]]"
+      },
+      "date": 1459806825774
+    },
+    {
+      "type": "remove",
+      "id": "e4e78a0e65c583f4",
+      "date": 1459806832222
+    },
+    {
+      "type": "edit",
+      "id": "7b028722318a4148",
+      "item": {
+        "type": "reference",
+        "id": "7b028722318a4148",
+        "site": "revigniter.livecode.world",
+        "slug": "handlers",
+        "title": "Handlers",
+        "text": "In the above example the handler name is index(). The \"index\" handler is always loaded by default if the second segment of the URI is empty. "
+      },
+      "date": 1459807819027
+    },
+    {
+      "type": "edit",
+      "id": "3719249937d8168b",
+      "item": {
+        "type": "markdown",
+        "id": "3719249937d8168b",
+        "text": "# See also"
+      },
+      "date": 1459807837588
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "af434a4f79a858c4",
+        "site": "revigniter.livecode.world",
+        "slug": "defining-a-default-controller",
+        "title": "Defining a Default Controller",
+        "text": "revIgniter can be told to load a default controller when a URI is not present, as will be the case when only your site root URL is requested."
+      },
+      "after": "7b028722318a4148",
+      "id": "af434a4f79a858c4",
+      "date": 1459807925030
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "e6d99ecd04806f7e",
+        "site": "revigniter.livecode.world",
+        "slug": "processing-output",
+        "title": "Processing Output",
+        "text": "revIgniter has an output library that takes care of sending your final rendered data to the web browser automatically. More information on this can be found in the Views and Output library pages. "
+      },
+      "after": "af434a4f79a858c4",
+      "id": "e6d99ecd04806f7e",
+      "date": 1459807932156
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "2233cc4259ce1537",
+        "site": "revigniter.livecode.world",
+        "slug": "organizing-controllers-into-sub-folders",
+        "title": "Organizing Controllers into Sub-folders",
+        "text": "If you are building a large application you might find it convenient to organize your controllers into sub-folders. revIgniter permits you to do this."
+      },
+      "after": "e6d99ecd04806f7e",
+      "id": "2233cc4259ce1537",
+      "date": 1459807937934
+    },
+    {
+      "type": "move",
+      "order": [
+        "0683043ef7880191",
+        "549ed459415b8c29",
+        "d879e113f1eb927b",
+        "e2b8364b215064e9",
+        "4a4e3b7bef413098",
+        "1b606bef930d24e2",
+        "a33648ce0ca145cd",
+        "d41bf15fc017de16",
+        "cfdb9c8ffd2374dd",
+        "3719249937d8168b",
+        "7b028722318a4148",
+        "af434a4f79a858c4",
+        "e6d99ecd04806f7e",
+        "2233cc4259ce1537"
+      ],
+      "id": "4a4e3b7bef413098",
+      "date": 1459807956273
+    },
+    {
+      "type": "move",
+      "order": [
+        "0683043ef7880191",
+        "549ed459415b8c29",
+        "d879e113f1eb927b",
+        "e2b8364b215064e9",
+        "4a4e3b7bef413098",
+        "cfdb9c8ffd2374dd",
+        "1b606bef930d24e2",
+        "a33648ce0ca145cd",
+        "d41bf15fc017de16",
+        "3719249937d8168b",
+        "7b028722318a4148",
+        "af434a4f79a858c4",
+        "e6d99ecd04806f7e",
+        "2233cc4259ce1537"
+      ],
+      "id": "cfdb9c8ffd2374dd",
+      "date": 1459807959158
+    },
+    {
+      "type": "edit",
+      "id": "e2b8364b215064e9",
+      "item": {
+        "type": "paragraph",
+        "id": "e2b8364b215064e9",
+        "text": "In the above example, revIgniter would attempt to find a controller named blog.lc and load it. When a controller's name matches the first segment of a URI, it will be loaded."
+      },
+      "date": 1459807986184
+    },
+    {
+      "type": "edit",
+      "id": "a33648ce0ca145cd",
+      "item": {
+        "type": "paragraph",
+        "id": "a33648ce0ca145cd",
+        "text": "It is good practice, though not mandatory, to load all needed libraries, models, helpers and plugins in a handler named after the controller itself. "
+      },
+      "date": 1459808006423
+    },
+    {
+      "type": "add",
+      "id": "08c3588a11987da9",
+      "item": {
+        "type": "paragraph",
+        "id": "08c3588a11987da9",
+        "text": "This handler, if present, is called first and automatically by the front controller. So, this is a good place to load required libraries, helpers, plugins, models, a database etc. "
+      },
+      "after": "a33648ce0ca145cd",
+      "date": 1459808016750
+    },
+    {
+      "type": "add",
+      "id": "e118c586b5d03443",
+      "item": {
+        "type": "paragraph",
+        "id": "e118c586b5d03443",
+        "text": "Let's say your controller is called \"blog.lc\", then your code would look like this:"
+      },
+      "after": "08c3588a11987da9",
+      "date": 1459808017376
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "87544a1fd6c9e57c"
+      },
+      "id": "87544a1fd6c9e57c",
+      "type": "add",
+      "after": "2233cc4259ce1537",
+      "date": 1459811114203
+    },
+    {
+      "type": "edit",
+      "id": "87544a1fd6c9e57c",
+      "item": {
+        "type": "reference",
+        "id": "87544a1fd6c9e57c",
+        "site": "revigniter.livecode.world",
+        "slug": "views",
+        "title": "Views",
+        "text": "A view is simply a web page, or a page fragment, like a header, footer, sidebar, etc. In fact, views can flexibly be embedded within other views (within other views, etc., etc.) if you need this type of hierarchy."
+      },
+      "date": 1459811121085
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote>\n<b style='color: purple'>Note: </b>Name conflicts\n<p>\nBe careful not to name the sub-folder the same as that of an existing controller, as the controller will take precedence and the subfolder route will be ignored.\n<p>\nFor instance if you have a sub-folder called \"feast\" and a controller called \"feast.lc\" then you need to rename the folder or controller in order not to confuse the routing."
+      },
+      "after": "d41bf15fc017de16",
+      "id": "cec79293b6479153",
+      "date": 1498213253829
+    },
+    {
+      "type": "edit",
+      "id": "3719249937d8168b",
+      "item": {
+        "type": "markdown",
+        "id": "3719249937d8168b",
+        "text": "# See also\n\n- [[Handlers]]\n- "
+      },
+      "date": 1498213286656
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Controllers]]\n- [[Defining a default controller]]\n- [[URI Routing]]"
+      },
+      "after": "cec79293b6479153",
+      "id": "3b41e912bafd4e09",
+      "date": 1498213288713
+    },
+    {
+      "type": "remove",
+      "id": "3719249937d8168b",
+      "date": 1498213292304
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[handlers]]\n- [[Controllers]]\n- [[Defining a default controller]]\n- [[URI Routing]]"
+      },
+      "date": 1498213302235
+    },
+    {
+      "type": "remove",
+      "id": "7b028722318a4148",
+      "date": 1498213305156
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Controllers]]\n- [[Defining a default controller]]\n- [[URI Routing]]"
+      },
+      "date": 1498213309487
+    },
+    {
+      "type": "remove",
+      "id": "af434a4f79a858c4",
+      "date": 1498213310682
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Controllers]]\n- [[URI Routing]]"
+      },
+      "date": 1498213341018
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Organizing Controllers into Sub-folders]]\n- [[Controllers]]\n- [[URI Routing]]"
+      },
+      "date": 1498213382728
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Organizing Controllers into Sub-folders]]\n- [[Controllers]]\n- [[Remapping Handler Calls]]\n- [[URI Routing]]"
+      },
+      "date": 1498213399986
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Organizing Controllers into Sub-folders]]\n- [[Controllers]]\n- [[Remapping Handler Calls]]\n- [[Private Handlers]]\n- [[URI Routing]]"
+      },
+      "date": 1498213416445
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Organizing Controllers into Sub-folders]]\n- [[Controllers]]\n- [[Remapping Handler Calls]]\n- [[Private Handlers]]\n- [[Reserved Handler Names]]\n- [[URI Routing]]"
+      },
+      "date": 1498213430876
+    },
+    {
+      "type": "remove",
+      "id": "e6d99ecd04806f7e",
+      "date": 1498213433427
+    },
+    {
+      "type": "remove",
+      "id": "2233cc4259ce1537",
+      "date": 1498213435755
+    },
+    {
+      "type": "remove",
+      "id": "87544a1fd6c9e57c",
+      "date": 1498213439891
+    },
+    {
+      "type": "edit",
+      "id": "3b41e912bafd4e09",
+      "item": {
+        "type": "markdown",
+        "id": "3b41e912bafd4e09",
+        "text": "# See also\n\n- [[Handlers]]\n- [[Defining a default controller]]\n- [[Processing Output]]\n- [[Organizing Controllers into Sub-folders]]\n- [[Views]]\n- [[Controllers]]\n- [[Remapping Handler Calls]]\n- [[Private Handlers]]\n- [[Reserved Handler Names]]\n- [[URI Routing]]"
+      },
+      "date": 1498213451302
+    }
+  ]
+}

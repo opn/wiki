@@ -1,0 +1,756 @@
+{
+  "title": "detailed look at wiki components",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "53d2d69374097220",
+      "text": "Several components collaborate to make this local wiki farm work.  Here we consider the parts and their interaction with the whole."
+    },
+    {
+      "text": "<img width=420 src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwcHQiIGhlaWdodD0iMzUwcHQiCiB2aWV3Qm94PSIw\nLjAwIDAuMDAgMjc5LjYyIDM0OS43NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMu\nb3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcv\nMTk5OS94bGluayI+CjxnIGlkPSJncmFwaDAiIGNsYXNzPSJncmFwaCIgdHJh\nbnNmb3JtPSJzY2FsZSgxIDEpIHJvdGF0ZSgwKSB0cmFuc2xhdGUoNCAzNDUu\nNzQpIj4KPHRpdGxlPiUzPC90aXRsZT4KPHBvbHlnb24gZmlsbD0id2hpdGUi\nIHN0cm9rZT0ibm9uZSIgcG9pbnRzPSItNCw0IC00LC0zNDUuNzQgMjc1LjYy\nMiwtMzQ1Ljc0IDI3NS42MjIsNCAtNCw0Ii8+CjwhLS0gQnJvd3NlciAtLT4K\nPGcgaWQ9Im5vZGUxIiBjbGFzcz0ibm9kZSI+PHRpdGxlPkJyb3dzZXI8L3Rp\ndGxlPgo8ZWxsaXBzZSBmaWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2si\nIGN4PSI4My40OTcxIiBjeT0iLTMyMy43NCIgcng9IjUwLjA5MTIiIHJ5PSIx\nOCIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI4My40OTcxIiB5\nPSItMzIwLjA0IiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6\nZT0iMTQuMDAiPkJyb3dzZXI8L3RleHQ+CjwvZz4KPCEtLSBETlMgLS0+Cjxn\nIGlkPSJub2RlMiIgY2xhc3M9Im5vZGUiPjx0aXRsZT5ETlM8L3RpdGxlPgo8\nZWxsaXBzZSBmaWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2siIGN4PSIz\nMi40OTcxIiBjeT0iLTI1MS43NCIgcng9IjMyLjQ5NDIiIHJ5PSIxOCIvPgo8\ndGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzMi40OTcxIiB5PSItMjQ4\nLjA0IiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6ZT0iMTQu\nMDAiPkROUzwvdGV4dD4KPC9nPgo8IS0tIEJyb3dzZXImIzQ1OyZndDtETlMg\nLS0+CjxnIGlkPSJlZGdlMSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Ccm93c2Vy\nJiM0NTsmZ3Q7RE5TPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tl\nPSJibGFjayIgZD0iTTcxLjQxMDgsLTMwNi4xNTFDNjUuMDMxOCwtMjk3LjM5\nNiA1Ny4wODcyLC0yODYuNDkxIDUwLjA0MjYsLTI3Ni44MjIiLz4KPHBvbHln\nb24gZmlsbD0iYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iNTIuODYz\nMSwtMjc0Ljc1IDQ0LjE0NTYsLTI2OC43MjggNDcuMjA1NCwtMjc4Ljg3MiA1\nMi44NjMxLC0yNzQuNzUiLz4KPC9nPgo8IS0tIGxvY2FsaG9zdCAtLT4KPGcg\naWQ9Im5vZGUzIiBjbGFzcz0ibm9kZSI+PHRpdGxlPmxvY2FsaG9zdDwvdGl0\nbGU+CjxlbGxpcHNlIGZpbGw9InBhbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIg\nY3g9IjEzNS40OTciIGN5PSItMjUxLjc0IiByeD0iNTIuNzkxMSIgcnk9IjE4\nIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEzNS40OTciIHk9\nIi0yNDguMDQiIGZvbnQtZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXpl\nPSIxNC4wMCI+bG9jYWxob3N0PC90ZXh0Pgo8L2c+CjwhLS0gQnJvd3NlciYj\nNDU7Jmd0O2xvY2FsaG9zdCAtLT4KPGcgaWQ9ImVkZ2UyIiBjbGFzcz0iZWRn\nZSI+PHRpdGxlPkJyb3dzZXImIzQ1OyZndDtsb2NhbGhvc3Q8L3RpdGxlPgo8\ncGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNrIiBkPSJNOTUuODIwNCwt\nMzA2LjE1MUMxMDIuMDc1LC0yOTcuNzMyIDEwOS44MDUsLTI4Ny4zMjUgMTE2\nLjc3NywtMjc3Ljk0MSIvPgo8cG9seWdvbiBmaWxsPSJibGFjayIgc3Ryb2tl\nPSJibGFjayIgcG9pbnRzPSIxMTkuNzQ3LC0yNzkuODExIDEyMi45MDEsLTI2\nOS42OTYgMTE0LjEyOCwtMjc1LjYzNyAxMTkuNzQ3LC0yNzkuODExIi8+Cjwv\nZz4KPCEtLSBEb2NrZXIgLS0+CjxnIGlkPSJub2RlNCIgY2xhc3M9Im5vZGUi\nPjx0aXRsZT5Eb2NrZXI8L3RpdGxlPgo8ZWxsaXBzZSBmaWxsPSJwYWxlR3Jl\nZW4iIHN0cm9rZT0iYmxhY2siIGN4PSIxMzUuNDk3IiBjeT0iLTE3OS43NCIg\ncng9IjQ0LjM5MyIgcnk9IjE4Ii8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRk\nbGUiIHg9IjEzNS40OTciIHk9Ii0xNzYuMDQiIGZvbnQtZmFtaWx5PSJUaW1l\ncyxzZXJpZiIgZm9udC1zaXplPSIxNC4wMCI+RG9ja2VyPC90ZXh0Pgo8L2c+\nCjwhLS0gbG9jYWxob3N0JiM0NTsmZ3Q7RG9ja2VyIC0tPgo8ZyBpZD0iZWRn\nZTMiIGNsYXNzPSJlZGdlIj48dGl0bGU+bG9jYWxob3N0JiM0NTsmZ3Q7RG9j\na2VyPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIg\nZD0iTTEzNS40OTcsLTIzMy40MzdDMTM1LjQ5NywtMjI1LjcyMyAxMzUuNDk3\nLC0yMTYuNDUzIDEzNS40OTcsLTIwNy44NTMiLz4KPHBvbHlnb24gZmlsbD0i\nYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iMTM4Ljk5NywtMjA3Ljg0\nNCAxMzUuNDk3LC0xOTcuODQ0IDEzMS45OTcsLTIwNy44NDQgMTM4Ljk5Nywt\nMjA3Ljg0NCIvPgo8L2c+CjwhLS0gUHJveHkgLS0+CjxnIGlkPSJub2RlNSIg\nY2xhc3M9Im5vZGUiPjx0aXRsZT5Qcm94eTwvdGl0bGU+CjxlbGxpcHNlIGZp\nbGw9InBhbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIgY3g9IjEzNS40OTciIGN5\nPSItMTA3Ljc0IiByeD0iMzcuODk0MyIgcnk9IjE4Ii8+Cjx0ZXh0IHRleHQt\nYW5jaG9yPSJtaWRkbGUiIHg9IjEzNS40OTciIHk9Ii0xMDQuMDQiIGZvbnQt\nZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXplPSIxNC4wMCI+UHJveHk8\nL3RleHQ+CjwvZz4KPCEtLSBEb2NrZXImIzQ1OyZndDtQcm94eSAtLT4KPGcg\naWQ9ImVkZ2U0IiBjbGFzcz0iZWRnZSI+PHRpdGxlPkRvY2tlciYjNDU7Jmd0\nO1Byb3h5PC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFj\nayIgZD0iTTEzNS40OTcsLTE2MS40MzdDMTM1LjQ5NywtMTUzLjcyMyAxMzUu\nNDk3LC0xNDQuNDUzIDEzNS40OTcsLTEzNS44NTMiLz4KPHBvbHlnb24gZmls\nbD0iYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iMTM4Ljk5NywtMTM1\nLjg0NCAxMzUuNDk3LC0xMjUuODQ0IDEzMS45OTcsLTEzNS44NDQgMTM4Ljk5\nNywtMTM1Ljg0NCIvPgo8L2c+CjwhLS0gRmFybSAtLT4KPGcgaWQ9Im5vZGU2\nIiBjbGFzcz0ibm9kZSI+PHRpdGxlPkZhcm08L3RpdGxlPgo8ZWxsaXBzZSBm\naWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2siIGN4PSI3MS40OTcxIiBj\neT0iLTI2Ljg3MDEiIHJ4PSIzNS4xOTQiIHJ5PSIxOCIvPgo8dGV4dCB0ZXh0\nLWFuY2hvcj0ibWlkZGxlIiB4PSI3MS40OTcxIiB5PSItMjMuMTcwMSIgZm9u\ndC1mYW1pbHk9IlRpbWVzLHNlcmlmIiBmb250LXNpemU9IjE0LjAwIj5GYXJt\nPC90ZXh0Pgo8L2c+CjwhLS0gRG9ja2VyJiM0NTsmZ3Q7RmFybSAtLT4KPGcg\naWQ9ImVkZ2U1IiBjbGFzcz0iZWRnZSI+PHRpdGxlPkRvY2tlciYjNDU7Jmd0\nO0Zhcm08L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNr\nIiBkPSJNMTE3LjExOSwtMTYyLjg3OEMxMDcuMDc2LC0xNTMuMTczIDk1LjMy\nNjIsLTEzOS45MjMgODguNDk3MSwtMTI1Ljc0IDc3Ljc3OTUsLTEwMy40ODEg\nNzMuNzMzNCwtNzUuNDg2OCA3Mi4yNDg0LC01NS4xNDY0Ii8+Cjxwb2x5Z29u\nIGZpbGw9ImJsYWNrIiBzdHJva2U9ImJsYWNrIiBwb2ludHM9Ijc1LjczMzUs\nLTU0Ljc4NDIgNzEuNjcyLC00NC45OTg5IDY4Ljc0NDgsLTU1LjE4MTMgNzUu\nNzMzNSwtNTQuNzg0MiIvPgo8L2c+CjwhLS0gSW1hZ2UKVHJhbnNwb3J0ZXIg\nLS0+CjxnIGlkPSJub2RlNyIgY2xhc3M9Im5vZGUiPjx0aXRsZT5JbWFnZQpU\ncmFuc3BvcnRlcjwvdGl0bGU+CjxlbGxpcHNlIGZpbGw9InBhbGVHcmVlbiIg\nc3Ryb2tlPSJibGFjayIgY3g9IjE5OS40OTciIGN5PSItMjYuODcwMSIgcng9\nIjcyLjI1IiByeT0iMjYuNzQwNyIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ibWlk\nZGxlIiB4PSIxOTkuNDk3IiB5PSItMzAuNjcwMSIgZm9udC1mYW1pbHk9IlRp\nbWVzLHNlcmlmIiBmb250LXNpemU9IjE0LjAwIj5JbWFnZTwvdGV4dD4KPHRl\neHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTk5LjQ5NyIgeT0iLTE1LjY3\nMDEiIGZvbnQtZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXplPSIxNC4w\nMCI+VHJhbnNwb3J0ZXI8L3RleHQ+CjwvZz4KPCEtLSBEb2NrZXImIzQ1OyZn\ndDtJbWFnZQpUcmFuc3BvcnRlciAtLT4KPGcgaWQ9ImVkZ2U2IiBjbGFzcz0i\nZWRnZSI+PHRpdGxlPkRvY2tlciYjNDU7Jmd0O0ltYWdlClRyYW5zcG9ydGVy\nPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgZD0i\nTTE1My44NzUsLTE2Mi44NzhDMTYzLjkxOCwtMTUzLjE3MyAxNzUuNjY4LC0x\nMzkuOTIzIDE4Mi40OTcsLTEyNS43NCAxOTEuNzEzLC0xMDYuNTk5IDE5NS45\nOTYsLTgzLjIxNjggMTk3Ljk2LC02NC4xMDc3Ii8+Cjxwb2x5Z29uIGZpbGw9\nImJsYWNrIiBzdHJva2U9ImJsYWNrIiBwb2ludHM9IjIwMS40NiwtNjQuMjQ3\nOSAxOTguODI4LC01My45ODUyIDE5NC40ODYsLTYzLjY0OTMgMjAxLjQ2LC02\nNC4yNDc5Ii8+CjwvZz4KPCEtLSBQcm94eSYjNDU7Jmd0O0Zhcm0gLS0+Cjxn\nIGlkPSJlZGdlNyIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Qcm94eSYjNDU7Jmd0\nO0Zhcm08L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNr\nIiBkPSJNMTIyLjU0NiwtOTAuNzc5NkMxMTMuNDM3LC03OS41NTQ4IDEwMS4w\nOTEsLTY0LjM0MDQgOTAuODIyNSwtNTEuNjg1NiIvPgo8cG9seWdvbiBmaWxs\nPSJibGFjayIgc3Ryb2tlPSJibGFjayIgcG9pbnRzPSI5My40NDgxLC00OS4z\nNjY2IDg0LjQyOTIsLTQzLjgwNjkgODguMDEyNSwtNTMuNzc3MyA5My40NDgx\nLC00OS4zNjY2Ii8+CjwvZz4KPCEtLSBQcm94eSYjNDU7Jmd0O0ltYWdlClRy\nYW5zcG9ydGVyIC0tPgo8ZyBpZD0iZWRnZTgiIGNsYXNzPSJlZGdlIj48dGl0\nbGU+UHJveHkmIzQ1OyZndDtJbWFnZQpUcmFuc3BvcnRlcjwvdGl0bGU+Cjxw\nYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iYmxhY2siIGQ9Ik0xNDguNDQ4LC05\nMC43Nzk2QzE1NS40OTIsLTgyLjA5OTMgMTY0LjQ3MiwtNzEuMDMzMyAxNzIu\nOTMsLTYwLjYxMDEiLz4KPHBvbHlnb24gZmlsbD0iYmxhY2siIHN0cm9rZT0i\nYmxhY2siIHBvaW50cz0iMTc1LjY3MiwtNjIuNzg1NCAxNzkuMjU1LC01Mi44\nMTQ5IDE3MC4yMzYsLTU4LjM3NDYgMTc1LjY3MiwtNjIuNzg1NCIvPgo8L2c+\nCjwvZz4KPC9zdmc+Cg==\n'>",
+      "type": "html",
+      "id": "51cb5e9186835610"
+    },
+    {
+      "type": "markdown",
+      "id": "f518a975f83015fa",
+      "text": "# Browser"
+    },
+    {
+      "type": "paragraph",
+      "id": "92ca1fcabe5023fb",
+      "text": "Your web browser is an essential component.  Most of your interaction with the local wiki farm will happen through your browser."
+    },
+    {
+      "type": "markdown",
+      "id": "16b885ed1c5bc57e",
+      "text": "# DNS (& especially localtest.me)"
+    },
+    {
+      "type": "paragraph",
+      "id": "e411ba330936d146",
+      "text": "When your browser asks The Net where to find \"localtest.me\", it replies, \"127.0.0.1\" also known as \"localhost\" which is right where you are: on your own computer."
+    },
+    {
+      "type": "markdown",
+      "id": "45391deb235e8b95",
+      "text": "# Docker & docker-compose"
+    },
+    {
+      "type": "paragraph",
+      "id": "12dfc7bf1cf584a4",
+      "text": "For our purposes, docker provides something like a simulation of a network within our laptop in which we run several services.  The docker-compose.yml config file allows us to describe the network services succinctly, and the docker-compose command allow us to type simpler instructions at the command line when we wish to control or interact with the admin side of these services. "
+    },
+    {
+      "type": "markdown",
+      "id": "17cca0019290635d",
+      "text": "# Proxy"
+    },
+    {
+      "type": "paragraph",
+      "id": "eec1e0d67ae80fda",
+      "text": "A reverse proxy server manages transport layer security (TLS) for our wiki. We use [https://caddyserver.com Caddy] configured with self-signed certificates in large part because the configuration is remarkably easy.  Including a reverse proxy also offers us a place to dispatch requests to adjacent services.  For example, Caddy sends requests for the image-transporter to that service, and sends all other requests to our wiki farm."
+    },
+    {
+      "type": "paragraph",
+      "id": "b60eae7bc5b6880e",
+      "text": "The configuration for our container is maintained at Github: [https://github.com/dobbs/proxy https://github.com/dobbs/proxy] and published at Dockerhub: [http://dockerhub.com/r/dobbs/proxy/ http://dockerhub.com/r/dobbs/proxy/]"
+    },
+    {
+      "type": "markdown",
+      "id": "30e40b8c1871d0d0",
+      "text": "# Farm"
+    },
+    {
+      "type": "paragraph",
+      "id": "2231a060357055c8",
+      "text": "The heart of our service is a federated wiki server configured to act as a farm using the friends security plugin."
+    },
+    {
+      "type": "paragraph",
+      "id": "9b596733902c0d76",
+      "text": "The configuration for our wiki container is also maintained at Github: [https://github.com/dobbs/farm https://github.com/dobbs/farm] and published at Dockerhub: [http://dockerhub.com/r/dobbs/farm/ http://dockerhub.com/r/dobbs/farm/]"
+    },
+    {
+      "type": "markdown",
+      "id": "8e216ab15a9b3d1e",
+      "text": "# Image Transporter"
+    },
+    {
+      "type": "paragraph",
+      "id": "09bacfa7ba6c6e34",
+      "text": "You can read [[About Transport Plugin]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "6c5eaeedccfa24c9",
+      "text": "The configuration for our image transporter is also maintained at Github: [https://github.com/dobbs/image-transporter https://github.com/dobbs/image-transporter] and published at Dockerhub: [http://dockerhub.com/r/dobbs/image-transporter http://dockerhub.com/r/dobbs/image-transporter]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "detailed look at wiki components",
+        "story": []
+      },
+      "date": 1501508094847
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "53d2d69374097220"
+      },
+      "id": "53d2d69374097220",
+      "type": "add",
+      "date": 1501508110897
+    },
+    {
+      "type": "edit",
+      "id": "53d2d69374097220",
+      "item": {
+        "type": "paragraph",
+        "id": "53d2d69374097220",
+        "text": "Several components collaborate to make this local wiki farm work.  Here we consider the parts and their interaction with the whole."
+      },
+      "date": 1501508313714
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "45391deb235e8b95"
+      },
+      "id": "45391deb235e8b95",
+      "type": "add",
+      "after": "53d2d69374097220",
+      "date": 1501508317531
+    },
+    {
+      "type": "edit",
+      "id": "45391deb235e8b95",
+      "item": {
+        "type": "markdown",
+        "id": "45391deb235e8b95",
+        "text": "# Docker"
+      },
+      "date": 1501508333561
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "12dfc7bf1cf584a4"
+      },
+      "id": "12dfc7bf1cf584a4",
+      "type": "add",
+      "after": "45391deb235e8b95",
+      "date": 1501508336287
+    },
+    {
+      "type": "edit",
+      "id": "12dfc7bf1cf584a4",
+      "item": {
+        "type": "paragraph",
+        "id": "12dfc7bf1cf584a4",
+        "text": "For our purposes, docker provides something like a simulation of a network within our laptop in which we run several services.  The docker-compose.yml config file allows us to describe the network services succinctly, and the docker-compose command allow us to type simpler instructions at the command line when we wish to control or interact with the admin side of these services. "
+      },
+      "date": 1501508710413
+    },
+    {
+      "type": "edit",
+      "id": "45391deb235e8b95",
+      "item": {
+        "type": "markdown",
+        "id": "45391deb235e8b95",
+        "text": "# Docker & docker-compose"
+      },
+      "date": 1501508717399
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17cca0019290635d"
+      },
+      "id": "17cca0019290635d",
+      "type": "add",
+      "after": "12dfc7bf1cf584a4",
+      "date": 1501508722306
+    },
+    {
+      "type": "edit",
+      "id": "17cca0019290635d",
+      "item": {
+        "type": "markdown",
+        "id": "17cca0019290635d",
+        "text": "# proxy"
+      },
+      "date": 1501508752809
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b60eae7bc5b6880e"
+      },
+      "id": "b60eae7bc5b6880e",
+      "type": "add",
+      "after": "17cca0019290635d",
+      "date": 1501508756870
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "30e40b8c1871d0d0"
+      },
+      "id": "30e40b8c1871d0d0",
+      "type": "add",
+      "after": "b60eae7bc5b6880e",
+      "date": 1501508759424
+    },
+    {
+      "type": "edit",
+      "id": "30e40b8c1871d0d0",
+      "item": {
+        "type": "markdown",
+        "id": "30e40b8c1871d0d0",
+        "text": "# farm"
+      },
+      "date": 1501508770245
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9b596733902c0d76"
+      },
+      "id": "9b596733902c0d76",
+      "type": "add",
+      "after": "30e40b8c1871d0d0",
+      "date": 1501508772815
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8e216ab15a9b3d1e"
+      },
+      "id": "8e216ab15a9b3d1e",
+      "type": "add",
+      "after": "9b596733902c0d76",
+      "date": 1501508775492
+    },
+    {
+      "type": "edit",
+      "id": "8e216ab15a9b3d1e",
+      "item": {
+        "type": "markdown",
+        "id": "8e216ab15a9b3d1e",
+        "text": "# image-transporter"
+      },
+      "date": 1501508786607
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "09bacfa7ba6c6e34"
+      },
+      "id": "09bacfa7ba6c6e34",
+      "type": "add",
+      "after": "8e216ab15a9b3d1e",
+      "date": 1501508788433
+    },
+    {
+      "type": "edit",
+      "id": "b60eae7bc5b6880e",
+      "item": {
+        "type": "paragraph",
+        "id": "b60eae7bc5b6880e",
+        "text": "Github: [https://github.com/dobbs/proxy]"
+      },
+      "date": 1501510308821
+    },
+    {
+      "type": "add",
+      "id": "afd04d986bddf359",
+      "item": {
+        "type": "paragraph",
+        "id": "afd04d986bddf359",
+        "text": "Dockerhub: [https://dockerhub.com/dobbs/proxy https://dockerhub.com/dobbs/proxy]"
+      },
+      "after": "b60eae7bc5b6880e",
+      "date": 1501510332147
+    },
+    {
+      "type": "edit",
+      "id": "b60eae7bc5b6880e",
+      "item": {
+        "type": "paragraph",
+        "id": "b60eae7bc5b6880e",
+        "text": "Github: [https://github.com/dobbs/proxy https://github.com/dobbs/proxy]"
+      },
+      "date": 1501510339401
+    },
+    {
+      "type": "edit",
+      "id": "afd04d986bddf359",
+      "item": {
+        "type": "paragraph",
+        "id": "afd04d986bddf359",
+        "text": "Dockerhub: [https://dockerhub.com/r/dobbs/proxy https://dockerhub.com/r/dobbs/proxy]"
+      },
+      "date": 1501510395775
+    },
+    {
+      "type": "edit",
+      "id": "afd04d986bddf359",
+      "item": {
+        "type": "paragraph",
+        "id": "afd04d986bddf359",
+        "text": "Dockerhub: [http://dockerhub.com/r/dobbs/proxy http://dockerhub.com/r/dobbs/proxy]"
+      },
+      "date": 1501510446381
+    },
+    {
+      "type": "add",
+      "id": "eec1e0d67ae80fda",
+      "item": {
+        "type": "paragraph",
+        "id": "eec1e0d67ae80fda",
+        "text": "A reverse proxy server manages TLS for our wiki. [https://caddyserver.io Caddy]"
+      },
+      "after": "17cca0019290635d",
+      "date": 1501510673525
+    },
+    {
+      "type": "edit",
+      "id": "eec1e0d67ae80fda",
+      "item": {
+        "type": "paragraph",
+        "id": "eec1e0d67ae80fda",
+        "text": "A reverse proxy server manages TLS for our wiki. [https://caddyserver.com Caddy]"
+      },
+      "date": 1501510704308
+    },
+    {
+      "type": "edit",
+      "id": "eec1e0d67ae80fda",
+      "item": {
+        "type": "paragraph",
+        "id": "eec1e0d67ae80fda",
+        "text": "A reverse proxy server manages transport layer security (TLS) for our wiki. We use [https://caddyserver.com Caddy] configured with self-signed certificates in large part because the configuration is remarkably easy."
+      },
+      "date": 1501510806657
+    },
+    {
+      "type": "edit",
+      "id": "eec1e0d67ae80fda",
+      "item": {
+        "type": "paragraph",
+        "id": "eec1e0d67ae80fda",
+        "text": "A reverse proxy server manages transport layer security (TLS) for our wiki. We use [https://caddyserver.com Caddy] configured with self-signed certificates in large part because the configuration is remarkably easy.  Including a reverse proxy also offers us a place to dispatch requests to adjacent services.  For example, Caddy sends requests for the image-transporter to that service, and sends all other requests to our wiki farm."
+      },
+      "date": 1501510959293
+    },
+    {
+      "type": "edit",
+      "id": "9b596733902c0d76",
+      "item": {
+        "type": "paragraph",
+        "id": "9b596733902c0d76",
+        "text": "Github: [https://github.com/dobbs/farm https://github.com/dobbs/farm]"
+      },
+      "date": 1501511059482
+    },
+    {
+      "type": "add",
+      "id": "d8436109a208cf74",
+      "item": {
+        "type": "paragraph",
+        "id": "d8436109a208cf74",
+        "text": "Dockerhub: [http://dockerhub.com/r/dobbs/farm/ http://dockerhub.com/r/dobbs/farm/]"
+      },
+      "after": "9b596733902c0d76",
+      "date": 1501511079232
+    },
+    {
+      "type": "edit",
+      "id": "afd04d986bddf359",
+      "item": {
+        "type": "paragraph",
+        "id": "afd04d986bddf359",
+        "text": "Dockerhub: [http://dockerhub.com/r/dobbs/proxy/ http://dockerhub.com/r/dobbs/proxy/]"
+      },
+      "date": 1501511090320
+    },
+    {
+      "type": "edit",
+      "id": "afd04d986bddf359",
+      "item": {
+        "type": "paragraph",
+        "id": "afd04d986bddf359",
+        "text": "Dockerhub: [https://dockerhub.com/r/dobbs/proxy/ https://dockerhub.com/r/dobbs/proxy/]"
+      },
+      "date": 1501511105861
+    },
+    {
+      "type": "edit",
+      "id": "afd04d986bddf359",
+      "item": {
+        "type": "paragraph",
+        "id": "afd04d986bddf359",
+        "text": "Dockerhub: [http://dockerhub.com/r/dobbs/proxy/ http://dockerhub.com/r/dobbs/proxy/]"
+      },
+      "date": 1501511120761
+    },
+    {
+      "type": "edit",
+      "id": "b60eae7bc5b6880e",
+      "item": {
+        "type": "paragraph",
+        "id": "b60eae7bc5b6880e",
+        "text": "The configuration for our container is maintained at Github: [https://github.com/dobbs/proxy https://github.com/dobbs/proxy] and published at"
+      },
+      "date": 1501511738028
+    },
+    {
+      "type": "remove",
+      "id": "afd04d986bddf359",
+      "date": 1501511746515
+    },
+    {
+      "type": "edit",
+      "id": "b60eae7bc5b6880e",
+      "item": {
+        "type": "paragraph",
+        "id": "b60eae7bc5b6880e",
+        "text": "The configuration for our container is maintained at Github: [https://github.com/dobbs/proxy https://github.com/dobbs/proxy] and published at Dockerhub: [http://dockerhub.com/r/dobbs/proxy/ http://dockerhub.com/r/dobbs/proxy/]"
+      },
+      "date": 1501511748115
+    },
+    {
+      "type": "add",
+      "id": "2231a060357055c8",
+      "item": {
+        "type": "paragraph",
+        "id": "2231a060357055c8",
+        "text": "The heart of our service is a federated wiki server configured to act as a farm using the friends security plugin."
+      },
+      "after": "30e40b8c1871d0d0",
+      "date": 1501511874441
+    },
+    {
+      "type": "edit",
+      "id": "9b596733902c0d76",
+      "item": {
+        "type": "paragraph",
+        "id": "9b596733902c0d76",
+        "text": "The configuration for our wiki container is also maintained at Github: [https://github.com/dobbs/farm https://github.com/dobbs/farm] and published at "
+      },
+      "date": 1501511911136
+    },
+    {
+      "type": "remove",
+      "id": "d8436109a208cf74",
+      "date": 1501511915097
+    },
+    {
+      "type": "edit",
+      "id": "9b596733902c0d76",
+      "item": {
+        "type": "paragraph",
+        "id": "9b596733902c0d76",
+        "text": "The configuration for our wiki container is also maintained at Github: [https://github.com/dobbs/farm https://github.com/dobbs/farm] and published at Dockerhub: [http://dockerhub.com/r/dobbs/farm/ http://dockerhub.com/r/dobbs/farm/]"
+      },
+      "date": 1501511919887
+    },
+    {
+      "type": "edit",
+      "id": "09bacfa7ba6c6e34",
+      "item": {
+        "type": "paragraph",
+        "id": "09bacfa7ba6c6e34",
+        "text": "You can read [About Transport Plugin]."
+      },
+      "date": 1501512139216
+    },
+    {
+      "type": "add",
+      "id": "6c5eaeedccfa24c9",
+      "item": {
+        "type": "paragraph",
+        "id": "6c5eaeedccfa24c9",
+        "text": "The configuration for our image transporter is als maintained at Github: [https://github.com/dobbs/image-transporter https://github.com/dobbs/image-transporter] and published at Dockerhub: [http://dockerhub.com/r/dobbs/image-transporter http://dockerhub.com/r/dobbs/image-transporter]"
+      },
+      "after": "09bacfa7ba6c6e34",
+      "date": 1501512215850
+    },
+    {
+      "type": "edit",
+      "id": "09bacfa7ba6c6e34",
+      "item": {
+        "type": "paragraph",
+        "id": "09bacfa7ba6c6e34",
+        "text": "You can read [[About Transport Plugin]]."
+      },
+      "date": 1501512246241
+    },
+    {
+      "type": "edit",
+      "id": "6c5eaeedccfa24c9",
+      "item": {
+        "type": "paragraph",
+        "id": "6c5eaeedccfa24c9",
+        "text": "The configuration for our image transporter is also maintained at Github: [https://github.com/dobbs/image-transporter https://github.com/dobbs/image-transporter] and published at Dockerhub: [http://dockerhub.com/r/dobbs/image-transporter http://dockerhub.com/r/dobbs/image-transporter]"
+      },
+      "date": 1501512747264
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "<img width=420 src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjc2cHQiIGhlaWdodD0iMjc4cHQiCiB2aWV3Qm94PSIw\nLjAwIDAuMDAgMjc1LjUwIDI3Ny43NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMu\nb3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcv\nMTk5OS94bGluayI+CjxnIGlkPSJncmFwaDAiIGNsYXNzPSJncmFwaCIgdHJh\nbnNmb3JtPSJzY2FsZSgxIDEpIHJvdGF0ZSgwKSB0cmFuc2xhdGUoNCAyNzMu\nNzQpIj4KPHRpdGxlPiUzPC90aXRsZT4KPHBvbHlnb24gZmlsbD0id2hpdGUi\nIHN0cm9rZT0ibm9uZSIgcG9pbnRzPSItNCw0IC00LC0yNzMuNzQgMjcxLjUw\nMSwtMjczLjc0IDI3MS41MDEsNCAtNCw0Ii8+CjwhLS0gQnJvd3NlciAtLT4K\nPGcgaWQ9Im5vZGUxIiBjbGFzcz0ibm9kZSI+PHRpdGxlPkJyb3dzZXI8L3Rp\ndGxlPgo8ZWxsaXBzZSBmaWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2si\nIGN4PSI4My40OTcxIiBjeT0iLTI1MS43NCIgcng9IjUwLjA5MTIiIHJ5PSIx\nOCIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI4My40OTcxIiB5\nPSItMjQ4LjA0IiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6\nZT0iMTQuMDAiPkJyb3dzZXI8L3RleHQ+CjwvZz4KPCEtLSBETlMgLS0+Cjxn\nIGlkPSJub2RlMiIgY2xhc3M9Im5vZGUiPjx0aXRsZT5ETlM8L3RpdGxlPgo8\nZWxsaXBzZSBmaWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2siIGN4PSIz\nMi40OTcxIiBjeT0iLTE3OS43NCIgcng9IjMyLjQ5NDIiIHJ5PSIxOCIvPgo8\ndGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzMi40OTcxIiB5PSItMTc2\nLjA0IiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6ZT0iMTQu\nMDAiPkROUzwvdGV4dD4KPC9nPgo8IS0tIEJyb3dzZXImIzQ1OyZndDtETlMg\nLS0+CjxnIGlkPSJlZGdlMSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Ccm93c2Vy\nJiM0NTsmZ3Q7RE5TPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tl\nPSJibGFjayIgZD0iTTcxLjQxMDgsLTIzNC4xNTFDNjUuMDMxOCwtMjI1LjM5\nNiA1Ny4wODcyLC0yMTQuNDkxIDUwLjA0MjYsLTIwNC44MjIiLz4KPHBvbHln\nb24gZmlsbD0iYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iNTIuODYz\nMSwtMjAyLjc1IDQ0LjE0NTYsLTE5Ni43MjggNDcuMjA1NCwtMjA2Ljg3MiA1\nMi44NjMxLC0yMDIuNzUiLz4KPC9nPgo8IS0tIGxvY2FsaG9zdCAtLT4KPGcg\naWQ9Im5vZGUzIiBjbGFzcz0ibm9kZSI+PHRpdGxlPmxvY2FsaG9zdDwvdGl0\nbGU+CjxlbGxpcHNlIGZpbGw9InBhbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIg\nY3g9IjEzNS40OTciIGN5PSItMTc5Ljc0IiByeD0iNTIuNzkxMSIgcnk9IjE4\nIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEzNS40OTciIHk9\nIi0xNzYuMDQiIGZvbnQtZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXpl\nPSIxNC4wMCI+bG9jYWxob3N0PC90ZXh0Pgo8L2c+CjwhLS0gQnJvd3NlciYj\nNDU7Jmd0O2xvY2FsaG9zdCAtLT4KPGcgaWQ9ImVkZ2UyIiBjbGFzcz0iZWRn\nZSI+PHRpdGxlPkJyb3dzZXImIzQ1OyZndDtsb2NhbGhvc3Q8L3RpdGxlPgo8\ncGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNrIiBkPSJNOTUuODIwNCwt\nMjM0LjE1MUMxMDIuMDc1LC0yMjUuNzMyIDEwOS44MDUsLTIxNS4zMjUgMTE2\nLjc3NywtMjA1Ljk0MSIvPgo8cG9seWdvbiBmaWxsPSJibGFjayIgc3Ryb2tl\nPSJibGFjayIgcG9pbnRzPSIxMTkuNzQ3LC0yMDcuODExIDEyMi45MDEsLTE5\nNy42OTYgMTE0LjEyOCwtMjAzLjYzNyAxMTkuNzQ3LC0yMDcuODExIi8+Cjwv\nZz4KPCEtLSBQcm94eSAtLT4KPGcgaWQ9Im5vZGU0IiBjbGFzcz0ibm9kZSI+\nPHRpdGxlPlByb3h5PC90aXRsZT4KPGVsbGlwc2UgZmlsbD0icGFsZUdyZWVu\nIiBzdHJva2U9ImJsYWNrIiBjeD0iMTM1LjQ5NyIgY3k9Ii0xMDcuNzQiIHJ4\nPSIzNy44OTQzIiByeT0iMTgiLz4KPHRleHQgdGV4dC1hbmNob3I9Im1pZGRs\nZSIgeD0iMTM1LjQ5NyIgeT0iLTEwNC4wNCIgZm9udC1mYW1pbHk9IlRpbWVz\nLHNlcmlmIiBmb250LXNpemU9IjE0LjAwIj5Qcm94eTwvdGV4dD4KPC9nPgo8\nIS0tIGxvY2FsaG9zdCYjNDU7Jmd0O1Byb3h5IC0tPgo8ZyBpZD0iZWRnZTMi\nIGNsYXNzPSJlZGdlIj48dGl0bGU+bG9jYWxob3N0JiM0NTsmZ3Q7UHJveHk8\nL3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNrIiBkPSJN\nMTM1LjQ5NywtMTYxLjQzN0MxMzUuNDk3LC0xNTMuNzIzIDEzNS40OTcsLTE0\nNC40NTMgMTM1LjQ5NywtMTM1Ljg1MyIvPgo8cG9seWdvbiBmaWxsPSJibGFj\nayIgc3Ryb2tlPSJibGFjayIgcG9pbnRzPSIxMzguOTk3LC0xMzUuODQ0IDEz\nNS40OTcsLTEyNS44NDQgMTMxLjk5NywtMTM1Ljg0NCAxMzguOTk3LC0xMzUu\nODQ0Ii8+CjwvZz4KPCEtLSBGYXJtIC0tPgo8ZyBpZD0ibm9kZTUiIGNsYXNz\nPSJub2RlIj48dGl0bGU+RmFybTwvdGl0bGU+CjxlbGxpcHNlIGZpbGw9InBh\nbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIgY3g9Ijc0LjQ5NzEiIGN5PSItMjYu\nODcwMSIgcng9IjM1LjE5NCIgcnk9IjE4Ii8+Cjx0ZXh0IHRleHQtYW5jaG9y\nPSJtaWRkbGUiIHg9Ijc0LjQ5NzEiIHk9Ii0yMy4xNzAxIiBmb250LWZhbWls\neT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiPkZhcm08L3RleHQ+\nCjwvZz4KPCEtLSBQcm94eSYjNDU7Jmd0O0Zhcm0gLS0+CjxnIGlkPSJlZGdl\nNCIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Qcm94eSYjNDU7Jmd0O0Zhcm08L3Rp\ndGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNrIiBkPSJNMTIy\nLjg1OCwtOTAuMzk4MkMxMTQuMjk1LC03OS4zMjY4IDEwMi44MzIsLTY0LjUw\nNTkgOTMuMjE1NywtNTIuMDcyMyIvPgo8cG9seWdvbiBmaWxsPSJibGFjayIg\nc3Ryb2tlPSJibGFjayIgcG9pbnRzPSI5NS43OTgsLTQ5LjY5MDEgODYuOTEx\nNSwtNDMuOTIxMiA5MC4yNjA4LC01My45NzI3IDk1Ljc5OCwtNDkuNjkwMSIv\nPgo8L2c+CjwhLS0gaW1hZ2UKdHJhbnNwb3J0ZXIgLS0+CjxnIGlkPSJub2Rl\nNiIgY2xhc3M9Im5vZGUiPjx0aXRsZT5pbWFnZQp0cmFuc3BvcnRlcjwvdGl0\nbGU+CjxlbGxpcHNlIGZpbGw9InBhbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIg\nY3g9IjE5Ny40OTciIGN5PSItMjYuODcwMSIgcng9IjcwLjAwNzEiIHJ5PSIy\nNi43NDA3Ii8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5Ny40\nOTciIHk9Ii0zMC42NzAxIiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZv\nbnQtc2l6ZT0iMTQuMDAiPmltYWdlPC90ZXh0Pgo8dGV4dCB0ZXh0LWFuY2hv\ncj0ibWlkZGxlIiB4PSIxOTcuNDk3IiB5PSItMTUuNjcwMSIgZm9udC1mYW1p\nbHk9IlRpbWVzLHNlcmlmIiBmb250LXNpemU9IjE0LjAwIj50cmFuc3BvcnRl\ncjwvdGV4dD4KPC9nPgo8IS0tIFByb3h5JiM0NTsmZ3Q7aW1hZ2UKdHJhbnNw\nb3J0ZXIgLS0+CjxnIGlkPSJlZGdlNSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Q\ncm94eSYjNDU7Jmd0O2ltYWdlCnRyYW5zcG9ydGVyPC90aXRsZT4KPHBhdGgg\nZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgZD0iTTE0OC4zNDQsLTkwLjM5\nODJDMTU1LjA2MSwtODEuODUzNiAxNjMuNTMzLC03MS4wNzU2IDE3MS41NDQs\nLTYwLjg4NTMiLz4KPHBvbHlnb24gZmlsbD0iYmxhY2siIHN0cm9rZT0iYmxh\nY2siIHBvaW50cz0iMTc0LjM5OCwtNjIuOTE3NSAxNzcuODI3LC01Mi44OTI4\nIDE2OC44OTUsLTU4LjU5MTQgMTc0LjM5OCwtNjIuOTE3NSIvPgo8L2c+Cjwv\nZz4KPC9zdmc+Cg==\n'>",
+        "type": "html",
+        "id": "b659260e53f5e3ea"
+      },
+      "after": "53d2d69374097220",
+      "id": "b659260e53f5e3ea",
+      "date": 1501513339006
+    },
+    {
+      "type": "remove",
+      "id": "b659260e53f5e3ea",
+      "date": 1501513380721
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "<img width=420 src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwcHQiIGhlaWdodD0iMzUwcHQiCiB2aWV3Qm94PSIw\nLjAwIDAuMDAgMjc5LjYyIDM0OS43NCIgeG1sbnM9Imh0dHA6Ly93d3cudzMu\nb3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcv\nMTk5OS94bGluayI+CjxnIGlkPSJncmFwaDAiIGNsYXNzPSJncmFwaCIgdHJh\nbnNmb3JtPSJzY2FsZSgxIDEpIHJvdGF0ZSgwKSB0cmFuc2xhdGUoNCAzNDUu\nNzQpIj4KPHRpdGxlPiUzPC90aXRsZT4KPHBvbHlnb24gZmlsbD0id2hpdGUi\nIHN0cm9rZT0ibm9uZSIgcG9pbnRzPSItNCw0IC00LC0zNDUuNzQgMjc1LjYy\nMiwtMzQ1Ljc0IDI3NS42MjIsNCAtNCw0Ii8+CjwhLS0gQnJvd3NlciAtLT4K\nPGcgaWQ9Im5vZGUxIiBjbGFzcz0ibm9kZSI+PHRpdGxlPkJyb3dzZXI8L3Rp\ndGxlPgo8ZWxsaXBzZSBmaWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2si\nIGN4PSI4My40OTcxIiBjeT0iLTMyMy43NCIgcng9IjUwLjA5MTIiIHJ5PSIx\nOCIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI4My40OTcxIiB5\nPSItMzIwLjA0IiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6\nZT0iMTQuMDAiPkJyb3dzZXI8L3RleHQ+CjwvZz4KPCEtLSBETlMgLS0+Cjxn\nIGlkPSJub2RlMiIgY2xhc3M9Im5vZGUiPjx0aXRsZT5ETlM8L3RpdGxlPgo8\nZWxsaXBzZSBmaWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2siIGN4PSIz\nMi40OTcxIiBjeT0iLTI1MS43NCIgcng9IjMyLjQ5NDIiIHJ5PSIxOCIvPgo8\ndGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzMi40OTcxIiB5PSItMjQ4\nLjA0IiBmb250LWZhbWlseT0iVGltZXMsc2VyaWYiIGZvbnQtc2l6ZT0iMTQu\nMDAiPkROUzwvdGV4dD4KPC9nPgo8IS0tIEJyb3dzZXImIzQ1OyZndDtETlMg\nLS0+CjxnIGlkPSJlZGdlMSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Ccm93c2Vy\nJiM0NTsmZ3Q7RE5TPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tl\nPSJibGFjayIgZD0iTTcxLjQxMDgsLTMwNi4xNTFDNjUuMDMxOCwtMjk3LjM5\nNiA1Ny4wODcyLC0yODYuNDkxIDUwLjA0MjYsLTI3Ni44MjIiLz4KPHBvbHln\nb24gZmlsbD0iYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iNTIuODYz\nMSwtMjc0Ljc1IDQ0LjE0NTYsLTI2OC43MjggNDcuMjA1NCwtMjc4Ljg3MiA1\nMi44NjMxLC0yNzQuNzUiLz4KPC9nPgo8IS0tIGxvY2FsaG9zdCAtLT4KPGcg\naWQ9Im5vZGUzIiBjbGFzcz0ibm9kZSI+PHRpdGxlPmxvY2FsaG9zdDwvdGl0\nbGU+CjxlbGxpcHNlIGZpbGw9InBhbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIg\nY3g9IjEzNS40OTciIGN5PSItMjUxLjc0IiByeD0iNTIuNzkxMSIgcnk9IjE4\nIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEzNS40OTciIHk9\nIi0yNDguMDQiIGZvbnQtZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXpl\nPSIxNC4wMCI+bG9jYWxob3N0PC90ZXh0Pgo8L2c+CjwhLS0gQnJvd3NlciYj\nNDU7Jmd0O2xvY2FsaG9zdCAtLT4KPGcgaWQ9ImVkZ2UyIiBjbGFzcz0iZWRn\nZSI+PHRpdGxlPkJyb3dzZXImIzQ1OyZndDtsb2NhbGhvc3Q8L3RpdGxlPgo8\ncGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNrIiBkPSJNOTUuODIwNCwt\nMzA2LjE1MUMxMDIuMDc1LC0yOTcuNzMyIDEwOS44MDUsLTI4Ny4zMjUgMTE2\nLjc3NywtMjc3Ljk0MSIvPgo8cG9seWdvbiBmaWxsPSJibGFjayIgc3Ryb2tl\nPSJibGFjayIgcG9pbnRzPSIxMTkuNzQ3LC0yNzkuODExIDEyMi45MDEsLTI2\nOS42OTYgMTE0LjEyOCwtMjc1LjYzNyAxMTkuNzQ3LC0yNzkuODExIi8+Cjwv\nZz4KPCEtLSBEb2NrZXIgLS0+CjxnIGlkPSJub2RlNCIgY2xhc3M9Im5vZGUi\nPjx0aXRsZT5Eb2NrZXI8L3RpdGxlPgo8ZWxsaXBzZSBmaWxsPSJwYWxlR3Jl\nZW4iIHN0cm9rZT0iYmxhY2siIGN4PSIxMzUuNDk3IiBjeT0iLTE3OS43NCIg\ncng9IjQ0LjM5MyIgcnk9IjE4Ii8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRk\nbGUiIHg9IjEzNS40OTciIHk9Ii0xNzYuMDQiIGZvbnQtZmFtaWx5PSJUaW1l\ncyxzZXJpZiIgZm9udC1zaXplPSIxNC4wMCI+RG9ja2VyPC90ZXh0Pgo8L2c+\nCjwhLS0gbG9jYWxob3N0JiM0NTsmZ3Q7RG9ja2VyIC0tPgo8ZyBpZD0iZWRn\nZTMiIGNsYXNzPSJlZGdlIj48dGl0bGU+bG9jYWxob3N0JiM0NTsmZ3Q7RG9j\na2VyPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIg\nZD0iTTEzNS40OTcsLTIzMy40MzdDMTM1LjQ5NywtMjI1LjcyMyAxMzUuNDk3\nLC0yMTYuNDUzIDEzNS40OTcsLTIwNy44NTMiLz4KPHBvbHlnb24gZmlsbD0i\nYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iMTM4Ljk5NywtMjA3Ljg0\nNCAxMzUuNDk3LC0xOTcuODQ0IDEzMS45OTcsLTIwNy44NDQgMTM4Ljk5Nywt\nMjA3Ljg0NCIvPgo8L2c+CjwhLS0gUHJveHkgLS0+CjxnIGlkPSJub2RlNSIg\nY2xhc3M9Im5vZGUiPjx0aXRsZT5Qcm94eTwvdGl0bGU+CjxlbGxpcHNlIGZp\nbGw9InBhbGVHcmVlbiIgc3Ryb2tlPSJibGFjayIgY3g9IjEzNS40OTciIGN5\nPSItMTA3Ljc0IiByeD0iMzcuODk0MyIgcnk9IjE4Ii8+Cjx0ZXh0IHRleHQt\nYW5jaG9yPSJtaWRkbGUiIHg9IjEzNS40OTciIHk9Ii0xMDQuMDQiIGZvbnQt\nZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXplPSIxNC4wMCI+UHJveHk8\nL3RleHQ+CjwvZz4KPCEtLSBEb2NrZXImIzQ1OyZndDtQcm94eSAtLT4KPGcg\naWQ9ImVkZ2U0IiBjbGFzcz0iZWRnZSI+PHRpdGxlPkRvY2tlciYjNDU7Jmd0\nO1Byb3h5PC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFj\nayIgZD0iTTEzNS40OTcsLTE2MS40MzdDMTM1LjQ5NywtMTUzLjcyMyAxMzUu\nNDk3LC0xNDQuNDUzIDEzNS40OTcsLTEzNS44NTMiLz4KPHBvbHlnb24gZmls\nbD0iYmxhY2siIHN0cm9rZT0iYmxhY2siIHBvaW50cz0iMTM4Ljk5NywtMTM1\nLjg0NCAxMzUuNDk3LC0xMjUuODQ0IDEzMS45OTcsLTEzNS44NDQgMTM4Ljk5\nNywtMTM1Ljg0NCIvPgo8L2c+CjwhLS0gRmFybSAtLT4KPGcgaWQ9Im5vZGU2\nIiBjbGFzcz0ibm9kZSI+PHRpdGxlPkZhcm08L3RpdGxlPgo8ZWxsaXBzZSBm\naWxsPSJwYWxlR3JlZW4iIHN0cm9rZT0iYmxhY2siIGN4PSI3MS40OTcxIiBj\neT0iLTI2Ljg3MDEiIHJ4PSIzNS4xOTQiIHJ5PSIxOCIvPgo8dGV4dCB0ZXh0\nLWFuY2hvcj0ibWlkZGxlIiB4PSI3MS40OTcxIiB5PSItMjMuMTcwMSIgZm9u\ndC1mYW1pbHk9IlRpbWVzLHNlcmlmIiBmb250LXNpemU9IjE0LjAwIj5GYXJt\nPC90ZXh0Pgo8L2c+CjwhLS0gRG9ja2VyJiM0NTsmZ3Q7RmFybSAtLT4KPGcg\naWQ9ImVkZ2U1IiBjbGFzcz0iZWRnZSI+PHRpdGxlPkRvY2tlciYjNDU7Jmd0\nO0Zhcm08L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNr\nIiBkPSJNMTE3LjExOSwtMTYyLjg3OEMxMDcuMDc2LC0xNTMuMTczIDk1LjMy\nNjIsLTEzOS45MjMgODguNDk3MSwtMTI1Ljc0IDc3Ljc3OTUsLTEwMy40ODEg\nNzMuNzMzNCwtNzUuNDg2OCA3Mi4yNDg0LC01NS4xNDY0Ii8+Cjxwb2x5Z29u\nIGZpbGw9ImJsYWNrIiBzdHJva2U9ImJsYWNrIiBwb2ludHM9Ijc1LjczMzUs\nLTU0Ljc4NDIgNzEuNjcyLC00NC45OTg5IDY4Ljc0NDgsLTU1LjE4MTMgNzUu\nNzMzNSwtNTQuNzg0MiIvPgo8L2c+CjwhLS0gSW1hZ2UKVHJhbnNwb3J0ZXIg\nLS0+CjxnIGlkPSJub2RlNyIgY2xhc3M9Im5vZGUiPjx0aXRsZT5JbWFnZQpU\ncmFuc3BvcnRlcjwvdGl0bGU+CjxlbGxpcHNlIGZpbGw9InBhbGVHcmVlbiIg\nc3Ryb2tlPSJibGFjayIgY3g9IjE5OS40OTciIGN5PSItMjYuODcwMSIgcng9\nIjcyLjI1IiByeT0iMjYuNzQwNyIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ibWlk\nZGxlIiB4PSIxOTkuNDk3IiB5PSItMzAuNjcwMSIgZm9udC1mYW1pbHk9IlRp\nbWVzLHNlcmlmIiBmb250LXNpemU9IjE0LjAwIj5JbWFnZTwvdGV4dD4KPHRl\neHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTk5LjQ5NyIgeT0iLTE1LjY3\nMDEiIGZvbnQtZmFtaWx5PSJUaW1lcyxzZXJpZiIgZm9udC1zaXplPSIxNC4w\nMCI+VHJhbnNwb3J0ZXI8L3RleHQ+CjwvZz4KPCEtLSBEb2NrZXImIzQ1OyZn\ndDtJbWFnZQpUcmFuc3BvcnRlciAtLT4KPGcgaWQ9ImVkZ2U2IiBjbGFzcz0i\nZWRnZSI+PHRpdGxlPkRvY2tlciYjNDU7Jmd0O0ltYWdlClRyYW5zcG9ydGVy\nPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgZD0i\nTTE1My44NzUsLTE2Mi44NzhDMTYzLjkxOCwtMTUzLjE3MyAxNzUuNjY4LC0x\nMzkuOTIzIDE4Mi40OTcsLTEyNS43NCAxOTEuNzEzLC0xMDYuNTk5IDE5NS45\nOTYsLTgzLjIxNjggMTk3Ljk2LC02NC4xMDc3Ii8+Cjxwb2x5Z29uIGZpbGw9\nImJsYWNrIiBzdHJva2U9ImJsYWNrIiBwb2ludHM9IjIwMS40NiwtNjQuMjQ3\nOSAxOTguODI4LC01My45ODUyIDE5NC40ODYsLTYzLjY0OTMgMjAxLjQ2LC02\nNC4yNDc5Ii8+CjwvZz4KPCEtLSBQcm94eSYjNDU7Jmd0O0Zhcm0gLS0+Cjxn\nIGlkPSJlZGdlNyIgY2xhc3M9ImVkZ2UiPjx0aXRsZT5Qcm94eSYjNDU7Jmd0\nO0Zhcm08L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNr\nIiBkPSJNMTIyLjU0NiwtOTAuNzc5NkMxMTMuNDM3LC03OS41NTQ4IDEwMS4w\nOTEsLTY0LjM0MDQgOTAuODIyNSwtNTEuNjg1NiIvPgo8cG9seWdvbiBmaWxs\nPSJibGFjayIgc3Ryb2tlPSJibGFjayIgcG9pbnRzPSI5My40NDgxLC00OS4z\nNjY2IDg0LjQyOTIsLTQzLjgwNjkgODguMDEyNSwtNTMuNzc3MyA5My40NDgx\nLC00OS4zNjY2Ii8+CjwvZz4KPCEtLSBQcm94eSYjNDU7Jmd0O0ltYWdlClRy\nYW5zcG9ydGVyIC0tPgo8ZyBpZD0iZWRnZTgiIGNsYXNzPSJlZGdlIj48dGl0\nbGU+UHJveHkmIzQ1OyZndDtJbWFnZQpUcmFuc3BvcnRlcjwvdGl0bGU+Cjxw\nYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iYmxhY2siIGQ9Ik0xNDguNDQ4LC05\nMC43Nzk2QzE1NS40OTIsLTgyLjA5OTMgMTY0LjQ3MiwtNzEuMDMzMyAxNzIu\nOTMsLTYwLjYxMDEiLz4KPHBvbHlnb24gZmlsbD0iYmxhY2siIHN0cm9rZT0i\nYmxhY2siIHBvaW50cz0iMTc1LjY3MiwtNjIuNzg1NCAxNzkuMjU1LC01Mi44\nMTQ5IDE3MC4yMzYsLTU4LjM3NDYgMTc1LjY3MiwtNjIuNzg1NCIvPgo8L2c+\nCjwvZz4KPC9zdmc+Cg==\n'>",
+        "type": "html",
+        "id": "51cb5e9186835610"
+      },
+      "after": "53d2d69374097220",
+      "id": "51cb5e9186835610",
+      "date": 1501513547997
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f518a975f83015fa"
+      },
+      "id": "f518a975f83015fa",
+      "type": "add",
+      "after": "6c5eaeedccfa24c9",
+      "date": 1501513620211
+    },
+    {
+      "type": "edit",
+      "id": "f518a975f83015fa",
+      "item": {
+        "type": "markdown",
+        "id": "f518a975f83015fa",
+        "text": "# browser"
+      },
+      "date": 1501513650377
+    },
+    {
+      "type": "move",
+      "order": [
+        "53d2d69374097220",
+        "51cb5e9186835610",
+        "f518a975f83015fa",
+        "45391deb235e8b95",
+        "12dfc7bf1cf584a4",
+        "17cca0019290635d",
+        "eec1e0d67ae80fda",
+        "b60eae7bc5b6880e",
+        "30e40b8c1871d0d0",
+        "2231a060357055c8",
+        "9b596733902c0d76",
+        "8e216ab15a9b3d1e",
+        "09bacfa7ba6c6e34",
+        "6c5eaeedccfa24c9"
+      ],
+      "id": "f518a975f83015fa",
+      "date": 1501513660236
+    },
+    {
+      "type": "edit",
+      "id": "f518a975f83015fa",
+      "item": {
+        "type": "markdown",
+        "id": "f518a975f83015fa",
+        "text": "# Browser"
+      },
+      "date": 1501513668417
+    },
+    {
+      "type": "edit",
+      "id": "17cca0019290635d",
+      "item": {
+        "type": "markdown",
+        "id": "17cca0019290635d",
+        "text": "# Proxy"
+      },
+      "date": 1501513672753
+    },
+    {
+      "type": "edit",
+      "id": "30e40b8c1871d0d0",
+      "item": {
+        "type": "markdown",
+        "id": "30e40b8c1871d0d0",
+        "text": "# Farm"
+      },
+      "date": 1501513677561
+    },
+    {
+      "type": "edit",
+      "id": "8e216ab15a9b3d1e",
+      "item": {
+        "type": "markdown",
+        "id": "8e216ab15a9b3d1e",
+        "text": "# Image Transporter"
+      },
+      "date": 1501513684288
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "92ca1fcabe5023fb"
+      },
+      "id": "92ca1fcabe5023fb",
+      "type": "add",
+      "after": "6c5eaeedccfa24c9",
+      "date": 1501513697473
+    },
+    {
+      "type": "move",
+      "order": [
+        "53d2d69374097220",
+        "51cb5e9186835610",
+        "f518a975f83015fa",
+        "92ca1fcabe5023fb",
+        "45391deb235e8b95",
+        "12dfc7bf1cf584a4",
+        "17cca0019290635d",
+        "eec1e0d67ae80fda",
+        "b60eae7bc5b6880e",
+        "30e40b8c1871d0d0",
+        "2231a060357055c8",
+        "9b596733902c0d76",
+        "8e216ab15a9b3d1e",
+        "09bacfa7ba6c6e34",
+        "6c5eaeedccfa24c9"
+      ],
+      "id": "92ca1fcabe5023fb",
+      "date": 1501513712445
+    },
+    {
+      "type": "edit",
+      "id": "92ca1fcabe5023fb",
+      "item": {
+        "type": "paragraph",
+        "id": "92ca1fcabe5023fb",
+        "text": "Your web browser is an essential component."
+      },
+      "date": 1501513865327
+    },
+    {
+      "type": "edit",
+      "id": "92ca1fcabe5023fb",
+      "item": {
+        "type": "paragraph",
+        "id": "92ca1fcabe5023fb",
+        "text": "Your web browser is an essential component.  Most of your interaction with the local wiki farm will happen through your browser."
+      },
+      "date": 1501513942870
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "16b885ed1c5bc57e"
+      },
+      "id": "16b885ed1c5bc57e",
+      "type": "add",
+      "after": "6c5eaeedccfa24c9",
+      "date": 1501514325410
+    },
+    {
+      "type": "edit",
+      "id": "16b885ed1c5bc57e",
+      "item": {
+        "type": "markdown",
+        "id": "16b885ed1c5bc57e",
+        "text": "# DNS (& especially localtest.me)"
+      },
+      "date": 1501514345504
+    },
+    {
+      "type": "move",
+      "order": [
+        "53d2d69374097220",
+        "51cb5e9186835610",
+        "f518a975f83015fa",
+        "92ca1fcabe5023fb",
+        "16b885ed1c5bc57e",
+        "45391deb235e8b95",
+        "12dfc7bf1cf584a4",
+        "17cca0019290635d",
+        "eec1e0d67ae80fda",
+        "b60eae7bc5b6880e",
+        "30e40b8c1871d0d0",
+        "2231a060357055c8",
+        "9b596733902c0d76",
+        "8e216ab15a9b3d1e",
+        "09bacfa7ba6c6e34",
+        "6c5eaeedccfa24c9"
+      ],
+      "id": "16b885ed1c5bc57e",
+      "date": 1501514356011
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e411ba330936d146"
+      },
+      "id": "e411ba330936d146",
+      "type": "add",
+      "after": "6c5eaeedccfa24c9",
+      "date": 1501514359402
+    },
+    {
+      "type": "move",
+      "order": [
+        "53d2d69374097220",
+        "51cb5e9186835610",
+        "f518a975f83015fa",
+        "92ca1fcabe5023fb",
+        "16b885ed1c5bc57e",
+        "e411ba330936d146",
+        "45391deb235e8b95",
+        "12dfc7bf1cf584a4",
+        "17cca0019290635d",
+        "eec1e0d67ae80fda",
+        "b60eae7bc5b6880e",
+        "30e40b8c1871d0d0",
+        "2231a060357055c8",
+        "9b596733902c0d76",
+        "8e216ab15a9b3d1e",
+        "09bacfa7ba6c6e34",
+        "6c5eaeedccfa24c9"
+      ],
+      "id": "e411ba330936d146",
+      "date": 1501514370660
+    },
+    {
+      "type": "edit",
+      "id": "e411ba330936d146",
+      "item": {
+        "type": "paragraph",
+        "id": "e411ba330936d146",
+        "text": "When your browser asks The Net where to find \"localtest.me\", it replies, \"127.0.0.1\" also known as \"localhost\" which is right where you are: on your own computer."
+      },
+      "date": 1501514640022
+    },
+    {
+      "type": "fork",
+      "site": "local-farm.wiki.dbbs.co",
+      "date": 1502996632218
+    }
+  ]
+}

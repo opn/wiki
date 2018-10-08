@@ -1,0 +1,750 @@
+{
+  "title": "DreamFactory Wiki",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "81138e1639a2f24c",
+      "text": "So the idea here is to see if we can get [[DreamFactory]] to fulfil the basic [[Fedwiki Server Requirements]], which essentially means serving json files, a favicon and a sitemap via HTTP GET."
+    },
+    {
+      "type": "markdown",
+      "id": "f50df8f4c29185f6",
+      "text": "# To do\n\n- [x] Add Favicon route to [[Nginx]]\n- [x] Point domains to IP adress (Trevor's droplet)\n- [x] Add [[CORS Headers for Wiki]]\n- [ ] [[DreamFactory IPFS Service]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]]\n- [ ] Explore [[DreamFactory Security]]\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "b138ddfe8f75db4f",
+      "text": "The core url's that DreamFactory must respond to in order to display wiki content (ie json files) are:"
+    },
+    {
+      "type": "code",
+      "id": "6b7531f6e508ca4c",
+      "text": "http://example.com/(slug).json\nhttp://example.com/favicon.png\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "a9c845504cf1ae03",
+      "text": "In addition, if the site is to be searchable and display links to newer, or later pages etc Dreamfactory must also serve a json sitemap under the following url:"
+    },
+    {
+      "type": "code",
+      "id": "c287d3e5f66294c2",
+      "text": "http://example.com/system/sitemap.json"
+    },
+    {
+      "type": "markdown",
+      "id": "f85ba11ef2700260",
+      "text": "# Loading wiki client"
+    },
+    {
+      "type": "paragraph",
+      "id": "79a14bfc9543cbda",
+      "text": "The above functionality will provide a readable wiki, that can full participate in the federation - all though it will not load the javascript wiki client when visiting the TLD for the first time. "
+    },
+    {
+      "type": "paragraph",
+      "id": "19a954a666f3fc50",
+      "text": "Therefore someone wanting to view the wiki content must first visit another wiki first to load the wiki client. from there on in, the wiki client will fetch [[json]] files using [[CORS]] based HTTP GET requests to whichever server it needs (for example the DreamFactory Wiki server."
+    },
+    {
+      "text": "<blockquote><b style='color:red'>Issue: </b>\n\nIt may not be possible to turn off all authentication for HTTP GET requests without simply getting [[Nginx]] to redirect. An api-key may be required in the url - see [http://community.dreamfactory.com/t/whitelisting-an-ip-or-domain-to-bypass-need-for-authorisation/2437 dreamfactory.com]\n<p>",
+      "id": "20084356ff8e69ce",
+      "type": "html"
+    },
+    {
+      "type": "html",
+      "id": "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+      "text": "<h3>DreamFacory Wiki Research</h3>\nBelow are a collection of links imported from [[OneTab]]. You can view these links here - [https://www.one-tab.com/page/I9P0cqsuROKAPDOQs1ldKA one-tab.com]:<p>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=wiki.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://wiki.dreamfactory.com/DreamFactory/Tutorials/Downloading_File'>Downloading File - DreamFactory</a></div>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=www.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://www.dreamfactory.com/resources/video/how-add-api-aliases-sql-fields'>How to Add API Aliases to SQL fields | DreamFactory</a></div>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=wiki.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://wiki.dreamfactory.com/DreamFactory/Tutorials/Using_field_aliases'>Using field aliases - DreamFactory</a></div>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=wiki.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://wiki.dreamfactory.com/DreamFactory/Features/Database/Schema'>Schema - DreamFactory</a></div>\n"
+    },
+    {
+      "type": "markdown",
+      "id": "f1c3dbf580816056",
+      "text": "# Plugins"
+    },
+    {
+      "type": "paragraph",
+      "id": "3ce8e0b81fe6eb76",
+      "text": "Non core wiki plugins would not be rendered with this setup however. This may not be a problem. However adding the functionality to serve the javascript needed for the wiki client to render paragraph items using a plugin is not much harder to achieve - see [[Fedwiki Server Requirements]]."
+    },
+    {
+      "type": "markdown",
+      "id": "14d455f967f4c258",
+      "text": "# Authoring wiki pages"
+    },
+    {
+      "type": "paragraph",
+      "id": "9b2c630e7b34a37c",
+      "text": "It is not proposed that the [[DreamFactory Wiki]] would allow the current fedwiki client to author wiki content. It would be a [[Read-only Wiki]] as far as the fedwiki client was concerned."
+    },
+    {
+      "type": "html",
+      "id": "cec79293b6479153",
+      "text": "<blockquote><b style='color: darkgreen'>Suggestion: </b><br>\nIt would be nice if the current wiki client was enhanced to display this in the browser - that is distinguish between read-only and writeable wiki's. "
+    },
+    {
+      "type": "paragraph",
+      "id": "f38a8da66d3828d4",
+      "text": "This functionality could have other uses. It would also allow the possibility of creating a link to alternative authoring platforms if they were available. DreamFactory Wiki for instance could offer it's own REST based authoring interface."
+    },
+    {
+      "type": "markdown",
+      "id": "ee0fd1ca89dc92c4",
+      "text": "# See also\n\n- [[Alternative Wiki View]]\n- [[Nginx]]\n- [[DevOps]]\n- [[Custom CSS]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "DreamFactory Wiki",
+        "story": []
+      },
+      "date": 1501768192636
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "81138e1639a2f24c"
+      },
+      "id": "81138e1639a2f24c",
+      "type": "add",
+      "date": 1501768193697
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+        "text": "<h3>DreamFacory Wiki Research</h3>\nBelow are a collection of links imported from [[OneTab]]. You can view these links here - [https://www.one-tab.com/page/I9P0cqsuROKAPDOQs1ldKA one-tab.com]:<p>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=wiki.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://wiki.dreamfactory.com/DreamFactory/Tutorials/Downloading_File'>Downloading File - DreamFactory</a></div>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=www.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://www.dreamfactory.com/resources/video/how-add-api-aliases-sql-fields'>How to Add API Aliases to SQL fields | DreamFactory</a></div>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=wiki.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://wiki.dreamfactory.com/DreamFactory/Tutorials/Using_field_aliases'>Using field aliases - DreamFactory</a></div>\n<div style='padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;'><img src='https://www.google.com/s2/favicons?domain=wiki.dreamfactory.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://wiki.dreamfactory.com/DreamFactory/Features/Database/Schema'>Schema - DreamFactory</a></div>\n"
+      },
+      "after": "81138e1639a2f24c",
+      "id": "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+      "date": 1501768237600
+    },
+    {
+      "type": "edit",
+      "id": "81138e1639a2f24c",
+      "item": {
+        "type": "paragraph",
+        "id": "81138e1639a2f24c",
+        "text": "So the idea here is to see if we can get [[DreamFactory]] to fulfil the basic [[Fedwiki Server Requirements]]."
+      },
+      "date": 1501768288111
+    },
+    {
+      "type": "edit",
+      "id": "81138e1639a2f24c",
+      "item": {
+        "type": "paragraph",
+        "id": "81138e1639a2f24c",
+        "text": "So the idea here is to see if we can get [[DreamFactory]] to fulfil the basic [[Fedwiki Server Requirements]], which essentially means serving json files, a favicon and a sitemap via HTTP GET."
+      },
+      "date": 1501768326352
+    },
+    {
+      "type": "add",
+      "id": "b138ddfe8f75db4f",
+      "item": {
+        "type": "paragraph",
+        "id": "b138ddfe8f75db4f",
+        "text": "The core url's that DreamFactory must respond to are:"
+      },
+      "after": "81138e1639a2f24c",
+      "date": 1501768365520
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3aeefce07ae7281a",
+        "text": "To be read from a link a site must serve:"
+      },
+      "after": "b138ddfe8f75db4f",
+      "id": "3aeefce07ae7281a",
+      "date": 1501768371852
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6b7531f6e508ca4c",
+        "text": "http://example.com/(slug).json\nhttp://example.com/favicon.png\n"
+      },
+      "after": "3aeefce07ae7281a",
+      "id": "6b7531f6e508ca4c",
+      "date": 1501768373760
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "a9c845504cf1ae03",
+        "text": "To be searched a site must serve:"
+      },
+      "after": "6b7531f6e508ca4c",
+      "id": "a9c845504cf1ae03",
+      "date": 1501768375998
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "c287d3e5f66294c2",
+        "text": "http://example.com/system/sitemap.json"
+      },
+      "after": "a9c845504cf1ae03",
+      "id": "c287d3e5f66294c2",
+      "date": 1501768378680
+    },
+    {
+      "type": "remove",
+      "id": "3aeefce07ae7281a",
+      "date": 1501768479445
+    },
+    {
+      "type": "edit",
+      "id": "b138ddfe8f75db4f",
+      "item": {
+        "type": "paragraph",
+        "id": "b138ddfe8f75db4f",
+        "text": "The core url's that DreamFactory must respond to in order to display wiki content (ie json files) are:"
+      },
+      "date": 1501768524639
+    },
+    {
+      "type": "edit",
+      "id": "a9c845504cf1ae03",
+      "item": {
+        "type": "paragraph",
+        "id": "a9c845504cf1ae03",
+        "text": "In addition, if the site is to be searchable and display links to newer, or later pages etc Dreamfactory must also serve a json sitemap under the following url:"
+      },
+      "date": 1501768596646
+    },
+    {
+      "type": "add",
+      "id": "f85ba11ef2700260",
+      "item": {
+        "type": "paragraph",
+        "id": "f85ba11ef2700260",
+        "text": "The above functionality will provide a readable wiki, that can full participate in the federation - all though it will not load the javascript wiki client when visiting the TLD for the first time. "
+      },
+      "after": "a9c845504cf1ae03",
+      "date": 1501768719755
+    },
+    {
+      "type": "add",
+      "id": "19a954a666f3fc50",
+      "item": {
+        "type": "paragraph",
+        "id": "19a954a666f3fc50",
+        "text": "Therefore someone wanting to view the wiki content must first visit another wiki first to load the wiki client. from there on in, the wiki client will fetch [[json]] files using [[CORS]] based HTTP GET requests to whichever server it needs (for example the DreamFactory Wiki server."
+      },
+      "after": "f85ba11ef2700260",
+      "date": 1501768796460
+    },
+    {
+      "type": "move",
+      "order": [
+        "81138e1639a2f24c",
+        "b138ddfe8f75db4f",
+        "6b7531f6e508ca4c",
+        "a9c845504cf1ae03",
+        "f85ba11ef2700260",
+        "c287d3e5f66294c2",
+        "19a954a666f3fc50",
+        "625cd2b8-b3d1-4e8c-b45d-969691a004de"
+      ],
+      "id": "c287d3e5f66294c2",
+      "date": 1501768798218
+    },
+    {
+      "type": "add",
+      "id": "f1c3dbf580816056",
+      "item": {
+        "type": "paragraph",
+        "id": "f1c3dbf580816056",
+        "text": "# Plugins"
+      },
+      "after": "19a954a666f3fc50",
+      "date": 1501768901200
+    },
+    {
+      "type": "add",
+      "id": "3ce8e0b81fe6eb76",
+      "item": {
+        "type": "paragraph",
+        "id": "3ce8e0b81fe6eb76",
+        "text": "Non core wiki plugins would not be rendered with this setup however. This may not be a problem. However adding the functionality to serve the javascript needed for the wiki client to render paragraph items using a plugin is not much harder to achieve - see ."
+      },
+      "after": "f1c3dbf580816056",
+      "date": 1501769009848
+    },
+    {
+      "type": "edit",
+      "id": "f1c3dbf580816056",
+      "item": {
+        "type": "markdown",
+        "id": "f1c3dbf580816056",
+        "text": "# Plugins"
+      },
+      "date": 1501769016289
+    },
+    {
+      "type": "edit",
+      "id": "3ce8e0b81fe6eb76",
+      "item": {
+        "type": "paragraph",
+        "id": "3ce8e0b81fe6eb76",
+        "text": "Non core wiki plugins would not be rendered with this setup however. This may not be a problem. However adding the functionality to serve the javascript needed for the wiki client to render paragraph items using a plugin is not much harder to achieve - see [[Fedwiki Server Requirements]]."
+      },
+      "date": 1501769024708
+    },
+    {
+      "type": "add",
+      "id": "14d455f967f4c258",
+      "item": {
+        "type": "paragraph",
+        "id": "14d455f967f4c258",
+        "text": "# Authoring wiki pages"
+      },
+      "after": "3ce8e0b81fe6eb76",
+      "date": 1501769036548
+    },
+    {
+      "type": "add",
+      "id": "9b2c630e7b34a37c",
+      "item": {
+        "type": "paragraph",
+        "id": "9b2c630e7b34a37c",
+        "text": "It is not proposed that the [[DreamFactory Wiki]] would allow the current fedwiki client to author wiki content. It would be a [[Read-only Wiki]] as far as the fedwiki client was concerned."
+      },
+      "after": "14d455f967f4c258",
+      "date": 1501769118382
+    },
+    {
+      "type": "edit",
+      "id": "14d455f967f4c258",
+      "item": {
+        "type": "markdown",
+        "id": "14d455f967f4c258",
+        "text": "# Authoring wiki pages"
+      },
+      "date": 1501769124722
+    },
+    {
+      "type": "add",
+      "id": "4ecd0b4aefdf1a34",
+      "item": {
+        "type": "paragraph",
+        "id": "4ecd0b4aefdf1a34",
+        "text": "It would be nice if the current wiki client was enhanced to display this in the browser - that is distinguish between read-only and writeable wiki's. "
+      },
+      "after": "9b2c630e7b34a37c",
+      "date": 1501769186571
+    },
+    {
+      "type": "add",
+      "id": "f38a8da66d3828d4",
+      "item": {
+        "type": "paragraph",
+        "id": "f38a8da66d3828d4",
+        "text": "This functionality could have other uses. It would also allow the possibility of creating a link to alternative authoring platforms if they were available. DreamFactory Wiki for instance could offer it's own REST based authoring interface."
+      },
+      "after": "4ecd0b4aefdf1a34",
+      "date": 1501769249387
+    },
+    {
+      "type": "add",
+      "id": "70a533b82baef588",
+      "item": {
+        "type": "paragraph",
+        "id": "70a533b82baef588",
+        "text": "http://community.dreamfactory.com/t/whitelisting-an-ip-or-domain-to-bypass-need-for-authorisation/2437"
+      },
+      "after": "19a954a666f3fc50",
+      "date": 1501769875965
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "<blockquote><b style='color:red'>Issue: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "after": "19a954a666f3fc50",
+      "id": "20084356ff8e69ce",
+      "date": 1501770049088
+    },
+    {
+      "type": "remove",
+      "id": "70a533b82baef588",
+      "date": 1501770052785
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "text": "<blockquote><b style='color:red'>Issue: </b>\n\nIt may not be possible to turn off all authentication for HTTP GET requests without simply getting [[Nginx]] to redirect. An api-key may be required in the url - see [http://community.dreamfactory.com/t/whitelisting-an-ip-or-domain-to-bypass-need-for-authorisation/2437 dreamfactory.com]\n<p>",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "date": 1501770127692
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote><b style='color: darkgreen'>Suggestion: </b><br>\n<ul>\n<li> [[Testability and code re-use]]\n<li> [[Automatic Testing]]"
+      },
+      "after": "9b2c630e7b34a37c",
+      "id": "cec79293b6479153",
+      "date": 1501770139766
+    },
+    {
+      "type": "remove",
+      "id": "4ecd0b4aefdf1a34",
+      "date": 1501770143228
+    },
+    {
+      "type": "edit",
+      "id": "cec79293b6479153",
+      "item": {
+        "type": "html",
+        "id": "cec79293b6479153",
+        "text": "<blockquote><b style='color: darkgreen'>Suggestion: </b><br>\nIt would be nice if the current wiki client was enhanced to display this in the browser - that is distinguish between read-only and writeable wiki's. "
+      },
+      "date": 1501770148972
+    },
+    {
+      "type": "add",
+      "id": "ee0fd1ca89dc92c4",
+      "item": {
+        "type": "paragraph",
+        "id": "ee0fd1ca89dc92c4",
+        "text": "# See also"
+      },
+      "after": "f38a8da66d3828d4",
+      "date": 1501770184743
+    },
+    {
+      "type": "edit",
+      "id": "ee0fd1ca89dc92c4",
+      "item": {
+        "type": "markdown",
+        "id": "ee0fd1ca89dc92c4",
+        "text": "# See also"
+      },
+      "date": 1501770187672
+    },
+    {
+      "type": "edit",
+      "id": "ee0fd1ca89dc92c4",
+      "item": {
+        "type": "markdown",
+        "id": "ee0fd1ca89dc92c4",
+        "text": "# See also\n\n- [[Alternative Wiki View]]\n- [[Nginx]]\n- [[DevOps]]"
+      },
+      "date": 1501770260055
+    },
+    {
+      "type": "move",
+      "order": [
+        "81138e1639a2f24c",
+        "b138ddfe8f75db4f",
+        "6b7531f6e508ca4c",
+        "a9c845504cf1ae03",
+        "f85ba11ef2700260",
+        "c287d3e5f66294c2",
+        "19a954a666f3fc50",
+        "20084356ff8e69ce",
+        "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+        "f1c3dbf580816056",
+        "3ce8e0b81fe6eb76",
+        "14d455f967f4c258",
+        "9b2c630e7b34a37c",
+        "cec79293b6479153",
+        "f38a8da66d3828d4",
+        "ee0fd1ca89dc92c4"
+      ],
+      "id": "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+      "date": 1501771311914
+    },
+    {
+      "type": "add",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "paragraph",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do"
+      },
+      "after": "19a954a666f3fc50",
+      "date": 1502199909796
+    },
+    {
+      "type": "move",
+      "order": [
+        "81138e1639a2f24c",
+        "b138ddfe8f75db4f",
+        "6b7531f6e508ca4c",
+        "a9c845504cf1ae03",
+        "f85ba11ef2700260",
+        "c287d3e5f66294c2",
+        "19a954a666f3fc50",
+        "20084356ff8e69ce",
+        "f50df8f4c29185f6",
+        "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+        "f1c3dbf580816056",
+        "3ce8e0b81fe6eb76",
+        "14d455f967f4c258",
+        "9b2c630e7b34a37c",
+        "cec79293b6479153",
+        "f38a8da66d3828d4",
+        "ee0fd1ca89dc92c4"
+      ],
+      "id": "f50df8f4c29185f6",
+      "date": 1502199929712
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do"
+      },
+      "date": 1502199948646
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [ ] Add Favicon route to [[Nginx]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy Livecode Server behind Nginx"
+      },
+      "date": 1502200097791
+    },
+    {
+      "type": "move",
+      "order": [
+        "81138e1639a2f24c",
+        "f50df8f4c29185f6",
+        "b138ddfe8f75db4f",
+        "6b7531f6e508ca4c",
+        "a9c845504cf1ae03",
+        "f85ba11ef2700260",
+        "c287d3e5f66294c2",
+        "19a954a666f3fc50",
+        "20084356ff8e69ce",
+        "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+        "f1c3dbf580816056",
+        "3ce8e0b81fe6eb76",
+        "14d455f967f4c258",
+        "9b2c630e7b34a37c",
+        "cec79293b6479153",
+        "f38a8da66d3828d4",
+        "ee0fd1ca89dc92c4"
+      ],
+      "id": "f50df8f4c29185f6",
+      "date": 1502200104048
+    },
+    {
+      "type": "move",
+      "order": [
+        "81138e1639a2f24c",
+        "f50df8f4c29185f6",
+        "b138ddfe8f75db4f",
+        "6b7531f6e508ca4c",
+        "a9c845504cf1ae03",
+        "c287d3e5f66294c2",
+        "f85ba11ef2700260",
+        "19a954a666f3fc50",
+        "20084356ff8e69ce",
+        "625cd2b8-b3d1-4e8c-b45d-969691a004de",
+        "f1c3dbf580816056",
+        "3ce8e0b81fe6eb76",
+        "14d455f967f4c258",
+        "9b2c630e7b34a37c",
+        "cec79293b6479153",
+        "f38a8da66d3828d4",
+        "ee0fd1ca89dc92c4"
+      ],
+      "id": "c287d3e5f66294c2",
+      "date": 1502200121879
+    },
+    {
+      "type": "edit",
+      "id": "f85ba11ef2700260",
+      "item": {
+        "type": "paragraph",
+        "id": "f85ba11ef2700260",
+        "text": "# Loaind wiki client"
+      },
+      "date": 1502200146474
+    },
+    {
+      "type": "add",
+      "id": "79a14bfc9543cbda",
+      "item": {
+        "type": "paragraph",
+        "id": "79a14bfc9543cbda",
+        "text": "The above functionality will provide a readable wiki, that can full participate in the federation - all though it will not load the javascript wiki client when visiting the TLD for the first time. "
+      },
+      "after": "f85ba11ef2700260",
+      "date": 1502200148311
+    },
+    {
+      "type": "edit",
+      "id": "f85ba11ef2700260",
+      "item": {
+        "type": "paragraph",
+        "id": "f85ba11ef2700260",
+        "text": "# Loading wiki client"
+      },
+      "date": 1502200154001
+    },
+    {
+      "type": "edit",
+      "id": "f85ba11ef2700260",
+      "item": {
+        "type": "markdown",
+        "id": "f85ba11ef2700260",
+        "text": "# Loading wiki client"
+      },
+      "date": 1502200155083
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [ ] Add Favicon route to [[Nginx]]\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy Livecode Server behind Nginx"
+      },
+      "date": 1502200211737
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [ ] Add Favicon route to [[Nginx]]\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx"
+      },
+      "date": 1502200225753
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [ ] Add Favicon route to [[Nginx]]\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] Explore [[DreamFactory Security]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]] "
+      },
+      "date": 1502222564535
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [x] Add Favicon route to [[Nginx]]\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] Explore [[DreamFactory Security]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]] "
+      },
+      "date": 1502267915278
+    },
+    {
+      "type": "add",
+      "id": "71ab0063cd65200c",
+      "item": {
+        "type": "paragraph",
+        "id": "71ab0063cd65200c",
+        "text": "# Working on- [[Trevor's Activity]]- [[DreamFactory Wiki Files]]"
+      },
+      "after": "81138e1639a2f24c",
+      "date": 1502267961312
+    },
+    {
+      "type": "edit",
+      "id": "71ab0063cd65200c",
+      "item": {
+        "type": "markdown",
+        "id": "71ab0063cd65200c",
+        "text": "# Working on- [[Trevor's Activity]]- [[DreamFactory Wiki Files]]"
+      },
+      "date": 1502267962634
+    },
+    {
+      "type": "edit",
+      "id": "71ab0063cd65200c",
+      "item": {
+        "type": "markdown",
+        "id": "71ab0063cd65200c",
+        "text": "# Working on\n\n- [[Trevor's Activity]]\n- [[DreamFactory Wiki Files]]"
+      },
+      "date": 1502267969640
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [x] Add Favicon route to [[Nginx]]\n- [x] Point domains to IP adress (Trevor's droplet)\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] Explore [[DreamFactory Security]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]] "
+      },
+      "date": 1502271398784
+    },
+    {
+      "type": "edit",
+      "id": "ee0fd1ca89dc92c4",
+      "item": {
+        "type": "markdown",
+        "id": "ee0fd1ca89dc92c4",
+        "text": "# See also\n\n- [[Alternative Wiki View]]\n- [[Nginx]]\n- [[DevOps]]\n- [[Custom CSS]]"
+      },
+      "date": 1502355796893
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [x] Add Favicon route to [[Nginx]]\n- [x] Point domains to IP adress (Trevor's droplet)\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] [[DreamFactory IPFS Services]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]]\n- [ ] Explore [[DreamFactory Security]]\n"
+      },
+      "date": 1502375027182
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [x] Add Favicon route to [[Nginx]]\n- [x] Point domains to IP adress (Trevor's droplet)\n- [ ] Add [[CORS Headers for Wiki]]\n- [ ] [[DreamFactory IPFS Service]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]]\n- [ ] Explore [[DreamFactory Security]]\n"
+      },
+      "date": 1502375087807
+    },
+    {
+      "type": "edit",
+      "id": "f50df8f4c29185f6",
+      "item": {
+        "type": "markdown",
+        "id": "f50df8f4c29185f6",
+        "text": "# To do\n\n- [x] Add Favicon route to [[Nginx]]\n- [x] Point domains to IP adress (Trevor's droplet)\n- [x] Add [[CORS Headers for Wiki]]\n- [ ] [[DreamFactory IPFS Service]]\n- [ ] Add [[Let's Encrypt]] certificate\n- [ ] Proxy [[Livecode Server]] behind Nginx\n- [ ] [[DreamWiki using Dockers]]\n- [ ] Explore [[DreamFactory Security]]\n"
+      },
+      "date": 1502458909836
+    },
+    {
+      "type": "remove",
+      "id": "71ab0063cd65200c",
+      "date": 1503088482614
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1517179769957
+    }
+  ]
+}

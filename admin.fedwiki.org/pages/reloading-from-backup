@@ -1,0 +1,272 @@
+{
+  "title": "Reloading from Backup",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "c122e96d82471b9d",
+      "text": "Anyone can make a backup of any site by retrieving the system/export.json from the site."
+    },
+    {
+      "type": "paragraph",
+      "id": "22f38c51564ea26b",
+      "text": "Pages from an export file can be restored one at a time by dropping the export file on empty space in the destination wiki's web page. See [[Backup]], [[Keep Safe]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "670fbe71066fa08b",
+      "text": "The export.json file differs from the format pages are routinely saved.  The wiki-server implementation prefers to keep pages in separate files within a pages/ directory."
+    },
+    {
+      "type": "paragraph",
+      "id": "3ab628810cf544a0",
+      "text": "An administrator with ssh access to a server can reconstruct the pages directory from an export file using the json utility 'jq'. [https://stackoverflow.com/questions/28744361/split-a-json-file-into-separate-files stackoverflow]"
+    },
+    {
+      "type": "code",
+      "id": "96b5db13bb02cf01",
+      "text": "cat export.json |\njq -c -r 'keys[] as $slug|\"\\($slug)\\n\\(.[$slug])\"' |\n  while read -r slug ; do\n    read -r item\n    printf \"%s\" \"$item\" | jq . > \"pages/$slug\"\n  done\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "c765d6b4a8efb08e",
+      "text": "Here is a slower but slightly simpler version of this script."
+    },
+    {
+      "type": "code",
+      "id": "612e3812a81c7f45",
+      "text": "for slug in `cat export.json | jq -r 'keys[]'` ; do\n  cat export.json | jq '.[\"'$slug'\"]' > pages/$slug\ndone"
+    },
+    {
+      "type": "markdown",
+      "id": "eb48388e9739de5a",
+      "text": "# See also\n\n- [[Backup]]\n- [[Keep Safe]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Reloading from Backup",
+        "story": []
+      },
+      "date": 1497810527192
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c122e96d82471b9d"
+      },
+      "id": "c122e96d82471b9d",
+      "type": "add",
+      "date": 1497810533346
+    },
+    {
+      "type": "edit",
+      "id": "c122e96d82471b9d",
+      "item": {
+        "type": "paragraph",
+        "id": "c122e96d82471b9d",
+        "text": "Anyone can make a backup of any site by retrieving the system/export.json from the site."
+      },
+      "date": 1497810714211
+    },
+    {
+      "type": "add",
+      "id": "22f38c51564ea26b",
+      "item": {
+        "type": "paragraph",
+        "id": "22f38c51564ea26b",
+        "text": "See [[Keep Safe]] from the field guide."
+      },
+      "after": "c122e96d82471b9d",
+      "date": 1497810741396
+    },
+    {
+      "type": "add",
+      "id": "670fbe71066fa08b",
+      "item": {
+        "type": "paragraph",
+        "id": "670fbe71066fa08b",
+        "text": "The export.json file differs from the format pages are routinely saved.  The wiki-server implementation prefers to keep pages in separate files within a directory named "
+      },
+      "after": "22f38c51564ea26b",
+      "date": 1497811041004
+    },
+    {
+      "type": "edit",
+      "id": "670fbe71066fa08b",
+      "item": {
+        "type": "paragraph",
+        "id": "670fbe71066fa08b",
+        "text": "The export.json file differs from the format pages are routinely saved.  The wiki-server implementation prefers to keep pages in separate files within a pages/ directory."
+      },
+      "date": 1497811063000
+    },
+    {
+      "type": "edit",
+      "id": "22f38c51564ea26b",
+      "item": {
+        "type": "paragraph",
+        "id": "22f38c51564ea26b",
+        "text": "Pages from an export file can be restored one at a time by dropping the export file on empty space in the destination wiki's web page. See [[Keep Safe]]"
+      },
+      "date": 1497811239123
+    },
+    {
+      "type": "add",
+      "id": "3ab628810cf544a0",
+      "item": {
+        "type": "paragraph",
+        "id": "3ab628810cf544a0",
+        "text": "An administrator with ssh access to a server can reconstruct the pages directory from an export file using the json utility 'jq'."
+      },
+      "after": "670fbe71066fa08b",
+      "date": 1497811650118
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "96b5db13bb02cf01"
+      },
+      "id": "96b5db13bb02cf01",
+      "type": "add",
+      "after": "3ab628810cf544a0",
+      "date": 1497811657001
+    },
+    {
+      "type": "edit",
+      "id": "96b5db13bb02cf01",
+      "item": {
+        "type": "code",
+        "id": "96b5db13bb02cf01",
+        "text": "cat export.json |\njq -c -r 'keys[] as $k | \"\\($k)\\n\\(.[$k])\"' |\n  while read -r key ; do\n    read -r item\n    printf \"%s\" \"$item\" | jq . > \"pages/$key\"\n  done"
+      },
+      "date": 1497811670766
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c765d6b4a8efb08e"
+      },
+      "id": "c765d6b4a8efb08e",
+      "type": "add",
+      "after": "96b5db13bb02cf01",
+      "date": 1497812664874
+    },
+    {
+      "type": "edit",
+      "id": "c765d6b4a8efb08e",
+      "item": {
+        "type": "paragraph",
+        "id": "c765d6b4a8efb08e",
+        "text": "Here is a slower but slightly simpler version of this script."
+      },
+      "date": 1497812683492
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "612e3812a81c7f45"
+      },
+      "id": "612e3812a81c7f45",
+      "type": "add",
+      "after": "c765d6b4a8efb08e",
+      "date": 1497812687343
+    },
+    {
+      "type": "edit",
+      "id": "612e3812a81c7f45",
+      "item": {
+        "type": "code",
+        "id": "612e3812a81c7f45",
+        "text": "for page in `cat export.json | jq -r 'keys[]'` ; do\n  cat export.json | jq '.[\"'$page'\"]' > pages/$page\ndone"
+      },
+      "date": 1497812692958
+    },
+    {
+      "type": "edit",
+      "id": "3ab628810cf544a0",
+      "item": {
+        "type": "paragraph",
+        "id": "3ab628810cf544a0",
+        "text": "An administrator with ssh access to a server can reconstruct the pages directory from an export file using the json utility 'jq'. [https://stackoverflow.com/questions/28744361/split-a-json-file-into-separate-files stackoverflow]"
+      },
+      "date": 1497812837958
+    },
+    {
+      "type": "edit",
+      "id": "612e3812a81c7f45",
+      "item": {
+        "type": "code",
+        "id": "612e3812a81c7f45",
+        "text": "for slug in `cat export.json | jq -r 'keys[]'` ; do\n  cat export.json | jq '.[\"'$slug'\"]' > pages/$slug\ndone"
+      },
+      "date": 1497812936723
+    },
+    {
+      "type": "edit",
+      "id": "96b5db13bb02cf01",
+      "item": {
+        "type": "code",
+        "id": "96b5db13bb02cf01",
+        "text": "cat export.json |\njq -c -r 'keys[] as $k | \"\\($k)\\n\\(.[$k])\"' |\n  while read -r slug ; do\n    read -r item\n    printf \"%s\" \"$item\" | jq . > \"pages/$slug\"\n  done\n"
+      },
+      "date": 1497812975824
+    },
+    {
+      "type": "edit",
+      "id": "96b5db13bb02cf01",
+      "item": {
+        "type": "code",
+        "id": "96b5db13bb02cf01",
+        "text": "cat export.json |\njq -c -r 'keys[] as $slug | \"\\($slug)\\n\\(.[$slug])\"' |\n  while read -r slug ; do\n    read -r item\n    printf \"%s\" \"$item\" | jq . > \"pages/$slug\"\n  done\n"
+      },
+      "date": 1497813015509
+    },
+    {
+      "type": "edit",
+      "id": "96b5db13bb02cf01",
+      "item": {
+        "type": "code",
+        "id": "96b5db13bb02cf01",
+        "text": "cat export.json |\njq -c -r 'keys[] as $slug|\"\\($slug)\\n\\(.[$slug])\"' |\n  while read -r slug ; do\n    read -r item\n    printf \"%s\" \"$item\" | jq . > \"pages/$slug\"\n  done\n"
+      },
+      "date": 1497813031129
+    },
+    {
+      "type": "edit",
+      "id": "22f38c51564ea26b",
+      "item": {
+        "type": "paragraph",
+        "id": "22f38c51564ea26b",
+        "text": "Pages from an export file can be restored one at a time by dropping the export file on empty space in the destination wiki's web page. See [[Backup]], [[Keep Safe]]"
+      },
+      "date": 1497814180219
+    },
+    {
+      "type": "fork",
+      "site": "admin.asia.wiki.org",
+      "date": 1498124471380
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eb48388e9739de5a"
+      },
+      "id": "eb48388e9739de5a",
+      "type": "add",
+      "after": "612e3812a81c7f45",
+      "date": 1498124475287
+    },
+    {
+      "type": "edit",
+      "id": "eb48388e9739de5a",
+      "item": {
+        "type": "markdown",
+        "id": "eb48388e9739de5a",
+        "text": "# See also\n\n- [[Backup]]\n- [[Keep Safe]]"
+      },
+      "date": 1498124497154
+    }
+  ]
+}

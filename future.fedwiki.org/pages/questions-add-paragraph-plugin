@@ -1,0 +1,964 @@
+{
+  "title": "Questions: Add Paragraph Plugin",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d27a62020437c10d",
+      "text": "Here are some questions regarding the implementation:"
+    },
+    {
+      "type": "html",
+      "id": "8b4091acfccf76ee",
+      "text": "<b>Question:</b> If we don't get json items, what do we do with what we get?"
+    },
+    {
+      "type": "paragraph",
+      "id": "b4064839eef3ca08",
+      "text": "Display a basic error message:"
+    },
+    {
+      "type": "code",
+      "id": "9c9d35317a4d5187",
+      "text": "There was a problem fetching the items from the server:  [[Retry]]"
+    },
+    {
+      "type": "pagefold",
+      "id": "52b5293cc7adf2d7",
+      "text": "?"
+    },
+    {
+      "type": "html",
+      "id": "621ab813bf424d98",
+      "text": "<b>Question:</b> If we get items that aren't well formed, say duplicate ids, then how hard do we work to accommodate this?"
+    },
+    {
+      "type": "paragraph",
+      "id": "ce5b1f5883d70d90",
+      "text": "Not at all. Make the programmer of the service do the work. Display:"
+    },
+    {
+      "type": "code",
+      "id": "c9411d89af1c68ce",
+      "text": "Sorry, there was an error fetching the items from the server."
+    },
+    {
+      "type": "pagefold",
+      "id": "53aaeee3b6ece598",
+      "text": "?"
+    },
+    {
+      "type": "html",
+      "id": "c8f1274897e6a975",
+      "text": "<b>Question:</b> If we drag a transcluded item to another page, how much travels with it?"
+    },
+    {
+      "type": "paragraph",
+      "id": "2644028d2f2746ab",
+      "text": "I'm not suggesting a temporary (in cache display) of the created item. The item will be created on the server by the plugin. If the item created is say an \"Audio\" item - this exact same result would be created manually by creating a factory and then selecting \"audio\" and pasting in the audio url. No difference. The item is now a standard audio item, and travels around the federation just as if it were created by hand."
+    },
+    {
+      "type": "pagefold",
+      "id": "269c498f07ff2204",
+      "text": "?"
+    },
+    {
+      "type": "html",
+      "id": "c4dc58d3cbd71cd8",
+      "text": "<b>Question:</b> If we double click a transcluded item, what kind of editor do we get?"
+    },
+    {
+      "type": "paragraph",
+      "id": "e7f4ddf8de5d3cb0",
+      "text": "Standard simple text. You specify:"
+    },
+    {
+      "type": "code",
+      "id": "eb53385ddaad20f6",
+      "text": "URL    https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "781d4716a08fc134",
+      "text": "Or similar syntax."
+    },
+    {
+      "type": "pagefold",
+      "id": "51b7e414c386e959",
+      "text": "?"
+    },
+    {
+      "type": "html",
+      "id": "2434a7c9f81d80b6",
+      "text": "<b>Question:</b> If we want to edit the transclusion configuration, what do we double click for that?"
+    },
+    {
+      "type": "paragraph",
+      "id": "e577123cd9671c04",
+      "text": "The Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created."
+    },
+    {
+      "type": "pagefold",
+      "id": "23928195c513aac7",
+      "text": "?"
+    },
+    {
+      "type": "html",
+      "id": "c70ec180992e6356",
+      "text": "<b>Question:</b> If we trust json fetched as pages from remote servers can we also trust json page fragments?"
+    },
+    {
+      "type": "paragraph",
+      "id": "2e17ed4783666734",
+      "text": "No. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?"
+    },
+    {
+      "type": "pagefold",
+      "id": "758ab79200f81a24",
+      "text": "?"
+    },
+    {
+      "type": "html",
+      "id": "624c077ec618a4cc",
+      "text": "<b>Question:</b> If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful."
+    },
+    {
+      "type": "paragraph",
+      "id": "b8cd0e8e954acd66",
+      "text": "Yes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Questions: Add Paragraph Plugin",
+        "story": []
+      },
+      "date": 1438436175267
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d27a62020437c10d"
+      },
+      "id": "d27a62020437c10d",
+      "type": "add",
+      "date": 1438436176524
+    },
+    {
+      "type": "edit",
+      "id": "d27a62020437c10d",
+      "item": {
+        "type": "paragraph",
+        "id": "d27a62020437c10d",
+        "text": "On 31 July 2015 at 22:21, Ward Cunningham <ward@c2.com> wrote:\n\n\n    If we don't get json items, what do we do with what we get?\n\n\nDisplay a basic error message:\n\n    There was a problem fetching the items from the server:  [[Retry]]\n\n    If we get items that aren't well formed, say duplicate ids, then how hard do we work to accommodate this?\n\n\nNot at all. Make the programmer of the service do the work. Display:\n\n    Sorry, there was an error fetching the items from the server.\n\n    If we drag a transcluded item to another page, how much travels with it?\n\n\nI'm not suggesting a temporary (in cache display) of the created item. The item will be created on the server by the plugin. If the item created is say an \"Audio\" item - this exact same result would be created manually by creating a factory and then selecting \"audio\" and pasting in the audio url. No difference. The item is now a standard audio item, and travels around the federation just as if it were created by hand.\n \n\n    If we double click a transcluded item, what kind of editor do we get?\n\n\nStandard simple text. You specify:\n\nURL  https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\nOr similar syntax\n \n\n    if we want to edit the transclusion configuration, what do we double click for that?\n\n\nThe Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created.\n \n\n    If we trust json fetched as pages from remote servers can we also trust json page fragments?\n\n \nNo. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?\n\n    If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful.\n\n\nYes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+      },
+      "date": 1438436178800
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1c48b60b3016e7d9"
+      },
+      "id": "1c48b60b3016e7d9",
+      "type": "add",
+      "after": "d27a62020437c10d",
+      "date": 1438436188081
+    },
+    {
+      "type": "edit",
+      "id": "d27a62020437c10d",
+      "item": {
+        "type": "paragraph",
+        "id": "d27a62020437c10d",
+        "text": "Here are some questions regarding the implementation:"
+      },
+      "date": 1438436210407
+    },
+    {
+      "type": "add",
+      "id": "798471be8ab16163",
+      "item": {
+        "type": "paragraph",
+        "id": "798471be8ab16163",
+        "text": "If we don't get json items, what do we do with what we get?"
+      },
+      "after": "d27a62020437c10d",
+      "date": 1438436212493
+    },
+    {
+      "type": "add",
+      "id": "b4064839eef3ca08",
+      "item": {
+        "type": "paragraph",
+        "id": "b4064839eef3ca08",
+        "text": "Display a basic error message:\n\n    There was a problem fetching the items from the server:  [[Retry]]\n\n    If we get items that aren't well formed, say duplicate ids, then how hard do we work to accommodate this?\n\n\nNot at all. Make the programmer of the service do the work. Display:\n\n    Sorry, there was an error fetching the items from the server.\n\n    If we drag a transcluded item to another page, how much travels with it?\n\n\nI'm not suggesting a temporary (in cache display) of the created item. The item will be created on the server by the plugin. If the item created is say an \"Audio\" item - this exact same result would be created manually by creating a factory and then selecting \"audio\" and pasting in the audio url. No difference. The item is now a standard audio item, and travels around the federation just as if it were created by hand.\n \n\n    If we double click a transcluded item, what kind of editor do we get?\n\n\nStandard simple text. You specify:\n\nURL  https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\nOr similar syntax\n \n\n    if we want to edit the transclusion configuration, what do we double click for that?\n\n\nThe Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created.\n \n\n    If we trust json fetched as pages from remote servers can we also trust json page fragments?\n\n \nNo. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?\n\n    If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful.\n\n\nYes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+      },
+      "after": "798471be8ab16163",
+      "date": 1438436224137
+    },
+    {
+      "type": "edit",
+      "id": "1c48b60b3016e7d9",
+      "item": {
+        "type": "code",
+        "id": "1c48b60b3016e7d9",
+        "text": "If we don't get json items, what do we do with what we get?"
+      },
+      "date": 1438436238664
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "1c48b60b3016e7d9",
+        "798471be8ab16163",
+        "b4064839eef3ca08"
+      ],
+      "id": "1c48b60b3016e7d9",
+      "date": 1438436244966
+    },
+    {
+      "type": "remove",
+      "id": "798471be8ab16163",
+      "date": 1438436250009
+    },
+    {
+      "type": "edit",
+      "id": "b4064839eef3ca08",
+      "item": {
+        "type": "paragraph",
+        "id": "b4064839eef3ca08",
+        "text": "Display a basic error message:"
+      },
+      "date": 1438436279133
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9c9d35317a4d5187"
+      },
+      "id": "9c9d35317a4d5187",
+      "type": "add",
+      "after": "621ab813bf424d98",
+      "date": 1438436280829
+    },
+    {
+      "type": "add",
+      "id": "621ab813bf424d98",
+      "item": {
+        "type": "paragraph",
+        "id": "621ab813bf424d98",
+        "text": "\n    \n\n    If we get items that aren't well formed, say duplicate ids, then how hard do we work to accommodate this?\n\n\nNot at all. Make the programmer of the service do the work. Display:\n\n    Sorry, there was an error fetching the items from the server.\n\n    If we drag a transcluded item to another page, how much travels with it?\n\n\nI'm not suggesting a temporary (in cache display) of the created item. The item will be created on the server by the plugin. If the item created is say an \"Audio\" item - this exact same result would be created manually by creating a factory and then selecting \"audio\" and pasting in the audio url. No difference. The item is now a standard audio item, and travels around the federation just as if it were created by hand.\n \n\n    If we double click a transcluded item, what kind of editor do we get?\n\n\nStandard simple text. You specify:\n\nURL  https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\nOr similar syntax\n \n\n    if we want to edit the transclusion configuration, what do we double click for that?\n\n\nThe Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created.\n \n\n    If we trust json fetched as pages from remote servers can we also trust json page fragments?\n\n \nNo. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?\n\n    If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful.\n\n\nYes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+      },
+      "after": "b4064839eef3ca08",
+      "date": 1438436282059
+    },
+    {
+      "type": "edit",
+      "id": "9c9d35317a4d5187",
+      "item": {
+        "type": "code",
+        "id": "9c9d35317a4d5187",
+        "text": "There was a problem fetching the items from the server:  [[Retry]]"
+      },
+      "date": 1438436283292
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "1c48b60b3016e7d9",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "621ab813bf424d98"
+      ],
+      "id": "9c9d35317a4d5187",
+      "date": 1438436288480
+    },
+    {
+      "type": "add",
+      "id": "87348e64b91cbe18",
+      "item": {
+        "type": "paragraph",
+        "id": "87348e64b91cbe18",
+        "text": "# If we don't get json items, what do we do with what we get?"
+      },
+      "after": "d27a62020437c10d",
+      "date": 1438436310781
+    },
+    {
+      "type": "edit",
+      "id": "87348e64b91cbe18",
+      "item": {
+        "type": "markdown",
+        "id": "87348e64b91cbe18",
+        "text": "# If we don't get json items, what do we do with what we get?"
+      },
+      "date": 1438436311849
+    },
+    {
+      "type": "remove",
+      "id": "1c48b60b3016e7d9",
+      "date": 1438436318784
+    },
+    {
+      "type": "edit",
+      "id": "621ab813bf424d98",
+      "item": {
+        "type": "paragraph",
+        "id": "621ab813bf424d98",
+        "text": "<b>Question:</b> If we get items that aren't well formed, say duplicate ids, then how hard do we work to accommodate this?"
+      },
+      "date": 1438436352504
+    },
+    {
+      "type": "edit",
+      "id": "621ab813bf424d98",
+      "item": {
+        "type": "html",
+        "id": "621ab813bf424d98",
+        "text": "<b>Question:</b> If we get items that aren't well formed, say duplicate ids, then how hard do we work to accommodate this?"
+      },
+      "date": 1438436353548
+    },
+    {
+      "type": "add",
+      "id": "ce5b1f5883d70d90",
+      "item": {
+        "type": "paragraph",
+        "id": "ce5b1f5883d70d90",
+        "text": "\n\nNot at all. Make the programmer of the service do the work. Display:\n\n    Sorry, there was an error fetching the items from the server.\n\n    If we drag a transcluded item to another page, how much travels with it?\n\n\nI'm not suggesting a temporary (in cache display) of the created item. The item will be created on the server by the plugin. If the item created is say an \"Audio\" item - this exact same result would be created manually by creating a factory and then selecting \"audio\" and pasting in the audio url. No difference. The item is now a standard audio item, and travels around the federation just as if it were created by hand.\n \n\n    If we double click a transcluded item, what kind of editor do we get?\n\n\nStandard simple text. You specify:\n\nURL  https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\nOr similar syntax\n \n\n    if we want to edit the transclusion configuration, what do we double click for that?\n\n\nThe Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created.\n \n\n    If we trust json fetched as pages from remote servers can we also trust json page fragments?\n\n \nNo. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?\n\n    If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful.\n\n\nYes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+      },
+      "after": "621ab813bf424d98",
+      "date": 1438436356440
+    },
+    {
+      "type": "add",
+      "id": "8b4091acfccf76ee",
+      "item": {
+        "type": "paragraph",
+        "id": "8b4091acfccf76ee",
+        "text": "If we don't get json items, what do we do with what we get?"
+      },
+      "after": "d27a62020437c10d",
+      "date": 1438436377342
+    },
+    {
+      "type": "edit",
+      "id": "8b4091acfccf76ee",
+      "item": {
+        "type": "paragraph",
+        "id": "8b4091acfccf76ee",
+        "text": "<b>Question:</b> If we don't get json items, what do we do with what we get?"
+      },
+      "date": 1438436387466
+    },
+    {
+      "type": "edit",
+      "id": "8b4091acfccf76ee",
+      "item": {
+        "type": "html",
+        "id": "8b4091acfccf76ee",
+        "text": "<b>Question:</b> If we don't get json items, what do we do with what we get?"
+      },
+      "date": 1438436388330
+    },
+    {
+      "type": "remove",
+      "id": "87348e64b91cbe18",
+      "date": 1438436391349
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "52b5293cc7adf2d7"
+      },
+      "id": "52b5293cc7adf2d7",
+      "type": "add",
+      "after": "ce5b1f5883d70d90",
+      "date": 1438436403595
+    },
+    {
+      "type": "edit",
+      "id": "52b5293cc7adf2d7",
+      "item": {
+        "type": "pagefold",
+        "id": "52b5293cc7adf2d7",
+        "text": "."
+      },
+      "date": 1438436412028
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90"
+      ],
+      "id": "52b5293cc7adf2d7",
+      "date": 1438436418186
+    },
+    {
+      "type": "edit",
+      "id": "52b5293cc7adf2d7",
+      "item": {
+        "type": "pagefold",
+        "id": "52b5293cc7adf2d7",
+        "text": "?"
+      },
+      "date": 1438436427589
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "53aaeee3b6ece598"
+      },
+      "id": "53aaeee3b6ece598",
+      "type": "add",
+      "after": "ce5b1f5883d70d90",
+      "date": 1438436435478
+    },
+    {
+      "type": "edit",
+      "id": "53aaeee3b6ece598",
+      "item": {
+        "type": "pagefold",
+        "id": "53aaeee3b6ece598",
+        "text": "?"
+      },
+      "date": 1438436442928
+    },
+    {
+      "type": "edit",
+      "id": "ce5b1f5883d70d90",
+      "item": {
+        "type": "paragraph",
+        "id": "ce5b1f5883d70d90",
+        "text": "Not at all. Make the programmer of the service do the work. Display:"
+      },
+      "date": 1438436465066
+    },
+    {
+      "type": "add",
+      "id": "c8f1274897e6a975",
+      "item": {
+        "type": "paragraph",
+        "id": "c8f1274897e6a975",
+        "text": "If we drag a transcluded item to another page, how much travels with it?"
+      },
+      "after": "ce5b1f5883d70d90",
+      "date": 1438436469319
+    },
+    {
+      "type": "add",
+      "id": "2644028d2f2746ab",
+      "item": {
+        "type": "paragraph",
+        "id": "2644028d2f2746ab",
+        "text": "I'm not suggesting a temporary (in cache display) of the created item. The item will be created on the server by the plugin. If the item created is say an \"Audio\" item - this exact same result would be created manually by creating a factory and then selecting \"audio\" and pasting in the audio url. No difference. The item is now a standard audio item, and travels around the federation just as if it were created by hand."
+      },
+      "after": "c8f1274897e6a975",
+      "date": 1438436475181
+    },
+    {
+      "type": "add",
+      "id": "c4dc58d3cbd71cd8",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dc58d3cbd71cd8",
+        "text": "If we double click a transcluded item, what kind of editor do we get?"
+      },
+      "after": "2644028d2f2746ab",
+      "date": 1438436479406
+    },
+    {
+      "type": "add",
+      "id": "e7f4ddf8de5d3cb0",
+      "item": {
+        "type": "paragraph",
+        "id": "e7f4ddf8de5d3cb0",
+        "text": "Standard simple text. You specify:"
+      },
+      "after": "c4dc58d3cbd71cd8",
+      "date": 1438436486421
+    },
+    {
+      "type": "add",
+      "id": "781d4716a08fc134",
+      "item": {
+        "type": "paragraph",
+        "id": "781d4716a08fc134",
+        "text": "\nURL  https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\nOr similar syntax\n \n\n    if we want to edit the transclusion configuration, what do we double click for that?\n\n\nThe Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created.\n \n\n    If we trust json fetched as pages from remote servers can we also trust json page fragments?\n\n \nNo. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?\n\n    If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful.\n\n\nYes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+      },
+      "after": "e7f4ddf8de5d3cb0",
+      "date": 1438436488217
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c9411d89af1c68ce"
+      },
+      "id": "c9411d89af1c68ce",
+      "type": "add",
+      "after": "53aaeee3b6ece598",
+      "date": 1438436494668
+    },
+    {
+      "type": "edit",
+      "id": "c9411d89af1c68ce",
+      "item": {
+        "type": "code",
+        "id": "c9411d89af1c68ce",
+        "text": "Sorry, there was an error fetching the items from the server."
+      },
+      "date": 1438436502981
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "781d4716a08fc134",
+        "53aaeee3b6ece598"
+      ],
+      "id": "c9411d89af1c68ce",
+      "date": 1438436526992
+    },
+    {
+      "type": "edit",
+      "id": "c8f1274897e6a975",
+      "item": {
+        "type": "paragraph",
+        "id": "c8f1274897e6a975",
+        "text": "<b>Question:</b> If we drag a transcluded item to another page, how much travels with it?"
+      },
+      "date": 1438436541881
+    },
+    {
+      "type": "edit",
+      "id": "c8f1274897e6a975",
+      "item": {
+        "type": "html",
+        "id": "c8f1274897e6a975",
+        "text": "<b>Question:</b> If we drag a transcluded item to another page, how much travels with it?"
+      },
+      "date": 1438436542717
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "53aaeee3b6ece598",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "781d4716a08fc134"
+      ],
+      "id": "53aaeee3b6ece598",
+      "date": 1438436553922
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "269c498f07ff2204"
+      },
+      "id": "269c498f07ff2204",
+      "type": "add",
+      "after": "781d4716a08fc134",
+      "date": 1438436562775
+    },
+    {
+      "type": "edit",
+      "id": "269c498f07ff2204",
+      "item": {
+        "type": "pagefold",
+        "id": "269c498f07ff2204",
+        "text": "?"
+      },
+      "date": 1438436566073
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "53aaeee3b6ece598",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "269c498f07ff2204",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "781d4716a08fc134"
+      ],
+      "id": "269c498f07ff2204",
+      "date": 1438436572149
+    },
+    {
+      "type": "edit",
+      "id": "c4dc58d3cbd71cd8",
+      "item": {
+        "type": "paragraph",
+        "id": "c4dc58d3cbd71cd8",
+        "text": "<b>Question:</b> If we double click a transcluded item, what kind of editor do we get?"
+      },
+      "date": 1438436581462
+    },
+    {
+      "type": "edit",
+      "id": "c4dc58d3cbd71cd8",
+      "item": {
+        "type": "html",
+        "id": "c4dc58d3cbd71cd8",
+        "text": "<b>Question:</b> If we double click a transcluded item, what kind of editor do we get?"
+      },
+      "date": 1438436582303
+    },
+    {
+      "type": "edit",
+      "id": "781d4716a08fc134",
+      "item": {
+        "type": "paragraph",
+        "id": "781d4716a08fc134",
+        "text": "URL  https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\nOr similar syntax\n \n\n"
+      },
+      "date": 1438436598514
+    },
+    {
+      "type": "add",
+      "id": "2434a7c9f81d80b6",
+      "item": {
+        "type": "paragraph",
+        "id": "2434a7c9f81d80b6",
+        "text": "<b>Question:</b> If we want to edit the transclusion configuration, what do we double click for that?"
+      },
+      "after": "781d4716a08fc134",
+      "date": 1438436600913
+    },
+    {
+      "type": "add",
+      "id": "e577123cd9671c04",
+      "item": {
+        "type": "paragraph",
+        "id": "e577123cd9671c04",
+        "text": "The Create Item Factory is as above. Items are not transcluded they are created. Editing them is the same as editing any item of the type created."
+      },
+      "after": "2434a7c9f81d80b6",
+      "date": 1438436606562
+    },
+    {
+      "type": "add",
+      "id": "c70ec180992e6356",
+      "item": {
+        "type": "paragraph",
+        "id": "c70ec180992e6356",
+        "text": "<b>Question:</b> If we trust json fetched as pages from remote servers can we also trust json page fragments?"
+      },
+      "after": "e577123cd9671c04",
+      "date": 1438436611659
+    },
+    {
+      "type": "add",
+      "id": "2e17ed4783666734",
+      "item": {
+        "type": "paragraph",
+        "id": "2e17ed4783666734",
+        "text": "No. But this is an authoring plugin, installed and configured by the owner of the site. They need to trust the author of the service they are connecting to. The created items should be normal items, and they should be safe to move through the federation. It would be good to check the JSON created. It may be possible to pass the text content of each Json param through the html sanitizer we already use for the HTML plugin?"
+      },
+      "after": "c70ec180992e6356",
+      "date": 1438436619995
+    },
+    {
+      "type": "add",
+      "id": "624c077ec618a4cc",
+      "item": {
+        "type": "paragraph",
+        "id": "624c077ec618a4cc",
+        "text": "<b>Question:</b> If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful."
+      },
+      "after": "2e17ed4783666734",
+      "date": 1438436633110
+    },
+    {
+      "type": "add",
+      "id": "b8cd0e8e954acd66",
+      "item": {
+        "type": "paragraph",
+        "id": "b8cd0e8e954acd66",
+        "text": "Yes - this is in the enhancement section described on the wiki page - you could take input from a data plugin to configure the service. However this needs to be thought through."
+      },
+      "after": "624c077ec618a4cc",
+      "date": 1438436639214
+    },
+    {
+      "type": "edit",
+      "id": "624c077ec618a4cc",
+      "item": {
+        "type": "html",
+        "id": "624c077ec618a4cc",
+        "text": "<b>Question:</b> If we make this much work then we can consider how the transcluding plugin can collect information from the dom and send it as arguments to the remote site. This would raise other security/privacy issues. Perhaps we can design a configuration language that can assemble query parameters. I could imagine page title would be safe and useful."
+      },
+      "date": 1438436647838
+    },
+    {
+      "type": "edit",
+      "id": "c70ec180992e6356",
+      "item": {
+        "type": "html",
+        "id": "c70ec180992e6356",
+        "text": "<b>Question:</b> If we trust json fetched as pages from remote servers can we also trust json page fragments?"
+      },
+      "date": 1438436649381
+    },
+    {
+      "type": "edit",
+      "id": "2434a7c9f81d80b6",
+      "item": {
+        "type": "html",
+        "id": "2434a7c9f81d80b6",
+        "text": "<b>Question:</b> If we want to edit the transclusion configuration, what do we double click for that?"
+      },
+      "date": 1438436650426
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "758ab79200f81a24"
+      },
+      "id": "758ab79200f81a24",
+      "type": "add",
+      "after": "b8cd0e8e954acd66",
+      "date": 1438436654123
+    },
+    {
+      "type": "edit",
+      "id": "758ab79200f81a24",
+      "item": {
+        "type": "pagefold",
+        "id": "758ab79200f81a24",
+        "text": "?"
+      },
+      "date": 1438436657769
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "53aaeee3b6ece598",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "269c498f07ff2204",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "781d4716a08fc134",
+        "2434a7c9f81d80b6",
+        "e577123cd9671c04",
+        "c70ec180992e6356",
+        "2e17ed4783666734",
+        "758ab79200f81a24",
+        "624c077ec618a4cc",
+        "b8cd0e8e954acd66"
+      ],
+      "id": "758ab79200f81a24",
+      "date": 1438436660835
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "23928195c513aac7"
+      },
+      "id": "23928195c513aac7",
+      "type": "add",
+      "after": "b8cd0e8e954acd66",
+      "date": 1438436663431
+    },
+    {
+      "type": "edit",
+      "id": "23928195c513aac7",
+      "item": {
+        "type": "pagefold",
+        "id": "23928195c513aac7",
+        "text": "?"
+      },
+      "date": 1438436666173
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "53aaeee3b6ece598",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "269c498f07ff2204",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "781d4716a08fc134",
+        "2434a7c9f81d80b6",
+        "e577123cd9671c04",
+        "23928195c513aac7",
+        "c70ec180992e6356",
+        "2e17ed4783666734",
+        "758ab79200f81a24",
+        "624c077ec618a4cc",
+        "b8cd0e8e954acd66"
+      ],
+      "id": "23928195c513aac7",
+      "date": 1438436670657
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "51b7e414c386e959"
+      },
+      "id": "51b7e414c386e959",
+      "type": "add",
+      "after": "b8cd0e8e954acd66",
+      "date": 1438436677157
+    },
+    {
+      "type": "edit",
+      "id": "51b7e414c386e959",
+      "item": {
+        "type": "pagefold",
+        "id": "51b7e414c386e959",
+        "text": "?"
+      },
+      "date": 1438436680798
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "53aaeee3b6ece598",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "269c498f07ff2204",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "781d4716a08fc134",
+        "51b7e414c386e959",
+        "2434a7c9f81d80b6",
+        "e577123cd9671c04",
+        "23928195c513aac7",
+        "c70ec180992e6356",
+        "2e17ed4783666734",
+        "758ab79200f81a24",
+        "624c077ec618a4cc",
+        "b8cd0e8e954acd66"
+      ],
+      "id": "51b7e414c386e959",
+      "date": 1438436685458
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eb53385ddaad20f6"
+      },
+      "id": "eb53385ddaad20f6",
+      "type": "add",
+      "after": "b8cd0e8e954acd66",
+      "date": 1438436693376
+    },
+    {
+      "type": "move",
+      "order": [
+        "d27a62020437c10d",
+        "8b4091acfccf76ee",
+        "b4064839eef3ca08",
+        "9c9d35317a4d5187",
+        "52b5293cc7adf2d7",
+        "621ab813bf424d98",
+        "ce5b1f5883d70d90",
+        "c9411d89af1c68ce",
+        "53aaeee3b6ece598",
+        "c8f1274897e6a975",
+        "2644028d2f2746ab",
+        "269c498f07ff2204",
+        "c4dc58d3cbd71cd8",
+        "e7f4ddf8de5d3cb0",
+        "eb53385ddaad20f6",
+        "781d4716a08fc134",
+        "51b7e414c386e959",
+        "2434a7c9f81d80b6",
+        "e577123cd9671c04",
+        "23928195c513aac7",
+        "c70ec180992e6356",
+        "2e17ed4783666734",
+        "758ab79200f81a24",
+        "624c077ec618a4cc",
+        "b8cd0e8e954acd66"
+      ],
+      "id": "eb53385ddaad20f6",
+      "date": 1438436697994
+    },
+    {
+      "type": "edit",
+      "id": "781d4716a08fc134",
+      "item": {
+        "type": "paragraph",
+        "id": "781d4716a08fc134",
+        "text": "Or similar syntax."
+      },
+      "date": 1438436709618
+    },
+    {
+      "type": "edit",
+      "id": "eb53385ddaad20f6",
+      "item": {
+        "type": "code",
+        "id": "eb53385ddaad20f6",
+        "text": "URL    https://example.com/fedwiki/create_item.cgi\ntitle  Test Title\n\n"
+      },
+      "date": 1438436717275
+    }
+  ]
+}

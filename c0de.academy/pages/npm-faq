@@ -1,0 +1,1076 @@
+{
+  "title": "npm FAQ",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "9605b610e3a5650a",
+      "text": "Here we list some frequently asked questions about [[npm]]. See [https://docs.npmjs.com/files/folders docs.npmjs.com] for the official FAQ."
+    },
+    {
+      "type": "markdown",
+      "id": "7ce568d56e83a6bf",
+      "text": "# Where does npm put stuff?"
+    },
+    {
+      "type": "paragraph",
+      "id": "3fe399d34a3ad347",
+      "text": "Global installs are different from local installs."
+    },
+    {
+      "type": "code",
+      "id": "8adefcdbc93a8850",
+      "text": "npm bin -g\nnpm root -g."
+    },
+    {
+      "type": "paragraph",
+      "id": "ad6c28bc64513d4a",
+      "text": "If you install something with the -g flag, then its executables go in npm bin -g and its modules go in npm root -g:"
+    },
+    {
+      "type": "paragraph",
+      "id": "dd83c7a76f8a456c",
+      "text": "For local installs, use the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go. See [https://docs.npmjs.com/files/folders npm-folders]"
+    },
+    {
+      "type": "markdown",
+      "id": "ec91fac5e260d234",
+      "text": "# How do I install something on my computer in a central location?"
+    },
+    {
+      "type": "paragraph",
+      "id": "1afa37188a606bce",
+      "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)"
+    },
+    {
+      "type": "markdown",
+      "id": "cac1de16dd9d0ec0",
+      "text": "# I installed something globally, but I can't require() it?\n\nInstall it locally."
+    },
+    {
+      "type": "paragraph",
+      "id": "47e5405967a66ab3",
+      "text": "The global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "b19df89397e45c5c",
+      "text": "# Why can't npm just put everything in one place, like other package managers?"
+    },
+    {
+      "type": "paragraph",
+      "id": "c257ceb2b9ecae8e",
+      "text": "Not every change is an improvement, but every improvement is a change. This would be like asking git to do network IO for every commit. It's not going to happen, because it's a terrible idea that causes more problems than it solves.\n\nIt is much harder to avoid dependency conflicts without nesting dependencies. This is fundamental to the way that npm works, and has proven to be an extremely successful approach. See npm-folders for more details.\n\nIf you want a package to be installed in one place, and have all your programs reference the same copy of it, then use the npm link command. That's what it's for. Install it globally, then link it into each program that uses it."
+    },
+    {
+      "type": "markdown",
+      "id": "baaae2762b6d1610",
+      "text": "# Whatever, I really want the old style 'everything global' style. \nWrite your own package manager. You could probably even wrap up npm in a shell script if you really wanted to.\n\nnpm will not help you do something that is known to be a bad idea.\n\nShould I check my node_modules folder into git?\n\nUsually, no. Allow npm to resolve dependencies for your packages.\n\nFor packages you deploy, such as websites and apps, you should use npm shrinkwrap to lock down your full dependency tree:\n\nhttps://docs.npmjs.com/cli/shrinkwrap\n\nIf you are paranoid about depending on the npm ecosystem, you should run a private npm mirror or a private cache.\n\nIf you want 100% confidence in being able to reproduce the specific bytes included in a deployment, you should use an additional mechanism that can verify contents rather than versions. For example, Amazon machine images, DigitalOcean snapshots, Heroku slugs, or simple tarballs.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "1e9e87ae4b8f8824",
+      "text": "# Is it 'npm' or 'NPM' or 'Npm'?\n\nnpm should never be capitalized unless it is being displayed in a location that is customarily all-caps (such as the title of man pages.)\n\nIf 'npm' is an acronym, why is it never capitalized?\n\nContrary to the belief of many, \"npm\" is not in fact an abbreviation for \"Node Package Manager\". It is a recursive bacronymic abbreviation for \"npm is not an acronym\". (If it was \"ninaa\", then it would be an acronym, and thus incorrectly named.)\n\n\"NPM\", however, is an acronym (more precisely, a capitonym) for the National Association of Pastoral Musicians. You can learn more about them at http://npm.org/.\n\nIn software, \"NPM\" is a Non-Parametric Mapping utility written by Chris Rorden. You can analyze pictures of brains with it. Learn more about the (capitalized) NPM program at http://www.cabiatl.com/mricro/npm/.\n\nThe first seed that eventually grew into this flower was a bash utility named \"pm\", which was a shortened descendent of \"pkgmakeinst\", a bash function that was used to install various different things on different platforms, most often using Yahoo's yinst. If npm was ever an acronym for anything, it was node pm or maybe new pm.\n\nSo, in all seriousness, the \"npm\" project is named after its command-line utility, which was organically selected to be easily typed by a right-handed programmer using a US QWERTY keyboard layout, ending with the right-ring-finger in a postition to type the - key for flags and other command-line arguments. That command-line utility is always lower-case, though it starts most sentences it is a part of.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "ac1214ca33a2cb8b",
+      "text": "# How do I list installed packages?\n\nnpm ls\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "b832a9ac9735c1fc",
+      "text": "# How do I search for packages?\n\nnpm search\n\nArguments are greps. npm search jsdom shows jsdom packages.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "c25ae37d1d8cf18b",
+      "text": "# How do I update npm?\n\nnpm install npm -g\nYou can also update all outdated local packages by doing npm update without any arguments, or global packages by doing npm update -g.\n\nOccasionally, the version of npm will progress such that the current version cannot be properly installed with the version that you have installed already. (Consider, if there is ever a bug in the update command.)\n\nIn those cases, you can do this:\n\ncurl https://www.npmjs.com/install.sh | sh\nWhat is a package?\n\nA package is:\n\na) a folder containing a program described by a package.json file\nb) a gzipped tarball containing (a)\nc) a url that resolves to (b)\nd) a <name>@<version> that is published on the registry with (c)\ne) a <name>@<tag> that points to (d)\nf) a <name> that has a \"latest\" tag satisfying (e)\ng) a git url that, when cloned, results in (a).\nEven if you never publish your package, you can still get a lot of benefits of using npm if you just want to write a node program (a), and perhaps if you also want to be able to easily install it elsewhere after packing it up into a tarball (b).\n\nGit urls can be of the form:\n\ngit://github.com/user/project.git#commit-ish\ngit+ssh://user@hostname:project.git#commit-ish\ngit+http://user@hostname/project/blah.git#commit-ish\ngit+https://user@hostname/project/blah.git#commit-ish\nThe commit-ish can be any tag, sha, or branch which can be supplied as an argument to git checkout. The default is master.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "6c71f5e5099684c8",
+      "text": "# What is a module?\n\nA module is anything that can be loaded with require() in a Node.js program. The following things are all examples of things that can be loaded as modules:\n\nA folder with a package.json file containing a main field.\nA folder with an index.js file in it.\nA JavaScript file.\nMost npm packages are modules, because they are libraries that you load with require. However, there's no requirement that an npm package be a module! Some only contain an executable command-line interface, and don't provide a main field for use in Node programs.\n\nAlmost all npm packages (at least, those that are Node programs) contain many modules within them (because every file they load with require() is a module).\n\nIn the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program:\n\nvar req = require('request')\nwe might say that \"The variable req refers to the request module\".\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "73b3937fddb52e8f",
+      "text": "# So, why is it the \"node_modules\" folder, but \"package.json\" file? Why not node_packages or module.json?\n\nThe package.json file defines the package. (See \"What is a package?\" above.)\n\nThe node_modules folder is the place Node.js looks for modules. (See \"What is a module?\" above.)\n\nFor example, if you create a file at node_modules/foo.js and then had a program that did var f = require('foo.js') then it would load the module. However, foo.js is not a \"package\" in this case, because it does not have a package.json.\n\nAlternatively, if you create a package which does not have an index.js or a \"main\" field in the package.json file, then it is not a module. Even if it's installed in node_modules, it can't be an argument to require().\n\n\"node_modules\" is the name of my deity's arch-rival, and a Forbidden Word in my religion. Can I configure npm to use a different folder?\n\nNo. This will never happen. This question comes up sometimes, because it seems silly from the outside that npm couldn't just be configured to put stuff somewhere else, and then npm could load them from there. It's an arbitrary spelling choice, right? What's the big deal?\n\nAt the time of this writing, the string 'node_modules' appears 151 times in 53 separate files in npm and node core (excluding tests and documentation).\n\nSome of these references are in node's built-in module loader. Since npm is not involved at all at run-time, node itself would have to be configured to know where you've decided to stick stuff. Complexity hurdle #1. Since the Node module system is locked, this cannot be changed, and is enough to kill this request. But I'll continue, in deference to your deity's delicate feelings regarding spelling.\n\nMany of the others are in dependencies that npm uses, which are not necessarily tightly coupled to npm (in the sense that they do not read npm's configuration files, etc.) Each of these would have to be configured to take the name of the node_modules folder as a parameter. Complexity hurdle #2.\n\nFurthermore, npm has the ability to \"bundle\" dependencies by adding the dep names to the \"bundledDependencies\" list in package.json, which causes the folder to be included in the package tarball. What if the author of a module bundles its dependencies, and they use a different spelling for node_modules? npm would have to rename the folder at publish time, and then be smart enough to unpack it using your locally configured name. Complexity hurdle #3.\n\nFurthermore, what happens when you change this name? Fine, it's easy enough the first time, just rename the node_modules folders to ./blergyblerp/ or whatever name you choose. But what about when you change it again? npm doesn't currently track any state about past configuration settings, so this would be rather difficult to do properly. It would have to track every previous value for this config, and always accept any of them, or else yesterday's install may be broken tomorrow. Complexity hurdle #4.\n\nNever going to happen. The folder is named node_modules. It is written indelibly in the Node Way, handed down from the ancient times of Node 0.3.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "16ce77189156fd0e",
+      "text": "# How do I install node with npm?\n\nYou don't. Try one of these node version managers:\n\nUnix:\n\nhttp://github.com/isaacs/nave\nhttp://github.com/visionmedia/n\nhttp://github.com/creationix/nvm\nWindows:\n\nhttp://github.com/marcelklehr/nodist\nhttps://github.com/coreybutler/nvm-windows\nhttps://github.com/hakobera/nvmw\nhttps://github.com/nanjingboy/nvmw\nHow can I use npm for development?\n\nSee npm-developers and package.json.\n\nYou'll most likely want to npm link your development folder. That's awesomely handy.\n\nTo set up your own private registry, check out npm-registry.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "0fcf3dea38b2c665",
+      "text": "# Can I list a url as a dependency?\n\nYes. It should be a url to a gzipped tarball containing a single folder that has a package.json in its root, or a git url. (See \"what is a package?\" above.)\n\nHow do I symlink to a dev folder so I don't have to keep re-installing?\n\nSee npm-link\n\nThe package registry website. What is that exactly?\n\nSee npm-registry.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "7bd71117439cc9c9",
+      "text": "# I forgot my password, and can't publish. How do I reset it?\n\nGo to https://npmjs.com/forgot.\n\nI get ECONNREFUSED a lot. What's up?\n\nEither the registry is down, or node's DNS isn't able to reach out.\n\nTo check if the registry is down, open up https://registry.npmjs.org/ in a web browser. This will also tell you if you are just unable to access the internet for some reason.\n\nIf the registry IS down, let us know by emailing support@npmjs.com or posting an issue at https://github.com/npm/npm/issues. If it's down for the world (and not just on your local network) then we're probably already being pinged about it.\n\nYou can also often get a faster response by visiting the #npm channel on Freenode IRC.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "a806daf5c5b8766a",
+      "text": "# Why no namespaces?\n\nnpm has only one global namespace. If you want to namespace your own packages, you may: simply use the - character to separate the names or use scoped packages. npm is a mostly anarchic system. There is not sufficient need to impose namespace rules on everyone.\n\nAs of 2.0, npm supports scoped packages, which allow you to publish a group of related modules without worrying about name collisions.\n\nEvery npm user owns the scope associated with their username. For example, the user named npm owns the scope @npm. Scoped packages are published inside a scope by naming them as if they were files under the scope directory, e.g., by setting name in package.json to @npm/npm.\n\nScoped packages are supported by the public npm registry. The npm client is backwards-compatible with un-scoped registries, so it can be used to work with scoped and un-scoped registries at the same time.\n\nUnscoped packages can only depend on other unscoped packages. Scoped packages can depend on packages from their own scope, a different scope, or the public registry (unscoped).\n\nFor the current documentation of scoped packages, see https://docs.npmjs.com/misc/scope\n\nReferences:\n\nFor the reasoning behind the \"one global namespace\", please see this discussion: https://github.com/npm/npm/issues/798 (TL;DR: It doesn't actually make things better, and can make them worse.)\n\nFor the pre-implementation discussion of the scoped package feature, see this discussion: https://github.com/npm/npm/issues/5239\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "39f5918db833545a",
+      "text": "# Who does npm?\n\nnpm was originally written by Isaac Z. Schlueter, and many others have contributed to it, some of them quite substantially.\n\nThe npm open source project, The npm Registry, and the community website are maintained and operated by the good folks at npm, Inc."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "npm FAQ",
+        "story": []
+      },
+      "date": 1448979906107
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9605b610e3a5650a"
+      },
+      "id": "9605b610e3a5650a",
+      "type": "add",
+      "date": 1448979907813
+    },
+    {
+      "type": "edit",
+      "id": "9605b610e3a5650a",
+      "item": {
+        "type": "paragraph",
+        "id": "9605b610e3a5650a",
+        "text": "Here we list some frequently asked questions about [[npm]];"
+      },
+      "date": 1448979940217
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7ce568d56e83a6bf"
+      },
+      "id": "7ce568d56e83a6bf",
+      "type": "add",
+      "after": "9605b610e3a5650a",
+      "date": 1448979941527
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "paragraph",
+        "id": "7ce568d56e83a6bf",
+        "text": "http://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "date": 1448980052634
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "paragraph",
+        "id": "7ce568d56e83a6bf",
+        "text": "# Where does npm put stuff?\n\nSee npm-folders\n\ntl;dr:\n\nUse the npm root command to see where modules go, and the npm bin command to see where executables go\nGlobal installs are different from local installs. If you install something with the -g flag, then its executables go in npm bin -g and its modules go in npm root -g."
+      },
+      "date": 1448980087483
+    },
+    {
+      "type": "add",
+      "id": "ec91fac5e260d234",
+      "item": {
+        "type": "paragraph",
+        "id": "ec91fac5e260d234",
+        "text": "# How do I install something on my computer in a central location?"
+      },
+      "after": "7ce568d56e83a6bf",
+      "date": 1448980092187
+    },
+    {
+      "type": "add",
+      "id": "cac1de16dd9d0ec0",
+      "item": {
+        "type": "paragraph",
+        "id": "cac1de16dd9d0ec0",
+        "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)\n\n"
+      },
+      "after": "ec91fac5e260d234",
+      "date": 1448980119492
+    },
+    {
+      "type": "add",
+      "id": "b19df89397e45c5c",
+      "item": {
+        "type": "paragraph",
+        "id": "b19df89397e45c5c",
+        "text": "I installed something globally, but I can't require() it\n\nInstall it locally.\n\nThe global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program.\n\n# Why can't npm just put everything in one place, like other package managers?"
+      },
+      "after": "cac1de16dd9d0ec0",
+      "date": 1448980129298
+    },
+    {
+      "type": "add",
+      "id": "c257ceb2b9ecae8e",
+      "item": {
+        "type": "paragraph",
+        "id": "c257ceb2b9ecae8e",
+        "text": "Not every change is an improvement, but every improvement is a change. This would be like asking git to do network IO for every commit. It's not going to happen, because it's a terrible idea that causes more problems than it solves.\n\nIt is much harder to avoid dependency conflicts without nesting dependencies. This is fundamental to the way that npm works, and has proven to be an extremely successful approach. See npm-folders for more details.\n\nIf you want a package to be installed in one place, and have all your programs reference the same copy of it, then use the npm link command. That's what it's for. Install it globally, then link it into each program that uses it.\n\n# Whatever, I really want the old style 'everything global' style."
+      },
+      "after": "b19df89397e45c5c",
+      "date": 1448980140808
+    },
+    {
+      "type": "add",
+      "id": "baaae2762b6d1610",
+      "item": {
+        "type": "paragraph",
+        "id": "baaae2762b6d1610",
+        "text": "Write your own package manager. You could probably even wrap up npm in a shell script if you really wanted to.\n\nnpm will not help you do something that is known to be a bad idea.\n\nShould I check my node_modules folder into git?\n\nUsually, no. Allow npm to resolve dependencies for your packages.\n\nFor packages you deploy, such as websites and apps, you should use npm shrinkwrap to lock down your full dependency tree:\n\nhttps://docs.npmjs.com/cli/shrinkwrap\n\nIf you are paranoid about depending on the npm ecosystem, you should run a private npm mirror or a private cache.\n\nIf you want 100% confidence in being able to reproduce the specific bytes included in a deployment, you should use an additional mechanism that can verify contents rather than versions. For example, Amazon machine images, DigitalOcean snapshots, Heroku slugs, or simple tarballs.\n\n"
+      },
+      "after": "c257ceb2b9ecae8e",
+      "date": 1448980156626
+    },
+    {
+      "type": "add",
+      "id": "1e9e87ae4b8f8824",
+      "item": {
+        "type": "paragraph",
+        "id": "1e9e87ae4b8f8824",
+        "text": "# Is it 'npm' or 'NPM' or 'Npm'?\n\nnpm should never be capitalized unless it is being displayed in a location that is customarily all-caps (such as the title of man pages.)\n\nIf 'npm' is an acronym, why is it never capitalized?\n\nContrary to the belief of many, \"npm\" is not in fact an abbreviation for \"Node Package Manager\". It is a recursive bacronymic abbreviation for \"npm is not an acronym\". (If it was \"ninaa\", then it would be an acronym, and thus incorrectly named.)\n\n\"NPM\", however, is an acronym (more precisely, a capitonym) for the National Association of Pastoral Musicians. You can learn more about them at http://npm.org/.\n\nIn software, \"NPM\" is a Non-Parametric Mapping utility written by Chris Rorden. You can analyze pictures of brains with it. Learn more about the (capitalized) NPM program at http://www.cabiatl.com/mricro/npm/.\n\nThe first seed that eventually grew into this flower was a bash utility named \"pm\", which was a shortened descendent of \"pkgmakeinst\", a bash function that was used to install various different things on different platforms, most often using Yahoo's yinst. If npm was ever an acronym for anything, it was node pm or maybe new pm.\n\nSo, in all seriousness, the \"npm\" project is named after its command-line utility, which was organically selected to be easily typed by a right-handed programmer using a US QWERTY keyboard layout, ending with the right-ring-finger in a postition to type the - key for flags and other command-line arguments. That command-line utility is always lower-case, though it starts most sentences it is a part of.\n\n"
+      },
+      "after": "baaae2762b6d1610",
+      "date": 1448980175521
+    },
+    {
+      "type": "add",
+      "id": "ac1214ca33a2cb8b",
+      "item": {
+        "type": "paragraph",
+        "id": "ac1214ca33a2cb8b",
+        "text": "# How do I list installed packages?\n\nnpm ls\n\n"
+      },
+      "after": "1e9e87ae4b8f8824",
+      "date": 1448980182435
+    },
+    {
+      "type": "add",
+      "id": "b832a9ac9735c1fc",
+      "item": {
+        "type": "paragraph",
+        "id": "b832a9ac9735c1fc",
+        "text": "# How do I search for packages?\n\nnpm search\n\nArguments are greps. npm search jsdom shows jsdom packages.\n\n"
+      },
+      "after": "ac1214ca33a2cb8b",
+      "date": 1448980191082
+    },
+    {
+      "type": "add",
+      "id": "c25ae37d1d8cf18b",
+      "item": {
+        "type": "paragraph",
+        "id": "c25ae37d1d8cf18b",
+        "text": "# How do I update npm?\n\nnpm install npm -g\nYou can also update all outdated local packages by doing npm update without any arguments, or global packages by doing npm update -g.\n\nOccasionally, the version of npm will progress such that the current version cannot be properly installed with the version that you have installed already. (Consider, if there is ever a bug in the update command.)\n\nIn those cases, you can do this:\n\ncurl https://www.npmjs.com/install.sh | sh\nWhat is a package?\n\nA package is:\n\na) a folder containing a program described by a package.json file\nb) a gzipped tarball containing (a)\nc) a url that resolves to (b)\nd) a <name>@<version> that is published on the registry with (c)\ne) a <name>@<tag> that points to (d)\nf) a <name> that has a \"latest\" tag satisfying (e)\ng) a git url that, when cloned, results in (a).\nEven if you never publish your package, you can still get a lot of benefits of using npm if you just want to write a node program (a), and perhaps if you also want to be able to easily install it elsewhere after packing it up into a tarball (b).\n\nGit urls can be of the form:\n\ngit://github.com/user/project.git#commit-ish\ngit+ssh://user@hostname:project.git#commit-ish\ngit+http://user@hostname/project/blah.git#commit-ish\ngit+https://user@hostname/project/blah.git#commit-ish\nThe commit-ish can be any tag, sha, or branch which can be supplied as an argument to git checkout. The default is master.\n\n"
+      },
+      "after": "b832a9ac9735c1fc",
+      "date": 1448980205774
+    },
+    {
+      "type": "add",
+      "id": "6c71f5e5099684c8",
+      "item": {
+        "type": "paragraph",
+        "id": "6c71f5e5099684c8",
+        "text": "# What is a module?\n\nA module is anything that can be loaded with require() in a Node.js program. The following things are all examples of things that can be loaded as modules:\n\nA folder with a package.json file containing a main field.\nA folder with an index.js file in it.\nA JavaScript file.\nMost npm packages are modules, because they are libraries that you load with require. However, there's no requirement that an npm package be a module! Some only contain an executable command-line interface, and don't provide a main field for use in Node programs.\n\nAlmost all npm packages (at least, those that are Node programs) contain many modules within them (because every file they load with require() is a module).\n\nIn the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program:\n\nvar req = require('request')\nwe might say that \"The variable req refers to the request module\".\n\n"
+      },
+      "after": "c25ae37d1d8cf18b",
+      "date": 1448980231770
+    },
+    {
+      "type": "add",
+      "id": "73b3937fddb52e8f",
+      "item": {
+        "type": "paragraph",
+        "id": "73b3937fddb52e8f",
+        "text": "# So, why is it the \"node_modules\" folder, but \"package.json\" file? Why not node_packages or module.json?\n\nThe package.json file defines the package. (See \"What is a package?\" above.)\n\nThe node_modules folder is the place Node.js looks for modules. (See \"What is a module?\" above.)\n\nFor example, if you create a file at node_modules/foo.js and then had a program that did var f = require('foo.js') then it would load the module. However, foo.js is not a \"package\" in this case, because it does not have a package.json.\n\nAlternatively, if you create a package which does not have an index.js or a \"main\" field in the package.json file, then it is not a module. Even if it's installed in node_modules, it can't be an argument to require().\n\n\"node_modules\" is the name of my deity's arch-rival, and a Forbidden Word in my religion. Can I configure npm to use a different folder?\n\nNo. This will never happen. This question comes up sometimes, because it seems silly from the outside that npm couldn't just be configured to put stuff somewhere else, and then npm could load them from there. It's an arbitrary spelling choice, right? What's the big deal?\n\nAt the time of this writing, the string 'node_modules' appears 151 times in 53 separate files in npm and node core (excluding tests and documentation).\n\nSome of these references are in node's built-in module loader. Since npm is not involved at all at run-time, node itself would have to be configured to know where you've decided to stick stuff. Complexity hurdle #1. Since the Node module system is locked, this cannot be changed, and is enough to kill this request. But I'll continue, in deference to your deity's delicate feelings regarding spelling.\n\nMany of the others are in dependencies that npm uses, which are not necessarily tightly coupled to npm (in the sense that they do not read npm's configuration files, etc.) Each of these would have to be configured to take the name of the node_modules folder as a parameter. Complexity hurdle #2.\n\nFurthermore, npm has the ability to \"bundle\" dependencies by adding the dep names to the \"bundledDependencies\" list in package.json, which causes the folder to be included in the package tarball. What if the author of a module bundles its dependencies, and they use a different spelling for node_modules? npm would have to rename the folder at publish time, and then be smart enough to unpack it using your locally configured name. Complexity hurdle #3.\n\nFurthermore, what happens when you change this name? Fine, it's easy enough the first time, just rename the node_modules folders to ./blergyblerp/ or whatever name you choose. But what about when you change it again? npm doesn't currently track any state about past configuration settings, so this would be rather difficult to do properly. It would have to track every previous value for this config, and always accept any of them, or else yesterday's install may be broken tomorrow. Complexity hurdle #4.\n\nNever going to happen. The folder is named node_modules. It is written indelibly in the Node Way, handed down from the ancient times of Node 0.3.\n\n"
+      },
+      "after": "6c71f5e5099684c8",
+      "date": 1448980245768
+    },
+    {
+      "type": "add",
+      "id": "16ce77189156fd0e",
+      "item": {
+        "type": "paragraph",
+        "id": "16ce77189156fd0e",
+        "text": "# How do I install node with npm?\n\nYou don't. Try one of these node version managers:\n\nUnix:\n\nhttp://github.com/isaacs/nave\nhttp://github.com/visionmedia/n\nhttp://github.com/creationix/nvm\nWindows:\n\nhttp://github.com/marcelklehr/nodist\nhttps://github.com/coreybutler/nvm-windows\nhttps://github.com/hakobera/nvmw\nhttps://github.com/nanjingboy/nvmw\nHow can I use npm for development?\n\nSee npm-developers and package.json.\n\nYou'll most likely want to npm link your development folder. That's awesomely handy.\n\nTo set up your own private registry, check out npm-registry.\n\n"
+      },
+      "after": "73b3937fddb52e8f",
+      "date": 1448980257822
+    },
+    {
+      "type": "add",
+      "id": "0fcf3dea38b2c665",
+      "item": {
+        "type": "paragraph",
+        "id": "0fcf3dea38b2c665",
+        "text": "# Can I list a url as a dependency?\n\nYes. It should be a url to a gzipped tarball containing a single folder that has a package.json in its root, or a git url. (See \"what is a package?\" above.)\n\nHow do I symlink to a dev folder so I don't have to keep re-installing?\n\nSee npm-link\n\nThe package registry website. What is that exactly?\n\nSee npm-registry.\n\n"
+      },
+      "after": "16ce77189156fd0e",
+      "date": 1448980270522
+    },
+    {
+      "type": "add",
+      "id": "7bd71117439cc9c9",
+      "item": {
+        "type": "paragraph",
+        "id": "7bd71117439cc9c9",
+        "text": "# I forgot my password, and can't publish. How do I reset it?\n\nGo to https://npmjs.com/forgot.\n\nI get ECONNREFUSED a lot. What's up?\n\nEither the registry is down, or node's DNS isn't able to reach out.\n\nTo check if the registry is down, open up https://registry.npmjs.org/ in a web browser. This will also tell you if you are just unable to access the internet for some reason.\n\nIf the registry IS down, let us know by emailing support@npmjs.com or posting an issue at https://github.com/npm/npm/issues. If it's down for the world (and not just on your local network) then we're probably already being pinged about it.\n\nYou can also often get a faster response by visiting the #npm channel on Freenode IRC.\n\n"
+      },
+      "after": "0fcf3dea38b2c665",
+      "date": 1448980276963
+    },
+    {
+      "type": "add",
+      "id": "a806daf5c5b8766a",
+      "item": {
+        "type": "paragraph",
+        "id": "a806daf5c5b8766a",
+        "text": "# Why no namespaces?\n\nnpm has only one global namespace. If you want to namespace your own packages, you may: simply use the - character to separate the names or use scoped packages. npm is a mostly anarchic system. There is not sufficient need to impose namespace rules on everyone.\n\nAs of 2.0, npm supports scoped packages, which allow you to publish a group of related modules without worrying about name collisions.\n\nEvery npm user owns the scope associated with their username. For example, the user named npm owns the scope @npm. Scoped packages are published inside a scope by naming them as if they were files under the scope directory, e.g., by setting name in package.json to @npm/npm.\n\nScoped packages are supported by the public npm registry. The npm client is backwards-compatible with un-scoped registries, so it can be used to work with scoped and un-scoped registries at the same time.\n\nUnscoped packages can only depend on other unscoped packages. Scoped packages can depend on packages from their own scope, a different scope, or the public registry (unscoped).\n\nFor the current documentation of scoped packages, see https://docs.npmjs.com/misc/scope\n\nReferences:\n\nFor the reasoning behind the \"one global namespace\", please see this discussion: https://github.com/npm/npm/issues/798 (TL;DR: It doesn't actually make things better, and can make them worse.)\n\nFor the pre-implementation discussion of the scoped package feature, see this discussion: https://github.com/npm/npm/issues/5239\n\n"
+      },
+      "after": "7bd71117439cc9c9",
+      "date": 1448980290110
+    },
+    {
+      "type": "add",
+      "id": "39f5918db833545a",
+      "item": {
+        "type": "paragraph",
+        "id": "39f5918db833545a",
+        "text": "# Who does npm?\n\nnpm was originally written by Isaac Z. Schlueter, and many others have contributed to it, some of them quite substantially.\n\nThe npm open source project, The npm Registry, and the community website are maintained and operated by the good folks at npm, Inc."
+      },
+      "after": "a806daf5c5b8766a",
+      "date": 1448980303603
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "markdown",
+        "id": "7ce568d56e83a6bf",
+        "text": "# Where does npm put stuff?\n\nSee npm-folders\n\ntl;dr:\n\nUse the npm root command to see where modules go, and the npm bin command to see where executables go\nGlobal installs are different from local installs. If you install something with the -g flag, then its executables go in npm bin -g and its modules go in npm root -g."
+      },
+      "date": 1448980313413
+    },
+    {
+      "type": "edit",
+      "id": "ec91fac5e260d234",
+      "item": {
+        "type": "markdown",
+        "id": "ec91fac5e260d234",
+        "text": "# How do I install something on my computer in a central location?"
+      },
+      "date": 1448980315516
+    },
+    {
+      "type": "edit",
+      "id": "b19df89397e45c5c",
+      "item": {
+        "type": "markdown",
+        "id": "b19df89397e45c5c",
+        "text": "I installed something globally, but I can't require() it\n\nInstall it locally.\n\nThe global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program.\n\n# Why can't npm just put everything in one place, like other package managers?"
+      },
+      "date": 1448980321115
+    },
+    {
+      "type": "edit",
+      "id": "b19df89397e45c5c",
+      "item": {
+        "type": "markdown",
+        "id": "b19df89397e45c5c",
+        "text": "# Why can't npm just put everything in one place, like other package managers?"
+      },
+      "date": 1448980347980
+    },
+    {
+      "type": "edit",
+      "id": "cac1de16dd9d0ec0",
+      "item": {
+        "type": "paragraph",
+        "id": "cac1de16dd9d0ec0",
+        "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)\n\nI installed something globally, but I can't require() it\n\nInstall it locally.\n\nThe global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program."
+      },
+      "date": 1448980354556
+    },
+    {
+      "type": "edit",
+      "id": "c257ceb2b9ecae8e",
+      "item": {
+        "type": "paragraph",
+        "id": "c257ceb2b9ecae8e",
+        "text": "Not every change is an improvement, but every improvement is a change. This would be like asking git to do network IO for every commit. It's not going to happen, because it's a terrible idea that causes more problems than it solves.\n\nIt is much harder to avoid dependency conflicts without nesting dependencies. This is fundamental to the way that npm works, and has proven to be an extremely successful approach. See npm-folders for more details.\n\nIf you want a package to be installed in one place, and have all your programs reference the same copy of it, then use the npm link command. That's what it's for. Install it globally, then link it into each program that uses it."
+      },
+      "date": 1448980379116
+    },
+    {
+      "type": "edit",
+      "id": "baaae2762b6d1610",
+      "item": {
+        "type": "paragraph",
+        "id": "baaae2762b6d1610",
+        "text": "# Whatever, I really want the old style 'everything global' style."
+      },
+      "date": 1448980384326
+    },
+    {
+      "type": "edit",
+      "id": "baaae2762b6d1610",
+      "item": {
+        "type": "paragraph",
+        "id": "baaae2762b6d1610",
+        "text": "# Whatever, I really want the old style 'everything global' style. Write your own package manager. You could probably even wrap up npm in a shell script if you really wanted to.\n\nnpm will not help you do something that is known to be a bad idea.\n\nShould I check my node_modules folder into git?\n\nUsually, no. Allow npm to resolve dependencies for your packages.\n\nFor packages you deploy, such as websites and apps, you should use npm shrinkwrap to lock down your full dependency tree:\n\nhttps://docs.npmjs.com/cli/shrinkwrap\n\nIf you are paranoid about depending on the npm ecosystem, you should run a private npm mirror or a private cache.\n\nIf you want 100% confidence in being able to reproduce the specific bytes included in a deployment, you should use an additional mechanism that can verify contents rather than versions. For example, Amazon machine images, DigitalOcean snapshots, Heroku slugs, or simple tarballs.\n\n"
+      },
+      "date": 1448980391350
+    },
+    {
+      "type": "edit",
+      "id": "baaae2762b6d1610",
+      "item": {
+        "type": "markdown",
+        "id": "baaae2762b6d1610",
+        "text": "# Whatever, I really want the old style 'everything global' style. Write your own package manager. You could probably even wrap up npm in a shell script if you really wanted to.\n\nnpm will not help you do something that is known to be a bad idea.\n\nShould I check my node_modules folder into git?\n\nUsually, no. Allow npm to resolve dependencies for your packages.\n\nFor packages you deploy, such as websites and apps, you should use npm shrinkwrap to lock down your full dependency tree:\n\nhttps://docs.npmjs.com/cli/shrinkwrap\n\nIf you are paranoid about depending on the npm ecosystem, you should run a private npm mirror or a private cache.\n\nIf you want 100% confidence in being able to reproduce the specific bytes included in a deployment, you should use an additional mechanism that can verify contents rather than versions. For example, Amazon machine images, DigitalOcean snapshots, Heroku slugs, or simple tarballs.\n\n"
+      },
+      "date": 1448980393549
+    },
+    {
+      "type": "edit",
+      "id": "baaae2762b6d1610",
+      "item": {
+        "type": "markdown",
+        "id": "baaae2762b6d1610",
+        "text": "# Whatever, I really want the old style 'everything global' style. \nWrite your own package manager. You could probably even wrap up npm in a shell script if you really wanted to.\n\nnpm will not help you do something that is known to be a bad idea.\n\nShould I check my node_modules folder into git?\n\nUsually, no. Allow npm to resolve dependencies for your packages.\n\nFor packages you deploy, such as websites and apps, you should use npm shrinkwrap to lock down your full dependency tree:\n\nhttps://docs.npmjs.com/cli/shrinkwrap\n\nIf you are paranoid about depending on the npm ecosystem, you should run a private npm mirror or a private cache.\n\nIf you want 100% confidence in being able to reproduce the specific bytes included in a deployment, you should use an additional mechanism that can verify contents rather than versions. For example, Amazon machine images, DigitalOcean snapshots, Heroku slugs, or simple tarballs.\n\n"
+      },
+      "date": 1448980404654
+    },
+    {
+      "type": "edit",
+      "id": "1e9e87ae4b8f8824",
+      "item": {
+        "type": "markdown",
+        "id": "1e9e87ae4b8f8824",
+        "text": "# Is it 'npm' or 'NPM' or 'Npm'?\n\nnpm should never be capitalized unless it is being displayed in a location that is customarily all-caps (such as the title of man pages.)\n\nIf 'npm' is an acronym, why is it never capitalized?\n\nContrary to the belief of many, \"npm\" is not in fact an abbreviation for \"Node Package Manager\". It is a recursive bacronymic abbreviation for \"npm is not an acronym\". (If it was \"ninaa\", then it would be an acronym, and thus incorrectly named.)\n\n\"NPM\", however, is an acronym (more precisely, a capitonym) for the National Association of Pastoral Musicians. You can learn more about them at http://npm.org/.\n\nIn software, \"NPM\" is a Non-Parametric Mapping utility written by Chris Rorden. You can analyze pictures of brains with it. Learn more about the (capitalized) NPM program at http://www.cabiatl.com/mricro/npm/.\n\nThe first seed that eventually grew into this flower was a bash utility named \"pm\", which was a shortened descendent of \"pkgmakeinst\", a bash function that was used to install various different things on different platforms, most often using Yahoo's yinst. If npm was ever an acronym for anything, it was node pm or maybe new pm.\n\nSo, in all seriousness, the \"npm\" project is named after its command-line utility, which was organically selected to be easily typed by a right-handed programmer using a US QWERTY keyboard layout, ending with the right-ring-finger in a postition to type the - key for flags and other command-line arguments. That command-line utility is always lower-case, though it starts most sentences it is a part of.\n\n"
+      },
+      "date": 1448980415255
+    },
+    {
+      "type": "edit",
+      "id": "ac1214ca33a2cb8b",
+      "item": {
+        "type": "markdown",
+        "id": "ac1214ca33a2cb8b",
+        "text": "# How do I list installed packages?\n\nnpm ls\n\n"
+      },
+      "date": 1448980419934
+    },
+    {
+      "type": "edit",
+      "id": "b832a9ac9735c1fc",
+      "item": {
+        "type": "markdown",
+        "id": "b832a9ac9735c1fc",
+        "text": "# How do I search for packages?\n\nnpm search\n\nArguments are greps. npm search jsdom shows jsdom packages.\n\n"
+      },
+      "date": 1448980422634
+    },
+    {
+      "type": "edit",
+      "id": "c25ae37d1d8cf18b",
+      "item": {
+        "type": "markdown",
+        "id": "c25ae37d1d8cf18b",
+        "text": "# How do I update npm?\n\nnpm install npm -g\nYou can also update all outdated local packages by doing npm update without any arguments, or global packages by doing npm update -g.\n\nOccasionally, the version of npm will progress such that the current version cannot be properly installed with the version that you have installed already. (Consider, if there is ever a bug in the update command.)\n\nIn those cases, you can do this:\n\ncurl https://www.npmjs.com/install.sh | sh\nWhat is a package?\n\nA package is:\n\na) a folder containing a program described by a package.json file\nb) a gzipped tarball containing (a)\nc) a url that resolves to (b)\nd) a <name>@<version> that is published on the registry with (c)\ne) a <name>@<tag> that points to (d)\nf) a <name> that has a \"latest\" tag satisfying (e)\ng) a git url that, when cloned, results in (a).\nEven if you never publish your package, you can still get a lot of benefits of using npm if you just want to write a node program (a), and perhaps if you also want to be able to easily install it elsewhere after packing it up into a tarball (b).\n\nGit urls can be of the form:\n\ngit://github.com/user/project.git#commit-ish\ngit+ssh://user@hostname:project.git#commit-ish\ngit+http://user@hostname/project/blah.git#commit-ish\ngit+https://user@hostname/project/blah.git#commit-ish\nThe commit-ish can be any tag, sha, or branch which can be supplied as an argument to git checkout. The default is master.\n\n"
+      },
+      "date": 1448980425307
+    },
+    {
+      "type": "edit",
+      "id": "6c71f5e5099684c8",
+      "item": {
+        "type": "markdown",
+        "id": "6c71f5e5099684c8",
+        "text": "# What is a module?\n\nA module is anything that can be loaded with require() in a Node.js program. The following things are all examples of things that can be loaded as modules:\n\nA folder with a package.json file containing a main field.\nA folder with an index.js file in it.\nA JavaScript file.\nMost npm packages are modules, because they are libraries that you load with require. However, there's no requirement that an npm package be a module! Some only contain an executable command-line interface, and don't provide a main field for use in Node programs.\n\nAlmost all npm packages (at least, those that are Node programs) contain many modules within them (because every file they load with require() is a module).\n\nIn the context of a Node program, the module is also the thing that was loaded from a file. For example, in the following program:\n\nvar req = require('request')\nwe might say that \"The variable req refers to the request module\".\n\n"
+      },
+      "date": 1448980430583
+    },
+    {
+      "type": "edit",
+      "id": "73b3937fddb52e8f",
+      "item": {
+        "type": "markdown",
+        "id": "73b3937fddb52e8f",
+        "text": "# So, why is it the \"node_modules\" folder, but \"package.json\" file? Why not node_packages or module.json?\n\nThe package.json file defines the package. (See \"What is a package?\" above.)\n\nThe node_modules folder is the place Node.js looks for modules. (See \"What is a module?\" above.)\n\nFor example, if you create a file at node_modules/foo.js and then had a program that did var f = require('foo.js') then it would load the module. However, foo.js is not a \"package\" in this case, because it does not have a package.json.\n\nAlternatively, if you create a package which does not have an index.js or a \"main\" field in the package.json file, then it is not a module. Even if it's installed in node_modules, it can't be an argument to require().\n\n\"node_modules\" is the name of my deity's arch-rival, and a Forbidden Word in my religion. Can I configure npm to use a different folder?\n\nNo. This will never happen. This question comes up sometimes, because it seems silly from the outside that npm couldn't just be configured to put stuff somewhere else, and then npm could load them from there. It's an arbitrary spelling choice, right? What's the big deal?\n\nAt the time of this writing, the string 'node_modules' appears 151 times in 53 separate files in npm and node core (excluding tests and documentation).\n\nSome of these references are in node's built-in module loader. Since npm is not involved at all at run-time, node itself would have to be configured to know where you've decided to stick stuff. Complexity hurdle #1. Since the Node module system is locked, this cannot be changed, and is enough to kill this request. But I'll continue, in deference to your deity's delicate feelings regarding spelling.\n\nMany of the others are in dependencies that npm uses, which are not necessarily tightly coupled to npm (in the sense that they do not read npm's configuration files, etc.) Each of these would have to be configured to take the name of the node_modules folder as a parameter. Complexity hurdle #2.\n\nFurthermore, npm has the ability to \"bundle\" dependencies by adding the dep names to the \"bundledDependencies\" list in package.json, which causes the folder to be included in the package tarball. What if the author of a module bundles its dependencies, and they use a different spelling for node_modules? npm would have to rename the folder at publish time, and then be smart enough to unpack it using your locally configured name. Complexity hurdle #3.\n\nFurthermore, what happens when you change this name? Fine, it's easy enough the first time, just rename the node_modules folders to ./blergyblerp/ or whatever name you choose. But what about when you change it again? npm doesn't currently track any state about past configuration settings, so this would be rather difficult to do properly. It would have to track every previous value for this config, and always accept any of them, or else yesterday's install may be broken tomorrow. Complexity hurdle #4.\n\nNever going to happen. The folder is named node_modules. It is written indelibly in the Node Way, handed down from the ancient times of Node 0.3.\n\n"
+      },
+      "date": 1448980433759
+    },
+    {
+      "type": "edit",
+      "id": "16ce77189156fd0e",
+      "item": {
+        "type": "markdown",
+        "id": "16ce77189156fd0e",
+        "text": "# How do I install node with npm?\n\nYou don't. Try one of these node version managers:\n\nUnix:\n\nhttp://github.com/isaacs/nave\nhttp://github.com/visionmedia/n\nhttp://github.com/creationix/nvm\nWindows:\n\nhttp://github.com/marcelklehr/nodist\nhttps://github.com/coreybutler/nvm-windows\nhttps://github.com/hakobera/nvmw\nhttps://github.com/nanjingboy/nvmw\nHow can I use npm for development?\n\nSee npm-developers and package.json.\n\nYou'll most likely want to npm link your development folder. That's awesomely handy.\n\nTo set up your own private registry, check out npm-registry.\n\n"
+      },
+      "date": 1448980450961
+    },
+    {
+      "type": "edit",
+      "id": "0fcf3dea38b2c665",
+      "item": {
+        "type": "markdown",
+        "id": "0fcf3dea38b2c665",
+        "text": "# Can I list a url as a dependency?\n\nYes. It should be a url to a gzipped tarball containing a single folder that has a package.json in its root, or a git url. (See \"what is a package?\" above.)\n\nHow do I symlink to a dev folder so I don't have to keep re-installing?\n\nSee npm-link\n\nThe package registry website. What is that exactly?\n\nSee npm-registry.\n\n"
+      },
+      "date": 1448980453786
+    },
+    {
+      "type": "edit",
+      "id": "7bd71117439cc9c9",
+      "item": {
+        "type": "markdown",
+        "id": "7bd71117439cc9c9",
+        "text": "# I forgot my password, and can't publish. How do I reset it?\n\nGo to https://npmjs.com/forgot.\n\nI get ECONNREFUSED a lot. What's up?\n\nEither the registry is down, or node's DNS isn't able to reach out.\n\nTo check if the registry is down, open up https://registry.npmjs.org/ in a web browser. This will also tell you if you are just unable to access the internet for some reason.\n\nIf the registry IS down, let us know by emailing support@npmjs.com or posting an issue at https://github.com/npm/npm/issues. If it's down for the world (and not just on your local network) then we're probably already being pinged about it.\n\nYou can also often get a faster response by visiting the #npm channel on Freenode IRC.\n\n"
+      },
+      "date": 1448980455764
+    },
+    {
+      "type": "edit",
+      "id": "a806daf5c5b8766a",
+      "item": {
+        "type": "markdown",
+        "id": "a806daf5c5b8766a",
+        "text": "# Why no namespaces?\n\nnpm has only one global namespace. If you want to namespace your own packages, you may: simply use the - character to separate the names or use scoped packages. npm is a mostly anarchic system. There is not sufficient need to impose namespace rules on everyone.\n\nAs of 2.0, npm supports scoped packages, which allow you to publish a group of related modules without worrying about name collisions.\n\nEvery npm user owns the scope associated with their username. For example, the user named npm owns the scope @npm. Scoped packages are published inside a scope by naming them as if they were files under the scope directory, e.g., by setting name in package.json to @npm/npm.\n\nScoped packages are supported by the public npm registry. The npm client is backwards-compatible with un-scoped registries, so it can be used to work with scoped and un-scoped registries at the same time.\n\nUnscoped packages can only depend on other unscoped packages. Scoped packages can depend on packages from their own scope, a different scope, or the public registry (unscoped).\n\nFor the current documentation of scoped packages, see https://docs.npmjs.com/misc/scope\n\nReferences:\n\nFor the reasoning behind the \"one global namespace\", please see this discussion: https://github.com/npm/npm/issues/798 (TL;DR: It doesn't actually make things better, and can make them worse.)\n\nFor the pre-implementation discussion of the scoped package feature, see this discussion: https://github.com/npm/npm/issues/5239\n\n"
+      },
+      "date": 1448980458123
+    },
+    {
+      "type": "edit",
+      "id": "39f5918db833545a",
+      "item": {
+        "type": "markdown",
+        "id": "39f5918db833545a",
+        "text": "# Who does npm?\n\nnpm was originally written by Isaac Z. Schlueter, and many others have contributed to it, some of them quite substantially.\n\nThe npm open source project, The npm Registry, and the community website are maintained and operated by the good folks at npm, Inc."
+      },
+      "date": 1448980460559
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "markdown",
+        "id": "7ce568d56e83a6bf",
+        "text": "# Where does npm put stuff?\n\nSee [https://docs.npmjs.com/files/folders npm-folders]\n\ntl;dr:\n\nUse the npm root command to see where modules go, and the npm bin command to see where executables go\nGlobal installs are different from local installs. If you install something with the -g flag, then its executables go in npm bin -g and its modules go in npm root -g."
+      },
+      "date": 1448980501800
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "markdown",
+        "id": "7ce568d56e83a6bf",
+        "text": "# Where does npm put stuff?\n\nSee [https://docs.npmjs.com/files/folders npm-folders]\n\nUse the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go\n\nGlobal installs are different from local installs. If you install something with the -g flag, then its executables go in:\n"
+      },
+      "date": 1448980564498
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8adefcdbc93a8850"
+      },
+      "id": "8adefcdbc93a8850",
+      "type": "add",
+      "after": "39f5918db833545a",
+      "date": 1448980570301
+    },
+    {
+      "type": "edit",
+      "id": "8adefcdbc93a8850",
+      "item": {
+        "type": "code",
+        "id": "8adefcdbc93a8850",
+        "text": "npm bin -g and its modules go in npm root -g."
+      },
+      "date": 1448980582309
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "8adefcdbc93a8850",
+        "ec91fac5e260d234",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "8adefcdbc93a8850",
+      "date": 1448980599775
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "markdown",
+        "id": "7ce568d56e83a6bf",
+        "text": "# Where does npm put stuff?\n\nSee [https://docs.npmjs.com/files/folders npm-folders]\n\nUse the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go\n\nGlobal installs are different from local installs."
+      },
+      "date": 1448980613331
+    },
+    {
+      "type": "add",
+      "id": "ad6c28bc64513d4a",
+      "item": {
+        "type": "paragraph",
+        "id": "ad6c28bc64513d4a",
+        "text": "If you install something with the -g flag, then its executables go in:\n"
+      },
+      "after": "9605b610e3a5650a",
+      "date": 1448980624882
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "ad6c28bc64513d4a",
+        "8adefcdbc93a8850",
+        "ec91fac5e260d234",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "ad6c28bc64513d4a",
+      "date": 1448980628047
+    },
+    {
+      "type": "edit",
+      "id": "8adefcdbc93a8850",
+      "item": {
+        "type": "code",
+        "id": "8adefcdbc93a8850",
+        "text": "npm bin -g\nnpm root -g."
+      },
+      "date": 1448980651172
+    },
+    {
+      "type": "edit",
+      "id": "ad6c28bc64513d4a",
+      "item": {
+        "type": "paragraph",
+        "id": "ad6c28bc64513d4a",
+        "text": "If you install something with the -g flag, then its executables go in fdsa  and its modules go in \n"
+      },
+      "date": 1448980659226
+    },
+    {
+      "type": "edit",
+      "id": "ad6c28bc64513d4a",
+      "item": {
+        "type": "paragraph",
+        "id": "ad6c28bc64513d4a",
+        "text": "If you install something with the -g flag, then its executables go in npm bin -g and its modules go in npm root -g:\n"
+      },
+      "date": 1448980684724
+    },
+    {
+      "type": "edit",
+      "id": "ad6c28bc64513d4a",
+      "item": {
+        "type": "paragraph",
+        "id": "ad6c28bc64513d4a",
+        "text": "If you install something with the -g flag, then its executables go in npm bin -g and its modules go in npm root -g:"
+      },
+      "date": 1448980696499
+    },
+    {
+      "type": "add",
+      "id": "3fe399d34a3ad347",
+      "item": {
+        "type": "paragraph",
+        "id": "3fe399d34a3ad347",
+        "text": "da"
+      },
+      "after": "ad6c28bc64513d4a",
+      "date": 1448980698948
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "3fe399d34a3ad347",
+        "ad6c28bc64513d4a",
+        "8adefcdbc93a8850",
+        "ec91fac5e260d234",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "3fe399d34a3ad347",
+      "date": 1448980701202
+    },
+    {
+      "type": "edit",
+      "id": "7ce568d56e83a6bf",
+      "item": {
+        "type": "markdown",
+        "id": "7ce568d56e83a6bf",
+        "text": "# Where does npm put stuff?"
+      },
+      "date": 1448980709421
+    },
+    {
+      "type": "edit",
+      "id": "3fe399d34a3ad347",
+      "item": {
+        "type": "paragraph",
+        "id": "3fe399d34a3ad347",
+        "text": "See [https://docs.npmjs.com/files/folders npm-folders]\n\nUse the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go\n\nGlobal installs are different from local installs."
+      },
+      "date": 1448980715405
+    },
+    {
+      "type": "edit",
+      "id": "3fe399d34a3ad347",
+      "item": {
+        "type": "paragraph",
+        "id": "3fe399d34a3ad347",
+        "text": "Use the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go. See [https://docs.npmjs.com/files/folders npm-folders]\n\nGlobal installs are different from local installs."
+      },
+      "date": 1448980737278
+    },
+    {
+      "type": "edit",
+      "id": "3fe399d34a3ad347",
+      "item": {
+        "type": "paragraph",
+        "id": "3fe399d34a3ad347",
+        "text": "Use the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go. See [https://docs.npmjs.com/files/folders npm-folders]"
+      },
+      "date": 1448980758150
+    },
+    {
+      "type": "edit",
+      "id": "3fe399d34a3ad347",
+      "item": {
+        "type": "paragraph",
+        "id": "3fe399d34a3ad347",
+        "text": "Global installs are different from local installs."
+      },
+      "date": 1448980761174
+    },
+    {
+      "type": "add",
+      "id": "dd83c7a76f8a456c",
+      "item": {
+        "type": "paragraph",
+        "id": "dd83c7a76f8a456c",
+        "text": "Use the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go. See [https://docs.npmjs.com/files/folders npm-folders]"
+      },
+      "after": "3fe399d34a3ad347",
+      "date": 1448980763054
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "3fe399d34a3ad347",
+        "8adefcdbc93a8850",
+        "dd83c7a76f8a456c",
+        "ad6c28bc64513d4a",
+        "ec91fac5e260d234",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "8adefcdbc93a8850",
+      "date": 1448980765778
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "3fe399d34a3ad347",
+        "8adefcdbc93a8850",
+        "ad6c28bc64513d4a",
+        "dd83c7a76f8a456c",
+        "ec91fac5e260d234",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "ad6c28bc64513d4a",
+      "date": 1448980771586
+    },
+    {
+      "type": "edit",
+      "id": "dd83c7a76f8a456c",
+      "item": {
+        "type": "paragraph",
+        "id": "dd83c7a76f8a456c",
+        "text": "For loval installs, use the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go. See [https://docs.npmjs.com/files/folders npm-folders]"
+      },
+      "date": 1448980785494
+    },
+    {
+      "type": "edit",
+      "id": "9605b610e3a5650a",
+      "item": {
+        "type": "paragraph",
+        "id": "9605b610e3a5650a",
+        "text": "Here we list some frequently asked questions about [[npm]]. See [https://docs.npmjs.com/files/folders docs.npmjs.com] for the official FAQ."
+      },
+      "date": 1448980831760
+    },
+    {
+      "type": "edit",
+      "id": "cac1de16dd9d0ec0",
+      "item": {
+        "type": "paragraph",
+        "id": "cac1de16dd9d0ec0",
+        "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)\n\n# I installed something globally, but I can't require() it?\n\nInstall it locally.\n\nThe global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program."
+      },
+      "date": 1466508082869
+    },
+    {
+      "type": "edit",
+      "id": "cac1de16dd9d0ec0",
+      "item": {
+        "type": "markdown",
+        "id": "cac1de16dd9d0ec0",
+        "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)\n\n# I installed something globally, but I can't require() it?\n\nInstall it locally.\n\nThe global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program."
+      },
+      "date": 1466508084112
+    },
+    {
+      "type": "edit",
+      "id": "cac1de16dd9d0ec0",
+      "item": {
+        "type": "markdown",
+        "id": "cac1de16dd9d0ec0",
+        "text": "# I installed something globally, but I can't require() it?\n\nInstall it locally.\n\nThe global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program."
+      },
+      "date": 1466508101230
+    },
+    {
+      "type": "add",
+      "id": "1afa37188a606bce",
+      "item": {
+        "type": "paragraph",
+        "id": "1afa37188a606bce",
+        "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)\n\n"
+      },
+      "after": "dd83c7a76f8a456c",
+      "date": 1466508109611
+    },
+    {
+      "type": "edit",
+      "id": "dd83c7a76f8a456c",
+      "item": {
+        "type": "paragraph",
+        "id": "dd83c7a76f8a456c",
+        "text": "For local installs, use the [[npm root]] command to see where modules go, and the [[npm bin]] command to see where executables go. See [https://docs.npmjs.com/files/folders npm-folders]"
+      },
+      "date": 1466508113660
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "3fe399d34a3ad347",
+        "8adefcdbc93a8850",
+        "ad6c28bc64513d4a",
+        "dd83c7a76f8a456c",
+        "ec91fac5e260d234",
+        "1afa37188a606bce",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "1afa37188a606bce",
+      "date": 1466508116389
+    },
+    {
+      "type": "edit",
+      "id": "cac1de16dd9d0ec0",
+      "item": {
+        "type": "markdown",
+        "id": "cac1de16dd9d0ec0",
+        "text": "# I installed something globally, but I can't require() it?\n\nInstall it locally."
+      },
+      "date": 1466508129436
+    },
+    {
+      "type": "edit",
+      "id": "1afa37188a606bce",
+      "item": {
+        "type": "paragraph",
+        "id": "1afa37188a606bce",
+        "text": "Install it globally by tacking -g or --global to the command. (This is especially important for command line utilities that need to add their bins to the global system PATH.)"
+      },
+      "date": 1466508132668
+    },
+    {
+      "type": "add",
+      "id": "47e5405967a66ab3",
+      "item": {
+        "type": "paragraph",
+        "id": "47e5405967a66ab3",
+        "text": "The global install location is a place for command-line utilities to put their bins in the system PATH. It's not for use with require().\n\nIf you require() a module in your code, then that means it's a dependency, and a part of your program. You need to install it locally in your program.\n"
+      },
+      "after": "1afa37188a606bce",
+      "date": 1466508134453
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "3fe399d34a3ad347",
+        "8adefcdbc93a8850",
+        "ad6c28bc64513d4a",
+        "dd83c7a76f8a456c",
+        "ec91fac5e260d234",
+        "1afa37188a606bce",
+        "cac1de16dd9d0ec0",
+        "b19df89397e45c5c",
+        "47e5405967a66ab3",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "47e5405967a66ab3",
+      "date": 1466508139036
+    },
+    {
+      "type": "move",
+      "order": [
+        "9605b610e3a5650a",
+        "7ce568d56e83a6bf",
+        "3fe399d34a3ad347",
+        "8adefcdbc93a8850",
+        "ad6c28bc64513d4a",
+        "dd83c7a76f8a456c",
+        "ec91fac5e260d234",
+        "1afa37188a606bce",
+        "cac1de16dd9d0ec0",
+        "47e5405967a66ab3",
+        "b19df89397e45c5c",
+        "c257ceb2b9ecae8e",
+        "baaae2762b6d1610",
+        "1e9e87ae4b8f8824",
+        "ac1214ca33a2cb8b",
+        "b832a9ac9735c1fc",
+        "c25ae37d1d8cf18b",
+        "6c71f5e5099684c8",
+        "73b3937fddb52e8f",
+        "16ce77189156fd0e",
+        "0fcf3dea38b2c665",
+        "7bd71117439cc9c9",
+        "a806daf5c5b8766a",
+        "39f5918db833545a"
+      ],
+      "id": "47e5405967a66ab3",
+      "date": 1466508143750
+    }
+  ]
+}

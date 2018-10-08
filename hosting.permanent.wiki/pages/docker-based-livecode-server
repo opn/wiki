@@ -1,0 +1,605 @@
+{
+  "title": "Docker Based Livecode Server",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "7cf53f1eff8e1076",
+      "text": "Here we explore how we might run a Livecode server using Docker."
+    },
+    {
+      "type": "markdown",
+      "id": "229576edd676d846",
+      "text": "# Aims"
+    },
+    {
+      "type": "paragraph",
+      "id": "fd4ee6d1d438306c",
+      "text": "The aim is to be able to integrate Livecode scripting into a scaleable cluster based architecture, which will allow easy scripting of automation tasks, and development of server based code for mobile apps."
+    },
+    {
+      "type": "markdown",
+      "id": "cfb731e2827cbc57",
+      "text": "There are two versions of this set up:\n\n- [[Caddy Based Federation]]\n- [[Cluster Based Federation]]\n- [[Docker Data Volumes]]"
+    },
+    {
+      "type": "markdown",
+      "id": "c418791cc44cb94d",
+      "text": "# Basic Docker Setup"
+    },
+    {
+      "type": "paragraph",
+      "id": "be3a93a1e3523d92",
+      "text": "Here is a a Docker image with Apache + LiveCode Community Server installed to the Docker Hub registry - [https://registry.hub.docker.com/u/techstrategies/livecode/ registry.hub.docker.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "2a41ca1e7696e2f9",
+      "text": "Here is the repo on [https://github.com/techstrategies/docker-livecode github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "6937afba30f6bcf3",
+      "text": " To use, simply run the following command from the directory where you have your LiveCode scripts:"
+    },
+    {
+      "type": "code",
+      "id": "d7d7d74dbda31275",
+      "text": "docker run -it --rm -P --name livecode -v \"$PWD\":/var/www/html/ techstrategies/livecode:7.0.6"
+    },
+    {
+      "type": "paragraph",
+      "id": "566c522e46884f0b",
+      "text": "Now let's try this on [[Containership.io]]"
+    },
+    {
+      "type": "markdown",
+      "id": "2d545f18bead440c",
+      "text": "# Livecode Server on Docker"
+    },
+    {
+      "type": "paragraph",
+      "id": "ebb70561699386dc",
+      "text": "Setting up a Docker image is fairly simple.  I am guessing you are wanting to run a LiveCode Linux standalone in a Docker container that listens on a particular port?"
+    },
+    {
+      "type": "paragraph",
+      "id": "e153cc2773a77599",
+      "text": "In that case, it would be a matter of configuring a Dockerfile that uses a base Docker image for whatever distro you prefer, copies the standalone into it, and sets it to execute on startup of the container…  "
+    },
+    {
+      "type": "paragraph",
+      "id": "2704c58b3a97e93c",
+      "text": "For what you are doing the Dockerfile might look something like:"
+    },
+    {
+      "type": "code",
+      "id": "a8549de21727e039",
+      "text": "FROM: ubuntu:14.04\n\nEXPOSE 5000 (put what port you are using here)\n\nCOPY yourstandalone /linux/path/to/yourstandalone\n\nENTRYPOINT [“/linux/path/to/yourstandalone”]\nCMD [“-p parameter”, “-y another parameter”]"
+    },
+    {
+      "type": "paragraph",
+      "id": "f6912661d9c92557",
+      "text": "Then, making sure that the Dockerfile and standalone are in the current directory, build it…. \"docker build -t image name .\"\n"
+    },
+    {
+      "type": "html",
+      "id": "de13115c0f6a22e2",
+      "text": "<h3>Links</h3>\n\n <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=revIgnitor+server+config&amp;start=10\">revIgnitor server config - Google Search</a>\n      </div>\n\n    \n       <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=hosting.permanent.wiki\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://hosting.permanent.wiki/view/welcome-visitors/view/fedwiki-site-administration/view/federated-wiki-on-digital-ocean/view/docker-provisioning/view/docker-based-livecode-server\">Docker Provisioning</a>\n      </div>\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Docker Based Livecode Server",
+        "story": []
+      },
+      "date": 1497884132912
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7cf53f1eff8e1076"
+      },
+      "id": "7cf53f1eff8e1076",
+      "type": "add",
+      "date": 1497884134014
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "de13115c0f6a22e2"
+      },
+      "id": "de13115c0f6a22e2",
+      "type": "add",
+      "after": "7cf53f1eff8e1076",
+      "date": 1497884251106
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n\n <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=revIgnitor+server+config&amp;start=10\">revIgnitor server config - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/search.php?sid=e24800ea0ba5f1576b8b4d45b0801812\">LiveCode Forums &amp;bull; Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=livecode.world\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://livecode.world/\">Hello &amp;quot;[[gData[&amp;quot;pageTitle&amp;quot;]]]&amp;quot;</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=livecode+docker&amp;start=20\">livecode docker - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=hosting.permanent.wiki\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://hosting.permanent.wiki/view/welcome-visitors/view/fedwiki-site-administration/view/federated-wiki-on-digital-ocean/view/docker-provisioning/view/docker-based-livecode-server\">Docker Provisioning</a>\n      </div>\n"
+      },
+      "date": 1497884268154
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n  \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/search.php?sid=e24800ea0ba5f1576b8b4d45b0801812\">LiveCode Forums &amp;bull; Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=livecode.world\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://livecode.world/\">Hello &amp;quot;[[gData[&amp;quot;pageTitle&amp;quot;]]]&amp;quot;</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=livecode+docker&amp;start=20\">livecode docker - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=hosting.permanent.wiki\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://hosting.permanent.wiki/view/welcome-visitors/view/fedwiki-site-administration/view/federated-wiki-on-digital-ocean/view/docker-provisioning/view/docker-based-livecode-server\">Docker Provisioning</a>\n      </div>\n"
+      },
+      "date": 1497884302401
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n  \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=livecode.world\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://livecode.world/\">Hello &amp;quot;[[gData[&amp;quot;pageTitle&amp;quot;]]]&amp;quot;</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=livecode+docker&amp;start=20\">livecode docker - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=hosting.permanent.wiki\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://hosting.permanent.wiki/view/welcome-visitors/view/fedwiki-site-administration/view/federated-wiki-on-digital-ocean/view/docker-provisioning/view/docker-based-livecode-server\">Docker Provisioning</a>\n      </div>\n"
+      },
+      "date": 1497884397673
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n\n <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=revIgnitor+server+config&amp;start=10\">revIgnitor server config - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/search.php?sid=e24800ea0ba5f1576b8b4d45b0801812\">LiveCode Forums &amp;bull; Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=livecode.world\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://livecode.world/\">Hello &amp;quot;[[gData[&amp;quot;pageTitle&amp;quot;]]]&amp;quot;</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=livecode+docker&amp;start=20\">livecode docker - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>"
+      },
+      "date": 1497884452155
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n\n <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=revIgnitor+server+config&amp;start=10\">revIgnitor server config - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/search.php?sid=e24800ea0ba5f1576b8b4d45b0801812\">LiveCode Forums &amp;bull; Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n     <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=livecode+docker&amp;start=20\">livecode docker - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>"
+      },
+      "date": 1497884478181
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n\n <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=revIgnitor+server+config&amp;start=10\">revIgnitor server config - Google Search</a>\n      </div>\n\n    \n       <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=livecode.world\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://livecode.world/\">Hello &amp;quot;[[gData[&amp;quot;pageTitle&amp;quot;]]]&amp;quot;</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=livecode+docker&amp;start=20\">livecode docker - Google Search</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=hosting.permanent.wiki\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://hosting.permanent.wiki/view/welcome-visitors/view/fedwiki-site-administration/view/federated-wiki-on-digital-ocean/view/docker-provisioning/view/docker-based-livecode-server\">Docker Provisioning</a>\n      </div>\n"
+      },
+      "date": 1497884548115
+    },
+    {
+      "type": "edit",
+      "id": "de13115c0f6a22e2",
+      "item": {
+        "type": "html",
+        "id": "de13115c0f6a22e2",
+        "text": "<h3>Links</h3>\n\n <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.google.co.uk\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=revIgnitor+server+config&amp;start=10\">revIgnitor server config - Google Search</a>\n      </div>\n\n    \n       <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/index.html\">Welcome to revIgniter : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=revigniter.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://revigniter.com/userGuide/general/urls.html\">revIgniter URLs : revIgniter User Guide</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/bootstraptutorial2\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.bbyteonline.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://www.bbyteonline.com/tutorial\">Fixed layout example with Twitter Bootstrap</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=lists.runrev.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://lists.runrev.com/pipermail/use-livecode/2015-July/216887.html\">LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=forums.livecode.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://forums.livecode.com/phpBB2/viewtopic.php?f=9&amp;t=28679\">LiveCode Forums &amp;bull; View topic - socket connection</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.mail-archive.com\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.mail-archive.com/use-livecode@lists.runrev.com/msg64599.html\">Re: LiveCode community server on Docker</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=www.techstrategies.com.au\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"https://www.techstrategies.com.au/contact/\">Contact | Tech Strategies</a>\n      </div>\n\n    \n      <div style=\"padding-left: 24px; padding-top: 8px; position: relative; font-size: 13px;\">\n        <img src=\"https://www.google.com/s2/favicons?domain=hosting.permanent.wiki\" style=\"vertical-align: middle; width:16px; height:16px\">\n        <a style=\"vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;\" href=\"http://hosting.permanent.wiki/view/welcome-visitors/view/fedwiki-site-administration/view/federated-wiki-on-digital-ocean/view/docker-provisioning/view/docker-based-livecode-server\">Docker Provisioning</a>\n      </div>\n"
+      },
+      "date": 1497884575382
+    },
+    {
+      "type": "edit",
+      "id": "7cf53f1eff8e1076",
+      "item": {
+        "type": "paragraph",
+        "id": "7cf53f1eff8e1076",
+        "text": "Here we explore how we might run a Livecode server using Docker."
+      },
+      "date": 1497884788218
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ebb70561699386dc"
+      },
+      "id": "ebb70561699386dc",
+      "type": "add",
+      "after": "de13115c0f6a22e2",
+      "date": 1497884822480
+    },
+    {
+      "type": "move",
+      "order": [
+        "7cf53f1eff8e1076",
+        "ebb70561699386dc",
+        "de13115c0f6a22e2"
+      ],
+      "id": "ebb70561699386dc",
+      "date": 1497884823790
+    },
+    {
+      "type": "edit",
+      "id": "ebb70561699386dc",
+      "item": {
+        "type": "paragraph",
+        "id": "ebb70561699386dc",
+        "text": "Setting up a Docker image is fairly simple.  I am guessing you are wanting to run a LiveCode Linux standalone in a Docker container that listens on a particular port?"
+      },
+      "date": 1497884839766
+    },
+    {
+      "type": "add",
+      "id": "e153cc2773a77599",
+      "item": {
+        "type": "paragraph",
+        "id": "e153cc2773a77599",
+        "text": "In that case, it would be a matter of configuring a Dockerfile that uses a base Docker image for whatever distro you prefer, copies the standalone into it, and sets it to execute on startup of the container…  "
+      },
+      "after": "ebb70561699386dc",
+      "date": 1497884855174
+    },
+    {
+      "type": "add",
+      "id": "2704c58b3a97e93c",
+      "item": {
+        "type": "paragraph",
+        "id": "2704c58b3a97e93c",
+        "text": "For what you are doing the Dockerfile might look something like:"
+      },
+      "after": "e153cc2773a77599",
+      "date": 1497884857718
+    },
+    {
+      "type": "add",
+      "id": "0c6b8570a21037b3",
+      "item": {
+        "type": "paragraph",
+        "id": "0c6b8570a21037b3",
+        "text": "\n—\nFROM: ubuntu:14.04\n\nEXPOSE 5000 (put what port you are using here)\n\nCOPY yourstandalone /linux/path/to/yourstandalone\n\nENTRYPOINT [“/linux/path/to/yourstandalone”]\nCMD [“-p parameter”, “-y another parameter”]\n—\n"
+      },
+      "after": "2704c58b3a97e93c",
+      "date": 1497884861154
+    },
+    {
+      "type": "add",
+      "id": "f6912661d9c92557",
+      "item": {
+        "type": "paragraph",
+        "id": "f6912661d9c92557",
+        "text": "Then, making sure that the Dockerfile and standalone are in the current directory, build it…. \"docker build -t image name .\"\n"
+      },
+      "after": "0c6b8570a21037b3",
+      "date": 1497884863216
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a8549de21727e039"
+      },
+      "id": "a8549de21727e039",
+      "type": "add",
+      "after": "de13115c0f6a22e2",
+      "date": 1497884866268
+    },
+    {
+      "type": "move",
+      "order": [
+        "7cf53f1eff8e1076",
+        "ebb70561699386dc",
+        "e153cc2773a77599",
+        "2704c58b3a97e93c",
+        "a8549de21727e039",
+        "0c6b8570a21037b3",
+        "f6912661d9c92557",
+        "de13115c0f6a22e2"
+      ],
+      "id": "a8549de21727e039",
+      "date": 1497884868214
+    },
+    {
+      "type": "remove",
+      "id": "0c6b8570a21037b3",
+      "date": 1497884871680
+    },
+    {
+      "type": "edit",
+      "id": "a8549de21727e039",
+      "item": {
+        "type": "code",
+        "id": "a8549de21727e039",
+        "text": "FROM: ubuntu:14.04\n\nEXPOSE 5000 (put what port you are using here)\n\nCOPY yourstandalone /linux/path/to/yourstandalone\n\nENTRYPOINT [“/linux/path/to/yourstandalone”]\nCMD [“-p parameter”, “-y another parameter”]"
+      },
+      "date": 1497884880441
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2d545f18bead440c"
+      },
+      "id": "2d545f18bead440c",
+      "type": "add",
+      "after": "de13115c0f6a22e2",
+      "date": 1497884960577
+    },
+    {
+      "type": "move",
+      "order": [
+        "7cf53f1eff8e1076",
+        "2d545f18bead440c",
+        "ebb70561699386dc",
+        "e153cc2773a77599",
+        "2704c58b3a97e93c",
+        "a8549de21727e039",
+        "f6912661d9c92557",
+        "de13115c0f6a22e2"
+      ],
+      "id": "2d545f18bead440c",
+      "date": 1497884964193
+    },
+    {
+      "type": "edit",
+      "id": "2d545f18bead440c",
+      "item": {
+        "type": "markdown",
+        "id": "2d545f18bead440c",
+        "text": "# Livecode Server"
+      },
+      "date": 1497884985975
+    },
+    {
+      "type": "add",
+      "id": "c418791cc44cb94d",
+      "item": {
+        "type": "paragraph",
+        "id": "c418791cc44cb94d",
+        "text": "# Basic Docker Setup"
+      },
+      "after": "7cf53f1eff8e1076",
+      "date": 1497885018064
+    },
+    {
+      "type": "add",
+      "id": "be3a93a1e3523d92",
+      "item": {
+        "type": "paragraph",
+        "id": "be3a93a1e3523d92",
+        "text": "I have uploaded a Docker image with Apache + LiveCode Community Server installed to the Docker Hub registry .\n\nhttps://registry.hub.docker.com/u/techstrategies/livecode/ <https://registry.hub.docker.com/u/techstrategies/livecode/>\n\nTo use, simply run the following command from the directory where you have your LiveCode scripts:\n\n\tdocker run -it --rm -P --name livecode -v \"$PWD\":/var/www/html/ techstrategies/livecode:7.0.6"
+      },
+      "after": "c418791cc44cb94d",
+      "date": 1497885020308
+    },
+    {
+      "type": "edit",
+      "id": "c418791cc44cb94d",
+      "item": {
+        "type": "markdown",
+        "id": "c418791cc44cb94d",
+        "text": "# Basic Docker Setup"
+      },
+      "date": 1497885021518
+    },
+    {
+      "type": "edit",
+      "id": "be3a93a1e3523d92",
+      "item": {
+        "type": "paragraph",
+        "id": "be3a93a1e3523d92",
+        "text": "Here is a a Docker image with Apache + LiveCode Community Server installed to the Docker Hub registry - [https://registry.hub.docker.com/u/techstrategies/livecode/ registry.hub.docker.com]"
+      },
+      "date": 1497885070471
+    },
+    {
+      "type": "add",
+      "id": "6937afba30f6bcf3",
+      "item": {
+        "type": "paragraph",
+        "id": "6937afba30f6bcf3",
+        "text": " To use, simply run the following command from the directory where you have your LiveCode scripts:"
+      },
+      "after": "be3a93a1e3523d92",
+      "date": 1497885074511
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d7d7d74dbda31275"
+      },
+      "id": "d7d7d74dbda31275",
+      "type": "add",
+      "after": "de13115c0f6a22e2",
+      "date": 1497885079579
+    },
+    {
+      "type": "move",
+      "order": [
+        "7cf53f1eff8e1076",
+        "c418791cc44cb94d",
+        "be3a93a1e3523d92",
+        "6937afba30f6bcf3",
+        "d7d7d74dbda31275",
+        "2d545f18bead440c",
+        "ebb70561699386dc",
+        "e153cc2773a77599",
+        "2704c58b3a97e93c",
+        "a8549de21727e039",
+        "f6912661d9c92557",
+        "de13115c0f6a22e2"
+      ],
+      "id": "d7d7d74dbda31275",
+      "date": 1497885082305
+    },
+    {
+      "type": "edit",
+      "id": "d7d7d74dbda31275",
+      "item": {
+        "type": "code",
+        "id": "d7d7d74dbda31275",
+        "text": "docker run -it --rm -P --name livecode -v \"$PWD\":/var/www/html/ techstrategies/livecode:7.0.6"
+      },
+      "date": 1497885089626
+    },
+    {
+      "type": "add",
+      "id": "2a41ca1e7696e2f9",
+      "item": {
+        "type": "paragraph",
+        "id": "2a41ca1e7696e2f9",
+        "text": "Here is the repo on [https://github.com/techstrategies/docker-livecode github]"
+      },
+      "after": "6937afba30f6bcf3",
+      "date": 1497885187001
+    },
+    {
+      "type": "move",
+      "order": [
+        "7cf53f1eff8e1076",
+        "c418791cc44cb94d",
+        "be3a93a1e3523d92",
+        "2a41ca1e7696e2f9",
+        "6937afba30f6bcf3",
+        "d7d7d74dbda31275",
+        "2d545f18bead440c",
+        "ebb70561699386dc",
+        "e153cc2773a77599",
+        "2704c58b3a97e93c",
+        "a8549de21727e039",
+        "f6912661d9c92557",
+        "de13115c0f6a22e2"
+      ],
+      "id": "2a41ca1e7696e2f9",
+      "date": 1497885189149
+    },
+    {
+      "type": "add",
+      "id": "566c522e46884f0b",
+      "item": {
+        "type": "paragraph",
+        "id": "566c522e46884f0b",
+        "text": "Now let's try this on [[Containership.io]]"
+      },
+      "after": "6937afba30f6bcf3",
+      "date": 1497885835361
+    },
+    {
+      "type": "move",
+      "order": [
+        "7cf53f1eff8e1076",
+        "c418791cc44cb94d",
+        "be3a93a1e3523d92",
+        "2a41ca1e7696e2f9",
+        "6937afba30f6bcf3",
+        "d7d7d74dbda31275",
+        "566c522e46884f0b",
+        "2d545f18bead440c",
+        "ebb70561699386dc",
+        "e153cc2773a77599",
+        "2704c58b3a97e93c",
+        "a8549de21727e039",
+        "f6912661d9c92557",
+        "de13115c0f6a22e2"
+      ],
+      "id": "566c522e46884f0b",
+      "date": 1497885838124
+    },
+    {
+      "type": "add",
+      "id": "229576edd676d846",
+      "item": {
+        "type": "paragraph",
+        "id": "229576edd676d846",
+        "text": "# Aims"
+      },
+      "after": "7cf53f1eff8e1076",
+      "date": 1497945021605
+    },
+    {
+      "type": "add",
+      "id": "fd4ee6d1d438306c",
+      "item": {
+        "type": "paragraph",
+        "id": "fd4ee6d1d438306c",
+        "text": "The aim is to eb able to integrate Livecode scripting into a scaleable cluster based architecture, which will allow easy scripting of automation tasks, and development of server based code for mobile apps."
+      },
+      "after": "229576edd676d846",
+      "date": 1497945083892
+    },
+    {
+      "type": "edit",
+      "id": "fd4ee6d1d438306c",
+      "item": {
+        "type": "paragraph",
+        "id": "fd4ee6d1d438306c",
+        "text": "The aim is to be able to integrate Livecode scripting into a scaleable cluster based architecture, which will allow easy scripting of automation tasks, and development of server based code for mobile apps."
+      },
+      "date": 1497945088208
+    },
+    {
+      "type": "edit",
+      "id": "229576edd676d846",
+      "item": {
+        "type": "markdown",
+        "id": "229576edd676d846",
+        "text": "# Aims"
+      },
+      "date": 1497945089383
+    },
+    {
+      "type": "add",
+      "id": "cfb731e2827cbc57",
+      "item": {
+        "type": "paragraph",
+        "id": "cfb731e2827cbc57",
+        "text": "There are two versions of this set up:- [[Caddy Based Federation]]- [[Cluster Based Federation]]"
+      },
+      "after": "fd4ee6d1d438306c",
+      "date": 1497945147185
+    },
+    {
+      "type": "edit",
+      "id": "cfb731e2827cbc57",
+      "item": {
+        "type": "markdown",
+        "id": "cfb731e2827cbc57",
+        "text": "There are two versions of this set up:- [[Caddy Based Federation]]- [[Cluster Based Federation]]"
+      },
+      "date": 1497945148771
+    },
+    {
+      "type": "edit",
+      "id": "cfb731e2827cbc57",
+      "item": {
+        "type": "markdown",
+        "id": "cfb731e2827cbc57",
+        "text": "There are two versions of this set up:\n\n- [[Caddy Based Federation]]\n- [[Cluster Based Federation]]"
+      },
+      "date": 1497945156540
+    },
+    {
+      "type": "edit",
+      "id": "2d545f18bead440c",
+      "item": {
+        "type": "markdown",
+        "id": "2d545f18bead440c",
+        "text": "# Livecode Server on Docker"
+      },
+      "date": 1497948317440
+    },
+    {
+      "type": "edit",
+      "id": "cfb731e2827cbc57",
+      "item": {
+        "type": "markdown",
+        "id": "cfb731e2827cbc57",
+        "text": "There are two versions of this set up:\n\n- [[Caddy Based Federation]]\n- [[Cluster Based Federation]]\n- [[Docker Data Volumes]]"
+      },
+      "date": 1497994739935,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1497994762492
+    }
+  ]
+}

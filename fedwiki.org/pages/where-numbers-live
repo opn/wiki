@@ -1,0 +1,967 @@
+{
+  "title": "Where Numbers Live",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3d755bd8bde1e2b1",
+      "text": "Wiki stores numbers in json and shares them through http requests. We see a lot of variety in how numbers get into json and what happens to them after they are fetched."
+    },
+    {
+      "type": "html",
+      "id": "a9d8850800d5bbb2",
+      "text": "<h3> Server Side"
+    },
+    {
+      "type": "paragraph",
+      "id": "74b7b4a781b61ea7",
+      "text": "Servers are free to rewrite the json they store and might do so to track streaming data. See [[Air Temperature]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "25b6bf33751ccedb",
+      "text": "When one forks a page from a server-side stream the connection to that stream is (appropriately) broken."
+    },
+    {
+      "type": "paragraph",
+      "id": "bae5d01e2672b442",
+      "text": "High resolution or frequently updated data should carry its own timestamps independent of those in the journal."
+    },
+    {
+      "type": "paragraph",
+      "id": "c7e9540095645b5e",
+      "text": "Servers might create whole pages when they update data. One would expect the journal to reflect only the most recent creation. It is possible to keep older versions by preserving a series of create actions."
+    },
+    {
+      "type": "paragraph",
+      "id": "e730900ddbfff36d",
+      "text": "Servers might find and update specific items within a page. In this case the journal reflects only the manual configuration of the items on the page, not the automatic updating of data within a particular item."
+    },
+    {
+      "type": "paragraph",
+      "id": "7dc007d6910a77ae",
+      "text": "Servers can offer live, two-way, low-latency connectivity specific to specialized plugins. See [[About Txtzyme Plugin]]."
+    },
+    {
+      "type": "html",
+      "id": "974a5155a95e2579",
+      "text": "<h3> Client Side"
+    },
+    {
+      "type": "paragraph",
+      "id": "ca3fec1d926106c4",
+      "text": "Clients fetch and render json using a repertoire of plugins to interpret, transform and visualize data. Wiki retrieves and launches plugins for each item it renders."
+    },
+    {
+      "type": "paragraph",
+      "id": "69a2a062aba490b4",
+      "text": "Plugins are free to cooperate with other plugins they discover by exploring the DOM. By convention they look to their left when retrieving data so one experience data flowing from left to right. See [[About Method Plugin]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "37d78603ce5677dc",
+      "text": "Plugins may recognize useful items by their type. Items display their type as a class attribute when rendered in the DOM. This approach breaks down as item types proliferate."
+    },
+    {
+      "type": "paragraph",
+      "id": "cda0bfcf0120f16e",
+      "text": "Plugins may recognize useful items by semantically meaningful class attributes added to the DOM by the item's plugin. The sourcing plugin can further annotate the DOM with access functions to be called by the downstream plugin at will. See [[About Radar Plugin]]."
+    },
+    {
+      "type": "code",
+      "id": "136070562dcaad7c",
+      "text": "# expose access to \"radar\" format data\ndiv.addClass 'radar-source'\ndiv.get(0).radarData = -> output"
+    },
+    {
+      "type": "html",
+      "id": "fe040ae638b2f41a",
+      "text": "Plugins may look for data in several formats. Our first experiment with d3.js ([[D3 Line]]) expected to find a Chart Plugin with time sequence data. This was later generalized to look for plugins advertising <i>sequence-source</i> which respond to <i>getSequence()</i>. See [[About Txtzyme Plugin]] which collects data from remote devices and reports the sequence."
+    },
+    {
+      "type": "paragraph",
+      "id": "ed502a46e445d3e5",
+      "text": "Plugins are free to fetch json for pages not found in the DOM. It is possible for a plugin to instantiate a slave plugin for the purpose of interpreting the otherwise inert json they might fetch. See [[About Rollup Plugin]] which uses a slave Method plugin to repeat calculations."
+    },
+    {
+      "type": "html",
+      "id": "f9992dc903b341b1",
+      "text": "A plugin that expects to be used as a slave must offer some special access to its capability. For example, the Method plugin offers a complex <b>eval</b> interface including callback when evaluation is complete."
+    },
+    {
+      "type": "code",
+      "id": "9445076862e9859d",
+      "text": "# evaluate item with input calling back with output\neval: (caller, item, input, done) ->\n  state = {caller, item, input, output: {}}\n  dispatch state, (state, input) ->\n    done state.caller, state.output"
+    },
+    {
+      "type": "paragraph",
+      "id": "5b01eb966e90d9c9",
+      "text": "Plugins are free to trigger and handle events so as to cooperatively respond to changing situations such as additional user input."
+    },
+    {
+      "type": "html",
+      "id": "d1a1f872285040e9",
+      "text": "Many plugins signal and/or respond to the <b>thumb</b> event indicating a new position of the user's thumb when scrubbing through a dataset. By convention thumb notifications flow both left and right so users are free to scrub coordinated data from where ever convenient. See [[About Data Plugin]]."
+    },
+    {
+      "type": "html",
+      "id": "e7adcc02c05c05c2",
+      "text": "<h3> Variables"
+    },
+    {
+      "type": "paragraph",
+      "id": "7407ac2e911ea590",
+      "text": "A runtime data representation has emerged between the plugins we have already mentioned."
+    },
+    {
+      "type": "paragraph",
+      "id": "7e1e8f44af12221c",
+      "text": "longish variable names in title case"
+    },
+    {
+      "type": "paragraph",
+      "id": "3bfd2c8949352f4d",
+      "text": "values that we think of as numbers but may be strings or value objects"
+    },
+    {
+      "type": "paragraph",
+      "id": "51bd85498bae24c0",
+      "text": "inputs merged, output only changes"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Where Numbers Live"
+      },
+      "date": 1367161708644
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3d755bd8bde1e2b1"
+      },
+      "id": "3d755bd8bde1e2b1",
+      "type": "add",
+      "date": 1367161745456
+    },
+    {
+      "type": "edit",
+      "id": "3d755bd8bde1e2b1",
+      "item": {
+        "type": "paragraph",
+        "id": "3d755bd8bde1e2b1",
+        "text": "Wiki stores numbers in json and shares them through http requests. We see a lot of variety in how numbers get into json and what happens to them after they are fetched."
+      },
+      "date": 1367162086833
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "74b7b4a781b61ea7",
+        "text": ""
+      },
+      "id": "74b7b4a781b61ea7",
+      "type": "add",
+      "after": "3d755bd8bde1e2b1",
+      "date": 1367162087344
+    },
+    {
+      "type": "edit",
+      "id": "74b7b4a781b61ea7",
+      "item": {
+        "type": "paragraph",
+        "id": "74b7b4a781b61ea7",
+        "text": "Servers are free to rewrite the json they store and might do so to track streaming data. See [[Air Temperature]]."
+      },
+      "date": 1367162287205
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "25b6bf33751ccedb",
+        "text": ""
+      },
+      "id": "25b6bf33751ccedb",
+      "type": "add",
+      "after": "74b7b4a781b61ea7",
+      "date": 1367162361027
+    },
+    {
+      "type": "edit",
+      "id": "25b6bf33751ccedb",
+      "item": {
+        "type": "paragraph",
+        "id": "25b6bf33751ccedb",
+        "text": "When one forks a page from a server-side stream the connection to that stream is (appropriately) broken."
+      },
+      "date": 1367162436695
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "bae5d01e2672b442",
+        "text": ""
+      },
+      "id": "bae5d01e2672b442",
+      "type": "add",
+      "after": "25b6bf33751ccedb",
+      "date": 1367162437200
+    },
+    {
+      "type": "edit",
+      "id": "bae5d01e2672b442",
+      "item": {
+        "type": "paragraph",
+        "id": "bae5d01e2672b442",
+        "text": "High resolution or frequently updated data should carry its own timestamps independent of those in the journal."
+      },
+      "date": 1367162638767
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "c7e9540095645b5e",
+        "text": ""
+      },
+      "id": "c7e9540095645b5e",
+      "type": "add",
+      "after": "bae5d01e2672b442",
+      "date": 1367162639277
+    },
+    {
+      "type": "edit",
+      "id": "c7e9540095645b5e",
+      "item": {
+        "type": "paragraph",
+        "id": "c7e9540095645b5e",
+        "text": "Servers might create whole pages when they update data. One would expect the journal to reflect only the most recent creation. It is possible to keep older versions by preserving a series of create actions."
+      },
+      "date": 1367162808093
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a9d8850800d5bbb2",
+        "text": ""
+      },
+      "id": "a9d8850800d5bbb2",
+      "type": "add",
+      "after": "c7e9540095645b5e",
+      "date": 1367162808599
+    },
+    {
+      "type": "edit",
+      "id": "a9d8850800d5bbb2",
+      "item": {
+        "type": "paragraph",
+        "id": "a9d8850800d5bbb2",
+        "text": "<h3> Server Side"
+      },
+      "date": 1367162824891
+    },
+    {
+      "type": "move",
+      "order": [
+        "3d755bd8bde1e2b1",
+        "a9d8850800d5bbb2",
+        "74b7b4a781b61ea7",
+        "25b6bf33751ccedb",
+        "bae5d01e2672b442",
+        "c7e9540095645b5e"
+      ],
+      "id": "a9d8850800d5bbb2",
+      "date": 1367162828481
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e730900ddbfff36d",
+        "text": ""
+      },
+      "id": "e730900ddbfff36d",
+      "type": "add",
+      "after": "c7e9540095645b5e",
+      "date": 1367162856572
+    },
+    {
+      "type": "edit",
+      "id": "e730900ddbfff36d",
+      "item": {
+        "type": "paragraph",
+        "id": "e730900ddbfff36d",
+        "text": "Servers might find and update specific items within a page. In this case the journal reflects only the manual configuration of the items on the page, not the automatic updating of data within a particular item."
+      },
+      "date": 1367163049821
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "974a5155a95e2579",
+        "text": ""
+      },
+      "id": "974a5155a95e2579",
+      "type": "add",
+      "after": "e730900ddbfff36d",
+      "date": 1367163104209
+    },
+    {
+      "type": "edit",
+      "id": "974a5155a95e2579",
+      "item": {
+        "type": "paragraph",
+        "id": "974a5155a95e2579",
+        "text": "<h3> Client Side"
+      },
+      "date": 1367163112346
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ca3fec1d926106c4",
+        "text": ""
+      },
+      "id": "ca3fec1d926106c4",
+      "type": "add",
+      "after": "974a5155a95e2579",
+      "date": 1367163112852
+    },
+    {
+      "type": "edit",
+      "id": "ca3fec1d926106c4",
+      "item": {
+        "type": "paragraph",
+        "id": "ca3fec1d926106c4",
+        "text": "Clients fetch and render json using a repertoire of plugins to interpret, transform and visualize data.  "
+      },
+      "date": 1367163462935
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7dc007d6910a77ae",
+        "text": ""
+      },
+      "id": "7dc007d6910a77ae",
+      "type": "add",
+      "after": "e730900ddbfff36d",
+      "date": 1367163477606
+    },
+    {
+      "type": "edit",
+      "id": "7dc007d6910a77ae",
+      "item": {
+        "type": "paragraph",
+        "id": "7dc007d6910a77ae",
+        "text": "Servers can offer live, two-way, low-latency connectivity specific to specialized plugins. See [[About Txtzyme Plugin]]."
+      },
+      "date": 1367163618706
+    },
+    {
+      "type": "edit",
+      "id": "ca3fec1d926106c4",
+      "item": {
+        "type": "paragraph",
+        "id": "ca3fec1d926106c4",
+        "text": "Clients fetch and render json using a repertoire of plugins to interpret, transform and visualize data."
+      },
+      "date": 1367163763594
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "69a2a062aba490b4",
+        "text": ""
+      },
+      "id": "69a2a062aba490b4",
+      "type": "add",
+      "after": "ca3fec1d926106c4",
+      "date": 1367163764102
+    },
+    {
+      "type": "edit",
+      "id": "69a2a062aba490b4",
+      "item": {
+        "type": "paragraph",
+        "id": "69a2a062aba490b4",
+        "text": "Plugins are free to cooperate with other plugins they discover by exploring the DOM. By convention they look to their left when retrieving data so one experience data flowing from left to right. See [[About Method Plugin]]."
+      },
+      "date": 1367164171762
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "fe040ae638b2f41a",
+        "text": ""
+      },
+      "id": "fe040ae638b2f41a",
+      "type": "add",
+      "after": "69a2a062aba490b4",
+      "date": 1367164172268
+    },
+    {
+      "type": "edit",
+      "id": "fe040ae638b2f41a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe040ae638b2f41a",
+        "text": "Plugins are free to fetch json for pages not found in the DOM. It is possible for a plugin to instantiate a slave plugin for the purpose of interpreting the otherwise inert json they might fetch. See [[About Rollup Plugin]]."
+      },
+      "date": 1367164415618
+    },
+    {
+      "type": "edit",
+      "id": "fe040ae638b2f41a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe040ae638b2f41a",
+        "text": "Plugins are free to fetch json for pages not found in the DOM. It is possible for a plugin to instantiate a slave plugin for the purpose of interpreting the otherwise inert json they might fetch. See [[About Rollup Plugin]] which uses a slave Method plugin to repeat calculations."
+      },
+      "date": 1367164499432
+    },
+    {
+      "type": "edit",
+      "id": "ca3fec1d926106c4",
+      "item": {
+        "type": "paragraph",
+        "id": "ca3fec1d926106c4",
+        "text": "Clients fetch and render json using a repertoire of plugins to interpret, transform and visualize data. Wiki retrieves and launches plugins for each item it renders."
+      },
+      "date": 1367164580869
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "5b01eb966e90d9c9",
+        "text": ""
+      },
+      "id": "5b01eb966e90d9c9",
+      "type": "add",
+      "after": "fe040ae638b2f41a",
+      "date": 1367164709292
+    },
+    {
+      "type": "edit",
+      "id": "5b01eb966e90d9c9",
+      "item": {
+        "type": "paragraph",
+        "id": "5b01eb966e90d9c9",
+        "text": "Plugins are free to trigger and handle events so as to cooperatively respond to changing situations such as additional user input."
+      },
+      "date": 1367164894772
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d1a1f872285040e9",
+        "text": ""
+      },
+      "id": "d1a1f872285040e9",
+      "type": "add",
+      "after": "5b01eb966e90d9c9",
+      "date": 1367164895280
+    },
+    {
+      "type": "edit",
+      "id": "d1a1f872285040e9",
+      "item": {
+        "type": "paragraph",
+        "id": "d1a1f872285040e9",
+        "text": "Many plugins signal and/or respond to the <b>thumb</b> event indicating a new position of the user's thumb when scrubbing through a dataset. By convention thumb notifications flow both left and right so users are free to scrub coordinated data from where ever convenient."
+      },
+      "date": 1367165279551
+    },
+    {
+      "type": "edit",
+      "id": "d1a1f872285040e9",
+      "item": {
+        "type": "paragraph",
+        "id": "d1a1f872285040e9",
+        "text": "Many plugins signal and/or respond to the <b>thumb</b> event indicating a new position of the user's thumb when scrubbing through a dataset. By convention thumb notifications flow both left and right so users are free to scrub coordinated data from where ever convenient. See [[About Data Plugin]]."
+      },
+      "date": 1367165616183
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "37d78603ce5677dc",
+        "text": ""
+      },
+      "id": "37d78603ce5677dc",
+      "type": "add",
+      "after": "69a2a062aba490b4",
+      "date": 1367165663038
+    },
+    {
+      "type": "edit",
+      "id": "37d78603ce5677dc",
+      "item": {
+        "type": "paragraph",
+        "id": "37d78603ce5677dc",
+        "text": "Plugins may recognize useful items by their type. Items display their type as a class attribute when rendered in the DOM."
+      },
+      "date": 1367165941260
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "992bccb1cb87ac07",
+        "text": ""
+      },
+      "id": "992bccb1cb87ac07",
+      "type": "add",
+      "after": "37d78603ce5677dc",
+      "date": 1367165941766
+    },
+    {
+      "type": "remove",
+      "id": "992bccb1cb87ac07",
+      "date": 1367165975941
+    },
+    {
+      "type": "edit",
+      "id": "37d78603ce5677dc",
+      "item": {
+        "type": "paragraph",
+        "id": "37d78603ce5677dc",
+        "text": "Plugins may recognize useful items by their type. Items display their type as a class attribute when rendered in the DOM. This approach shows some weakness as item types proliferate."
+      },
+      "date": 1367166090623
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "d74601bd15e4823a",
+        "text": ""
+      },
+      "id": "d74601bd15e4823a",
+      "type": "add",
+      "after": "37d78603ce5677dc",
+      "date": 1367166091134
+    },
+    {
+      "type": "remove",
+      "id": "d74601bd15e4823a",
+      "date": 1367166099504
+    },
+    {
+      "type": "edit",
+      "id": "37d78603ce5677dc",
+      "item": {
+        "type": "paragraph",
+        "id": "37d78603ce5677dc",
+        "text": "Plugins may recognize useful items by their type. Items display their type as a class attribute when rendered in the DOM. This approach breaks down as item types proliferate."
+      },
+      "date": 1367166118807
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "cda0bfcf0120f16e",
+        "text": ""
+      },
+      "id": "cda0bfcf0120f16e",
+      "type": "add",
+      "after": "37d78603ce5677dc",
+      "date": 1367166119312
+    },
+    {
+      "type": "edit",
+      "id": "cda0bfcf0120f16e",
+      "item": {
+        "type": "paragraph",
+        "id": "cda0bfcf0120f16e",
+        "text": "Plugins may recognize useful items by semantically meaningful class attributes added to the DOM by the item's plugin. "
+      },
+      "date": 1367166608736
+    },
+    {
+      "type": "edit",
+      "id": "cda0bfcf0120f16e",
+      "item": {
+        "type": "paragraph",
+        "id": "cda0bfcf0120f16e",
+        "text": "Plugins may recognize useful items by semantically meaningful class attributes added to the DOM by the item's plugin. The sourcing plugin can further annotate the DOM with access functions to be called by the downstream plugin at will. See [[About Radar Plugin]]."
+      },
+      "date": 1367167044355
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "a72235c82bc2b873",
+        "text": ""
+      },
+      "id": "a72235c82bc2b873",
+      "type": "add",
+      "after": "cda0bfcf0120f16e",
+      "date": 1367167044861
+    },
+    {
+      "type": "remove",
+      "id": "a72235c82bc2b873",
+      "date": 1367167046289
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "136070562dcaad7c"
+      },
+      "id": "136070562dcaad7c",
+      "type": "add",
+      "after": "d1a1f872285040e9",
+      "date": 1367167050629
+    },
+    {
+      "type": "edit",
+      "id": "136070562dcaad7c",
+      "item": {
+        "type": "code",
+        "id": "136070562dcaad7c",
+        "text": "# expose access to \"radar\" format data\ndiv.addClass 'radar-source'\ndiv.get(0).radarData = -> output"
+      },
+      "date": 1367167107695
+    },
+    {
+      "type": "move",
+      "order": [
+        "3d755bd8bde1e2b1",
+        "a9d8850800d5bbb2",
+        "74b7b4a781b61ea7",
+        "25b6bf33751ccedb",
+        "bae5d01e2672b442",
+        "c7e9540095645b5e",
+        "e730900ddbfff36d",
+        "7dc007d6910a77ae",
+        "974a5155a95e2579",
+        "ca3fec1d926106c4",
+        "69a2a062aba490b4",
+        "37d78603ce5677dc",
+        "cda0bfcf0120f16e",
+        "136070562dcaad7c",
+        "fe040ae638b2f41a",
+        "5b01eb966e90d9c9",
+        "d1a1f872285040e9"
+      ],
+      "id": "136070562dcaad7c",
+      "date": 1367167113112
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "f9992dc903b341b1",
+        "text": ""
+      },
+      "id": "f9992dc903b341b1",
+      "type": "add",
+      "after": "fe040ae638b2f41a",
+      "date": 1367167336910
+    },
+    {
+      "type": "edit",
+      "id": "f9992dc903b341b1",
+      "item": {
+        "type": "paragraph",
+        "id": "f9992dc903b341b1",
+        "text": "A plugin that expects to be used as a slave must offer some special access to its capability. For example, the Method plugin offers a complex <b>eval</b> interface including callback when evaluation is complete."
+      },
+      "date": 1367167466637
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9445076862e9859d"
+      },
+      "id": "9445076862e9859d",
+      "type": "add",
+      "after": "d1a1f872285040e9",
+      "date": 1367167470454
+    },
+    {
+      "type": "edit",
+      "id": "9445076862e9859d",
+      "item": {
+        "type": "code",
+        "id": "9445076862e9859d",
+        "text": "eval: (caller, item, input, done) ->\n  state = {caller, item, input, output: {}}\n  dispatch state, (state, input) ->\n    done state.caller, state.output"
+      },
+      "date": 1367167495077
+    },
+    {
+      "type": "move",
+      "order": [
+        "3d755bd8bde1e2b1",
+        "a9d8850800d5bbb2",
+        "74b7b4a781b61ea7",
+        "25b6bf33751ccedb",
+        "bae5d01e2672b442",
+        "c7e9540095645b5e",
+        "e730900ddbfff36d",
+        "7dc007d6910a77ae",
+        "974a5155a95e2579",
+        "ca3fec1d926106c4",
+        "69a2a062aba490b4",
+        "37d78603ce5677dc",
+        "cda0bfcf0120f16e",
+        "136070562dcaad7c",
+        "fe040ae638b2f41a",
+        "f9992dc903b341b1",
+        "9445076862e9859d",
+        "5b01eb966e90d9c9",
+        "d1a1f872285040e9"
+      ],
+      "id": "9445076862e9859d",
+      "date": 1367167501861
+    },
+    {
+      "type": "edit",
+      "id": "9445076862e9859d",
+      "item": {
+        "type": "code",
+        "id": "9445076862e9859d",
+        "text": "# evaluate item with input calling back with output\neval: (caller, item, input, done) ->\n  state = {caller, item, input, output: {}}\n  dispatch state, (state, input) ->\n    done state.caller, state.output"
+      },
+      "date": 1367167604322
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "e7adcc02c05c05c2",
+        "text": ""
+      },
+      "id": "e7adcc02c05c05c2",
+      "type": "add",
+      "after": "d1a1f872285040e9",
+      "date": 1367167974480
+    },
+    {
+      "type": "edit",
+      "id": "e7adcc02c05c05c2",
+      "item": {
+        "type": "paragraph",
+        "id": "e7adcc02c05c05c2",
+        "text": "<h3> Variables"
+      },
+      "date": 1367167985869
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7407ac2e911ea590",
+        "text": ""
+      },
+      "id": "7407ac2e911ea590",
+      "type": "add",
+      "after": "e7adcc02c05c05c2",
+      "date": 1367167986375
+    },
+    {
+      "type": "edit",
+      "id": "7407ac2e911ea590",
+      "item": {
+        "type": "paragraph",
+        "id": "7407ac2e911ea590",
+        "text": "A runtime data representation has emerged between the plugins we have already mentioned."
+      },
+      "date": 1367168509101
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "51bd85498bae24c0",
+        "text": ""
+      },
+      "id": "51bd85498bae24c0",
+      "type": "add",
+      "after": "7407ac2e911ea590",
+      "date": 1367168509608
+    },
+    {
+      "type": "edit",
+      "id": "51bd85498bae24c0",
+      "item": {
+        "type": "paragraph",
+        "id": "51bd85498bae24c0",
+        "text": "inputs merged, output only changes"
+      },
+      "date": 1367168577276
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "7e1e8f44af12221c",
+        "text": ""
+      },
+      "id": "7e1e8f44af12221c",
+      "type": "add",
+      "after": "51bd85498bae24c0",
+      "date": 1367168577781
+    },
+    {
+      "type": "edit",
+      "id": "7e1e8f44af12221c",
+      "item": {
+        "type": "paragraph",
+        "id": "7e1e8f44af12221c",
+        "text": "longish variable names in title case"
+      },
+      "date": 1367168593554
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "3bfd2c8949352f4d",
+        "text": ""
+      },
+      "id": "3bfd2c8949352f4d",
+      "type": "add",
+      "after": "7e1e8f44af12221c",
+      "date": 1367168594060
+    },
+    {
+      "type": "edit",
+      "id": "3bfd2c8949352f4d",
+      "item": {
+        "type": "paragraph",
+        "id": "3bfd2c8949352f4d",
+        "text": "values that we think of as numbers but may be strings or value objects"
+      },
+      "date": 1367168650745
+    },
+    {
+      "type": "move",
+      "order": [
+        "3d755bd8bde1e2b1",
+        "a9d8850800d5bbb2",
+        "74b7b4a781b61ea7",
+        "25b6bf33751ccedb",
+        "bae5d01e2672b442",
+        "c7e9540095645b5e",
+        "e730900ddbfff36d",
+        "7dc007d6910a77ae",
+        "974a5155a95e2579",
+        "ca3fec1d926106c4",
+        "69a2a062aba490b4",
+        "37d78603ce5677dc",
+        "cda0bfcf0120f16e",
+        "136070562dcaad7c",
+        "fe040ae638b2f41a",
+        "f9992dc903b341b1",
+        "9445076862e9859d",
+        "5b01eb966e90d9c9",
+        "d1a1f872285040e9",
+        "e7adcc02c05c05c2",
+        "7407ac2e911ea590",
+        "7e1e8f44af12221c",
+        "3bfd2c8949352f4d",
+        "51bd85498bae24c0"
+      ],
+      "id": "51bd85498bae24c0",
+      "date": 1367168654433
+    },
+    {
+      "type": "edit",
+      "id": "fe040ae638b2f41a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe040ae638b2f41a",
+        "text": "Plugins may look for data in several formats. Our first experiment with d3.js expected to find a Chart Plugin with time sequence data. This was later generalized to look for plugins advertising <i>sequence-source</i> which respond to <i>getSequence()</i>. See [[About D3 Line]]."
+      },
+      "date": 1367332503493
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "ed502a46e445d3e5",
+        "text": "Plugins are free to fetch json for pages not found in the DOM. It is possible for a plugin to instantiate a slave plugin for the purpose of interpreting the otherwise inert json they might fetch. See [[About Rollup Plugin]] which uses a slave Method plugin to repeat calculations."
+      },
+      "id": "ed502a46e445d3e5",
+      "type": "add",
+      "after": "fe040ae638b2f41a",
+      "date": 1367332504008
+    },
+    {
+      "type": "edit",
+      "id": "fe040ae638b2f41a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe040ae638b2f41a",
+        "text": "Plugins may look for data in several formats. Our first experiment with d3.js expected to find a Chart Plugin with time sequence data. This was later generalized to look for plugins advertising <i>sequence-source</i> which respond to <i>getSequence()</i>. See [[About D3 Line Plugin]]."
+      },
+      "date": 1367332524950
+    },
+    {
+      "type": "edit",
+      "id": "fe040ae638b2f41a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe040ae638b2f41a",
+        "text": "Plugins may look for data in several formats. Our first experiment with d3.js ([[D3 Line]]) expected to find a Chart Plugin with time sequence data. This was later generalized to look for plugins advertising <i>sequence-source</i> which respond to <i>getSequence()</i>. See [[About Txtzyme Plugin]] which collects data from remote devices and reports the sequence."
+      },
+      "date": 1367332737056
+    },
+    {
+      "type": "edit",
+      "id": "a9d8850800d5bbb2",
+      "item": {
+        "type": "html",
+        "id": "a9d8850800d5bbb2",
+        "text": "<h3> Server Side"
+      },
+      "date": 1420345705607
+    },
+    {
+      "type": "edit",
+      "id": "974a5155a95e2579",
+      "item": {
+        "type": "html",
+        "id": "974a5155a95e2579",
+        "text": "<h3> Client Side"
+      },
+      "date": 1420345709171
+    },
+    {
+      "type": "edit",
+      "id": "e7adcc02c05c05c2",
+      "item": {
+        "type": "html",
+        "id": "e7adcc02c05c05c2",
+        "text": "<h3> Variables"
+      },
+      "date": 1420345727749
+    },
+    {
+      "type": "edit",
+      "id": "fe040ae638b2f41a",
+      "item": {
+        "type": "html",
+        "id": "fe040ae638b2f41a",
+        "text": "Plugins may look for data in several formats. Our first experiment with d3.js ([[D3 Line]]) expected to find a Chart Plugin with time sequence data. This was later generalized to look for plugins advertising <i>sequence-source</i> which respond to <i>getSequence()</i>. See [[About Txtzyme Plugin]] which collects data from remote devices and reports the sequence."
+      },
+      "date": 1420515614782
+    },
+    {
+      "type": "edit",
+      "id": "f9992dc903b341b1",
+      "item": {
+        "type": "html",
+        "id": "f9992dc903b341b1",
+        "text": "A plugin that expects to be used as a slave must offer some special access to its capability. For example, the Method plugin offers a complex <b>eval</b> interface including callback when evaluation is complete."
+      },
+      "date": 1420515620178
+    },
+    {
+      "type": "edit",
+      "id": "d1a1f872285040e9",
+      "item": {
+        "type": "html",
+        "id": "d1a1f872285040e9",
+        "text": "Many plugins signal and/or respond to the <b>thumb</b> event indicating a new position of the user's thumb when scrubbing through a dataset. By convention thumb notifications flow both left and right so users are free to scrub coordinated data from where ever convenient. See [[About Data Plugin]]."
+      },
+      "date": 1420515970697
+    },
+    {
+      "type": "fork",
+      "site": "ward.fed.wiki.org",
+      "date": 1435491644606
+    }
+  ]
+}

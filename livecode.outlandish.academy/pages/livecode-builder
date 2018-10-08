@@ -1,0 +1,1006 @@
+{
+  "journal": [
+    {
+      "date": 1427398338385,
+      "item": {
+        "story": "",
+        "title": "LiveCode Builder"
+      },
+      "type": "create"
+    },
+    {
+      "date": 1427398339840,
+      "id": "4d93155e1ba7b90b",
+      "item": {
+        "id": "4d93155e1ba7b90b",
+        "type": "factory"
+      },
+      "type": "add"
+    },
+    {
+      "date": 1427398343083,
+      "id": "4d93155e1ba7b90b",
+      "item": {
+        "id": "4d93155e1ba7b90b",
+        "text": "Well, there will be a new dialect of LiveCode in which you will be able to write things called extensions. An extension will (in the first instance) either be a library or a widget.\n\nLibraries are collections of commands and functions that integrate into the engine in exactly the same way as engine commands and functions do (the only caveat being initially is that you will be restricted to generic function / command call syntax to access them ‚Äì full and proper syntax bindings will have to wait until Open Language is born).\n\nWidgets are collections of commands, functions and event handlers ‚Äì these will be used by a new control type widget and allow you to create you own controls which look, feel and act as if they were in fact part of the engine itself. Indeed, widgets will be very familiar to anyone who has ever written a control in Visual Basic, Delphi, or derived a new control from the base control class in any of the multiplicity of C++ GUI frameworks. This idea of controls is different from the aggregate style of custom control we currently see in LiveCode ‚Äì rather than using a container in which you put other controls you instead get a ‚Äòpaint‚Äô event and all the basic interaction events you need to craft your control entirely the way you want. To help you do this, you‚Äôll also have access to an array of functionality crafted for the task ‚Äì most importantly, you‚Äôll be able to use a collection of syntax that provides 2d vector drawing capabilities along the lines of the HTML5 Canvas, or CoreGraphics library to draw your widgets.\n\nI mentioned above that this will be based upon a ‚Äònew dialect‚Äô of LiveCode (I‚Äôm currently calling it LiveCodeish) but this shouldn‚Äôt cause alarm bells (hopefully, at least). Essentially the dialect will be a distilled form of the current LiveCode core syntax and semantics ‚Äì this syntax will be cleaned up and its functionality will be much better defined (for example, getting rid of auto-conversion of arrays to empty strings and ‚Äòfixing‚Äô the non-standard ‚Äòfor x to y‚Äô loop we have). The main aim of this clean up is to ensure we have a solid, predictable, reliable and completely defined base to work from without having to worry about any hangovers from the (very much organically evolved) past.\n\n[ I think it is important for me to mention is that we do not intend there to be two LiveCode languages - the language you use for extensions (what I‚Äôm calling LiveCodeish) and the language you use in object scripts. It is our intention that there will be one, and only one, LiveCode - the object script language will also move to LiveCodeish, once we‚Äôre happy we‚Äôve got LiveCodeish right (and don‚Äôt worry, when LiveCodeish does arrive at the LiveCode script level your existing scripts will all continue to run as they do now and you‚Äôll be able to translate them automatically over time as needed with the script translation tool we are planning as part of the syntax cleanup project that will be enabled by Open Language). ]\n\nThere are perhaps three aspects of this proposed new LiveCodeish language which deserve mention.\n\nThe first is that this new dialect will provide the ability to directly hook into native code through binding to functions in native code (whether that be Java, Objective-C or C/C++) thus, hopefully, eliminating the need to write ‚Äòglue-code‚Äô externals and, again, making extending LiveCode much more accessible to anyone that can code in LiveCode rather than those few who can, or have the time to delve into these lower-level environments.\n\nThe next is that it will (eventually) be typed in a very natural way. You will be able to declare variables and handler parameters as having a given type (by default their type will be any). Whenever you try to assign a value to the variable the engine will attempt to convert it to the appropriate type and only throw an error if this is not possible. For example a variable with an integer type can have an integer put into it directly, a real number can be put into it after its been automatically rounded, and even a string can ‚Äì as long as the string can be converted to an integer. This simple ability will mean that it will be easier to write ‚Äòcorrect‚Äô code ‚Äì you‚Äôll be able to much more easily debug things where it could be type-mismatches that are causing errors. It also means that (in the future) suitably typed code will run more efficiently ‚Äì for example if you have an integer variable then that can be much more efficiently represented internally than a variable which can hold any type.\n\nThe third thing about LiveCodeish which is quite different from normal LiveCode scripts is that there is no message path ‚Äì well, the message path is there, it‚Äôs just that command and functions in extensions do not sit in it. This is exactly the same situation as current engine commands and functions ‚Äì they are bound at compile time. This not sitting in the message path does not mean that extensions have no access to it, quite the reverse as they will have access in the same way as engine syntax does ‚Äì you will be able to send messages to objects through the message path just as the engine can. This slight change in perspective brings LiveCodeish much closer to more ‚Äòtraditional‚Äô languages ‚Äì and means that over time a much larger range of optimization potential becomes available (as things are more static in this world ‚Äì dynamicity is great, except when you want to optimize at compile time!). Indeed, I can see no reason that LiveCodeish should not be eventually compilable to native code with performance at a level where the decision to code something in C or LiveCodeish due to that metric is a non-issue ‚Äì LiveCodeish will be amply able.",
+        "type": "paragraph"
+      },
+      "type": "edit"
+    },
+    {
+      "date": 1427398389193,
+      "id": "4d93155e1ba7b90b",
+      "item": {
+        "id": "4d93155e1ba7b90b",
+        "text": "Well, there will be a new dialect of LiveCode in which you will be able to write things called extensions. An extension will (in the first instance) either be a library or a widget - [http://livecode.com/the-present-and-future-livecode/ livecode.com]",
+        "type": "paragraph"
+      },
+      "type": "edit"
+    },
+    {
+      "after": "4d93155e1ba7b90b",
+      "date": 1427398392776,
+      "id": "afddcba834ce05ba",
+      "item": {
+        "id": "afddcba834ce05ba",
+        "text": "Libraries are collections of commands and functions that integrate into the engine in exactly the same way as engine commands and functions do (the only caveat being initially is that you will be restricted to generic function / command call syntax to access them ‚Äì full and proper syntax bindings will have to wait until Open Language is born).",
+        "type": "paragraph"
+      },
+      "type": "add"
+    },
+    {
+      "after": "afddcba834ce05ba",
+      "date": 1427398399195,
+      "id": "342b2f5e5d370ada",
+      "item": {
+        "id": "342b2f5e5d370ada",
+        "text": "Widgets are collections of commands, functions and event handlers ‚Äì these will be used by a new control type widget and allow you to create you own controls which look, feel and act as if they were in fact part of the engine itself. Indeed, widgets will be very familiar to anyone who has ever written a control in Visual Basic, Delphi, or derived a new control from the base control class in any of the multiplicity of C++ GUI frameworks. This idea of controls is different from the aggregate style of custom control we currently see in LiveCode ‚Äì rather than using a container in which you put other controls you instead get a ‚Äòpaint‚Äô event and all the basic interaction events you need to craft your control entirely the way you want. To help you do this, you‚Äôll also have access to an array of functionality crafted for the task ‚Äì most importantly, you‚Äôll be able to use a collection of syntax that provides 2d vector drawing capabilities along the lines of the HTML5 Canvas, or CoreGraphics library to draw your widgets.",
+        "type": "paragraph"
+      },
+      "type": "add"
+    },
+    {
+      "after": "342b2f5e5d370ada",
+      "date": 1427398406976,
+      "id": "4bc105c8384b3034",
+      "item": {
+        "id": "4bc105c8384b3034",
+        "text": "I mentioned above that this will be based upon a ‚Äònew dialect‚Äô of LiveCode (I‚Äôm currently calling it LiveCodeish) but this shouldn‚Äôt cause alarm bells (hopefully, at least). Essentially the dialect will be a distilled form of the current LiveCode core syntax and semantics ‚Äì this syntax will be cleaned up and its functionality will be much better defined (for example, getting rid of auto-conversion of arrays to empty strings and ‚Äòfixing‚Äô the non-standard ‚Äòfor x to y‚Äô loop we have). The main aim of this clean up is to ensure we have a solid, predictable, reliable and completely defined base to work from without having to worry about any hangovers from the (very much organically evolved) past.",
+        "type": "paragraph"
+      },
+      "type": "add"
+    },
+    {
+      "after": "4bc105c8384b3034",
+      "date": 1427398410088,
+      "id": "f5a94b223227d9a5",
+      "item": {
+        "id": "f5a94b223227d9a5",
+        "text": "[ I think it is important for me to mention is that we do not intend there to be two LiveCode languages - the language you use for extensions (what I‚Äôm calling LiveCodeish) and the language you use in object scripts. It is our intention that there will be one, and only one, LiveCode - the object script language will also move to LiveCodeish, once we‚Äôre happy we‚Äôve got LiveCodeish right (and don‚Äôt worry, when LiveCodeish does arrive at the LiveCode script level your existing scripts will all continue to run as they do now and you‚Äôll be able to translate them automatically over time as needed with the script translation tool we are planning as part of the syntax cleanup project that will be enabled by Open Language). ]\n\nThere are perhaps three aspects of this proposed new LiveCodeish language which deserve mention.\n\nThe first is that this new dialect will provide the ability to directly hook into native code through binding to functions in native code (whether that be Java, Objective-C or C/C++) thus, hopefully, eliminating the need to write ‚Äòglue-code‚Äô externals and, again, making extending LiveCode much more accessible to anyone that can code in LiveCode rather than those few who can, or have the time to delve into these lower-level environments.\n\nThe next is that it will (eventually) be typed in a very natural way. You will be able to declare variables and handler parameters as having a given type (by default their type will be any). Whenever you try to assign a value to the variable the engine will attempt to convert it to the appropriate type and only throw an error if this is not possible. For example a variable with an integer type can have an integer put into it directly, a real number can be put into it after its been automatically rounded, and even a string can ‚Äì as long as the string can be converted to an integer. This simple ability will mean that it will be easier to write ‚Äòcorrect‚Äô code ‚Äì you‚Äôll be able to much more easily debug things where it could be type-mismatches that are causing errors. It also means that (in the future) suitably typed code will run more efficiently ‚Äì for example if you have an integer variable then that can be much more efficiently represented internally than a variable which can hold any type.\n\nThe third thing about LiveCodeish which is quite different from normal LiveCode scripts is that there is no message path ‚Äì well, the message path is there, it‚Äôs just that command and functions in extensions do not sit in it. This is exactly the same situation as current engine commands and functions ‚Äì they are bound at compile time. This not sitting in the message path does not mean that extensions have no access to it, quite the reverse as they will have access in the same way as engine syntax does ‚Äì you will be able to send messages to objects through the message path just as the engine can. This slight change in perspective brings LiveCodeish much closer to more ‚Äòtraditional‚Äô languages ‚Äì and means that over time a much larger range of optimization potential becomes available (as things are more static in this world ‚Äì dynamicity is great, except when you want to optimize at compile time!). Indeed, I can see no reason that LiveCodeish should not be eventually compilable to native code with performance at a level where the decision to code something in C or LiveCodeish due to that metric is a non-issue ‚Äì LiveCodeish will be amply able.",
+        "type": "paragraph"
+      },
+      "type": "add"
+    },
+    {
+      "date": 1427398440946,
+      "id": "f5a94b223227d9a5",
+      "item": {
+        "id": "f5a94b223227d9a5",
+        "text": "[ I think it is important for me to mention is that we do not intend there to be two LiveCode languages - the language you use for extensions (what I‚Äôm calling LiveCodeish) and the language you use in object scripts. It is our intention that there will be one, and only one, LiveCode - the object script language will also move to LiveCodeish, once we‚Äôre happy we‚Äôve got LiveCodeish right (and don‚Äôt worry, when LiveCodeish does arrive at the LiveCode script level your existing scripts will all continue to run as they do now and you‚Äôll be able to translate them automatically over time as needed with the script translation tool we are planning as part of the syntax cleanup project that will be enabled by [[Open Language]]). ]",
+        "type": "paragraph"
+      },
+      "type": "edit"
+    },
+    {
+      "after": "f5a94b223227d9a5",
+      "date": 1427398449422,
+      "id": "c133a85c1c0a355a",
+      "item": {
+        "id": "c133a85c1c0a355a",
+        "text": "There are perhaps three aspects of this proposed new LiveCodeish language which deserve mention.\n\nThe first is that this new dialect will provide the ability to directly hook into native code through binding to functions in native code (whether that be Java, Objective-C or C/C++) thus, hopefully, eliminating the need to write ‚Äòglue-code‚Äô externals and, again, making extending LiveCode much more accessible to anyone that can code in LiveCode rather than those few who can, or have the time to delve into these lower-level environments.\n\nThe next is that it will (eventually) be typed in a very natural way. You will be able to declare variables and handler parameters as having a given type (by default their type will be any). Whenever you try to assign a value to the variable the engine will attempt to convert it to the appropriate type and only throw an error if this is not possible. For example a variable with an integer type can have an integer put into it directly, a real number can be put into it after its been automatically rounded, and even a string can ‚Äì as long as the string can be converted to an integer. This simple ability will mean that it will be easier to write ‚Äòcorrect‚Äô code ‚Äì you‚Äôll be able to much more easily debug things where it could be type-mismatches that are causing errors. It also means that (in the future) suitably typed code will run more efficiently ‚Äì for example if you have an integer variable then that can be much more efficiently represented internally than a variable which can hold any type.\n\nThe third thing about LiveCodeish which is quite different from normal LiveCode scripts is that there is no message path ‚Äì well, the message path is there, it‚Äôs just that command and functions in extensions do not sit in it. This is exactly the same situation as current engine commands and functions ‚Äì they are bound at compile time. This not sitting in the message path does not mean that extensions have no access to it, quite the reverse as they will have access in the same way as engine syntax does ‚Äì you will be able to send messages to objects through the message path just as the engine can. This slight change in perspective brings LiveCodeish much closer to more ‚Äòtraditional‚Äô languages ‚Äì and means that over time a much larger range of optimization potential becomes available (as things are more static in this world ‚Äì dynamicity is great, except when you want to optimize at compile time!). Indeed, I can see no reason that LiveCodeish should not be eventually compilable to native code with performance at a level where the decision to code something in C or LiveCodeish due to that metric is a non-issue ‚Äì LiveCodeish will be amply able.",
+        "type": "paragraph"
+      },
+      "type": "add"
+    },
+    {
+      "type": "edit",
+      "id": "4d93155e1ba7b90b",
+      "item": {
+        "id": "4d93155e1ba7b90b",
+        "text": "Livecode Builder is a new dialect of LiveCode in which you are able to write things called extensions. An extension will (in the first instance) either be a library or a widget - [http://livecode.com/the-present-and-future-livecode/ livecode.com]",
+        "type": "paragraph"
+      },
+      "date": 1437142519203
+    },
+    {
+      "type": "edit",
+      "id": "afddcba834ce05ba",
+      "item": {
+        "id": "afddcba834ce05ba",
+        "text": "Livecode Buider Libraries",
+        "type": "paragraph"
+      },
+      "date": 1437142538219
+    },
+    {
+      "type": "add",
+      "id": "99feee261cbe4bce",
+      "item": {
+        "type": "paragraph",
+        "id": "99feee261cbe4bce",
+        "text": "Libraries are collections of commands and functions that integrate into the engine in exactly the same way as engine commands and functions do (the only caveat being initially is that you will be restricted to generic function / command call syntax to access them ‚Äì full and proper syntax bindings will have to wait until Open Language is born)."
+      },
+      "after": "afddcba834ce05ba",
+      "date": 1437142539542
+    },
+    {
+      "type": "edit",
+      "id": "afddcba834ce05ba",
+      "item": {
+        "id": "afddcba834ce05ba",
+        "text": "<H3>Livecode Buider Libraries",
+        "type": "paragraph"
+      },
+      "date": 1437142549400
+    },
+    {
+      "type": "edit",
+      "id": "afddcba834ce05ba",
+      "item": {
+        "id": "afddcba834ce05ba",
+        "text": "<H3>Livecode Buider Libraries",
+        "type": "html"
+      },
+      "date": 1437142550938
+    },
+    {
+      "type": "edit",
+      "id": "99feee261cbe4bce",
+      "item": {
+        "type": "paragraph",
+        "id": "99feee261cbe4bce",
+        "text": "Libraries are collections of commands and functions that integrate into the engine in exactly the same way as engine commands and functions do (the only caveat being initially is that you will be restricted to generic function / command call syntax to access them. Full and proper syntax bindings will have to wait until [[Open Language]] is born)."
+      },
+      "date": 1437142597257
+    },
+    {
+      "type": "add",
+      "id": "c12b0217b64b74b4",
+      "item": {
+        "type": "paragraph",
+        "id": "c12b0217b64b74b4",
+        "text": "<H3>Livecode Builder Widgets"
+      },
+      "after": "99feee261cbe4bce",
+      "date": 1437142927271
+    },
+    {
+      "type": "edit",
+      "id": "c12b0217b64b74b4",
+      "item": {
+        "type": "html",
+        "id": "c12b0217b64b74b4",
+        "text": "<H3>Livecode Builder Widgets"
+      },
+      "date": 1437142928658
+    },
+    {
+      "type": "edit",
+      "id": "342b2f5e5d370ada",
+      "item": {
+        "id": "342b2f5e5d370ada",
+        "text": "Widgets are collections of commands, functions and event handlers that together create a new control type, or widget. ",
+        "type": "paragraph"
+      },
+      "date": 1437143007923
+    },
+    {
+      "type": "add",
+      "id": "b7e47f4ef2f321e5",
+      "item": {
+        "type": "paragraph",
+        "id": "b7e47f4ef2f321e5",
+        "text": "You can create you own controls which look, feel and act as if they were in fact part of the engine itself. Indeed, widgets will be very familiar to anyone who has ever written a control in Visual Basic, Delphi, or derived a new control from the base control class in any of the multiplicity of C++ GUI frameworks. "
+      },
+      "after": "342b2f5e5d370ada",
+      "date": 1437143027652
+    },
+    {
+      "type": "add",
+      "id": "1b2be55a5b5db6cd",
+      "item": {
+        "type": "paragraph",
+        "id": "1b2be55a5b5db6cd",
+        "text": "This idea of controls is different from the aggregate style of custom control we currently see in [[LiveCode]]. Rather than using a container in which you put other controls you instead get a ‚\"paint\" event and all the basic interaction events you need to craft your control entirely the way you want. "
+      },
+      "after": "b7e47f4ef2f321e5",
+      "date": 1437143076888
+    },
+    {
+      "type": "add",
+      "id": "1d50cc17e3586558",
+      "item": {
+        "type": "paragraph",
+        "id": "1d50cc17e3586558",
+        "text": "To help you do this, you'll also have access to an array of functionality crafted for the task - most importantly, you'll be able to use a collection of syntax that provides 2d vector drawing capabilities along the lines of the [[HTML5 Canvas]], or [[CoreGraphics]] library to draw your widgets."
+      },
+      "after": "1b2be55a5b5db6cd",
+      "date": 1437143129330
+    },
+    {
+      "type": "edit",
+      "id": "4bc105c8384b3034",
+      "item": {
+        "id": "4bc105c8384b3034",
+        "text": "I mentioned above that this will be based upon a ‚new dialect\" of LiveCode (le's call it LiveCodeish for now) but this shouldn‚t cause alarm bells (hopefully, at least). ",
+        "type": "paragraph"
+      },
+      "date": 1437143364623
+    },
+    {
+      "type": "add",
+      "id": "49efce92568f151f",
+      "item": {
+        "type": "paragraph",
+        "id": "49efce92568f151f",
+        "text": "Essentially the dialect will be a distilled form of the current LiveCode core syntax and semantics - this syntax will be cleaned up and its functionality will be much better defined (for example, getting rid of auto-conversion of arrays to empty strings and \"fixing\" the non-standard \"for x to y\" loop we have). "
+      },
+      "after": "4bc105c8384b3034",
+      "date": 1437143407360
+    },
+    {
+      "type": "add",
+      "id": "34827348f682035d",
+      "item": {
+        "type": "paragraph",
+        "id": "34827348f682035d",
+        "text": "The main aim of this clean up is to ensure we have a solid, predictable, reliable and completely defined base to work from without having to worry about any hangovers from the (very much organically evolved) past."
+      },
+      "after": "49efce92568f151f",
+      "date": 1437143414986
+    },
+    {
+      "type": "edit",
+      "id": "342b2f5e5d370ada",
+      "item": {
+        "id": "342b2f5e5d370ada",
+        "text": "[[Widgets]] are collections of commands, functions and event handlers that together create a new control type, or widget. ",
+        "type": "paragraph"
+      },
+      "date": 1437143440121
+    },
+    {
+      "type": "remove",
+      "id": "342b2f5e5d370ada",
+      "date": 1437143449693
+    },
+    {
+      "type": "remove",
+      "id": "b7e47f4ef2f321e5",
+      "date": 1437143451365
+    },
+    {
+      "type": "remove",
+      "id": "1b2be55a5b5db6cd",
+      "date": 1437143453157
+    },
+    {
+      "type": "remove",
+      "id": "c12b0217b64b74b4",
+      "date": 1437143463914
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fdfb9074e5b62047"
+      },
+      "id": "fdfb9074e5b62047",
+      "type": "add",
+      "after": "c133a85c1c0a355a",
+      "date": 1437143468015
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "afddcba834ce05ba",
+        "99feee261cbe4bce",
+        "1d50cc17e3586558",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "34827348f682035d",
+        "f5a94b223227d9a5",
+        "c133a85c1c0a355a"
+      ],
+      "id": "fdfb9074e5b62047",
+      "date": 1437143475779
+    },
+    {
+      "type": "edit",
+      "id": "fdfb9074e5b62047",
+      "item": {
+        "type": "reference",
+        "id": "fdfb9074e5b62047",
+        "site": "livecode.viral.academy",
+        "slug": "widgets",
+        "title": "Widgets",
+        "text": "[[Widgets]] are collections of commands, functions and event handlers that together create a new control type, or widget. "
+      },
+      "date": 1437143478389
+    },
+    {
+      "type": "remove",
+      "id": "1d50cc17e3586558",
+      "date": 1437143497989
+    },
+    {
+      "type": "edit",
+      "id": "4bc105c8384b3034",
+      "item": {
+        "id": "4bc105c8384b3034",
+        "text": "I mentioned above that this will be based upon a \"new dialect\" of LiveCode (let's call it LiveCodeish for now) but this shouldn't cause alarm bells (hopefully, at least). ",
+        "type": "paragraph"
+      },
+      "date": 1437143532451
+    },
+    {
+      "type": "edit",
+      "id": "afddcba834ce05ba",
+      "item": {
+        "id": "afddcba834ce05ba",
+        "text": "<H3>[[Livecode Buider Libraries]]",
+        "type": "html"
+      },
+      "date": 1437143583548
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "99feee261cbe4bce",
+        "afddcba834ce05ba",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "34827348f682035d",
+        "f5a94b223227d9a5",
+        "c133a85c1c0a355a"
+      ],
+      "id": "99feee261cbe4bce",
+      "date": 1437143594283
+    },
+    {
+      "type": "remove",
+      "id": "99feee261cbe4bce",
+      "date": 1437143597501
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e024b8825e18e228"
+      },
+      "id": "e024b8825e18e228",
+      "type": "add",
+      "after": "c133a85c1c0a355a",
+      "date": 1437143620390
+    },
+    {
+      "type": "edit",
+      "id": "e024b8825e18e228",
+      "item": {
+        "type": "reference",
+        "id": "e024b8825e18e228",
+        "site": "livecode.viral.academy",
+        "slug": "livecode-buider-libraries",
+        "title": "Livecode Buider Libraries",
+        "text": "Libraries are collections of commands and functions that integrate into the engine in exactly the same way as engine commands and functions do (the only caveat being initially is that you will be restricted to generic function / command call syntax to access them. Full and proper syntax bindings will have to wait until [[Open Language]] is born)."
+      },
+      "date": 1437143621995
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "e024b8825e18e228",
+        "afddcba834ce05ba",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "34827348f682035d",
+        "f5a94b223227d9a5",
+        "c133a85c1c0a355a"
+      ],
+      "id": "e024b8825e18e228",
+      "date": 1437143628071
+    },
+    {
+      "type": "remove",
+      "id": "afddcba834ce05ba",
+      "date": 1437143631214
+    },
+    {
+      "type": "add",
+      "id": "59ca2aea21e60df3",
+      "item": {
+        "type": "paragraph",
+        "id": "59ca2aea21e60df3",
+        "text": "Extensions come in two flavours:"
+      },
+      "after": "4d93155e1ba7b90b",
+      "date": 1437143661413
+    },
+    {
+      "type": "edit",
+      "id": "4bc105c8384b3034",
+      "item": {
+        "id": "4bc105c8384b3034",
+        "text": "Livecode Builder extensions will be based upon a \"new dialect\" of LiveCode (let's call it LiveCodeish for now) but this shouldn't cause alarm bells (hopefully, at least). ",
+        "type": "paragraph"
+      },
+      "date": 1437143689731
+    },
+    {
+      "type": "edit",
+      "id": "f5a94b223227d9a5",
+      "item": {
+        "id": "f5a94b223227d9a5",
+        "text": "The intention is not to create two LiveCode languages, and longer term you will be able to translate Livecode scripts automatically as needed (with a script translation tool) we are planning as part of the syntax cleanup project that will be enabled by [[Open Language]]). ]",
+        "type": "paragraph"
+      },
+      "date": 1437144025035
+    },
+    {
+      "type": "remove",
+      "id": "f5a94b223227d9a5",
+      "date": 1437144033781
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e649a652de8fb294"
+      },
+      "id": "e649a652de8fb294",
+      "type": "add",
+      "after": "c133a85c1c0a355a",
+      "date": 1437144036608
+    },
+    {
+      "type": "edit",
+      "id": "e649a652de8fb294",
+      "item": {
+        "type": "code",
+        "id": "e649a652de8fb294",
+        "text": "The intention is not to create two LiveCode languages, and longer term you will be able to translate Livecode scripts automatically as needed (with a script translation tool) we are planning as part of the syntax cleanup project that will be enabled by [[Open Language]])."
+      },
+      "date": 1437144041153
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "59ca2aea21e60df3",
+        "e024b8825e18e228",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "34827348f682035d",
+        "e649a652de8fb294",
+        "c133a85c1c0a355a"
+      ],
+      "id": "e649a652de8fb294",
+      "date": 1437144052284
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "59ca2aea21e60df3",
+        "e024b8825e18e228",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "e649a652de8fb294",
+        "34827348f682035d",
+        "c133a85c1c0a355a"
+      ],
+      "id": "e649a652de8fb294",
+      "date": 1437144069023
+    },
+    {
+      "type": "edit",
+      "id": "c133a85c1c0a355a",
+      "item": {
+        "id": "c133a85c1c0a355a",
+        "text": "There are perhaps three aspects of this proposed new LiveCodeish language which deserve mention:",
+        "type": "paragraph"
+      },
+      "date": 1437144156017
+    },
+    {
+      "type": "add",
+      "id": "4aebcb8d68bd8827",
+      "item": {
+        "type": "paragraph",
+        "id": "4aebcb8d68bd8827",
+        "text": "The first is that this new dialect will provide the ability to directly hook into native code through binding to functions in native code (whether that be Java, Objective-C or C/C++) thus, hopefully, eliminating the need to write \"glue-code\" externals and, again, making extending LiveCode much more accessible to anyone that can code in LiveCode rather than those few who can, or have the time to delve into these lower-level environments."
+      },
+      "after": "c133a85c1c0a355a",
+      "date": 1437144161251
+    },
+    {
+      "type": "add",
+      "id": "f35b909975723d58",
+      "item": {
+        "type": "paragraph",
+        "id": "f35b909975723d58",
+        "text": "The next is that it will (eventually) be typed in a very natural way. You will be able to declare variables and handler parameters as having a given type (by default their type will be any). Whenever you try to assign a value to the variable the engine will attempt to convert it to the appropriate type and only throw an error if this is not possible. For example a variable with an integer type can have an integer put into it directly, a real number can be put into it after its been automatically rounded, and even a string can ‚Äì as long as the string can be converted to an integer. This simple ability will mean that it will be easier to write ‚Äòcorrect‚Äô code ‚Äì you‚Äôll be able to much more easily debug things where it could be type-mismatches that are causing errors. It also means that (in the future) suitably typed code will run more efficiently ‚Äì for example if you have an integer variable then that can be much more efficiently represented internally than a variable which can hold any type."
+      },
+      "after": "4aebcb8d68bd8827",
+      "date": 1437144166705
+    },
+    {
+      "type": "add",
+      "id": "d34fddc9c84cf8e7",
+      "item": {
+        "type": "paragraph",
+        "id": "d34fddc9c84cf8e7",
+        "text": "The third thing about LiveCodeish which is quite different from normal LiveCode scripts is that there is no message path ‚Äì well, the message path is there, it‚Äôs just that command and functions in extensions do not sit in it. This is exactly the same situation as current engine commands and functions ‚Äì they are bound at compile time. This not sitting in the message path does not mean that extensions have no access to it, quite the reverse as they will have access in the same way as engine syntax does ‚Äì you will be able to send messages to objects through the message path just as the engine can. This slight change in perspective brings LiveCodeish much closer to more ‚Äòtraditional‚Äô languages ‚Äì and means that over time a much larger range of optimization potential becomes available (as things are more static in this world ‚Äì dynamicity is great, except when you want to optimize at compile time!). Indeed, I can see no reason that LiveCodeish should not be eventually compilable to native code with performance at a level where the decision to code something in C or LiveCodeish due to that metric is a non-issue ‚Äì LiveCodeish will be amply able."
+      },
+      "after": "f35b909975723d58",
+      "date": 1437144172332
+    },
+    {
+      "type": "edit",
+      "id": "c133a85c1c0a355a",
+      "item": {
+        "id": "c133a85c1c0a355a",
+        "text": "There are perhaps three aspects of this proposed new LiveCodeish language which deserve mention:<OL><LI>No glue code<LI>It is a [[Typed Language]]<LI>No [[Message Path]]</OL>",
+        "type": "paragraph"
+      },
+      "date": 1437144229054
+    },
+    {
+      "type": "edit",
+      "id": "c133a85c1c0a355a",
+      "item": {
+        "id": "c133a85c1c0a355a",
+        "text": "There are perhaps three aspects of this proposed new LiveCodeish language which deserve mention:<OL><LI>No glue code<LI>It is a [[Typed Language]]<LI>No [[Message Path]]</OL>",
+        "type": "html"
+      },
+      "date": 1437144230742
+    },
+    {
+      "type": "edit",
+      "id": "4aebcb8d68bd8827",
+      "item": {
+        "type": "paragraph",
+        "id": "4aebcb8d68bd8827",
+        "text": "<H3>No Glue Code"
+      },
+      "date": 1437144248404
+    },
+    {
+      "type": "edit",
+      "id": "4aebcb8d68bd8827",
+      "item": {
+        "type": "html",
+        "id": "4aebcb8d68bd8827",
+        "text": "<H3>No Glue Code"
+      },
+      "date": 1437144249936
+    },
+    {
+      "type": "add",
+      "id": "5cf2314d5a1e9a7e",
+      "item": {
+        "type": "paragraph",
+        "id": "5cf2314d5a1e9a7e",
+        "text": "The first is that this new dialect will provide the ability to directly hook into native code through binding to functions in native code (whether that be Java, Objective-C or C/C++) thus, hopefully, eliminating the need to write \"glue-code\" externals and, again, making extending LiveCode much more accessible to anyone that can code in LiveCode rather than those few who can, or have the time to delve into these lower-level environments."
+      },
+      "after": "4aebcb8d68bd8827",
+      "date": 1437144251729
+    },
+    {
+      "type": "edit",
+      "id": "c133a85c1c0a355a",
+      "item": {
+        "id": "c133a85c1c0a355a",
+        "text": "There are perhaps three aspects of this proposed new LiveCodeish language which deserve mention:\n<OL>\n<LI>  No Glue Code\n<LI>  It is a [[Typed Language]]\n<LI>  No [[Message Path]]\n</OL>",
+        "type": "html"
+      },
+      "date": 1437144286255
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b1e2b3e9d3929b15"
+      },
+      "id": "b1e2b3e9d3929b15",
+      "type": "add",
+      "after": "d34fddc9c84cf8e7",
+      "date": 1437144294845
+    },
+    {
+      "type": "edit",
+      "id": "b1e2b3e9d3929b15",
+      "item": {
+        "type": "html",
+        "id": "b1e2b3e9d3929b15",
+        "text": "<H3>No Glue Code"
+      },
+      "date": 1437144298434
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "59ca2aea21e60df3",
+        "e024b8825e18e228",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "e649a652de8fb294",
+        "34827348f682035d",
+        "c133a85c1c0a355a",
+        "4aebcb8d68bd8827",
+        "5cf2314d5a1e9a7e",
+        "f35b909975723d58",
+        "b1e2b3e9d3929b15",
+        "d34fddc9c84cf8e7"
+      ],
+      "id": "b1e2b3e9d3929b15",
+      "date": 1437144301656
+    },
+    {
+      "type": "edit",
+      "id": "b1e2b3e9d3929b15",
+      "item": {
+        "type": "html",
+        "id": "b1e2b3e9d3929b15",
+        "text": "<H3>No Message Path"
+      },
+      "date": 1437144343289
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f723340853fad97e"
+      },
+      "id": "f723340853fad97e",
+      "type": "add",
+      "after": "d34fddc9c84cf8e7",
+      "date": 1437144349192
+    },
+    {
+      "type": "move",
+      "order": [
+        "4d93155e1ba7b90b",
+        "59ca2aea21e60df3",
+        "e024b8825e18e228",
+        "fdfb9074e5b62047",
+        "4bc105c8384b3034",
+        "49efce92568f151f",
+        "e649a652de8fb294",
+        "34827348f682035d",
+        "c133a85c1c0a355a",
+        "4aebcb8d68bd8827",
+        "5cf2314d5a1e9a7e",
+        "f723340853fad97e",
+        "f35b909975723d58",
+        "b1e2b3e9d3929b15",
+        "d34fddc9c84cf8e7"
+      ],
+      "id": "f723340853fad97e",
+      "date": 1437144353620
+    },
+    {
+      "type": "edit",
+      "id": "f723340853fad97e",
+      "item": {
+        "type": "html",
+        "id": "f723340853fad97e",
+        "text": "<H3>Typed Language"
+      },
+      "date": 1437144372204
+    },
+    {
+      "type": "edit",
+      "id": "f35b909975723d58",
+      "item": {
+        "type": "paragraph",
+        "id": "f35b909975723d58",
+        "text": "The next is that it will (eventually) be typed in a very natural way. You will be able to declare variables and handler parameters as having a given type (by default their type will be any). "
+      },
+      "date": 1437144382087
+    },
+    {
+      "type": "add",
+      "id": "2f734a1cda4df03d",
+      "item": {
+        "type": "paragraph",
+        "id": "2f734a1cda4df03d",
+        "text": "Whenever you try to assign a value to the variable the engine will attempt to convert it to the appropriate type and only throw an error if this is not possible. "
+      },
+      "after": "f35b909975723d58",
+      "date": 1437144389452
+    },
+    {
+      "type": "add",
+      "id": "9d6fbc8380c05273",
+      "item": {
+        "type": "paragraph",
+        "id": "9d6fbc8380c05273",
+        "text": "For example a variable with an integer type can have an integer put into it directly, a real number can be put into it after its been automatically rounded, and even a string can - as long as the string can be converted to an integer. "
+      },
+      "after": "2f734a1cda4df03d",
+      "date": 1437144402492
+    },
+    {
+      "type": "add",
+      "id": "d11d4c57dbfaf1ce",
+      "item": {
+        "type": "paragraph",
+        "id": "d11d4c57dbfaf1ce",
+        "text": "This simple ability will mean that it will be easier to write \"correct\" code - you'll be able to much more easily debug things where it could be type-mismatches that are causing errors. "
+      },
+      "after": "9d6fbc8380c05273",
+      "date": 1437144434305
+    },
+    {
+      "type": "add",
+      "id": "c046363737f579f1",
+      "item": {
+        "type": "paragraph",
+        "id": "c046363737f579f1",
+        "text": "It also means that (in the future) suitably typed code will run more efficiently - for example if you have an integer variable then that can be much more efficiently represented internally than a variable which can hold any type."
+      },
+      "after": "d11d4c57dbfaf1ce",
+      "date": 1437144445412
+    },
+    {
+      "type": "edit",
+      "id": "d34fddc9c84cf8e7",
+      "item": {
+        "type": "paragraph",
+        "id": "d34fddc9c84cf8e7",
+        "text": "The third thing about LiveCodeish which is quite different from normal LiveCode scripts is that there is no message path - well, the message path is there, it's just that command and functions in extensions do not sit in it. "
+      },
+      "date": 1437144473754
+    },
+    {
+      "type": "add",
+      "id": "af94d8a231af6f89",
+      "item": {
+        "type": "paragraph",
+        "id": "af94d8a231af6f89",
+        "text": "This is exactly the same situation as current engine commands and functions - they are bound at compile time. This not sitting in the message path does not mean that extensions have no access to it, quite the reverse as they will have access in the same way as engine syntax does - you will be able to send messages to objects through the message path just as the engine can. "
+      },
+      "after": "d34fddc9c84cf8e7",
+      "date": 1437144489915
+    },
+    {
+      "type": "add",
+      "id": "64bcc4f9266127c4",
+      "item": {
+        "type": "paragraph",
+        "id": "64bcc4f9266127c4",
+        "text": "This slight change in perspective brings LiveCodeish much closer to more \"traditional\" languages - and means that over time a much larger range of optimization potential becomes available (as things are more static in this world - dynamicity is great, except when you want to optimize at compile time!). "
+      },
+      "after": "af94d8a231af6f89",
+      "date": 1437144521840
+    },
+    {
+      "type": "add",
+      "id": "b7a84836a5aaf8c7",
+      "item": {
+        "type": "paragraph",
+        "id": "b7a84836a5aaf8c7",
+        "text": "Indeed, I can see no reason that LiveCodeish should not be eventually compilable to native code with performance at a level where the decision to code something in C or LiveCodeish due to that metric is a non-issue - LiveCodeish will be amply able."
+      },
+      "after": "64bcc4f9266127c4",
+      "date": 1437144540631
+    },
+    {
+      "type": "edit",
+      "id": "4bc105c8384b3034",
+      "item": {
+        "id": "4bc105c8384b3034",
+        "text": "Livecode Builder extensions will be based upon a \"new dialect\" of LiveCode (let's call it [[LiveCodeish]] for now) but this shouldn't cause alarm bells (hopefully, at least). ",
+        "type": "paragraph"
+      },
+      "date": 1437144561401
+    },
+    {
+      "type": "edit",
+      "id": "4bc105c8384b3034",
+      "item": {
+        "id": "4bc105c8384b3034",
+        "text": "Livecode Builder extensions will be based upon a \"new dialect\" of LiveCode (let's call it [[LiveCodeish]]. ",
+        "type": "paragraph"
+      },
+      "date": 1437144578265
+    },
+    {
+      "type": "remove",
+      "id": "49efce92568f151f",
+      "date": 1437144593632
+    },
+    {
+      "type": "remove",
+      "id": "4bc105c8384b3034",
+      "date": 1437144597226
+    },
+    {
+      "type": "remove",
+      "id": "c133a85c1c0a355a",
+      "date": 1437144615958
+    },
+    {
+      "type": "remove",
+      "id": "4aebcb8d68bd8827",
+      "date": 1437144621925
+    },
+    {
+      "type": "remove",
+      "id": "5cf2314d5a1e9a7e",
+      "date": 1437144629542
+    },
+    {
+      "type": "remove",
+      "id": "f723340853fad97e",
+      "date": 1437144634630
+    },
+    {
+      "type": "remove",
+      "id": "f35b909975723d58",
+      "date": 1437144638799
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "88542e9e62062f78"
+      },
+      "id": "88542e9e62062f78",
+      "type": "add",
+      "after": "b7a84836a5aaf8c7",
+      "date": 1437144649567
+    },
+    {
+      "type": "edit",
+      "id": "88542e9e62062f78",
+      "item": {
+        "type": "reference",
+        "id": "88542e9e62062f78",
+        "site": "livecode.viral.academy",
+        "slug": "livecodeish",
+        "title": "LiveCodeish",
+        "text": "[[Livecode Builder]] extensions will be based upon a \"new dialect\" of LiveCode (let's call it [[LiveCodeish]]. "
+      },
+      "date": 1437144651736
+    },
+    {
+      "type": "remove",
+      "id": "2f734a1cda4df03d",
+      "date": 1437144660726
+    },
+    {
+      "type": "remove",
+      "id": "9d6fbc8380c05273",
+      "date": 1437144665124
+    },
+    {
+      "type": "remove",
+      "id": "d11d4c57dbfaf1ce",
+      "date": 1437144685467
+    },
+    {
+      "type": "remove",
+      "id": "c046363737f579f1",
+      "date": 1437144692497
+    },
+    {
+      "type": "remove",
+      "id": "b1e2b3e9d3929b15",
+      "date": 1437144700781
+    },
+    {
+      "type": "remove",
+      "id": "d34fddc9c84cf8e7",
+      "date": 1437144704194
+    },
+    {
+      "type": "remove",
+      "id": "af94d8a231af6f89",
+      "date": 1437144708670
+    },
+    {
+      "type": "remove",
+      "id": "64bcc4f9266127c4",
+      "date": 1437144712607
+    },
+    {
+      "type": "remove",
+      "id": "b7a84836a5aaf8c7",
+      "date": 1437144716504
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4e0f7d3774551a07"
+      },
+      "id": "4e0f7d3774551a07",
+      "type": "add",
+      "after": "88542e9e62062f78",
+      "date": 1437144743763
+    },
+    {
+      "type": "edit",
+      "id": "4e0f7d3774551a07",
+      "item": {
+        "type": "reference",
+        "id": "4e0f7d3774551a07",
+        "site": "livecode.viral.academy",
+        "slug": "emscripten",
+        "title": "Emscripten",
+        "text": "Emscripten is a type of source-to-source compiler that runs as a back end to the LLVM compiler and produces a subset of JavaScript known as asm.js - [https://en.wikipedia.org/wiki/Emscripten wikipedia]"
+      },
+      "date": 1437144746838
+    }
+  ],
+  "story": [
+    {
+      "id": "4d93155e1ba7b90b",
+      "text": "Livecode Builder is a new dialect of LiveCode in which you are able to write things called extensions. An extension will (in the first instance) either be a library or a widget - [http://livecode.com/the-present-and-future-livecode/ livecode.com]",
+      "type": "paragraph"
+    },
+    {
+      "type": "paragraph",
+      "id": "59ca2aea21e60df3",
+      "text": "Extensions come in two flavours:"
+    },
+    {
+      "type": "reference",
+      "id": "e024b8825e18e228",
+      "site": "livecode.viral.academy",
+      "slug": "livecode-buider-libraries",
+      "title": "Livecode Buider Libraries",
+      "text": "Libraries are collections of commands and functions that integrate into the engine in exactly the same way as engine commands and functions do (the only caveat being initially is that you will be restricted to generic function / command call syntax to access them. Full and proper syntax bindings will have to wait until [[Open Language]] is born)."
+    },
+    {
+      "type": "reference",
+      "id": "fdfb9074e5b62047",
+      "site": "livecode.viral.academy",
+      "slug": "widgets",
+      "title": "Widgets",
+      "text": "[[Widgets]] are collections of commands, functions and event handlers that together create a new control type, or widget. "
+    },
+    {
+      "type": "code",
+      "id": "e649a652de8fb294",
+      "text": "The intention is not to create two LiveCode languages, and longer term you will be able to translate Livecode scripts automatically as needed (with a script translation tool) we are planning as part of the syntax cleanup project that will be enabled by [[Open Language]])."
+    },
+    {
+      "type": "paragraph",
+      "id": "34827348f682035d",
+      "text": "The main aim of this clean up is to ensure we have a solid, predictable, reliable and completely defined base to work from without having to worry about any hangovers from the (very much organically evolved) past."
+    },
+    {
+      "type": "reference",
+      "id": "88542e9e62062f78",
+      "site": "livecode.viral.academy",
+      "slug": "livecodeish",
+      "title": "LiveCodeish",
+      "text": "[[Livecode Builder]] extensions will be based upon a \"new dialect\" of LiveCode (let's call it [[LiveCodeish]]. "
+    },
+    {
+      "type": "reference",
+      "id": "4e0f7d3774551a07",
+      "site": "livecode.viral.academy",
+      "slug": "emscripten",
+      "title": "Emscripten",
+      "text": "Emscripten is a type of source-to-source compiler that runs as a back end to the LLVM compiler and produces a subset of JavaScript known as asm.js - [https://en.wikipedia.org/wiki/Emscripten wikipedia]"
+    }
+  ],
+  "title": "LiveCode Builder"
+}

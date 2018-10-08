@@ -1,0 +1,2469 @@
+{
+  "title": "Maintaining a Custom Wiki",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "f1e01b6b28414fd2",
+      "text": "You will want to include your custom plugins in some or all of the servers you operate. Here we explore various workflows that simplify this task."
+    },
+    {
+      "type": "paragraph",
+      "id": "2611f2c8bab1681d",
+      "text": "Note: npm module wiki is currently github project wiki-node. Here we anticipate that confusion resolved. [https://github.com/fedwiki/wiki-node/issues/55 issue]"
+    },
+    {
+      "type": "paragraph",
+      "id": "6cb95d7e9dfe68e5",
+      "text": "We'll assume you login to remote computers that hosts your wiki servers."
+    },
+    {
+      "type": "paragraph",
+      "id": "cc1cbb695c6c2b36",
+      "text": "Our goal is for you to be able to install and run your custom wiki with the convenience of the standard distribution."
+    },
+    {
+      "type": "code",
+      "id": "5ae97debc3f71c8b",
+      "text": "npm install -g --unsafe-perm wiki\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "5583cf5694917078",
+      "text": "We describe how to host a custom configuration in github under <you> and install it with with any one of these progressively similar commands."
+    },
+    {
+      "type": "paragraph",
+      "id": "4ffe454ee52744f3",
+      "text": "for a list of current questions see: [[ Installation DAQ]]"
+    },
+    {
+      "type": "code",
+      "id": "beb1310b9a97aedf",
+      "text": "npm install -g git://github.com/<you>/wiki.git\nnpm install -g github:<you>/wiki\nnpm install -g <you>/wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "6faeb7936c858da6",
+      "text": "You will then perhaps have to compile any cutom plugins that have been installed. This happens when the plugin author has not checked in an already compiled version of the plugin into github. Use:"
+    },
+    {
+      "type": "code",
+      "id": "cb21779b1c841e09",
+      "text": "npm install\ngrunt build"
+    },
+    {
+      "type": "markdown",
+      "id": "b177bc16a6db9df8",
+      "text": "# Customize"
+    },
+    {
+      "type": "paragraph",
+      "id": "4735885fedba3a39",
+      "text": "Wiki is published to npm from a github project, wiki, that brings client, server and plugins together from other places. [https://github.com/fedwiki/wiki-node github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ce8dc5e63b18c7e4",
+      "text": "Login to your own github account, <you>, then fork the wiki repo into your account. The fork button is in the second row of header buttons. When the fork completes, you can use this custom configuration for all installs."
+    },
+    {
+      "type": "paragraph",
+      "id": "5831a4fff345908b",
+      "text": "The wiki repo keeps its list of plugins to be included with each install as the \"dependents\" field in the package.json file. You can edit this file using the github web editor or by cloning and pushing changes from your own computer. "
+    },
+    {
+      "type": "paragraph",
+      "id": "be45a30207b0bb09",
+      "text": "For example, I've added the experimental search plugin by adding its npm name to the package.json list of dependents. [https://github.com/WardCunningham/wiki-node/commit/635ba998562ebcaa8e286696b11efbbdb5e62a2c github]"
+    },
+    {
+      "type": "code",
+      "id": "d104809b04e51c9d",
+      "text": "  \"wiki-plugin-search\": \"0.0.8\","
+    },
+    {
+      "type": "paragraph",
+      "id": "e014579ee0d4aff0",
+      "text": "If I hadn't already published my experimental plugin to npm, I could just as well add a dependent on the plugin's repo, here with npm shorthand so long as I included the javascript version of the plugin. [https://github.com/WardCunningham/wiki-node/commit/cc6dd4eb17d163161fc818834232a835ecba21fc github]"
+    },
+    {
+      "type": "code",
+      "id": "062f750cc95ef1f9",
+      "text": "  \"wiki-plugin-search\": \"<me>/wiki-plugin-search\","
+    },
+    {
+      "type": "paragraph",
+      "id": "e03d517b21909dd3",
+      "text": "In this form the repo is assumed to be hosted by github and the desired version on master. Other options are available with more complete syntax. [https://docs.npmjs.com/files/package.json#git-urls-as-dependencies doc]"
+    },
+    {
+      "type": "reference",
+      "id": "06f1213927a2f44b",
+      "site": "plugin.fedwiki.org",
+      "slug": "-installation-daq",
+      "title": " Installation DAQ",
+      "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+    },
+    {
+      "type": "markdown",
+      "id": "05b76193a429cca9",
+      "text": "# Maintain"
+    },
+    {
+      "type": "paragraph",
+      "id": "199693a143c2a8f8",
+      "text": "The advantage of this approach is that only one file is changed and changed such that one can easily merge updates from its upstream source. We'll adapt this section from the github help."
+    },
+    {
+      "type": "paragraph",
+      "id": "f3ceac70a59dcb6c",
+      "text": "It's good practice to regularly sync your fork with the upstream repository. To do this, you'll need to use git on the command line. [https://help.github.com/articles/fork-a-repo/#keep-your-fork-synced github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8688111b274b5a08",
+      "text": "Here we will assume you will be working on a personal computer, like a laptop, and later installing changes you make on your remote servers."
+    },
+    {
+      "type": "paragraph",
+      "id": "dc0ae159c23a1588",
+      "text": "Clone your repo and set the upstream on your computer."
+    },
+    {
+      "type": "code",
+      "id": "e74ff117f38dfef2",
+      "text": "git clone https://github.com/<you>/wiki.git\ngit remote add upstream \\\n  https://github.com/fedwiki/wiki.git"
+    },
+    {
+      "type": "paragraph",
+      "id": "8729d03dd5e71b3f",
+      "text": "Once setup, you can sync with fedwiki upstream. [https://help.github.com/articles/syncing-a-fork/ github]"
+    },
+    {
+      "type": "code",
+      "id": "220e2d4010b1c74c",
+      "text": "git fetch upstream\ngit checkout master\ngit merge upstream/master"
+    },
+    {
+      "type": "paragraph",
+      "id": "1a2537a21ba1a971",
+      "text": "See [[More About Upstream Merge]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "3a7a29095a1f8ac5",
+      "text": "You can stop if there are no changes. Otherwise, if the merge is successful, push the update to your own repo."
+    },
+    {
+      "type": "code",
+      "id": "e6d2b347615c5652",
+      "text": "git push origin master"
+    },
+    {
+      "type": "paragraph",
+      "id": "cf8df80ec440ae8d",
+      "text": "And install the new version on your servers."
+    },
+    {
+      "type": "code",
+      "id": "3ebbd05a4a12b067",
+      "text": "npm install -g <you>/wiki"
+    },
+    {
+      "type": "markdown",
+      "id": "eb42c6aebaf6c7f9",
+      "text": "# Share"
+    },
+    {
+      "type": "paragraph",
+      "id": "2c15cee43492479d",
+      "text": "Once you have customized a wiki to your liking with plugins that meet your needs you will want to share that configuration with others."
+    },
+    {
+      "type": "paragraph",
+      "id": "131bd9c9f827f14e",
+      "text": "Before you get too far along this path be sure that you are using a recent version of npm."
+    },
+    {
+      "type": "code",
+      "id": "c0759112fe8a425b",
+      "text": "npm install -g npm"
+    },
+    {
+      "type": "paragraph",
+      "id": "25f3ef23e66235f7",
+      "text": "You can share your github repo with others who install it instead of the normal npm wiki package. Npm offers a shorthand for this common case they can use."
+    },
+    {
+      "type": "code",
+      "id": "d0e6699796778a2e",
+      "text": "npm install -g <you>/wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "122743f0d9700f11",
+      "text": "With only a little more work you can publish your wiki configuration to npm and leave github out of the picture. "
+    },
+    {
+      "type": "paragraph",
+      "id": "9c6c5102c2c7255d",
+      "text": "You will need an npm account which we will refer to as <npm-you>. Consult npm documentation to understand what they expect of users."
+    },
+    {
+      "type": "paragraph",
+      "id": "0b3fdea6d8f1744d",
+      "text": "Edit the package.json file of your wiki-node configuration to include your name as a public scoped name."
+    },
+    {
+      "type": "code",
+      "id": "f5b5dad2cc69974c",
+      "text": "  \"name\": \"@<npm-you>/wiki\""
+    },
+    {
+      "type": "paragraph",
+      "id": "0b6dbaa05ba8a7d9",
+      "text": "Your use of github account for keeping your stuff in order and use your npm account for sharing it with others. When you add the @-scope to your package.json you are saying you intend to share with npm. Npm is smart enough to transition your users from github to npm for your sharing."
+    },
+    {
+      "type": "paragraph",
+      "id": "2cb21c9a1854157d",
+      "text": "You say"
+    },
+    {
+      "type": "code",
+      "id": "1cfe125927bda0fc",
+      "text": "npm publish --access public"
+    },
+    {
+      "type": "paragraph",
+      "id": "b44bd2cfe101df1e",
+      "text": "Your users say"
+    },
+    {
+      "type": "code",
+      "id": "c983e6a7015b59ad",
+      "text": "npm install -g @<npm-you>/wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "212aa68058b8985f",
+      "text": ""
+    },
+    {
+      "type": "paragraph",
+      "id": "f22d9f6495a8f351",
+      "text": "Here we are using an npm scoped name for the wiki server configuration. This will work correctly so long as a small package.json adjustment is included. [https://github.com/fedwiki/wiki-node/pull/56 issue]"
+    },
+    {
+      "type": "paragraph",
+      "id": "0cc35251bed4b43b",
+      "text": "We will eventually offer the same flexibility for the plugin packages themselves but this requires some improvement of the wiki server's plugin location logic. [https://github.com/fedwiki/wiki-node-server/issues/107 issue]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Maintaining a Custom Wiki",
+        "story": []
+      },
+      "date": 1442789136391
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f1e01b6b28414fd2"
+      },
+      "id": "f1e01b6b28414fd2",
+      "type": "add",
+      "date": 1442789231764
+    },
+    {
+      "type": "edit",
+      "id": "f1e01b6b28414fd2",
+      "item": {
+        "type": "paragraph",
+        "id": "f1e01b6b28414fd2",
+        "text": "You will want to include your custom plugins in some or all of the servers you operate. Here we explore various workflows that simplify this task in the short and long term."
+      },
+      "date": 1442789476558
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cc1cbb695c6c2b36"
+      },
+      "id": "cc1cbb695c6c2b36",
+      "type": "add",
+      "after": "f1e01b6b28414fd2",
+      "date": 1442789611253
+    },
+    {
+      "type": "edit",
+      "id": "cc1cbb695c6c2b36",
+      "item": {
+        "type": "paragraph",
+        "id": "cc1cbb695c6c2b36",
+        "text": "Our goal is for you to be able to install and run your custom wiki with the convenience of the standard distribution."
+      },
+      "date": 1442789705595
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5ae97debc3f71c8b"
+      },
+      "id": "5ae97debc3f71c8b",
+      "type": "add",
+      "after": "cc1cbb695c6c2b36",
+      "date": 1442789757345
+    },
+    {
+      "type": "edit",
+      "id": "5ae97debc3f71c8b",
+      "item": {
+        "type": "code",
+        "id": "5ae97debc3f71c8b",
+        "text": "npm install -g wiki"
+      },
+      "date": 1442789801676
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5583cf5694917078"
+      },
+      "id": "5583cf5694917078",
+      "type": "add",
+      "after": "5ae97debc3f71c8b",
+      "date": 1442789805823
+    },
+    {
+      "type": "edit",
+      "id": "5583cf5694917078",
+      "item": {
+        "type": "paragraph",
+        "id": "5583cf5694917078",
+        "text": "We will describe how to host a custom configuration in under <yourname> and install it with nearly the same command."
+      },
+      "date": 1442789892844
+    },
+    {
+      "type": "edit",
+      "id": "5583cf5694917078",
+      "item": {
+        "type": "paragraph",
+        "id": "5583cf5694917078",
+        "text": "We describe how to host a custom configuration in github under <yourname> and install it with nearly the same command."
+      },
+      "date": 1442789931915
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "beb1310b9a97aedf"
+      },
+      "id": "beb1310b9a97aedf",
+      "type": "add",
+      "after": "5583cf5694917078",
+      "date": 1442789935647
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g "
+      },
+      "date": 1442789955353
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<yourname>/wiki-node.git#install"
+      },
+      "date": 1442789995753
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<you>/wiki-node.git#install"
+      },
+      "date": 1442790016693
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<you>/wiki-node.git"
+      },
+      "date": 1442790022937
+    },
+    {
+      "type": "edit",
+      "id": "5583cf5694917078",
+      "item": {
+        "type": "paragraph",
+        "id": "5583cf5694917078",
+        "text": "We describe how to host a custom configuration in github under <you> and install it with nearly the same command."
+      },
+      "date": 1442790060174
+    },
+    {
+      "type": "edit",
+      "id": "5ae97debc3f71c8b",
+      "item": {
+        "type": "code",
+        "id": "5ae97debc3f71c8b",
+        "text": "npm install wiki"
+      },
+      "date": 1442790074653
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install git://github.com/<you>/wiki-node.git"
+      },
+      "date": 1442790080116
+    },
+    {
+      "type": "edit",
+      "id": "5ae97debc3f71c8b",
+      "item": {
+        "type": "code",
+        "id": "5ae97debc3f71c8b",
+        "text": "npm install -g wiki"
+      },
+      "date": 1442790952716
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<you>/wiki-node.git"
+      },
+      "date": 1442790959814
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b177bc16a6db9df8"
+      },
+      "id": "b177bc16a6db9df8",
+      "type": "add",
+      "after": "beb1310b9a97aedf",
+      "date": 1442791085041
+    },
+    {
+      "type": "edit",
+      "id": "b177bc16a6db9df8",
+      "item": {
+        "type": "paragraph",
+        "id": "b177bc16a6db9df8",
+        "text": "# Customize"
+      },
+      "date": 1442791104418
+    },
+    {
+      "type": "edit",
+      "id": "b177bc16a6db9df8",
+      "item": {
+        "type": "markdown",
+        "id": "b177bc16a6db9df8",
+        "text": "# Customize"
+      },
+      "date": 1442791111965
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4735885fedba3a39"
+      },
+      "id": "4735885fedba3a39",
+      "type": "add",
+      "after": "b177bc16a6db9df8",
+      "date": 1442791119701
+    },
+    {
+      "type": "edit",
+      "id": "4735885fedba3a39",
+      "item": {
+        "type": "paragraph",
+        "id": "4735885fedba3a39",
+        "text": "Wiki is published to npm from a github project, wiki-node, that brings client, server and plugins together from other places. [https://github.com/fedwiki/wiki-node github]"
+      },
+      "date": 1442791268121
+    },
+    {
+      "type": "add",
+      "id": "ce8dc5e63b18c7e4",
+      "item": {
+        "type": "paragraph",
+        "id": "ce8dc5e63b18c7e4",
+        "text": "Login to your own github account, <you>, then fork the wiki-node repo into your account. The fork button is in the second row of header buttons."
+      },
+      "after": "4735885fedba3a39",
+      "date": 1442791472869
+    },
+    {
+      "type": "edit",
+      "id": "ce8dc5e63b18c7e4",
+      "item": {
+        "type": "paragraph",
+        "id": "ce8dc5e63b18c7e4",
+        "text": "Login to your own github account, <you>, then fork the wiki-node repo into your account. The fork button is in the second row of header buttons. When the fork completes, you can use this custom configuration for all installs."
+      },
+      "date": 1442791574755
+    },
+    {
+      "type": "add",
+      "id": "5831a4fff345908b",
+      "item": {
+        "type": "paragraph",
+        "id": "5831a4fff345908b",
+        "text": "The wiki-node repo keeps its list of plugins to be included with each install as the \"dependents\" field in the package.json file. You can edit this file using the github web editor or by cloning and pushing changes from your own computer. For example, I've added the experimental search plugin by adding its npm name to the package.json list of dependents. [https://github.com/WardCunningham/wiki-node/commit/635ba998562ebcaa8e286696b11efbbdb5e62a2c github]"
+      },
+      "after": "ce8dc5e63b18c7e4",
+      "date": 1442792384615
+    },
+    {
+      "type": "edit",
+      "id": "5831a4fff345908b",
+      "item": {
+        "type": "paragraph",
+        "id": "5831a4fff345908b",
+        "text": "The wiki-node repo keeps its list of plugins to be included with each install as the \"dependents\" field in the package.json file. You can edit this file using the github web editor or by cloning and pushing changes from your own computer. "
+      },
+      "date": 1442792398751
+    },
+    {
+      "type": "add",
+      "id": "be45a30207b0bb09",
+      "item": {
+        "type": "paragraph",
+        "id": "be45a30207b0bb09",
+        "text": "For example, I've added the experimental search plugin by adding its npm name to the package.json list of dependents. [https://github.com/WardCunningham/wiki-node/commit/635ba998562ebcaa8e286696b11efbbdb5e62a2c github]"
+      },
+      "after": "5831a4fff345908b",
+      "date": 1442792400197
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d104809b04e51c9d"
+      },
+      "id": "d104809b04e51c9d",
+      "type": "add",
+      "after": "be45a30207b0bb09",
+      "date": 1442792403948
+    },
+    {
+      "type": "edit",
+      "id": "d104809b04e51c9d",
+      "item": {
+        "type": "code",
+        "id": "d104809b04e51c9d",
+        "text": "    \"wiki-plugin-search\": \"0.0.8\","
+      },
+      "date": 1442792444014
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e014579ee0d4aff0"
+      },
+      "id": "e014579ee0d4aff0",
+      "type": "add",
+      "after": "d104809b04e51c9d",
+      "date": 1442792519822
+    },
+    {
+      "type": "edit",
+      "id": "e014579ee0d4aff0",
+      "item": {
+        "type": "paragraph",
+        "id": "e014579ee0d4aff0",
+        "text": "If I hadn't already published my experimental plugin to npm, I could just as well add a dependent on its github repo."
+      },
+      "date": 1442792602651
+    },
+    {
+      "type": "edit",
+      "id": "e014579ee0d4aff0",
+      "item": {
+        "type": "paragraph",
+        "id": "e014579ee0d4aff0",
+        "text": "If I hadn't already published my experimental plugin to npm, I could just as well add a dependent on its repo."
+      },
+      "date": 1442792610491
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "effdcd65ac87d83b"
+      },
+      "id": "effdcd65ac87d83b",
+      "type": "add",
+      "after": "e014579ee0d4aff0",
+      "date": 1442792617683
+    },
+    {
+      "type": "remove",
+      "id": "effdcd65ac87d83b",
+      "date": 1442792642303
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "062f750cc95ef1f9"
+      },
+      "id": "062f750cc95ef1f9",
+      "type": "add",
+      "after": "e014579ee0d4aff0",
+      "date": 1442792719197
+    },
+    {
+      "type": "edit",
+      "id": "062f750cc95ef1f9",
+      "item": {
+        "type": "code",
+        "id": "062f750cc95ef1f9",
+        "text": "    \"wiki-plugin-search\": \"<me>/wiki-plugin-search\""
+      },
+      "date": 1442792756961
+    },
+    {
+      "type": "edit",
+      "id": "062f750cc95ef1f9",
+      "item": {
+        "type": "code",
+        "id": "062f750cc95ef1f9",
+        "text": "    \"wiki-plugin-search\": \"<me>/wiki-plugin-search\","
+      },
+      "date": 1442792773735
+    },
+    {
+      "type": "edit",
+      "id": "d104809b04e51c9d",
+      "item": {
+        "type": "code",
+        "id": "d104809b04e51c9d",
+        "text": "  \"wiki-plugin-search\": \"0.0.8\","
+      },
+      "date": 1442792806578
+    },
+    {
+      "type": "edit",
+      "id": "062f750cc95ef1f9",
+      "item": {
+        "type": "code",
+        "id": "062f750cc95ef1f9",
+        "text": "  \"wiki-plugin-search\": \"<me>/wiki-plugin-search\","
+      },
+      "date": 1442792814170
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e03d517b21909dd3"
+      },
+      "id": "e03d517b21909dd3",
+      "type": "add",
+      "after": "062f750cc95ef1f9",
+      "date": 1442792855231
+    },
+    {
+      "type": "edit",
+      "id": "e03d517b21909dd3",
+      "item": {
+        "type": "paragraph",
+        "id": "e03d517b21909dd3",
+        "text": "In this form the repo is assumed to be hosted by github and the desired version on master. Other options are available with more complete syntax."
+      },
+      "date": 1442792958354
+    },
+    {
+      "type": "edit",
+      "id": "e014579ee0d4aff0",
+      "item": {
+        "type": "paragraph",
+        "id": "e014579ee0d4aff0",
+        "text": "If I hadn't already published my experimental plugin to npm, I could just as well add a dependent on its repo. [https://github.com/WardCunningham/wiki-node/commit/cc6dd4eb17d163161fc818834232a835ecba21fc github]"
+      },
+      "date": 1442793325979
+    },
+    {
+      "type": "edit",
+      "id": "e014579ee0d4aff0",
+      "item": {
+        "type": "paragraph",
+        "id": "e014579ee0d4aff0",
+        "text": "If I hadn't already published my experimental plugin to npm, I could just as well add a dependent on the plugin's repo, here with npm shorthand. [https://github.com/WardCunningham/wiki-node/commit/cc6dd4eb17d163161fc818834232a835ecba21fc github]"
+      },
+      "date": 1442793379403
+    },
+    {
+      "type": "add",
+      "id": "05b76193a429cca9",
+      "item": {
+        "type": "paragraph",
+        "id": "05b76193a429cca9",
+        "text": "# Maintain"
+      },
+      "after": "e03d517b21909dd3",
+      "date": 1442793451007
+    },
+    {
+      "type": "add",
+      "id": "199693a143c2a8f8",
+      "item": {
+        "type": "paragraph",
+        "id": "199693a143c2a8f8",
+        "text": "The advantage of this approach is that only one file is changed and changed such that one can easily merge updates from its upstream source, github.com/fedwiki/wiki-node."
+      },
+      "after": "05b76193a429cca9",
+      "date": 1442793528760
+    },
+    {
+      "type": "edit",
+      "id": "199693a143c2a8f8",
+      "item": {
+        "type": "paragraph",
+        "id": "199693a143c2a8f8",
+        "text": "The advantage of this approach is that only one file is changed and changed such that one can easily merge updates from its upstream source."
+      },
+      "date": 1442793537633
+    },
+    {
+      "type": "edit",
+      "id": "05b76193a429cca9",
+      "item": {
+        "type": "markdown",
+        "id": "05b76193a429cca9",
+        "text": "# Maintain"
+      },
+      "date": 1442793542350
+    },
+    {
+      "type": "edit",
+      "id": "e03d517b21909dd3",
+      "item": {
+        "type": "paragraph",
+        "id": "e03d517b21909dd3",
+        "text": "In this form the repo is assumed to be hosted by github and the desired version on master. Other options are available with more complete syntax. [https://docs.npmjs.com/files/package.json#git-urls-as-dependencies doc]"
+      },
+      "date": 1442793638761
+    },
+    {
+      "type": "add",
+      "id": "f3ceac70a59dcb6c",
+      "item": {
+        "type": "paragraph",
+        "id": "f3ceac70a59dcb6c",
+        "text": "It's good practice to regularly sync your fork with the upstream repository. To do this, you'll need to use Git on the command line."
+      },
+      "after": "199693a143c2a8f8",
+      "date": 1442794314676
+    },
+    {
+      "type": "edit",
+      "id": "f3ceac70a59dcb6c",
+      "item": {
+        "type": "paragraph",
+        "id": "f3ceac70a59dcb6c",
+        "text": "It's good practice to regularly sync your fork with the upstream repository. To do this, you'll need to use Git on the command line. [https://help.github.com/articles/fork-a-repo/#keep-your-fork-synced github]"
+      },
+      "date": 1442794347861
+    },
+    {
+      "type": "edit",
+      "id": "199693a143c2a8f8",
+      "item": {
+        "type": "paragraph",
+        "id": "199693a143c2a8f8",
+        "text": "The advantage of this approach is that only one file is changed and changed such that one can easily merge updates from its upstream source. We'll adapt this section from the github help."
+      },
+      "date": 1442794391503
+    },
+    {
+      "type": "edit",
+      "id": "f3ceac70a59dcb6c",
+      "item": {
+        "type": "paragraph",
+        "id": "f3ceac70a59dcb6c",
+        "text": "It's good practice to regularly sync your fork with the upstream repository. To do this, you'll need to use git on the command line. [https://help.github.com/articles/fork-a-repo/#keep-your-fork-synced github]"
+      },
+      "date": 1442794398671
+    },
+    {
+      "type": "add",
+      "id": "dc0ae159c23a1588",
+      "item": {
+        "type": "paragraph",
+        "id": "dc0ae159c23a1588",
+        "text": "Clone your repo and set the upstream on your computer."
+      },
+      "after": "f3ceac70a59dcb6c",
+      "date": 1442794455701
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e74ff117f38dfef2"
+      },
+      "id": "e74ff117f38dfef2",
+      "type": "add",
+      "after": "dc0ae159c23a1588",
+      "date": 1442794464192
+    },
+    {
+      "type": "edit",
+      "id": "e74ff117f38dfef2",
+      "item": {
+        "type": "code",
+        "id": "e74ff117f38dfef2",
+        "text": "git clone"
+      },
+      "date": 1442794473113
+    },
+    {
+      "type": "edit",
+      "id": "e74ff117f38dfef2",
+      "item": {
+        "type": "code",
+        "id": "e74ff117f38dfef2",
+        "text": "git clone https://github.com/<you>/wiki-node"
+      },
+      "date": 1442794512482
+    },
+    {
+      "type": "edit",
+      "id": "e74ff117f38dfef2",
+      "item": {
+        "type": "code",
+        "id": "e74ff117f38dfef2",
+        "text": "git clone https://github.com/<you>/wiki-node.git\ngit remote add upstream https://github.com/fedwiki/wiki-node.git"
+      },
+      "date": 1442794607853
+    },
+    {
+      "type": "edit",
+      "id": "e74ff117f38dfef2",
+      "item": {
+        "type": "code",
+        "id": "e74ff117f38dfef2",
+        "text": "git clone https://github.com/<you>/wiki-node.git\ngit remote add upstream \\\n  https://github.com/fedwiki/wiki-node.git"
+      },
+      "date": 1442794691837
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8729d03dd5e71b3f"
+      },
+      "id": "8729d03dd5e71b3f",
+      "type": "add",
+      "after": "e74ff117f38dfef2",
+      "date": 1442794812962
+    },
+    {
+      "type": "edit",
+      "id": "8729d03dd5e71b3f",
+      "item": {
+        "type": "paragraph",
+        "id": "8729d03dd5e71b3f",
+        "text": "Once setup, you can sync with the upstream. [https://help.github.com/articles/syncing-a-fork/ github]"
+      },
+      "date": 1442794848901
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6d8d14671ae26350"
+      },
+      "id": "6d8d14671ae26350",
+      "type": "add",
+      "after": "8729d03dd5e71b3f",
+      "date": 1442794875327
+    },
+    {
+      "type": "edit",
+      "id": "6d8d14671ae26350",
+      "item": {
+        "type": "paragraph",
+        "id": "6d8d14671ae26350",
+        "text": "git fetch upstream/master"
+      },
+      "date": 1442794901642
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "220e2d4010b1c74c"
+      },
+      "id": "220e2d4010b1c74c",
+      "type": "add",
+      "after": "6d8d14671ae26350",
+      "date": 1442794915444
+    },
+    {
+      "type": "edit",
+      "id": "220e2d4010b1c74c",
+      "item": {
+        "type": "code",
+        "id": "220e2d4010b1c74c",
+        "text": "https://help.github.com/articles/syncing-a-fork/"
+      },
+      "date": 1442794925156
+    },
+    {
+      "type": "edit",
+      "id": "220e2d4010b1c74c",
+      "item": {
+        "type": "code",
+        "id": "220e2d4010b1c74c",
+        "text": "git fetch upstream"
+      },
+      "date": 1442794935527
+    },
+    {
+      "type": "remove",
+      "id": "6d8d14671ae26350",
+      "date": 1442794939959
+    },
+    {
+      "type": "edit",
+      "id": "220e2d4010b1c74c",
+      "item": {
+        "type": "code",
+        "id": "220e2d4010b1c74c",
+        "text": "git fetch upstream\ngit checkout master"
+      },
+      "date": 1442794969688
+    },
+    {
+      "type": "edit",
+      "id": "220e2d4010b1c74c",
+      "item": {
+        "type": "code",
+        "id": "220e2d4010b1c74c",
+        "text": "git fetch upstream\ngit checkout master\ngit merge upstream/master"
+      },
+      "date": 1442794994455
+    },
+    {
+      "type": "edit",
+      "id": "8729d03dd5e71b3f",
+      "item": {
+        "type": "paragraph",
+        "id": "8729d03dd5e71b3f",
+        "text": "Once setup, you can sync with fedwiki upstream. [https://help.github.com/articles/syncing-a-fork/ github]"
+      },
+      "date": 1442795094333
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3a7a29095a1f8ac5"
+      },
+      "id": "3a7a29095a1f8ac5",
+      "type": "add",
+      "after": "220e2d4010b1c74c",
+      "date": 1442795114656
+    },
+    {
+      "type": "edit",
+      "id": "3a7a29095a1f8ac5",
+      "item": {
+        "type": "paragraph",
+        "id": "3a7a29095a1f8ac5",
+        "text": "You can stop if there are no changes. Otherwise, if the merge is successful, push the update to your own repo and install the new version on your servers."
+      },
+      "date": 1442795221584
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e6d2b347615c5652"
+      },
+      "id": "e6d2b347615c5652",
+      "type": "add",
+      "after": "3a7a29095a1f8ac5",
+      "date": 1442795260527
+    },
+    {
+      "type": "edit",
+      "id": "e6d2b347615c5652",
+      "item": {
+        "type": "code",
+        "id": "e6d2b347615c5652",
+        "text": "git push origin master"
+      },
+      "date": 1442795279287
+    },
+    {
+      "type": "edit",
+      "id": "3a7a29095a1f8ac5",
+      "item": {
+        "type": "paragraph",
+        "id": "3a7a29095a1f8ac5",
+        "text": "You can stop if there are no changes. Otherwise, if the merge is successful, push the update to your own repo."
+      },
+      "date": 1442795632533
+    },
+    {
+      "type": "add",
+      "id": "cf8df80ec440ae8d",
+      "item": {
+        "type": "paragraph",
+        "id": "cf8df80ec440ae8d",
+        "text": "And install the new version on your servers."
+      },
+      "after": "3a7a29095a1f8ac5",
+      "date": 1442795635325
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "8729d03dd5e71b3f",
+        "220e2d4010b1c74c",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d"
+      ],
+      "id": "cf8df80ec440ae8d",
+      "date": 1442795639656
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3ebbd05a4a12b067"
+      },
+      "id": "3ebbd05a4a12b067",
+      "type": "add",
+      "after": "cf8df80ec440ae8d",
+      "date": 1442795655678
+    },
+    {
+      "type": "edit",
+      "id": "3ebbd05a4a12b067",
+      "item": {
+        "type": "code",
+        "id": "3ebbd05a4a12b067",
+        "text": "npm install -g git://github.com/<you>/wiki-node.git"
+      },
+      "date": 1442795665198
+    },
+    {
+      "type": "edit",
+      "id": "f1e01b6b28414fd2",
+      "item": {
+        "type": "paragraph",
+        "id": "f1e01b6b28414fd2",
+        "text": "You will want to include your custom plugins in some or all of the servers you operate. Here we explore various workflows that simplify this task."
+      },
+      "date": 1442795702612
+    },
+    {
+      "type": "add",
+      "id": "6cb95d7e9dfe68e5",
+      "item": {
+        "type": "paragraph",
+        "id": "6cb95d7e9dfe68e5",
+        "text": "We'll assume you login to remote computers that hosts your wiki servers."
+      },
+      "after": "f1e01b6b28414fd2",
+      "date": 1442795920589
+    },
+    {
+      "type": "add",
+      "id": "8688111b274b5a08",
+      "item": {
+        "type": "paragraph",
+        "id": "8688111b274b5a08",
+        "text": "Here we will assume you will be working on a personal computer, like a laptop, and later installing changes you make on your remote servers."
+      },
+      "after": "f3ceac70a59dcb6c",
+      "date": 1442796033068
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "220e2d4010b1c74c",
+        "8729d03dd5e71b3f",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067"
+      ],
+      "id": "220e2d4010b1c74c",
+      "date": 1445214084194
+    },
+    {
+      "type": "add",
+      "id": "f7ed60020d183d5a",
+      "item": {
+        "type": "paragraph",
+        "id": "f7ed60020d183d5a",
+        "text": "The node package manager (npm) has commands that will install plugins and update the package.json at the same time. You can add plugins and decide later if you want to keep them through other updates."
+      },
+      "after": "e03d517b21909dd3",
+      "date": 1445214323817
+    },
+    {
+      "type": "edit",
+      "id": "f7ed60020d183d5a",
+      "item": {
+        "type": "paragraph",
+        "id": "f7ed60020d183d5a",
+        "text": "The node package manager (npm) has commands that will install plugins and update the package.json at the same time. You can add plugins and decide later if you want to keep them through other updates."
+      },
+      "date": 1445214411225
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "49efec42e51ff94f",
+        "text": "npm prefix\ncd <prefix>/wiki\nnpm install wiki-plugin-search --save"
+      },
+      "id": "49efec42e51ff94f",
+      "type": "add",
+      "after": "3ebbd05a4a12b067",
+      "date": 1445214418077
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "f7ed60020d183d5a",
+        "49efec42e51ff94f",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "220e2d4010b1c74c",
+        "8729d03dd5e71b3f",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067"
+      ],
+      "id": "49efec42e51ff94f",
+      "date": 1445214425513
+    },
+    {
+      "type": "edit",
+      "id": "49efec42e51ff94f",
+      "item": {
+        "type": "code",
+        "id": "49efec42e51ff94f",
+        "text": "npm prefix\ncd <prefix>/wiki\nnpm install wiki-plugin-search --save"
+      },
+      "date": 1445214483110
+    },
+    {
+      "type": "edit",
+      "id": "49efec42e51ff94f",
+      "item": {
+        "type": "code",
+        "id": "49efec42e51ff94f",
+        "text": "npm prefix\ncd <prefix>/wiki\nnpm install wiki-plugin-search --save"
+      },
+      "date": 1445214549245
+    },
+    {
+      "item": {
+        "type": "markdown",
+        "id": "eb42c6aebaf6c7f9",
+        "text": "# Share"
+      },
+      "id": "eb42c6aebaf6c7f9",
+      "type": "add",
+      "after": "3ebbd05a4a12b067",
+      "date": 1445214592246
+    },
+    {
+      "type": "edit",
+      "id": "eb42c6aebaf6c7f9",
+      "item": {
+        "type": "markdown",
+        "id": "eb42c6aebaf6c7f9",
+        "text": "# Share"
+      },
+      "date": 1445214598877
+    },
+    {
+      "type": "add",
+      "id": "2c15cee43492479d",
+      "item": {
+        "type": "paragraph",
+        "id": "2c15cee43492479d",
+        "text": "Once you have customized a wiki to your liking with plugins that meet your needs you will want to share that configuration with others."
+      },
+      "after": "eb42c6aebaf6c7f9",
+      "date": 1445214771308
+    },
+    {
+      "type": "edit",
+      "id": "eb42c6aebaf6c7f9",
+      "item": {
+        "type": "markdown",
+        "id": "eb42c6aebaf6c7f9",
+        "text": "# Share"
+      },
+      "date": 1445214775954
+    },
+    {
+      "type": "add",
+      "id": "25f3ef23e66235f7",
+      "item": {
+        "type": "paragraph",
+        "id": "25f3ef23e66235f7",
+        "text": "You can share your github repo with others who install it instead of the normal npm wiki package. Npm offers a shorthand for this common case they can use."
+      },
+      "after": "2c15cee43492479d",
+      "date": 1445214839777
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "d0e6699796778a2e",
+        "text": "npm install -g <you>/wiki"
+      },
+      "id": "d0e6699796778a2e",
+      "type": "add",
+      "after": "25f3ef23e66235f7",
+      "date": 1445214880494
+    },
+    {
+      "type": "edit",
+      "id": "d0e6699796778a2e",
+      "item": {
+        "type": "code",
+        "id": "d0e6699796778a2e",
+        "text": "npm install -g <you>/wiki"
+      },
+      "date": 1445214898648
+    },
+    {
+      "type": "edit",
+      "id": "25f3ef23e66235f7",
+      "item": {
+        "type": "paragraph",
+        "id": "25f3ef23e66235f7",
+        "text": "You can share your github repo with others who install it instead of the normal npm wiki package. Npm offers a shorthand for this common case they can use."
+      },
+      "date": 1445214987791
+    },
+    {
+      "type": "add",
+      "id": "131bd9c9f827f14e",
+      "item": {
+        "type": "paragraph",
+        "id": "131bd9c9f827f14e",
+        "text": "Before you get too far along this path be sure that you are using a recent version of npm."
+      },
+      "after": "2c15cee43492479d",
+      "date": 1445215053291
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "c0759112fe8a425b",
+        "text": "npm install -g npm"
+      },
+      "id": "c0759112fe8a425b",
+      "type": "add",
+      "after": "d0e6699796778a2e",
+      "date": 1445215061134
+    },
+    {
+      "type": "edit",
+      "id": "c0759112fe8a425b",
+      "item": {
+        "type": "code",
+        "id": "c0759112fe8a425b",
+        "text": "npm install -g npm"
+      },
+      "date": 1445215070801
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "f7ed60020d183d5a",
+        "49efec42e51ff94f",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "220e2d4010b1c74c",
+        "8729d03dd5e71b3f",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e"
+      ],
+      "id": "c0759112fe8a425b",
+      "date": 1445215073967
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "122743f0d9700f11",
+        "text": "With only a little more work you can publish your wiki configuration to npm and leave github out of the picture. "
+      },
+      "id": "122743f0d9700f11",
+      "type": "add",
+      "after": "d0e6699796778a2e",
+      "date": 1445215177035
+    },
+    {
+      "type": "edit",
+      "id": "25f3ef23e66235f7",
+      "item": {
+        "type": "paragraph",
+        "id": "25f3ef23e66235f7",
+        "text": "You can share your github repo with others who install it instead of the normal npm wiki package. Npm offers a shorthand for this common case they can use."
+      },
+      "date": 1445215253266
+    },
+    {
+      "type": "edit",
+      "id": "122743f0d9700f11",
+      "item": {
+        "type": "paragraph",
+        "id": "122743f0d9700f11",
+        "text": "With only a little more work you can publish your wiki configuration to npm and leave github out of the picture. "
+      },
+      "date": 1445215349448
+    },
+    {
+      "type": "add",
+      "id": "9c6c5102c2c7255d",
+      "item": {
+        "type": "paragraph",
+        "id": "9c6c5102c2c7255d",
+        "text": "You will need an npm account which we will refer to as <npm-you>. Consult npm documentation to understand what they expect of users."
+      },
+      "after": "122743f0d9700f11",
+      "date": 1445215414613
+    },
+    {
+      "type": "edit",
+      "id": "9c6c5102c2c7255d",
+      "item": {
+        "type": "paragraph",
+        "id": "9c6c5102c2c7255d",
+        "text": "You will need an npm account which we will refer to as <npm-you>. Consult npm documentation to understand what they expect of users."
+      },
+      "date": 1445215487013
+    },
+    {
+      "type": "add",
+      "id": "0b3fdea6d8f1744d",
+      "item": {
+        "type": "paragraph",
+        "id": "0b3fdea6d8f1744d",
+        "text": "Edit the package.json file of your wiki-node configuration to include your name as a public scoped name."
+      },
+      "after": "9c6c5102c2c7255d",
+      "date": 1445215548470
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "4a56c1b44f76dc36",
+        "text": ""
+      },
+      "id": "4a56c1b44f76dc36",
+      "type": "add",
+      "after": "0b3fdea6d8f1744d",
+      "date": 1445215552289
+    },
+    {
+      "type": "remove",
+      "id": "4a56c1b44f76dc36",
+      "date": 1445215559874
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "f5b5dad2cc69974c",
+        "text": "  \"name\": \"@<npm-you>/wiki\""
+      },
+      "id": "f5b5dad2cc69974c",
+      "type": "add",
+      "after": "0b3fdea6d8f1744d",
+      "date": 1445215562056
+    },
+    {
+      "type": "edit",
+      "id": "f5b5dad2cc69974c",
+      "item": {
+        "type": "code",
+        "id": "f5b5dad2cc69974c",
+        "text": "  \"name\": \"@<npm-you>/wiki\""
+      },
+      "date": 1445215596811
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "0b6dbaa05ba8a7d9",
+        "text": "Your use of github account for keeping your stuff in order and use your npm account for sharing it with others. When you add the @-scope to your package.json you are saying you intend to share with npm. Npm is smart enough to transition your users from github to npm for your sharing."
+      },
+      "id": "0b6dbaa05ba8a7d9",
+      "type": "add",
+      "after": "f5b5dad2cc69974c",
+      "date": 1445215628763
+    },
+    {
+      "type": "edit",
+      "id": "0b6dbaa05ba8a7d9",
+      "item": {
+        "type": "paragraph",
+        "id": "0b6dbaa05ba8a7d9",
+        "text": "Your use of github account for keeping your stuff in order and use your npm account for sharing it with others. When you add the @-scope to your package.json you are saying you intend to share with npm. Npm is smart enough to transition your users from github to npm for your sharing."
+      },
+      "date": 1445215882911
+    },
+    {
+      "type": "add",
+      "id": "2cb21c9a1854157d",
+      "item": {
+        "type": "paragraph",
+        "id": "2cb21c9a1854157d",
+        "text": "You say"
+      },
+      "after": "0b6dbaa05ba8a7d9",
+      "date": 1445215909641
+    },
+    {
+      "type": "edit",
+      "id": "2cb21c9a1854157d",
+      "item": {
+        "type": "paragraph",
+        "id": "2cb21c9a1854157d",
+        "text": "You say"
+      },
+      "date": 1445215917210
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "1cfe125927bda0fc",
+        "text": "npm publish --access public"
+      },
+      "id": "1cfe125927bda0fc",
+      "type": "add",
+      "after": "2cb21c9a1854157d",
+      "date": 1445215924714
+    },
+    {
+      "type": "edit",
+      "id": "1cfe125927bda0fc",
+      "item": {
+        "type": "code",
+        "id": "1cfe125927bda0fc",
+        "text": "npm publish --access public"
+      },
+      "date": 1445215948826
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "b44bd2cfe101df1e",
+        "text": "Your users say"
+      },
+      "id": "b44bd2cfe101df1e",
+      "type": "add",
+      "after": "1cfe125927bda0fc",
+      "date": 1445215953120
+    },
+    {
+      "type": "edit",
+      "id": "b44bd2cfe101df1e",
+      "item": {
+        "type": "paragraph",
+        "id": "b44bd2cfe101df1e",
+        "text": "Your users say"
+      },
+      "date": 1445215960277
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "212aa68058b8985f",
+        "text": ""
+      },
+      "id": "212aa68058b8985f",
+      "type": "add",
+      "after": "b44bd2cfe101df1e",
+      "date": 1445215964252
+    },
+    {
+      "type": "remove",
+      "id": "212aa68058b8985f",
+      "date": 1445216000086
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "c983e6a7015b59ad",
+        "text": "npm install -g @<npm-you>/wiki"
+      },
+      "id": "c983e6a7015b59ad",
+      "type": "add",
+      "after": "b44bd2cfe101df1e",
+      "date": 1445216002321
+    },
+    {
+      "type": "edit",
+      "id": "c983e6a7015b59ad",
+      "item": {
+        "type": "code",
+        "id": "c983e6a7015b59ad",
+        "text": "npm install -g @<npm-you>/wiki"
+      },
+      "date": 1445216006438
+    },
+    {
+      "type": "edit",
+      "id": "212aa68058b8985f",
+      "item": {
+        "type": "paragraph",
+        "id": "212aa68058b8985f",
+        "text": ""
+      },
+      "date": 1445215994018,
+      "error": {
+        "type": "error",
+        "msg": "",
+        "response": ""
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1445216056857
+    },
+    {
+      "type": "edit",
+      "id": "e014579ee0d4aff0",
+      "item": {
+        "type": "paragraph",
+        "id": "e014579ee0d4aff0",
+        "text": "If I hadn't already published my experimental plugin to npm, I could just as well add a dependent on the plugin's repo, here with npm shorthand so long as I included the javascript version of the plugin. [https://github.com/WardCunningham/wiki-node/commit/cc6dd4eb17d163161fc818834232a835ecba21fc github]"
+      },
+      "date": 1445216281586
+    },
+    {
+      "type": "add",
+      "id": "2611f2c8bab1681d",
+      "item": {
+        "type": "paragraph",
+        "id": "2611f2c8bab1681d",
+        "text": "Note: the github project wiki-node is published as the npm module wiki. As you move from github to npm please keep this distinction in mind."
+      },
+      "after": "4735885fedba3a39",
+      "date": 1445216668916
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "2611f2c8bab1681d",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "f7ed60020d183d5a",
+        "49efec42e51ff94f",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "220e2d4010b1c74c",
+        "8729d03dd5e71b3f",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e",
+        "122743f0d9700f11",
+        "9c6c5102c2c7255d",
+        "0b3fdea6d8f1744d",
+        "f5b5dad2cc69974c",
+        "0b6dbaa05ba8a7d9",
+        "2cb21c9a1854157d",
+        "1cfe125927bda0fc",
+        "b44bd2cfe101df1e",
+        "c983e6a7015b59ad",
+        "212aa68058b8985f"
+      ],
+      "id": "2611f2c8bab1681d",
+      "date": 1445216692259
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f22d9f6495a8f351"
+      },
+      "id": "f22d9f6495a8f351",
+      "type": "add",
+      "after": "212aa68058b8985f",
+      "date": 1445216964224
+    },
+    {
+      "type": "edit",
+      "id": "f22d9f6495a8f351",
+      "item": {
+        "type": "paragraph",
+        "id": "f22d9f6495a8f351",
+        "text": "Here we are using an npm scoped name for the wiki server configuration. This will work correctly after "
+      },
+      "date": 1445217031093
+    },
+    {
+      "type": "edit",
+      "id": "f22d9f6495a8f351",
+      "item": {
+        "type": "paragraph",
+        "id": "f22d9f6495a8f351",
+        "text": "Here we are using an npm scoped name for the wiki server configuration. This will work correctly so long as a small package.json adjustment is included. [https://github.com/fedwiki/wiki-node/pull/56 issue]"
+      },
+      "date": 1445217124729
+    },
+    {
+      "type": "add",
+      "id": "0cc35251bed4b43b",
+      "item": {
+        "type": "paragraph",
+        "id": "0cc35251bed4b43b",
+        "text": "We will eventually offer the same flexibility for the packages themselves but this requires some improvement of the wiki server's plugin location logic. "
+      },
+      "after": "f22d9f6495a8f351",
+      "date": 1445217214879
+    },
+    {
+      "type": "edit",
+      "id": "0cc35251bed4b43b",
+      "item": {
+        "type": "paragraph",
+        "id": "0cc35251bed4b43b",
+        "text": "We will eventually offer the same flexibility for the packages themselves but this requires some improvement of the wiki server's plugin location logic. [https://github.com/fedwiki/wiki-node-server/issues/107 issue]"
+      },
+      "date": 1445217244959
+    },
+    {
+      "type": "edit",
+      "id": "0cc35251bed4b43b",
+      "item": {
+        "type": "paragraph",
+        "id": "0cc35251bed4b43b",
+        "text": "We will eventually offer the same flexibility for the plugin packages themselves but this requires some improvement of the wiki server's plugin location logic. [https://github.com/fedwiki/wiki-node-server/issues/107 issue]"
+      },
+      "date": 1445217272578
+    },
+    {
+      "type": "fork",
+      "site": "plugins.fed.wiki.org",
+      "date": 1445218478973
+    },
+    {
+      "type": "edit",
+      "id": "d0e6699796778a2e",
+      "item": {
+        "type": "code",
+        "id": "d0e6699796778a2e",
+        "text": "npm install -g <you>/wiki-node"
+      },
+      "date": 1445263279052
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<you>/wiki-node.git\nnpm install -g github:<you>/wiki-node"
+      },
+      "date": 1445310406304
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<you>/wiki-node.git\nnpm install -g github:<you>/wiki-node\nnpm install -g <you>/wiki-node"
+      },
+      "date": 1445310427488
+    },
+    {
+      "type": "edit",
+      "id": "5583cf5694917078",
+      "item": {
+        "type": "paragraph",
+        "id": "5583cf5694917078",
+        "text": "We describe how to host a custom configuration in github under <you> and install it with with any one of these progressively similar commands."
+      },
+      "date": 1445310482736
+    },
+    {
+      "type": "edit",
+      "id": "beb1310b9a97aedf",
+      "item": {
+        "type": "code",
+        "id": "beb1310b9a97aedf",
+        "text": "npm install -g git://github.com/<you>/wiki.git\nnpm install -g github:<you>/wiki\nnpm install -g <you>/wiki"
+      },
+      "date": 1445310533037
+    },
+    {
+      "type": "edit",
+      "id": "2611f2c8bab1681d",
+      "item": {
+        "type": "paragraph",
+        "id": "2611f2c8bab1681d",
+        "text": "Note: npm module wiki is currently github project wiki-node. As you move from github to npm please keep this distinction in mind."
+      },
+      "date": 1445310740703
+    },
+    {
+      "type": "edit",
+      "id": "2611f2c8bab1681d",
+      "item": {
+        "type": "paragraph",
+        "id": "2611f2c8bab1681d",
+        "text": "Note: npm module wiki is currently github project wiki-node. Here we anticipate that confusion resolved. [https://github.com/fedwiki/wiki-node/issues/55 issue]"
+      },
+      "date": 1445310808803
+    },
+    {
+      "type": "edit",
+      "id": "4735885fedba3a39",
+      "item": {
+        "type": "paragraph",
+        "id": "4735885fedba3a39",
+        "text": "Wiki is published to npm from a github project, wiki, that brings client, server and plugins together from other places. [https://github.com/fedwiki/wiki-node github]"
+      },
+      "date": 1445310844231
+    },
+    {
+      "type": "edit",
+      "id": "ce8dc5e63b18c7e4",
+      "item": {
+        "type": "paragraph",
+        "id": "ce8dc5e63b18c7e4",
+        "text": "Login to your own github account, <you>, then fork the wiki repo into your account. The fork button is in the second row of header buttons. When the fork completes, you can use this custom configuration for all installs."
+      },
+      "date": 1445310858399
+    },
+    {
+      "type": "edit",
+      "id": "5831a4fff345908b",
+      "item": {
+        "type": "paragraph",
+        "id": "5831a4fff345908b",
+        "text": "The wiki repo keeps its list of plugins to be included with each install as the \"dependents\" field in the package.json file. You can edit this file using the github web editor or by cloning and pushing changes from your own computer. "
+      },
+      "date": 1445310914011
+    },
+    {
+      "type": "edit",
+      "id": "e74ff117f38dfef2",
+      "item": {
+        "type": "code",
+        "id": "e74ff117f38dfef2",
+        "text": "git clone https://github.com/<you>/wiki.git\ngit remote add upstream \\\n  https://github.com/fedwiki/wiki.git"
+      },
+      "date": 1445310933809
+    },
+    {
+      "type": "edit",
+      "id": "3ebbd05a4a12b067",
+      "item": {
+        "type": "code",
+        "id": "3ebbd05a4a12b067",
+        "text": "npm install -g <you>/wiki"
+      },
+      "date": 1445310970242
+    },
+    {
+      "type": "edit",
+      "id": "d0e6699796778a2e",
+      "item": {
+        "type": "code",
+        "id": "d0e6699796778a2e",
+        "text": "npm install -g <you>/wiki"
+      },
+      "date": 1445311131272
+    },
+    {
+      "type": "fork",
+      "site": "admin.asia.wiki.org",
+      "date": 1445959207220
+    },
+    {
+      "type": "edit",
+      "id": "3a7a29095a1f8ac5",
+      "item": {
+        "type": "paragraph",
+        "id": "3a7a29095a1f8ac5",
+        "text": "You can stop if there are no changes. Otherwise, if the merge is successful, push the update to your own repo. See [[More About Upstream Merge]]"
+      },
+      "site": "admin.asia.wiki.org",
+      "date": 1445959207216
+    },
+    {
+      "type": "fork",
+      "date": 1445959242875
+    },
+    {
+      "type": "edit",
+      "id": "3a7a29095a1f8ac5",
+      "item": {
+        "type": "paragraph",
+        "id": "3a7a29095a1f8ac5",
+        "text": "You can stop if there are no changes. Otherwise, if the merge is successful, push the update to your own repo."
+      },
+      "date": 1445959269666
+    },
+    {
+      "type": "add",
+      "id": "1a2537a21ba1a971",
+      "item": {
+        "type": "paragraph",
+        "id": "1a2537a21ba1a971",
+        "text": "See [[More About Upstream Merge]]"
+      },
+      "after": "3a7a29095a1f8ac5",
+      "date": 1445959271380
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "2611f2c8bab1681d",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "f7ed60020d183d5a",
+        "49efec42e51ff94f",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "220e2d4010b1c74c",
+        "8729d03dd5e71b3f",
+        "1a2537a21ba1a971",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e",
+        "122743f0d9700f11",
+        "9c6c5102c2c7255d",
+        "0b3fdea6d8f1744d",
+        "f5b5dad2cc69974c",
+        "0b6dbaa05ba8a7d9",
+        "2cb21c9a1854157d",
+        "1cfe125927bda0fc",
+        "b44bd2cfe101df1e",
+        "c983e6a7015b59ad",
+        "212aa68058b8985f",
+        "f22d9f6495a8f351",
+        "0cc35251bed4b43b"
+      ],
+      "id": "1a2537a21ba1a971",
+      "date": 1445959276340
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "2611f2c8bab1681d",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "f7ed60020d183d5a",
+        "49efec42e51ff94f",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "8729d03dd5e71b3f",
+        "220e2d4010b1c74c",
+        "1a2537a21ba1a971",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e",
+        "122743f0d9700f11",
+        "9c6c5102c2c7255d",
+        "0b3fdea6d8f1744d",
+        "f5b5dad2cc69974c",
+        "0b6dbaa05ba8a7d9",
+        "2cb21c9a1854157d",
+        "1cfe125927bda0fc",
+        "b44bd2cfe101df1e",
+        "c983e6a7015b59ad",
+        "212aa68058b8985f",
+        "f22d9f6495a8f351",
+        "0cc35251bed4b43b"
+      ],
+      "id": "8729d03dd5e71b3f",
+      "date": 1445959409628
+    },
+    {
+      "type": "fork",
+      "site": "admin.asia.wiki.org",
+      "date": 1446737011070
+    },
+    {
+      "type": "add",
+      "id": "6b3b50f828777ebd",
+      "item": {
+        "type": "paragraph",
+        "id": "6b3b50f828777ebd",
+        "text": "# Errors"
+      },
+      "after": "e03d517b21909dd3",
+      "date": 1446751524223
+    },
+    {
+      "type": "add",
+      "id": "c87b8f2e9f4342c4",
+      "item": {
+        "type": "paragraph",
+        "id": "c87b8f2e9f4342c4",
+        "text": "You can run into permission errors:"
+      },
+      "after": "6b3b50f828777ebd",
+      "date": 1446751543089
+    },
+    {
+      "type": "edit",
+      "id": "6b3b50f828777ebd",
+      "item": {
+        "type": "markdown",
+        "id": "6b3b50f828777ebd",
+        "text": "# Errors"
+      },
+      "date": 1446751544464
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "937c77aee394e8d7"
+      },
+      "id": "937c77aee394e8d7",
+      "type": "add",
+      "after": "0cc35251bed4b43b",
+      "date": 1446751549328
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "2611f2c8bab1681d",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "6b3b50f828777ebd",
+        "c87b8f2e9f4342c4",
+        "937c77aee394e8d7",
+        "f7ed60020d183d5a",
+        "49efec42e51ff94f",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "8729d03dd5e71b3f",
+        "220e2d4010b1c74c",
+        "1a2537a21ba1a971",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e",
+        "122743f0d9700f11",
+        "9c6c5102c2c7255d",
+        "0b3fdea6d8f1744d",
+        "f5b5dad2cc69974c",
+        "0b6dbaa05ba8a7d9",
+        "2cb21c9a1854157d",
+        "1cfe125927bda0fc",
+        "b44bd2cfe101df1e",
+        "c983e6a7015b59ad",
+        "212aa68058b8985f",
+        "f22d9f6495a8f351",
+        "0cc35251bed4b43b"
+      ],
+      "id": "937c77aee394e8d7",
+      "date": 1446751564465
+    },
+    {
+      "type": "edit",
+      "id": "937c77aee394e8d7",
+      "item": {
+        "type": "code",
+        "id": "937c77aee394e8d7",
+        "text": " git clone git@github.com:github:ViralAcademy/wiki Permission denied (publickey).\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki fatal: Could not read from remote repository.\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki \nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki Please make sure you have the correct access rights\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki and the repository exists."
+      },
+      "date": 1446751568132
+    },
+    {
+      "type": "edit",
+      "id": "937c77aee394e8d7",
+      "item": {
+        "type": "code",
+        "id": "937c77aee394e8d7",
+        "text": "git clone git@github.com:github:ViralAcademy/wiki Permission denied (publickey).\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki fatal: Could not read from remote repository.\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki \nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki Please make sure you have the correct access rights\nnpm ERR! git clone git@github.com:github:ViralAcademy/wiki and the repository exists."
+      },
+      "date": 1446751579272
+    },
+    {
+      "type": "edit",
+      "id": "f7ed60020d183d5a",
+      "item": {
+        "type": "paragraph",
+        "id": "f7ed60020d183d5a",
+        "text": "In which case - you need to check the ssh keys on your server:"
+      },
+      "date": 1446752208774
+    },
+    {
+      "type": "add",
+      "id": "95eba38919432aac",
+      "item": {
+        "type": "paragraph",
+        "id": "95eba38919432aac",
+        "text": "https://help.github.com/articles/error-permission-denied-publickey/"
+      },
+      "after": "f7ed60020d183d5a",
+      "date": 1446752209773
+    },
+    {
+      "type": "add",
+      "id": "76a7afa9e9d9b332",
+      "item": {
+        "type": "paragraph",
+        "id": "76a7afa9e9d9b332",
+        "text": "The node package manager (npm) has commands that will install plugins and update the package.json at the same time. You can add plugins and decide later if you want to keep them through other updates."
+      },
+      "after": "95eba38919432aac",
+      "date": 1446752212307
+    },
+    {
+      "type": "edit",
+      "id": "f7ed60020d183d5a",
+      "item": {
+        "type": "paragraph",
+        "id": "f7ed60020d183d5a",
+        "text": "In which case - you need to check the ssh keys on your server: see [https://help.github.com/articles/error-permission-denied-publickey/ help.github.com]"
+      },
+      "date": 1446752224613
+    },
+    {
+      "type": "edit",
+      "id": "5ae97debc3f71c8b",
+      "item": {
+        "type": "code",
+        "id": "5ae97debc3f71c8b",
+        "text": "npm install -g --unsafe-perm wiki\n"
+      },
+      "date": 1447683983219
+    },
+    {
+      "type": "add",
+      "id": "4ffe454ee52744f3",
+      "item": {
+        "type": "paragraph",
+        "id": "4ffe454ee52744f3",
+        "text": "for a list of current questions see: [[Custom Wiki DAQ]]"
+      },
+      "after": "5583cf5694917078",
+      "date": 1447686416076
+    },
+    {
+      "type": "edit",
+      "id": "4ffe454ee52744f3",
+      "item": {
+        "type": "paragraph",
+        "id": "4ffe454ee52744f3",
+        "text": "for a list of current questions see: [[ Installation DAQ]]"
+      },
+      "date": 1447686451017
+    },
+    {
+      "type": "remove",
+      "id": "6b3b50f828777ebd",
+      "date": 1448969344804
+    },
+    {
+      "type": "remove",
+      "id": "937c77aee394e8d7",
+      "date": 1448969349592
+    },
+    {
+      "type": "remove",
+      "id": "c87b8f2e9f4342c4",
+      "date": 1448969352608
+    },
+    {
+      "type": "remove",
+      "id": "f7ed60020d183d5a",
+      "date": 1448969357561
+    },
+    {
+      "type": "remove",
+      "id": "95eba38919432aac",
+      "date": 1448969361446
+    },
+    {
+      "type": "remove",
+      "id": "76a7afa9e9d9b332",
+      "date": 1448969367344
+    },
+    {
+      "type": "remove",
+      "id": "49efec42e51ff94f",
+      "date": 1448969371931
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "06f1213927a2f44b"
+      },
+      "id": "06f1213927a2f44b",
+      "type": "add",
+      "after": "0cc35251bed4b43b",
+      "date": 1448969380692
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "2611f2c8bab1681d",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "4ffe454ee52744f3",
+        "beb1310b9a97aedf",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "06f1213927a2f44b",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "8729d03dd5e71b3f",
+        "220e2d4010b1c74c",
+        "1a2537a21ba1a971",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e",
+        "122743f0d9700f11",
+        "9c6c5102c2c7255d",
+        "0b3fdea6d8f1744d",
+        "f5b5dad2cc69974c",
+        "0b6dbaa05ba8a7d9",
+        "2cb21c9a1854157d",
+        "1cfe125927bda0fc",
+        "b44bd2cfe101df1e",
+        "c983e6a7015b59ad",
+        "212aa68058b8985f",
+        "f22d9f6495a8f351",
+        "0cc35251bed4b43b"
+      ],
+      "id": "06f1213927a2f44b",
+      "date": 1448969386630
+    },
+    {
+      "type": "edit",
+      "id": "06f1213927a2f44b",
+      "item": {
+        "type": "reference",
+        "id": "06f1213927a2f44b",
+        "site": "plugin.fedwiki.org",
+        "slug": "-installation-daq",
+        "title": " Installation DAQ",
+        "text": "Here we list issues and errors encountered while trying to install plugins for Fedwiki:"
+      },
+      "date": 1448969390830
+    },
+    {
+      "type": "add",
+      "id": "6faeb7936c858da6",
+      "item": {
+        "type": "paragraph",
+        "id": "6faeb7936c858da6",
+        "text": "You will then perhaps have to compile any cutom plugins that have been installed. This happens when the plugin author has not checked in an already compiled version of the plugin into github. Use:"
+      },
+      "after": "4ffe454ee52744f3",
+      "date": 1448982583515
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "cb21779b1c841e09",
+        "text": "ssh root@asia.wiki.org\ncd /usr/local/lib/node_modules/wiki/node_modules\ngit clone https://github.com/WardCunningham/wiki-plugin-plugins.git\ncd wiki-plugin-plugins\nnpm install\ngrunt build"
+      },
+      "after": "beb1310b9a97aedf",
+      "id": "cb21779b1c841e09",
+      "date": 1448982594908
+    },
+    {
+      "type": "edit",
+      "id": "cb21779b1c841e09",
+      "item": {
+        "type": "code",
+        "id": "cb21779b1c841e09",
+        "text": "npm install\ngrunt build"
+      },
+      "date": 1448982602037
+    },
+    {
+      "type": "move",
+      "order": [
+        "f1e01b6b28414fd2",
+        "2611f2c8bab1681d",
+        "6cb95d7e9dfe68e5",
+        "cc1cbb695c6c2b36",
+        "5ae97debc3f71c8b",
+        "5583cf5694917078",
+        "4ffe454ee52744f3",
+        "beb1310b9a97aedf",
+        "6faeb7936c858da6",
+        "cb21779b1c841e09",
+        "b177bc16a6db9df8",
+        "4735885fedba3a39",
+        "ce8dc5e63b18c7e4",
+        "5831a4fff345908b",
+        "be45a30207b0bb09",
+        "d104809b04e51c9d",
+        "e014579ee0d4aff0",
+        "062f750cc95ef1f9",
+        "e03d517b21909dd3",
+        "06f1213927a2f44b",
+        "05b76193a429cca9",
+        "199693a143c2a8f8",
+        "f3ceac70a59dcb6c",
+        "8688111b274b5a08",
+        "dc0ae159c23a1588",
+        "e74ff117f38dfef2",
+        "8729d03dd5e71b3f",
+        "220e2d4010b1c74c",
+        "1a2537a21ba1a971",
+        "3a7a29095a1f8ac5",
+        "e6d2b347615c5652",
+        "cf8df80ec440ae8d",
+        "3ebbd05a4a12b067",
+        "eb42c6aebaf6c7f9",
+        "2c15cee43492479d",
+        "131bd9c9f827f14e",
+        "c0759112fe8a425b",
+        "25f3ef23e66235f7",
+        "d0e6699796778a2e",
+        "122743f0d9700f11",
+        "9c6c5102c2c7255d",
+        "0b3fdea6d8f1744d",
+        "f5b5dad2cc69974c",
+        "0b6dbaa05ba8a7d9",
+        "2cb21c9a1854157d",
+        "1cfe125927bda0fc",
+        "b44bd2cfe101df1e",
+        "c983e6a7015b59ad",
+        "212aa68058b8985f",
+        "f22d9f6495a8f351",
+        "0cc35251bed4b43b"
+      ],
+      "id": "beb1310b9a97aedf",
+      "date": 1448982608944
+    }
+  ]
+}

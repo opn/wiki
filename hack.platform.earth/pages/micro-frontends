@@ -1,0 +1,957 @@
+{
+  "title": "Micro Frontends",
+  "journal": [
+    {
+      "date": 1519679637074,
+      "type": "create",
+      "item": {
+        "story": "",
+        "title": "Micro Frontends"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1519679640902,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1519679645589,
+      "error": {
+        "type": "error",
+        "msg": "Forbidden",
+        "response": "Forbidden"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1519679664412
+    },
+    {
+      "type": "edit",
+      "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+      "item": {
+        "type": "paragraph",
+        "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "text": "The term Micro Frontends first came up in ThoughtWorks Technology Radar at the end of 2016. It extends the concepts of micro services to the frontend world. The current trend is to build a feature-rich and powerful browser application, aka single page app, which sits on top of a micro service architecture. Over time the frontend layer, often developed by a separate team, grows and gets more difficult to maintain. That’s what we call a Frontend Monolith.\n\nThe idea behind Micro Frontends is to think about a website or web app as a composition of features which are owned by independent teams. Each team has a distinct area of business or mission it cares about and specialises in. A team is cross functional and develops its features end-to-end, from database to user interface.\n\nHowever, this idea is not new, in the past it went by the name of Frontend Integration for Verticalised Systems or Self contained Systems. But Micro Frontends is clearly a more friendly and less bulky term.\n\nMonolithic Frontends Monolithic Frontends\n\nOrganisation in Verticals End-To-End Teams with Micro Frontends\n\nWhat’s a Modern Web App?\nIn the introduction I’ve used the phrase “building a modern web app”. Let’s define the assumptions that are connected with this term.\n\nTo put this into a broader perspective, Aral Balkan has written a blog post about what he calls the Documents‐to‐Applications Continuum. He comes up with the concept of a sliding scale where a site, built out of static documents, connected via links, is on the left end and a pure behaviour driven, contentless application like an online photo editor is on the right.\n\nIf you would position your project on the left side of this spectrum, an integration on webserver level is a good fit. With this model a server collects and concatenates HTML strings from all components that make up the page requested by the user. Updates are done by reloading the page from the server or replacing parts of it via ajax. Gustaf Nilsson Kotte has written a comprehensive article on this topic.\n\nWhen your user interface has to provide instant feedback, even on unreliable connections, a pure server rendered site is not sufficient anymore. To implement techniques like Optimistic UI or Skeleton Screens you need to be able to also update your UI on the device itself. Google’s term Progressive Web Apps aptly describes the balancing act of being a good citizen of the web (progressive enhancement) while also providing app-like performance. This kind of application is located somewhere around the middle of the site-app-continuum. Here a solely server based solution is not sufficient anymore. We have to move the integration into the browser, and this is the focus of this article.\n\nCore Ideas behind Micro Frontends\nBe Technology Agnostic\nEach team should be able to choose and upgrade their stack without having to coordinate with other teams. Custom Elements are a great way to hide implementation details while providing a neutral interface to others.\nIsolate Team Code\nDon’t share a runtime, even if all teams use the same framework. Build independent apps that are self contained. Don’t rely on shared state or global variables.\nEstablish Team Prefixes\nAgree on naming conventions where isolation is not possible yet. Namespace CSS, Events, Local Storage and Cookies to avoid collisions and clarify ownership.\nFavor Native Browser Features over Custom APIs\nUse Browser Events for communication instead of building a global PubSub system. If you really have to build a cross team API, try keeping it as simple as possible.\nBuild a Resilient Site\nYour feature should be useful, even if JavaScript failed or hasn’t executed yet. Use Universal Rendering and Progressive Enhancement to improve perceived performance.\nThe DOM is the API\nCustom Elements, the interoperability aspect from the Web Components Spec, are a good primitive for integration in the browser. Each team builds their component using their web technology of choice and wraps it inside a Custom Element (e.g. <order-minicart></order-minicart>). The DOM specification of this particular element (tag-name, attributes & events) acts as the contract or public API for other teams. The advantage is that they can use the component and its functionality without having to know the implementation. They just have to be able to interact with the DOM.\n\nBut Custom Elements alone are not the solution to all our needs. To address progressive enhancement, universal rendering or routing we need additional pieces of software.\n\nThis page is divided into two main areas. First we will discuss Page Composition - how to assemble a page out of components owned by different teams. After that we’ll show examples for implementing clientside Page Transition.\n\nPage Composition\nBeside the client- and serverside integration of code written in different frameworks itself, there are a lot of side topics that should be discussed: mechanisms to isolate js, avoid css conflicts, load resources as needed, share common resources between teams, handle data fetching and think about good loading states for the user. We’ll go into these topics one step at a time."
+      },
+      "date": 1520169562232
+    },
+    {
+      "type": "edit",
+      "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+      "item": {
+        "type": "paragraph",
+        "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "text": "The term Micro Frontends first came up at the end of 2016. It extends the concepts of [[microservices]] to the frontend world. "
+      },
+      "date": 1520169611034
+    },
+    {
+      "type": "add",
+      "id": "2659346a0b258aa7",
+      "item": {
+        "type": "paragraph",
+        "id": "2659346a0b258aa7",
+        "text": "The current trend is to build a feature-rich and powerful browser application, aka single page app, which sits on top of a micro service architecture. Over time the frontend layer, often developed by a separate team, grows and gets more difficult to maintain. That’s what we call a [[Frontend Monolith]]."
+      },
+      "after": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+      "date": 1520169623530
+    },
+    {
+      "type": "add",
+      "id": "bcfbf507fa3d959c",
+      "item": {
+        "type": "paragraph",
+        "id": "bcfbf507fa3d959c",
+        "text": "The idea behind Micro Frontends is to think about a website or web app as a composition of features which are owned by independent teams. Each team has a distinct area of business or mission it cares about and specialises in. A team is cross functional and develops its features end-to-end, from database to user interface."
+      },
+      "after": "2659346a0b258aa7",
+      "date": 1520169634538
+    },
+    {
+      "type": "add",
+      "id": "48b964711e5b8e72",
+      "item": {
+        "type": "paragraph",
+        "id": "48b964711e5b8e72",
+        "text": "However, this idea is not new, in the past it went by the name of Frontend Integration for Verticalised Systems or Self contained Systems. But Micro Frontends is clearly a more friendly and less bulky term."
+      },
+      "after": "bcfbf507fa3d959c",
+      "date": 1520169642697
+    },
+    {
+      "type": "add",
+      "id": "57c2760e9fc51e35",
+      "item": {
+        "type": "paragraph",
+        "id": "57c2760e9fc51e35",
+        "text": "- [[What’s a Modern Web App?]]\nIn the introduction I’ve used the phrase “building a modern web app”. Let’s define the assumptions that are connected with this term.\n\nTo put this into a broader perspective, Aral Balkan has written a blog post about what he calls the Documents‐to‐Applications Continuum. He comes up with the concept of a sliding scale where a site, built out of static documents, connected via links, is on the left end and a pure behaviour driven, contentless application like an online photo editor is on the right.\n\nIf you would position your project on the left side of this spectrum, an integration on webserver level is a good fit. With this model a server collects and concatenates HTML strings from all components that make up the page requested by the user. Updates are done by reloading the page from the server or replacing parts of it via ajax. Gustaf Nilsson Kotte has written a comprehensive article on this topic.\n\nWhen your user interface has to provide instant feedback, even on unreliable connections, a pure server rendered site is not sufficient anymore. To implement techniques like Optimistic UI or Skeleton Screens you need to be able to also update your UI on the device itself. Google’s term Progressive Web Apps aptly describes the balancing act of being a good citizen of the web (progressive enhancement) while also providing app-like performance. This kind of application is located somewhere around the middle of the site-app-continuum. Here a solely server based solution is not sufficient anymore. We have to move the integration into the browser, and this is the focus of this article.\n\n- [[Core Ideas behind Micro Frontends]]\nBe Technology Agnostic\nEach team should be able to choose and upgrade their stack without having to coordinate with other teams. Custom Elements are a great way to hide implementation details while providing a neutral interface to others.\nIsolate Team Code\nDon’t share a runtime, even if all teams use the same framework. Build independent apps that are self contained. Don’t rely on shared state or global variables.\nEstablish Team Prefixes\nAgree on naming conventions where isolation is not possible yet. Namespace CSS, Events, Local Storage and Cookies to avoid collisions and clarify ownership.\nFavor Native Browser Features over Custom APIs\nUse Browser Events for communication instead of building a global PubSub system. If you really have to build a cross team API, try keeping it as simple as possible.\nBuild a Resilient Site\nYour feature should be useful, even if JavaScript failed or hasn’t executed yet. Use Universal Rendering and Progressive Enhancement to improve perceived performance.\nThe DOM is the API\nCustom Elements, the interoperability aspect from the Web Components Spec, are a good primitive for integration in the browser. Each team builds their component using their web technology of choice and wraps it inside a Custom Element (e.g. <order-minicart></order-minicart>). The DOM specification of this particular element (tag-name, attributes & events) acts as the contract or public API for other teams. The advantage is that they can use the component and its functionality without having to know the implementation. They just have to be able to interact with the DOM."
+      },
+      "after": "48b964711e5b8e72",
+      "date": 1520169692291
+    },
+    {
+      "type": "add",
+      "id": "ecd326a38ac64917",
+      "item": {
+        "type": "paragraph",
+        "id": "ecd326a38ac64917",
+        "text": "But Custom Elements alone are not the solution to all our needs. To address progressive enhancement, universal rendering or routing we need additional pieces of software."
+      },
+      "after": "57c2760e9fc51e35",
+      "date": 1520169695882
+    },
+    {
+      "type": "add",
+      "id": "706c366b6da025ea",
+      "item": {
+        "type": "paragraph",
+        "id": "706c366b6da025ea",
+        "text": "This page is divided into two main areas. First we will discuss Page Composition - how to assemble a page out of components owned by different teams. After that we’ll show examples for implementing clientside Page Transition."
+      },
+      "after": "ecd326a38ac64917",
+      "date": 1520169702745
+    },
+    {
+      "type": "add",
+      "id": "a87335123d398734",
+      "item": {
+        "type": "paragraph",
+        "id": "a87335123d398734",
+        "text": "# Page Composition\nBeside the client- and serverside integration of code written in different frameworks itself, there are a lot of side topics that should be discussed: mechanisms to isolate js, avoid css conflicts, load resources as needed, share common resources between teams, handle data fetching and think about good loading states for the user. We’ll go into these topics one step at a time."
+      },
+      "after": "706c366b6da025ea",
+      "date": 1520169708818
+    },
+    {
+      "type": "edit",
+      "id": "a87335123d398734",
+      "item": {
+        "type": "markdown",
+        "id": "a87335123d398734",
+        "text": "# Page Composition\nBeside the client- and serverside integration of code written in different frameworks itself, there are a lot of side topics that should be discussed: mechanisms to isolate js, avoid css conflicts, load resources as needed, share common resources between teams, handle data fetching and think about good loading states for the user. We’ll go into these topics one step at a time."
+      },
+      "date": 1520169710047
+    },
+    {
+      "type": "edit",
+      "id": "57c2760e9fc51e35",
+      "item": {
+        "type": "markdown",
+        "id": "57c2760e9fc51e35",
+        "text": "- [[What’s a Modern Web App?]]\nIn the introduction I’ve used the phrase “building a modern web app”. Let’s define the assumptions that are connected with this term.\n\nTo put this into a broader perspective, Aral Balkan has written a blog post about what he calls the Documents‐to‐Applications Continuum. He comes up with the concept of a sliding scale where a site, built out of static documents, connected via links, is on the left end and a pure behaviour driven, contentless application like an online photo editor is on the right.\n\nIf you would position your project on the left side of this spectrum, an integration on webserver level is a good fit. With this model a server collects and concatenates HTML strings from all components that make up the page requested by the user. Updates are done by reloading the page from the server or replacing parts of it via ajax. Gustaf Nilsson Kotte has written a comprehensive article on this topic.\n\nWhen your user interface has to provide instant feedback, even on unreliable connections, a pure server rendered site is not sufficient anymore. To implement techniques like Optimistic UI or Skeleton Screens you need to be able to also update your UI on the device itself. Google’s term Progressive Web Apps aptly describes the balancing act of being a good citizen of the web (progressive enhancement) while also providing app-like performance. This kind of application is located somewhere around the middle of the site-app-continuum. Here a solely server based solution is not sufficient anymore. We have to move the integration into the browser, and this is the focus of this article.\n\n- [[Core Ideas behind Micro Frontends]]\nBe Technology Agnostic\nEach team should be able to choose and upgrade their stack without having to coordinate with other teams. Custom Elements are a great way to hide implementation details while providing a neutral interface to others.\nIsolate Team Code\nDon’t share a runtime, even if all teams use the same framework. Build independent apps that are self contained. Don’t rely on shared state or global variables.\nEstablish Team Prefixes\nAgree on naming conventions where isolation is not possible yet. Namespace CSS, Events, Local Storage and Cookies to avoid collisions and clarify ownership.\nFavor Native Browser Features over Custom APIs\nUse Browser Events for communication instead of building a global PubSub system. If you really have to build a cross team API, try keeping it as simple as possible.\nBuild a Resilient Site\nYour feature should be useful, even if JavaScript failed or hasn’t executed yet. Use Universal Rendering and Progressive Enhancement to improve perceived performance.\nThe DOM is the API\nCustom Elements, the interoperability aspect from the Web Components Spec, are a good primitive for integration in the browser. Each team builds their component using their web technology of choice and wraps it inside a Custom Element (e.g. <order-minicart></order-minicart>). The DOM specification of this particular element (tag-name, attributes & events) acts as the contract or public API for other teams. The advantage is that they can use the component and its functionality without having to know the implementation. They just have to be able to interact with the DOM."
+      },
+      "date": 1520169712608
+    },
+    {
+      "type": "edit",
+      "id": "57c2760e9fc51e35",
+      "item": {
+        "type": "markdown",
+        "id": "57c2760e9fc51e35",
+        "text": "- [[What’s a Modern Web App?]]\nIn the introduction I’ve used the phrase “building a modern web app”. Let’s define the assumptions that are connected with this term.\n\nTo put this into a broader perspective, Aral Balkan has written a blog post about what he calls the Documents‐to‐Applications Continuum. He comes up with the concept of a sliding scale where a site, built out of static documents, connected via links, is on the left end and a pure behaviour driven, contentless application like an online photo editor is on the right.\n\nIf you would position your project on the left side of this spectrum, an integration on webserver level is a good fit. With this model a server collects and concatenates HTML strings from all components that make up the page requested by the user. Updates are done by reloading the page from the server or replacing parts of it via ajax. Gustaf Nilsson Kotte has written a comprehensive article on this topic.\n\nWhen your user interface has to provide instant feedback, even on unreliable connections, a pure server rendered site is not sufficient anymore. To implement techniques like Optimistic UI or Skeleton Screens you need to be able to also update your UI on the device itself. Google’s term Progressive Web Apps aptly describes the balancing act of being a good citizen of the web (progressive enhancement) while also providing app-like performance. This kind of application is located somewhere around the middle of the site-app-continuum. Here a solely server based solution is not sufficient anymore. We have to move the integration into the browser, and this is the focus of this article.\n\n\n"
+      },
+      "date": 1520169732398
+    },
+    {
+      "type": "add",
+      "id": "c069349c8eb0aea4",
+      "item": {
+        "type": "markdown",
+        "id": "c069349c8eb0aea4",
+        "text": "- [[Core Ideas behind Micro Frontends]]\n- [[Be Technology Agnostic]]\nEach team should be able to choose and upgrade their stack without having to coordinate with other teams. Custom Elements are a great way to hide implementation details while providing a neutral interface to others.\n- [[Isolate Team Code]]\nDon’t share a runtime, even if all teams use the same framework. Build independent apps that are self contained. Don’t rely on shared state or global variables.\nEstablish Team Prefixes\nAgree on naming conventions where isolation is not possible yet. Namespace CSS, Events, Local Storage and Cookies to avoid collisions and clarify ownership.\nFavor Native Browser Features over Custom APIs\nUse Browser Events for communication instead of building a global PubSub system. If you really have to build a cross team API, try keeping it as simple as possible.\nBuild a Resilient Site\nYour feature should be useful, even if JavaScript failed or hasn’t executed yet. Use Universal Rendering and Progressive Enhancement to improve perceived performance.\nThe DOM is the API\nCustom Elements, the interoperability aspect from the Web Components Spec, are a good primitive for integration in the browser. Each team builds their component using their web technology of choice and wraps it inside a Custom Element (e.g. <order-minicart></order-minicart>). The DOM specification of this particular element (tag-name, attributes & events) acts as the contract or public API for other teams. The advantage is that they can use the component and its functionality without having to know the implementation. They just have to be able to interact with the DOM."
+      },
+      "after": "57c2760e9fc51e35",
+      "date": 1520169770668
+    },
+    {
+      "type": "edit",
+      "id": "c069349c8eb0aea4",
+      "item": {
+        "type": "markdown",
+        "id": "c069349c8eb0aea4",
+        "text": "- [[Core Ideas behind Micro Frontends]]\n"
+      },
+      "date": 1520169809862
+    },
+    {
+      "type": "add",
+      "id": "e0efdcb381d5ad31",
+      "item": {
+        "type": "markdown",
+        "id": "e0efdcb381d5ad31",
+        "text": "- [[Be Technology Agnostic]]\nEach team should be able to choose and upgrade their stack without having to coordinate with other teams. Custom Elements are a great way to hide implementation details while providing a neutral interface to others.\n- [[Isolate Team Code]]\nDon’t share a runtime, even if all teams use the same framework. Build independent apps that are self contained. Don’t rely on shared state or global variables.\n- [[Establish Team Prefixes]]\nAgree on naming conventions where isolation is not possible yet. Namespace CSS, Events, Local Storage and Cookies to avoid collisions and clarify ownership.\nFavor Native Browser Features over Custom APIs\nUse Browser Events for communication instead of building a global PubSub system. If you really have to build a cross team API, try keeping it as simple as possible.\n- [[Build a Resilient Site]]\nYour feature should be useful, even if JavaScript failed or hasn’t executed yet. Use Universal Rendering and Progressive Enhancement to improve perceived performance.\n- [[The DOM is the API]]\nCustom Elements, the interoperability aspect from the Web Components Spec, are a good primitive for integration in the browser. Each team builds their component using their web technology of choice and wraps it inside a Custom Element (e.g. <order-minicart></order-minicart>). The DOM specification of this particular element (tag-name, attributes & events) acts as the contract or public API for other teams. The advantage is that they can use the component and its functionality without having to know the implementation. They just have to be able to interact with the DOM."
+      },
+      "after": "c069349c8eb0aea4",
+      "date": 1520169810615
+    },
+    {
+      "type": "edit",
+      "id": "57c2760e9fc51e35",
+      "item": {
+        "type": "markdown",
+        "id": "57c2760e9fc51e35",
+        "text": "- [[What’s a Modern Web App?]]\n"
+      },
+      "date": 1520169820992
+    },
+    {
+      "type": "add",
+      "id": "93ef05740a5955ea",
+      "item": {
+        "type": "markdown",
+        "id": "93ef05740a5955ea",
+        "text": "In the introduction I’ve used the phrase “building a modern web app”. Let’s define the assumptions that are connected with this term.\n\nTo put this into a broader perspective, Aral Balkan has written a blog post about what he calls the Documents‐to‐Applications Continuum. He comes up with the concept of a sliding scale where a site, built out of static documents, connected via links, is on the left end and a pure behaviour driven, contentless application like an online photo editor is on the right.\n\nIf you would position your project on the left side of this spectrum, an integration on webserver level is a good fit. With this model a server collects and concatenates HTML strings from all components that make up the page requested by the user. Updates are done by reloading the page from the server or replacing parts of it via ajax. Gustaf Nilsson Kotte has written a comprehensive article on this topic.\n\nWhen your user interface has to provide instant feedback, even on unreliable connections, a pure server rendered site is not sufficient anymore. To implement techniques like Optimistic UI or Skeleton Screens you need to be able to also update your UI on the device itself. Google’s term Progressive Web Apps aptly describes the balancing act of being a good citizen of the web (progressive enhancement) while also providing app-like performance. This kind of application is located somewhere around the middle of the site-app-continuum. Here a solely server based solution is not sufficient anymore. We have to move the integration into the browser, and this is the focus of this article.\n\n\n"
+      },
+      "after": "57c2760e9fc51e35",
+      "date": 1520169821830
+    },
+    {
+      "type": "remove",
+      "id": "93ef05740a5955ea",
+      "date": 1520169823745
+    },
+    {
+      "type": "edit",
+      "id": "c069349c8eb0aea4",
+      "item": {
+        "type": "markdown",
+        "id": "c069349c8eb0aea4",
+        "text": "- [[Ideas behind Micro Frontends]]\n"
+      },
+      "date": 1520169841831
+    },
+    {
+      "type": "remove",
+      "id": "e0efdcb381d5ad31",
+      "date": 1520169848325
+    },
+    {
+      "type": "edit",
+      "id": "706c366b6da025ea",
+      "item": {
+        "type": "paragraph",
+        "id": "706c366b6da025ea",
+        "text": "This page is divided into two main areas. First we will discuss [[Page Composition]] - how to assemble a page out of components owned by different teams. After that we’ll show examples for implementing clientside [[Page Transition]]."
+      },
+      "date": 1520169885143
+    },
+    {
+      "type": "remove",
+      "id": "c069349c8eb0aea4",
+      "date": 1520171378295
+    },
+    {
+      "type": "edit",
+      "id": "57c2760e9fc51e35",
+      "item": {
+        "type": "markdown",
+        "id": "57c2760e9fc51e35",
+        "text": "- [[What’s a Modern Web App?]]\n- [[Ideas behind Micro Frontends]]\n"
+      },
+      "date": 1520171379470
+    },
+    {
+      "type": "remove",
+      "id": "a87335123d398734",
+      "date": 1520171389047
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "a87335123d398734",
+        "text": "- [[Page Composition]]\n"
+      },
+      "after": "706c366b6da025ea",
+      "id": "a87335123d398734",
+      "date": 1520171417016
+    },
+    {
+      "type": "edit",
+      "id": "a87335123d398734",
+      "item": {
+        "type": "markdown",
+        "id": "a87335123d398734",
+        "text": "- [[Page Composition]]\n- [[[[Page Transition]]\n"
+      },
+      "date": 1520171433872
+    },
+    {
+      "type": "edit",
+      "id": "a87335123d398734",
+      "item": {
+        "type": "markdown",
+        "id": "a87335123d398734",
+        "text": "- [[Page Composition]]\n- [[Page Transition]]\n"
+      },
+      "date": 1520171436968
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "103e064f-5d08-4abc-989c-b2024e1894c2",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "103e064f-5d08-4abc-989c-b2024e1894c2",
+      "date": 1520171441363
+    },
+    {
+      "type": "edit",
+      "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+      "item": {
+        "type": "paragraph",
+        "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "text": "The term Micro Frontends first came up at the end of 2016. It extends the concepts of [[microservices]] to the frontend world - [https://micro-frontends.org/ micro-frontends.org]"
+      },
+      "date": 1520171459329
+    },
+    {
+      "type": "remove",
+      "id": "103e064f-5d08-4abc-989c-b2024e1894c2",
+      "date": 1520171462391
+    },
+    {
+      "type": "edit",
+      "id": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+      "item": {
+        "type": "markdown",
+        "id": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "text": "# Code"
+      },
+      "date": 1520171481281
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+      "date": 1520171493770
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+      "date": 1520171497364
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+      "date": 1520171501666
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+      "date": 1520171508885
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+      "date": 1520171515731
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+        "b8521009-cfd8-4b78-baa6-575f3360bd25"
+      ],
+      "id": "d44cb917-bacd-4606-8da3-92e19c01030c",
+      "date": 1520171518925
+    },
+    {
+      "type": "remove",
+      "id": "ea754755-0c61-4dba-afc7-028dda6f4ff6",
+      "date": 1520171525297
+    },
+    {
+      "type": "remove",
+      "id": "b8521009-cfd8-4b78-baa6-575f3360bd25",
+      "date": 1520171528345
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6"
+      ],
+      "id": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+      "date": 1520171534370
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6"
+      ],
+      "id": "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+      "date": 1520171537756
+    },
+    {
+      "type": "edit",
+      "id": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+      "item": {
+        "type": "markdown",
+        "id": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "text": "# Code\n"
+      },
+      "date": 1520171543819
+    },
+    {
+      "type": "add",
+      "id": "587f31a13d43a690",
+      "item": {
+        "type": "markdown",
+        "id": "587f31a13d43a690",
+        "text": "# Discussion"
+      },
+      "after": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+      "date": 1520171552245
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "587f31a13d43a690",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6"
+      ],
+      "id": "587f31a13d43a690",
+      "date": 1520171555843
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "587f31a13d43a690",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6"
+      ],
+      "id": "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+      "date": 1520171558277
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "587f31a13d43a690",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6"
+      ],
+      "id": "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+      "date": 1520171562909
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "587f31a13d43a690",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c"
+      ],
+      "id": "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+      "date": 1520171566304
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e9e331dfb71cc73b"
+      },
+      "id": "e9e331dfb71cc73b",
+      "type": "add",
+      "after": "d44cb917-bacd-4606-8da3-92e19c01030c",
+      "date": 1520171571073
+    },
+    {
+      "type": "edit",
+      "id": "e9e331dfb71cc73b",
+      "item": {
+        "type": "markdown",
+        "id": "e9e331dfb71cc73b",
+        "text": "# See also\n\n- [[Microservices]]"
+      },
+      "date": 1520171588378
+    },
+    {
+      "type": "edit",
+      "id": "e9e331dfb71cc73b",
+      "item": {
+        "type": "markdown",
+        "id": "e9e331dfb71cc73b",
+        "text": "# See also\n\n- [[Web Components]]\n- [[Microservices]]"
+      },
+      "date": 1520171602262
+    },
+    {
+      "type": "edit",
+      "id": "e9e331dfb71cc73b",
+      "item": {
+        "type": "markdown",
+        "id": "e9e331dfb71cc73b",
+        "text": "# See also\n\n- [[Platform Earth Frontends]]\n- [[Web Components]]\n- [[Microservices]]"
+      },
+      "date": 1520171651958
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1b5da17e95be2a74"
+      },
+      "id": "1b5da17e95be2a74",
+      "type": "add",
+      "after": "e9e331dfb71cc73b",
+      "date": 1520182524987
+    },
+    {
+      "type": "move",
+      "order": [
+        "90fceee5-5ba2-450f-8130-e9f912aa0884",
+        "1b5da17e95be2a74",
+        "2659346a0b258aa7",
+        "bcfbf507fa3d959c",
+        "48b964711e5b8e72",
+        "57c2760e9fc51e35",
+        "ecd326a38ac64917",
+        "706c366b6da025ea",
+        "a87335123d398734",
+        "c1aaf0fa-cc17-4528-bc79-698a11729515",
+        "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+        "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+        "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+        "587f31a13d43a690",
+        "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+        "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+        "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+        "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+        "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+        "d44cb917-bacd-4606-8da3-92e19c01030c",
+        "e9e331dfb71cc73b"
+      ],
+      "id": "1b5da17e95be2a74",
+      "date": 1520182530713
+    },
+    {
+      "type": "edit",
+      "id": "1b5da17e95be2a74",
+      "item": {
+        "type": "video",
+        "id": "1b5da17e95be2a74",
+        "text": "YOUTUBE o1Sr39DVdOQ\n(double-click to edit caption)\n"
+      },
+      "date": 1520182537357
+    },
+    {
+      "type": "edit",
+      "id": "1b5da17e95be2a74",
+      "item": {
+        "type": "video",
+        "id": "1b5da17e95be2a74",
+        "text": "YOUTUBE o1Sr39DVdOQ\nMichael Geers - [[Micro Frontends]]: Break Up You Web App!"
+      },
+      "date": 1520182578277
+    },
+    {
+      "type": "edit",
+      "id": "2659346a0b258aa7",
+      "item": {
+        "type": "paragraph",
+        "id": "2659346a0b258aa7",
+        "text": "- https://twitter.com/naltatis"
+      },
+      "date": 1520182626594
+    },
+    {
+      "type": "edit",
+      "id": "2659346a0b258aa7",
+      "item": {
+        "type": "markdown",
+        "id": "2659346a0b258aa7",
+        "text": "- https://twitter.com/naltatis"
+      },
+      "date": 1520182628644
+    },
+    {
+      "type": "add",
+      "id": "12f32b43b36e0efd",
+      "item": {
+        "type": "paragraph",
+        "id": "12f32b43b36e0efd",
+        "text": "The current trend is to build a feature-rich and powerful browser application, aka single page app, which sits on top of a micro service architecture. Over time the frontend layer, often developed by a separate team, grows and gets more difficult to maintain. That’s what we call a [[Frontend Monolith]]."
+      },
+      "after": "2659346a0b258aa7",
+      "date": 1520182631202
+    },
+    {
+      "type": "edit",
+      "id": "2659346a0b258aa7",
+      "item": {
+        "type": "markdown",
+        "id": "2659346a0b258aa7",
+        "text": "- Michael Geers on https://twitter.com/naltatis"
+      },
+      "date": 1520182640962
+    },
+    {
+      "type": "edit",
+      "id": "2659346a0b258aa7",
+      "item": {
+        "type": "markdown",
+        "id": "2659346a0b258aa7",
+        "text": "- Michael Geers on [https://twitter.com/naltatis twitter]"
+      },
+      "date": 1520182654056
+    }
+  ],
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "90fceee5-5ba2-450f-8130-e9f912aa0884",
+      "text": "The term Micro Frontends first came up at the end of 2016. It extends the concepts of [[microservices]] to the frontend world - [https://micro-frontends.org/ micro-frontends.org]"
+    },
+    {
+      "type": "video",
+      "id": "1b5da17e95be2a74",
+      "text": "YOUTUBE o1Sr39DVdOQ\nMichael Geers - [[Micro Frontends]]: Break Up You Web App!"
+    },
+    {
+      "type": "markdown",
+      "id": "2659346a0b258aa7",
+      "text": "- Michael Geers on [https://twitter.com/naltatis twitter]"
+    },
+    {
+      "type": "paragraph",
+      "id": "12f32b43b36e0efd",
+      "text": "The current trend is to build a feature-rich and powerful browser application, aka single page app, which sits on top of a micro service architecture. Over time the frontend layer, often developed by a separate team, grows and gets more difficult to maintain. That’s what we call a [[Frontend Monolith]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "bcfbf507fa3d959c",
+      "text": "The idea behind Micro Frontends is to think about a website or web app as a composition of features which are owned by independent teams. Each team has a distinct area of business or mission it cares about and specialises in. A team is cross functional and develops its features end-to-end, from database to user interface."
+    },
+    {
+      "type": "paragraph",
+      "id": "48b964711e5b8e72",
+      "text": "However, this idea is not new, in the past it went by the name of Frontend Integration for Verticalised Systems or Self contained Systems. But Micro Frontends is clearly a more friendly and less bulky term."
+    },
+    {
+      "type": "markdown",
+      "id": "57c2760e9fc51e35",
+      "text": "- [[What’s a Modern Web App?]]\n- [[Ideas behind Micro Frontends]]\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "ecd326a38ac64917",
+      "text": "But Custom Elements alone are not the solution to all our needs. To address progressive enhancement, universal rendering or routing we need additional pieces of software."
+    },
+    {
+      "type": "paragraph",
+      "id": "706c366b6da025ea",
+      "text": "This page is divided into two main areas. First we will discuss [[Page Composition]] - how to assemble a page out of components owned by different teams. After that we’ll show examples for implementing clientside [[Page Transition]]."
+    },
+    {
+      "type": "markdown",
+      "id": "a87335123d398734",
+      "text": "- [[Page Composition]]\n- [[Page Transition]]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "c1aaf0fa-cc17-4528-bc79-698a11729515",
+      "text": "# Code\n"
+    },
+    {
+      "type": "html",
+      "id": "f8d0ec0d-8537-432d-8e78-592c6590c9c5",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=github.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://github.com/neuland/micro-frontends'>neuland/micro-frontends: extending the microservice paradigms to web development</a>"
+    },
+    {
+      "type": "html",
+      "id": "3e882c8e-fb66-41d0-99cd-001d28e77bf6",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=github.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://github.com/CanopyTax/single-spa'>CanopyTax/single-spa: The javascript metaframework</a>"
+    },
+    {
+      "type": "html",
+      "id": "448d4e96-fc01-4457-b62f-d5ec12b11e28",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=single-spa.surge.sh' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://single-spa.surge.sh/'>Single-spa examples</a>"
+    },
+    {
+      "type": "markdown",
+      "id": "587f31a13d43a690",
+      "text": "# Discussion"
+    },
+    {
+      "type": "html",
+      "id": "25a9a05e-696a-46db-a8c5-0572f3a35e0a",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=syndicode.co' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='http://syndicode.co/2017/08/11/micro-frontends-approach/'>Micro Frontends approach</a>"
+    },
+    {
+      "type": "html",
+      "id": "97dadf06-a963-4d64-8332-85cf5c1b8c07",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=medium.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://medium.com/@tomsoderlund/micro-frontends-a-microservice-approach-to-front-end-web-development-f325ebdadc16'>Micro frontends&mdash;a microservice approach to front-end web development</a>"
+    },
+    {
+      "type": "html",
+      "id": "9106ed90-ad75-4e85-ba4a-e1d3398af869",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=medium.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://medium.com/canopy-tax/a-case-for-soa-in-the-browser-f777a9f139b2'>A Case for SOA in the Browser &ndash; Development at Canopy Tax &ndash; Medium</a>"
+    },
+    {
+      "type": "html",
+      "id": "04c37faa-aa70-4761-b4bf-29f4acfa2691",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=technologyconversations.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://technologyconversations.com/2015/08/09/including-front-end-web-components-into-microservices/'>Including Front-End Web Components Into Microservices | Technology Conversations</a>"
+    },
+    {
+      "type": "html",
+      "id": "19ee942a-0556-4da3-a17c-eb0d83a7d815",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=news.ycombinator.com' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://news.ycombinator.com/item?id=13009285'>Ask HN: What do you use to build micro-front ends? | Hacker News</a>"
+    },
+    {
+      "type": "html",
+      "id": "d44cb917-bacd-4606-8da3-92e19c01030c",
+      "text": "<img src='https://www.google.com/s2/favicons?domain=en.wikipedia.org' style='vertical-align: middle; width:16px; height:16px' /><a target=_blank style='vertical-align: middle; padding-left: 10px; padding-right: 12px; text-decoration: none;' href='https://en.wikipedia.org/wiki/Edge_computing'>Edge computing - Wikipedia</a>"
+    },
+    {
+      "type": "markdown",
+      "id": "e9e331dfb71cc73b",
+      "text": "# See also\n\n- [[Platform Earth Frontends]]\n- [[Web Components]]\n- [[Microservices]]"
+    }
+  ]
+}

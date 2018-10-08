@@ -1,0 +1,1811 @@
+{
+  "title": "Presentations with Pandoc",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "772157a148d42b04",
+      "text": "Here we look how we can author a  [[reveal.js]] presentation using [[pandoc]]"
+    },
+    {
+      "type": "reference",
+      "id": "329343d0973edd0c",
+      "site": "c0de.academy",
+      "slug": "javascript-slide-presentation",
+      "title": "Javascript Slide presentation",
+      "text": "There are a number of ways of creating presentations in Javascript and HTML5 (see [[Web-based Slideshow]]). Here we review the best options."
+    },
+    {
+      "type": "markdown",
+      "id": "2ab18c3501bdd401",
+      "text": "# Why use pandoc?"
+    },
+    {
+      "type": "paragraph",
+      "id": "14ac34037955eb60",
+      "text": "[[pandoc]] is a [[command-line]] utility written in [[Haskell]] that enables you to convert one document format into another. Amongst it's export capabilities are the ability to create a range of slide presentation formats - [http://pandoc.org/README.html#producing-slide-shows-with-pandoc pandoc.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "990c05e48508c264",
+      "text": "You can use pandoc to produce an HTML + javascript slide presentation that can be viewed via a web browser. There are five ways to do this, using [[S5]], [[DZSlides]], [[Slidy]], [[Slideous]], or [[reveal.js]]. You can also produce a PDF slide show using [[LaTeX beamer]]."
+    },
+    {
+      "type": "markdown",
+      "id": "e8c3ab1c77025bbe",
+      "text": "# How"
+    },
+    {
+      "type": "paragraph",
+      "id": "b31e4533ffb943e5",
+      "text": "To produce an HTML/javascript slide show, simply type:"
+    },
+    {
+      "type": "code",
+      "id": "00e5e949eb310635",
+      "text": "pandoc -t FORMAT -s habits.txt -o habits.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "955d310faf9e52d7",
+      "text": "where FORMAT is either s5, slidy, slideous, dzslides, or revealjs."
+    },
+    {
+      "type": "paragraph",
+      "id": "b746c4c1f7fbbcac",
+      "text": "The file produced by pandoc with the -s/--standalone option embeds a link to javascripts and CSS files, which are assumed to be available at the relative path  = reveal.js (for reveal.js)  - [http://pandoc.org/README.html#producing-slide-shows-with-pandoc pandoc.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "50efb28b07dc729a",
+      "text": "These paths can be changed by setting the variable revealjs-url. This allows you to set an alternative value for the base URL for reveal.js documents (defaults to reveal.js) - [http://pandoc.org/README.html#variables-for-slides pandoc.org]"
+    },
+    {
+      "type": "code",
+      "id": "1dd835197a5d1ccb",
+      "text": "pandoc -t revealjs -f markdown_mmd -s -V revealjs-url=http://lab.hakim.se/reveal-js test.md -o test.html"
+    },
+    {
+      "type": "paragraph",
+      "id": "ab143e512f4d14c0",
+      "text": "With all HTML slide formats, the --self-contained option can be used to produce a single file that contains all of the data necessary to display the slide show, including linked scripts, stylesheets, images, and videos."
+    },
+    {
+      "type": "markdown",
+      "id": "8dba7000900fdb16",
+      "text": "# Styling"
+    },
+    {
+      "type": "paragraph",
+      "id": "dc0b498c05241954",
+      "text": "All reveal.js configuration options can be set through variables. For example, themes can be used by setting the theme variable:"
+    },
+    {
+      "type": "code",
+      "id": "f7de98fe082f4d0e",
+      "text": "-V theme=moon"
+    },
+    {
+      "type": "paragraph",
+      "id": "8db747703a17c7e1",
+      "text": "Or you can specify a custom stylesheet using the --css option."
+    },
+    {
+      "type": "markdown",
+      "id": "315f523a9977dc20",
+      "text": "# Speaker Notes"
+    },
+    {
+      "type": "paragraph",
+      "id": "734a069ddcc9b4d0",
+      "text": "[[reveal.js]] has good support for speaker notes. You can add notes to your Markdown document thus:"
+    },
+    {
+      "type": "code",
+      "id": "e26c4114b5eaf356",
+      "text": "<div class=\"notes\">\nThis is my note.\n\n- It can contain Markdown\n- like this list\n\n</div>"
+    },
+    {
+      "type": "paragraph",
+      "id": "af8daed86ee0d6b8",
+      "text": "To show the notes window, press s while viewing the presentation. Notes are not yet supported for other slide formats, but the notes will not appear on the slides themselves."
+    },
+    {
+      "type": "markdown",
+      "id": "9494d7ea5d485db3",
+      "text": "# Example"
+    },
+    {
+      "type": "paragraph",
+      "id": "0b834d0028d38701",
+      "text": "Here’s the [[Markdown]] source for a simple slide show, habits.txt:"
+    },
+    {
+      "type": "code",
+      "id": "ed59a07e34670802",
+      "text": "% Habits\n% John Doe\n% March 22, 2005\n\n# In the morning\n\n## Getting up\n\n- Turn off alarm\n- Get out of bed\n\n## Breakfast\n\n- Eat eggs\n- Drink coffee\n\n# In the evening\n\n## Dinner\n\n- Eat spaghetti\n- Drink wine\n\n------------------\n\n![picture of spaghetti](images/spaghetti.jpg)\n\n## Going to sleep\n\n- Get in bed\n- Count sheep"
+    },
+    {
+      "type": "paragraph",
+      "id": "e2022f4604ee4c9f",
+      "text": "In the example above, level 1 headers are always followed by level 2 headers, which are followed by content, so 2 is the slide level (see explanation below)."
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: purple'>Note: </b>\n\n[[Markdown]] such as this, can be conveniently stored and (pre)viewed using the [[About Markdown Plugin]] within Fedwiki.<p>"
+    },
+    {
+      "type": "markdown",
+      "id": "a11daa2e1b41eb4e",
+      "text": "# Structuring the slide show"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f15a17aa7027eed",
+      "text": "By default, the slide level is the highest header level in the hierarchy that is followed immediately by content, and not another header, somewhere in the document. "
+    },
+    {
+      "type": "paragraph",
+      "id": "758e235c7720519e",
+      "text": "This default header level for new slides can be overridden using the --slide-level option. The following coomand-line flag would specify a level 2 header as a trigger to create a new slide:"
+    },
+    {
+      "type": "code",
+      "id": "3fd36971f1bdf4e4",
+      "text": "pandoc -t revealjs -f markdown_mmd --slide-level=2 --standalone test3.md -o test3.html\n"
+    },
+    {
+      "type": "markdown",
+      "id": "315769eaf7bb29e2",
+      "text": "The document is carved up into slides according to the following rules:\n* A horizontal rule always starts a new slide.\n* A header at the slide level always starts a new slide.\n* Headers below the slide level in the hierarchy create headers within a slide.\n* Headers above the slide level in the hierarchy create “title slides,” which just contain the section title and help to break the slide show into sections.\n* A title page is constructed automatically from the document’s title block, if present. (In the case of beamer, this can be disabled by commenting out some lines in the default template.)"
+    },
+    {
+      "type": "markdown",
+      "id": "97ed8d6d544d069a",
+      "text": "# Simple Structure"
+    },
+    {
+      "type": "paragraph",
+      "id": "5523a294a024eb5f",
+      "text": "These rules are designed to support many different styles of slide show. If you don’t care about structuring your slides into sections and subsections, you can just use level 1 headers for all each slide. (In that case, level 1 will be the slide level.) But you can also structure the slide show into sections, as in the example above."
+    },
+    {
+      "type": "markdown",
+      "id": "640f04fb57ea7742",
+      "text": "# Structuring the slide show with reveal.js"
+    },
+    {
+      "type": "paragraph",
+      "id": "453897eb70da489a",
+      "text": "However this is not the case with reveal.js, as reveal.js is structured by default to allow horzontal and vertical navigation of slides."
+    },
+    {
+      "type": "paragraph",
+      "id": "d290257053254e5b",
+      "text": "In reveal.js slide shows therefore, if slide level is 2, a two-dimensional layout will be produced, with level 1 headers building horizontally and level 2 headers building vertically. It is not recommended that you use deeper nesting of section levels with reveal.js."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Presentations with Pandoc",
+        "story": []
+      },
+      "date": 1459403056879
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "772157a148d42b04"
+      },
+      "id": "772157a148d42b04",
+      "type": "add",
+      "date": 1459403062710
+    },
+    {
+      "type": "edit",
+      "id": "772157a148d42b04",
+      "item": {
+        "type": "paragraph",
+        "id": "772157a148d42b04",
+        "text": "[[pandoc]] is a [[command-line]] utility written in [[Haskel]] that enables you to convert one document format into another. Amongst it's export capabilities are the ability to create a range of slide presentation formats:"
+      },
+      "date": 1459403174175
+    },
+    {
+      "type": "edit",
+      "id": "772157a148d42b04",
+      "item": {
+        "type": "paragraph",
+        "id": "772157a148d42b04",
+        "text": "[[pandoc]] is a [[command-line]] utility written in [[Haskell]] that enables you to convert one document format into another. Amongst it's export capabilities are the ability to create a range of slide presentation formats:"
+      },
+      "date": 1459403227224
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "990c05e48508c264"
+      },
+      "id": "990c05e48508c264",
+      "type": "add",
+      "after": "772157a148d42b04",
+      "date": 1459403694789
+    },
+    {
+      "type": "edit",
+      "id": "990c05e48508c264",
+      "item": {
+        "type": "paragraph",
+        "id": "990c05e48508c264",
+        "text": "You can use pandoc to produce an HTML + javascript slide presentation that can be viewed via a web browser. There are five ways to do this, using [[S5]], [[DZSlides]], [[Slidy]], [[Slideous]], or [[reveal.js]]. You can also produce a PDF slide show using [[LaTeX beamer]].\n\nHere’s the [[Markdown]] source for a simple slide show, habits.txt:"
+      },
+      "date": 1459403754750
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "329343d0973edd0c"
+      },
+      "id": "329343d0973edd0c",
+      "type": "add",
+      "after": "990c05e48508c264",
+      "date": 1459403775986
+    },
+    {
+      "type": "edit",
+      "id": "329343d0973edd0c",
+      "item": {
+        "type": "reference",
+        "id": "329343d0973edd0c",
+        "site": "c0de.academy",
+        "slug": "javascript-slide-presentation",
+        "title": "Javascript Slide presentation",
+        "text": "There are a number of ways of creating presentations in Javascript and HTML5 (see [[Web-based Slideshow]]). Here we look how we can author a  [[reveal.js]] presentation using [[pandoc]] (see [[Presentations with Pandoc]])."
+      },
+      "date": 1459403778253
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "c3f4c057ccc0b549",
+        "text": "% Eating Habits\n% John Doe\n% March 22, 2005\n\n# In the morning\n\n- Eat eggs\n- Drink coffee\n\n# In the evening\n\n- Eat spaghetti\n- Drink wine\n\n# Conclusion\n\n- And the answer is...\n- $f(x)=\\sum_{n=0}^\\infty\\frac{f^{(n)}(a)}{n!}(x-a)^n$"
+      },
+      "after": "990c05e48508c264",
+      "id": "c3f4c057ccc0b549",
+      "date": 1459403788454
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ed59a07e34670802"
+      },
+      "id": "ed59a07e34670802",
+      "type": "add",
+      "after": "329343d0973edd0c",
+      "date": 1459403798404
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "990c05e48508c264",
+        "ed59a07e34670802",
+        "c3f4c057ccc0b549",
+        "329343d0973edd0c"
+      ],
+      "id": "ed59a07e34670802",
+      "date": 1459403800521
+    },
+    {
+      "type": "edit",
+      "id": "ed59a07e34670802",
+      "item": {
+        "type": "code",
+        "id": "ed59a07e34670802",
+        "text": "% Eating Habits\n% John Doe\n% March 22, 2005\n\n# In the morning\n\n- Eat eggs\n- Drink coffee\n\n# In the evening\n\n- Eat spaghetti\n- Drink wine\n\n# Conclusion\n\n- And the answer is...\n- $f(x)=\\sum_{n=0}^\\infty\\frac{f^{(n)}(a)}{n!}(x-a)^n$"
+      },
+      "date": 1459403809286
+    },
+    {
+      "type": "add",
+      "id": "0bc364da9d15eacf",
+      "item": {
+        "type": "paragraph",
+        "id": "0bc364da9d15eacf",
+        "text": "Which can be viewed using the [[About markdown Plugin]] within Fedwiki as:"
+      },
+      "after": "990c05e48508c264",
+      "date": 1459403857197
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "990c05e48508c264",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549",
+        "329343d0973edd0c"
+      ],
+      "id": "0bc364da9d15eacf",
+      "date": 1459403859467
+    },
+    {
+      "type": "edit",
+      "id": "0bc364da9d15eacf",
+      "item": {
+        "type": "paragraph",
+        "id": "0bc364da9d15eacf",
+        "text": "Which can be viewed using the [[About Markdown Plugin]] within Fedwiki as:"
+      },
+      "date": 1459403865700
+    },
+    {
+      "type": "edit",
+      "id": "772157a148d42b04",
+      "item": {
+        "type": "paragraph",
+        "id": "772157a148d42b04",
+        "text": "[[pandoc]] is a [[command-line]] utility written in [[Haskell]] that enables you to convert one document format into another. Amongst it's export capabilities are the ability to create a range of slide presentation formats - [http://pandoc.org/README.html#producing-slide-shows-with-pandoc pandoc.org]"
+      },
+      "date": 1459403899195
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "315f523a9977dc20"
+      },
+      "id": "315f523a9977dc20",
+      "type": "add",
+      "after": "329343d0973edd0c",
+      "date": 1459404112032
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "315f523a9977dc20",
+        "990c05e48508c264",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549",
+        "329343d0973edd0c"
+      ],
+      "id": "315f523a9977dc20",
+      "date": 1459404124340
+    },
+    {
+      "type": "edit",
+      "id": "990c05e48508c264",
+      "item": {
+        "type": "paragraph",
+        "id": "990c05e48508c264",
+        "text": "You can use pandoc to produce an HTML + javascript slide presentation that can be viewed via a web browser. There are five ways to do this, using [[S5]], [[DZSlides]], [[Slidy]], [[Slideous]], or [[reveal.js]]. You can also produce a PDF slide show using [[LaTeX beamer]]."
+      },
+      "date": 1459404128434
+    },
+    {
+      "type": "add",
+      "id": "9494d7ea5d485db3",
+      "item": {
+        "type": "paragraph",
+        "id": "9494d7ea5d485db3",
+        "text": "# Example"
+      },
+      "after": "990c05e48508c264",
+      "date": 1459404136512
+    },
+    {
+      "type": "edit",
+      "id": "9494d7ea5d485db3",
+      "item": {
+        "type": "markdown",
+        "id": "9494d7ea5d485db3",
+        "text": "# Example"
+      },
+      "date": 1459404138548
+    },
+    {
+      "type": "add",
+      "id": "0b834d0028d38701",
+      "item": {
+        "type": "paragraph",
+        "id": "0b834d0028d38701",
+        "text": "Here’s the [[Markdown]] source for a simple slide show, habits.txt:"
+      },
+      "after": "9494d7ea5d485db3",
+      "date": 1459404139650
+    },
+    {
+      "type": "edit",
+      "id": "315f523a9977dc20",
+      "item": {
+        "type": "paragraph",
+        "id": "315f523a9977dc20",
+        "text": "# Speaker Notes"
+      },
+      "date": 1459404154438
+    },
+    {
+      "type": "add",
+      "id": "734a069ddcc9b4d0",
+      "item": {
+        "type": "paragraph",
+        "id": "734a069ddcc9b4d0",
+        "text": "[[reveal.js]] has good support for speaker notes. You can add notes to your Markdown document thus:"
+      },
+      "after": "315f523a9977dc20",
+      "date": 1459404173704
+    },
+    {
+      "type": "edit",
+      "id": "315f523a9977dc20",
+      "item": {
+        "type": "markdown",
+        "id": "315f523a9977dc20",
+        "text": "# Speaker Notes"
+      },
+      "date": 1459404176368
+    },
+    {
+      "type": "add",
+      "id": "af8daed86ee0d6b8",
+      "item": {
+        "type": "paragraph",
+        "id": "af8daed86ee0d6b8",
+        "text": "To show the notes window, press s while viewing the presentation. Notes are not yet supported for other slide formats, but the notes will not appear on the slides themselves."
+      },
+      "after": "734a069ddcc9b4d0",
+      "date": 1459404177297
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "990c05e48508c264",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549",
+        "329343d0973edd0c"
+      ],
+      "id": "990c05e48508c264",
+      "date": 1459404184521
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e26c4114b5eaf356"
+      },
+      "id": "e26c4114b5eaf356",
+      "type": "add",
+      "after": "329343d0973edd0c",
+      "date": 1459404187255
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "990c05e48508c264",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549",
+        "329343d0973edd0c"
+      ],
+      "id": "e26c4114b5eaf356",
+      "date": 1459404192429
+    },
+    {
+      "type": "edit",
+      "id": "e26c4114b5eaf356",
+      "item": {
+        "type": "code",
+        "id": "e26c4114b5eaf356",
+        "text": "<div class=\"notes\">\nThis is my note.\n\n- It can contain Markdown\n- like this list\n\n</div>"
+      },
+      "date": 1459404195685
+    },
+    {
+      "type": "add",
+      "id": "b31e4533ffb943e5",
+      "item": {
+        "type": "paragraph",
+        "id": "b31e4533ffb943e5",
+        "text": "To produce an HTML/javascript slide show, simply type:\n\npandoc -t FORMAT -s habits.txt -o habits.html"
+      },
+      "after": "990c05e48508c264",
+      "date": 1459404284617
+    },
+    {
+      "type": "add",
+      "id": "955d310faf9e52d7",
+      "item": {
+        "type": "paragraph",
+        "id": "955d310faf9e52d7",
+        "text": "where FORMAT is either s5, slidy, slideous, dzslides, or revealjs."
+      },
+      "after": "b31e4533ffb943e5",
+      "date": 1459404286951
+    },
+    {
+      "type": "add",
+      "id": "b746c4c1f7fbbcac",
+      "item": {
+        "type": "paragraph",
+        "id": "b746c4c1f7fbbcac",
+        "text": "For Slidy, Slideous, reveal.js, and S5, the file produced by pandoc with the -s/--standalone option embeds a link to javascripts and CSS files, which are assumed to be available at the relative path s5/default (for S5), slideous (for Slideous), reveal.js (for reveal.js), or at the Slidy website at w3.org (for Slidy)."
+      },
+      "after": "955d310faf9e52d7",
+      "date": 1459404312120
+    },
+    {
+      "type": "add",
+      "id": "50efb28b07dc729a",
+      "item": {
+        "type": "paragraph",
+        "id": "50efb28b07dc729a",
+        "text": "These paths can be changed by setting the slidy-url, slideous-url, revealjs-url, or s5-url variables; see Variables for slides, above.) For DZSlides, the (relatively short) javascript and css are included in the file by default."
+      },
+      "after": "b746c4c1f7fbbcac",
+      "date": 1459404326975
+    },
+    {
+      "type": "add",
+      "id": "ab143e512f4d14c0",
+      "item": {
+        "type": "paragraph",
+        "id": "ab143e512f4d14c0",
+        "text": "With all HTML slide formats, the --self-contained option can be used to produce a single file that contains all of the data necessary to display the slide show, including linked scripts, stylesheets, images, and videos."
+      },
+      "after": "50efb28b07dc729a",
+      "date": 1459404331609
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "00e5e949eb310635"
+      },
+      "id": "00e5e949eb310635",
+      "type": "add",
+      "after": "329343d0973edd0c",
+      "date": 1459404337290
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "990c05e48508c264",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "ab143e512f4d14c0",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549",
+        "329343d0973edd0c"
+      ],
+      "id": "00e5e949eb310635",
+      "date": 1459404343095
+    },
+    {
+      "type": "edit",
+      "id": "b31e4533ffb943e5",
+      "item": {
+        "type": "paragraph",
+        "id": "b31e4533ffb943e5",
+        "text": "To produce an HTML/javascript slide show, simply type:"
+      },
+      "date": 1459404348466
+    },
+    {
+      "type": "edit",
+      "id": "00e5e949eb310635",
+      "item": {
+        "type": "code",
+        "id": "00e5e949eb310635",
+        "text": "pandoc -t FORMAT -s habits.txt -o habits.html"
+      },
+      "date": 1459404350739
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "990c05e48508c264",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "ab143e512f4d14c0",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549"
+      ],
+      "id": "329343d0973edd0c",
+      "date": 1459413257420
+    },
+    {
+      "type": "edit",
+      "id": "329343d0973edd0c",
+      "item": {
+        "type": "reference",
+        "id": "329343d0973edd0c",
+        "site": "c0de.academy",
+        "slug": "javascript-slide-presentation",
+        "title": "Javascript Slide presentation",
+        "text": "There are a number of ways of creating presentations in Javascript and HTML5 (see [[Web-based Slideshow]]). Here we review the best options."
+      },
+      "date": 1459413308470
+    },
+    {
+      "type": "edit",
+      "id": "772157a148d42b04",
+      "item": {
+        "type": "paragraph",
+        "id": "772157a148d42b04",
+        "text": "Here we look how we can author a  [[reveal.js]] presentation using [[pandoc]]"
+      },
+      "date": 1459413312878
+    },
+    {
+      "type": "add",
+      "id": "14ac34037955eb60",
+      "item": {
+        "type": "paragraph",
+        "id": "14ac34037955eb60",
+        "text": "[[pandoc]] is a [[command-line]] utility written in [[Haskell]] that enables you to convert one document format into another. Amongst it's export capabilities are the ability to create a range of slide presentation formats - [http://pandoc.org/README.html#producing-slide-shows-with-pandoc pandoc.org]"
+      },
+      "after": "772157a148d42b04",
+      "date": 1459413315703
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "ab143e512f4d14c0",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549"
+      ],
+      "id": "329343d0973edd0c",
+      "date": 1459413318304
+    },
+    {
+      "type": "add",
+      "id": "2ab18c3501bdd401",
+      "item": {
+        "type": "paragraph",
+        "id": "2ab18c3501bdd401",
+        "text": "# Why pandoc"
+      },
+      "after": "772157a148d42b04",
+      "date": 1459413353430
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "ab143e512f4d14c0",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549"
+      ],
+      "id": "2ab18c3501bdd401",
+      "date": 1459413355629
+    },
+    {
+      "type": "edit",
+      "id": "2ab18c3501bdd401",
+      "item": {
+        "type": "paragraph",
+        "id": "2ab18c3501bdd401",
+        "text": "# Why use pandoc?"
+      },
+      "date": 1459413368423
+    },
+    {
+      "type": "edit",
+      "id": "2ab18c3501bdd401",
+      "item": {
+        "type": "markdown",
+        "id": "2ab18c3501bdd401",
+        "text": "# Why use pandoc?"
+      },
+      "date": 1459413369297
+    },
+    {
+      "type": "add",
+      "id": "e8c3ab1c77025bbe",
+      "item": {
+        "type": "paragraph",
+        "id": "e8c3ab1c77025bbe",
+        "text": "# How"
+      },
+      "after": "990c05e48508c264",
+      "date": 1459413380574
+    },
+    {
+      "type": "edit",
+      "id": "e8c3ab1c77025bbe",
+      "item": {
+        "type": "markdown",
+        "id": "e8c3ab1c77025bbe",
+        "text": "# How"
+      },
+      "date": 1459413381613
+    },
+    {
+      "type": "edit",
+      "id": "b746c4c1f7fbbcac",
+      "item": {
+        "type": "paragraph",
+        "id": "b746c4c1f7fbbcac",
+        "text": "The file produced by pandoc with the -s/--standalone option embeds a link to javascripts and CSS files, which are assumed to be available at the relative path  = reveal.js (for reveal.js)  - [http://pandoc.org/README.html#producing-slide-shows-with-pandoc pandoc.org]"
+      },
+      "date": 1459413458070
+    },
+    {
+      "type": "edit",
+      "id": "50efb28b07dc729a",
+      "item": {
+        "type": "paragraph",
+        "id": "50efb28b07dc729a",
+        "text": "These paths can be changed by setting the revealjs-url."
+      },
+      "date": 1459413508838
+    },
+    {
+      "type": "edit",
+      "id": "50efb28b07dc729a",
+      "item": {
+        "type": "paragraph",
+        "id": "50efb28b07dc729a",
+        "text": "These paths can be changed by setting the revealjs-url - [http://pandoc.org/README.html#variables-for-slides pandoc.org]"
+      },
+      "date": 1459413726415
+    },
+    {
+      "type": "edit",
+      "id": "50efb28b07dc729a",
+      "item": {
+        "type": "paragraph",
+        "id": "50efb28b07dc729a",
+        "text": "These paths can be changed by setting the variable revealjs-url. THis allows you to set an alternative value for the base URL for reveal.js documents (defaults to reveal.js) - [http://pandoc.org/README.html#variables-for-slides pandoc.org]"
+      },
+      "date": 1459413870239
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1dd835197a5d1ccb"
+      },
+      "id": "1dd835197a5d1ccb",
+      "type": "add",
+      "after": "c3f4c057ccc0b549",
+      "date": 1459414258072
+    },
+    {
+      "type": "edit",
+      "id": "1dd835197a5d1ccb",
+      "item": {
+        "type": "code",
+        "id": "1dd835197a5d1ccb",
+        "text": "pandoc -t revealjs -f markdown_mmd --slide-level=2 --standalone -V revealjs-url=http://lab.hakim.se/reveal-js --css=http://lab.hakim.se/reveal-js/css/theme/solarized.css --css=http://lab.hakim.se/reveal-js/css/print/paper.css test3.md -o test3.html"
+      },
+      "date": 1459414265528
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549"
+      ],
+      "id": "1dd835197a5d1ccb",
+      "date": 1459414272126
+    },
+    {
+      "type": "edit",
+      "id": "1dd835197a5d1ccb",
+      "item": {
+        "type": "code",
+        "id": "1dd835197a5d1ccb",
+        "text": "pandoc -t revealjs -f markdown_mmd -s -V revealjs-url=http://lab.hakim.se/reveal-js test.md -o test.html"
+      },
+      "date": 1459414348352
+    },
+    {
+      "type": "edit",
+      "id": "50efb28b07dc729a",
+      "item": {
+        "type": "paragraph",
+        "id": "50efb28b07dc729a",
+        "text": "These paths can be changed by setting the variable revealjs-url. This allows you to set an alternative value for the base URL for reveal.js documents (defaults to reveal.js) - [http://pandoc.org/README.html#variables-for-slides pandoc.org]"
+      },
+      "date": 1459414391727
+    },
+    {
+      "type": "add",
+      "id": "8dba7000900fdb16",
+      "item": {
+        "type": "paragraph",
+        "id": "8dba7000900fdb16",
+        "text": "# Styling"
+      },
+      "after": "ab143e512f4d14c0",
+      "date": 1459414477172
+    },
+    {
+      "type": "add",
+      "id": "dc0b498c05241954",
+      "item": {
+        "type": "paragraph",
+        "id": "dc0b498c05241954",
+        "text": "All reveal.js configuration options can be set through variables. For example, themes can be used by setting the theme variable:"
+      },
+      "after": "8dba7000900fdb16",
+      "date": 1459414481278
+    },
+    {
+      "type": "add",
+      "id": "a472b45064a05843",
+      "item": {
+        "type": "paragraph",
+        "id": "a472b45064a05843",
+        "text": "-V theme=moon"
+      },
+      "after": "dc0b498c05241954",
+      "date": 1459414484837
+    },
+    {
+      "type": "add",
+      "id": "8db747703a17c7e1",
+      "item": {
+        "type": "paragraph",
+        "id": "8db747703a17c7e1",
+        "text": "Or you can specify a custom stylesheet using the --css option."
+      },
+      "after": "a472b45064a05843",
+      "date": 1459414487422
+    },
+    {
+      "type": "edit",
+      "id": "8dba7000900fdb16",
+      "item": {
+        "type": "markdown",
+        "id": "8dba7000900fdb16",
+        "text": "# Styling"
+      },
+      "date": 1459414488558
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f7de98fe082f4d0e"
+      },
+      "id": "f7de98fe082f4d0e",
+      "type": "add",
+      "after": "c3f4c057ccc0b549",
+      "date": 1459414491210
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "a472b45064a05843",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "c3f4c057ccc0b549"
+      ],
+      "id": "f7de98fe082f4d0e",
+      "date": 1459414495444
+    },
+    {
+      "type": "remove",
+      "id": "a472b45064a05843",
+      "date": 1459414499359
+    },
+    {
+      "type": "edit",
+      "id": "f7de98fe082f4d0e",
+      "item": {
+        "type": "code",
+        "id": "f7de98fe082f4d0e",
+        "text": "-V theme=moon"
+      },
+      "date": 1459414500807
+    },
+    {
+      "type": "add",
+      "id": "a11daa2e1b41eb4e",
+      "item": {
+        "type": "paragraph",
+        "id": "a11daa2e1b41eb4e",
+        "text": "# Structuring the slide show"
+      },
+      "after": "af8daed86ee0d6b8",
+      "date": 1459414606565
+    },
+    {
+      "type": "add",
+      "id": "1f15a17aa7027eed",
+      "item": {
+        "type": "paragraph",
+        "id": "1f15a17aa7027eed",
+        "text": "By default, the slide level is the highest header level in the hierarchy that is followed immediately by content, and not another header, somewhere in the document. In the example above, level 1 headers are always followed by level 2 headers, which are followed by content, so 2 is the slide level. "
+      },
+      "after": "a11daa2e1b41eb4e",
+      "date": 1459414634917
+    },
+    {
+      "type": "edit",
+      "id": "a11daa2e1b41eb4e",
+      "item": {
+        "type": "markdown",
+        "id": "a11daa2e1b41eb4e",
+        "text": "# Structuring the slide show"
+      },
+      "date": 1459414636860
+    },
+    {
+      "type": "add",
+      "id": "758e235c7720519e",
+      "item": {
+        "type": "paragraph",
+        "id": "758e235c7720519e",
+        "text": "This default can be overridden using the --slide-level option."
+      },
+      "after": "1f15a17aa7027eed",
+      "date": 1459414643117
+    },
+    {
+      "type": "add",
+      "id": "315769eaf7bb29e2",
+      "item": {
+        "type": "paragraph",
+        "id": "315769eaf7bb29e2",
+        "text": "The document is carved up into slides according to the following rules:\n* A horizontal rule always starts a new slide.\n* A header at the slide level always starts a new slide.\n* Headers below the slide level in the hierarchy create headers within a slide.\n* Headers above the slide level in the hierarchy create “title slides,” which just contain the section title and help to break the slide show into sections.\n* A title page is constructed automatically from the document’s title block, if present. (In the case of beamer, this can be disabled by commenting out some lines in the default template.)"
+      },
+      "after": "758e235c7720519e",
+      "date": 1459414667798
+    },
+    {
+      "type": "edit",
+      "id": "315769eaf7bb29e2",
+      "item": {
+        "type": "markdown",
+        "id": "315769eaf7bb29e2",
+        "text": "The document is carved up into slides according to the following rules:\n* A horizontal rule always starts a new slide.\n* A header at the slide level always starts a new slide.\n* Headers below the slide level in the hierarchy create headers within a slide.\n* Headers above the slide level in the hierarchy create “title slides,” which just contain the section title and help to break the slide show into sections.\n* A title page is constructed automatically from the document’s title block, if present. (In the case of beamer, this can be disabled by commenting out some lines in the default template.)"
+      },
+      "date": 1459414669519
+    },
+    {
+      "type": "add",
+      "id": "97ed8d6d544d069a",
+      "item": {
+        "type": "paragraph",
+        "id": "97ed8d6d544d069a",
+        "text": "\nThese rules are designed to support many different styles of slide show. If you don’t care about structuring your slides into sections and subsections, you can just use level 1 headers for all each slide. (In that case, level 1 will be the slide level.) But you can also structure the slide show into sections, as in the example above.\n\nNote: in reveal.js slide shows, if slide level is 2, a two-dimensional layout will be produced, with level 1 headers building horizontally and level 2 headers building vertically. It is not recommended that you use deeper nesting of section levels with reveal.js."
+      },
+      "after": "315769eaf7bb29e2",
+      "date": 1459414678792
+    },
+    {
+      "type": "edit",
+      "id": "1f15a17aa7027eed",
+      "item": {
+        "type": "paragraph",
+        "id": "1f15a17aa7027eed",
+        "text": "By default, the slide level is the highest header level in the hierarchy that is followed immediately by content, and not another header, somewhere in the document. "
+      },
+      "date": 1459414684206
+    },
+    {
+      "type": "add",
+      "id": "e2022f4604ee4c9f",
+      "item": {
+        "type": "paragraph",
+        "id": "e2022f4604ee4c9f",
+        "text": "In the example above, level 1 headers are always followed by level 2 headers, which are followed by content, so 2 is the slide level. "
+      },
+      "after": "1f15a17aa7027eed",
+      "date": 1459414685007
+    },
+    {
+      "type": "edit",
+      "id": "ed59a07e34670802",
+      "item": {
+        "type": "code",
+        "id": "ed59a07e34670802",
+        "text": "% Habits\n% John Doe\n% March 22, 2005\n\n# In the morning\n\n## Getting up\n\n- Turn off alarm\n- Get out of bed\n\n## Breakfast\n\n- Eat eggs\n- Drink coffee\n\n# In the evening\n\n## Dinner\n\n- Eat spaghetti\n- Drink wine\n\n------------------\n\n![picture of spaghetti](images/spaghetti.jpg)\n\n## Going to sleep\n\n- Get in bed\n- Count sheep"
+      },
+      "date": 1459414748056
+    },
+    {
+      "type": "edit",
+      "id": "c3f4c057ccc0b549",
+      "item": {
+        "type": "markdown",
+        "id": "c3f4c057ccc0b549",
+        "text": "% Habits\n% John Doe\n% March 22, 2005\n\n# In the morning\n\n## Getting up\n\n- Turn off alarm\n- Get out of bed\n\n## Breakfast\n\n- Eat eggs\n- Drink coffee\n\n# In the evening\n\n## Dinner\n\n- Eat spaghetti\n- Drink wine\n\n------------------\n\n![picture of spaghetti](images/spaghetti.jpg)\n\n## Going to sleep\n\n- Get in bed\n- Count sheep"
+      },
+      "date": 1459414756208
+    },
+    {
+      "type": "remove",
+      "id": "c3f4c057ccc0b549",
+      "date": 1459414773926
+    },
+    {
+      "type": "edit",
+      "id": "0bc364da9d15eacf",
+      "item": {
+        "type": "paragraph",
+        "id": "0bc364da9d15eacf",
+        "text": "Which can be conveniently stored viewed using the [[About Markdown Plugin]] within Fedwiki."
+      },
+      "date": 1459414790344
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "e2022f4604ee4c9f",
+        "758e235c7720519e",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf"
+      ],
+      "id": "9494d7ea5d485db3",
+      "date": 1459414808200
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "e2022f4604ee4c9f",
+        "758e235c7720519e",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf"
+      ],
+      "id": "0b834d0028d38701",
+      "date": 1459414811197
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "e2022f4604ee4c9f",
+        "758e235c7720519e",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "0bc364da9d15eacf"
+      ],
+      "id": "ed59a07e34670802",
+      "date": 1459414814491
+    },
+    {
+      "type": "edit",
+      "id": "97ed8d6d544d069a",
+      "item": {
+        "type": "paragraph",
+        "id": "97ed8d6d544d069a",
+        "text": "These rules are designed to support many different styles of slide show. If you don’t care about structuring your slides into sections and subsections, you can just use level 1 headers for all each slide. (In that case, level 1 will be the slide level.) But you can also structure the slide show into sections, as in the example above."
+      },
+      "date": 1459414842727
+    },
+    {
+      "type": "add",
+      "id": "640f04fb57ea7742",
+      "item": {
+        "type": "paragraph",
+        "id": "640f04fb57ea7742",
+        "text": "Note: in reveal.js slide shows, if slide level is 2, a two-dimensional layout will be produced, with level 1 headers building horizontally and level 2 headers building vertically. It is not recommended that you use deeper nesting of section levels with reveal.js."
+      },
+      "after": "97ed8d6d544d069a",
+      "date": 1459414847686
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "e2022f4604ee4c9f",
+        "640f04fb57ea7742",
+        "758e235c7720519e",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "0bc364da9d15eacf"
+      ],
+      "id": "640f04fb57ea7742",
+      "date": 1459414852086
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "e2022f4604ee4c9f",
+        "640f04fb57ea7742",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "0bc364da9d15eacf"
+      ],
+      "id": "758e235c7720519e",
+      "date": 1459414863548
+    },
+    {
+      "type": "edit",
+      "id": "758e235c7720519e",
+      "item": {
+        "type": "paragraph",
+        "id": "758e235c7720519e",
+        "text": "This default header level for new slides can be overridden using the --slide-level option."
+      },
+      "date": 1459414912422
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3fd36971f1bdf4e4"
+      },
+      "id": "3fd36971f1bdf4e4",
+      "type": "add",
+      "after": "0bc364da9d15eacf",
+      "date": 1459414969951
+    },
+    {
+      "type": "edit",
+      "id": "3fd36971f1bdf4e4",
+      "item": {
+        "type": "code",
+        "id": "3fd36971f1bdf4e4",
+        "text": "pandoc -t revealjs -f markdown_mmd --slide-level=2 --standalone -V revealjs-url=http://lab.hakim.se/reveal-js --css=http://lab.hakim.se/reveal-js/css/theme/solarized.css --css=http://lab.hakim.se/reveal-js/css/print/paper.css test3.md -o test3.html\n"
+      },
+      "date": 1459414972427
+    },
+    {
+      "type": "edit",
+      "id": "3fd36971f1bdf4e4",
+      "item": {
+        "type": "code",
+        "id": "3fd36971f1bdf4e4",
+        "text": "pandoc -t revealjs -f markdown_mmd --slide-level=2 --standalone test3.md -o test3.html\n"
+      },
+      "date": 1459415017959
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "3fd36971f1bdf4e4",
+        "e2022f4604ee4c9f",
+        "640f04fb57ea7742",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "0bc364da9d15eacf"
+      ],
+      "id": "3fd36971f1bdf4e4",
+      "date": 1459415026623
+    },
+    {
+      "type": "edit",
+      "id": "758e235c7720519e",
+      "item": {
+        "type": "paragraph",
+        "id": "758e235c7720519e",
+        "text": "This default header level for new slides can be overridden using the --slide-level option. The following coomand-line flag would specify a level 2 header as a trigger to create a new slide:"
+      },
+      "date": 1459415064239
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "e2022f4604ee4c9f",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "3fd36971f1bdf4e4",
+        "640f04fb57ea7742",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "0bc364da9d15eacf"
+      ],
+      "id": "e2022f4604ee4c9f",
+      "date": 1459415083899
+    },
+    {
+      "type": "edit",
+      "id": "e2022f4604ee4c9f",
+      "item": {
+        "type": "paragraph",
+        "id": "e2022f4604ee4c9f",
+        "text": "In the example above, level 1 headers are always followed by level 2 headers, which are followed by content, so 2 is the slide level (see explanation below)."
+      },
+      "date": 1459415098391
+    },
+    {
+      "type": "edit",
+      "id": "640f04fb57ea7742",
+      "item": {
+        "type": "paragraph",
+        "id": "640f04fb57ea7742",
+        "text": "However this is not the case with reveal.js, as reveal.js is structured by default to allow horzontal and vertical navigation of slides."
+      },
+      "date": 1459415153005
+    },
+    {
+      "type": "add",
+      "id": "d290257053254e5b",
+      "item": {
+        "type": "paragraph",
+        "id": "d290257053254e5b",
+        "text": "In reveal.js slide shows therefore, if slide level is 2, a two-dimensional layout will be produced, with level 1 headers building horizontally and level 2 headers building vertically. It is not recommended that you use deeper nesting of section levels with reveal.js."
+      },
+      "after": "640f04fb57ea7742",
+      "date": 1459415179118
+    },
+    {
+      "type": "edit",
+      "id": "640f04fb57ea7742",
+      "item": {
+        "type": "paragraph",
+        "id": "640f04fb57ea7742",
+        "text": "# Structuring the slide show in reveal.js"
+      },
+      "date": 1459415198437
+    },
+    {
+      "type": "add",
+      "id": "453897eb70da489a",
+      "item": {
+        "type": "paragraph",
+        "id": "453897eb70da489a",
+        "text": "However this is not the case with reveal.js, as reveal.js is structured by default to allow horzontal and vertical navigation of slides."
+      },
+      "after": "640f04fb57ea7742",
+      "date": 1459415199729
+    },
+    {
+      "type": "edit",
+      "id": "640f04fb57ea7742",
+      "item": {
+        "type": "paragraph",
+        "id": "640f04fb57ea7742",
+        "text": "# Structuring the slide show with reveal.js"
+      },
+      "date": 1459415204190
+    },
+    {
+      "type": "edit",
+      "id": "640f04fb57ea7742",
+      "item": {
+        "type": "markdown",
+        "id": "640f04fb57ea7742",
+        "text": "# Structuring the slide show with reveal.js"
+      },
+      "date": 1459415205191
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "e2022f4604ee4c9f",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "3fd36971f1bdf4e4",
+        "315769eaf7bb29e2",
+        "640f04fb57ea7742",
+        "453897eb70da489a",
+        "d290257053254e5b",
+        "97ed8d6d544d069a",
+        "0bc364da9d15eacf"
+      ],
+      "id": "315769eaf7bb29e2",
+      "date": 1459415234944
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "e2022f4604ee4c9f",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "3fd36971f1bdf4e4",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "640f04fb57ea7742",
+        "453897eb70da489a",
+        "d290257053254e5b",
+        "0bc364da9d15eacf"
+      ],
+      "id": "97ed8d6d544d069a",
+      "date": 1459415239956
+    },
+    {
+      "type": "edit",
+      "id": "97ed8d6d544d069a",
+      "item": {
+        "type": "paragraph",
+        "id": "97ed8d6d544d069a",
+        "text": "# Simple Structure"
+      },
+      "date": 1459415257429
+    },
+    {
+      "type": "edit",
+      "id": "97ed8d6d544d069a",
+      "item": {
+        "type": "markdown",
+        "id": "97ed8d6d544d069a",
+        "text": "# Simple Structure"
+      },
+      "date": 1459415259125
+    },
+    {
+      "type": "add",
+      "id": "5523a294a024eb5f",
+      "item": {
+        "type": "paragraph",
+        "id": "5523a294a024eb5f",
+        "text": "These rules are designed to support many different styles of slide show. If you don’t care about structuring your slides into sections and subsections, you can just use level 1 headers for all each slide. (In that case, level 1 will be the slide level.) But you can also structure the slide show into sections, as in the example above."
+      },
+      "after": "97ed8d6d544d069a",
+      "date": 1459415261367
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "0bc364da9d15eacf",
+        "e2022f4604ee4c9f",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "3fd36971f1bdf4e4",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "5523a294a024eb5f",
+        "640f04fb57ea7742",
+        "453897eb70da489a",
+        "d290257053254e5b"
+      ],
+      "id": "0bc364da9d15eacf",
+      "date": 1459415270113
+    },
+    {
+      "type": "edit",
+      "id": "0bc364da9d15eacf",
+      "item": {
+        "type": "paragraph",
+        "id": "0bc364da9d15eacf",
+        "text": "[[Note]]:  Markdown such as this, can be conveniently stored and (pre)viewed using the [[About Markdown Plugin]] within Fedwiki."
+      },
+      "date": 1459415329623
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>"
+      },
+      "after": "ed59a07e34670802",
+      "id": "20084356ff8e69ce",
+      "date": 1459417772066
+    },
+    {
+      "type": "remove",
+      "id": "0bc364da9d15eacf",
+      "date": 1459417777278
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\nMarkdown such as this, can be conveniently stored and (pre)viewed using the [[About Markdown Plugin]] within Fedwiki.<p>"
+      },
+      "date": 1459417790847
+    },
+    {
+      "type": "move",
+      "order": [
+        "772157a148d42b04",
+        "329343d0973edd0c",
+        "2ab18c3501bdd401",
+        "14ac34037955eb60",
+        "990c05e48508c264",
+        "e8c3ab1c77025bbe",
+        "b31e4533ffb943e5",
+        "00e5e949eb310635",
+        "955d310faf9e52d7",
+        "b746c4c1f7fbbcac",
+        "50efb28b07dc729a",
+        "1dd835197a5d1ccb",
+        "ab143e512f4d14c0",
+        "8dba7000900fdb16",
+        "dc0b498c05241954",
+        "f7de98fe082f4d0e",
+        "8db747703a17c7e1",
+        "315f523a9977dc20",
+        "734a069ddcc9b4d0",
+        "e26c4114b5eaf356",
+        "af8daed86ee0d6b8",
+        "9494d7ea5d485db3",
+        "0b834d0028d38701",
+        "ed59a07e34670802",
+        "e2022f4604ee4c9f",
+        "20084356ff8e69ce",
+        "a11daa2e1b41eb4e",
+        "1f15a17aa7027eed",
+        "758e235c7720519e",
+        "3fd36971f1bdf4e4",
+        "315769eaf7bb29e2",
+        "97ed8d6d544d069a",
+        "5523a294a024eb5f",
+        "640f04fb57ea7742",
+        "453897eb70da489a",
+        "d290257053254e5b"
+      ],
+      "id": "20084356ff8e69ce",
+      "date": 1459417797359
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: purple'>Note: </b>\n\n[[Markdown]] such as this, can be conveniently stored and (pre)viewed using the [[About Markdown Plugin]] within Fedwiki.<p>"
+      },
+      "date": 1459417811126
+    }
+  ]
+}

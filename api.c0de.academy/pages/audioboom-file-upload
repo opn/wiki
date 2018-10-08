@@ -1,0 +1,254 @@
+{
+  "title": "Audioboom File Upload",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d7349b76122e50b5",
+      "text": "Files should be sent using HTTP multipart encoding. You must include a 'filename' parameter in the Content-Disposition multipart header, to ensure that our webserver processes it as a file."
+    },
+    {
+      "type": "paragraph",
+      "id": "b5dd481b503b8aaf",
+      "text": "As we can see from the ruby  code this means multipart/form-data:"
+    },
+    {
+      "type": "code",
+      "id": "7ab65239d23d95d0",
+      "text": "<form action='/upload' enctype='multipart/form-data' method=POST>\n Want to upload an audio file?\n <input type=file name=audio_file>\n <input type=submit value=Upload>\n</form>"
+    },
+    {
+      "type": "paragraph",
+      "id": "59dfb0d0b875d978",
+      "text": "Below is the ruby code that uploads a file."
+    },
+    {
+      "type": "code",
+      "id": "f7fccf4399e199b0",
+      "text": "post \"/upload\" do\n  local_file = params['audio_file']\n  clip_params = {\n    'audio_clip[title]' => 'my first boo',\n    'audio_clip[uploaded_data]' => UploadIO.new(local_file[:tempfile], local_file[:type], local_file[:filename])\n  }\n\n  request = Net::HTTP::Post::Multipart.new('/account/audio_clips', clip_params)\n  access_token.sign!(request)\n  response = Net::HTTP.start('api.audioboom.com', 443){|http| http.use_ssl = true; http.request(request)}\n\n  response.body\nend"
+    },
+    {
+      "type": "paragraph",
+      "id": "fa412a2e99c958fb",
+      "text": "Seems to me like the first part is constructing some json:"
+    },
+    {
+      "type": "code",
+      "id": "4b4165636fe1ee1c",
+      "text": "  clip_params = {\n    'audio_clip[title]' => 'my first boo',\n    'audio_clip[uploaded_data]' => [[stuff]]\n  }"
+    },
+    {
+      "type": "paragraph",
+      "id": "d548467a6e162eaf",
+      "text": "with the file data being created by:"
+    },
+    {
+      "type": "code",
+      "id": "90e4129c27e5e14f",
+      "text": "UploadIO.new(local_file[:tempfile], local_file[:type], local_file[:filename])\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "e2741d47b061ae5e",
+      "text": "UploadIO creates \"an upload IO suitable for including in the params hash of a Net::HTTP::Post::Multipart.\n\" - [http://www.rubydoc.info/gems/multipart-post/1.1.0/UploadIO rubydoc.info]"
+    },
+    {
+      "type": "code",
+      "id": "8d740e96e27c684d",
+      "text": "UploadIO.new(file_io, \"text/plain\", \"file.txt\")\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "c9a14035ea09474a",
+      "text": "That is it works basically like:"
+    },
+    {
+      "type": "code",
+      "id": "abe43391e3247a96",
+      "text": "libURLMultipartFormAddPart(formData,partName, value [,MIMEtype, encoding]"
+    },
+    {
+      "type": "paragraph",
+      "id": "1793e704b7354118",
+      "text": "The request is then constructed by multipart from encoding the entire json (clip_params):"
+    },
+    {
+      "type": "code",
+      "id": "ba92abbd78e2bcc8",
+      "text": "request = Net::HTTP::Post::Multipart.new('/account/audio_clips', clip_params)"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Audioboom File Upload",
+        "story": []
+      },
+      "date": 1502258372112
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d7349b76122e50b5",
+        "text": "Files should be sent using HTTP multipart encoding. You must include a 'filename' parameter in the Content-Disposition multipart header, to ensure that our webserver processes it as a file."
+      },
+      "id": "d7349b76122e50b5",
+      "date": 1502258374662
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b5dd481b503b8aaf",
+        "text": "As we can see from the ruby  code this means multipart/form-data:"
+      },
+      "after": "d7349b76122e50b5",
+      "id": "b5dd481b503b8aaf",
+      "date": 1502258378757
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "7ab65239d23d95d0",
+        "text": "<form action='/upload' enctype='multipart/form-data' method=POST>\n Want to upload an audio file?\n <input type=file name=audio_file>\n <input type=submit value=Upload>\n</form>"
+      },
+      "after": "b5dd481b503b8aaf",
+      "id": "7ab65239d23d95d0",
+      "date": 1502258381144
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "59dfb0d0b875d978",
+        "text": "Below is the ruby code that uploads a file."
+      },
+      "after": "7ab65239d23d95d0",
+      "id": "59dfb0d0b875d978",
+      "date": 1502258383333
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "f7fccf4399e199b0",
+        "text": "post \"/upload\" do\n  local_file = params['audio_file']\n  clip_params = {\n    'audio_clip[title]' => 'my first boo',\n    'audio_clip[uploaded_data]' => UploadIO.new(local_file[:tempfile], local_file[:type], local_file[:filename])\n  }\n\n  request = Net::HTTP::Post::Multipart.new('/account/audio_clips', clip_params)\n  access_token.sign!(request)\n  response = Net::HTTP.start('api.audioboom.com', 443){|http| http.use_ssl = true; http.request(request)}\n\n  response.body\nend"
+      },
+      "after": "59dfb0d0b875d978",
+      "id": "f7fccf4399e199b0",
+      "date": 1502258385233
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "fa412a2e99c958fb",
+        "text": "Seems to me like the first part is constructing some json:"
+      },
+      "after": "f7fccf4399e199b0",
+      "id": "fa412a2e99c958fb",
+      "date": 1502258387449
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "4b4165636fe1ee1c",
+        "text": "  clip_params = {\n    'audio_clip[title]' => 'my first boo',\n    'audio_clip[uploaded_data]' => [[stuff]]\n  }"
+      },
+      "after": "fa412a2e99c958fb",
+      "id": "4b4165636fe1ee1c",
+      "date": 1502258390311
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "d548467a6e162eaf",
+        "text": "with the file data being created by:"
+      },
+      "after": "4b4165636fe1ee1c",
+      "id": "d548467a6e162eaf",
+      "date": 1502258392307
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "90e4129c27e5e14f",
+        "text": "UploadIO.new(local_file[:tempfile], local_file[:type], local_file[:filename])\n"
+      },
+      "after": "d548467a6e162eaf",
+      "id": "90e4129c27e5e14f",
+      "date": 1502258394624
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e2741d47b061ae5e",
+        "text": "UploadIO creates \"an upload IO suitable for including in the params hash of a Net::HTTP::Post::Multipart.\n\" - [http://www.rubydoc.info/gems/multipart-post/1.1.0/UploadIO rubydoc.info]"
+      },
+      "after": "90e4129c27e5e14f",
+      "id": "e2741d47b061ae5e",
+      "date": 1502258396842
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "8d740e96e27c684d",
+        "text": "UploadIO.new(file_io, \"text/plain\", \"file.txt\")\n"
+      },
+      "after": "e2741d47b061ae5e",
+      "id": "8d740e96e27c684d",
+      "date": 1502258399110
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "abe43391e3247a96",
+        "text": "libURLMultipartFormAddPart(formData,partName, value [,MIMEtype, encoding]"
+      },
+      "after": "8d740e96e27c684d",
+      "id": "abe43391e3247a96",
+      "date": 1502258401792
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "c9a14035ea09474a",
+        "text": "That is it works basically like:"
+      },
+      "after": "8d740e96e27c684d",
+      "id": "c9a14035ea09474a",
+      "date": 1502258407290
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "1793e704b7354118",
+        "text": "The request is then constructed by multipart from encoding the entire json (clip_params):"
+      },
+      "after": "abe43391e3247a96",
+      "id": "1793e704b7354118",
+      "date": 1502258410307
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "ba92abbd78e2bcc8",
+        "text": "request = Net::HTTP::Post::Multipart.new('/account/audio_clips', clip_params)"
+      },
+      "after": "1793e704b7354118",
+      "id": "ba92abbd78e2bcc8",
+      "date": 1502258415477
+    }
+  ]
+}

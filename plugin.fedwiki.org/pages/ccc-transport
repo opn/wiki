@@ -1,0 +1,510 @@
+{
+  "title": "CCC Transport",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "8517907daf483544",
+      "text": "Here we list a few [[transporters]] that we have written for [[#32C3]]. "
+    },
+    {
+      "type": "paragraph",
+      "id": "1c9d6aa478d274ab",
+      "text": "These transporters should be combined into a single controller and then the code adjusted so that one Transporter can accept url's from any of the relevant domains - that is drag a video or wik page onto the Transporter and it will detect the difference and respond appropriately."
+    },
+    {
+      "type": "markdown",
+      "id": "107b32fe6a4d2d03",
+      "text": "# Import CCC-TV Videos"
+    },
+    {
+      "type": "paragraph",
+      "id": "58f47bd2219ad362",
+      "text": "The [[transporter]] below allows you drag and drop video urls from the [[CCC-TV]] site, and create an imported page with embedded [[HTML5 Video]] and metadata."
+    },
+    {
+      "type": "paragraph",
+      "id": "ca5ec320470996bf",
+      "text": "The code for this [[CCC-TV Transporter]] can be found on [https://github.com/opn/CCC-TV-Transport github]"
+    },
+    {
+      "type": "paragraph",
+      "id": "d198e86091e947a2",
+      "text": "We need to fix this to pull in multiple video formats - not just [[WEBM]] if they are available. In particular we need to offer the option of [[MP4 Video]] as [[WEBM]] is not available on [[iOS]]."
+    },
+    {
+      "type": "transport",
+      "id": "bc7183f81d231057",
+      "text": "https://livecode.world/ccc_video"
+    },
+    {
+      "type": "paragraph",
+      "id": "2317fca0fbc4931f",
+      "text": "Additionally newly imported videos from #32C3 appear not to have WEBM encoding or at least the MP4 encoding appears faster in the archive. The solution is to add multile sources to the <video> tag."
+    },
+    {
+      "type": "paragraph",
+      "id": "0b0a8f0f43e7cfe3",
+      "text": "However this valid HTML5 does not display in a Fedwiki [[HTML Plugin]]. Possibly due to sanitisation issues"
+    },
+    {
+      "type": "code",
+      "id": "45bdd8d3458bc3eb",
+      "text": "<video poster=\"movie.jpg\" controls>\n  <source src=\"movie.webm\" type='video/webm; codecs=\"vp8.0, vorbis\"'>\n  <source src=\"movie.mp4\" type='video/mp4; codecs=\"avc1.4D401E, mp4a.40.2\"'>\n  <p>This is fallback content to display for user agents that do not support the video tag.</p>\n</video>"
+    },
+    {
+      "type": "paragraph",
+      "id": "fbee2b97c84f5a79",
+      "text": "Instead we use a single source <video> element, which takes the form shown below:"
+    },
+    {
+      "type": "paragraph",
+      "id": "e8606fdc09ef4e5f",
+      "text": "At the moment the code does not work with German language talks - though a few tweaks should sort that."
+    },
+    {
+      "type": "code",
+      "id": "524b7626a1c5ee93",
+      "text": "<video src=\"http://c3media.vsos.ethz.ch/congress/2013/webm/30c3-5437-en-Plants_Machines_webm.webm\" width=\"400\" controls>\n\tThis is fallback content to display for user agents that do not support the video tag.\n</video><br></br>\nPlants and Machines video courtesy of \n<a href=\"https://media.ccc.de/v/30C3_-_5437_-_en_-_saal_g_-_201312282245_-_plants_machines_-_mrv_-_bbuegler#video\" target=\"_blank\">CCC</a>."
+    },
+    {
+      "type": "markdown",
+      "id": "3a1618e96b500ae2",
+      "text": "# Import CCC Wiki"
+    },
+    {
+      "type": "paragraph",
+      "id": "c89ba1afbe9ed148",
+      "text": "This crude transporter scrapes a [[CCC]] wiki page (or any [[Mediawiki]] page. It does not use the [[Mediawiki API]] because it is unfortunately turned off for this site."
+    },
+    {
+      "type": "transport",
+      "id": "fcc8f3879e697de4",
+      "text": "POST https://livecode.world/test"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "CCC Transport",
+        "story": []
+      },
+      "date": 1451217078021
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c89ba1afbe9ed148"
+      },
+      "id": "c89ba1afbe9ed148",
+      "type": "add",
+      "date": 1451217079605
+    },
+    {
+      "type": "edit",
+      "id": "c89ba1afbe9ed148",
+      "item": {
+        "type": "paragraph",
+        "id": "c89ba1afbe9ed148",
+        "text": "This crude transporter scrapes a [[CCC]] wiki page (or any [[Mediawiki]] page. It does not use the [[Mediawiki API]] because it is unfortunately turned off for this site."
+      },
+      "date": 1451217163011
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fcc8f3879e697de4"
+      },
+      "id": "fcc8f3879e697de4",
+      "type": "add",
+      "after": "c89ba1afbe9ed148",
+      "date": 1451217164285
+    },
+    {
+      "type": "edit",
+      "id": "fcc8f3879e697de4",
+      "item": {
+        "type": "transport",
+        "id": "fcc8f3879e697de4",
+        "text": "POST https://livecode.world/test"
+      },
+      "date": 1451217229358
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "transport",
+        "id": "bc7183f81d231057",
+        "text": "https://livecode.world/ccc_video"
+      },
+      "id": "bc7183f81d231057",
+      "date": 1451238780114
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "58f47bd2219ad362"
+      },
+      "id": "58f47bd2219ad362",
+      "type": "add",
+      "after": "fcc8f3879e697de4",
+      "date": 1451238782636
+    },
+    {
+      "type": "move",
+      "order": [
+        "58f47bd2219ad362",
+        "bc7183f81d231057",
+        "c89ba1afbe9ed148",
+        "fcc8f3879e697de4"
+      ],
+      "id": "58f47bd2219ad362",
+      "date": 1451238785709
+    },
+    {
+      "type": "edit",
+      "id": "58f47bd2219ad362",
+      "item": {
+        "type": "paragraph",
+        "id": "58f47bd2219ad362",
+        "text": "The Transport below allows you drag and drop video urls from the [[CCC-TV]] site, and create an imported page with embedded [[HTML5 Video]] and metadata."
+      },
+      "date": 1451238864426
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3a1618e96b500ae2"
+      },
+      "id": "3a1618e96b500ae2",
+      "type": "add",
+      "after": "fcc8f3879e697de4",
+      "date": 1451238873704
+    },
+    {
+      "type": "move",
+      "order": [
+        "58f47bd2219ad362",
+        "bc7183f81d231057",
+        "3a1618e96b500ae2",
+        "c89ba1afbe9ed148",
+        "fcc8f3879e697de4"
+      ],
+      "id": "3a1618e96b500ae2",
+      "date": 1451238876277
+    },
+    {
+      "type": "edit",
+      "id": "3a1618e96b500ae2",
+      "item": {
+        "type": "markdown",
+        "id": "3a1618e96b500ae2",
+        "text": "# Import CCC Wiki"
+      },
+      "date": 1451238889320
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8517907daf483544"
+      },
+      "id": "8517907daf483544",
+      "type": "add",
+      "after": "fcc8f3879e697de4",
+      "date": 1451238896416
+    },
+    {
+      "type": "move",
+      "order": [
+        "8517907daf483544",
+        "58f47bd2219ad362",
+        "bc7183f81d231057",
+        "3a1618e96b500ae2",
+        "c89ba1afbe9ed148",
+        "fcc8f3879e697de4"
+      ],
+      "id": "8517907daf483544",
+      "date": 1451238898491
+    },
+    {
+      "type": "edit",
+      "id": "8517907daf483544",
+      "item": {
+        "type": "paragraph",
+        "id": "8517907daf483544",
+        "text": "Here we list a few [[transport]]s that we have written for [[#32C3]]. "
+      },
+      "date": 1451239026748
+    },
+    {
+      "type": "add",
+      "id": "1c9d6aa478d274ab",
+      "item": {
+        "type": "paragraph",
+        "id": "1c9d6aa478d274ab",
+        "text": "These transports should be combined into a single controller and then the code adjusted so that one Transporter can accept url's from any of the relevant domains - that is drag a video or wik page onto the Transporter and it will detect the difference and respond appropriately."
+      },
+      "after": "8517907daf483544",
+      "date": 1451239029436
+    },
+    {
+      "type": "add",
+      "id": "107b32fe6a4d2d03",
+      "item": {
+        "type": "paragraph",
+        "id": "107b32fe6a4d2d03",
+        "text": "# Import CCC-TV Videos"
+      },
+      "after": "1c9d6aa478d274ab",
+      "date": 1451239039821
+    },
+    {
+      "type": "edit",
+      "id": "107b32fe6a4d2d03",
+      "item": {
+        "type": "markdown",
+        "id": "107b32fe6a4d2d03",
+        "text": "# Import CCC-TV Videos"
+      },
+      "date": 1451239041312
+    },
+    {
+      "type": "fork",
+      "site": "ccc.cryptoacademy.org",
+      "date": 1451355737342
+    },
+    {
+      "type": "add",
+      "id": "d198e86091e947a2",
+      "item": {
+        "type": "paragraph",
+        "id": "d198e86091e947a2",
+        "text": "We need to fix this to pull in multiple video formats - not just [[WEBM]] if they are available. In particular we need to offer the option of [[MP4 Video]] as [[WEBM]] is not available on [[iOS]]."
+      },
+      "after": "58f47bd2219ad362",
+      "date": 1451355840709
+    },
+    {
+      "type": "add",
+      "id": "2317fca0fbc4931f",
+      "item": {
+        "type": "paragraph",
+        "id": "2317fca0fbc4931f",
+        "text": "Additionally newly imported videos from #32C3 appear not to have WEBM encoding or at least the MP4 encoding appears faster in the archive."
+      },
+      "after": "d198e86091e947a2",
+      "date": 1451355886036
+    },
+    {
+      "type": "move",
+      "order": [
+        "8517907daf483544",
+        "1c9d6aa478d274ab",
+        "107b32fe6a4d2d03",
+        "58f47bd2219ad362",
+        "d198e86091e947a2",
+        "bc7183f81d231057",
+        "2317fca0fbc4931f",
+        "3a1618e96b500ae2",
+        "c89ba1afbe9ed148",
+        "fcc8f3879e697de4"
+      ],
+      "id": "2317fca0fbc4931f",
+      "date": 1451355893932
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "45bdd8d3458bc3eb"
+      },
+      "id": "45bdd8d3458bc3eb",
+      "type": "add",
+      "after": "fcc8f3879e697de4",
+      "date": 1451355897997
+    },
+    {
+      "type": "move",
+      "order": [
+        "8517907daf483544",
+        "1c9d6aa478d274ab",
+        "107b32fe6a4d2d03",
+        "58f47bd2219ad362",
+        "d198e86091e947a2",
+        "bc7183f81d231057",
+        "2317fca0fbc4931f",
+        "45bdd8d3458bc3eb",
+        "3a1618e96b500ae2",
+        "c89ba1afbe9ed148",
+        "fcc8f3879e697de4"
+      ],
+      "id": "45bdd8d3458bc3eb",
+      "date": 1451355900478
+    },
+    {
+      "type": "edit",
+      "id": "45bdd8d3458bc3eb",
+      "item": {
+        "type": "code",
+        "id": "45bdd8d3458bc3eb",
+        "text": "<video poster=\"movie.jpg\" controls>\n\t<source src=\"movie.webm\" type='video/webm; codecs=\"vp8.0, vorbis\"'>\n\t<source src=\"movie.ogv\" type='video/ogg; codecs=\"theora, vorbis\"'>\n\t<source src=\"movie.mp4\" type='video/mp4; codecs=\"avc1.4D401E, mp4a.40.2\"'>\n\t<p>This is fallback content to display for user agents that do not support the video tag.</p>\n</video>"
+      },
+      "date": 1451355980795
+    },
+    {
+      "type": "edit",
+      "id": "45bdd8d3458bc3eb",
+      "item": {
+        "type": "code",
+        "id": "45bdd8d3458bc3eb",
+        "text": "<video poster=\"movie.jpg\" controls>\n  <source src=\"movie.webm\" type='video/webm; codecs=\"vp8.0, vorbis\"'>\n  <source src=\"movie.ogv\" type='video/ogg; codecs=\"theora, vorbis\"'>\n  <source src=\"movie.mp4\" type='video/mp4; codecs=\"avc1.4D401E, mp4a.40.2\"'>\n  <p>This is fallback content to display for user agents that do not support the video tag.</p>\n</video>"
+      },
+      "date": 1451356003155
+    },
+    {
+      "type": "edit",
+      "id": "45bdd8d3458bc3eb",
+      "item": {
+        "type": "code",
+        "id": "45bdd8d3458bc3eb",
+        "text": "<video poster=\"movie.jpg\" controls>\n  <source src=\"movie.webm\" type='video/webm; codecs=\"vp8.0, vorbis\"'>\n  <source src=\"movie.mp4\" type='video/mp4; codecs=\"avc1.4D401E, mp4a.40.2\"'>\n  <p>This is fallback content to display for user agents that do not support the video tag.</p>\n</video>"
+      },
+      "date": 1451356026664
+    },
+    {
+      "type": "edit",
+      "id": "2317fca0fbc4931f",
+      "item": {
+        "type": "paragraph",
+        "id": "2317fca0fbc4931f",
+        "text": "Additionally newly imported videos from #32C3 appear not to have WEBM encoding or at least the MP4 encoding appears faster in the archive. The solution is to add multile sources to the <video> tag."
+      },
+      "date": 1451356051579
+    },
+    {
+      "type": "edit",
+      "id": "8517907daf483544",
+      "item": {
+        "type": "paragraph",
+        "id": "8517907daf483544",
+        "text": "Here we list a few [[transporters]] that we have written for [[#32C3]]. "
+      },
+      "date": 1451356134768
+    },
+    {
+      "type": "edit",
+      "id": "1c9d6aa478d274ab",
+      "item": {
+        "type": "paragraph",
+        "id": "1c9d6aa478d274ab",
+        "text": "These transporters should be combined into a single controller and then the code adjusted so that one Transporter can accept url's from any of the relevant domains - that is drag a video or wik page onto the Transporter and it will detect the difference and respond appropriately."
+      },
+      "date": 1451356145313
+    },
+    {
+      "type": "edit",
+      "id": "58f47bd2219ad362",
+      "item": {
+        "type": "paragraph",
+        "id": "58f47bd2219ad362",
+        "text": "The [[transport]] below allows you drag and drop video urls from the [[CCC-TV]] site, and create an imported page with embedded [[HTML5 Video]] and metadata."
+      },
+      "date": 1451356153896
+    },
+    {
+      "type": "edit",
+      "id": "58f47bd2219ad362",
+      "item": {
+        "type": "paragraph",
+        "id": "58f47bd2219ad362",
+        "text": "The [[transporter]] below allows you drag and drop video urls from the [[CCC-TV]] site, and create an imported page with embedded [[HTML5 Video]] and metadata."
+      },
+      "date": 1451356174201
+    },
+    {
+      "type": "add",
+      "id": "ca5ec320470996bf",
+      "item": {
+        "type": "paragraph",
+        "id": "ca5ec320470996bf",
+        "text": "The code for this [[CCC-TV Transporter]] can be found on [https://github.com/opn/CCC-TV-Transport github]"
+      },
+      "after": "58f47bd2219ad362",
+      "date": 1451356266363
+    },
+    {
+      "type": "add",
+      "id": "0b0a8f0f43e7cfe3",
+      "item": {
+        "type": "paragraph",
+        "id": "0b0a8f0f43e7cfe3",
+        "text": "However this valid HTML5 does not display in a Fedwiki [[HTML Plugin]]. Possibly due to sanitisation issues"
+      },
+      "after": "2317fca0fbc4931f",
+      "date": 1451513614868
+    },
+    {
+      "type": "add",
+      "id": "fbee2b97c84f5a79",
+      "item": {
+        "type": "paragraph",
+        "id": "fbee2b97c84f5a79",
+        "text": "Instead we use a single source <video> element."
+      },
+      "after": "0b0a8f0f43e7cfe3",
+      "date": 1451513640886
+    },
+    {
+      "type": "edit",
+      "id": "fbee2b97c84f5a79",
+      "item": {
+        "type": "paragraph",
+        "id": "fbee2b97c84f5a79",
+        "text": "Instead we use a single source <video> element, which takes the form shown below:"
+      },
+      "date": 1451513695650
+    },
+    {
+      "type": "move",
+      "order": [
+        "8517907daf483544",
+        "1c9d6aa478d274ab",
+        "107b32fe6a4d2d03",
+        "58f47bd2219ad362",
+        "ca5ec320470996bf",
+        "d198e86091e947a2",
+        "bc7183f81d231057",
+        "2317fca0fbc4931f",
+        "0b0a8f0f43e7cfe3",
+        "45bdd8d3458bc3eb",
+        "fbee2b97c84f5a79",
+        "3a1618e96b500ae2",
+        "c89ba1afbe9ed148",
+        "fcc8f3879e697de4"
+      ],
+      "id": "fbee2b97c84f5a79",
+      "date": 1451513697226
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "524b7626a1c5ee93",
+        "text": "<video src=\"http://c3media.vsos.ethz.ch/congress/2013/webm/30c3-5437-en-Plants_Machines_webm.webm\" width=\"400\" controls>\n\tThis is fallback content to display for user agents that do not support the video tag.\n</video><br></br>\nPlants and Machines video courtesy of \n<a href=\"https://media.ccc.de/v/30C3_-_5437_-_en_-_saal_g_-_201312282245_-_plants_machines_-_mrv_-_bbuegler#video\" target=\"_blank\">CCC</a>."
+      },
+      "after": "fbee2b97c84f5a79",
+      "id": "524b7626a1c5ee93",
+      "date": 1451513699412
+    },
+    {
+      "type": "add",
+      "id": "e8606fdc09ef4e5f",
+      "item": {
+        "type": "paragraph",
+        "id": "e8606fdc09ef4e5f",
+        "text": "At the moment the code does not work with German language talks - though a few tweaks should sort that."
+      },
+      "after": "fbee2b97c84f5a79",
+      "date": 1451522556010
+    }
+  ]
+}

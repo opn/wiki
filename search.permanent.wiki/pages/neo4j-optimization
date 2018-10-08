@@ -1,0 +1,219 @@
+{
+  "title": "Neo4J Optimization",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "fc842e01b963f769",
+      "text": "Having had the good fortune of meeting Michael Hunger at OOP Munich, I now explore his first suggested optimizations. See [[Neo4J]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "d524104c973ed2c4",
+      "text": "Add an index to avoid full database scan."
+    },
+    {
+      "type": "code",
+      "id": "41fc6cc749ded824",
+      "text": "CREATE CONSTRAINT ON (s:Site)\n  ASSERT s.title IS UNIQUE;\nCREATE INDEX ON :Page(title);\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "dc7de79747831f60",
+      "text": "Improve query."
+    },
+    {
+      "type": "code",
+      "id": "ac193dced5368332",
+      "text": "MATCH \n  (site:Site)-[:HAS]->\n  (page:Page)-[:LINK]->\n  (link:Title)<-[:IS]-(p:Page),\n  (page)-[:KNOWS]->(here:Site) \nWHERE\n  here.title in {sites} AND \n  p.title IN {slugs}\nWITH page, site, link, count(*) as freq\nORDER BY freq desc\nRETURN page.title,site.title,link.title;\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "8cc8724c5f1891e6",
+      "text": "I have applied these ad-hoc and seen query performance as fast as 300 msec but sometimes much slower. Michael reports 9 msec but not on my Digital Ocean server."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Neo4J Optimization",
+        "story": []
+      },
+      "date": 1454816338432
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "fc842e01b963f769"
+      },
+      "id": "fc842e01b963f769",
+      "type": "add",
+      "date": 1454816484272
+    },
+    {
+      "type": "edit",
+      "id": "fc842e01b963f769",
+      "item": {
+        "type": "paragraph",
+        "id": "fc842e01b963f769",
+        "text": "Having had the good fortune of meeting Michael Hunger at OOP Munich, I now explore his first suggested optimizations."
+      },
+      "date": 1454816556059
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d524104c973ed2c4"
+      },
+      "id": "d524104c973ed2c4",
+      "type": "add",
+      "after": "fc842e01b963f769",
+      "date": 1454816592563
+    },
+    {
+      "type": "edit",
+      "id": "d524104c973ed2c4",
+      "item": {
+        "type": "paragraph",
+        "id": "d524104c973ed2c4",
+        "text": "Add an index on "
+      },
+      "date": 1454816616979
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "41fc6cc749ded824"
+      },
+      "id": "41fc6cc749ded824",
+      "type": "add",
+      "after": "d524104c973ed2c4",
+      "date": 1454816664736
+    },
+    {
+      "type": "edit",
+      "id": "41fc6cc749ded824",
+      "item": {
+        "type": "code",
+        "id": "41fc6cc749ded824",
+        "text": "CREATE CONSTRAINT ON (s:Site) ASSERT s.title IS UNIQUE;\nCREATE INDEX ON :Page(title);\n"
+      },
+      "date": 1454816674239
+    },
+    {
+      "type": "edit",
+      "id": "41fc6cc749ded824",
+      "item": {
+        "type": "code",
+        "id": "41fc6cc749ded824",
+        "text": "CREATE CONSTRAINT ON (s:Site)\n  ASSERT s.title IS UNIQUE;\nCREATE INDEX ON :Page(title);\n"
+      },
+      "date": 1454816687904
+    },
+    {
+      "type": "edit",
+      "id": "d524104c973ed2c4",
+      "item": {
+        "type": "paragraph",
+        "id": "d524104c973ed2c4",
+        "text": "Add an index to avoid full database scan."
+      },
+      "date": 1454816783744
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dc7de79747831f60"
+      },
+      "id": "dc7de79747831f60",
+      "type": "add",
+      "after": "41fc6cc749ded824",
+      "date": 1454816823258
+    },
+    {
+      "type": "edit",
+      "id": "dc7de79747831f60",
+      "item": {
+        "type": "paragraph",
+        "id": "dc7de79747831f60",
+        "text": "Improve "
+      },
+      "date": 1454816832699
+    },
+    {
+      "type": "edit",
+      "id": "dc7de79747831f60",
+      "item": {
+        "type": "paragraph",
+        "id": "dc7de79747831f60",
+        "text": "Improve query."
+      },
+      "date": 1454816845414
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ac193dced5368332"
+      },
+      "id": "ac193dced5368332",
+      "type": "add",
+      "after": "dc7de79747831f60",
+      "date": 1454816847389
+    },
+    {
+      "type": "edit",
+      "id": "ac193dced5368332",
+      "item": {
+        "type": "code",
+        "id": "ac193dced5368332",
+        "text": "MATCH \n  (site:Site)-[:HAS]->\n  (page:Page)-[:LINK]->\n  (link:Title)<-[:IS]-(p:Page),\n  (page)-[:KNOWS]->(here:Site) \nWHERE\n  here.title in {sites} AND \n  p.title IN {slugs}\nWITH page, site, link, count(*) as freq\nORDER BY freq desc\nRETURN page.title,site.title,link.title;\n"
+      },
+      "date": 1454816952764
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8cc8724c5f1891e6"
+      },
+      "id": "8cc8724c5f1891e6",
+      "type": "add",
+      "after": "ac193dced5368332",
+      "date": 1454816985386
+    },
+    {
+      "type": "edit",
+      "id": "8cc8724c5f1891e6",
+      "item": {
+        "type": "paragraph",
+        "id": "8cc8724c5f1891e6",
+        "text": "I have applied these ad-hoc and seen query performance as fast as 300 msec but sometimes much slower."
+      },
+      "date": 1454817048449
+    },
+    {
+      "type": "edit",
+      "id": "8cc8724c5f1891e6",
+      "item": {
+        "type": "paragraph",
+        "id": "8cc8724c5f1891e6",
+        "text": "I have applied these ad-hoc and seen query performance as fast as 300 msec but sometimes much slower. Michael reports 9 msec but not on my Digital Ocean server."
+      },
+      "date": 1454822063469
+    },
+    {
+      "type": "edit",
+      "id": "fc842e01b963f769",
+      "item": {
+        "type": "paragraph",
+        "id": "fc842e01b963f769",
+        "text": "Having had the good fortune of meeting Michael Hunger at OOP Munich, I now explore his first suggested optimizations. See [[Neo4J]]"
+      },
+      "date": 1454823083254
+    },
+    {
+      "type": "fork",
+      "site": "ward.asia.wiki.org",
+      "date": 1512315634555
+    }
+  ]
+}

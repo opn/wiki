@@ -1,0 +1,1796 @@
+{
+  "title": "Matrix",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "6ba1432077bc1a95",
+      "text": "Matrix is an open standard for interoperable, decentralised, real-time communication over IP. It can be used anywhere you need a standard HTTP API for publishing and subscribing to data whilst tracking the conversation history - [http://matrix.org/docs/guides/faq.html#general matrix.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ed2d2b91cf36fbc6",
+      "text": "It can be used to power Instant Messaging, VoIP/WebRTC signalling, or [[Internet of Things]] communication"
+    },
+    {
+      "type": "markdown",
+      "id": "d952d1a649473c25",
+      "text": "# Fedwiki Chat Room\n\n* [https://vector.im/beta/#/room/#fedwiki:matrix.org #fedwiki:matrix.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "cd1e20e954f8c109",
+      "text": "You can find us at the above address on the matrix :)"
+    },
+    {
+      "type": "markdown",
+      "id": "3ad4884c1a69ad35",
+      "text": "# Things we could do"
+    },
+    {
+      "type": "paragraph",
+      "id": "6fa127b59b66b0ba",
+      "text": "Here we list some ideas and ways we could build a decentralised [[federation]] using Matrix."
+    },
+    {
+      "type": "markdown",
+      "id": "2f8fed5de4292cc1",
+      "text": "- [[Fedwiki Chat Client]] \n- matrix-js-sdk - [https://github.com/matrix-org/matrix-js-sdk github]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "030d42fba577360a",
+      "text": "# Notable links\n\n- [[Matrix API]]\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]\n- Dendrite Go impplementation - [https://github.com/matrix-org/dendrite gitbub]\n- Matrix-appservice-node  - [https://github.com/matrix-org/matrix-appservice-node github]\n- Matrix Recorder - [https://gitlab.com/argit/matrix-recorder gitlab]"
+    },
+    {
+      "type": "markdown",
+      "id": "1511d2a9d799107f",
+      "text": "# Introduction"
+    },
+    {
+      "type": "paragraph",
+      "id": "a0420256d3f92238",
+      "text": "Matrix defines APIs for synchronising extensible JSON objects known as \"events\" between compatible clients, servers and services - [http://matrix.org/docs/spec/intro.html matrix.org]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ba05553794be1ade",
+      "text": "Clients are typically messaging/VoIP applications or IoT devices/hubs and communicate by synchronising communication history with their \"homeserver\" using the \"Client-Server API\". See [[Matrix API]]."
+    },
+    {
+      "type": "video",
+      "id": "df37edf1c1c478ce",
+      "text": "ARCHIVE DWebSummit2016_Lightning_Talks_Session_B\n[[Decentralized Web Summit]] - SESSION B: Lightning Talks and Workshops featuring \nMatthew Hodgson - [[Matrix]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "97a5021e5782d73a",
+      "text": "Each homeserver stores the communication history and account information for all of its clients, and shares data with the wider Matrix ecosystem by synchronising communication history with other homeservers and their clients."
+    },
+    {
+      "type": "paragraph",
+      "id": "8511fdee753c569b",
+      "text": "Clients typically communicate with each other by emitting events in the context of a virtual \"room\". Room data is replicated across all of the homeservers whose users are participating in a given room. "
+    },
+    {
+      "type": "paragraph",
+      "id": "bf750b80bdc26941",
+      "text": "As such, no single homeserver has control or ownership over a given room. Homeservers model communication history as a partially ordered graph of events known as the room's \"event graph\", which is synchronised with eventual consistency between the participating servers using the \"Server-Server API\". "
+    },
+    {
+      "type": "paragraph",
+      "id": "ca4a16c623014bfb",
+      "text": "This process of synchronising shared conversation history between homeservers run by different parties is called \"Federation\". Matrix optimises for the the [[Availability]] and [[Partition tolerance]] properties of [[CAP theorem]] at the expense of [[Consistency]]."
+    },
+    {
+      "type": "markdown",
+      "id": "f20752e906fbdec3",
+      "text": "# Example"
+    },
+    {
+      "type": "paragraph",
+      "id": "c2d2c1a63034bc8c",
+      "text": "For example, for client A to send a message to client B, client A performs an HTTP PUT of the required JSON event on its homeserver (HS) using the client-server API. "
+    },
+    {
+      "type": "paragraph",
+      "id": "fe35a67b09a92560",
+      "text": "A's HS appends this event to its copy of the room's event graph, signing the message in the context of the graph for integrity. A's HS then replicates the message to B's HS by performing an HTTP PUT using the server-server API. "
+    },
+    {
+      "type": "paragraph",
+      "id": "965eab849a03f1a5",
+      "text": "B's HS authenticates the request, validates the event's signature, authorises the event's contents and then adds it to its copy of the room's event graph. Client B then receives the message from his homeserver via a long-lived GET request."
+    },
+    {
+      "type": "markdown",
+      "id": "fe6434d9038d9b8a",
+      "text": "# About the matrix"
+    },
+    {
+      "type": "paragraph",
+      "id": "68540e90b081bb6a",
+      "text": "Matrix defines the standard, and provides open source reference implementations of Matrix-compatible Servers, Clients, Client SDKs and Application Services to help you create new communication solutions or extend the capabilities and reach of existing ones."
+    },
+    {
+      "type": "markdown",
+      "id": "3dbbdb09513b38a0",
+      "text": "# What is Matrix’s Mission?"
+    },
+    {
+      "type": "paragraph",
+      "id": "25f43c3e57f2996d",
+      "text": "Matrix’s initial goal is to fix the problem of fragmented IP communications: letting users message and call each other without having to care what app the other user is on - making it as easy as sending an email.\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2fc475ab5c2ecfe7",
+      "text": "The longer term goal is for Matrix to act as a generic HTTP messaging and data synchronisation system for the whole web - allowing people, services and devices to easily communicate with each other, empowering users to own and control their data and select the services and vendors they want to use."
+    },
+    {
+      "type": "markdown",
+      "id": "d3724e68ea9f05ba",
+      "text": "# What does Matrix provide?\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "e7007c2706744812",
+      "text": "The actual ecosystem and community of everyone running Matrix servers and services\nLoads of 3rd party contributions of clients, SDKs, servers and services.\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "3a7958765dc0f661",
+      "text": "You can find the full list of Matrix enabled projects at [https://matrix.org/blog/try-matrix-now matrix.org]\n"
+    },
+    {
+      "type": "markdown",
+      "id": "9e78d9d02d7edaa8",
+      "text": "# What does federated mean?\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "cc684f72b9cce21a",
+      "text": "Federation allows separate deployments of a communication service to communicate with each other - for instance a mail server run by Google federates with a mail server run by Microsoft when you send email from @gmail.com to @hotmail.com.\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "ebd454dd1ec1eca2",
+      "text": "Federation is different to interoperability, as interoperable clients may simply be running on the same deployment - whereas in federation the deployments themselves are exchanging data in a compatible manner."
+    },
+    {
+      "type": "paragraph",
+      "id": "305068061473856f",
+      "text": "Matrix provides open federation - meaning that anyone on the internet can join into the Matrix ecosystem by deploying their own server."
+    },
+    {
+      "type": "markdown",
+      "id": "d688e8b8ffb9e8a2",
+      "text": "# What does this mean for users?"
+    },
+    {
+      "type": "paragraph",
+      "id": "e1afdce168a26cd7",
+      "text": "The aim is to provide an analogous ecosystem to email - one where you can communicate with pretty much anyone, without caring what app or server they are using, using whichever app & server you chose to use, and use a neutral identity system like an e-mail address or phone number to discover people to talk to.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "c5d887a4973e9f6d",
+      "text": "# What kind of company is Matrix.org?\nMatrix is an open initiative which acts as a neutral custodian of the Matrix standard. It’s not actually incorporated anywhere at the moment but we are looking at the best legal structure for the future (and as of October 2015 we have hopefully found one). "
+    },
+    {
+      "type": "paragraph",
+      "id": "b8978362025e2749",
+      "text": "Whatever the legal structure, we are committed to keeping the Matrix project open."
+    },
+    {
+      "type": "markdown",
+      "id": "f9f834d18ff9d8a9",
+      "text": "# Who is funding Matrix.org?\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "44e05f1db831ec7b",
+      "text": "Most of the current core contributors to Matrix work at Amdocs, who have kindly given us permission to work on Matrix as an independent non-profit initiative. Other contributors are funded by their own employers or donate their own time to the project.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "06346d4ae698cb7b",
+      "text": "# Who is building Matrix?\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "de4ce3c3dec7c870",
+      "text": "The core team is ~10 people with extensive experience in building custom VoIP and Messaging apps for mobile network operators. Most of us have day jobs at Amdocs or OpenMarket, but there are an increasing number of contributors from other companies and folks all over the internet.\n"
+    },
+    {
+      "type": "markdown",
+      "id": "948b8d103fea703c",
+      "text": "# Why are you called Matrix?\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "8a6bf5e70f5d191f",
+      "text": "We are called Matrix because we provide a structure in which all communication can be matrixed together.\nNo, it’s nothing to do with the film (although you could go and build virtual worlds on top of Matrix if you wanted :)\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Matrix",
+        "story": []
+      },
+      "date": 1458843069502
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6ba1432077bc1a95"
+      },
+      "id": "6ba1432077bc1a95",
+      "type": "add",
+      "date": 1458843178509
+    },
+    {
+      "type": "edit",
+      "id": "6ba1432077bc1a95",
+      "item": {
+        "type": "paragraph",
+        "id": "6ba1432077bc1a95",
+        "text": "Matrix is an open standard for interoperable, decentralised, real-time communication over IP. It can be used to power Instant Messaging, VoIP/WebRTC signalling, Internet of Things communication - or anywhere you need a standard HTTP API for publishing and subscribing to data whilst tracking the conversation history."
+      },
+      "date": 1458843187690
+    },
+    {
+      "type": "add",
+      "id": "cd1e20e954f8c109",
+      "item": {
+        "type": "paragraph",
+        "id": "cd1e20e954f8c109",
+        "text": "Matrix defines the standard, and provides open source reference implementations of Matrix-compatible Servers, Clients, Client SDKs and Application Services to help you create new communication solutions or extend the capabilities and reach of existing ones.\n"
+      },
+      "after": "6ba1432077bc1a95",
+      "date": 1458843192842
+    },
+    {
+      "type": "add",
+      "id": "3dbbdb09513b38a0",
+      "item": {
+        "type": "paragraph",
+        "id": "3dbbdb09513b38a0",
+        "text": "# What is Matrix’s Mission?"
+      },
+      "after": "cd1e20e954f8c109",
+      "date": 1458843196058
+    },
+    {
+      "type": "add",
+      "id": "25f43c3e57f2996d",
+      "item": {
+        "type": "paragraph",
+        "id": "25f43c3e57f2996d",
+        "text": "Matrix’s initial goal is to fix the problem of fragmented IP communications: letting users message and call each other without having to care what app the other user is on - making it as easy as sending an email.\nThe longer term goal is for Matrix to act as a generic HTTP messaging and data synchronisation system for the whole web - allowing people, services and devices to easily communicate with each other, empowering users to own and control their data and select the services and vendors they want to use."
+      },
+      "after": "3dbbdb09513b38a0",
+      "date": 1458843200410
+    },
+    {
+      "type": "add",
+      "id": "d3724e68ea9f05ba",
+      "item": {
+        "type": "paragraph",
+        "id": "d3724e68ea9f05ba",
+        "text": "# What does Matrix provide?\nMatrix provides:\n* Open Standard HTTP APIs for transferring JSON messages (e.g. instant messages, WebRTC signalling), including:\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\nHomeservers (Synapse)\nApplication Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "after": "25f43c3e57f2996d",
+      "date": 1458843241749
+    },
+    {
+      "type": "add",
+      "id": "1f5e2d19d9695240",
+      "item": {
+        "type": "paragraph",
+        "id": "1f5e2d19d9695240",
+        "text": "The actual ecosystem and community of everyone running Matrix servers and services\nLoads of 3rd party contributions of clients, SDKs, servers and services.\n"
+      },
+      "after": "d3724e68ea9f05ba",
+      "date": 1458843252020
+    },
+    {
+      "type": "add",
+      "id": "3a7958765dc0f661",
+      "item": {
+        "type": "paragraph",
+        "id": "3a7958765dc0f661",
+        "text": "You can find the full list of Matrix enabled projects at https://matrix.org/blog/try-matrix-now.\n"
+      },
+      "after": "1f5e2d19d9695240",
+      "date": 1458843254917
+    },
+    {
+      "type": "add",
+      "id": "d688e8b8ffb9e8a2",
+      "item": {
+        "type": "paragraph",
+        "id": "d688e8b8ffb9e8a2",
+        "text": "# What does this mean for users?"
+      },
+      "after": "3a7958765dc0f661",
+      "date": 1458843259852
+    },
+    {
+      "type": "add",
+      "id": "e1afdce168a26cd7",
+      "item": {
+        "type": "paragraph",
+        "id": "e1afdce168a26cd7",
+        "text": "The aim is to provide an analogous ecosystem to email - one where you can communicate with pretty much anyone, without caring what app or server they are using, using whichever app & server you chose to use, and use a neutral identity system like an e-mail address or phone number to discover people to talk to.\n"
+      },
+      "after": "d688e8b8ffb9e8a2",
+      "date": 1458843264277
+    },
+    {
+      "type": "add",
+      "id": "c5d887a4973e9f6d",
+      "item": {
+        "type": "paragraph",
+        "id": "c5d887a4973e9f6d",
+        "text": "# What kind of company is Matrix.org?\nMatrix is an open initiative which acts as a neutral custodian of the Matrix standard. It’s not actually incorporated anywhere at the moment but we are looking at the best legal structure for the future (and as of October 2015 we have hopefully found one). "
+      },
+      "after": "e1afdce168a26cd7",
+      "date": 1458843271957
+    },
+    {
+      "type": "add",
+      "id": "b8978362025e2749",
+      "item": {
+        "type": "paragraph",
+        "id": "b8978362025e2749",
+        "text": "Whatever the legal structure, we are committed to keeping the Matrix project open."
+      },
+      "after": "c5d887a4973e9f6d",
+      "date": 1458843275700
+    },
+    {
+      "type": "add",
+      "id": "f9f834d18ff9d8a9",
+      "item": {
+        "type": "paragraph",
+        "id": "f9f834d18ff9d8a9",
+        "text": "# Who is funding Matrix.org?\n"
+      },
+      "after": "b8978362025e2749",
+      "date": 1458843282733
+    },
+    {
+      "type": "add",
+      "id": "44e05f1db831ec7b",
+      "item": {
+        "type": "paragraph",
+        "id": "44e05f1db831ec7b",
+        "text": "Most of the current core contributors to Matrix work at Amdocs, who have kindly given us permission to work on Matrix as an independent non-profit initiative. Other contributors are funded by their own employers or donate their own time to the project.\n"
+      },
+      "after": "f9f834d18ff9d8a9",
+      "date": 1458843286477
+    },
+    {
+      "type": "add",
+      "id": "06346d4ae698cb7b",
+      "item": {
+        "type": "paragraph",
+        "id": "06346d4ae698cb7b",
+        "text": "# Who is building Matrix?\n"
+      },
+      "after": "44e05f1db831ec7b",
+      "date": 1458843290405
+    },
+    {
+      "type": "add",
+      "id": "de4ce3c3dec7c870",
+      "item": {
+        "type": "paragraph",
+        "id": "de4ce3c3dec7c870",
+        "text": "The core team is ~10 people with extensive experience in building custom VoIP and Messaging apps for mobile network operators. Most of us have day jobs at Amdocs or OpenMarket, but there are an increasing number of contributors from other companies and folks all over the internet.\n"
+      },
+      "after": "06346d4ae698cb7b",
+      "date": 1458843297150
+    },
+    {
+      "type": "add",
+      "id": "948b8d103fea703c",
+      "item": {
+        "type": "paragraph",
+        "id": "948b8d103fea703c",
+        "text": "# Why are you called Matrix?\n"
+      },
+      "after": "de4ce3c3dec7c870",
+      "date": 1458843306118
+    },
+    {
+      "type": "add",
+      "id": "8a6bf5e70f5d191f",
+      "item": {
+        "type": "paragraph",
+        "id": "8a6bf5e70f5d191f",
+        "text": "We are called Matrix because we provide a structure in which all communication can be matrixed together.\nNo, it’s nothing to do with the film (although you could go and build virtual worlds on top of Matrix if you wanted :)\n"
+      },
+      "after": "948b8d103fea703c",
+      "date": 1458843309294
+    },
+    {
+      "type": "add",
+      "id": "9e78d9d02d7edaa8",
+      "item": {
+        "type": "paragraph",
+        "id": "9e78d9d02d7edaa8",
+        "text": "# What does federated mean?\n"
+      },
+      "after": "8a6bf5e70f5d191f",
+      "date": 1458843330150
+    },
+    {
+      "type": "add",
+      "id": "cc684f72b9cce21a",
+      "item": {
+        "type": "paragraph",
+        "id": "cc684f72b9cce21a",
+        "text": "Federation allows separate deployments of a communication service to communicate with each other - for instance a mail server run by Google federates with a mail server run by Microsoft when you send email from @gmail.com to @hotmail.com.\nFederation is different to interoperability, as interoperable clients may simply be running on the same deployment - whereas in federation the deployments themselves are exchanging data in a compatible manner."
+      },
+      "after": "9e78d9d02d7edaa8",
+      "date": 1458843334615
+    },
+    {
+      "type": "add",
+      "id": "305068061473856f",
+      "item": {
+        "type": "paragraph",
+        "id": "305068061473856f",
+        "text": "Matrix provides open federation - meaning that anyone on the internet can join into the Matrix ecosystem by deploying their own server."
+      },
+      "after": "cc684f72b9cce21a",
+      "date": 1458843336200
+    },
+    {
+      "type": "edit",
+      "id": "9e78d9d02d7edaa8",
+      "item": {
+        "type": "markdown",
+        "id": "9e78d9d02d7edaa8",
+        "text": "# What does federated mean?\n"
+      },
+      "date": 1458843337441
+    },
+    {
+      "type": "edit",
+      "id": "948b8d103fea703c",
+      "item": {
+        "type": "markdown",
+        "id": "948b8d103fea703c",
+        "text": "# Why are you called Matrix?\n"
+      },
+      "date": 1458843338878
+    },
+    {
+      "type": "edit",
+      "id": "06346d4ae698cb7b",
+      "item": {
+        "type": "markdown",
+        "id": "06346d4ae698cb7b",
+        "text": "# Who is building Matrix?\n"
+      },
+      "date": 1458843340456
+    },
+    {
+      "type": "edit",
+      "id": "f9f834d18ff9d8a9",
+      "item": {
+        "type": "markdown",
+        "id": "f9f834d18ff9d8a9",
+        "text": "# Who is funding Matrix.org?\n"
+      },
+      "date": 1458843341778
+    },
+    {
+      "type": "edit",
+      "id": "d688e8b8ffb9e8a2",
+      "item": {
+        "type": "markdown",
+        "id": "d688e8b8ffb9e8a2",
+        "text": "# What does this mean for users?"
+      },
+      "date": 1458843345307
+    },
+    {
+      "type": "edit",
+      "id": "c5d887a4973e9f6d",
+      "item": {
+        "type": "markdown",
+        "id": "c5d887a4973e9f6d",
+        "text": "# What kind of company is Matrix.org?\nMatrix is an open initiative which acts as a neutral custodian of the Matrix standard. It’s not actually incorporated anywhere at the moment but we are looking at the best legal structure for the future (and as of October 2015 we have hopefully found one). "
+      },
+      "date": 1458843346500
+    },
+    {
+      "type": "edit",
+      "id": "d3724e68ea9f05ba",
+      "item": {
+        "type": "paragraph",
+        "id": "d3724e68ea9f05ba",
+        "text": "# What does Matrix provide?\n"
+      },
+      "date": 1458843360656
+    },
+    {
+      "type": "add",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "paragraph",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for transferring JSON messages (e.g. instant messages, WebRTC signalling), including:\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\nHomeservers (Synapse)\nApplication Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "after": "d3724e68ea9f05ba",
+      "date": 1458843362105
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for transferring JSON messages (e.g. instant messages, WebRTC signalling), including:\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\nHomeservers (Synapse)\nApplication Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1458843363011
+    },
+    {
+      "type": "edit",
+      "id": "d3724e68ea9f05ba",
+      "item": {
+        "type": "markdown",
+        "id": "d3724e68ea9f05ba",
+        "text": "# What does Matrix provide?\n"
+      },
+      "date": 1458843364149
+    },
+    {
+      "type": "edit",
+      "id": "3dbbdb09513b38a0",
+      "item": {
+        "type": "markdown",
+        "id": "3dbbdb09513b38a0",
+        "text": "# What is Matrix’s Mission?"
+      },
+      "date": 1458843368831
+    },
+    {
+      "type": "edit",
+      "id": "6ba1432077bc1a95",
+      "item": {
+        "type": "paragraph",
+        "id": "6ba1432077bc1a95",
+        "text": "Matrix is an open standard for interoperable, decentralised, real-time communication over IP. It can be used to power Instant Messaging, VoIP/WebRTC signalling, Internet of Things communication - or anywhere you need a standard HTTP API for publishing and subscribing to data whilst tracking the conversation history - [http://matrix.org/docs/guides/faq.html#general matrix.org]"
+      },
+      "date": 1458843392610
+    },
+    {
+      "type": "edit",
+      "id": "25f43c3e57f2996d",
+      "item": {
+        "type": "paragraph",
+        "id": "25f43c3e57f2996d",
+        "text": "Matrix’s initial goal is to fix the problem of fragmented IP communications: letting users message and call each other without having to care what app the other user is on - making it as easy as sending an email.\n"
+      },
+      "date": 1458843420523
+    },
+    {
+      "type": "add",
+      "id": "2fc475ab5c2ecfe7",
+      "item": {
+        "type": "paragraph",
+        "id": "2fc475ab5c2ecfe7",
+        "text": "The longer term goal is for Matrix to act as a generic HTTP messaging and data synchronisation system for the whole web - allowing people, services and devices to easily communicate with each other, empowering users to own and control their data and select the services and vendors they want to use."
+      },
+      "after": "25f43c3e57f2996d",
+      "date": 1458843423059
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for transferring JSON messages (e.g. instant messages, WebRTC signalling), including:\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1458843472886
+    },
+    {
+      "type": "edit",
+      "id": "3a7958765dc0f661",
+      "item": {
+        "type": "paragraph",
+        "id": "3a7958765dc0f661",
+        "text": "You can find the full list of Matrix enabled projects at [https://matrix.org/blog/try-matrix-now matrix.org]\n"
+      },
+      "date": 1458843507343
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for transferring [[JSON]] messages (e.g. instant messages, [[WebRTC]] signalling), including:\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1458843542392
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org"
+    },
+    {
+      "type": "edit",
+      "id": "cd1e20e954f8c109",
+      "item": {
+        "type": "paragraph",
+        "id": "cd1e20e954f8c109",
+        "text": "Matrix defines the standard, and provides open source reference implementations of Matrix-compatible Servers, Clients, Client SDKs and Application Services to help you create new communication solutions or extend the capabilities and reach of existing ones."
+      },
+      "date": 1466939473194
+    },
+    {
+      "type": "add",
+      "id": "d952d1a649473c25",
+      "item": {
+        "type": "paragraph",
+        "id": "d952d1a649473c25",
+        "text": "You can find us here - [https://vector.im/beta/#/room/#fedwiki:matrix.org #fedwiki:matrix.org]"
+      },
+      "after": "cd1e20e954f8c109",
+      "date": 1466939535795
+    },
+    {
+      "type": "fork",
+      "site": "goals.pod.rodwell.me",
+      "date": 1466940797643
+    },
+    {
+      "type": "move",
+      "order": [
+        "6ba1432077bc1a95",
+        "d952d1a649473c25",
+        "cd1e20e954f8c109",
+        "3dbbdb09513b38a0",
+        "25f43c3e57f2996d",
+        "2fc475ab5c2ecfe7",
+        "d3724e68ea9f05ba",
+        "3f0f1809d631463b",
+        "1f5e2d19d9695240",
+        "3a7958765dc0f661",
+        "d688e8b8ffb9e8a2",
+        "e1afdce168a26cd7",
+        "c5d887a4973e9f6d",
+        "b8978362025e2749",
+        "f9f834d18ff9d8a9",
+        "44e05f1db831ec7b",
+        "06346d4ae698cb7b",
+        "de4ce3c3dec7c870",
+        "948b8d103fea703c",
+        "8a6bf5e70f5d191f",
+        "9e78d9d02d7edaa8",
+        "cc684f72b9cce21a",
+        "305068061473856f"
+      ],
+      "id": "d952d1a649473c25",
+      "date": 1466940805553
+    },
+    {
+      "type": "edit",
+      "id": "d952d1a649473c25",
+      "item": {
+        "type": "paragraph",
+        "id": "d952d1a649473c25",
+        "text": "You can find us here:* [https://vector.im/beta/#/room/#fedwiki:matrix.org #fedwiki:matrix.org]"
+      },
+      "date": 1466940815267
+    },
+    {
+      "type": "edit",
+      "id": "d952d1a649473c25",
+      "item": {
+        "type": "markdown",
+        "id": "d952d1a649473c25",
+        "text": "You can find us here:* [https://vector.im/beta/#/room/#fedwiki:matrix.org #fedwiki:matrix.org]"
+      },
+      "date": 1466940816402
+    },
+    {
+      "type": "edit",
+      "id": "d952d1a649473c25",
+      "item": {
+        "type": "markdown",
+        "id": "d952d1a649473c25",
+        "text": "You can find us here:\n\n* [https://vector.im/beta/#/room/#fedwiki:matrix.org #fedwiki:matrix.org]"
+      },
+      "date": 1466940819490
+    },
+    {
+      "type": "edit",
+      "id": "6ba1432077bc1a95",
+      "item": {
+        "type": "paragraph",
+        "id": "6ba1432077bc1a95",
+        "text": "Matrix is an open standard for interoperable, decentralised, real-time communication over IP. "
+      },
+      "date": 1466941220590
+    },
+    {
+      "type": "add",
+      "id": "ed2d2b91cf36fbc6",
+      "item": {
+        "type": "paragraph",
+        "id": "ed2d2b91cf36fbc6",
+        "text": "It can be used to power Instant Messaging, VoIP/WebRTC signalling, or [[Internet of Things]] communication - [http://matrix.org/docs/guides/faq.html#general matrix.org]"
+      },
+      "after": "6ba1432077bc1a95",
+      "date": 1466941259666
+    },
+    {
+      "type": "edit",
+      "id": "6ba1432077bc1a95",
+      "item": {
+        "type": "paragraph",
+        "id": "6ba1432077bc1a95",
+        "text": "Matrix is an open standard for interoperable, decentralised, real-time communication over IP. It can be used anywhere you need a standard HTTP API for publishing and subscribing to data whilst tracking the conversation history."
+      },
+      "date": 1466941277657
+    },
+    {
+      "type": "edit",
+      "id": "ed2d2b91cf36fbc6",
+      "item": {
+        "type": "paragraph",
+        "id": "ed2d2b91cf36fbc6",
+        "text": "It can be used to power Instant Messaging, VoIP/WebRTC signalling, or [[Internet of Things]] communication"
+      },
+      "date": 1466941281370
+    },
+    {
+      "type": "edit",
+      "id": "6ba1432077bc1a95",
+      "item": {
+        "type": "paragraph",
+        "id": "6ba1432077bc1a95",
+        "text": "Matrix is an open standard for interoperable, decentralised, real-time communication over IP. It can be used anywhere you need a standard HTTP API for publishing and subscribing to data whilst tracking the conversation history - [http://matrix.org/docs/guides/faq.html#general matrix.org]"
+      },
+      "date": 1466941285763
+    },
+    {
+      "type": "edit",
+      "id": "d952d1a649473c25",
+      "item": {
+        "type": "markdown",
+        "id": "d952d1a649473c25",
+        "text": "# Fedwiki Chat Room\n\n* [https://vector.im/beta/#/room/#fedwiki:matrix.org #fedwiki:matrix.org]"
+      },
+      "date": 1466941308099
+    },
+    {
+      "type": "edit",
+      "id": "cd1e20e954f8c109",
+      "item": {
+        "type": "paragraph",
+        "id": "cd1e20e954f8c109",
+        "text": "You can find us at the above address on the matrix :)"
+      },
+      "date": 1466941326931
+    },
+    {
+      "type": "add",
+      "id": "fe6434d9038d9b8a",
+      "item": {
+        "type": "paragraph",
+        "id": "fe6434d9038d9b8a",
+        "text": "# About the matrix"
+      },
+      "after": "cd1e20e954f8c109",
+      "date": 1466941350042
+    },
+    {
+      "type": "add",
+      "id": "68540e90b081bb6a",
+      "item": {
+        "type": "paragraph",
+        "id": "68540e90b081bb6a",
+        "text": "Matrix defines the standard, and provides open source reference implementations of Matrix-compatible Servers, Clients, Client SDKs and Application Services to help you create new communication solutions or extend the capabilities and reach of existing ones."
+      },
+      "after": "fe6434d9038d9b8a",
+      "date": 1466941351443
+    },
+    {
+      "type": "edit",
+      "id": "fe6434d9038d9b8a",
+      "item": {
+        "type": "markdown",
+        "id": "fe6434d9038d9b8a",
+        "text": "# About the matrix"
+      },
+      "date": 1466941352537
+    },
+    {
+      "type": "edit",
+      "id": "cc684f72b9cce21a",
+      "item": {
+        "type": "paragraph",
+        "id": "cc684f72b9cce21a",
+        "text": "Federation allows separate deployments of a communication service to communicate with each other - for instance a mail server run by Google federates with a mail server run by Microsoft when you send email from @gmail.com to @hotmail.com.\n"
+      },
+      "date": 1466941411023
+    },
+    {
+      "type": "add",
+      "id": "ebd454dd1ec1eca2",
+      "item": {
+        "type": "paragraph",
+        "id": "ebd454dd1ec1eca2",
+        "text": "Federation is different to interoperability, as interoperable clients may simply be running on the same deployment - whereas in federation the deployments themselves are exchanging data in a compatible manner."
+      },
+      "after": "cc684f72b9cce21a",
+      "date": 1466941418880
+    },
+    {
+      "type": "move",
+      "order": [
+        "6ba1432077bc1a95",
+        "ed2d2b91cf36fbc6",
+        "d952d1a649473c25",
+        "cd1e20e954f8c109",
+        "fe6434d9038d9b8a",
+        "68540e90b081bb6a",
+        "3dbbdb09513b38a0",
+        "25f43c3e57f2996d",
+        "2fc475ab5c2ecfe7",
+        "d3724e68ea9f05ba",
+        "3f0f1809d631463b",
+        "1f5e2d19d9695240",
+        "3a7958765dc0f661",
+        "9e78d9d02d7edaa8",
+        "d688e8b8ffb9e8a2",
+        "e1afdce168a26cd7",
+        "c5d887a4973e9f6d",
+        "b8978362025e2749",
+        "f9f834d18ff9d8a9",
+        "44e05f1db831ec7b",
+        "06346d4ae698cb7b",
+        "de4ce3c3dec7c870",
+        "948b8d103fea703c",
+        "8a6bf5e70f5d191f",
+        "cc684f72b9cce21a",
+        "ebd454dd1ec1eca2",
+        "305068061473856f"
+      ],
+      "id": "9e78d9d02d7edaa8",
+      "date": 1466945518897
+    },
+    {
+      "type": "move",
+      "order": [
+        "6ba1432077bc1a95",
+        "ed2d2b91cf36fbc6",
+        "d952d1a649473c25",
+        "cd1e20e954f8c109",
+        "fe6434d9038d9b8a",
+        "68540e90b081bb6a",
+        "3dbbdb09513b38a0",
+        "25f43c3e57f2996d",
+        "2fc475ab5c2ecfe7",
+        "d3724e68ea9f05ba",
+        "3f0f1809d631463b",
+        "1f5e2d19d9695240",
+        "3a7958765dc0f661",
+        "9e78d9d02d7edaa8",
+        "cc684f72b9cce21a",
+        "d688e8b8ffb9e8a2",
+        "e1afdce168a26cd7",
+        "c5d887a4973e9f6d",
+        "b8978362025e2749",
+        "f9f834d18ff9d8a9",
+        "44e05f1db831ec7b",
+        "06346d4ae698cb7b",
+        "de4ce3c3dec7c870",
+        "948b8d103fea703c",
+        "8a6bf5e70f5d191f",
+        "ebd454dd1ec1eca2",
+        "305068061473856f"
+      ],
+      "id": "cc684f72b9cce21a",
+      "date": 1466945525856
+    },
+    {
+      "type": "move",
+      "order": [
+        "6ba1432077bc1a95",
+        "ed2d2b91cf36fbc6",
+        "d952d1a649473c25",
+        "cd1e20e954f8c109",
+        "fe6434d9038d9b8a",
+        "68540e90b081bb6a",
+        "3dbbdb09513b38a0",
+        "25f43c3e57f2996d",
+        "2fc475ab5c2ecfe7",
+        "d3724e68ea9f05ba",
+        "3f0f1809d631463b",
+        "1f5e2d19d9695240",
+        "3a7958765dc0f661",
+        "9e78d9d02d7edaa8",
+        "cc684f72b9cce21a",
+        "ebd454dd1ec1eca2",
+        "d688e8b8ffb9e8a2",
+        "e1afdce168a26cd7",
+        "c5d887a4973e9f6d",
+        "b8978362025e2749",
+        "f9f834d18ff9d8a9",
+        "44e05f1db831ec7b",
+        "06346d4ae698cb7b",
+        "de4ce3c3dec7c870",
+        "948b8d103fea703c",
+        "8a6bf5e70f5d191f",
+        "305068061473856f"
+      ],
+      "id": "ebd454dd1ec1eca2",
+      "date": 1466945528513
+    },
+    {
+      "type": "move",
+      "order": [
+        "6ba1432077bc1a95",
+        "ed2d2b91cf36fbc6",
+        "d952d1a649473c25",
+        "cd1e20e954f8c109",
+        "fe6434d9038d9b8a",
+        "68540e90b081bb6a",
+        "3dbbdb09513b38a0",
+        "25f43c3e57f2996d",
+        "2fc475ab5c2ecfe7",
+        "d3724e68ea9f05ba",
+        "3f0f1809d631463b",
+        "1f5e2d19d9695240",
+        "3a7958765dc0f661",
+        "9e78d9d02d7edaa8",
+        "cc684f72b9cce21a",
+        "ebd454dd1ec1eca2",
+        "305068061473856f",
+        "d688e8b8ffb9e8a2",
+        "e1afdce168a26cd7",
+        "c5d887a4973e9f6d",
+        "b8978362025e2749",
+        "f9f834d18ff9d8a9",
+        "44e05f1db831ec7b",
+        "06346d4ae698cb7b",
+        "de4ce3c3dec7c870",
+        "948b8d103fea703c",
+        "8a6bf5e70f5d191f"
+      ],
+      "id": "305068061473856f",
+      "date": 1466945530654
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for transferring [[JSON]] messages.\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945548557
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for [[JSON]] messages.\n* Client<->Server API - defines how Matrix compatible clients communicate with Matrix homeservers.\n* Server<->Server API - defines how Matrix homeservers exchange messages and synchronise history with each other.\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945558875
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for [[JSON]] messages.\n* Client<->Server API\n* Server<->Server API\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945599796
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides:\n* Open Standard HTTP APIs for [[JSON]] messages.\n* Client<->Server API\n* Server<->Server API"
+      },
+      "date": 1466945615756
+    },
+    {
+      "type": "edit",
+      "id": "1f5e2d19d9695240",
+      "item": {
+        "type": "paragraph",
+        "id": "1f5e2d19d9695240",
+        "text": "In addition matrix provides:* * Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945638116
+    },
+    {
+      "type": "edit",
+      "id": "1f5e2d19d9695240",
+      "item": {
+        "type": "markdown",
+        "id": "1f5e2d19d9695240",
+        "text": "In addition matrix provides:* * Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945639626
+    },
+    {
+      "type": "add",
+      "id": "e7007c2706744812",
+      "item": {
+        "type": "paragraph",
+        "id": "e7007c2706744812",
+        "text": "The actual ecosystem and community of everyone running Matrix servers and services\nLoads of 3rd party contributions of clients, SDKs, servers and services.\n"
+      },
+      "after": "1f5e2d19d9695240",
+      "date": 1466945640289
+    },
+    {
+      "type": "edit",
+      "id": "1f5e2d19d9695240",
+      "item": {
+        "type": "markdown",
+        "id": "1f5e2d19d9695240",
+        "text": "In addition matrix provides:\n\n* Application Service API - defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n* Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945646052
+    },
+    {
+      "type": "edit",
+      "id": "1f5e2d19d9695240",
+      "item": {
+        "type": "markdown",
+        "id": "1f5e2d19d9695240",
+        "text": "In addition matrix provides:\n\n# Application Service API\nThe Application Service API defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n\n# Modules - specifies features that must be implemented by particular classes of clients.\n* Open source reference implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n* Homeservers (Synapse) - [https://github.com/matrix-org/synapse github]\n* Application Services (bridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945684102
+    },
+    {
+      "type": "edit",
+      "id": "1f5e2d19d9695240",
+      "item": {
+        "type": "markdown",
+        "id": "1f5e2d19d9695240",
+        "text": "In addition matrix provides:\n\n# Application Service API\nThe Application Service API defines how to extend the functionality of Matrix with ‘integrations’ and bridge to other networks.\n\n# Modules \nModules specify features that must be implemented by particular classes of clients.\n\n# Open source reference implementations \nMatrix provides implementations of:\nClients (Web (React), iOS, Android)\nClient SDKs (Javascript, Web (React), iOS, Android)\n\n# Homeservers\nSynapse - [https://github.com/matrix-org/synapse github]\n\n# Application Services\n\nBridges to IRC, Slack, Skype, Lync and more…)\n"
+      },
+      "date": 1466945770946
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides the follwoing [http://matrix.org/docs/spec/#client-server-api-v1 - api's]\n* Open Standard HTTP APIs for [[JSON]] messages.\n* Client<->Server API\n* Server<->Server API"
+      },
+      "date": 1466945819076
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides the following [http://matrix.org/docs/spec/#client-server-api-v1 api's]\n* Open Standard HTTP APIs for [[JSON]] messages.\n* Client<->Server API\n* Server<->Server API"
+      },
+      "date": 1466945832372
+    },
+    {
+      "type": "add",
+      "id": "69f5e44485f71198",
+      "item": {
+        "type": "paragraph",
+        "id": "69f5e44485f71198",
+        "text": "[[Matrix Authentication]]"
+      },
+      "after": "2fc475ab5c2ecfe7",
+      "date": 1466946259633
+    },
+    {
+      "type": "add",
+      "id": "1511d2a9d799107f",
+      "item": {
+        "type": "paragraph",
+        "id": "1511d2a9d799107f",
+        "text": "Matrix defines APIs for synchronising extensible JSON objects known as \"events\" between compatible clients, servers and services. Clients are typically messaging/VoIP applications or IoT devices/hubs and communicate by synchronising communication history with their \"homeserver\" using the \"Client-Server API\". Each homeserver stores the communication history and account information for all of its clients, and shares data with the wider Matrix ecosystem by synchronising communication history with other homeservers and their clients.\nClients typically communicate with each other by emitting events in the context of a virtual \"room\". Room data is replicated across all of the homeservers whose users are participating in a given room. As such, no single homeserver has control or ownership over a given room. Homeservers model communication history as a partially ordered graph of events known as the room's \"event graph\", which is synchronised with eventual consistency between the participating servers using the \"Server-Server API\". This process of synchronising shared conversation history between homeservers run by different parties is called \"Federation\". Matrix optimises for the the Availability and Partitioned properties of CAP theorem at the expense of Consistency.\nFor example, for client A to send a message to client B, client A performs an HTTP PUT of the required JSON event on its homeserver (HS) using the client-server API. A's HS appends this event to its copy of the room's event graph, signing the message in the context of the graph for integrity. A's HS then replicates the message to B's HS by performing an HTTP PUT using the server-server API. B's HS authenticates the request, validates the event's signature, authorises the event's contents and then adds it to its copy of the room's event graph. Client B then receives the message from his homeserver via a long-lived GET request."
+      },
+      "after": "cd1e20e954f8c109",
+      "date": 1466947629436
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "2b25c0adceec5aed",
+        "text": "\n                  How data flows between clients\n                  ==============================\n\n{ Matrix client A }                             { Matrix client B }\n    ^          |                                    ^          |\n    |  events  |  Client-Server API                 |  events  |\n    |          V                                    |          V\n+------------------+                            +------------------+\n|                  |---------( HTTPS )--------->|                  |\n|   homeserver    |                            |   homeserver    |\n|                  |<--------( HTTPS )----------|                  |\n+------------------+      Server-Server API     +------------------+\n                       History Synchronisation\n                           (Federation)"
+      },
+      "after": "1511d2a9d799107f",
+      "id": "2b25c0adceec5aed",
+      "date": 1466947642352
+    },
+    {
+      "type": "edit",
+      "id": "2b25c0adceec5aed",
+      "item": {
+        "type": "code",
+        "id": "2b25c0adceec5aed",
+        "text": "    How data flows between clients\n  ==============================\n\n{ Matrix client A }                             { Matrix client B }\n    ^          |                                    ^          |\n    |  events  |  Client-Server API                 |  events  |\n    |          V                                    |          V\n+------------------+                            +------------------+\n|                  |---------( HTTPS )--------->|                  |\n|   homeserver    |                            |   homeserver    |\n|                  |<--------( HTTPS )----------|                  |\n+------------------+      Server-Server API     +------------------+\n                       History Synchronisation\n                           (Federation)"
+      },
+      "date": 1466947652203
+    },
+    {
+      "type": "edit",
+      "id": "2b25c0adceec5aed",
+      "item": {
+        "type": "code",
+        "id": "2b25c0adceec5aed",
+        "text": "         How data flows between clients\n        ==============================\n\n{ Matrix client A }                             { Matrix client B }\n    ^          |                                    ^          |\n    |  events  |  Client-Server API                 |  events  |\n    |          V                                    |          V\n+------------------+                            +------------------+\n|                  |---------( HTTPS )--------->|                  |\n|   homeserver    |                            |   homeserver    |\n|                  |<--------( HTTPS )----------|                  |\n+------------------+      Server-Server API     +------------------+\n                       History Synchronisation\n                           (Federation)"
+      },
+      "date": 1466947661137
+    },
+    {
+      "type": "edit",
+      "id": "2b25c0adceec5aed",
+      "item": {
+        "type": "code",
+        "id": "2b25c0adceec5aed",
+        "text": "           How data flows between clients\n           ==============================\n\n{ Matrix client A }                             { Matrix client B }\n    ^          |                                    ^          |\n    |  events  |  Client-Server API                 |  events  |\n    |          V                                    |          V\n+------------------+                            +------------------+\n|                  |---------( HTTPS )--------->|                  |\n|   homeserver    |                            |   homeserver    |\n|                  |<--------( HTTPS )----------|                  |\n+------------------+      Server-Server API     +------------------+\n                       History Synchronisation\n                           (Federation)"
+      },
+      "date": 1466947667631
+    },
+    {
+      "type": "remove",
+      "id": "2b25c0adceec5aed",
+      "date": 1466947705257
+    },
+    {
+      "type": "edit",
+      "id": "1511d2a9d799107f",
+      "item": {
+        "type": "paragraph",
+        "id": "1511d2a9d799107f",
+        "text": "Matrix defines APIs for synchronising extensible JSON objects known as \"events\" between compatible clients, servers and services. "
+      },
+      "date": 1466947720409
+    },
+    {
+      "type": "add",
+      "id": "ba05553794be1ade",
+      "item": {
+        "type": "paragraph",
+        "id": "ba05553794be1ade",
+        "text": "Clients are typically messaging/VoIP applications or IoT devices/hubs and communicate by synchronising communication history with their \"homeserver\" using the \"Client-Server API\". "
+      },
+      "after": "1511d2a9d799107f",
+      "date": 1466947724131
+    },
+    {
+      "type": "add",
+      "id": "97a5021e5782d73a",
+      "item": {
+        "type": "paragraph",
+        "id": "97a5021e5782d73a",
+        "text": "Each homeserver stores the communication history and account information for all of its clients, and shares data with the wider Matrix ecosystem by synchronising communication history with other homeservers and their clients."
+      },
+      "after": "ba05553794be1ade",
+      "date": 1466947727026
+    },
+    {
+      "type": "add",
+      "id": "8511fdee753c569b",
+      "item": {
+        "type": "paragraph",
+        "id": "8511fdee753c569b",
+        "text": "Clients typically communicate with each other by emitting events in the context of a virtual \"room\". Room data is replicated across all of the homeservers whose users are participating in a given room. As such, no single homeserver has control or ownership over a given room. Homeservers model communication history as a partially ordered graph of events known as the room's \"event graph\", which is synchronised with eventual consistency between the participating servers using the \"Server-Server API\". This process of synchronising shared conversation history between homeservers run by different parties is called \"Federation\". Matrix optimises for the the Availability and Partitioned properties of CAP theorem at the expense of Consistency.\nFor example, for client A to send a message to client B, client A performs an HTTP PUT of the required JSON event on its homeserver (HS) using the client-server API. A's HS appends this event to its copy of the room's event graph, signing the message in the context of the graph for integrity. A's HS then replicates the message to B's HS by performing an HTTP PUT using the server-server API. B's HS authenticates the request, validates the event's signature, authorises the event's contents and then adds it to its copy of the room's event graph. Client B then receives the message from his homeserver via a long-lived GET request."
+      },
+      "after": "97a5021e5782d73a",
+      "date": 1466947734115
+    },
+    {
+      "type": "edit",
+      "id": "1511d2a9d799107f",
+      "item": {
+        "type": "paragraph",
+        "id": "1511d2a9d799107f",
+        "text": "# Introduction"
+      },
+      "date": 1466947739890
+    },
+    {
+      "type": "add",
+      "id": "a0420256d3f92238",
+      "item": {
+        "type": "paragraph",
+        "id": "a0420256d3f92238",
+        "text": "Matrix defines APIs for synchronising extensible JSON objects known as \"events\" between compatible clients, servers and services. "
+      },
+      "after": "1511d2a9d799107f",
+      "date": 1466947740531
+    },
+    {
+      "type": "edit",
+      "id": "1511d2a9d799107f",
+      "item": {
+        "type": "markdown",
+        "id": "1511d2a9d799107f",
+        "text": "# Introduction"
+      },
+      "date": 1466947741760
+    },
+    {
+      "type": "edit",
+      "id": "a0420256d3f92238",
+      "item": {
+        "type": "paragraph",
+        "id": "a0420256d3f92238",
+        "text": "Matrix defines APIs for synchronising extensible JSON objects known as \"events\" between compatible clients, servers and services - [http://matrix.org/docs/spec/intro.html matrix.org]"
+      },
+      "date": 1466947758909
+    },
+    {
+      "type": "edit",
+      "id": "8511fdee753c569b",
+      "item": {
+        "type": "paragraph",
+        "id": "8511fdee753c569b",
+        "text": "Clients typically communicate with each other by emitting events in the context of a virtual \"room\". Room data is replicated across all of the homeservers whose users are participating in a given room. "
+      },
+      "date": 1466947769627
+    },
+    {
+      "type": "add",
+      "id": "bf750b80bdc26941",
+      "item": {
+        "type": "paragraph",
+        "id": "bf750b80bdc26941",
+        "text": "As such, no single homeserver has control or ownership over a given room. Homeservers model communication history as a partially ordered graph of events known as the room's \"event graph\", which is synchronised with eventual consistency between the participating servers using the \"Server-Server API\". "
+      },
+      "after": "8511fdee753c569b",
+      "date": 1466947775243
+    },
+    {
+      "type": "add",
+      "id": "ca4a16c623014bfb",
+      "item": {
+        "type": "paragraph",
+        "id": "ca4a16c623014bfb",
+        "text": "This process of synchronising shared conversation history between homeservers run by different parties is called \"Federation\". Matrix optimises for the the Availability and Partitioned properties of CAP theorem at the expense of Consistency."
+      },
+      "after": "bf750b80bdc26941",
+      "date": 1466947777011
+    },
+    {
+      "type": "add",
+      "id": "f20752e906fbdec3",
+      "item": {
+        "type": "paragraph",
+        "id": "f20752e906fbdec3",
+        "text": "For example, for client A to send a message to client B, client A performs an HTTP PUT of the required JSON event on its homeserver (HS) using the client-server API. "
+      },
+      "after": "ca4a16c623014bfb",
+      "date": 1466947785702
+    },
+    {
+      "type": "add",
+      "id": "fe35a67b09a92560",
+      "item": {
+        "type": "paragraph",
+        "id": "fe35a67b09a92560",
+        "text": "A's HS appends this event to its copy of the room's event graph, signing the message in the context of the graph for integrity. A's HS then replicates the message to B's HS by performing an HTTP PUT using the server-server API. "
+      },
+      "after": "f20752e906fbdec3",
+      "date": 1466947791684
+    },
+    {
+      "type": "add",
+      "id": "965eab849a03f1a5",
+      "item": {
+        "type": "paragraph",
+        "id": "965eab849a03f1a5",
+        "text": "B's HS authenticates the request, validates the event's signature, authorises the event's contents and then adds it to its copy of the room's event graph. Client B then receives the message from his homeserver via a long-lived GET request."
+      },
+      "after": "fe35a67b09a92560",
+      "date": 1466947793653
+    },
+    {
+      "type": "edit",
+      "id": "f20752e906fbdec3",
+      "item": {
+        "type": "paragraph",
+        "id": "f20752e906fbdec3",
+        "text": "# Example"
+      },
+      "date": 1466947801684
+    },
+    {
+      "type": "add",
+      "id": "c2d2c1a63034bc8c",
+      "item": {
+        "type": "paragraph",
+        "id": "c2d2c1a63034bc8c",
+        "text": "For example, for client A to send a message to client B, client A performs an HTTP PUT of the required JSON event on its homeserver (HS) using the client-server API. "
+      },
+      "after": "f20752e906fbdec3",
+      "date": 1466947803005
+    },
+    {
+      "type": "edit",
+      "id": "f20752e906fbdec3",
+      "item": {
+        "type": "markdown",
+        "id": "f20752e906fbdec3",
+        "text": "# Example"
+      },
+      "date": 1466947803879
+    },
+    {
+      "type": "edit",
+      "id": "ca4a16c623014bfb",
+      "item": {
+        "type": "paragraph",
+        "id": "ca4a16c623014bfb",
+        "text": "This process of synchronising shared conversation history between homeservers run by different parties is called \"Federation\". Matrix optimises for the the Availability and Partitioned properties of [[CAP theorem]] at the expense of [[Consistency]]."
+      },
+      "date": 1466947875122
+    },
+    {
+      "type": "edit",
+      "id": "ca4a16c623014bfb",
+      "item": {
+        "type": "paragraph",
+        "id": "ca4a16c623014bfb",
+        "text": "This process of synchronising shared conversation history between homeservers run by different parties is called \"Federation\". Matrix optimises for the the [[Availability]] and [[Partition tolerance]] properties of [[CAP theorem]] at the expense of [[Consistency]]."
+      },
+      "date": 1466948017749
+    },
+    {
+      "type": "move",
+      "order": [
+        "6ba1432077bc1a95",
+        "ed2d2b91cf36fbc6",
+        "d952d1a649473c25",
+        "cd1e20e954f8c109",
+        "69f5e44485f71198",
+        "1511d2a9d799107f",
+        "a0420256d3f92238",
+        "ba05553794be1ade",
+        "97a5021e5782d73a",
+        "8511fdee753c569b",
+        "bf750b80bdc26941",
+        "ca4a16c623014bfb",
+        "f20752e906fbdec3",
+        "c2d2c1a63034bc8c",
+        "fe35a67b09a92560",
+        "965eab849a03f1a5",
+        "fe6434d9038d9b8a",
+        "68540e90b081bb6a",
+        "3dbbdb09513b38a0",
+        "25f43c3e57f2996d",
+        "2fc475ab5c2ecfe7",
+        "d3724e68ea9f05ba",
+        "3f0f1809d631463b",
+        "1f5e2d19d9695240",
+        "e7007c2706744812",
+        "3a7958765dc0f661",
+        "9e78d9d02d7edaa8",
+        "cc684f72b9cce21a",
+        "ebd454dd1ec1eca2",
+        "305068061473856f",
+        "d688e8b8ffb9e8a2",
+        "e1afdce168a26cd7",
+        "c5d887a4973e9f6d",
+        "b8978362025e2749",
+        "f9f834d18ff9d8a9",
+        "44e05f1db831ec7b",
+        "06346d4ae698cb7b",
+        "de4ce3c3dec7c870",
+        "948b8d103fea703c",
+        "8a6bf5e70f5d191f"
+      ],
+      "id": "69f5e44485f71198",
+      "date": 1466975147994
+    },
+    {
+      "type": "add",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "paragraph",
+        "id": "030d42fba577360a",
+        "text": "# Notable links"
+      },
+      "after": "cd1e20e954f8c109",
+      "date": 1466975170066
+    },
+    {
+      "type": "remove",
+      "id": "69f5e44485f71198",
+      "date": 1466975176529
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "paragraph",
+        "id": "030d42fba577360a",
+        "text": "# Notable links* [[Matrix Authentication]]* Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]"
+      },
+      "date": 1466975205852
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links* [[Matrix Authentication]]* Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]"
+      },
+      "date": 1466975207206
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n* [[Matrix Authentication]]\n* Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]"
+      },
+      "date": 1466975214180
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n* [[Matrix Authentication]]\n* Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n* Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1467068314587
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "video",
+        "id": "df37edf1c1c478ce",
+        "text": "ARCHIVE DWebSummit2016_Lightning_Talks_Session_B\nSESSION B: Lightning Talks and Workshops\nMatthew Hodgson - Matrix\nLauren Garcia - LevelNews.org\nRyan Barrett - IndieWeb\nPrimavera De Filippi - Backfeed/COALA\nJoel Dietz - Decentralized Autonomous Society\nGalen Wolfe-Pauly - Urbit\nTamas Kocsis - ZeroNet\nDavid Dias - Protocol Labs/IPFS\nDr. Gavin Wood - Ethereum"
+      },
+      "after": "ba05553794be1ade",
+      "id": "df37edf1c1c478ce",
+      "date": 1467291924411
+    },
+    {
+      "type": "edit",
+      "id": "df37edf1c1c478ce",
+      "item": {
+        "type": "video",
+        "id": "df37edf1c1c478ce",
+        "text": "ARCHIVE DWebSummit2016_Lightning_Talks_Session_B\n[[Decentralized Web Summit]] - SESSION B: Lightning Talks and Workshops\nMatthew Hodgson - Matrix\nLauren Garcia - LevelNews.org\nRyan Barrett - IndieWeb\nPrimavera De Filippi - Backfeed/COALA\nJoel Dietz - Decentralized Autonomous Society\nGalen Wolfe-Pauly - Urbit\nTamas Kocsis - ZeroNet\nDavid Dias - Protocol Labs/IPFS\nDr. Gavin Wood - Ethereum"
+      },
+      "date": 1467291955301
+    },
+    {
+      "type": "edit",
+      "id": "df37edf1c1c478ce",
+      "item": {
+        "type": "video",
+        "id": "df37edf1c1c478ce",
+        "text": "ARCHIVE DWebSummit2016_Lightning_Talks_Session_B\n[[Decentralized Web Summit]] - SESSION B: Lightning Talks and Workshops featuring \nMatthew Hodgson - [[Matrix]]"
+      },
+      "date": 1467291994304
+    },
+    {
+      "type": "add",
+      "id": "3ad4884c1a69ad35",
+      "item": {
+        "type": "paragraph",
+        "id": "3ad4884c1a69ad35",
+        "text": "# Things we could do"
+      },
+      "after": "cd1e20e954f8c109",
+      "date": 1492087628701
+    },
+    {
+      "type": "add",
+      "id": "6fa127b59b66b0ba",
+      "item": {
+        "type": "paragraph",
+        "id": "6fa127b59b66b0ba",
+        "text": "Here we list some ideas and ways we could build a decentralised [[federation]] using Matrix."
+      },
+      "after": "3ad4884c1a69ad35",
+      "date": 1492087709365
+    },
+    {
+      "type": "add",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "paragraph",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [Fedwiki Chat Client]] "
+      },
+      "after": "6fa127b59b66b0ba",
+      "date": 1492087747040
+    },
+    {
+      "type": "edit",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "paragraph",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [Fedwiki Chat Client]] - [https://github.com/matrix-org/matrix-js-sdk"
+      },
+      "date": 1492087750154
+    },
+    {
+      "type": "edit",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "markdown",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [Fedwiki Chat Client]] - [https://github.com/matrix-org/matrix-js-sdk"
+      },
+      "date": 1492087752448
+    },
+    {
+      "type": "edit",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "markdown",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [Fedwiki Chat Client]] \n- matrix-js-sdk - [https://github.com/matrix-org/matrix-js-sdk github]"
+      },
+      "date": 1492087765235
+    },
+    {
+      "type": "edit",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "markdown",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [[Fedwiki Chat Client]] \n- matrix-js-sdk - [https://github.com/matrix-org/matrix-js-sdk github]"
+      },
+      "date": 1492087771435
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Matrix projects [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088083402
+    },
+    {
+      "type": "edit",
+      "id": "3ad4884c1a69ad35",
+      "item": {
+        "type": "markdown",
+        "id": "3ad4884c1a69ad35",
+        "text": "# Things we could do"
+      },
+      "date": 1492088095261
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of matrix-enabled clients, servers, gateways, application services, bots... -\n [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088116729
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of clients, servers, gateways, application services, bots... -\n [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088124538
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of clients, servers, gateways... -\n [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088136459
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of clients, gateways... -\n [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088146610
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of clients, gateways...\n [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088151482
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects -\n [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088162108
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]"
+      },
+      "date": 1492088167884
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Wrtie your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++\n chat library -\n  [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]"
+      },
+      "date": 1492088216493
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library -\n  [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]"
+      },
+      "date": 1492088228111
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]"
+      },
+      "date": 1492088235133
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]\n- Dendrite Go impplementation - [https://github.com/matrix-org/dendrite gitbub]"
+      },
+      "date": 1492088273888
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]\n- Dendrite Go impplementation - [https://github.com/matrix-org/dendrite gitbub]\n- matrix-appservice-node  - [https://github.com/matrix-org/matrix-appservice-node github]"
+      },
+      "date": 1492088316241
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]\n- Dendrite Go impplementation - [https://github.com/matrix-org/dendrite gitbub]\n- Matrix-appservice-node  - [https://github.com/matrix-org/matrix-appservice-node github]"
+      },
+      "date": 1492088328129
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]\n- Dendrite Go impplementation - [https://github.com/matrix-org/dendrite gitbub]\n- Matrix-appservice-node  - [https://github.com/matrix-org/matrix-appservice-node github]\n- Matrix Recorder - [https://gitlab.com/argit/matrix-recorder gitlab]"
+      },
+      "date": 1492090139274
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org",
+      "date": 1521033851531
+    },
+    {
+      "type": "edit",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "markdown",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [[Fedwiki Chat Client]] \n- matrix-js-sdk - [https://github.com/matrix-org/matrix-js-sdk github]\n- [[Matrix API]]"
+      },
+      "date": 1521033873221
+    },
+    {
+      "type": "edit",
+      "id": "2f8fed5de4292cc1",
+      "item": {
+        "type": "markdown",
+        "id": "2f8fed5de4292cc1",
+        "text": "- [[Fedwiki Chat Client]] \n- matrix-js-sdk - [https://github.com/matrix-org/matrix-js-sdk github]\n"
+      },
+      "date": 1521033882038
+    },
+    {
+      "type": "edit",
+      "id": "030d42fba577360a",
+      "item": {
+        "type": "markdown",
+        "id": "030d42fba577360a",
+        "text": "# Notable links\n\n- [[Matrix API]]\n- Ecosystem of projects - [http://matrix.org/docs/projects/try-matrix-now.html matrix.org]\n- [[Matrix Authentication]]\n- Write your own client - [http://matrix.org/docs/guides/getting_involved.html#run matrix.org]\n- Presentation - [http://matrix.org/~matthew/2015-06-26%20Matrix%20Jardin%20Entropique.pdf matrix.org]\n- C++ chat library - [https://developer.pidgin.im/wiki/WhatIsLibpurple pidgin.im]\n- Dendrite Go impplementation - [https://github.com/matrix-org/dendrite gitbub]\n- Matrix-appservice-node  - [https://github.com/matrix-org/matrix-appservice-node github]\n- Matrix Recorder - [https://gitlab.com/argit/matrix-recorder gitlab]"
+      },
+      "date": 1521033886039
+    },
+    {
+      "type": "edit",
+      "id": "ba05553794be1ade",
+      "item": {
+        "type": "paragraph",
+        "id": "ba05553794be1ade",
+        "text": "Clients are typically messaging/VoIP applications or IoT devices/hubs and communicate by synchronising communication history with their \"homeserver\" using the \"Client-Server API\". See [[Matrix API]]."
+      },
+      "date": 1521033926286
+    },
+    {
+      "type": "edit",
+      "id": "3f0f1809d631463b",
+      "item": {
+        "type": "markdown",
+        "id": "3f0f1809d631463b",
+        "text": "Matrix provides the following [[Matrix API]]s:\n\n* Open Standard HTTP APIs for [[JSON]] messages.\n* Client<->Server API\n* Server<->Server API"
+      },
+      "date": 1521033965223
+    },
+    {
+      "type": "remove",
+      "id": "3f0f1809d631463b",
+      "date": 1521034030716
+    },
+    {
+      "type": "remove",
+      "id": "1f5e2d19d9695240",
+      "date": 1521034036728
+    }
+  ]
+}

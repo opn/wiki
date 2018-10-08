@@ -1,0 +1,502 @@
+{
+  "title": "HTML Table Library",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "cf1a508b7b2919f6",
+      "text": "[[revIgnitor]]s [[HTML Table Library]] which you can find in a file called Table.lc in the revIgnitor distribution."
+    },
+    {
+      "type": "paragraph",
+      "id": "7f0bd8b539b02135",
+      "text": "The Table Library provides handlers that enable you to auto-generate HTML tables from arrays or database result sets."
+    },
+    {
+      "type": "markdown",
+      "id": "2f0c9f43e6a564d3",
+      "text": "# Examples:"
+    },
+    {
+      "type": "paragraph",
+      "id": "eb8dc0847fe6f719",
+      "text": "Here is an example of a table created from a database query result. The Table library will automatically generate the headings based on the table names (or you can set your own headings using the [[rigSetTableHeading]] handler described in the handler reference below).\n"
+    },
+    {
+      "type": "code",
+      "id": "bd104e2bccefe273",
+      "text": "rigLoaderLoadLibrary \"Table\"\n\nput rigDbQuery(\"SELECT * FROM mytable\") into tQuery\nput tQuery[\"resultarray\"] into tResult\n\nput rigGenerateTable(tResult) into gData[\"testTable\"]\t"
+    },
+    {
+      "type": "paragraph",
+      "id": "2d74c4dc694f46a3",
+      "text": "Here is an example showing how you might create a table using discrete parameters:"
+    },
+    {
+      "type": "code",
+      "id": "731ee2851d6b8df1",
+      "text": "rigLoaderLoadLibrary \"Table\"\n\nrigSetTableHeading \"Name,Color,Size\"\n\nrigAddTableRow \"Fred,Blue,Small\"\nrigAddTableRow \"Mary,Red,Large\"\nrigAddTableRow \"John,Green,Medium\"\n\nput rigGenerateTable() into gData[\"testTable\"]\t\t"
+    },
+    {
+      "type": "paragraph",
+      "id": "aa1be0929d2e2d24",
+      "text": "Here is the same example, except instead of individual parameters, arrays are used:"
+    },
+    {
+      "type": "code",
+      "id": "c1e0f6540509133c",
+      "text": "rigLoaderLoadLibrary \"Table\"\n\nput \"Name\" into tHeading[1]\nput \"Color\" into tHeading[2]\nput \"Size\" into tHeading[3]\nrigSetTableHeading tHeading\n\nput \"Fred\" into tRow[1]\nput \"Blue\" into tRow[2]\nput \"Small\" into tRow[3]\nrigAddTableRow tRow\n\nput \"Mary\" into tRow[1]\nput \"Red\" into tRow[2]\nput \"Large\" into tRow[3]\nrigAddTableRow tRow\n\nput \"John\" into tRow[1]\nput \"Green\" into tRow[2]\nput \"Medium\" into tRow[3]\nrigAddTableRow tRow\n\nput rigGenerateTable() into gData[\"testTable\"]\t\t"
+    },
+    {
+      "type": "markdown",
+      "id": "2b2dd54b0cc00b43",
+      "text": "# Changing the Look of Your Table"
+    },
+    {
+      "type": "paragraph",
+      "id": "a7f7785f845e6945",
+      "text": "The Table Library permits you to set a table template with which you can specify the design of your layout. Here is the template prototype:"
+    },
+    {
+      "type": "code",
+      "id": "ec94dd6f99936e62",
+      "text": "put \"<table border=\" & quote & \"0\" & quote && \"cellpadding=\" & quote & \"4\" & quote && \"cellspacing=\" & quote & \"0\" & quote & \">\" into tTmpl[\"tableOpen\"]\n\nput \"<tr>\" into tTmpl[\"headingRowStart\"]\nput \"</tr>\" into tTmpl[\"headingRowEnd\"]\nput \"<th>\" into tTmpl[\"headingCellStart\"]\nput \"</th>\" into tTmpl[\"headingCellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowStart\"]\nput \"</tr>\" into tTmpl[\"rowEnd\"]\nput \"<td>\" into tTmpl[\"cellStart\"]\nput \"</td>\" into tTmpl[\"cellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowAltStart\"]\nput \"</tr>\" into tTmpl[\"rowAltEnd\"]\nput \"<td>\" into tTmpl[\"cellAltStart\"]\nput \"</td>\" into tTmpl[\"cellAltEnd\"]\n\nput \"</table>\" into tTmpl[\"tableClose\"]\n\nrigSetTableTemplate tTmpl"
+    },
+    {
+      "type": "html",
+      "id": "0158a26dd5b56123",
+      "text": "<blockquote><b>Note:</b>  You'll notice there are two sets of \"row\" blocks in the template. These permit you to create alternating row colors or design elements that alternate with each iteration of the row data.</blockquote>"
+    },
+    {
+      "type": "paragraph",
+      "id": "5d04b4e5576cd8cb",
+      "text": "You are NOT required to submit a complete template. If you only need to change parts of the layout you can simply submit those elements. In this example, only the table opening tag is being changed:\n"
+    },
+    {
+      "type": "code",
+      "id": "e64ac08457d8a2d3",
+      "text": "put \"<table border=\" & quote & \"1\" & quote && \"cellpadding=\" & quote & \"2\" & quote && \"cellspacing=\" & quote & \"1\" & quote && \"class=\" & quote & \"mytable\" & quote & \">\" into tTmpl[\"tableOpen\"]\n\nrigSetTableTemplate tTmpl"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "HTML Table Library",
+        "story": []
+      },
+      "date": 1458059090563
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cf1a508b7b2919f6"
+      },
+      "id": "cf1a508b7b2919f6",
+      "type": "add",
+      "date": 1458059091943
+    },
+    {
+      "type": "edit",
+      "id": "cf1a508b7b2919f6",
+      "item": {
+        "type": "paragraph",
+        "id": "cf1a508b7b2919f6",
+        "text": "The Table Library provides handlers that enable you to auto-generate HTML tables from arrays or database result sets."
+      },
+      "date": 1458059100349
+    },
+    {
+      "type": "edit",
+      "id": "cf1a508b7b2919f6",
+      "item": {
+        "type": "paragraph",
+        "id": "cf1a508b7b2919f6",
+        "text": "[[revIgnitor]]s [[HTML Table Library]] which you can find in a file called Table.lc in the revIgnitor distribution."
+      },
+      "date": 1458059119872
+    },
+    {
+      "type": "add",
+      "id": "7f0bd8b539b02135",
+      "item": {
+        "type": "paragraph",
+        "id": "7f0bd8b539b02135",
+        "text": "The Table Library provides handlers that enable you to auto-generate HTML tables from arrays or database result sets."
+      },
+      "after": "cf1a508b7b2919f6",
+      "date": 1458059124575
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8777d816fff554f3"
+      },
+      "id": "8777d816fff554f3",
+      "type": "add",
+      "after": "7f0bd8b539b02135",
+      "date": 1458059216650
+    },
+    {
+      "type": "edit",
+      "id": "8777d816fff554f3",
+      "item": {
+        "type": "paragraph",
+        "id": "8777d816fff554f3",
+        "text": "Here is an example showing how you can create a table from a multi-dimensional array. Note that the first array index will become the table heading (or you can set your own headings using the [[rigSetTableHeading]] handler described in the handler reference below).\n"
+      },
+      "date": 1458059228979
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d5447c5fa2ae282a"
+      },
+      "id": "d5447c5fa2ae282a",
+      "type": "add",
+      "after": "8777d816fff554f3",
+      "date": 1458059232161
+    },
+    {
+      "type": "edit",
+      "id": "d5447c5fa2ae282a",
+      "item": {
+        "type": "code",
+        "id": "d5447c5fa2ae282a",
+        "text": "rigLoaderLoadLibrary \"Table\"\n\nput \"Name\" into tData[1][1]\nput \"Color\" into tData[1][2]\nput \"Size\" into tData[1][3]\n\nput \"Fred\" into tData[2][1]\nput \"Blue\" into tData[2][2]\nput \"Small\" into tData[2][3]\n\nput \"Mary\" into tData[3][1]\nput \"Red\" into tData[3][2]\nput \"Large\" into tData[3][3]\n\nput \"John\" into tData[4][1]\nput \"Green\" into tData[4][2]\nput \"Medium\" into tData[4][3]\n\nput rigGenerateTable(tData) into gData[\"testTable\"]\t\t"
+      },
+      "date": 1458059244006
+    },
+    {
+      "type": "add",
+      "id": "2f0c9f43e6a564d3",
+      "item": {
+        "type": "paragraph",
+        "id": "2f0c9f43e6a564d3",
+        "text": "# Examples:\n"
+      },
+      "after": "7f0bd8b539b02135",
+      "date": 1458059274628
+    },
+    {
+      "type": "edit",
+      "id": "2f0c9f43e6a564d3",
+      "item": {
+        "type": "markdown",
+        "id": "2f0c9f43e6a564d3",
+        "text": "# Examples:\n"
+      },
+      "date": 1458059276361
+    },
+    {
+      "type": "edit",
+      "id": "2f0c9f43e6a564d3",
+      "item": {
+        "type": "markdown",
+        "id": "2f0c9f43e6a564d3",
+        "text": "# Examples:"
+      },
+      "date": 1458059286622
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eb8dc0847fe6f719"
+      },
+      "id": "eb8dc0847fe6f719",
+      "type": "add",
+      "after": "d5447c5fa2ae282a",
+      "date": 1458059298589
+    },
+    {
+      "type": "edit",
+      "id": "eb8dc0847fe6f719",
+      "item": {
+        "type": "paragraph",
+        "id": "eb8dc0847fe6f719",
+        "text": "Here is an example of a table created from a database query result. The Table library will automatically generate the headings based on the table names (or you can set your own headings using the [[rigSetTableHeading]] handler described in the handler reference below).\n"
+      },
+      "date": 1458059312535
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bd104e2bccefe273"
+      },
+      "id": "bd104e2bccefe273",
+      "type": "add",
+      "after": "eb8dc0847fe6f719",
+      "date": 1458059640642
+    },
+    {
+      "type": "edit",
+      "id": "bd104e2bccefe273",
+      "item": {
+        "type": "code",
+        "id": "bd104e2bccefe273",
+        "text": "rigLoaderLoadLibrary \"Table\"\n\nput rigDbQuery(\"SELECT * FROM mytable\") into tQuery\nput tQuery[\"resultarray\"] into tResult\n\nput rigGenerateTable(tResult) into gData[\"testTable\"]\t"
+      },
+      "date": 1458059644631
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2d74c4dc694f46a3"
+      },
+      "id": "2d74c4dc694f46a3",
+      "type": "add",
+      "after": "bd104e2bccefe273",
+      "date": 1458059657901
+    },
+    {
+      "type": "edit",
+      "id": "2d74c4dc694f46a3",
+      "item": {
+        "type": "paragraph",
+        "id": "2d74c4dc694f46a3",
+        "text": "Here is an example showing how you might create a table using discrete parameters:"
+      },
+      "date": 1458059662332
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "731ee2851d6b8df1"
+      },
+      "id": "731ee2851d6b8df1",
+      "type": "add",
+      "after": "2d74c4dc694f46a3",
+      "date": 1458059674964
+    },
+    {
+      "type": "edit",
+      "id": "731ee2851d6b8df1",
+      "item": {
+        "type": "code",
+        "id": "731ee2851d6b8df1",
+        "text": "rigLoaderLoadLibrary \"Table\"\n\nrigSetTableHeading \"Name,Color,Size\"\n\nrigAddTableRow \"Fred,Blue,Small\"\nrigAddTableRow \"Mary,Red,Large\"\nrigAddTableRow \"John,Green,Medium\"\n\nput rigGenerateTable() into gData[\"testTable\"]\t\t"
+      },
+      "date": 1458059678711
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "aa1be0929d2e2d24"
+      },
+      "id": "aa1be0929d2e2d24",
+      "type": "add",
+      "after": "731ee2851d6b8df1",
+      "date": 1458059713254
+    },
+    {
+      "type": "edit",
+      "id": "aa1be0929d2e2d24",
+      "item": {
+        "type": "paragraph",
+        "id": "aa1be0929d2e2d24",
+        "text": "Here is the same example, except instead of individual parameters, arrays are used:"
+      },
+      "date": 1458059717365
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c1e0f6540509133c"
+      },
+      "id": "c1e0f6540509133c",
+      "type": "add",
+      "after": "aa1be0929d2e2d24",
+      "date": 1458059730988
+    },
+    {
+      "type": "edit",
+      "id": "c1e0f6540509133c",
+      "item": {
+        "type": "code",
+        "id": "c1e0f6540509133c",
+        "text": "rigLoaderLoadLibrary \"Table\"\n\nput \"Name\" into tHeading[1]\nput \"Color\" into tHeading[2]\nput \"Size\" into tHeading[3]\nrigSetTableHeading tHeading\n\nput \"Fred\" into tRow[1]\nput \"Blue\" into tRow[2]\nput \"Small\" into tRow[3]\nrigAddTableRow tRow\n\nput \"Mary\" into tRow[1]\nput \"Red\" into tRow[2]\nput \"Large\" into tRow[3]\nrigAddTableRow tRow\n\nput \"John\" into tRow[1]\nput \"Green\" into tRow[2]\nput \"Medium\" into tRow[3]\nrigAddTableRow tRow\n\nput rigGenerateTable() into gData[\"testTable\"]\t\t"
+      },
+      "date": 1458059734688
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2b2dd54b0cc00b43"
+      },
+      "id": "2b2dd54b0cc00b43",
+      "type": "add",
+      "after": "c1e0f6540509133c",
+      "date": 1458059767694
+    },
+    {
+      "type": "edit",
+      "id": "2b2dd54b0cc00b43",
+      "item": {
+        "type": "markdown",
+        "id": "2b2dd54b0cc00b43",
+        "text": "# Changing the Look of Your Table"
+      },
+      "date": 1458059776425
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a7f7785f845e6945"
+      },
+      "id": "a7f7785f845e6945",
+      "type": "add",
+      "after": "2b2dd54b0cc00b43",
+      "date": 1458059778012
+    },
+    {
+      "type": "edit",
+      "id": "a7f7785f845e6945",
+      "item": {
+        "type": "paragraph",
+        "id": "a7f7785f845e6945",
+        "text": "The Table Library permits you to set a table template with which you can specify the design of your layout. Here is the template prototype:"
+      },
+      "date": 1458059790473
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ec94dd6f99936e62"
+      },
+      "id": "ec94dd6f99936e62",
+      "type": "add",
+      "after": "a7f7785f845e6945",
+      "date": 1458059792362
+    },
+    {
+      "type": "edit",
+      "id": "ec94dd6f99936e62",
+      "item": {
+        "type": "code",
+        "id": "ec94dd6f99936e62",
+        "text": "put \"<table border=\" & quote & \"0\" & quote && \"cellpadding=\" & quote & \"4\" & quote && \"cellspacing=\" & quote & \"0\" & quote & \">\" into tTmpl[\"tableOpen\"]\nput \"<tr>\" into tTmpl[\"headingRowStart\"]\nput \"</tr>\" into tTmpl[\"headingRowEnd\"]\nput \"<th>\" into tTmpl[\"headingCellStart\"]\nput \"</th>\" into tTmpl[\"headingCellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowStart\"]\nput \"</tr>\" into tTmpl[\"rowEnd\"]\nput \"<td>\" into tTmpl[\"cellStart\"]\nput \"</td>\" into tTmpl[\"cellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowAltStart\"]\nput \"</tr>\" into tTmpl[\"rowAltEnd\"]\nput \"<td>\" into tTmpl[\"cellAltStart\"]\nput \"</td>\" into tTmpl[\"cellAltEnd\"]\n\nput \"</table>\" into tTmpl[\"tableClose\"]"
+      },
+      "date": 1458059822182
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0158a26dd5b56123"
+      },
+      "id": "0158a26dd5b56123",
+      "type": "add",
+      "after": "ec94dd6f99936e62",
+      "date": 1458059824675
+    },
+    {
+      "type": "edit",
+      "id": "0158a26dd5b56123",
+      "item": {
+        "type": "paragraph",
+        "id": "0158a26dd5b56123",
+        "text": "\n\nrigSetTableTemplate tTmpl\nNote:  You'll notice there are two sets of \"row\" blocks in the template. These permit you to create alternating row colors or design elements that alternate with each iteration of the row data."
+      },
+      "date": 1458059829002
+    },
+    {
+      "type": "add",
+      "id": "5d04b4e5576cd8cb",
+      "item": {
+        "type": "paragraph",
+        "id": "5d04b4e5576cd8cb",
+        "text": "You are NOT required to submit a complete template. If you only need to change parts of the layout you can simply submit those elements. In this example, only the table opening tag is being changed:\n"
+      },
+      "after": "0158a26dd5b56123",
+      "date": 1458059835315
+    },
+    {
+      "type": "edit",
+      "id": "0158a26dd5b56123",
+      "item": {
+        "type": "paragraph",
+        "id": "0158a26dd5b56123",
+        "text": "Note:  You'll notice there are two sets of \"row\" blocks in the template. These permit you to create alternating row colors or design elements that alternate with each iteration of the row data."
+      },
+      "date": 1458059864283
+    },
+    {
+      "type": "edit",
+      "id": "ec94dd6f99936e62",
+      "item": {
+        "type": "code",
+        "id": "ec94dd6f99936e62",
+        "text": "put \"<table border=\" & quote & \"0\" & quote && \"cellpadding=\" & quote & \"4\" & quote && \"cellspacing=\" & quote & \"0\" & quote & \">\" into tTmpl[\"tableOpen\"]\nput \"<tr>\" into tTmpl[\"headingRowStart\"]\nput \"</tr>\" into tTmpl[\"headingRowEnd\"]\nput \"<th>\" into tTmpl[\"headingCellStart\"]\nput \"</th>\" into tTmpl[\"headingCellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowStart\"]\nput \"</tr>\" into tTmpl[\"rowEnd\"]\nput \"<td>\" into tTmpl[\"cellStart\"]\nput \"</td>\" into tTmpl[\"cellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowAltStart\"]\nput \"</tr>\" into tTmpl[\"rowAltEnd\"]\nput \"<td>\" into tTmpl[\"cellAltStart\"]\nput \"</td>\" into tTmpl[\"cellAltEnd\"]\n\nput \"</table>\" into tTmpl[\"tableClose\"]\n\nrigSetTableTemplate tTmpl"
+      },
+      "date": 1458059873226
+    },
+    {
+      "type": "edit",
+      "id": "ec94dd6f99936e62",
+      "item": {
+        "type": "code",
+        "id": "ec94dd6f99936e62",
+        "text": "put \"<table border=\" & quote & \"0\" & quote && \"cellpadding=\" & quote & \"4\" & quote && \"cellspacing=\" & quote & \"0\" & quote & \">\" into tTmpl[\"tableOpen\"]\n\nput \"<tr>\" into tTmpl[\"headingRowStart\"]\nput \"</tr>\" into tTmpl[\"headingRowEnd\"]\nput \"<th>\" into tTmpl[\"headingCellStart\"]\nput \"</th>\" into tTmpl[\"headingCellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowStart\"]\nput \"</tr>\" into tTmpl[\"rowEnd\"]\nput \"<td>\" into tTmpl[\"cellStart\"]\nput \"</td>\" into tTmpl[\"cellEnd\"]\n\nput \"<tr>\" into tTmpl[\"rowAltStart\"]\nput \"</tr>\" into tTmpl[\"rowAltEnd\"]\nput \"<td>\" into tTmpl[\"cellAltStart\"]\nput \"</td>\" into tTmpl[\"cellAltEnd\"]\n\nput \"</table>\" into tTmpl[\"tableClose\"]\n\nrigSetTableTemplate tTmpl"
+      },
+      "date": 1458059910072
+    },
+    {
+      "type": "edit",
+      "id": "0158a26dd5b56123",
+      "item": {
+        "type": "paragraph",
+        "id": "0158a26dd5b56123",
+        "text": "<blockquote><b>Note:<b>  You'll notice there are two sets of \"row\" blocks in the template. These permit you to create alternating row colors or design elements that alternate with each iteration of the row data.</blockquote>"
+      },
+      "date": 1458059942911
+    },
+    {
+      "type": "edit",
+      "id": "0158a26dd5b56123",
+      "item": {
+        "type": "html",
+        "id": "0158a26dd5b56123",
+        "text": "<blockquote><b>Note:<b>  You'll notice there are two sets of \"row\" blocks in the template. These permit you to create alternating row colors or design elements that alternate with each iteration of the row data.</blockquote>"
+      },
+      "date": 1458059944049
+    },
+    {
+      "type": "edit",
+      "id": "0158a26dd5b56123",
+      "item": {
+        "type": "html",
+        "id": "0158a26dd5b56123",
+        "text": "<blockquote><b>Note:</b>  You'll notice there are two sets of \"row\" blocks in the template. These permit you to create alternating row colors or design elements that alternate with each iteration of the row data.</blockquote>"
+      },
+      "date": 1458059949168
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e64ac08457d8a2d3"
+      },
+      "id": "e64ac08457d8a2d3",
+      "type": "add",
+      "after": "5d04b4e5576cd8cb",
+      "date": 1458059996736
+    },
+    {
+      "type": "edit",
+      "id": "e64ac08457d8a2d3",
+      "item": {
+        "type": "code",
+        "id": "e64ac08457d8a2d3",
+        "text": "put \"<table border=\" & quote & \"1\" & quote && \"cellpadding=\" & quote & \"2\" & quote && \"cellspacing=\" & quote & \"1\" & quote && \"class=\" & quote & \"mytable\" & quote & \">\" into tTmpl[\"tableOpen\"]\n\nrigSetTableTemplate tTmpl"
+      },
+      "date": 1458060000803
+    },
+    {
+      "type": "remove",
+      "id": "d5447c5fa2ae282a",
+      "date": 1458060784797
+    },
+    {
+      "type": "remove",
+      "id": "8777d816fff554f3",
+      "date": 1458060789918
+    }
+  ]
+}

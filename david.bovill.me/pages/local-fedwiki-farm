@@ -1,0 +1,752 @@
+{
+  "title": "Local Fedwiki Farm",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "acd9947609bfaa95",
+      "text": "Serving a local [[Fedwiki Farm]] on OSX involves the following steps:"
+    },
+    {
+      "type": "html",
+      "id": "0320e828afb7addb",
+      "text": "<UL>\n<LI>  Create Wiki Network\n<LI>  Start local wiki farm\n<LI>  Configure [[Bonjour]] to serve local domains\n</UL>"
+    },
+    {
+      "type": "paragraph",
+      "id": "443b3d37470cb288",
+      "text": "There seem to be roughly three ways to configure / hack the DNS on the LAN in order that different \"local domains\" point to the same IP address on the LAN - therefore allowing wiki-in-farm-mode to serve different sites:"
+    },
+    {
+      "type": "html",
+      "id": "115ca7ba4bf98429",
+      "text": "<H3>Use Bonjour and dns-sd"
+    },
+    {
+      "type": "html",
+      "id": "ce69d685af0858a9",
+      "text": "<UL>\n<LI>  Use Bonjour and [[dns-sd]]\n<LI>  Manipulate a DNS Server you control\n<LI>  Run your own DHCP / DNS Server locally\n</UL>"
+    },
+    {
+      "type": "paragraph",
+      "id": "56d48c904472e9c7",
+      "text": "The following command registers a locally running Fedwiki site (being served on the default 3000 port):"
+    },
+    {
+      "type": "code",
+      "id": "6b49d92863dcaa72",
+      "text": "dns-sd -P Fedwiki _http._tcp local 3000 fedwiki.local david.local path=/"
+    },
+    {
+      "type": "paragraph",
+      "id": "88c99a06836374ee",
+      "text": "in a way in which it can be reached using a local browser by:"
+    },
+    {
+      "type": "code",
+      "id": "04505f09da9d3c88",
+      "text": "http://fedwiki.local:3000/view/welcome-visitors"
+    },
+    {
+      "type": "paragraph",
+      "id": "5380bc2774ea43bc",
+      "text": "or stangely:"
+    },
+    {
+      "type": "code",
+      "id": "7c88e4a103e8334b",
+      "text": "http://fedwiki.local.:3000/view/welcome-visitors"
+    },
+    {
+      "type": "paragraph",
+      "id": "b6bc64fc81bd53b4",
+      "text": "You can use [[dns-sd]] to point a local domain to a url togetehr with a path, and this path can be used by Fedwiki to lay out a long [[Lineup]] of pages when the network user goes to their local home domain."
+    },
+    {
+      "type": "code",
+      "id": "f6176c974447fdd6",
+      "text": "dns-sd -P Viral _http._tcp local 3000 viral.local david.local path=/view/welcome-visitors/david.bovill.me/david-bovill/google.local:3000/google/plonker.local:3000/plonkers/view/local-hosting\nRegistering Service Viral._http._tcp.local host viral.local port 3000 TXT path=/view/welcome-visitors/david.bovill.me/david-bovill/google.local:3000/google/plonker.local:3000/plonkers/view/local-hosting\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "84ede38af8b6bf86",
+      "text": "The issue here is then how to automatically create a lot of Bonjour records using [[dnd-sd]], given that the tool is supposed to be used mainly in interactive mode."
+    },
+    {
+      "type": "html",
+      "id": "1c7470288875509e",
+      "text": "<H3>Manipulate a DNS Server you control"
+    },
+    {
+      "type": "paragraph",
+      "id": "22f944a35b6e5246",
+      "text": "Dynadot or DigitalOcean name servers can be controlled via an [[REST API]]. It is therefore possible to dynamically control DNS settings, and this is the basis for altering the services revealed by [[Zeroconf]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "f006459ed84f5602",
+      "text": "The technique essentially involves setting 3-5 records on your DNS Server and then telling the computers on the LAN to use your DNS Server rather than the ISP's DNS Server. You can find details of how to do this here - [http://dns-sd.org/ServerStaticSetup.html dns-sd.org]"
+    },
+    {
+      "type": "html",
+      "id": "c8d8e9188e4a66d8",
+      "text": "<H3>Run your own DHCP / DNS Server locally"
+    },
+    {
+      "type": "paragraph",
+      "id": "c6c260bea8f95379",
+      "text": "The sofware you can use to run your own local DHCP / DNS server is [[dnsmasq]]. It can be installed using brew, looks pretty powerful, but a tad hard to get your head around / configure. I'm not completely clear it plays properly with Yosemite and above - [http://www.thekelleys.org.uk/dnsmasq/doc.html thekelleys.org.uk]"
+    },
+    {
+      "type": "paragraph",
+      "id": "8acd42ce8936aa3a",
+      "text": "There is a useful description of how to use [[dnsmasq]] on OSX over at - [http://passingcuriosity.com/2013/dnsmasq-dev-osx/ passingcuriosity.com]"
+    },
+    {
+      "type": "html",
+      "id": "9fcabf7c48ec757b",
+      "text": "DNSmasq provides two services, either of which can be used independently - [https://help.ubuntu.com/community/Dnsmasq ubuntu.com]\n<UL>\n<LI>    DNS service\n<LI>    DHCP service (including features relating to network boot) \n</UL>"
+    },
+    {
+      "type": "paragraph",
+      "id": "51fdf2cf39dfbfda",
+      "text": "A local DNS cache can speed up internet browsing because the user's browser will not need to access a domain name server when it looks up a domain name the computer has visited before.\n\nDHCP allows the user's computer to allocate network addresses to other computers on the wired or wireless network. A computer needs a unique network address in order to do access the internet.\n\nDNSmasq is not designed for so-called \"Internet Connection Sharing,\" however, it does provide a lot of the services needed in the background. With DNSmasq set up, only two additional commands can set up internet connection sharing.\n\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Local Fedwiki Farm",
+        "story": []
+      },
+      "date": 1436741952542
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "acd9947609bfaa95"
+      },
+      "id": "acd9947609bfaa95",
+      "type": "add",
+      "date": 1436741954262
+    },
+    {
+      "type": "edit",
+      "id": "acd9947609bfaa95",
+      "item": {
+        "type": "paragraph",
+        "id": "acd9947609bfaa95",
+        "text": "Serving a local [[Fedwiki Farm]] on OSX involves teh following steps:"
+      },
+      "date": 1436741996272
+    },
+    {
+      "type": "add",
+      "id": "0320e828afb7addb",
+      "item": {
+        "type": "paragraph",
+        "id": "0320e828afb7addb",
+        "text": "<UL><LI>Create Wiki Network"
+      },
+      "after": "acd9947609bfaa95",
+      "date": 1436742039210
+    },
+    {
+      "type": "edit",
+      "id": "0320e828afb7addb",
+      "item": {
+        "type": "html",
+        "id": "0320e828afb7addb",
+        "text": "<UL><LI>Create Wiki Network"
+      },
+      "date": 1436742040138
+    },
+    {
+      "type": "edit",
+      "id": "0320e828afb7addb",
+      "item": {
+        "type": "html",
+        "id": "0320e828afb7addb",
+        "text": "<UL>\n<LI>  Create Wiki Network\n<LI>  Start local wiki farm\n<LI>  Configure [[Bonjour]] to serve local domains\n</UL>"
+      },
+      "date": 1436742103886
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f6176c974447fdd6"
+      },
+      "id": "f6176c974447fdd6",
+      "type": "add",
+      "after": "0320e828afb7addb",
+      "date": 1436742107779
+    },
+    {
+      "type": "edit",
+      "id": "f6176c974447fdd6",
+      "item": {
+        "type": "code",
+        "id": "f6176c974447fdd6",
+        "text": "dns-sd -P Viral _http._tcp local 3000 viral.local david.local path=/view/welcome-visitors/david.bovill.me/david-bovill/google.local:3000/google/plonker.local:3000/plonkers/view/local-hosting\nRegistering Service Viral._http._tcp.local host viral.local port 3000 TXT path=/view/welcome-visitors/david.bovill.me/david-bovill/google.local:3000/google/plonker.local:3000/plonkers/view/local-hosting\n"
+      },
+      "date": 1436742114791
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5380bc2774ea43bc"
+      },
+      "id": "5380bc2774ea43bc",
+      "type": "add",
+      "after": "f6176c974447fdd6",
+      "date": 1436742117006
+    },
+    {
+      "type": "edit",
+      "id": "5380bc2774ea43bc",
+      "item": {
+        "type": "paragraph",
+        "id": "5380bc2774ea43bc",
+        "text": "You can use [[dns-sd]] to point a local domain to a url togetehr with a path, and this path can be used by Fedwiki to lay out a long [[Lineup]] of pages when the network user goes to their local home domain."
+      },
+      "date": 1436742218007
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "443b3d37470cb288",
+        "text": "The following command registers a locally running Fedwiki site (being served on the default 3000 port):"
+      },
+      "after": "0320e828afb7addb",
+      "id": "443b3d37470cb288",
+      "date": 1436742254067
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "6b49d92863dcaa72",
+        "text": "dns-sd -P Fedwiki _http._tcp local 3000 google.local david.local path=/"
+      },
+      "after": "443b3d37470cb288",
+      "id": "6b49d92863dcaa72",
+      "date": 1436742258733
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "88c99a06836374ee",
+        "text": "in a way in which it can be reached using a local browser by:"
+      },
+      "after": "6b49d92863dcaa72",
+      "id": "88c99a06836374ee",
+      "date": 1436742270000
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "04505f09da9d3c88",
+        "text": "http://google.local.:3000/view/welcome-visitors"
+      },
+      "after": "88c99a06836374ee",
+      "id": "04505f09da9d3c88",
+      "date": 1436742274242
+    },
+    {
+      "type": "move",
+      "order": [
+        "acd9947609bfaa95",
+        "0320e828afb7addb",
+        "443b3d37470cb288",
+        "6b49d92863dcaa72",
+        "88c99a06836374ee",
+        "04505f09da9d3c88",
+        "5380bc2774ea43bc",
+        "f6176c974447fdd6"
+      ],
+      "id": "5380bc2774ea43bc",
+      "date": 1436742304968
+    },
+    {
+      "type": "edit",
+      "id": "04505f09da9d3c88",
+      "item": {
+        "type": "code",
+        "id": "04505f09da9d3c88",
+        "text": "http://fedwiki.local.:3000/view/welcome-visitors"
+      },
+      "date": 1436742337688
+    },
+    {
+      "type": "edit",
+      "id": "6b49d92863dcaa72",
+      "item": {
+        "type": "code",
+        "id": "6b49d92863dcaa72",
+        "text": "dns-sd -P Fedwiki _http._tcp local 3000 fedwiki.local david.local path=/"
+      },
+      "date": 1436742340038
+    },
+    {
+      "type": "edit",
+      "id": "acd9947609bfaa95",
+      "item": {
+        "type": "paragraph",
+        "id": "acd9947609bfaa95",
+        "text": "Serving a local [[Fedwiki Farm]] on OSX involves the following steps:"
+      },
+      "date": 1436766884599
+    },
+    {
+      "type": "edit",
+      "id": "443b3d37470cb288",
+      "item": {
+        "type": "paragraph",
+        "id": "443b3d37470cb288",
+        "text": "There seem to be roughly three ways to configure / hack the DNS on the LAN in order that different \"local domains\" point to the smae IP address on the LAN - therefore allowing wiki in farm mode to serve different sites."
+      },
+      "date": 1436766976347
+    },
+    {
+      "type": "add",
+      "id": "115ca7ba4bf98429",
+      "item": {
+        "type": "paragraph",
+        "id": "115ca7ba4bf98429",
+        "text": "The following command registers a locally running Fedwiki site (being served on the default 3000 port):"
+      },
+      "after": "443b3d37470cb288",
+      "date": 1436766978716
+    },
+    {
+      "type": "edit",
+      "id": "443b3d37470cb288",
+      "item": {
+        "type": "paragraph",
+        "id": "443b3d37470cb288",
+        "text": "There seem to be roughly three ways to configure / hack the DNS on the LAN in order that different \"local domains\" point to the smae IP address on the LAN - therefore allowing wiki-in-farm-mode to serve different sites."
+      },
+      "date": 1436766994048
+    },
+    {
+      "type": "edit",
+      "id": "443b3d37470cb288",
+      "item": {
+        "type": "paragraph",
+        "id": "443b3d37470cb288",
+        "text": "There seem to be roughly three ways to configure / hack the DNS on the LAN in order that different \"local domains\" point to the smae IP address on the LAN - therefore allowing wiki-in-farm-mode to serve different sites:"
+      },
+      "date": 1436767004628
+    },
+    {
+      "type": "add",
+      "id": "ce69d685af0858a9",
+      "item": {
+        "type": "paragraph",
+        "id": "ce69d685af0858a9",
+        "text": "<UL><LI>Use Bonjour and [[dns-sd]]<LI>Use DNS records on a DNS Server you control<LI>Run your own DHCP / DNS Server locally</UL>"
+      },
+      "after": "443b3d37470cb288",
+      "date": 1436767089559
+    },
+    {
+      "type": "edit",
+      "id": "ce69d685af0858a9",
+      "item": {
+        "type": "html",
+        "id": "ce69d685af0858a9",
+        "text": "<UL><LI>Use Bonjour and [[dns-sd]]<LI>Use DNS records on a DNS Server you control<LI>Run your own DHCP / DNS Server locally</UL>"
+      },
+      "date": 1436767090601
+    },
+    {
+      "type": "edit",
+      "id": "ce69d685af0858a9",
+      "item": {
+        "type": "html",
+        "id": "ce69d685af0858a9",
+        "text": "<UL>\n<LI>  Use Bonjour and [[dns-sd]]\n<LI>  Use DNS records on a DNS Server you control\n<LI>  Run your own DHCP / DNS Server locally\n</UL>"
+      },
+      "date": 1436767148738
+    },
+    {
+      "type": "edit",
+      "id": "443b3d37470cb288",
+      "item": {
+        "type": "paragraph",
+        "id": "443b3d37470cb288",
+        "text": "There seem to be roughly three ways to configure / hack the DNS on the LAN in order that different \"local domains\" point to the same IP address on the LAN - therefore allowing wiki-in-farm-mode to serve different sites:"
+      },
+      "date": 1436767157118
+    },
+    {
+      "type": "edit",
+      "id": "115ca7ba4bf98429",
+      "item": {
+        "type": "paragraph",
+        "id": "115ca7ba4bf98429",
+        "text": "<H3>Use Bonjour and [[dns-sd"
+      },
+      "date": 1436767166125
+    },
+    {
+      "type": "add",
+      "id": "56d48c904472e9c7",
+      "item": {
+        "type": "paragraph",
+        "id": "56d48c904472e9c7",
+        "text": "The following command registers a locally running Fedwiki site (being served on the default 3000 port):"
+      },
+      "after": "115ca7ba4bf98429",
+      "date": 1436767167714
+    },
+    {
+      "type": "edit",
+      "id": "115ca7ba4bf98429",
+      "item": {
+        "type": "paragraph",
+        "id": "115ca7ba4bf98429",
+        "text": "<H3>Use Bonjour and dns-sd"
+      },
+      "date": 1436767172375
+    },
+    {
+      "type": "edit",
+      "id": "115ca7ba4bf98429",
+      "item": {
+        "type": "html",
+        "id": "115ca7ba4bf98429",
+        "text": "<H3>Use Bonjour and dns-sd"
+      },
+      "date": 1436767173440
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "84ede38af8b6bf86"
+      },
+      "id": "84ede38af8b6bf86",
+      "type": "add",
+      "after": "f6176c974447fdd6",
+      "date": 1436767186292
+    },
+    {
+      "type": "edit",
+      "id": "84ede38af8b6bf86",
+      "item": {
+        "type": "paragraph",
+        "id": "84ede38af8b6bf86",
+        "text": "The issue here is then how to automatically create a lot of Bonjour records using [[dnd-sd]], given that the tool is supposed to be used mainly in interactive mode."
+      },
+      "date": 1436767262337
+    },
+    {
+      "type": "add",
+      "id": "1c7470288875509e",
+      "item": {
+        "type": "paragraph",
+        "id": "1c7470288875509e",
+        "text": "Use Bonjour and [[dns-sd"
+      },
+      "after": "84ede38af8b6bf86",
+      "date": 1436767269092
+    },
+    {
+      "type": "edit",
+      "id": "ce69d685af0858a9",
+      "item": {
+        "type": "html",
+        "id": "ce69d685af0858a9",
+        "text": "<UL>\n<LI>  Use Bonjour and [[dns-sd]]\n<LI>  Manipulate a DNS Server you control\n<LI>  Run your own DHCP / DNS Server locally\n</UL>"
+      },
+      "date": 1436767294562
+    },
+    {
+      "type": "edit",
+      "id": "1c7470288875509e",
+      "item": {
+        "type": "paragraph",
+        "id": "1c7470288875509e",
+        "text": "<H3>Manipulate a DNS Server you control"
+      },
+      "date": 1436767301970
+    },
+    {
+      "type": "edit",
+      "id": "1c7470288875509e",
+      "item": {
+        "type": "html",
+        "id": "1c7470288875509e",
+        "text": "<H3>Manipulate a DNS Server you control"
+      },
+      "date": 1436767303995
+    },
+    {
+      "type": "add",
+      "id": "22f944a35b6e5246",
+      "item": {
+        "type": "paragraph",
+        "id": "22f944a35b6e5246",
+        "text": "fdas"
+      },
+      "after": "1c7470288875509e",
+      "date": 1436767305986
+    },
+    {
+      "type": "edit",
+      "id": "22f944a35b6e5246",
+      "item": {
+        "type": "paragraph",
+        "id": "22f944a35b6e5246",
+        "text": "Dynadot or DigitalOcean name servers can be controlled via an [[REST API]]. It is therefore possible to dynamically control DNS settings, and this is the basis for altering the services revealed by [[Zeroconf]]."
+      },
+      "date": 1436767446408
+    },
+    {
+      "type": "add",
+      "id": "f006459ed84f5602",
+      "item": {
+        "type": "paragraph",
+        "id": "f006459ed84f5602",
+        "text": "The technique essentially involves setting 3-5 records on your DNS Server and then telling the computers on the LAN to use your DNS Server rather than the ISP's DNS Server. "
+      },
+      "after": "22f944a35b6e5246",
+      "date": 1436767524581
+    },
+    {
+      "type": "add",
+      "id": "c8d8e9188e4a66d8",
+      "item": {
+        "type": "paragraph",
+        "id": "c8d8e9188e4a66d8",
+        "text": "You can do this by eithe"
+      },
+      "after": "f006459ed84f5602",
+      "date": 1436767536886
+    },
+    {
+      "type": "edit",
+      "id": "f006459ed84f5602",
+      "item": {
+        "type": "paragraph",
+        "id": "f006459ed84f5602",
+        "text": "The technique essentially involves setting 3-5 records on your DNS Server and then telling the computers on the LAN to use your DNS Server rather than the ISP's DNS Server. You can find details of how to do this here - [http://dns-sd.org/ServerStaticSetup.html dns-sd.org]"
+      },
+      "date": 1436767553861
+    },
+    {
+      "type": "move",
+      "order": [
+        "acd9947609bfaa95",
+        "0320e828afb7addb",
+        "443b3d37470cb288",
+        "115ca7ba4bf98429",
+        "ce69d685af0858a9",
+        "56d48c904472e9c7",
+        "6b49d92863dcaa72",
+        "88c99a06836374ee",
+        "04505f09da9d3c88",
+        "5380bc2774ea43bc",
+        "f6176c974447fdd6",
+        "84ede38af8b6bf86",
+        "1c7470288875509e",
+        "22f944a35b6e5246",
+        "f006459ed84f5602",
+        "c8d8e9188e4a66d8"
+      ],
+      "id": "ce69d685af0858a9",
+      "date": 1436767857747
+    },
+    {
+      "type": "edit",
+      "id": "c8d8e9188e4a66d8",
+      "item": {
+        "type": "paragraph",
+        "id": "c8d8e9188e4a66d8",
+        "text": "<H3>Run your own DHCP / DNS Server locally"
+      },
+      "date": 1436767875987
+    },
+    {
+      "type": "edit",
+      "id": "c8d8e9188e4a66d8",
+      "item": {
+        "type": "html",
+        "id": "c8d8e9188e4a66d8",
+        "text": "<H3>Run your own DHCP / DNS Server locally"
+      },
+      "date": 1436767877241
+    },
+    {
+      "type": "add",
+      "id": "c6c260bea8f95379",
+      "item": {
+        "type": "paragraph",
+        "id": "c6c260bea8f95379",
+        "text": "The sofware you can use to run your own local DHCP / DNS server is adf. It can be installed using brew, looks pretty powerful, but a tad hard to get your head around / configure. I'm not completely clear it plays properly with Yosemite and above."
+      },
+      "after": "c8d8e9188e4a66d8",
+      "date": 1436767959269
+    },
+    {
+      "type": "edit",
+      "id": "c6c260bea8f95379",
+      "item": {
+        "type": "paragraph",
+        "id": "c6c260bea8f95379",
+        "text": "The sofware you can use to run your own local DHCP / DNS server is [[dnsmasq]]. It can be installed using brew, looks pretty powerful, but a tad hard to get your head around / configure. I'm not completely clear it plays properly with Yosemite and above - [http://www.thekelleys.org.uk/dnsmasq/doc.html thekelleys.org.uk]"
+      },
+      "date": 1436768122439
+    },
+    {
+      "type": "add",
+      "id": "8acd42ce8936aa3a",
+      "item": {
+        "type": "paragraph",
+        "id": "8acd42ce8936aa3a",
+        "text": "There is a useful description of how to use [[dnsmasq]] on OSX over at - [http://passingcuriosity.com/2013/dnsmasq-dev-osx/ passingcuriosity.com]"
+      },
+      "after": "c6c260bea8f95379",
+      "date": 1436768278395
+    },
+    {
+      "type": "add",
+      "id": "9fcabf7c48ec757b",
+      "item": {
+        "type": "paragraph",
+        "id": "9fcabf7c48ec757b",
+        "text": "DNSmasq provides two services, either of which can be used independently.\n\n    DNS service\n    DHCP service (including features relating to network boot) \n\nA local DNS cache can speed up internet browsing because the user's browser will not need to access a domain name server when it looks up a domain name the computer has visited before.\n\nDHCP allows the user's computer to allocate network addresses to other computers on the wired or wireless network. A computer needs a unique network address in order to do access the internet.\n\nDNSmasq is not designed for so-called \"Internet Connection Sharing,\" however, it does provide a lot of the services needed in the background. With DNSmasq set up, only two additional commands can set up internet connection sharing (ref?).\n\n"
+      },
+      "after": "8acd42ce8936aa3a",
+      "date": 1436768345384
+    },
+    {
+      "type": "edit",
+      "id": "9fcabf7c48ec757b",
+      "item": {
+        "type": "paragraph",
+        "id": "9fcabf7c48ec757b",
+        "text": "DNSmasq provides two services, either of which can be used independently.\n<UL>\n<LI>    DNS service\n<LI>    DHCP service (including features relating to network boot) \n</UL>"
+      },
+      "date": 1436768377492
+    },
+    {
+      "type": "edit",
+      "id": "9fcabf7c48ec757b",
+      "item": {
+        "type": "html",
+        "id": "9fcabf7c48ec757b",
+        "text": "DNSmasq provides two services, either of which can be used independently.\n<UL>\n<LI>    DNS service\n<LI>    DHCP service (including features relating to network boot) \n</UL>"
+      },
+      "date": 1436768379305
+    },
+    {
+      "type": "add",
+      "id": "51fdf2cf39dfbfda",
+      "item": {
+        "type": "paragraph",
+        "id": "51fdf2cf39dfbfda",
+        "text": "A local DNS cache can speed up internet browsing because the user's browser will not need to access a domain name server when it looks up a domain name the computer has visited before.\n\nDHCP allows the user's computer to allocate network addresses to other computers on the wired or wireless network. A computer needs a unique network address in order to do access the internet.\n\nDNSmasq is not designed for so-called \"Internet Connection Sharing,\" however, it does provide a lot of the services needed in the background. With DNSmasq set up, only two additional commands can set up internet connection sharing.\n\n"
+      },
+      "after": "9fcabf7c48ec757b",
+      "date": 1436768399914
+    },
+    {
+      "type": "edit",
+      "id": "9fcabf7c48ec757b",
+      "item": {
+        "type": "html",
+        "id": "9fcabf7c48ec757b",
+        "text": "DNSmasq provides two services, either of which can be used independently - [https://help.ubuntu.com/community/Dnsmasq ubuntu.com]\n<UL>\n<LI>    DNS service\n<LI>    DHCP service (including features relating to network boot) \n</UL>"
+      },
+      "date": 1436768418568
+    },
+    {
+      "type": "fork",
+      "site": "osx.c0de.academy"
+    },
+    {
+      "type": "edit",
+      "id": "5380bc2774ea43bc",
+      "item": {
+        "type": "paragraph",
+        "id": "5380bc2774ea43bc",
+        "text": "or stangely:"
+      },
+      "date": 1436894203288
+    },
+    {
+      "type": "add",
+      "id": "b6bc64fc81bd53b4",
+      "item": {
+        "type": "paragraph",
+        "id": "b6bc64fc81bd53b4",
+        "text": "You can use [[dns-sd]] to point a local domain to a url togetehr with a path, and this path can be used by Fedwiki to lay out a long [[Lineup]] of pages when the network user goes to their local home domain."
+      },
+      "after": "5380bc2774ea43bc",
+      "date": 1436894205602
+    },
+    {
+      "type": "edit",
+      "id": "04505f09da9d3c88",
+      "item": {
+        "type": "code",
+        "id": "04505f09da9d3c88",
+        "text": "http://fedwiki.local:3000/view/welcome-visitors"
+      },
+      "date": 1436894210607
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7c88e4a103e8334b"
+      },
+      "id": "7c88e4a103e8334b",
+      "type": "add",
+      "after": "51fdf2cf39dfbfda",
+      "date": 1436894213078
+    },
+    {
+      "type": "edit",
+      "id": "7c88e4a103e8334b",
+      "item": {
+        "type": "code",
+        "id": "7c88e4a103e8334b",
+        "text": "http://fedwiki.local.:3000/view/welcome-visitors"
+      },
+      "date": 1436894215879
+    },
+    {
+      "type": "move",
+      "order": [
+        "acd9947609bfaa95",
+        "0320e828afb7addb",
+        "443b3d37470cb288",
+        "115ca7ba4bf98429",
+        "ce69d685af0858a9",
+        "56d48c904472e9c7",
+        "6b49d92863dcaa72",
+        "88c99a06836374ee",
+        "04505f09da9d3c88",
+        "5380bc2774ea43bc",
+        "7c88e4a103e8334b",
+        "b6bc64fc81bd53b4",
+        "f6176c974447fdd6",
+        "84ede38af8b6bf86",
+        "1c7470288875509e",
+        "22f944a35b6e5246",
+        "f006459ed84f5602",
+        "c8d8e9188e4a66d8",
+        "c6c260bea8f95379",
+        "8acd42ce8936aa3a",
+        "9fcabf7c48ec757b",
+        "51fdf2cf39dfbfda"
+      ],
+      "id": "7c88e4a103e8334b",
+      "date": 1436894221747
+    }
+  ]
+}

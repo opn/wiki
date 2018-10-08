@@ -1,0 +1,1035 @@
+{
+  "title": "Apache Web Directory Owners",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "03fe572b04d51550",
+      "text": "Lets change the default directory used for storing web files as the current html directory is also owned by root and its a good practise to not use it - [http://activethought.net/setting-livecode-server/ activethought.net]"
+    },
+    {
+      "type": "code",
+      "id": "6122b2985fa9a2b0",
+      "text": "sudo mkdir /var/www/webroot"
+    },
+    {
+      "type": "paragraph",
+      "id": "1c2f1d34d523925b",
+      "text": "Assign this new directory to the apache group"
+    },
+    {
+      "type": "code",
+      "id": "d2c855f9815eb10f",
+      "text": "sudo chgrp www-data /var/www/webroot\nsudo chmod g+s /var/www/webroot"
+    },
+    {
+      "type": "paragraph",
+      "id": "07c2086adefc664d",
+      "text": "Add our SSH user that we login with to the www-data group"
+    },
+    {
+      "type": "code",
+      "id": "b9848b6c6af1b7e7",
+      "text": "sudo useradd -g www-data ssh-user-name"
+    },
+    {
+      "type": "paragraph",
+      "id": "54fe2e3ad2b2a462",
+      "text": "Now update the apache config to point to this directory"
+    },
+    {
+      "type": "code",
+      "id": "8ae70550f10aa066",
+      "text": "sudo nano /etc/apache2/sites-enabled/000-default.conf"
+    },
+    {
+      "type": "paragraph",
+      "id": "e29d087eb558f02d",
+      "text": "Add umask to /etc/apache2/envvars"
+    },
+    {
+      "type": "code",
+      "id": "bd91d4f0ddd6b6a0",
+      "text": "sudo nano /etc/apache2/envvars"
+    },
+    {
+      "type": "paragraph",
+      "id": "9e1b9b80da9161c8",
+      "text": "add “umask 002” to the end of the file. Save and quit. "
+    },
+    {
+      "type": "paragraph",
+      "id": "3dd7b9f15b6aa4d9",
+      "text": "This allows the Apache www-data user (ie cgi scripts) to read and write to files - [https://serverfault.com/questions/624866/umask-for-www-data-user-running-php-on-ubuntu serverfault.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "f26460c60885deaf",
+      "text": "Now restart Apache using:"
+    },
+    {
+      "type": "code",
+      "id": "e956083b4cde9a2f",
+      "text": "sudo service apache2 restart"
+    },
+    {
+      "type": "paragraph",
+      "id": "21f14bd4fef24949",
+      "text": "or:"
+    },
+    {
+      "type": "code",
+      "id": "541c3e0bb109fc53",
+      "text": "service apache2 stop; service apache2 start"
+    },
+    {
+      "type": "paragraph",
+      "id": "c43ccee1ed892e3c",
+      "text": "If everything goes according to plan, you should be done. You should now be able to access files on your web server. You will also be able to login to your LiveCode Server via SFTP and manage your web server files via an application like FileZilla."
+    },
+    {
+      "type": "markdown",
+      "id": "ade27a83a30c93fa",
+      "text": "# Notes on permissions"
+    },
+    {
+      "type": "paragraph",
+      "id": "b787504a9817e9db",
+      "text": "What you may want to do is to instead set the groups sticky bit (SetGID) bit on the directory your CGI is working with (see [[Apache Permissions]]):"
+    },
+    {
+      "type": "code",
+      "id": "4130e4d7d3b4ce56",
+      "text": "chgrp mygroup dir\nchmod g+s dir\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "956cd725b2e4f1f1",
+      "text": "Make sure when you do this that (user) apache is in the mygroup group (in /etc/group), so it will have permissions."
+    },
+    {
+      "type": "paragraph",
+      "id": "0862642340047301",
+      "text": "This will make it so any file created under this directory will be owned by the same group as the directory."
+    },
+    {
+      "type": "paragraph",
+      "id": "7582b75bfad96967",
+      "text": "This is a safer approach than setting a global umask for EVERY cgi script that apache may run."
+    },
+    {
+      "type": "paragraph",
+      "id": "c411c5b3f8727443",
+      "text": "(This is how [[git-http-backend]] is typically run from Apache)."
+    },
+    {
+      "type": "markdown",
+      "id": "35498636be8c30d7",
+      "text": "# See also\n\n- [[Apache Permissions]]\n- [[Home Away from Home]]\n- [[Livecode Server on DigitalOcean]]\n- [[Configure Apache for Livecode]]\n- [[Let's Encrypt Livecode]]\n- [[Serving Static Content]]\n- [[Nginx]]\n- [[Apache HTTP Server]]\n- [[Caddy]]\n- [[Revigniter]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Apache Web Directory Owners",
+        "story": []
+      },
+      "date": 1497989951939
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "03fe572b04d51550",
+        "text": "Lets change the default directory used for storing web files as the current html directory is also owned by root and its a good practise to not use it.\n\nsudo mkdir /var/www/webroot\nAssign this new directory to the apache group\n\nsudo chgrp www-data /var/www/webroot\nsudo chmod g+s /var/www/webroot\nAdd our SSH user that we login with to the www-data group\n\nsudo useradd -g www-data ssh-user-name\nNow update the apache config to point to this directory\n\nsudo nano /etc/apache2/sites-enabled/000-default.conf\nAdd umask to /etc/apache2/envvars\n\nsudo nano /etc/apache2/envvars\nadd “umask 002” to the end of the file. Save and quit.\n\nsudo service apache2 restart\nIf everything goes according to plan, you should be done. You should now be able to access files on your web server. You will also be able to login to your LiveCode Server via SFTP and manage your web server files via an application like FileZilla."
+      },
+      "id": "03fe572b04d51550",
+      "date": 1497989955042
+    },
+    {
+      "type": "edit",
+      "id": "03fe572b04d51550",
+      "item": {
+        "type": "paragraph",
+        "id": "03fe572b04d51550",
+        "text": "Lets change the default directory used for storing web files as the current html directory is also owned by root and its a good practise to not use it."
+      },
+      "date": 1497990003239
+    },
+    {
+      "type": "add",
+      "id": "4b2cef5702ae51dc",
+      "item": {
+        "type": "paragraph",
+        "id": "4b2cef5702ae51dc",
+        "text": "\nsudo mkdir /var/www/webroot"
+      },
+      "after": "03fe572b04d51550",
+      "date": 1497990006319
+    },
+    {
+      "type": "add",
+      "id": "1c2f1d34d523925b",
+      "item": {
+        "type": "paragraph",
+        "id": "1c2f1d34d523925b",
+        "text": "Assign this new directory to the apache group"
+      },
+      "after": "4b2cef5702ae51dc",
+      "date": 1497990008609
+    },
+    {
+      "type": "add",
+      "id": "02c28b09938c1ab2",
+      "item": {
+        "type": "paragraph",
+        "id": "02c28b09938c1ab2",
+        "text": "\nsudo chgrp www-data /var/www/webroot\nsudo chmod g+s /var/www/webroot"
+      },
+      "after": "1c2f1d34d523925b",
+      "date": 1497990011376
+    },
+    {
+      "type": "add",
+      "id": "07c2086adefc664d",
+      "item": {
+        "type": "paragraph",
+        "id": "07c2086adefc664d",
+        "text": "Add our SSH user that we login with to the www-data group"
+      },
+      "after": "02c28b09938c1ab2",
+      "date": 1497990013248
+    },
+    {
+      "type": "add",
+      "id": "45f17ce8bd50f231",
+      "item": {
+        "type": "paragraph",
+        "id": "45f17ce8bd50f231",
+        "text": "\nsudo useradd -g www-data ssh-user-name"
+      },
+      "after": "07c2086adefc664d",
+      "date": 1497990015336
+    },
+    {
+      "type": "add",
+      "id": "54fe2e3ad2b2a462",
+      "item": {
+        "type": "paragraph",
+        "id": "54fe2e3ad2b2a462",
+        "text": "Now update the apache config to point to this directory"
+      },
+      "after": "45f17ce8bd50f231",
+      "date": 1497990016672
+    },
+    {
+      "type": "add",
+      "id": "0059d51c2d831727",
+      "item": {
+        "type": "paragraph",
+        "id": "0059d51c2d831727",
+        "text": "\nsudo nano /etc/apache2/sites-enabled/000-default.conf"
+      },
+      "after": "54fe2e3ad2b2a462",
+      "date": 1497990019834
+    },
+    {
+      "type": "add",
+      "id": "e29d087eb558f02d",
+      "item": {
+        "type": "paragraph",
+        "id": "e29d087eb558f02d",
+        "text": "Add umask to /etc/apache2/envvars"
+      },
+      "after": "0059d51c2d831727",
+      "date": 1497990022473
+    },
+    {
+      "type": "add",
+      "id": "7ed5f09b87a87ddd",
+      "item": {
+        "type": "paragraph",
+        "id": "7ed5f09b87a87ddd",
+        "text": "\nsudo nano /etc/apache2/envvars"
+      },
+      "after": "e29d087eb558f02d",
+      "date": 1497990025025
+    },
+    {
+      "type": "add",
+      "id": "9e1b9b80da9161c8",
+      "item": {
+        "type": "paragraph",
+        "id": "9e1b9b80da9161c8",
+        "text": "add “umask 002” to the end of the file. Save and quit."
+      },
+      "after": "7ed5f09b87a87ddd",
+      "date": 1497990028865
+    },
+    {
+      "type": "add",
+      "id": "1a1952b12e64b03c",
+      "item": {
+        "type": "paragraph",
+        "id": "1a1952b12e64b03c",
+        "text": "\nsudo service apache2 restart"
+      },
+      "after": "9e1b9b80da9161c8",
+      "date": 1497990030601
+    },
+    {
+      "type": "add",
+      "id": "c43ccee1ed892e3c",
+      "item": {
+        "type": "paragraph",
+        "id": "c43ccee1ed892e3c",
+        "text": "If everything goes according to plan, you should be done. You should now be able to access files on your web server. You will also be able to login to your LiveCode Server via SFTP and manage your web server files via an application like FileZilla."
+      },
+      "after": "1a1952b12e64b03c",
+      "date": 1497990033067
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6122b2985fa9a2b0"
+      },
+      "id": "6122b2985fa9a2b0",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990034153
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "4b2cef5702ae51dc",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "02c28b09938c1ab2",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "54fe2e3ad2b2a462",
+        "0059d51c2d831727",
+        "e29d087eb558f02d",
+        "7ed5f09b87a87ddd",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "6122b2985fa9a2b0",
+      "date": 1497990036247
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d2c855f9815eb10f"
+      },
+      "id": "d2c855f9815eb10f",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990037776
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "4b2cef5702ae51dc",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "02c28b09938c1ab2",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "54fe2e3ad2b2a462",
+        "0059d51c2d831727",
+        "e29d087eb558f02d",
+        "7ed5f09b87a87ddd",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "d2c855f9815eb10f",
+      "date": 1497990043369
+    },
+    {
+      "type": "remove",
+      "id": "4b2cef5702ae51dc",
+      "date": 1497990047682
+    },
+    {
+      "type": "edit",
+      "id": "6122b2985fa9a2b0",
+      "item": {
+        "type": "code",
+        "id": "6122b2985fa9a2b0",
+        "text": "sudo mkdir /var/www/webroot"
+      },
+      "date": 1497990049493
+    },
+    {
+      "type": "remove",
+      "id": "02c28b09938c1ab2",
+      "date": 1497990053315
+    },
+    {
+      "type": "edit",
+      "id": "d2c855f9815eb10f",
+      "item": {
+        "type": "code",
+        "id": "d2c855f9815eb10f",
+        "text": "sudo chgrp www-data /var/www/webroot\nsudo chmod g+s /var/www/webroot"
+      },
+      "date": 1497990056207
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b9848b6c6af1b7e7"
+      },
+      "id": "b9848b6c6af1b7e7",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990058725
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "0059d51c2d831727",
+        "e29d087eb558f02d",
+        "7ed5f09b87a87ddd",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "b9848b6c6af1b7e7",
+      "date": 1497990060819
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "8ae70550f10aa066"
+      },
+      "id": "8ae70550f10aa066",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990062034
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "0059d51c2d831727",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "7ed5f09b87a87ddd",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "8ae70550f10aa066",
+      "date": 1497990063825
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "75f0f19069dcc8cc"
+      },
+      "id": "75f0f19069dcc8cc",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990066479
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "0059d51c2d831727",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "7ed5f09b87a87ddd",
+        "75f0f19069dcc8cc",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "75f0f19069dcc8cc",
+      "date": 1497990068537
+    },
+    {
+      "type": "remove",
+      "id": "0059d51c2d831727",
+      "date": 1497990072045
+    },
+    {
+      "type": "edit",
+      "id": "8ae70550f10aa066",
+      "item": {
+        "type": "code",
+        "id": "8ae70550f10aa066",
+        "text": "sudo nano /etc/apache2/sites-enabled/000-default.conf"
+      },
+      "date": 1497990074382
+    },
+    {
+      "type": "remove",
+      "id": "7ed5f09b87a87ddd",
+      "date": 1497990077773
+    },
+    {
+      "type": "remove",
+      "id": "75f0f19069dcc8cc",
+      "date": 1497990080422
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "bd91d4f0ddd6b6a0"
+      },
+      "id": "bd91d4f0ddd6b6a0",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990085999
+    },
+    {
+      "type": "edit",
+      "id": "bd91d4f0ddd6b6a0",
+      "item": {
+        "type": "code",
+        "id": "bd91d4f0ddd6b6a0",
+        "text": "sudo nano /etc/apache2/envvars"
+      },
+      "date": 1497990090191
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "bd91d4f0ddd6b6a0",
+      "date": 1497990095858
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e956083b4cde9a2f"
+      },
+      "id": "e956083b4cde9a2f",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990100017
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "45f17ce8bd50f231",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "1a1952b12e64b03c",
+        "e956083b4cde9a2f",
+        "c43ccee1ed892e3c"
+      ],
+      "id": "e956083b4cde9a2f",
+      "date": 1497990101356
+    },
+    {
+      "type": "remove",
+      "id": "1a1952b12e64b03c",
+      "date": 1497990107288
+    },
+    {
+      "type": "edit",
+      "id": "e956083b4cde9a2f",
+      "item": {
+        "type": "code",
+        "id": "e956083b4cde9a2f",
+        "text": "sudo service apache2 restart"
+      },
+      "date": 1497990110610
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "35498636be8c30d7"
+      },
+      "id": "35498636be8c30d7",
+      "type": "add",
+      "after": "c43ccee1ed892e3c",
+      "date": 1497990112733
+    },
+    {
+      "type": "edit",
+      "id": "35498636be8c30d7",
+      "item": {
+        "type": "markdown",
+        "id": "35498636be8c30d7",
+        "text": "# See also\n\n- da"
+      },
+      "date": 1497990120378
+    },
+    {
+      "type": "edit",
+      "id": "35498636be8c30d7",
+      "item": {
+        "type": "markdown",
+        "id": "35498636be8c30d7",
+        "text": "# See also\n\n- [[Livecode Server on DigitalOcean]]\n- [[Configure Apache for Livecode]]\n- [[Let's Encrypt Livecode]]\n- [[Serving Static Content]]\n- [[Nginx]]\n- [[Apache HTTP Server]]\n- [[Caddy]]\n- [[Revigniter]]"
+      },
+      "date": 1497990132076
+    },
+    {
+      "type": "edit",
+      "id": "03fe572b04d51550",
+      "item": {
+        "type": "paragraph",
+        "id": "03fe572b04d51550",
+        "text": "Lets change the default directory used for storing web files as the current html directory is also owned by root and its a good practise to not use it - [http://activethought.net/setting-livecode-server/ activethought.net]"
+      },
+      "date": 1497991004605
+    },
+    {
+      "type": "remove",
+      "id": "45f17ce8bd50f231",
+      "date": 1497991009732
+    },
+    {
+      "type": "edit",
+      "id": "b9848b6c6af1b7e7",
+      "item": {
+        "type": "code",
+        "id": "b9848b6c6af1b7e7",
+        "text": "sudo useradd -g www-data ssh-user-name"
+      },
+      "date": 1497991012278
+    },
+    {
+      "type": "edit",
+      "id": "35498636be8c30d7",
+      "item": {
+        "type": "markdown",
+        "id": "35498636be8c30d7",
+        "text": "# See also\n\n- [[Home Away from Home]]\n- [[Livecode Server on DigitalOcean]]\n- [[Configure Apache for Livecode]]\n- [[Let's Encrypt Livecode]]\n- [[Serving Static Content]]\n- [[Nginx]]\n- [[Apache HTTP Server]]\n- [[Caddy]]\n- [[Revigniter]]"
+      },
+      "date": 1497991032808
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ade27a83a30c93fa"
+      },
+      "id": "ade27a83a30c93fa",
+      "type": "add",
+      "after": "35498636be8c30d7",
+      "date": 1498035913887
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "e956083b4cde9a2f",
+        "c43ccee1ed892e3c",
+        "ade27a83a30c93fa",
+        "35498636be8c30d7"
+      ],
+      "id": "ade27a83a30c93fa",
+      "date": 1498035916263
+    },
+    {
+      "type": "edit",
+      "id": "ade27a83a30c93fa",
+      "item": {
+        "type": "markdown",
+        "id": "ade27a83a30c93fa",
+        "text": "# Notes on permissions"
+      },
+      "date": 1498035931426
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b787504a9817e9db"
+      },
+      "id": "b787504a9817e9db",
+      "type": "add",
+      "after": "35498636be8c30d7",
+      "date": 1498035932926
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "e956083b4cde9a2f",
+        "c43ccee1ed892e3c",
+        "ade27a83a30c93fa",
+        "b787504a9817e9db",
+        "35498636be8c30d7"
+      ],
+      "id": "b787504a9817e9db",
+      "date": 1498035934272
+    },
+    {
+      "type": "edit",
+      "id": "b787504a9817e9db",
+      "item": {
+        "type": "paragraph",
+        "id": "b787504a9817e9db",
+        "text": "What you may want to do is to instead set the groups sticky bit (SetGID) bit on the directory your CGI is working with:\n\nchgrp mygroup dir\nchmod g+s dir\n\nMake sure when you do this that (user) apache is in the mygroup group (in /etc/group), so it will have permissions.\n\nThis will make it so any file created under this directory will be owned by the same group as the directory.\n\nThis is a safer approach than setting a global umask for EVERY cgi script that apache may run.\n\n(This is how git-http-backend is typically run from Apache)."
+      },
+      "date": 1498035937594
+    },
+    {
+      "type": "edit",
+      "id": "9e1b9b80da9161c8",
+      "item": {
+        "type": "paragraph",
+        "id": "9e1b9b80da9161c8",
+        "text": "add “umask 002” to the end of the file. Save and quit. This allows the Apache www-data user (ie cgi scripts) to read and write to files - [https://serverfault.com/questions/624866/umask-for-www-data-user-running-php-on-ubuntu serverfault.com]"
+      },
+      "date": 1498036018064
+    },
+    {
+      "type": "edit",
+      "id": "9e1b9b80da9161c8",
+      "item": {
+        "type": "paragraph",
+        "id": "9e1b9b80da9161c8",
+        "text": "add “umask 002” to the end of the file. Save and quit. "
+      },
+      "date": 1498036027816
+    },
+    {
+      "type": "add",
+      "id": "3dd7b9f15b6aa4d9",
+      "item": {
+        "type": "paragraph",
+        "id": "3dd7b9f15b6aa4d9",
+        "text": "This allows the Apache www-data user (ie cgi scripts) to read and write to files - [https://serverfault.com/questions/624866/umask-for-www-data-user-running-php-on-ubuntu serverfault.com]"
+      },
+      "after": "9e1b9b80da9161c8",
+      "date": 1498036029129
+    },
+    {
+      "type": "add",
+      "id": "f26460c60885deaf",
+      "item": {
+        "type": "paragraph",
+        "id": "f26460c60885deaf",
+        "text": "Now restart Apache using:"
+      },
+      "after": "3dd7b9f15b6aa4d9",
+      "date": 1498036052299
+    },
+    {
+      "type": "add",
+      "id": "21f14bd4fef24949",
+      "item": {
+        "type": "paragraph",
+        "id": "21f14bd4fef24949",
+        "text": "or:"
+      },
+      "after": "f26460c60885deaf",
+      "date": 1498036061321
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "541c3e0bb109fc53"
+      },
+      "id": "541c3e0bb109fc53",
+      "type": "add",
+      "after": "35498636be8c30d7",
+      "date": 1498036065653
+    },
+    {
+      "type": "edit",
+      "id": "541c3e0bb109fc53",
+      "item": {
+        "type": "code",
+        "id": "541c3e0bb109fc53",
+        "text": "service apache2 stop; service apache2 start"
+      },
+      "date": 1498036084438
+    },
+    {
+      "type": "remove",
+      "id": "541c3e0bb109fc53",
+      "date": 1498036097813
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "3dd7b9f15b6aa4d9",
+        "f26460c60885deaf",
+        "e956083b4cde9a2f",
+        "21f14bd4fef24949",
+        "c43ccee1ed892e3c",
+        "ade27a83a30c93fa",
+        "b787504a9817e9db",
+        "35498636be8c30d7"
+      ],
+      "id": "21f14bd4fef24949",
+      "date": 1498036121717
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "541c3e0bb109fc53",
+        "text": "service apache2 stop; service apache2 start"
+      },
+      "after": "21f14bd4fef24949",
+      "id": "541c3e0bb109fc53",
+      "date": 1498036125443
+    },
+    {
+      "type": "fork",
+      "site": "admin.fedwiki.org",
+      "date": 1498296756031
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4130e4d7d3b4ce56"
+      },
+      "id": "4130e4d7d3b4ce56",
+      "type": "add",
+      "after": "35498636be8c30d7",
+      "date": 1498296758672
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "3dd7b9f15b6aa4d9",
+        "f26460c60885deaf",
+        "e956083b4cde9a2f",
+        "21f14bd4fef24949",
+        "541c3e0bb109fc53",
+        "c43ccee1ed892e3c",
+        "ade27a83a30c93fa",
+        "4130e4d7d3b4ce56",
+        "b787504a9817e9db",
+        "35498636be8c30d7"
+      ],
+      "id": "4130e4d7d3b4ce56",
+      "date": 1498296762542
+    },
+    {
+      "type": "edit",
+      "id": "b787504a9817e9db",
+      "item": {
+        "type": "paragraph",
+        "id": "b787504a9817e9db",
+        "text": "What you may want to do is to instead set the groups sticky bit (SetGID) bit on the directory your CGI is working with:"
+      },
+      "date": 1498296767285
+    },
+    {
+      "type": "add",
+      "id": "70f188f61cb503ff",
+      "item": {
+        "type": "paragraph",
+        "id": "70f188f61cb503ff",
+        "text": "\nchgrp mygroup dir\nchmod g+s dir\n\n"
+      },
+      "after": "b787504a9817e9db",
+      "date": 1498296770091
+    },
+    {
+      "type": "add",
+      "id": "956cd725b2e4f1f1",
+      "item": {
+        "type": "paragraph",
+        "id": "956cd725b2e4f1f1",
+        "text": "Make sure when you do this that (user) apache is in the mygroup group (in /etc/group), so it will have permissions."
+      },
+      "after": "70f188f61cb503ff",
+      "date": 1498296771641
+    },
+    {
+      "type": "add",
+      "id": "0862642340047301",
+      "item": {
+        "type": "paragraph",
+        "id": "0862642340047301",
+        "text": "This will make it so any file created under this directory will be owned by the same group as the directory."
+      },
+      "after": "956cd725b2e4f1f1",
+      "date": 1498296775602
+    },
+    {
+      "type": "add",
+      "id": "7582b75bfad96967",
+      "item": {
+        "type": "paragraph",
+        "id": "7582b75bfad96967",
+        "text": "This is a safer approach than setting a global umask for EVERY cgi script that apache may run."
+      },
+      "after": "0862642340047301",
+      "date": 1498296781882
+    },
+    {
+      "type": "add",
+      "id": "c411c5b3f8727443",
+      "item": {
+        "type": "paragraph",
+        "id": "c411c5b3f8727443",
+        "text": "(This is how [[git-http-backend]] is typically run from Apache)."
+      },
+      "after": "7582b75bfad96967",
+      "date": 1498296793420
+    },
+    {
+      "type": "move",
+      "order": [
+        "03fe572b04d51550",
+        "6122b2985fa9a2b0",
+        "1c2f1d34d523925b",
+        "d2c855f9815eb10f",
+        "07c2086adefc664d",
+        "b9848b6c6af1b7e7",
+        "54fe2e3ad2b2a462",
+        "8ae70550f10aa066",
+        "e29d087eb558f02d",
+        "bd91d4f0ddd6b6a0",
+        "9e1b9b80da9161c8",
+        "3dd7b9f15b6aa4d9",
+        "f26460c60885deaf",
+        "e956083b4cde9a2f",
+        "21f14bd4fef24949",
+        "541c3e0bb109fc53",
+        "c43ccee1ed892e3c",
+        "ade27a83a30c93fa",
+        "b787504a9817e9db",
+        "70f188f61cb503ff",
+        "4130e4d7d3b4ce56",
+        "956cd725b2e4f1f1",
+        "0862642340047301",
+        "7582b75bfad96967",
+        "c411c5b3f8727443",
+        "35498636be8c30d7"
+      ],
+      "id": "4130e4d7d3b4ce56",
+      "date": 1498296800890
+    },
+    {
+      "type": "remove",
+      "id": "70f188f61cb503ff",
+      "date": 1498296804500
+    },
+    {
+      "type": "edit",
+      "id": "4130e4d7d3b4ce56",
+      "item": {
+        "type": "code",
+        "id": "4130e4d7d3b4ce56",
+        "text": "chgrp mygroup dir\nchmod g+s dir\n\n"
+      },
+      "date": 1498296807110
+    },
+    {
+      "type": "edit",
+      "id": "b787504a9817e9db",
+      "item": {
+        "type": "paragraph",
+        "id": "b787504a9817e9db",
+        "text": "What you may want to do is to instead set the groups sticky bit (SetGID) bit on the directory your CGI is working with (see [[Apache Permissions]]):"
+      },
+      "date": 1498297687731
+    },
+    {
+      "type": "edit",
+      "id": "35498636be8c30d7",
+      "item": {
+        "type": "markdown",
+        "id": "35498636be8c30d7",
+        "text": "# See also\n\n- [[Apache Permissions]]\n- [[Home Away from Home]]\n- [[Livecode Server on DigitalOcean]]\n- [[Configure Apache for Livecode]]\n- [[Let's Encrypt Livecode]]\n- [[Serving Static Content]]\n- [[Nginx]]\n- [[Apache HTTP Server]]\n- [[Caddy]]\n- [[Revigniter]]"
+      },
+      "date": 1498297691049
+    }
+  ]
+}

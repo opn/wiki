@@ -1,0 +1,800 @@
+{
+  "title": "Fedwiki Security",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "dce60ef84c458454",
+      "text": "*This page is about Authentication __not__ security.*"
+    },
+    {
+      "type": "paragraph",
+      "id": "412333a08a39e809",
+      "text": "Here are early some explorations on how to provide better login experience for wiki farms, and for users developing mobile apps. The aim is to provide backward compatibility with Persona, while moving over to a better security model."
+    },
+    {
+      "type": "paragraph",
+      "id": "e76f8db6680e8fd4",
+      "text": "Fedwiki currently has a pull-only, one domain-one author philosophy which cuts down on spam. We use [[Mozilla Persona]] to authenticate users."
+    },
+    {
+      "type": "html",
+      "id": "b77b1d42be9bf359",
+      "text": "<H3>Issues"
+    },
+    {
+      "type": "html",
+      "id": "215c2b96c689fbdc",
+      "text": "Here are a few of the issues with the current login and security model:\n<ul>\n<li>  Persona has a habit of logging you out\n<li>  Logging in wipes the [[Lineout]]\n<li>  Persona sign in dialogues are ugly\n<li>  Relying on Persona is brittle\n<li>  You can't share authorship or give other people temporary access\n</ul>"
+    },
+    {
+      "type": "html",
+      "id": "5c0142bd395fc80f",
+      "text": "<H3>Suggestions"
+    },
+    {
+      "type": "paragraph",
+      "id": "764cf687fbac7d78",
+      "text": "This is work in progress, but a suggestion here is to use [[Capability URL]]s, and also separate authoring from viewing interfaces somewhat."
+    },
+    {
+      "type": "paragraph",
+      "id": "78148d329b17fa00",
+      "text": "Given you know the url you have access to the ability to write to that domain. If you are concerned that other people may have a copy of the url, or you just want to renew / refresh your \"password\" - you can revoke the old url, and get issued with a new one. "
+    },
+    {
+      "type": "paragraph",
+      "id": "49cfafe69ee7b5b4",
+      "text": "These url's are impossible to guess, and are not crawled. It should be possible to set up a domain that generates and manages these [[Capability URL]]'s and enables Fedwiki users to use them to gain the ability to author their sites in a way that does not have the problems abaove."
+    },
+    {
+      "type": "html",
+      "id": "97cf7f74743e9603",
+      "text": "<H3>A Persona Hack?"
+    },
+    {
+      "type": "html",
+      "id": "5ac15b1cef60842d",
+      "text": "Using Persona tools such as:\n<ul>\n<li>  Persona IDP - [https://developer.mozilla.org/en-US/Persona/Implementing_a_Persona_IdP developer.mozilla.org/]\n<li>  Persona browserid-certifier (node.js) - [https://github.com/mozilla/browserid-certifier github]\n</ul>"
+    },
+    {
+      "type": "paragraph",
+      "id": "d9f886b74059b28a",
+      "text": "it should be possible to set up a web site which will automatically generate an updated Persona certificate for your sites - without the need for anything other than the knowledge of the URL."
+    },
+    {
+      "type": "paragraph",
+      "id": "bdc8503894876e44",
+      "text": "Visiting this URL would then automatically renew your persona certificate - and redirect you to your site. You would bookmark this url on your local machine in order to be able to visit it later. You could share it with other people you want to have access to your site."
+    },
+    {
+      "type": "paragraph",
+      "id": "cdcf0d66b28534e2",
+      "text": "A second Persona based url - would enable access to revoking, or changing the durations of the certificates that were issued via the url. This service could be developed in a way which is compatible with modern decentralised blockchain and [[IPFS]] technologies - allowing users to choose this way to renew there certificates, or the web service."
+    },
+    {
+      "type": "paragraph",
+      "id": "f0bdd767ced343f9",
+      "text": "Using the existing Persona Login would still be available."
+    },
+    {
+      "type": "paragraph",
+      "id": "be3c6937e551df46",
+      "text": "Below we list some links that are related to this line of enquiry:"
+    },
+    {
+      "type": "reference",
+      "id": "3106db99c3822452",
+      "site": "future.fedwiki.org",
+      "slug": "can-security-be-beautiful",
+      "title": "Can Security be Beautiful",
+      "text": "Watching [[Let's Encrypt]] I had to admire the mechanisms but see them as some sort of band-aid over earlier mistakes. Or are our goals themselves misguided?"
+    },
+    {
+      "type": "reference",
+      "id": "86a117d427f69b7a",
+      "site": "admin.fedwiki.org",
+      "slug": "wiki-admin",
+      "title": "Wiki Admin",
+      "text": "An administrator is identified by the --admin parameter when starting wiki. The admin value would depend on how individuals are identified by the security module in use."
+    },
+    {
+      "type": "reference",
+      "id": "9bc9697543c65d54",
+      "site": "goals.pod.rodwell.me",
+      "slug": "wiki-domain",
+      "title": "wiki domain",
+      "text": "The \"Wiki Domain\" is a concept added as part of Wiki@0.10 as part of providing a practical use of OAuth security."
+    },
+    {
+      "type": "reference",
+      "id": "ae516b7b8cf32abb",
+      "site": "fedwiki.org",
+      "slug": "wiki-farm-security",
+      "title": "Wiki Farm Security",
+      "text": "A loose discussion of [[Wiki Farm]] security. A more technical discussion may well evolve over at [https://github.com/fedwiki/wiki-node-server/issues/97#issuecomment-74984127 GitHub]."
+    },
+    {
+      "type": "reference",
+      "id": "323a5fe967127dae",
+      "site": "forage.david.bovill.me",
+      "slug": "capn-proto",
+      "title": "Cap’n Proto",
+      "text": "Cap’n Proto is an insanely fast data interchange format and capability-based RPC system. Think JSON, except binary. Or think Protocol Buffers, except faster - [https://capnproto.org/index.html capnproto.org]"
+    },
+    {
+      "type": "reference",
+      "id": "f09f61fc9e5e6dfa",
+      "site": "goals.pod.rodwell.me",
+      "slug": "extremely-modular-distributed-javascript",
+      "title": "Extremely Modular Distributed JavaScript",
+      "text": "Ward, this is my new top security video from Mark S Miller aka @erights aka Dr. SES."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Fedwiki Security",
+        "story": []
+      },
+      "date": 1437307909508
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "412333a08a39e809"
+      },
+      "id": "412333a08a39e809",
+      "type": "add",
+      "date": 1437307911147
+    },
+    {
+      "type": "edit",
+      "id": "412333a08a39e809",
+      "item": {
+        "type": "paragraph",
+        "id": "412333a08a39e809",
+        "text": "Fedwiki currently has a pull-only, one domain-one author philosophy which cuts down on spam. We use [[Mozilla Persona]] to authenticate users."
+      },
+      "date": 1437308016064
+    },
+    {
+      "type": "add",
+      "id": "b77b1d42be9bf359",
+      "item": {
+        "type": "paragraph",
+        "id": "b77b1d42be9bf359",
+        "text": "<H3>Issues"
+      },
+      "after": "412333a08a39e809",
+      "date": 1437308030905
+    },
+    {
+      "type": "add",
+      "id": "215c2b96c689fbdc",
+      "item": {
+        "type": "paragraph",
+        "id": "215c2b96c689fbdc",
+        "text": "First:<ul><li>Persona has a habit of logging you out<LI>Logging in wipes the [[Lineout]]"
+      },
+      "after": "b77b1d42be9bf359",
+      "date": 1437308120685
+    },
+    {
+      "type": "edit",
+      "id": "b77b1d42be9bf359",
+      "item": {
+        "type": "html",
+        "id": "b77b1d42be9bf359",
+        "text": "<H3>Issues"
+      },
+      "date": 1437308121784
+    },
+    {
+      "type": "edit",
+      "id": "215c2b96c689fbdc",
+      "item": {
+        "type": "html",
+        "id": "215c2b96c689fbdc",
+        "text": "First:<ul><li>Persona has a habit of logging you out<LI>Logging in wipes the [[Lineout]]"
+      },
+      "date": 1437308123998
+    },
+    {
+      "type": "edit",
+      "id": "215c2b96c689fbdc",
+      "item": {
+        "type": "html",
+        "id": "215c2b96c689fbdc",
+        "text": "Here are a few of the issues with the current login and security model:\n<ul>\n<li>  Persona has a habit of logging you out\n<li>  Logging in wipes the [[Lineout]]\n<li>  Persona sign in dialogues are ugly\n<li>  Relying on Persona is brittle\n<li>  You can't share authorship or give other people temporary access\n</ul>"
+      },
+      "date": 1437308868191
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5c0142bd395fc80f"
+      },
+      "id": "5c0142bd395fc80f",
+      "type": "add",
+      "after": "215c2b96c689fbdc",
+      "date": 1437311869737
+    },
+    {
+      "type": "edit",
+      "id": "5c0142bd395fc80f",
+      "item": {
+        "type": "paragraph",
+        "id": "5c0142bd395fc80f",
+        "text": "<H3>Suggestions"
+      },
+      "date": 1437311888627
+    },
+    {
+      "type": "add",
+      "id": "764cf687fbac7d78",
+      "item": {
+        "type": "paragraph",
+        "id": "764cf687fbac7d78",
+        "text": "This is work in progress, but a suggestion here is to use [[Capability URL]]s, and also separate authoring from viewing interfaces somewhat."
+      },
+      "after": "5c0142bd395fc80f",
+      "date": 1437311939480
+    },
+    {
+      "type": "edit",
+      "id": "5c0142bd395fc80f",
+      "item": {
+        "type": "html",
+        "id": "5c0142bd395fc80f",
+        "text": "<H3>Suggestions"
+      },
+      "date": 1437311940684
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "323a5fe967127dae"
+      },
+      "id": "323a5fe967127dae",
+      "type": "add",
+      "after": "764cf687fbac7d78",
+      "date": 1437312147050
+    },
+    {
+      "type": "edit",
+      "id": "323a5fe967127dae",
+      "item": {
+        "type": "reference",
+        "id": "323a5fe967127dae",
+        "site": "forage.david.bovill.me",
+        "slug": "capn-proto",
+        "title": "Cap’n Proto",
+        "text": "Cap’n Proto is an insanely fast data interchange format and capability-based RPC system. Think JSON, except binary. Or think Protocol Buffers, except faster - [https://capnproto.org/index.html capnproto.org]"
+      },
+      "date": 1437312160870
+    },
+    {
+      "type": "add",
+      "id": "78148d329b17fa00",
+      "item": {
+        "type": "paragraph",
+        "id": "78148d329b17fa00",
+        "text": "Given you know the url you have access to the ability to write to that domain. If you are concerned that other people may have a copy of the url, or you just want to renew / refresh your \"password\" - you can revoke the old url, and get issued with a new one. "
+      },
+      "after": "764cf687fbac7d78",
+      "date": 1437312365040
+    },
+    {
+      "type": "add",
+      "id": "49cfafe69ee7b5b4",
+      "item": {
+        "type": "paragraph",
+        "id": "49cfafe69ee7b5b4",
+        "text": "These url's are impossible to guess, and are not crawled. It should be possible to set up a domain that generates and manages these [[Capability URL]'s and enables Fedwiki users to use them to gain the ability to author their sites in a way that does not have the problems abaove."
+      },
+      "after": "78148d329b17fa00",
+      "date": 1437312491327
+    },
+    {
+      "type": "add",
+      "id": "97cf7f74743e9603",
+      "item": {
+        "type": "paragraph",
+        "id": "97cf7f74743e9603",
+        "text": "A Persoan Hack"
+      },
+      "after": "49cfafe69ee7b5b4",
+      "date": 1437312508604
+    },
+    {
+      "type": "add",
+      "id": "5ac15b1cef60842d",
+      "item": {
+        "type": "paragraph",
+        "id": "5ac15b1cef60842d",
+        "text": "Using Persona tools such as:<ul><li>"
+      },
+      "after": "97cf7f74743e9603",
+      "date": 1437312532874
+    },
+    {
+      "type": "edit",
+      "id": "5ac15b1cef60842d",
+      "item": {
+        "type": "html",
+        "id": "5ac15b1cef60842d",
+        "text": "Using Persona tools such as:<ul><li>"
+      },
+      "date": 1437312554411
+    },
+    {
+      "type": "edit",
+      "id": "5ac15b1cef60842d",
+      "item": {
+        "type": "html",
+        "id": "5ac15b1cef60842d",
+        "text": "Using Persona tools such as:\n<ul>\n<li>  Persona IDP - [https://developer.mozilla.org/en-US/Persona/Implementing_a_Persona_IdP developer.mozilla.org/]\n<li>  Persona Node \n</ul>"
+      },
+      "date": 1437312605077
+    },
+    {
+      "type": "edit",
+      "id": "5ac15b1cef60842d",
+      "item": {
+        "type": "html",
+        "id": "5ac15b1cef60842d",
+        "text": "Using Persona tools such as:\n<ul>\n<li>  Persona IDP - [https://developer.mozilla.org/en-US/Persona/Implementing_a_Persona_IdP developer.mozilla.org/]\n<li>  Persona browserid-certifier (node.js) - [browserid-certifier github]\n</ul>"
+      },
+      "date": 1437312679904
+    },
+    {
+      "type": "edit",
+      "id": "5ac15b1cef60842d",
+      "item": {
+        "type": "html",
+        "id": "5ac15b1cef60842d",
+        "text": "Using Persona tools such as:\n<ul>\n<li>  Persona IDP - [https://developer.mozilla.org/en-US/Persona/Implementing_a_Persona_IdP developer.mozilla.org/]\n<li>  Persona browserid-certifier (node.js) - [https://github.com/mozilla/browserid-certifier github]\n</ul>"
+      },
+      "date": 1437312707729
+    },
+    {
+      "type": "edit",
+      "id": "97cf7f74743e9603",
+      "item": {
+        "type": "paragraph",
+        "id": "97cf7f74743e9603",
+        "text": "<H3>A Persona Hack?"
+      },
+      "date": 1437312721009
+    },
+    {
+      "type": "edit",
+      "id": "97cf7f74743e9603",
+      "item": {
+        "type": "html",
+        "id": "97cf7f74743e9603",
+        "text": "<H3>A Persona Hack?"
+      },
+      "date": 1437312723599
+    },
+    {
+      "type": "edit",
+      "id": "412333a08a39e809",
+      "item": {
+        "type": "paragraph",
+        "id": "412333a08a39e809",
+        "text": "Here are some thoughts on how to provide better login experience for wiki farms, and for users developing mobile apps."
+      },
+      "date": 1437312760312
+    },
+    {
+      "type": "add",
+      "id": "e76f8db6680e8fd4",
+      "item": {
+        "type": "paragraph",
+        "id": "e76f8db6680e8fd4",
+        "text": "Fedwiki currently has a pull-only, one domain-one author philosophy which cuts down on spam. We use [[Mozilla Persona]] to authenticate users."
+      },
+      "after": "412333a08a39e809",
+      "date": 1437312762338
+    },
+    {
+      "type": "edit",
+      "id": "412333a08a39e809",
+      "item": {
+        "type": "paragraph",
+        "id": "412333a08a39e809",
+        "text": "Here are early some explorations on how to provide better login experience for wiki farms, and for users developing mobile apps. The aim is to provide backward compatibility with Persona, while moving over to a better security model."
+      },
+      "date": 1437312813099
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d9f886b74059b28a"
+      },
+      "id": "d9f886b74059b28a",
+      "type": "add",
+      "after": "323a5fe967127dae",
+      "date": 1437312823648
+    },
+    {
+      "type": "move",
+      "order": [
+        "412333a08a39e809",
+        "e76f8db6680e8fd4",
+        "b77b1d42be9bf359",
+        "215c2b96c689fbdc",
+        "5c0142bd395fc80f",
+        "764cf687fbac7d78",
+        "78148d329b17fa00",
+        "49cfafe69ee7b5b4",
+        "97cf7f74743e9603",
+        "5ac15b1cef60842d",
+        "d9f886b74059b28a",
+        "323a5fe967127dae"
+      ],
+      "id": "d9f886b74059b28a",
+      "date": 1437312824836
+    },
+    {
+      "type": "edit",
+      "id": "d9f886b74059b28a",
+      "item": {
+        "type": "paragraph",
+        "id": "d9f886b74059b28a",
+        "text": "it should be possible to set up a web site which will automatically generate an updated Persona certificate for your sites - without the need for anything other than the knowledge of the URL."
+      },
+      "date": 1437312930499
+    },
+    {
+      "type": "add",
+      "id": "bdc8503894876e44",
+      "item": {
+        "type": "paragraph",
+        "id": "bdc8503894876e44",
+        "text": "Visiting this URL would then automatically renew your persona certificate - and redirect you to your site. You would bookmark this url on your local machine in order to be able to visit it later. You could share it with other people you want to have access to your site."
+      },
+      "after": "d9f886b74059b28a",
+      "date": 1437313005603
+    },
+    {
+      "type": "add",
+      "id": "cdcf0d66b28534e2",
+      "item": {
+        "type": "paragraph",
+        "id": "cdcf0d66b28534e2",
+        "text": "A second Persona based url - would enable access to revoking, or changing the durations of the certificates that were issued via the url. This service could be developed in a way which is compatible with modern decentralised blockchain and [[IPFS]] technologies - allowing users to choose this way to renew there certificates, or the web service."
+      },
+      "after": "bdc8503894876e44",
+      "date": 1437313505976
+    },
+    {
+      "type": "add",
+      "id": "f0bdd767ced343f9",
+      "item": {
+        "type": "paragraph",
+        "id": "f0bdd767ced343f9",
+        "text": "Using the existing Persona Login would still be available."
+      },
+      "after": "cdcf0d66b28534e2",
+      "date": 1437313530067
+    },
+    {
+      "type": "add",
+      "id": "be3c6937e551df46",
+      "item": {
+        "type": "paragraph",
+        "id": "be3c6937e551df46",
+        "text": "Belwo we list some links that are related to this line of enquiry:"
+      },
+      "after": "f0bdd767ced343f9",
+      "date": 1437313552444
+    },
+    {
+      "type": "edit",
+      "id": "be3c6937e551df46",
+      "item": {
+        "type": "paragraph",
+        "id": "be3c6937e551df46",
+        "text": "Below we list some links that are related to this line of enquiry:"
+      },
+      "date": 1437313558972
+    },
+    {
+      "type": "fork",
+      "site": "future.fedwiki.org"
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dce60ef84c458454"
+      },
+      "id": "dce60ef84c458454",
+      "type": "add",
+      "after": "323a5fe967127dae",
+      "date": 1438272469284
+    },
+    {
+      "type": "move",
+      "order": [
+        "dce60ef84c458454",
+        "412333a08a39e809",
+        "e76f8db6680e8fd4",
+        "b77b1d42be9bf359",
+        "215c2b96c689fbdc",
+        "5c0142bd395fc80f",
+        "764cf687fbac7d78",
+        "78148d329b17fa00",
+        "49cfafe69ee7b5b4",
+        "97cf7f74743e9603",
+        "5ac15b1cef60842d",
+        "d9f886b74059b28a",
+        "bdc8503894876e44",
+        "cdcf0d66b28534e2",
+        "f0bdd767ced343f9",
+        "be3c6937e551df46",
+        "323a5fe967127dae"
+      ],
+      "id": "dce60ef84c458454",
+      "date": 1438272474914
+    },
+    {
+      "type": "edit",
+      "id": "dce60ef84c458454",
+      "item": {
+        "type": "markdown",
+        "id": "dce60ef84c458454",
+        "text": "*This page is about Authentication __not__ security.*"
+      },
+      "date": 1438272535700
+    },
+    {
+      "type": "edit",
+      "id": "49cfafe69ee7b5b4",
+      "item": {
+        "type": "paragraph",
+        "id": "49cfafe69ee7b5b4",
+        "text": "These url's are impossible to guess, and are not crawled. It should be possible to set up a domain that generates and manages these [[Capability URL]]'s and enables Fedwiki users to use them to gain the ability to author their sites in a way that does not have the problems abaove."
+      },
+      "date": 1438272563340
+    },
+    {
+      "type": "fork",
+      "site": "goals.pod.rodwell.me",
+      "date": 1510387649257
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9bc9697543c65d54"
+      },
+      "id": "9bc9697543c65d54",
+      "type": "add",
+      "after": "323a5fe967127dae",
+      "date": 1510387653595
+    },
+    {
+      "type": "edit",
+      "id": "9bc9697543c65d54",
+      "item": {
+        "type": "reference",
+        "id": "9bc9697543c65d54",
+        "site": "goals.pod.rodwell.me",
+        "slug": "wiki-domain",
+        "title": "wiki domain",
+        "text": "The \"Wiki Domain\" is a concept added as part of Wiki@0.10 as part of providing a practical use of OAuth security."
+      },
+      "date": 1510387657026
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f09f61fc9e5e6dfa"
+      },
+      "id": "f09f61fc9e5e6dfa",
+      "type": "add",
+      "after": "9bc9697543c65d54",
+      "date": 1510387661767
+    },
+    {
+      "type": "edit",
+      "id": "f09f61fc9e5e6dfa",
+      "item": {
+        "type": "reference",
+        "id": "f09f61fc9e5e6dfa",
+        "site": "goals.pod.rodwell.me",
+        "slug": "extremely-modular-distributed-javascript",
+        "title": "Extremely Modular Distributed JavaScript",
+        "text": "Ward, this is my new top security video from Mark S Miller aka @erights aka Dr. SES."
+      },
+      "date": 1510387664782
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "86a117d427f69b7a"
+      },
+      "id": "86a117d427f69b7a",
+      "type": "add",
+      "after": "f09f61fc9e5e6dfa",
+      "date": 1510387666182
+    },
+    {
+      "type": "edit",
+      "id": "86a117d427f69b7a",
+      "item": {
+        "type": "reference",
+        "id": "86a117d427f69b7a",
+        "site": "admin.fedwiki.org",
+        "slug": "wiki-admin",
+        "title": "Wiki Admin",
+        "text": "An administrator is identified by the --admin parameter when starting wiki. The admin value would depend on how individuals are identified by the security module in use."
+      },
+      "date": 1510387669976
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ae516b7b8cf32abb"
+      },
+      "id": "ae516b7b8cf32abb",
+      "type": "add",
+      "after": "86a117d427f69b7a",
+      "date": 1510387671261
+    },
+    {
+      "type": "edit",
+      "id": "ae516b7b8cf32abb",
+      "item": {
+        "type": "reference",
+        "id": "ae516b7b8cf32abb",
+        "site": "fedwiki.org",
+        "slug": "wiki-farm-security",
+        "title": "Wiki Farm Security",
+        "text": "A loose discussion of [[Wiki Farm]] security. A more technical discussion may well evolve over at [https://github.com/fedwiki/wiki-node-server/issues/97#issuecomment-74984127 GitHub]."
+      },
+      "date": 1510387675026
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3106db99c3822452"
+      },
+      "id": "3106db99c3822452",
+      "type": "add",
+      "after": "ae516b7b8cf32abb",
+      "date": 1510387685922
+    },
+    {
+      "type": "edit",
+      "id": "3106db99c3822452",
+      "item": {
+        "type": "reference",
+        "id": "3106db99c3822452",
+        "site": "future.fedwiki.org",
+        "slug": "can-security-be-beautiful",
+        "title": "Can Security be Beautiful",
+        "text": "Watching [[Let's Encrypt]] I had to admire the mechanisms but see them as some sort of band-aid over earlier mistakes. Or are our goals themselves misguided?"
+      },
+      "date": 1510387696616
+    },
+    {
+      "type": "move",
+      "order": [
+        "dce60ef84c458454",
+        "412333a08a39e809",
+        "e76f8db6680e8fd4",
+        "b77b1d42be9bf359",
+        "215c2b96c689fbdc",
+        "5c0142bd395fc80f",
+        "764cf687fbac7d78",
+        "78148d329b17fa00",
+        "49cfafe69ee7b5b4",
+        "97cf7f74743e9603",
+        "5ac15b1cef60842d",
+        "d9f886b74059b28a",
+        "bdc8503894876e44",
+        "cdcf0d66b28534e2",
+        "f0bdd767ced343f9",
+        "be3c6937e551df46",
+        "323a5fe967127dae",
+        "86a117d427f69b7a",
+        "9bc9697543c65d54",
+        "f09f61fc9e5e6dfa",
+        "ae516b7b8cf32abb",
+        "3106db99c3822452"
+      ],
+      "id": "86a117d427f69b7a",
+      "date": 1510387807562
+    },
+    {
+      "type": "move",
+      "order": [
+        "dce60ef84c458454",
+        "412333a08a39e809",
+        "e76f8db6680e8fd4",
+        "b77b1d42be9bf359",
+        "215c2b96c689fbdc",
+        "5c0142bd395fc80f",
+        "764cf687fbac7d78",
+        "78148d329b17fa00",
+        "49cfafe69ee7b5b4",
+        "97cf7f74743e9603",
+        "5ac15b1cef60842d",
+        "d9f886b74059b28a",
+        "bdc8503894876e44",
+        "cdcf0d66b28534e2",
+        "f0bdd767ced343f9",
+        "be3c6937e551df46",
+        "3106db99c3822452",
+        "323a5fe967127dae",
+        "86a117d427f69b7a",
+        "9bc9697543c65d54",
+        "f09f61fc9e5e6dfa",
+        "ae516b7b8cf32abb"
+      ],
+      "id": "3106db99c3822452",
+      "date": 1510387812031
+    },
+    {
+      "type": "move",
+      "order": [
+        "dce60ef84c458454",
+        "412333a08a39e809",
+        "e76f8db6680e8fd4",
+        "b77b1d42be9bf359",
+        "215c2b96c689fbdc",
+        "5c0142bd395fc80f",
+        "764cf687fbac7d78",
+        "78148d329b17fa00",
+        "49cfafe69ee7b5b4",
+        "97cf7f74743e9603",
+        "5ac15b1cef60842d",
+        "d9f886b74059b28a",
+        "bdc8503894876e44",
+        "cdcf0d66b28534e2",
+        "f0bdd767ced343f9",
+        "be3c6937e551df46",
+        "3106db99c3822452",
+        "86a117d427f69b7a",
+        "9bc9697543c65d54",
+        "f09f61fc9e5e6dfa",
+        "ae516b7b8cf32abb",
+        "323a5fe967127dae"
+      ],
+      "id": "323a5fe967127dae",
+      "date": 1510387814508
+    },
+    {
+      "type": "move",
+      "order": [
+        "dce60ef84c458454",
+        "412333a08a39e809",
+        "e76f8db6680e8fd4",
+        "b77b1d42be9bf359",
+        "215c2b96c689fbdc",
+        "5c0142bd395fc80f",
+        "764cf687fbac7d78",
+        "78148d329b17fa00",
+        "49cfafe69ee7b5b4",
+        "97cf7f74743e9603",
+        "5ac15b1cef60842d",
+        "d9f886b74059b28a",
+        "bdc8503894876e44",
+        "cdcf0d66b28534e2",
+        "f0bdd767ced343f9",
+        "be3c6937e551df46",
+        "3106db99c3822452",
+        "86a117d427f69b7a",
+        "9bc9697543c65d54",
+        "ae516b7b8cf32abb",
+        "323a5fe967127dae",
+        "f09f61fc9e5e6dfa"
+      ],
+      "id": "f09f61fc9e5e6dfa",
+      "date": 1510387817797
+    }
+  ]
+}

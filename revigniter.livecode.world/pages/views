@@ -1,0 +1,600 @@
+{
+  "title": "Views",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "d6423940dc760193",
+      "text": "A view is simply a web page, or a page fragment, like a header, footer, sidebar, etc. In fact, views can flexibly be embedded within other views (within other views, etc., etc.) if you need this type of hierarchy."
+    },
+    {
+      "type": "paragraph",
+      "id": "90c292ad03c78f42",
+      "text": "Views are never called directly, they must be loaded by a controller. Remember that in an MVC framework, the Controller acts as the traffic cop, so it is responsible for fetching a particular view. If you have not read the Controllers page you should do so before continuing."
+    },
+    {
+      "type": "paragraph",
+      "id": "60e1fbe4948988b1",
+      "text": "Using the example controller you created in the controller page, let's add a view to it."
+    },
+    {
+      "type": "reference",
+      "id": "7f0f9b136adda64a",
+      "site": "revigniter.livecode.world",
+      "slug": "creating-a-view",
+      "title": "Creating a View",
+      "text": "Using your text editor, create a file called blogview.lc, and put this in it:"
+    },
+    {
+      "type": "reference",
+      "id": "f7078bbf4f46976d",
+      "site": "revigniter.livecode.world",
+      "slug": "loading-a-view",
+      "title": "Loading a View",
+      "text": "To load a particular view file you will use the following function:"
+    },
+    {
+      "type": "reference",
+      "id": "eb0d931db6144f2f",
+      "site": "revigniter.livecode.world",
+      "slug": "returning-views-as-data",
+      "title": "Returning Views as Data",
+      "text": "There is a second optional parameter which lets you change the behavior of the function so that it returns data as a string rather than sending it to your browser. "
+    },
+    {
+      "type": "reference",
+      "id": "528f87fd57e55e38",
+      "site": "revigniter.livecode.world",
+      "slug": "loading-multiple-views",
+      "title": "Loading multiple views",
+      "text": "revIgniter will intelligently handle multiple calls to rigLoadView() from within a controller. If more than one call happens they will be appended together. "
+    },
+    {
+      "type": "reference",
+      "id": "6ed58f1fdf367c3f",
+      "site": "revigniter.livecode.world",
+      "slug": "storing-views-within-sub-folders",
+      "title": "Storing Views within Sub-folders",
+      "text": "Your view files can also be stored within sub-folders if you prefer that type of organization. When doing so you will need to include the folder name loading the view. "
+    },
+    {
+      "type": "reference",
+      "id": "173bf982067c7218",
+      "site": "revigniter.livecode.world",
+      "slug": "dynamic-data-in-views",
+      "title": "Dynamic Data in Views",
+      "text": "Data in the global array variable gData is merged with the view. Here is an example using the gData array:"
+    },
+    {
+      "id": "ddb56f4f39c15623",
+      "type": "reference",
+      "site": "revigniter.livecode.world",
+      "slug": "using-livecode-in-view-files",
+      "title": "Using LiveCode in View Files",
+      "text": "The data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. "
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Views",
+        "story": []
+      },
+      "date": 1459809355077
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d6423940dc760193"
+      },
+      "id": "d6423940dc760193",
+      "type": "add",
+      "date": 1459809357554
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c227f462002b4ba3"
+      },
+      "id": "c227f462002b4ba3",
+      "type": "add",
+      "after": "d6423940dc760193",
+      "date": 1459809359210
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f7078bbf4f46976d"
+      },
+      "id": "f7078bbf4f46976d",
+      "type": "add",
+      "after": "c227f462002b4ba3",
+      "date": 1459809360901
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7f0f9b136adda64a"
+      },
+      "id": "7f0f9b136adda64a",
+      "type": "add",
+      "after": "f7078bbf4f46976d",
+      "date": 1459809361843
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "23c8e22fb2c19940"
+      },
+      "id": "23c8e22fb2c19940",
+      "type": "add",
+      "after": "7f0f9b136adda64a",
+      "date": 1459809362872
+    },
+    {
+      "type": "edit",
+      "id": "d6423940dc760193",
+      "item": {
+        "type": "paragraph",
+        "id": "d6423940dc760193",
+        "text": "A view is simply a web page, or a page fragment, like a header, footer, sidebar, etc. In fact, views can flexibly be embedded within other views (within other views, etc., etc.) if you need this type of hierarchy.\n\nViews are never called directly, they must be loaded by a controller. Remember that in an MVC framework, the Controller acts as the traffic cop, so it is responsible for fetching a particular view. If you have not read the Controllers page you should do so before continuing.\n\nUsing the example controller you created in the controller page, let's add a view to it.\n\nCreating a View\n\nUsing your text editor, create a file called blogview.lc, and put this in it:\n\n<html>\n\t<head>\n\t\t<title>My Blog</title>\n\t</head>\n\t<body>\n\t\t<h1>Welcome to my Blog!</h1>\n\t</body>\n</html>\nThen save the file in your application/views/ folder.\n\nLoading a View\n\nTo load a particular view file you will use the following function:\n\nget rigLoadView(\"name\")\nWhere name is the name of your view file. Note: The .lc file extension does not need to be specified unless you use something other than .lc.\n\nNow, open the controller file you made earlier called blog.lc, and replace the put statement with the view loading function:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tget rigLoadView(\"blogview\")\nend index\nIf you visit the your site using the URL you did earlier you should see your new view. The URL was similar to this:\n\nexample.com/index.lc/blog/\nLoading multiple views\n\nrevIgniter will intelligently handle multiple calls to rigLoadView() from within a controller. If more than one call happens they will be appended together. For example, you may wish to have a header view, a menu view, a content view, and a footer view. That might look something like this:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Your title\" into gData[\"pageTitle\"]\n\tget rigLoadView(\"header\")\n\tget rigLoadView(\"menu\")\n\tget rigLoadView(\"content\")\n\tget rigLoadView(\"footer\")\nend index\nIn the example above, we are using \"dynamically added data\", which you will see below.\n\nStoring Views within Sub-folders\n\nYour view files can also be stored within sub-folders if you prefer that type of organization. When doing so you will need to include the folder name loading the view. Example:\n\nget rigLoadView(\"folderName/fileName\")\nAdding Dynamic Data to the View\n\nData in the global array variable gData is merged with the view. Here is an example using the gData array:\n\nput \"My Title\" into gData[\"title\"]\nput \"My Heading\" into gData[\"heading\"]\nput \"My Message\" into gData[\"message\"]\nget rigLoadView(\"blogview\")\nLet's try it with your controller file. Open it and add this code:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"My Real Title\" into gData[\"title\"]\n\tput \"My Real Heading\" into gData[\"heading\"]\n\tget rigLoadView(\"blogview\")\nend index\nNow open your view file and change the text to variables that correspond to the array keys in your data enclosed in double square brackets:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t</body>\n</html>\nNote: Like in the example above, add a space between the right array bracket and the merge brackets. Load the page at the URL you've been using and you should see the variables replaced.\n\nCreating Loops / Using LiveCode in View Files\n\nThe data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. For example, if you pull data from your database it will typically be in the form of a multi-dimensional array, which you can combine to a list if you like.\n\nHere's a simple example. Add this to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n\tput \"My Real Title\" into gData[\"title\"]\n\tput \"My Real Heading\" into gData[\"heading\"]\n\tget rigLoadView(\"blogview\")\nend index\nNow open your view file and create a loop:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t\t<p>\n\t\t\t<? put \"<ul>\" into tToDo\n\t\t\trepeat for each item thisItem in gData[\"toDoList\"]\n\t\t\t\tput \"<li>\" & thisItem & \"</li>\" after tToDo\n\t\t\tend repeat\n\t\t\tput \"</ul>\" after tToDo\n\t\t\treturn tToDo ?>\n\t\t</p>\n\t</body>\n</html>\nNote: You'll notice that in the example above we are using a return statement enclosed in \"<?\" and \"?>\". Keep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.\nAs an example to include LiveCode in view files you typically would use return statements to display text from language files if you have various translations:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1><? return rigLangLangLine(\"myInternationalHeading\") ?></h1>\n\t\t\n\t\t<p><? return rigLangLangLine(\"myInternationalBodyText\") ?></p>\n\n\t</body>\n</html>\nReturning Views as Data\n\nThere is a second optional parameter which lets you change the behavior of the function so that it returns data as a string rather than sending it to your browser. This can be useful if you want to process the data in some way. If you set the parameter to true (boolean) it will return data. The default behavior is false, which sends it to your browser. Remember to assign it to a variable if you want the data returned:\n\nget rigLoadView(\"myfile\", TRUE)\nNested Views Tutorial\n\nMultiple views can be loaded sequentially by the controller or, as stated above, nested like in the following sample:\n\nTo keep it really simple, just to demonstrate how to embed views within other views, let's use the revIgniter welcome view and split it into three parts. We name them nestedviewsHeader.lc, nestedviewsContent.lc and nestedviewsFooter.lc.\n\nnestedviewsHeader.lc, the header view:\n\n<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>\nNow we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:\n\n<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>\nThen, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:\n\n<?rev\n\nput \"welcome,index\" into gControllerHandlers\n\n\ncommand welcome\n\t# code...\nend welcome\n\n\ncommand index\n\t# SET PAGE TITLE\n\tput \"YourPageTitle\" into gData[\"pageTitle\"]\n\n\t# LOAD THE MAIN VIEW FILE\n\tget rigLoadView(\"nestedviewsMain\")\nend index\n\n\n\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc\n"
+      },
+      "date": 1459809389152
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "5416cc44dc80084a"
+      },
+      "id": "5416cc44dc80084a",
+      "date": 1459809396965
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "e601a1b8d01856d1"
+      },
+      "after": "5416cc44dc80084a",
+      "id": "e601a1b8d01856d1",
+      "date": 1459809398837
+    },
+    {
+      "type": "add",
+      "id": "4504cd119e964cac",
+      "item": {
+        "type": "paragraph",
+        "id": "4504cd119e964cac",
+        "text": "Of course, this way, nested views can be embedded within other views within other views etc., if you like."
+      },
+      "after": "d6423940dc760193",
+      "date": 1459809400376
+    },
+    {
+      "type": "edit",
+      "id": "d6423940dc760193",
+      "item": {
+        "type": "paragraph",
+        "id": "d6423940dc760193",
+        "text": "A view is simply a web page, or a page fragment, like a header, footer, sidebar, etc. In fact, views can flexibly be embedded within other views (within other views, etc., etc.) if you need this type of hierarchy."
+      },
+      "date": 1459809404319
+    },
+    {
+      "type": "add",
+      "id": "90c292ad03c78f42",
+      "item": {
+        "type": "paragraph",
+        "id": "90c292ad03c78f42",
+        "text": "Views are never called directly, they must be loaded by a controller. Remember that in an MVC framework, the Controller acts as the traffic cop, so it is responsible for fetching a particular view. If you have not read the Controllers page you should do so before continuing."
+      },
+      "after": "d6423940dc760193",
+      "date": 1459809410136
+    },
+    {
+      "type": "add",
+      "id": "60e1fbe4948988b1",
+      "item": {
+        "type": "paragraph",
+        "id": "60e1fbe4948988b1",
+        "text": "Using the example controller you created in the controller page, let's add a view to it."
+      },
+      "after": "90c292ad03c78f42",
+      "date": 1459809414095
+    },
+    {
+      "type": "add",
+      "id": "7acdc6c531a831bf",
+      "item": {
+        "type": "paragraph",
+        "id": "7acdc6c531a831bf",
+        "text": "# Creating a View"
+      },
+      "after": "60e1fbe4948988b1",
+      "date": 1459809425672
+    },
+    {
+      "type": "add",
+      "id": "8ae4c663fc9f1d57",
+      "item": {
+        "type": "paragraph",
+        "id": "8ae4c663fc9f1d57",
+        "text": "Using your text editor, create a file called blogview.lc, and put this in it:"
+      },
+      "after": "7acdc6c531a831bf",
+      "date": 1459809429478
+    },
+    {
+      "type": "add",
+      "id": "6a191f3cb2b2de6f",
+      "item": {
+        "type": "paragraph",
+        "id": "6a191f3cb2b2de6f",
+        "text": "<html>\n\t<head>\n\t\t<title>My Blog</title>\n\t</head>\n\t<body>\n\t\t<h1>Welcome to my Blog!</h1>\n\t</body>\n</html>"
+      },
+      "after": "8ae4c663fc9f1d57",
+      "date": 1459809433854
+    },
+    {
+      "type": "add",
+      "id": "346f16e57b7f6487",
+      "item": {
+        "type": "paragraph",
+        "id": "346f16e57b7f6487",
+        "text": "Then save the file in your application/views/ folder.\n\n"
+      },
+      "after": "6a191f3cb2b2de6f",
+      "date": 1459809438807
+    },
+    {
+      "type": "add",
+      "id": "aec9e43b8b3409a3",
+      "item": {
+        "type": "paragraph",
+        "id": "aec9e43b8b3409a3",
+        "text": "# Loading a View"
+      },
+      "after": "346f16e57b7f6487",
+      "date": 1459809442384
+    },
+    {
+      "type": "add",
+      "id": "4b74d6513344d113",
+      "item": {
+        "type": "paragraph",
+        "id": "4b74d6513344d113",
+        "text": "To load a particular view file you will use the following function:"
+      },
+      "after": "aec9e43b8b3409a3",
+      "date": 1459809446872
+    },
+    {
+      "type": "add",
+      "id": "11fa0ce57c4e08d7",
+      "item": {
+        "type": "paragraph",
+        "id": "11fa0ce57c4e08d7",
+        "text": "\nget rigLoadView(\"name\")"
+      },
+      "after": "4b74d6513344d113",
+      "date": 1459809448896
+    },
+    {
+      "type": "add",
+      "id": "e1765cdf2190dc09",
+      "item": {
+        "type": "paragraph",
+        "id": "e1765cdf2190dc09",
+        "text": "Where name is the name of your view file. Note: The .lc file extension does not need to be specified unless you use something other than .lc."
+      },
+      "after": "11fa0ce57c4e08d7",
+      "date": 1459809451503
+    },
+    {
+      "type": "add",
+      "id": "227cb3edbde48218",
+      "item": {
+        "type": "paragraph",
+        "id": "227cb3edbde48218",
+        "text": "\nNow, open the controller file you made earlier called blog.lc, and replace the put statement with the view loading function:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tget rigLoadView(\"blogview\")\nend index\nIf you visit the your site using the URL you did earlier you should see your new view. The URL was similar to this:\n\nexample.com/index.lc/blog/\nLoading multiple views\n\nrevIgniter will intelligently handle multiple calls to rigLoadView() from within a controller. If more than one call happens they will be appended together. For example, you may wish to have a header view, a menu view, a content view, and a footer view. That might look something like this:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Your title\" into gData[\"pageTitle\"]\n\tget rigLoadView(\"header\")\n\tget rigLoadView(\"menu\")\n\tget rigLoadView(\"content\")\n\tget rigLoadView(\"footer\")\nend index\nIn the example above, we are using \"dynamically added data\", which you will see below.\n\nStoring Views within Sub-folders\n\nYour view files can also be stored within sub-folders if you prefer that type of organization. When doing so you will need to include the folder name loading the view. Example:\n\nget rigLoadView(\"folderName/fileName\")\nAdding Dynamic Data to the View\n\nData in the global array variable gData is merged with the view. Here is an example using the gData array:\n\nput \"My Title\" into gData[\"title\"]\nput \"My Heading\" into gData[\"heading\"]\nput \"My Message\" into gData[\"message\"]\nget rigLoadView(\"blogview\")\nLet's try it with your controller file. Open it and add this code:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"My Real Title\" into gData[\"title\"]\n\tput \"My Real Heading\" into gData[\"heading\"]\n\tget rigLoadView(\"blogview\")\nend index\nNow open your view file and change the text to variables that correspond to the array keys in your data enclosed in double square brackets:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t</body>\n</html>\nNote: Like in the example above, add a space between the right array bracket and the merge brackets. Load the page at the URL you've been using and you should see the variables replaced.\n\nCreating Loops / Using LiveCode in View Files\n\nThe data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. For example, if you pull data from your database it will typically be in the form of a multi-dimensional array, which you can combine to a list if you like.\n\nHere's a simple example. Add this to your controller:\n\n<?rev\n\n# PUT YOUR HANDLER NAMES  INTO THE GLOBAL gControllerHandlers AS A COMMA SEPARATED LIST\nput \"index\" into gControllerHandlers\n\ncommand index\n\tput \"Clean House,Call Mom,Run Errands\" into gData[\"toDoList\"]\n\n\tput \"My Real Title\" into gData[\"title\"]\n\tput \"My Real Heading\" into gData[\"heading\"]\n\tget rigLoadView(\"blogview\")\nend index\nNow open your view file and create a loop:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1>[[gData[\"heading\"] ]]</h1>\n\t\t<p>\n\t\t\t<? put \"<ul>\" into tToDo\n\t\t\trepeat for each item thisItem in gData[\"toDoList\"]\n\t\t\t\tput \"<li>\" & thisItem & \"</li>\" after tToDo\n\t\t\tend repeat\n\t\t\tput \"</ul>\" after tToDo\n\t\t\treturn tToDo ?>\n\t\t</p>\n\t</body>\n</html>\nNote: You'll notice that in the example above we are using a return statement enclosed in \"<?\" and \"?>\". Keep in mind, that this is the only way to include LiveCode in your view files. The last statement needs to be a return statement.\nAs an example to include LiveCode in view files you typically would use return statements to display text from language files if you have various translations:\n\n<html>\n\t<head>\n\t\t<title>[[gData[\"title\"] ]]</title>\n\t</head>\n\t<body>\n\t\t<h1><? return rigLangLangLine(\"myInternationalHeading\") ?></h1>\n\t\t\n\t\t<p><? return rigLangLangLine(\"myInternationalBodyText\") ?></p>\n\n\t</body>\n</html>\nReturning Views as Data\n\nThere is a second optional parameter which lets you change the behavior of the function so that it returns data as a string rather than sending it to your browser. This can be useful if you want to process the data in some way. If you set the parameter to true (boolean) it will return data. The default behavior is false, which sends it to your browser. Remember to assign it to a variable if you want the data returned:\n\nget rigLoadView(\"myfile\", TRUE)\nNested Views Tutorial\n\nMultiple views can be loaded sequentially by the controller or, as stated above, nested like in the following sample:\n\nTo keep it really simple, just to demonstrate how to embed views within other views, let's use the revIgniter welcome view and split it into three parts. We name them nestedviewsHeader.lc, nestedviewsContent.lc and nestedviewsFooter.lc.\n\nnestedviewsHeader.lc, the header view:\n\n<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>\nNow we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:\n\n<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>\nThen, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:\n\n<?rev\n\nput \"welcome,index\" into gControllerHandlers\n\n\ncommand welcome\n\t# code...\nend welcome\n\n\ncommand index\n\t# SET PAGE TITLE\n\tput \"YourPageTitle\" into gData[\"pageTitle\"]\n\n\t# LOAD THE MAIN VIEW FILE\n\tget rigLoadView(\"nestedviewsMain\")\nend index\n\n\n\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc\n"
+      },
+      "after": "e1765cdf2190dc09",
+      "date": 1459809453605
+    },
+    {
+      "type": "edit",
+      "id": "7acdc6c531a831bf",
+      "item": {
+        "type": "paragraph",
+        "id": "7acdc6c531a831bf",
+        "text": "[[Creating a View]]"
+      },
+      "date": 1459809467248
+    },
+    {
+      "type": "remove",
+      "id": "8ae4c663fc9f1d57",
+      "date": 1459809474464
+    },
+    {
+      "type": "remove",
+      "id": "6a191f3cb2b2de6f",
+      "date": 1459809477990
+    },
+    {
+      "type": "remove",
+      "id": "346f16e57b7f6487",
+      "date": 1459809518309
+    },
+    {
+      "type": "edit",
+      "id": "aec9e43b8b3409a3",
+      "item": {
+        "type": "paragraph",
+        "id": "aec9e43b8b3409a3",
+        "text": "[[Loading a View]]"
+      },
+      "date": 1459809556099
+    },
+    {
+      "type": "remove",
+      "id": "4b74d6513344d113",
+      "date": 1459809564010
+    },
+    {
+      "type": "remove",
+      "id": "11fa0ce57c4e08d7",
+      "date": 1459809570054
+    },
+    {
+      "type": "remove",
+      "id": "e1765cdf2190dc09",
+      "date": 1459809573374
+    },
+    {
+      "type": "remove",
+      "id": "227cb3edbde48218",
+      "date": 1459809581321
+    },
+    {
+      "type": "remove",
+      "id": "e601a1b8d01856d1",
+      "date": 1459809792637
+    },
+    {
+      "type": "remove",
+      "id": "c227f462002b4ba3",
+      "date": 1459809812349
+    },
+    {
+      "type": "edit",
+      "id": "f7078bbf4f46976d",
+      "item": {
+        "type": "reference",
+        "id": "f7078bbf4f46976d",
+        "site": "revigniter.livecode.world",
+        "slug": "loading-a-view",
+        "title": "Loading a View",
+        "text": "To load a particular view file you will use the following function:"
+      },
+      "date": 1459809823815
+    },
+    {
+      "type": "move",
+      "order": [
+        "5416cc44dc80084a",
+        "d6423940dc760193",
+        "90c292ad03c78f42",
+        "60e1fbe4948988b1",
+        "7acdc6c531a831bf",
+        "aec9e43b8b3409a3",
+        "f7078bbf4f46976d",
+        "4504cd119e964cac",
+        "7f0f9b136adda64a",
+        "23c8e22fb2c19940"
+      ],
+      "id": "f7078bbf4f46976d",
+      "date": 1459809826147
+    },
+    {
+      "type": "remove",
+      "id": "aec9e43b8b3409a3",
+      "date": 1459809829017
+    },
+    {
+      "type": "remove",
+      "id": "5416cc44dc80084a",
+      "date": 1459810855261
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "528f87fd57e55e38",
+        "site": "revigniter.livecode.world",
+        "slug": "loading-multiple-views",
+        "title": "Loading multiple views",
+        "text": "revIgniter will intelligently handle multiple calls to rigLoadView() from within a controller. If more than one call happens they will be appended together. "
+      },
+      "after": "f7078bbf4f46976d",
+      "id": "528f87fd57e55e38",
+      "date": 1459810878878
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "6ed58f1fdf367c3f",
+        "site": "revigniter.livecode.world",
+        "slug": "storing-views-within-sub-folders",
+        "title": "Storing Views within Sub-folders",
+        "text": "Your view files can also be stored within sub-folders if you prefer that type of organization. When doing so you will need to include the folder name loading the view. "
+      },
+      "after": "528f87fd57e55e38",
+      "id": "6ed58f1fdf367c3f",
+      "date": 1459810887926
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "reference",
+        "id": "173bf982067c7218",
+        "site": "revigniter.livecode.world",
+        "slug": "dynamic-data-in-views",
+        "title": "Dynamic Data in Views",
+        "text": "Data in the global array variable gData is merged with the view. Here is an example using the gData array:"
+      },
+      "after": "6ed58f1fdf367c3f",
+      "id": "173bf982067c7218",
+      "date": 1459810889619
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "ddb56f4f39c15623",
+        "type": "reference",
+        "site": "revigniter.livecode.world",
+        "slug": "using-livecode-in-view-files",
+        "title": "Using LiveCode in View Files",
+        "text": "The data array in gData is not limited to simple variables. You can use multiple items or multi dimensional arrays, which can be looped to generate multiple rows. "
+      },
+      "after": "173bf982067c7218",
+      "id": "ddb56f4f39c15623",
+      "date": 1459810892338
+    },
+    {
+      "type": "move",
+      "order": [
+        "d6423940dc760193",
+        "90c292ad03c78f42",
+        "60e1fbe4948988b1",
+        "7acdc6c531a831bf",
+        "7f0f9b136adda64a",
+        "f7078bbf4f46976d",
+        "528f87fd57e55e38",
+        "6ed58f1fdf367c3f",
+        "173bf982067c7218",
+        "ddb56f4f39c15623",
+        "4504cd119e964cac",
+        "23c8e22fb2c19940"
+      ],
+      "id": "7f0f9b136adda64a",
+      "date": 1459810929938
+    },
+    {
+      "type": "edit",
+      "id": "7f0f9b136adda64a",
+      "item": {
+        "type": "reference",
+        "id": "7f0f9b136adda64a",
+        "site": "revigniter.livecode.world",
+        "slug": "creating-a-view",
+        "title": "Creating a View",
+        "text": "Using your text editor, create a file called blogview.lc, and put this in it:"
+      },
+      "date": 1459810933654
+    },
+    {
+      "type": "remove",
+      "id": "7acdc6c531a831bf",
+      "date": 1459810936783
+    },
+    {
+      "type": "remove",
+      "id": "4504cd119e964cac",
+      "date": 1459810962353
+    },
+    {
+      "type": "remove",
+      "id": "23c8e22fb2c19940",
+      "date": 1459811097292
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3cdc9e60f1a125d4"
+      },
+      "id": "3cdc9e60f1a125d4",
+      "type": "add",
+      "after": "ddb56f4f39c15623",
+      "date": 1459814923191
+    },
+    {
+      "type": "move",
+      "order": [
+        "d6423940dc760193",
+        "90c292ad03c78f42",
+        "60e1fbe4948988b1",
+        "7f0f9b136adda64a",
+        "f7078bbf4f46976d",
+        "3cdc9e60f1a125d4",
+        "528f87fd57e55e38",
+        "6ed58f1fdf367c3f",
+        "173bf982067c7218",
+        "ddb56f4f39c15623"
+      ],
+      "id": "3cdc9e60f1a125d4",
+      "date": 1459814925322
+    },
+    {
+      "type": "edit",
+      "id": "3cdc9e60f1a125d4",
+      "item": {
+        "type": "reference",
+        "id": "3cdc9e60f1a125d4",
+        "site": "revigniter.livecode.world",
+        "slug": "loading-a-view",
+        "title": "Loading a View",
+        "text": "To load a particular view file you will use the following function:"
+      },
+      "date": 1459814927291
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "eb0d931db6144f2f"
+      },
+      "id": "eb0d931db6144f2f",
+      "type": "add",
+      "after": "ddb56f4f39c15623",
+      "date": 1459815063854
+    },
+    {
+      "type": "move",
+      "order": [
+        "d6423940dc760193",
+        "90c292ad03c78f42",
+        "60e1fbe4948988b1",
+        "7f0f9b136adda64a",
+        "f7078bbf4f46976d",
+        "3cdc9e60f1a125d4",
+        "eb0d931db6144f2f",
+        "528f87fd57e55e38",
+        "6ed58f1fdf367c3f",
+        "173bf982067c7218",
+        "ddb56f4f39c15623"
+      ],
+      "id": "eb0d931db6144f2f",
+      "date": 1459815066590
+    },
+    {
+      "type": "edit",
+      "id": "eb0d931db6144f2f",
+      "item": {
+        "type": "reference",
+        "id": "eb0d931db6144f2f",
+        "site": "revigniter.livecode.world",
+        "slug": "returning-views-as-data",
+        "title": "Returning Views as Data",
+        "text": "There is a second optional parameter which lets you change the behavior of the function so that it returns data as a string rather than sending it to your browser. "
+      },
+      "date": 1459815074955
+    },
+    {
+      "type": "remove",
+      "id": "3cdc9e60f1a125d4",
+      "date": 1459815079237
+    }
+  ]
+}

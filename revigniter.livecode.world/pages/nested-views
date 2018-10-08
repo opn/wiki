@@ -1,0 +1,447 @@
+{
+  "title": "Nested Views",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "3dfe4124b6de4e81",
+      "text": "Multiple views can be loaded sequentially by the controller or, as stated above, nested like in the following sample:"
+    },
+    {
+      "type": "paragraph",
+      "id": "f2e2e4931b22778c",
+      "text": "To keep it really simple, just to demonstrate how to embed views within other views, let's use the revIgniter welcome view and split it into three parts."
+    },
+    {
+      "type": "paragraph",
+      "id": "fc16725f4ad762bd",
+      "text": " We name them nestedviewsHeader.lc, nestedviewsContent.lc and nestedviewsFooter.lc."
+    },
+    {
+      "type": "html",
+      "id": "d29eb639d61d0fd1",
+      "text": "# nestedviewsHeader.lc, the header view:"
+    },
+    {
+      "type": "code",
+      "id": "f781b94cee624542",
+      "text": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>[[gData[\"pageTitle\"] ]]</title>\n  </head>\n  <body>"
+    },
+    {
+      "type": "paragraph",
+      "id": "cef5a87c7e8b4ebd",
+      "text": "nestedviewsContent.lc, the content view:"
+    },
+    {
+      "type": "code",
+      "id": "0f1e3110b78750b9",
+      "text": "<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>\nsystem/application/views/welcomeMessage.lc\n</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>\nsystem/application/controllers/welcome.lc\n</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>"
+    },
+    {
+      "type": "paragraph",
+      "id": "7171e406e79eb8a0",
+      "text": "nestedviewsFooter.lc, the footer view:"
+    },
+    {
+      "type": "code",
+      "id": "6f13ec28da8d75f7",
+      "text": "    <p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n  </body>\n</html>"
+    },
+    {
+      "type": "paragraph",
+      "id": "1f1b95662465b674",
+      "text": "Now we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:"
+    },
+    {
+      "type": "code",
+      "id": "436426dfbef832ec",
+      "text": "<? \n  put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\n  put rigLoadView(\"nestedviewsContent\", TRUE) into tContent\n  put rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\n  return tHeader && tContent && tFooter\n?>"
+    },
+    {
+      "type": "paragraph",
+      "id": "e3deb468114021a9",
+      "text": "Then, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:"
+    },
+    {
+      "type": "code",
+      "id": "e39adb7628eed971",
+      "text": "<?rev\n  put \"welcome,index\" into gControllerHandlers\n\n  command welcome\n    # code...\n  end welcome\n\n  command index\n    # SET PAGE TITLE\n    put \"YourPageTitle\" into gData[\"pageTitle\"]\n\n    # LOAD THE MAIN VIEW FILE\n    get rigLoadView(\"nestedviewsMain\")\nend index\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Nested Views",
+        "story": []
+      },
+      "date": 1459811266917
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a4767f7a19ae646d"
+      },
+      "id": "a4767f7a19ae646d",
+      "type": "add",
+      "date": 1459811268145
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "3dfe4124b6de4e81",
+        "text": "[[Nested Views]]\n\nMultiple views can be loaded sequentially by the controller or, as stated above, nested like in the following sample:\n\nTo keep it really simple, just to demonstrate how to embed views within other views, let's use the revIgniter welcome view and split it into three parts. We name them nestedviewsHeader.lc, nestedviewsContent.lc and nestedviewsFooter.lc.\n\nnestedviewsHeader.lc, the header view:\n\n<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>\nNow we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:\n\n<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>\nThen, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:\n\n<?rev\n\nput \"welcome,index\" into gControllerHandlers\n\n\ncommand welcome\n\t# code...\nend welcome\n\n\ncommand index\n\t# SET PAGE TITLE\n\tput \"YourPageTitle\" into gData[\"pageTitle\"]\n\n\t# LOAD THE MAIN VIEW FILE\n\tget rigLoadView(\"nestedviewsMain\")\nend index\n\n\n\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc\n"
+      },
+      "after": "a4767f7a19ae646d",
+      "id": "3dfe4124b6de4e81",
+      "date": 1459811272154
+    },
+    {
+      "type": "edit",
+      "id": "3dfe4124b6de4e81",
+      "item": {
+        "type": "paragraph",
+        "id": "3dfe4124b6de4e81",
+        "text": "Multiple views can be loaded sequentially by the controller or, as stated above, nested like in the following sample:"
+      },
+      "date": 1459811294953
+    },
+    {
+      "type": "add",
+      "id": "f2e2e4931b22778c",
+      "item": {
+        "type": "paragraph",
+        "id": "f2e2e4931b22778c",
+        "text": "To keep it really simple, just to demonstrate how to embed views within other views, let's use the revIgniter welcome view and split it into three parts."
+      },
+      "after": "3dfe4124b6de4e81",
+      "date": 1459811304226
+    },
+    {
+      "type": "add",
+      "id": "fc16725f4ad762bd",
+      "item": {
+        "type": "paragraph",
+        "id": "fc16725f4ad762bd",
+        "text": " We name them nestedviewsHeader.lc, nestedviewsContent.lc and nestedviewsFooter.lc."
+      },
+      "after": "f2e2e4931b22778c",
+      "date": 1459811313699
+    },
+    {
+      "type": "add",
+      "id": "d29eb639d61d0fd1",
+      "item": {
+        "type": "paragraph",
+        "id": "d29eb639d61d0fd1",
+        "text": "# nestedviewsHeader.lc, the header view:\n\n<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>\nNow we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:\n\n<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>\nThen, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:\n\n<?rev\n\nput \"welcome,index\" into gControllerHandlers\n\n\ncommand welcome\n\t# code...\nend welcome\n\n\ncommand index\n\t# SET PAGE TITLE\n\tput \"YourPageTitle\" into gData[\"pageTitle\"]\n\n\t# LOAD THE MAIN VIEW FILE\n\tget rigLoadView(\"nestedviewsMain\")\nend index\n\n\n\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc\n"
+      },
+      "after": "fc16725f4ad762bd",
+      "date": 1459811326173
+    },
+    {
+      "type": "edit",
+      "id": "d29eb639d61d0fd1",
+      "item": {
+        "type": "html",
+        "id": "d29eb639d61d0fd1",
+        "text": "# nestedviewsHeader.lc, the header view:\n\n<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>\nNow we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:\n\n<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>\nThen, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:\n\n<?rev\n\nput \"welcome,index\" into gControllerHandlers\n\n\ncommand welcome\n\t# code...\nend welcome\n\n\ncommand index\n\t# SET PAGE TITLE\n\tput \"YourPageTitle\" into gData[\"pageTitle\"]\n\n\t# LOAD THE MAIN VIEW FILE\n\tget rigLoadView(\"nestedviewsMain\")\nend index\n\n\n\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc\n"
+      },
+      "date": 1459811328448
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d465f703410b8130"
+      },
+      "id": "d465f703410b8130",
+      "type": "add",
+      "after": "d29eb639d61d0fd1",
+      "date": 1459811341312
+    },
+    {
+      "type": "edit",
+      "id": "d29eb639d61d0fd1",
+      "item": {
+        "type": "html",
+        "id": "d29eb639d61d0fd1",
+        "text": "# nestedviewsHeader.lc, the header view:"
+      },
+      "date": 1459811344391
+    },
+    {
+      "type": "edit",
+      "id": "d465f703410b8130",
+      "item": {
+        "type": "html",
+        "id": "d465f703410b8130",
+        "text": "<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>\nNow we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:\n\n<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>\nThen, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:\n\n<?rev\n\nput \"welcome,index\" into gControllerHandlers\n\n\ncommand welcome\n\t# code...\nend welcome\n\n\ncommand index\n\t# SET PAGE TITLE\n\tput \"YourPageTitle\" into gData[\"pageTitle\"]\n\n\t# LOAD THE MAIN VIEW FILE\n\tget rigLoadView(\"nestedviewsMain\")\nend index\n\n\n\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc\n"
+      },
+      "date": 1459811353509
+    },
+    {
+      "type": "remove",
+      "id": "d465f703410b8130",
+      "date": 1459811359603
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f781b94cee624542"
+      },
+      "id": "f781b94cee624542",
+      "type": "add",
+      "after": "d29eb639d61d0fd1",
+      "date": 1459811372188
+    },
+    {
+      "type": "edit",
+      "id": "f781b94cee624542",
+      "item": {
+        "type": "code",
+        "id": "f781b94cee624542",
+        "text": "<!DOCTYPE html>\n\t<html>\n\t\t<head>\n\t\t\t<title>[[gData[\"pageTitle\"] ]]</title>\n\t\t</head>\n\t\t<body>\nnestedviewsContent.lc, the content view:\n\n<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>"
+      },
+      "date": 1459811387961
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cef5a87c7e8b4ebd"
+      },
+      "id": "cef5a87c7e8b4ebd",
+      "type": "add",
+      "after": "f781b94cee624542",
+      "date": 1459811390504
+    },
+    {
+      "type": "edit",
+      "id": "cef5a87c7e8b4ebd",
+      "item": {
+        "type": "paragraph",
+        "id": "cef5a87c7e8b4ebd",
+        "text": "Now we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:"
+      },
+      "date": 1459811398517
+    },
+    {
+      "type": "add",
+      "id": "1b331526665e2d07",
+      "item": {
+        "type": "paragraph",
+        "id": "1b331526665e2d07",
+        "text": "<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\nput rigLoadView(\"nestedviewsContent\", TRUE) into tContent\nput rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\nreturn tHeader && tContent && tFooter ?>"
+      },
+      "after": "cef5a87c7e8b4ebd",
+      "date": 1459811404061
+    },
+    {
+      "type": "add",
+      "id": "e3deb468114021a9",
+      "item": {
+        "type": "paragraph",
+        "id": "e3deb468114021a9",
+        "text": "Then, in the controller, we solely load the main view file to send a complete web page to the browser like in the following example:"
+      },
+      "after": "1b331526665e2d07",
+      "date": 1459811406332
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e39adb7628eed971"
+      },
+      "id": "e39adb7628eed971",
+      "type": "add",
+      "after": "147df78916bdc864",
+      "date": 1459811420424
+    },
+    {
+      "type": "edit",
+      "id": "e39adb7628eed971",
+      "item": {
+        "type": "code",
+        "id": "e39adb7628eed971",
+        "text": "<?rev\n  put \"welcome,index\" into gControllerHandlers\n\n  command welcome\n    # code...\n  end welcome\n\n  command index\n    # SET PAGE TITLE\n    put \"YourPageTitle\" into gData[\"pageTitle\"]\n\n    # LOAD THE MAIN VIEW FILE\n    get rigLoadView(\"nestedviewsMain\")\nend index\n\n--| END OF welcome.lc\n--| Location: ./system/application/controllers/welcome.lc"
+      },
+      "date": 1459811466784
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "436426dfbef832ec"
+      },
+      "id": "436426dfbef832ec",
+      "type": "add",
+      "after": "e39adb7628eed971",
+      "date": 1459811474103
+    },
+    {
+      "type": "move",
+      "order": [
+        "a4767f7a19ae646d",
+        "3dfe4124b6de4e81",
+        "f2e2e4931b22778c",
+        "fc16725f4ad762bd",
+        "d29eb639d61d0fd1",
+        "f781b94cee624542",
+        "cef5a87c7e8b4ebd",
+        "1b331526665e2d07",
+        "436426dfbef832ec",
+        "e3deb468114021a9",
+        "e39adb7628eed971"
+      ],
+      "id": "436426dfbef832ec",
+      "date": 1459811475777
+    },
+    {
+      "type": "remove",
+      "id": "1b331526665e2d07",
+      "date": 1459811480375
+    },
+    {
+      "type": "edit",
+      "id": "436426dfbef832ec",
+      "item": {
+        "type": "code",
+        "id": "436426dfbef832ec",
+        "text": "<? put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\n  put rigLoadView(\"nestedviewsContent\", TRUE) into tContent\n  put rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\n  return tHeader && tContent && tFooter ?>"
+      },
+      "date": 1459811497369
+    },
+    {
+      "type": "edit",
+      "id": "436426dfbef832ec",
+      "item": {
+        "type": "code",
+        "id": "436426dfbef832ec",
+        "text": "<? \n  put rigLoadView(\"nestedviewsHeader\", TRUE) into tHeader\n  put rigLoadView(\"nestedviewsContent\", TRUE) into tContent\n  put rigLoadView(\"nestedviewsFooter\", TRUE) into tFooter\n  return tHeader && tContent && tFooter\n?>"
+      },
+      "date": 1459811512442
+    },
+    {
+      "type": "edit",
+      "id": "f781b94cee624542",
+      "item": {
+        "type": "code",
+        "id": "f781b94cee624542",
+        "text": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>[[gData[\"pageTitle\"] ]]</title>\n  </head>\n  <body>"
+      },
+      "date": 1459811577251
+    },
+    {
+      "type": "edit",
+      "id": "cef5a87c7e8b4ebd",
+      "item": {
+        "type": "paragraph",
+        "id": "cef5a87c7e8b4ebd",
+        "text": "\n    nestedviewsContent.lc, the content view:\n\n  <h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>\nnestedviewsFooter.lc, the footer view:\n\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>"
+      },
+      "date": 1459811596363
+    },
+    {
+      "type": "add",
+      "id": "1f1b95662465b674",
+      "item": {
+        "type": "paragraph",
+        "id": "1f1b95662465b674",
+        "text": "Now we need one view which acts as the main view, the view all the other views are nested in. We name it nestedviewsMain.lc:"
+      },
+      "after": "cef5a87c7e8b4ebd",
+      "date": 1459811598015
+    },
+    {
+      "type": "edit",
+      "id": "cef5a87c7e8b4ebd",
+      "item": {
+        "type": "paragraph",
+        "id": "cef5a87c7e8b4ebd",
+        "text": "nestedviewsContent.lc, the content view:"
+      },
+      "date": 1459811605011
+    },
+    {
+      "type": "add",
+      "id": "7171e406e79eb8a0",
+      "item": {
+        "type": "paragraph",
+        "id": "7171e406e79eb8a0",
+        "text": "nestedviewsFooter.lc, the footer view:"
+      },
+      "after": "cef5a87c7e8b4ebd",
+      "date": 1459811624282
+    },
+    {
+      "type": "add",
+      "id": "2e409fecc9a62ab4",
+      "item": {
+        "type": "paragraph",
+        "id": "2e409fecc9a62ab4",
+        "text": "\n\t<p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n\t</body>\n</html>"
+      },
+      "after": "7171e406e79eb8a0",
+      "date": 1459811629996
+    },
+    {
+      "type": "edit",
+      "id": "a4767f7a19ae646d",
+      "item": {
+        "type": "html",
+        "id": "a4767f7a19ae646d",
+        "text": "<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>"
+      },
+      "date": 1459811632221
+    },
+    {
+      "type": "remove",
+      "id": "a4767f7a19ae646d",
+      "date": 1459811640491
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "0f1e3110b78750b9",
+        "text": "<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>system/application/views/welcomeMessage.lc</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>system/application/controllers/welcome.lc</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>"
+      },
+      "after": "cef5a87c7e8b4ebd",
+      "id": "0f1e3110b78750b9",
+      "date": 1459811651658
+    },
+    {
+      "type": "edit",
+      "id": "0f1e3110b78750b9",
+      "item": {
+        "type": "code",
+        "id": "0f1e3110b78750b9",
+        "text": "<h1>Welcome to revIgniter!</h1>\n\t\n<p>The page you are looking at is being generated dynamically by revIgniter.</p>\n\t\n<p>If you would like to edit this page you'll find it located at:</p>\n<code>\nsystem/application/views/welcomeMessage.lc\n</code>\n\t\n<p>The corresponding controller for this page is found at:</p>\n<code>\nsystem/application/controllers/welcome.lc\n</code>\n\t\n<p>If you are exploring revIgniter for the very first time, you should start by reading the <a href=\"userGuide/\">User Guide</a>.</p>"
+      },
+      "date": 1459811688975
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "6f13ec28da8d75f7"
+      },
+      "after": "2e409fecc9a62ab4",
+      "id": "6f13ec28da8d75f7",
+      "date": 1459811702017
+    },
+    {
+      "type": "remove",
+      "id": "2e409fecc9a62ab4",
+      "date": 1459811706692
+    },
+    {
+      "type": "edit",
+      "id": "6f13ec28da8d75f7",
+      "item": {
+        "type": "code",
+        "id": "6f13ec28da8d75f7",
+        "text": "    <p><br />Page rendered in {{g_ElapsedTime_}} seconds</p>\n  </body>\n</html>"
+      },
+      "date": 1459811718479
+    }
+  ]
+}

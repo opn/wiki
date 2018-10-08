@@ -1,0 +1,335 @@
+{
+  "journal": [
+    {
+      "date": 1502226440726,
+      "type": "create",
+      "item": {
+        "story": "",
+        "title": " Nginx Virtual Hosts"
+      }
+    },
+    {
+      "type": "add",
+      "id": "c0cd8a3a6d51e4a3",
+      "item": {
+        "type": "factory",
+        "id": "c0cd8a3a6d51e4a3"
+      },
+      "date": 1502226441662
+    },
+    {
+      "id": "c0cd8a3a6d51e4a3",
+      "type": "edit",
+      "item": {
+        "text": "First of all, you need to create 2 new folders to handle our next step:",
+        "type": "paragraph",
+        "id": "c0cd8a3a6d51e4a3"
+      },
+      "date": 1502226443681
+    },
+    {
+      "id": "9f740ffbba6e3349",
+      "type": "add",
+      "item": {
+        "text": "mkdir /usr/local/etc/nginx/sites-available  \nmkdir /usr/local/etc/nginx/sites-enabled  ",
+        "type": "code",
+        "id": "9f740ffbba6e3349"
+      },
+      "after": "c0cd8a3a6d51e4a3",
+      "date": 1502226447485
+    },
+    {
+      "id": "d865f0b15313fe25",
+      "type": "add",
+      "item": {
+        "text": "sites-available are all your virtual config files and sites-enabled hold a symbolic link from sites-available folder so you can remove and create new config if you want new sites added.",
+        "type": "paragraph",
+        "id": "d865f0b15313fe25"
+      },
+      "after": "9f740ffbba6e3349",
+      "date": 1502226450383
+    },
+    {
+      "id": "bfb34fc186bc0254",
+      "type": "add",
+      "item": {
+        "text": "Next step is create your first virtualhost file:",
+        "type": "paragraph",
+        "id": "bfb34fc186bc0254"
+      },
+      "after": "d865f0b15313fe25",
+      "date": 1502226453506
+    },
+    {
+      "id": "0ff043f8a07feccd",
+      "type": "add",
+      "item": {
+        "text": "nano /usr/local/etc/nginx/sites-available/{hostfile}  ",
+        "type": "code",
+        "id": "0ff043f8a07feccd"
+      },
+      "after": "bfb34fc186bc0254",
+      "date": 1502226456432
+    },
+    {
+      "id": "151882e56c1b7830",
+      "type": "add",
+      "item": {
+        "text": "Change {hostfile} to your domain eg. test.local ",
+        "type": "paragraph",
+        "id": "151882e56c1b7830"
+      },
+      "after": "0ff043f8a07feccd",
+      "date": 1502226459075
+    },
+    {
+      "id": "b9f00cfa9edb6c64",
+      "type": "add",
+      "item": {
+        "text": "My virtualhost file look likes this:",
+        "type": "paragraph",
+        "id": "b9f00cfa9edb6c64"
+      },
+      "after": "151882e56c1b7830",
+      "date": 1502226482498
+    },
+    {
+      "id": "5216badaf4625758",
+      "type": "add",
+      "item": {
+        "text": "server {  \n  listen                *:8080;\n  server_name           {test-domain};\n  #access_log           /Users/{username}/{webfolder}/{hostfile}/log/access.log;\n  #error_log            /Users/{username}/{webfolder}/{hostfile}/log/error.log;\n  root  /Users/{username}/{webfolder}/{hostfile};\n  index  index.html index.htm index.php;\n\n  location / {\n    try_files  $uri  $uri/  /index.php?$args;\n  }\n\n  location ~ \\.php$ {\n    try_files  $uri  $uri/  /index.php?$args;\n\n    fastcgi_param PATH_INFO $fastcgi_path_info;\n    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n    fastcgi_pass 127.0.0.1:9000;\n    fastcgi_index index.php;\n    fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n    fastcgi_intercept_errors on;\n    include fastcgi_params;\n  }\n}",
+        "type": "code",
+        "id": "5216badaf4625758"
+      },
+      "after": "b9f00cfa9edb6c64",
+      "date": 1502226485896
+    },
+    {
+      "id": "330e516b54559ae5",
+      "type": "add",
+      "item": {
+        "text": "change {username}, {webfolder} and {hostfile} width there names your ealier have changes the names on.",
+        "type": "paragraph",
+        "id": "330e516b54559ae5"
+      },
+      "after": "5216badaf4625758",
+      "date": 1502226491178
+    },
+    {
+      "id": "00c156b2ba7851ae",
+      "type": "add",
+      "item": {
+        "text": "When you have save this folder you go to the sites-enabled and run the following command.",
+        "type": "paragraph",
+        "id": "00c156b2ba7851ae"
+      },
+      "after": "330e516b54559ae5",
+      "date": 1502226493798
+    },
+    {
+      "id": "85e146a006ee2950",
+      "type": "add",
+      "item": {
+        "text": "ln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  ",
+        "type": "code",
+        "id": "85e146a006ee2950"
+      },
+      "after": "00c156b2ba7851ae",
+      "date": 1502226496398
+    },
+    {
+      "id": "a60f1631414f27bf",
+      "type": "add",
+      "item": {
+        "text": "Restart you NGINX webserver now:",
+        "type": "paragraph",
+        "id": "a60f1631414f27bf"
+      },
+      "after": "85e146a006ee2950",
+      "date": 1502226499577
+    },
+    {
+      "id": "c8994fd84adc7d4d",
+      "type": "add",
+      "item": {
+        "text": "sudo nginx -s reload ",
+        "type": "code",
+        "id": "c8994fd84adc7d4d"
+      },
+      "after": "a60f1631414f27bf",
+      "date": 1502226504248
+    },
+    {
+      "id": "17bf4d8018c20cab",
+      "type": "add",
+      "item": {
+        "text": "Look in your browser about its working well:\n\n",
+        "type": "paragraph",
+        "id": "17bf4d8018c20cab"
+      },
+      "after": "c8994fd84adc7d4d",
+      "date": 1502226507822
+    },
+    {
+      "id": "26e171d810d9ec0d",
+      "type": "add",
+      "item": {
+        "text": "http://{hostfile}:8080",
+        "type": "code",
+        "id": "26e171d810d9ec0d"
+      },
+      "after": "17bf4d8018c20cab",
+      "date": 1502226511490
+    },
+    {
+      "id": "b79389f41fe4a7ba",
+      "type": "add",
+      "item": {
+        "text": "Remember to changes your computers hostfile if not you have done that already in sudo nano /etc/hosts put this line in your hostfile",
+        "type": "paragraph",
+        "id": "b79389f41fe4a7ba"
+      },
+      "after": "26e171d810d9ec0d",
+      "date": 1502226514850
+    },
+    {
+      "id": "03b35b22ab016d56",
+      "type": "add",
+      "item": {
+        "text": "127.0.0.1 {test-domain} ",
+        "type": "code",
+        "id": "03b35b22ab016d56"
+      },
+      "after": "b79389f41fe4a7ba",
+      "date": 1502226546381
+    },
+    {
+      "type": "fork",
+      "date": 1502531314198
+    },
+    {
+      "type": "edit",
+      "id": "c0cd8a3a6d51e4a3",
+      "item": {
+        "text": "here we look at how to configure [[Virtual Host]]s in [[Nginx]].",
+        "id": "c0cd8a3a6d51e4a3",
+        "type": "paragraph"
+      },
+      "date": 1502531352697
+    },
+    {
+      "type": "add",
+      "id": "9cc2bd8ccf0548a8",
+      "item": {
+        "type": "paragraph",
+        "id": "9cc2bd8ccf0548a8",
+        "text": "First of all, you need to create 2 new folders to handle our next step:"
+      },
+      "after": "c0cd8a3a6d51e4a3",
+      "date": 1502531353063
+    },
+    {
+      "type": "edit",
+      "id": "c0cd8a3a6d51e4a3",
+      "item": {
+        "text": "Here we look at how to configure [[Virtual Host]]s in [[Nginx]].",
+        "id": "c0cd8a3a6d51e4a3",
+        "type": "paragraph"
+      },
+      "date": 1502531404871
+    }
+  ],
+  "title": "Nginx Virtual Hosts",
+  "story": [
+    {
+      "text": "Here we look at how to configure [[Virtual Host]]s in [[Nginx]].",
+      "id": "c0cd8a3a6d51e4a3",
+      "type": "paragraph"
+    },
+    {
+      "type": "paragraph",
+      "id": "9cc2bd8ccf0548a8",
+      "text": "First of all, you need to create 2 new folders to handle our next step:"
+    },
+    {
+      "text": "mkdir /usr/local/etc/nginx/sites-available  \nmkdir /usr/local/etc/nginx/sites-enabled  ",
+      "id": "9f740ffbba6e3349",
+      "type": "code"
+    },
+    {
+      "text": "sites-available are all your virtual config files and sites-enabled hold a symbolic link from sites-available folder so you can remove and create new config if you want new sites added.",
+      "id": "d865f0b15313fe25",
+      "type": "paragraph"
+    },
+    {
+      "text": "Next step is create your first virtualhost file:",
+      "id": "bfb34fc186bc0254",
+      "type": "paragraph"
+    },
+    {
+      "text": "nano /usr/local/etc/nginx/sites-available/{hostfile}  ",
+      "id": "0ff043f8a07feccd",
+      "type": "code"
+    },
+    {
+      "text": "Change {hostfile} to your domain eg. test.local ",
+      "id": "151882e56c1b7830",
+      "type": "paragraph"
+    },
+    {
+      "text": "My virtualhost file look likes this:",
+      "id": "b9f00cfa9edb6c64",
+      "type": "paragraph"
+    },
+    {
+      "text": "server {  \n  listen                *:8080;\n  server_name           {test-domain};\n  #access_log           /Users/{username}/{webfolder}/{hostfile}/log/access.log;\n  #error_log            /Users/{username}/{webfolder}/{hostfile}/log/error.log;\n  root  /Users/{username}/{webfolder}/{hostfile};\n  index  index.html index.htm index.php;\n\n  location / {\n    try_files  $uri  $uri/  /index.php?$args;\n  }\n\n  location ~ \\.php$ {\n    try_files  $uri  $uri/  /index.php?$args;\n\n    fastcgi_param PATH_INFO $fastcgi_path_info;\n    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;\n    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n\n    fastcgi_pass 127.0.0.1:9000;\n    fastcgi_index index.php;\n    fastcgi_split_path_info ^(.+\\.php)(/.+)$;\n    fastcgi_intercept_errors on;\n    include fastcgi_params;\n  }\n}",
+      "id": "5216badaf4625758",
+      "type": "code"
+    },
+    {
+      "text": "change {username}, {webfolder} and {hostfile} width there names your ealier have changes the names on.",
+      "id": "330e516b54559ae5",
+      "type": "paragraph"
+    },
+    {
+      "text": "When you have save this folder you go to the sites-enabled and run the following command.",
+      "id": "00c156b2ba7851ae",
+      "type": "paragraph"
+    },
+    {
+      "text": "ln -s /usr/local/etc/nginx/sites-available/{hostfile} /usr/local/etc/nginx/sites-enabled/{hostfile}  ",
+      "id": "85e146a006ee2950",
+      "type": "code"
+    },
+    {
+      "text": "Restart you NGINX webserver now:",
+      "id": "a60f1631414f27bf",
+      "type": "paragraph"
+    },
+    {
+      "text": "sudo nginx -s reload ",
+      "id": "c8994fd84adc7d4d",
+      "type": "code"
+    },
+    {
+      "text": "Look in your browser about its working well:\n\n",
+      "id": "17bf4d8018c20cab",
+      "type": "paragraph"
+    },
+    {
+      "text": "http://{hostfile}:8080",
+      "id": "26e171d810d9ec0d",
+      "type": "code"
+    },
+    {
+      "text": "Remember to changes your computers hostfile if not you have done that already in sudo nano /etc/hosts put this line in your hostfile",
+      "id": "b79389f41fe4a7ba",
+      "type": "paragraph"
+    },
+    {
+      "text": "127.0.0.1 {test-domain} ",
+      "id": "03b35b22ab016d56",
+      "type": "code"
+    }
+  ]
+}

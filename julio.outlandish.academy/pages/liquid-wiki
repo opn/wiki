@@ -1,0 +1,836 @@
+{
+  "title": "Liquid Wiki",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "cbc415816c889c14",
+      "text": "A key sprint aim of the [[Holo Sprintathon]] week will be to implement a version of Federated Wiki on [[Holo]], which has been christened [[Liquid Wiki]]."
+    },
+    {
+      "type": "markdown",
+      "id": "b4f24fc0098a411f",
+      "text": "- [[Liquid Wiki Notes]]\n- [[Federated Wiki]]\n- [[Advanced Wiki Nature]]\n- [[Fedwiki Server Requirements]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "4aee1eb0f82a28ed",
+      "text": "This [[Post-blockchain]] implementation will add secure verifiability to the provenance of content, which will significantly widen the applicability of the tool."
+    },
+    {
+      "type": "paragraph",
+      "id": "ca93a7508f64bf2e",
+      "text": "Here we are writing notes on the [[Implementing Liquid Wiki]] - a version of wiki on a [[holochain]] backend. The aim of Liquid Wiki is to create a writing platform for democracy. "
+    },
+    {
+      "type": "paragraph",
+      "id": "3f9dba1297156244",
+      "text": "Thie idea is that we can take wikipedia content and fork it, to enable students, or individuals interested in political debate to write and research about an issue and present it from there own perspective. Test."
+    },
+    {
+      "type": "paragraph",
+      "id": "7028e8c7999d5330",
+      "text": "Finally by adding a provenance layer, on holochain - that is the ability to prove the authorship of a change or modification - we can add (scientific) reputation, or democratic support to the propositions - enabling a bottom up form of democratic conversation and decision making."
+    },
+    {
+      "type": "markdown",
+      "id": "4958ca984d189de5",
+      "text": "# Specification"
+    },
+    {
+      "type": "factory",
+      "id": "a02d2413c53073ad",
+      "text": "- [[Functional Specification]]\n- [[Implementing Liquid Wiki]]\n- [[Fedwiki Server Requirements]]\n- [[Fedwiki Site Administration]]"
+    },
+    {
+      "type": "markdown",
+      "id": "8da693e4eeaf7268",
+      "text": "# See also\n\n- [[FedWiki for Notetaking]]\n- [[Federated Data]]\n- [[FedWiki for Scholarly Work]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "fork",
+      "date": 1517138640199
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f837ec8bcb2205fd"
+      },
+      "id": "f837ec8bcb2205fd",
+      "type": "add",
+      "date": 1517138647677
+    },
+    {
+      "type": "remove",
+      "id": "f837ec8bcb2205fd",
+      "date": 1517138661692
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "afb71b61eb80cdc9"
+      },
+      "id": "afb71b61eb80cdc9",
+      "type": "add",
+      "date": 1517138669899
+    },
+    {
+      "type": "remove",
+      "id": "afb71b61eb80cdc9",
+      "date": 1517138744826
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "14dce7f6d27680ea"
+      },
+      "id": "14dce7f6d27680ea",
+      "type": "add",
+      "date": 1517138757009
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "paragraph",
+        "id": "14dce7f6d27680ea",
+        "text": "### Questions for Holochain"
+      },
+      "date": 1517138776664
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "### Questions for Holochain"
+      },
+      "date": 1517138793230
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2e01e1a7e7638352"
+      },
+      "id": "2e01e1a7e7638352",
+      "type": "add",
+      "after": "14dce7f6d27680ea",
+      "date": 1517138803267
+    },
+    {
+      "type": "remove",
+      "id": "2e01e1a7e7638352",
+      "date": 1517138808931
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "### Questions for Holochain\n\n* Looking for details to implement the entry types for backing Federated Wiki\n\n#### JSON Blobs\n* do we store these inside the entry or not\n* if not, we want to store their IPFS hash inside the entry.\n\n*\n"
+      },
+      "date": 1517138948293
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which paragraph blobs are hung, added and deleted.\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517139675280
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "749660cbbc483e32"
+      },
+      "id": "749660cbbc483e32",
+      "type": "add",
+      "after": "14dce7f6d27680ea",
+      "date": 1517139777903
+    },
+    {
+      "type": "remove",
+      "id": "749660cbbc483e32",
+      "date": 1517139797992
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "969a4b8f9080cfb4"
+      },
+      "id": "969a4b8f9080cfb4",
+      "type": "add",
+      "after": "14dce7f6d27680ea",
+      "date": 1517140159691
+    },
+    {
+      "type": "remove",
+      "id": "969a4b8f9080cfb4",
+      "date": 1517140167811
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4975818131e55ea6"
+      },
+      "id": "4975818131e55ea6",
+      "type": "add",
+      "after": "14dce7f6d27680ea",
+      "date": 1517140169445
+    },
+    {
+      "type": "edit",
+      "id": "4975818131e55ea6",
+      "item": {
+        "type": "markdown",
+        "id": "4975818131e55ea6",
+        "text": "# Front End Development\n\n## Asset Upload\n\n* Front and or back end need to rewrite the `asset/` URL when the IPFS service has completed its journey of hashingtons\n"
+      },
+      "date": 1517140276465
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which paragraph blobs are hung, added and deleted.\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517177874132
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which paragraph blobs are hung, added and deleted.\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517177886232
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added and deleted.\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517178046917
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517178099303
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "Holochain provides a well matc\n\n# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517178189279
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "Holochain provides seemingly an extremely well matched paradigm for the storage of Federated Wiki content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517178634176
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "Holochain provides seemingly an extremely well matched paradigm for the storage of Federated Wiki content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\nThe latter seems closer to the Federated Wiki existing structure.\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517178668860
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "Holochain provides seemingly an extremely well matched paradigm for the storage of Federated Wiki content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517179035144
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "Holochain provides seemingly an extremely well matched paradigm for the storage of Federated Wiki content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n### High level implementation structure\n* retain the current node.js/express server for fedwiki, and all the various tools it provides. \n* extend/alter the express server such that content provenance is managed by Holochain in some way (see the Wiki Page Entry below).\n* early implementations would hold all the holochain nodes inside one container running on a DO droplet, each node representing some FedWiki site. Creating a new wiki site would push through a request to the Holochain Pre-Incubator, which would create a new Holochain Agent ID, register ports with the OS, and return that data to some intermediary service that can managed interfacing with the Holochain Node rest API's of each Agent/FedWiki site\n\n# Questions for Holochain\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517179381899
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "Holochain provides seemingly an extremely well matched paradigm for the storage of Federated Wiki content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n### High level implementation structure\n* retain the current node.js/express server for fedwiki, and all the various tools it provides. \n* extend/alter the express server such that content provenance is managed by Holochain in some way (see the Wiki Page Entry below).\n* early implementations would hold all the holochain nodes inside one container running on a DO droplet, each node representing some FedWiki site. Creating a new wiki site would push through a request to the Holochain Pre-Incubator, which would create a new Holochain Agent ID, register ports with the OS, and return that data to some intermediary service that can managed interfacing with the Holochain Node rest API's of each Agent/FedWiki site\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517179397048
+    },
+    {
+      "type": "fork",
+      "site": "christopherreay.outlandish.academy",
+      "date": 1517185201998
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "[[Holochain]] provides seemingly an extremely well matched paradigm for the storage of Federated Wiki content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n### High level implementation structure\n* retain the current node.js/express server for fedwiki, and all the various tools it provides. \n* extend/alter the express server such that content provenance is managed by Holochain in some way (see the Wiki Page Entry below).\n* early implementations would hold all the holochain nodes inside one container running on a DO droplet, each node representing some FedWiki site. Creating a new wiki site would push through a request to the Holochain Pre-Incubator, which would create a new Holochain Agent ID, register ports with the OS, and return that data to some intermediary service that can managed interfacing with the Holochain Node rest API's of each Agent/FedWiki site\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517185506539
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca93a7508f64bf2e"
+      },
+      "id": "ca93a7508f64bf2e",
+      "type": "add",
+      "after": "4975818131e55ea6",
+      "date": 1517185522300
+    },
+    {
+      "type": "move",
+      "order": [
+        "ca93a7508f64bf2e",
+        "14dce7f6d27680ea",
+        "4975818131e55ea6"
+      ],
+      "id": "ca93a7508f64bf2e",
+      "date": 1517185524179
+    },
+    {
+      "type": "edit",
+      "id": "14dce7f6d27680ea",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "[[Holochain]] provides seemingly an extremely well matched paradigm for the storage of [[Federated Wiki]] content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n### High level implementation structure\n* retain the current node.js/express server for fedwiki, and all the various tools it provides. \n* extend/alter the express server such that content provenance is managed by Holochain in some way (see the Wiki Page Entry below).\n* early implementations would hold all the holochain nodes inside one container running on a DO droplet, each node representing some FedWiki site. Creating a new wiki site would push through a request to the Holochain Pre-Incubator, which would create a new Holochain Agent ID, register ports with the OS, and return that data to some intermediary service that can managed interfacing with the Holochain Node rest API's of each Agent/FedWiki site\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "date": 1517185525437
+    },
+    {
+      "type": "edit",
+      "id": "ca93a7508f64bf2e",
+      "item": {
+        "type": "paragraph",
+        "id": "ca93a7508f64bf2e",
+        "text": "[[Liquid Wiki implementation]]"
+      },
+      "date": 1517185547401
+    },
+    {
+      "type": "edit",
+      "id": "ca93a7508f64bf2e",
+      "item": {
+        "type": "paragraph",
+        "id": "ca93a7508f64bf2e",
+        "text": "[[Implementing Liquid Wiki]]"
+      },
+      "date": 1517185559699
+    },
+    {
+      "type": "remove",
+      "id": "14dce7f6d27680ea",
+      "date": 1517185633802
+    },
+    {
+      "type": "remove",
+      "id": "4975818131e55ea6",
+      "date": 1517185641160
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4aeae1078111e5b3"
+      },
+      "id": "4aeae1078111e5b3",
+      "type": "add",
+      "after": "ca93a7508f64bf2e",
+      "date": 1517185659823
+    },
+    {
+      "type": "remove",
+      "id": "4aeae1078111e5b3",
+      "date": 1517185663980
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b4f24fc0098a411f"
+      },
+      "id": "b4f24fc0098a411f",
+      "type": "add",
+      "after": "ca93a7508f64bf2e",
+      "date": 1517185679249
+    },
+    {
+      "type": "edit",
+      "id": "b4f24fc0098a411f",
+      "item": {
+        "type": "paragraph",
+        "id": "b4f24fc0098a411f",
+        "text": "# Federated Wiki"
+      },
+      "date": 1517185715856
+    },
+    {
+      "type": "add",
+      "id": "ce391f2f4a8a2434",
+      "item": {
+        "type": "paragraph",
+        "id": "ce391f2f4a8a2434",
+        "text": "[[Federated Wiki]] is a complete rethink of Wiki from its inventor, [[Ward Cunningham]]. He felt that the build out of wiki had never quite enabled the character of collaboration he had hoped for, and set out to build anew."
+      },
+      "after": "b4f24fc0098a411f",
+      "date": 1517185724683
+    },
+    {
+      "type": "add",
+      "id": "9b821d2b91ae718e",
+      "item": {
+        "type": "paragraph",
+        "id": "9b821d2b91ae718e",
+        "text": "In federated wiki, your pages are your own, and can be shared or private; if shared, they can be forked, sections copied across by other users. Your status as a collaborator is 'remembered' through all versions. A wide variety of [[transporters]] have been built to enable use of varied media."
+      },
+      "after": "ce391f2f4a8a2434",
+      "date": 1517185738044
+    },
+    {
+      "type": "add",
+      "id": "7ea6b0cc379a2cf1",
+      "item": {
+        "type": "paragraph",
+        "id": "7ea6b0cc379a2cf1",
+        "text": "At the holo-hack in Barcelona, a parallel project named fractalWiki was hatched. The similarities were noted, and the applicability of holochain's 'agent-centric' mode and distributed processing was obvious."
+      },
+      "after": "9b821d2b91ae718e",
+      "date": 1517185741873
+    },
+    {
+      "type": "add",
+      "id": "cbc415816c889c14",
+      "item": {
+        "type": "paragraph",
+        "id": "cbc415816c889c14",
+        "text": "A key sprint aim of the [[Holo Sprintathon]] week will be to implement a version of Federated Wiki on [[Holo]], which has been christened [[Liquid Wiki]]."
+      },
+      "after": "7ea6b0cc379a2cf1",
+      "date": 1517185780948
+    },
+    {
+      "type": "add",
+      "id": "4aee1eb0f82a28ed",
+      "item": {
+        "type": "paragraph",
+        "id": "4aee1eb0f82a28ed",
+        "text": "This [[Post-blockchain]] implementation will add secure verifiability to the provenance of content, which will significantly widen the applicability of the tool."
+      },
+      "after": "cbc415816c889c14",
+      "date": 1517185807497
+    },
+    {
+      "type": "edit",
+      "id": "b4f24fc0098a411f",
+      "item": {
+        "type": "markdown",
+        "id": "b4f24fc0098a411f",
+        "text": "# Federated Wiki"
+      },
+      "date": 1517185810973
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "47be49d7a1be23d9"
+      },
+      "id": "47be49d7a1be23d9",
+      "type": "add",
+      "after": "4aee1eb0f82a28ed",
+      "date": 1517187323361
+    },
+    {
+      "type": "edit",
+      "id": "47be49d7a1be23d9",
+      "item": {
+        "type": "paragraph",
+        "id": "47be49d7a1be23d9",
+        "text": "# Notes"
+      },
+      "date": 1517187329715
+    },
+    {
+      "type": "add",
+      "id": "5d3ea0e81a1fb1b6",
+      "item": {
+        "type": "paragraph",
+        "id": "5d3ea0e81a1fb1b6",
+        "text": "So essentially we are looking to port Federated wiki to holochain - so we end up with a holochain app that can use all the content and community we have already written around blockchain, commons, graphing etc but in a new holochain app.\n\n2:06 PM\nThere are other ways to think of the technical relationship between the projects that we can explore - and we can also look at, discuss and document the deep philosophy behind the idea of the two projects and where we seek to go with the project.\n\n2:11 PM\nA clear requirement we defined, and have been discussing for a few years is to add a more robust provenance with regard to the authorship of pages as they flow through the federation (peoples servers). The need here is with regard to scientific writing, expert advise, and being able to ascertain the level of democratic (or expert) support for an idea or proposition. For this reason we've decided to call this Liquid Wiki (www.liquidwiki.org no content there yet). This relates to using Liquid Democracy with wiki pages as memes / micro propositions and enabling a demos to vote  support these ideas. The first step on this path is to provide robust provenance for authorship based around personal identity (agent focussed).\n2:12 PM\nThe argument mapping / graphing also fits into this picture - as we need to feed back to people the relationship between argument positions and how more complex ideas are organically broken down and synthesised. Towards the end of the week we can look to see how we integrate these things. In the end you can picture this integration as a writing and research platform for liquid democracy."
+      },
+      "after": "47be49d7a1be23d9",
+      "date": 1517187330930
+    },
+    {
+      "type": "edit",
+      "id": "5d3ea0e81a1fb1b6",
+      "item": {
+        "type": "paragraph",
+        "id": "5d3ea0e81a1fb1b6",
+        "text": "So essentially we are looking to port Federated wiki to holochain - so we end up with a holochain app that can use all the content and community we have already written around blockchain, commons, graphing etc but in a new holochain app."
+      },
+      "date": 1517187340968
+    },
+    {
+      "type": "add",
+      "id": "e5184aa69b465b8d",
+      "item": {
+        "type": "paragraph",
+        "id": "e5184aa69b465b8d",
+        "text": "There are other ways to think of the technical relationship between the projects that we can explore - and we can also look at, discuss and document the deep philosophy behind the idea of the two projects and where we seek to go with the project.\n"
+      },
+      "after": "5d3ea0e81a1fb1b6",
+      "date": 1517187346532
+    },
+    {
+      "type": "add",
+      "id": "dc945f6b80e72aec",
+      "item": {
+        "type": "paragraph",
+        "id": "dc945f6b80e72aec",
+        "text": "A clear requirement we defined, and have been discussing for a few years is to add a more robust provenance with regard to the authorship of pages as they flow through the federation (peoples servers). The need here is with regard to scientific writing, expert advise, and being able to ascertain the level of democratic (or expert) support for an idea or proposition. For this reason we've decided to call this Liquid Wiki (www.liquidwiki.org no content there yet). "
+      },
+      "after": "e5184aa69b465b8d",
+      "date": 1517187350244
+    },
+    {
+      "type": "add",
+      "id": "00f225d2c53e2f1d",
+      "item": {
+        "type": "paragraph",
+        "id": "00f225d2c53e2f1d",
+        "text": "This relates to using Liquid Democracy with wiki pages as memes / micro propositions and enabling a demos to vote  support these ideas. The first step on this path is to provide robust provenance for authorship based around personal identity (agent focussed)."
+      },
+      "after": "dc945f6b80e72aec",
+      "date": 1517187352431
+    },
+    {
+      "type": "add",
+      "id": "bf8a01237d3cccee",
+      "item": {
+        "type": "paragraph",
+        "id": "bf8a01237d3cccee",
+        "text": "The argument mapping / graphing also fits into this picture - as we need to feed back to people the relationship between argument positions and how more complex ideas are organically broken down and synthesised. Towards the end of the week we can look to see how we integrate these things. In the end you can picture this integration as a writing and research platform for liquid democracy."
+      },
+      "after": "00f225d2c53e2f1d",
+      "date": 1517187356659
+    },
+    {
+      "type": "edit",
+      "id": "47be49d7a1be23d9",
+      "item": {
+        "type": "markdown",
+        "id": "47be49d7a1be23d9",
+        "text": "# Notes"
+      },
+      "date": 1517187360097
+    },
+    {
+      "type": "edit",
+      "id": "ca93a7508f64bf2e",
+      "item": {
+        "type": "paragraph",
+        "id": "ca93a7508f64bf2e",
+        "text": "Here we are writing notes on the [[Implementing Liquid Wiki]] - a version of wiki on a [[holochain]] backend."
+      },
+      "date": 1517679586946
+    },
+    {
+      "type": "edit",
+      "id": "9b821d2b91ae718e",
+      "item": {
+        "type": "paragraph",
+        "id": "9b821d2b91ae718e",
+        "text": "In federated wiki, your pages are your own, and can be shared or private; if shared, they can be forked, sections copied across by other users. Your status as a collaborator is 'remembered' through all versions. A wide variety of [[transporter]] have been built to enable use of varied media."
+      },
+      "date": 1517679650255
+    },
+    {
+      "type": "edit",
+      "id": "9b821d2b91ae718e",
+      "item": {
+        "type": "paragraph",
+        "id": "9b821d2b91ae718e",
+        "text": "In federated wiki, your pages are your own, and can be shared or private; if shared, they can be forked, sections copied across by other users. Your status as a collaborator is 'remembered' through all versions. A wide variety of [[transporter]]s have been built to enable use of varied media."
+      },
+      "date": 1517679668014
+    },
+    {
+      "type": "edit",
+      "id": "ca93a7508f64bf2e",
+      "item": {
+        "type": "paragraph",
+        "id": "ca93a7508f64bf2e",
+        "text": "Here we are writing notes on the [[Implementing Liquid Wiki]] - a version of wiki on a [[holochain]] backend. The aim of Liquid Wiki is to create a writing platform for democracy."
+      },
+      "date": 1517679715745
+    },
+    {
+      "type": "edit",
+      "id": "ca93a7508f64bf2e",
+      "item": {
+        "type": "paragraph",
+        "id": "ca93a7508f64bf2e",
+        "text": "Here we are writing notes on the [[Implementing Liquid Wiki]] - a version of wiki on a [[holochain]] backend. The aim of Liquid Wiki is to create a writing platform for democracy. "
+      },
+      "date": 1517679725725
+    },
+    {
+      "type": "add",
+      "id": "3f9dba1297156244",
+      "item": {
+        "type": "paragraph",
+        "id": "3f9dba1297156244",
+        "text": "Thie idea is that we can take wikipedia content and fork it, to enable students, or individuals interested in political debate to write and research about an issue and present it from there own perspective."
+      },
+      "after": "ca93a7508f64bf2e",
+      "date": 1517679791011
+    },
+    {
+      "type": "add",
+      "id": "7028e8c7999d5330",
+      "item": {
+        "type": "paragraph",
+        "id": "7028e8c7999d5330",
+        "text": "Finally by adding a provenance layer, on holochain - that is the ability to prove the authorship of a change or modification - we can add (scientific) reputation, or democratic support to the propositions - enabling a bottom up form of democratic conversation and decision making."
+      },
+      "after": "3f9dba1297156244",
+      "date": 1517679894628
+    },
+    {
+      "type": "add",
+      "id": "a02d2413c53073ad",
+      "item": {
+        "type": "factory",
+        "id": "a02d2413c53073ad",
+        "text": "- [[Functional Specification]]\n- [[Implementing Liquid Wiki]]\n- [[Fedwiki Server Requirements]]\n- [[Fedwiki Site Administration]]"
+      },
+      "after": "7028e8c7999d5330",
+      "date": 1518366386047
+    },
+    {
+      "type": "edit",
+      "id": "47be49d7a1be23d9",
+      "item": {
+        "type": "markdown",
+        "id": "47be49d7a1be23d9",
+        "text": "- [[Liquid Wiki Notes]]"
+      },
+      "date": 1520168439453
+    },
+    {
+      "type": "remove",
+      "id": "5d3ea0e81a1fb1b6",
+      "date": 1520168445512
+    },
+    {
+      "type": "remove",
+      "id": "e5184aa69b465b8d",
+      "date": 1520168448193
+    },
+    {
+      "type": "remove",
+      "id": "dc945f6b80e72aec",
+      "date": 1520168452072
+    },
+    {
+      "type": "remove",
+      "id": "00f225d2c53e2f1d",
+      "date": 1520168458396
+    },
+    {
+      "type": "remove",
+      "id": "bf8a01237d3cccee",
+      "date": 1520168460963
+    },
+    {
+      "type": "edit",
+      "id": "b4f24fc0098a411f",
+      "item": {
+        "type": "markdown",
+        "id": "b4f24fc0098a411f",
+        "text": "- [[Federated Wiki]]"
+      },
+      "date": 1520168472124
+    },
+    {
+      "type": "remove",
+      "id": "ce391f2f4a8a2434",
+      "date": 1520168486289
+    },
+    {
+      "type": "remove",
+      "id": "9b821d2b91ae718e",
+      "date": 1520168587820
+    },
+    {
+      "type": "remove",
+      "id": "7ea6b0cc379a2cf1",
+      "date": 1520168600246
+    },
+    {
+      "type": "move",
+      "order": [
+        "cbc415816c889c14",
+        "ca93a7508f64bf2e",
+        "3f9dba1297156244",
+        "7028e8c7999d5330",
+        "a02d2413c53073ad",
+        "b4f24fc0098a411f",
+        "4aee1eb0f82a28ed",
+        "47be49d7a1be23d9"
+      ],
+      "id": "cbc415816c889c14",
+      "date": 1520168614001
+    },
+    {
+      "type": "move",
+      "order": [
+        "cbc415816c889c14",
+        "4aee1eb0f82a28ed",
+        "ca93a7508f64bf2e",
+        "3f9dba1297156244",
+        "7028e8c7999d5330",
+        "a02d2413c53073ad",
+        "b4f24fc0098a411f",
+        "47be49d7a1be23d9"
+      ],
+      "id": "4aee1eb0f82a28ed",
+      "date": 1520168617419
+    },
+    {
+      "type": "remove",
+      "id": "47be49d7a1be23d9",
+      "date": 1520168841065
+    },
+    {
+      "type": "edit",
+      "id": "b4f24fc0098a411f",
+      "item": {
+        "type": "markdown",
+        "id": "b4f24fc0098a411f",
+        "text": "- [[Liquid Wiki Notes]]\n- [[Federated Wiki]]"
+      },
+      "date": 1520168847879
+    },
+    {
+      "type": "move",
+      "order": [
+        "cbc415816c889c14",
+        "b4f24fc0098a411f",
+        "4aee1eb0f82a28ed",
+        "ca93a7508f64bf2e",
+        "3f9dba1297156244",
+        "7028e8c7999d5330",
+        "a02d2413c53073ad"
+      ],
+      "id": "b4f24fc0098a411f",
+      "date": 1520168853721
+    },
+    {
+      "type": "add",
+      "id": "4958ca984d189de5",
+      "item": {
+        "type": "paragraph",
+        "id": "4958ca984d189de5",
+        "text": "# Specification"
+      },
+      "after": "7028e8c7999d5330",
+      "date": 1520168868320
+    },
+    {
+      "type": "edit",
+      "id": "4958ca984d189de5",
+      "item": {
+        "type": "markdown",
+        "id": "4958ca984d189de5",
+        "text": "# Specification"
+      },
+      "date": 1520168869196
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "8da693e4eeaf7268",
+        "text": "# See also\n\n- [[FedWiki for Notetaking]]\n- [[Federated Data]]\n- [[FedWiki for Scholarly Work]]"
+      },
+      "after": "a02d2413c53073ad",
+      "id": "8da693e4eeaf7268",
+      "date": 1520168903582
+    },
+    {
+      "type": "edit",
+      "id": "b4f24fc0098a411f",
+      "item": {
+        "type": "markdown",
+        "id": "b4f24fc0098a411f",
+        "text": "- [[Liquid Wiki Notes]]\n- [[Federated Wiki]]\n- [[Advanced Wiki Nature]]"
+      },
+      "date": 1520168927427
+    },
+    {
+      "type": "edit",
+      "id": "b4f24fc0098a411f",
+      "item": {
+        "type": "markdown",
+        "id": "b4f24fc0098a411f",
+        "text": "- [[Liquid Wiki Notes]]\n- [[Federated Wiki]]\n- [[Advanced Wiki Nature]]\n- [[Fedwiki Server Requirements]]"
+      },
+      "date": 1520169008965
+    },
+    {
+      "type": "fork",
+      "site": "hack.platform.earth"
+    },
+    {
+      "type": "edit",
+      "id": "3f9dba1297156244",
+      "item": {
+        "type": "paragraph",
+        "id": "3f9dba1297156244",
+        "text": "Thie idea is that we can take wikipedia content and fork it, to enable students, or individuals interested in political debate to write and research about an issue and present it from there own perspective. Test."
+      },
+      "date": 1521753887341
+    }
+  ]
+}

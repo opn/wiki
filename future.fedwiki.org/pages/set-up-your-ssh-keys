@@ -1,0 +1,1653 @@
+{
+  "title": "Set up Your SSH Keys",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "4cc04d35413172f4",
+      "text": "The next step in securing your server is to set up public key authentication for your new user. Setting this up will increase the security of your server by requiring a private SSH key to log in."
+    },
+    {
+      "type": "html",
+      "id": "c3507529910c1c67",
+      "text": "<H3>Generate a Key Pair"
+    },
+    {
+      "type": "paragraph",
+      "id": "9fbb2ae4a9b5615c",
+      "text": "If you do not already have an SSH key pair, which consists of a public and private key, you need to generate one. If you already have a key that you want to use, skip to the Copy SSH Keys to Server step."
+    },
+    {
+      "type": "paragraph",
+      "id": "319d34cf9c8cf472",
+      "text": "To generate a new key pair, enter the following command at the terminal of your local machine (ie. your computer):"
+    },
+    {
+      "type": "code",
+      "id": "6199bf50d01b8fe0",
+      "text": "ssh-keygen -t rsa"
+    },
+    {
+      "type": "paragraph",
+      "id": "d94e9a4bc8b76eb4",
+      "text": "Assuming your local user is called \"david\", you will see output that looks like the following:"
+    },
+    {
+      "type": "code",
+      "id": "db87457905898ae3",
+      "text": "ssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/david/.ssh/id_rsa):"
+    },
+    {
+      "type": "paragraph",
+      "id": "b1bae1a506a316ec",
+      "text": "Hit return to accept this file name and path (or enter a new name)."
+    },
+    {
+      "type": "paragraph",
+      "id": "a6635e6678eebd8d",
+      "text": "Next, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication."
+    },
+    {
+      "type": "paragraph",
+      "id": "62c3d3f0f37a7b7f",
+      "text": "This generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!"
+    },
+    {
+      "type": "reference",
+      "id": "17933f47be941991",
+      "site": "ocean.admin.fedwiki.org",
+      "slug": "copy-ssh-keys-to-server",
+      "title": "Copy SSH Keys to Server",
+      "text": "Here we describe how to copy over your public ssh keys to a server on Linux and MacOS."
+    },
+    {
+      "type": "html",
+      "id": "4405a8f93edd25ed",
+      "text": "<H3>Use ssh-copy-id"
+    },
+    {
+      "type": "paragraph",
+      "id": "7cbf63f4b6887043",
+      "text": "After generating an SSH key pair, you will want to copy your public key to your new server. We will cover two easy ways to do this."
+    },
+    {
+      "type": "paragraph",
+      "id": "bf59a2880d25e5b5",
+      "text": "If your local machine has the [[ssh-copy-id]] script installed, you can use it to install your public key to any user that you have login credentials for."
+    },
+    {
+      "type": "paragraph",
+      "id": "6800db28e7d34f6d",
+      "text": "Run the [[ssh-copy-id]] script by specifying the user and IP address of the server that you want to install the key on, like this:"
+    },
+    {
+      "type": "code",
+      "id": "32206e2b217df192",
+      "text": "ssh-copy-id -i demo demo@SERVER_IP_ADDRESS"
+    },
+    {
+      "type": "paragraph",
+      "id": "d2cddb460e941ead",
+      "text": "You only need to pass the \"-i demo\" parameter if you are generating a second ssh key. If you only have one you can leave this empty and simply issue:"
+    },
+    {
+      "type": "paragraph",
+      "id": "7eb969260ba54003",
+      "text": "dafs"
+    },
+    {
+      "type": "paragraph",
+      "id": "d57a70e8968c7b24",
+      "text": "However in our case we are assuming you have just set up a server and generated and used an ssh key for the \"root\" user to gain initial access. The second \"demo\" key being specified is for the \"demo\" user you just created and had given sudo permissions. So you have two keys and need to specify which one to upload with the \"i\" parameter."
+    },
+    {
+      "type": "paragraph",
+      "id": "f71c1bcff6e830d8",
+      "text": "After providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+    },
+    {
+      "type": "paragraph",
+      "id": "ced789448671e5c6",
+      "text": "Now you should:"
+    },
+    {
+      "type": "reference",
+      "id": "e039e78a02c654d3",
+      "site": "future.fedwiki.org",
+      "slug": "lockdown-password-access",
+      "title": "Lockdown Password Access",
+      "text": "To improve security you should only allow ssh pass-wordless (key based) authentication, especially for root:"
+    },
+    {
+      "type": "html",
+      "id": "7adb7fb081683c82",
+      "text": "<H3>How to remove ssh keys from server"
+    },
+    {
+      "type": "paragraph",
+      "id": "a66f1ffb45c329ac",
+      "text": "You can add, remove and edit SSH keys within the panel under settings in the security tab.\nVisiting https://cloud.digitalocean.com/settings/security should yield the same effect - [https://www.digitalocean.com/community/questions/how-to-remove-ssh-in-digitalocean-portal digitalocean.com]"
+    },
+    {
+      "type": "paragraph",
+      "id": "03554d98a5bbc56e",
+      "text": "To remove keys added to your local system with ssh-keygen:"
+    },
+    {
+      "type": "code",
+      "id": "684de35267939b29",
+      "text": "ssh-keygen -R [your.ip.address.here]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Set up Your SSH Keys",
+        "story": []
+      },
+      "date": 1435534296468
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "25b774a3e08a03f0"
+      },
+      "id": "25b774a3e08a03f0",
+      "type": "add",
+      "date": 1435534298248
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "8621c3fa2b639151",
+        "text": "<H3>Add Public Key Authentication (Recommended)"
+      },
+      "after": "25b774a3e08a03f0",
+      "id": "8621c3fa2b639151",
+      "date": 1435534328595
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4cc04d35413172f4",
+        "text": "The next step in securing your server is to set up public key authentication for your new user. Setting this up will increase the security of your server by requiring a private SSH key to log in."
+      },
+      "after": "25b774a3e08a03f0",
+      "id": "4cc04d35413172f4",
+      "date": 1435534336370
+    },
+    {
+      "type": "remove",
+      "id": "25b774a3e08a03f0",
+      "date": 1435534338296
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "c3507529910c1c67",
+        "text": "<H3>Generate a Key Pair"
+      },
+      "after": "8621c3fa2b639151",
+      "id": "c3507529910c1c67",
+      "date": 1435534344217
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "9fbb2ae4a9b5615c",
+        "text": "If you do not already have an SSH key pair, which consists of a public and private key, you need to generate one. If you already have a key that you want to use, skip to the Copy the Public Key step."
+      },
+      "after": "c3507529910c1c67",
+      "id": "9fbb2ae4a9b5615c",
+      "date": 1435534350624
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "319d34cf9c8cf472",
+        "text": "To generate a new key pair, enter the following command at the terminal of your local machine (ie. your computer):\n\n    ssh-keygen\n\nAssuming your local user is called \"localuser\", you will see output that looks like the following:\n\nssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/localuser/.ssh/id_rsa):\n\nHit return to accept this file name and path (or enter a new name).\n\nNext, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication.\n\nThis generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!"
+      },
+      "after": "c3507529910c1c67",
+      "id": "319d34cf9c8cf472",
+      "date": 1435534368125
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "8621c3fa2b639151",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472"
+      ],
+      "id": "9fbb2ae4a9b5615c",
+      "date": 1435534373597
+    },
+    {
+      "type": "remove",
+      "id": "8621c3fa2b639151",
+      "date": 1435534412665
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "9c03e97119757794",
+        "text": "<H3>Copy the Public Key"
+      },
+      "after": "319d34cf9c8cf472",
+      "id": "9c03e97119757794",
+      "date": 1435534436515
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "4405a8f93edd25ed",
+        "text": "<H3>Use ssh-copy-id"
+      },
+      "after": "9c03e97119757794",
+      "id": "4405a8f93edd25ed",
+      "date": 1435534441356
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "7cbf63f4b6887043",
+        "text": "After generating an SSH key pair, you will want to copy your public key to your new server. We will cover two easy ways to do this."
+      },
+      "after": "4405a8f93edd25ed",
+      "id": "7cbf63f4b6887043",
+      "date": 1435534446994
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "bf59a2880d25e5b5",
+        "text": "If your local machine has the ssh-copy-id script installed, you can use it to install your public key to any user that you have login credentials for."
+      },
+      "after": "7cbf63f4b6887043",
+      "id": "bf59a2880d25e5b5",
+      "date": 1435534454811
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "6800db28e7d34f6d",
+        "text": "Run the ssh-copy-id script by specifying the user and IP address of the server that you want to install the key on, like this:\n\n    ssh-copy-id demo@SERVER_IP_ADDRESS\n\nAfter providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+      },
+      "after": "4405a8f93edd25ed",
+      "id": "6800db28e7d34f6d",
+      "date": 1435534464779
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "9c03e97119757794",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d"
+      ],
+      "id": "6800db28e7d34f6d",
+      "date": 1435534471587
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "17933f47be941991"
+      },
+      "id": "17933f47be941991",
+      "type": "add",
+      "after": "6800db28e7d34f6d",
+      "date": 1435535154738
+    },
+    {
+      "type": "edit",
+      "id": "17933f47be941991",
+      "item": {
+        "type": "reference",
+        "id": "17933f47be941991",
+        "site": "ocean.admin.fedwiki.org",
+        "slug": "copy-ssh-keys-to-server",
+        "title": "Copy SSH Keys to Server",
+        "text": "Here we describe how to copy over your public ssh keys to a server on Linux and MacOS."
+      },
+      "date": 1435535156825
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "17933f47be941991",
+        "9c03e97119757794",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d"
+      ],
+      "id": "17933f47be941991",
+      "date": 1435535160288
+    },
+    {
+      "type": "remove",
+      "id": "9c03e97119757794",
+      "date": 1435535166974
+    },
+    {
+      "type": "edit",
+      "id": "bf59a2880d25e5b5",
+      "item": {
+        "type": "paragraph",
+        "id": "bf59a2880d25e5b5",
+        "text": "If your local machine has the [[ssh-copy-id]] script installed, you can use it to install your public key to any user that you have login credentials for."
+      },
+      "date": 1435535185026
+    },
+    {
+      "type": "edit",
+      "id": "6800db28e7d34f6d",
+      "item": {
+        "type": "paragraph",
+        "id": "6800db28e7d34f6d",
+        "text": "Run the [[ssh-copy-id]] script by specifying the user and IP address of the server that you want to install the key on, like this:"
+      },
+      "date": 1435535209237
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "32206e2b217df192"
+      },
+      "id": "32206e2b217df192",
+      "type": "add",
+      "after": "d2cddb460e941ead",
+      "date": 1435535213116
+    },
+    {
+      "type": "add",
+      "id": "d2cddb460e941ead",
+      "item": {
+        "type": "paragraph",
+        "id": "d2cddb460e941ead",
+        "text": "After providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+      },
+      "after": "6800db28e7d34f6d",
+      "date": 1435535214466
+    },
+    {
+      "type": "edit",
+      "id": "32206e2b217df192",
+      "item": {
+        "type": "code",
+        "id": "32206e2b217df192",
+        "text": "ssh-copy-id demo@SERVER_IP_ADDRESS"
+      },
+      "date": 1435535228033
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead"
+      ],
+      "id": "32206e2b217df192",
+      "date": 1435535230673
+    },
+    {
+      "type": "edit",
+      "id": "9fbb2ae4a9b5615c",
+      "item": {
+        "type": "paragraph",
+        "id": "9fbb2ae4a9b5615c",
+        "text": "If you do not already have an SSH key pair, which consists of a public and private key, you need to generate one. If you already have a key that you want to use, skip to the Copy SSH Keys to Server step."
+      },
+      "date": 1435535309212
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "7adb7fb081683c82"
+      },
+      "id": "7adb7fb081683c82",
+      "type": "add",
+      "after": "d2cddb460e941ead",
+      "date": 1435535568760
+    },
+    {
+      "type": "edit",
+      "id": "7adb7fb081683c82",
+      "item": {
+        "type": "html",
+        "id": "7adb7fb081683c82",
+        "text": "<H3>How to remove ssh keys from server"
+      },
+      "date": 1435535588758
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a66f1ffb45c329ac"
+      },
+      "id": "a66f1ffb45c329ac",
+      "type": "add",
+      "after": "7adb7fb081683c82",
+      "date": 1435535590303
+    },
+    {
+      "type": "edit",
+      "id": "a66f1ffb45c329ac",
+      "item": {
+        "type": "paragraph",
+        "id": "a66f1ffb45c329ac",
+        "text": " - [https://www.digitalocean.com/community/questions/how-to-remove-ssh-in-digitalocean-portal digitalocean.com]"
+      },
+      "date": 1435535608388
+    },
+    {
+      "type": "edit",
+      "id": "a66f1ffb45c329ac",
+      "item": {
+        "type": "paragraph",
+        "id": "a66f1ffb45c329ac",
+        "text": "You can add, remove and edit SSH keys within the panel under settings in the security tab.\nVisiting https://cloud.digitalocean.com/settings/security should yield the same effect - [https://www.digitalocean.com/community/questions/how-to-remove-ssh-in-digitalocean-portal digitalocean.com]"
+      },
+      "date": 1435535636708
+    },
+    {
+      "type": "edit",
+      "id": "319d34cf9c8cf472",
+      "item": {
+        "type": "paragraph",
+        "id": "319d34cf9c8cf472",
+        "text": "To generate a new key pair, enter the following command at the terminal of your local machine (ie. your computer):"
+      },
+      "date": 1435565879084
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "6199bf50d01b8fe0"
+      },
+      "id": "6199bf50d01b8fe0",
+      "type": "add",
+      "after": "a66f1ffb45c329ac",
+      "date": 1435565881509
+    },
+    {
+      "type": "add",
+      "id": "d94e9a4bc8b76eb4",
+      "item": {
+        "type": "paragraph",
+        "id": "d94e9a4bc8b76eb4",
+        "text": "\nAssuming your local user is called \"localuser\", you will see output that looks like the following:\n\nssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/localuser/.ssh/id_rsa):\n\nHit return to accept this file name and path (or enter a new name).\n\nNext, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication.\n\nThis generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!"
+      },
+      "after": "319d34cf9c8cf472",
+      "date": 1435565882715
+    },
+    {
+      "type": "edit",
+      "id": "6199bf50d01b8fe0",
+      "item": {
+        "type": "code",
+        "id": "6199bf50d01b8fe0",
+        "text": "ssh-keygen"
+      },
+      "date": 1435565887211
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac"
+      ],
+      "id": "6199bf50d01b8fe0",
+      "date": 1435565895962
+    },
+    {
+      "type": "edit",
+      "id": "d94e9a4bc8b76eb4",
+      "item": {
+        "type": "paragraph",
+        "id": "d94e9a4bc8b76eb4",
+        "text": "Assuming your local user is called \"localuser\", you will see output that looks like the following:"
+      },
+      "date": 1435565904309
+    },
+    {
+      "type": "add",
+      "id": "b1bae1a506a316ec",
+      "item": {
+        "type": "paragraph",
+        "id": "b1bae1a506a316ec",
+        "text": "Hit return to accept this file name and path (or enter a new name)."
+      },
+      "after": "d94e9a4bc8b76eb4",
+      "date": 1435565919043
+    },
+    {
+      "type": "add",
+      "id": "a6635e6678eebd8d",
+      "item": {
+        "type": "paragraph",
+        "id": "a6635e6678eebd8d",
+        "text": "Next, you will be prompted for a passphrase to secure the key with. You may either enter a passphrase or leave the passphrase blank.\n\nNote: If you leave the passphrase blank, you will be able to use the private key for authentication without entering a passphrase. If you enter a passphrase, you will need both the private key and the passphrase to log in. Securing your keys with passphrases is more secure, but both methods have their uses and are more secure than basic password authentication."
+      },
+      "after": "b1bae1a506a316ec",
+      "date": 1435565927933
+    },
+    {
+      "type": "add",
+      "id": "62c3d3f0f37a7b7f",
+      "item": {
+        "type": "paragraph",
+        "id": "62c3d3f0f37a7b7f",
+        "text": "This generates a private key, id_rsa, and a public key, id_rsa.pub, in the .ssh directory of the localuser's home directory. Remember that the private key should not be shared with anyone who should not have access to your servers!"
+      },
+      "after": "a6635e6678eebd8d",
+      "date": 1435565933350
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "db87457905898ae3"
+      },
+      "id": "db87457905898ae3",
+      "type": "add",
+      "after": "a66f1ffb45c329ac",
+      "date": 1435565936648
+    },
+    {
+      "type": "edit",
+      "id": "db87457905898ae3",
+      "item": {
+        "type": "code",
+        "id": "db87457905898ae3",
+        "text": "ssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/localuser/.ssh/id_rsa):"
+      },
+      "date": 1435565939744
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac"
+      ],
+      "id": "db87457905898ae3",
+      "date": 1435565949127
+    },
+    {
+      "type": "edit",
+      "id": "d94e9a4bc8b76eb4",
+      "item": {
+        "type": "paragraph",
+        "id": "d94e9a4bc8b76eb4",
+        "text": "Assuming your local user is called \"david\", you will see output that looks like the following:"
+      },
+      "date": 1435565985855
+    },
+    {
+      "type": "edit",
+      "id": "db87457905898ae3",
+      "item": {
+        "type": "code",
+        "id": "db87457905898ae3",
+        "text": "ssh-keygen output\nGenerating public/private rsa key pair.\nEnter file in which to save the key (/Users/david/.ssh/id_rsa):"
+      },
+      "date": 1435565993943
+    },
+    {
+      "type": "fork",
+      "site": "ocean.admin.fedwiki.org",
+      "date": 1435670069697
+    },
+    {
+      "type": "edit",
+      "id": "6199bf50d01b8fe0",
+      "item": {
+        "type": "code",
+        "id": "6199bf50d01b8fe0",
+        "text": "ssh-keygen -t rsa"
+      },
+      "date": 1435670069665
+    },
+    {
+      "type": "fork",
+      "date": 1435670136426
+    },
+    {
+      "type": "edit",
+      "id": "32206e2b217df192",
+      "item": {
+        "type": "code",
+        "id": "32206e2b217df192",
+        "text": "ssh-copy-id -i demo demo@SERVER_IP_ADDRESS"
+      },
+      "date": 1435670468214
+    },
+    {
+      "type": "edit",
+      "id": "d2cddb460e941ead",
+      "item": {
+        "type": "paragraph",
+        "id": "d2cddb460e941ead",
+        "text": "You only need to pass the \"-i demo\" parameter if you are generating a second ssh key. If you only have one you can leave this empyt ans simply issue:"
+      },
+      "date": 1435670545032
+    },
+    {
+      "type": "add",
+      "id": "f71c1bcff6e830d8",
+      "item": {
+        "type": "paragraph",
+        "id": "f71c1bcff6e830d8",
+        "text": "After providing your password at the prompt, your public key will be added to the remote user's .ssh/authorized_keys file. The corresponding private key can now be used to log into the server."
+      },
+      "after": "d2cddb460e941ead",
+      "date": 1435670546601
+    },
+    {
+      "type": "edit",
+      "id": "d2cddb460e941ead",
+      "item": {
+        "type": "paragraph",
+        "id": "d2cddb460e941ead",
+        "text": "You only need to pass the \"-i demo\" parameter if you are generating a second ssh key. If you only have one you can leave this empty ans simply issue:"
+      },
+      "date": 1435670559577
+    },
+    {
+      "type": "add",
+      "id": "d57a70e8968c7b24",
+      "item": {
+        "type": "paragraph",
+        "id": "d57a70e8968c7b24",
+        "text": "however in our case we are assuming you have just set up a server and generated and used an ssh key for the \"root\" user to gain initial access. The second \"demo\" key being specified is for the \"demo\" user you just created and had given sudo permissions. So you have two keys and need to specify which one to upload with the \"i\" parameter."
+      },
+      "after": "d2cddb460e941ead",
+      "date": 1435670673658
+    },
+    {
+      "type": "edit",
+      "id": "d57a70e8968c7b24",
+      "item": {
+        "type": "paragraph",
+        "id": "d57a70e8968c7b24",
+        "text": "However in our case we are assuming you have just set up a server and generated and used an ssh key for the \"root\" user to gain initial access. The second \"demo\" key being specified is for the \"demo\" user you just created and had given sudo permissions. So you have two keys and need to specify which one to upload with the \"i\" parameter."
+      },
+      "date": 1435670680499
+    },
+    {
+      "type": "edit",
+      "id": "d2cddb460e941ead",
+      "item": {
+        "type": "paragraph",
+        "id": "d2cddb460e941ead",
+        "text": "You only need to pass the \"-i demo\" parameter if you are generating a second ssh key. If you only have one you can leave this empty and simply issue:"
+      },
+      "date": 1435670693360
+    },
+    {
+      "type": "add",
+      "id": "7eb969260ba54003",
+      "item": {
+        "type": "paragraph",
+        "id": "7eb969260ba54003",
+        "text": "dafs"
+      },
+      "after": "d2cddb460e941ead",
+      "date": 1435670700865
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "94c3906b171516fa"
+      },
+      "id": "94c3906b171516fa",
+      "type": "add",
+      "after": "a66f1ffb45c329ac",
+      "date": 1435670704743
+    },
+    {
+      "type": "edit",
+      "id": "94c3906b171516fa",
+      "item": {
+        "type": "paragraph",
+        "id": "94c3906b171516fa",
+        "text": "<H3>Lockdown Root SSH Access to Keys Only"
+      },
+      "date": 1435670720856
+    },
+    {
+      "type": "add",
+      "id": "5d765cf307e2fcce",
+      "item": {
+        "type": "paragraph",
+        "id": "5d765cf307e2fcce",
+        "text": "After you have confirmed that you can now login as root to the server without being prompted for a password you can disable password logins for root. This makes your server more secure since no one can brute force your SSH password."
+      },
+      "after": "94c3906b171516fa",
+      "date": 1435670724195
+    },
+    {
+      "type": "add",
+      "id": "8597caf5470272f1",
+      "item": {
+        "type": "paragraph",
+        "id": "8597caf5470272f1",
+        "text": "It's necessary to edit the server's SSHd configuration /etc/ssh/sshd_config and update the following line to now read:"
+      },
+      "after": "5d765cf307e2fcce",
+      "date": 1435670731645
+    },
+    {
+      "type": "add",
+      "id": "7bfb8a9289c5f4b5",
+      "item": {
+        "type": "paragraph",
+        "id": "7bfb8a9289c5f4b5",
+        "text": "PermitRootLogin without-password"
+      },
+      "after": "8597caf5470272f1",
+      "date": 1435670736261
+    },
+    {
+      "type": "add",
+      "id": "03e977741703eddd",
+      "item": {
+        "type": "paragraph",
+        "id": "03e977741703eddd",
+        "text": "Now it's necessary to restart or rehup the sshd process to have it re-read the new configuration. This can be done via the following:"
+      },
+      "after": "7bfb8a9289c5f4b5",
+      "date": 1435670740229
+    },
+    {
+      "type": "add",
+      "id": "d84dee7e59c7ee65",
+      "item": {
+        "type": "paragraph",
+        "id": "d84dee7e59c7ee65",
+        "text": "# ps auxw | grep ssh\nUSER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot       681  0.0  0.1  49948  2332 ?        Ss    2012   3:23 /usr/sbin/sshd -D\n\n# kill -HUP 681"
+      },
+      "after": "03e977741703eddd",
+      "date": 1435670747283
+    },
+    {
+      "type": "add",
+      "id": "ae9ae184f27c1bbe",
+      "item": {
+        "type": "paragraph",
+        "id": "ae9ae184f27c1bbe",
+        "text": "Now your server's root login is protected and you can test this by trying to SSH directly as root to this server from a system that doesn't have its keys shared and you will be automatically kicked out without being prompted for a root password."
+      },
+      "after": "d84dee7e59c7ee65",
+      "date": 1435670753059
+    },
+    {
+      "type": "edit",
+      "id": "94c3906b171516fa",
+      "item": {
+        "type": "html",
+        "id": "94c3906b171516fa",
+        "text": "<H3>Lockdown Root SSH Access to Keys Only"
+      },
+      "date": 1435670761982
+    },
+    {
+      "type": "edit",
+      "id": "5d765cf307e2fcce",
+      "item": {
+        "type": "paragraph",
+        "id": "5d765cf307e2fcce",
+        "text": "After you have confirmed that you can now login as root to the server without being prompted for a password you can disable password logins for root. This makes your server more secure since no one can brute force your SSH password - [https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets digitalocean.com]"
+      },
+      "date": 1435670772074
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "1d9db9562afa22c8"
+      },
+      "id": "1d9db9562afa22c8",
+      "type": "add",
+      "after": "ae9ae184f27c1bbe",
+      "date": 1435670775329
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "7bfb8a9289c5f4b5",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "d84dee7e59c7ee65",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "1d9db9562afa22c8",
+      "date": 1435670777594
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a26b9d78f60f3cd4"
+      },
+      "id": "a26b9d78f60f3cd4",
+      "type": "add",
+      "after": "ae9ae184f27c1bbe",
+      "date": 1435670779888
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "a26b9d78f60f3cd4",
+        "7bfb8a9289c5f4b5",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "d84dee7e59c7ee65",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "a26b9d78f60f3cd4",
+      "date": 1435670782424
+    },
+    {
+      "type": "remove",
+      "id": "7bfb8a9289c5f4b5",
+      "date": 1435670788747
+    },
+    {
+      "type": "edit",
+      "id": "a26b9d78f60f3cd4",
+      "item": {
+        "type": "code",
+        "id": "a26b9d78f60f3cd4",
+        "text": "PermitRootLogin without-password"
+      },
+      "date": 1435670791159
+    },
+    {
+      "type": "edit",
+      "id": "8597caf5470272f1",
+      "item": {
+        "type": "paragraph",
+        "id": "8597caf5470272f1",
+        "text": "It's necessary to edit the server's SSHd configuration:"
+      },
+      "date": 1435670806373
+    },
+    {
+      "type": "add",
+      "id": "4e3f69b5d758f790",
+      "item": {
+        "type": "paragraph",
+        "id": "4e3f69b5d758f790",
+        "text": "and update the following line to now read:"
+      },
+      "after": "8597caf5470272f1",
+      "date": 1435670815737
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "9165470282fc9978"
+      },
+      "id": "9165470282fc9978",
+      "type": "add",
+      "after": "ae9ae184f27c1bbe",
+      "date": 1435670817447
+    },
+    {
+      "type": "edit",
+      "id": "9165470282fc9978",
+      "item": {
+        "type": "code",
+        "id": "9165470282fc9978",
+        "text": "nano -w /etc/ssh/sshd_config"
+      },
+      "date": 1435670828337
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "d84dee7e59c7ee65",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "9165470282fc9978",
+      "date": 1435670833018
+    },
+    {
+      "type": "remove",
+      "id": "d84dee7e59c7ee65",
+      "date": 1435670838835
+    },
+    {
+      "type": "edit",
+      "id": "1d9db9562afa22c8",
+      "item": {
+        "type": "code",
+        "id": "1d9db9562afa22c8",
+        "text": "ps auxw | grep ssh"
+      },
+      "date": 1435670857905
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "4021c92f8de9b536"
+      },
+      "id": "4021c92f8de9b536",
+      "type": "add",
+      "after": "ae9ae184f27c1bbe",
+      "date": 1435670859986
+    },
+    {
+      "type": "edit",
+      "id": "4021c92f8de9b536",
+      "item": {
+        "type": "code",
+        "id": "4021c92f8de9b536",
+        "text": "USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot       681  0.0  0.1  49948  2332 ?        Ss    2012   3:23 /usr/sbin/sshd -D"
+      },
+      "date": 1435670866725
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "3629dc6e49d5179f"
+      },
+      "id": "3629dc6e49d5179f",
+      "type": "add",
+      "after": "4021c92f8de9b536",
+      "date": 1435670867733
+    },
+    {
+      "type": "edit",
+      "id": "3629dc6e49d5179f",
+      "item": {
+        "type": "code",
+        "id": "3629dc6e49d5179f",
+        "text": "kill -HUP 681"
+      },
+      "date": 1435670871493
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "4021c92f8de9b536",
+        "ae9ae184f27c1bbe",
+        "3629dc6e49d5179f"
+      ],
+      "id": "4021c92f8de9b536",
+      "date": 1435670874130
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "4021c92f8de9b536",
+        "3629dc6e49d5179f",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "3629dc6e49d5179f",
+      "date": 1435670875786
+    },
+    {
+      "type": "edit",
+      "id": "03e977741703eddd",
+      "item": {
+        "type": "paragraph",
+        "id": "03e977741703eddd",
+        "text": "Now it's necessary to restart or rehup the sshd process to have it re-read the new configuration. This can be done by finding out the process number (pid) for the ssh daemon:"
+      },
+      "date": 1435670960864
+    },
+    {
+      "type": "edit",
+      "id": "03e977741703eddd",
+      "item": {
+        "type": "paragraph",
+        "id": "03e977741703eddd",
+        "text": "Now it's necessary to restart or rehup the sshd process to have it re-read the new configuration. This can be done by finding out the process number (pid) for the ssh daemon using:"
+      },
+      "date": 1435670969739
+    },
+    {
+      "type": "add",
+      "id": "baa9e54077c2611b",
+      "item": {
+        "type": "paragraph",
+        "id": "baa9e54077c2611b",
+        "text": "Pick out the PID from the output which looks like:"
+      },
+      "after": "03e977741703eddd",
+      "date": 1435670984575
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "baa9e54077c2611b",
+        "4021c92f8de9b536",
+        "3629dc6e49d5179f",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "baa9e54077c2611b",
+      "date": 1435670986683
+    },
+    {
+      "type": "add",
+      "id": "929a6ea656fdae87",
+      "item": {
+        "type": "paragraph",
+        "id": "929a6ea656fdae87",
+        "text": "And kill the ssh daemon process:"
+      },
+      "after": "baa9e54077c2611b",
+      "date": 1435671015117
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "baa9e54077c2611b",
+        "4021c92f8de9b536",
+        "929a6ea656fdae87",
+        "3629dc6e49d5179f",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "929a6ea656fdae87",
+      "date": 1435671016788
+    },
+    {
+      "type": "edit",
+      "id": "4021c92f8de9b536",
+      "item": {
+        "type": "code",
+        "id": "4021c92f8de9b536",
+        "text": "USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND\nroot 681  0.0  0.1 49948 2332 ? Ss  2012  3:23 /usr/sbin/sshd -D"
+      },
+      "date": 1435671085947
+    },
+    {
+      "type": "add",
+      "id": "03554d98a5bbc56e",
+      "item": {
+        "type": "paragraph",
+        "id": "03554d98a5bbc56e",
+        "text": "To remove keys added to your local system:"
+      },
+      "after": "a66f1ffb45c329ac",
+      "date": 1435671581869
+    },
+    {
+      "type": "add",
+      "id": "6b0658d505bf7ca3",
+      "item": {
+        "type": "paragraph",
+        "id": "6b0658d505bf7ca3",
+        "text": "ssh-keygen -R [your.ip.address.here]"
+      },
+      "after": "03554d98a5bbc56e",
+      "date": 1435671585830
+    },
+    {
+      "type": "edit",
+      "id": "03554d98a5bbc56e",
+      "item": {
+        "type": "paragraph",
+        "id": "03554d98a5bbc56e",
+        "text": "To remove keys added to your local system with ssh-keygen:"
+      },
+      "date": 1435671598116
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "684de35267939b29"
+      },
+      "id": "684de35267939b29",
+      "type": "add",
+      "after": "ae9ae184f27c1bbe",
+      "date": 1435671602860
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "03554d98a5bbc56e",
+        "6b0658d505bf7ca3",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "684de35267939b29",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "baa9e54077c2611b",
+        "4021c92f8de9b536",
+        "929a6ea656fdae87",
+        "3629dc6e49d5179f",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "684de35267939b29",
+      "date": 1435671609784
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "03554d98a5bbc56e",
+        "6b0658d505bf7ca3",
+        "684de35267939b29",
+        "94c3906b171516fa",
+        "5d765cf307e2fcce",
+        "8597caf5470272f1",
+        "9165470282fc9978",
+        "4e3f69b5d758f790",
+        "a26b9d78f60f3cd4",
+        "03e977741703eddd",
+        "1d9db9562afa22c8",
+        "baa9e54077c2611b",
+        "4021c92f8de9b536",
+        "929a6ea656fdae87",
+        "3629dc6e49d5179f",
+        "ae9ae184f27c1bbe"
+      ],
+      "id": "684de35267939b29",
+      "date": 1435671615309
+    },
+    {
+      "type": "remove",
+      "id": "6b0658d505bf7ca3",
+      "date": 1435671620118
+    },
+    {
+      "type": "edit",
+      "id": "684de35267939b29",
+      "item": {
+        "type": "code",
+        "id": "684de35267939b29",
+        "text": "ssh-keygen -R [your.ip.address.here]"
+      },
+      "date": 1435671622402
+    },
+    {
+      "type": "add",
+      "id": "e3b8417c82184508",
+      "item": {
+        "type": "paragraph",
+        "id": "e3b8417c82184508",
+        "text": "<H3>Lockdown Password Access for other users"
+      },
+      "after": "ae9ae184f27c1bbe",
+      "date": 1435671758885
+    },
+    {
+      "type": "edit",
+      "id": "e3b8417c82184508",
+      "item": {
+        "type": "html",
+        "id": "e3b8417c82184508",
+        "text": "<H3>Lockdown Password Access for other users"
+      },
+      "date": 1435671762089
+    },
+    {
+      "type": "add",
+      "id": "ea5619cb9cf13532",
+      "item": {
+        "type": "paragraph",
+        "id": "ea5619cb9cf13532",
+        "text": "How to Disable Password Authentication for SSH\n\n    Overview\n    Linux / Mac OS X\n    PuTTY (Windows)\n    Extra Security\n\nOnce you have SSH Keys configured, you can add some extra security to your server by disabling password authentication for SSH. (Note that if you do lose your private key, this will make the server inaccessible and you will need to contact HostGator to have this re-enabled.)\n\nTo disable this setting, you can do the following:\nnano /etc/ssh/sshd_config\n\nIn this file, set the following settings to the following values. If these settings are already in the file, set them to \"no\" rather than add new lines.\nChallengeResponseAuthentication no\nPasswordAuthentication no\nUsePAM no\n\nOnce this is done, restart the SSH daemon to apply the settings.\n/etc/init.d/sshd restart\n"
+      },
+      "after": "e3b8417c82184508",
+      "date": 1435671795206
+    },
+    {
+      "type": "add",
+      "id": "ced789448671e5c6",
+      "item": {
+        "type": "paragraph",
+        "id": "ced789448671e5c6",
+        "text": "Now you should [[Lockdown Password Access]]"
+      },
+      "after": "f71c1bcff6e830d8",
+      "date": 1435671832513
+    },
+    {
+      "type": "remove",
+      "id": "94c3906b171516fa",
+      "date": 1435671950472
+    },
+    {
+      "type": "remove",
+      "id": "5d765cf307e2fcce",
+      "date": 1435671954564
+    },
+    {
+      "type": "remove",
+      "id": "8597caf5470272f1",
+      "date": 1435671963963
+    },
+    {
+      "type": "remove",
+      "id": "9165470282fc9978",
+      "date": 1435671969324
+    },
+    {
+      "type": "remove",
+      "id": "4e3f69b5d758f790",
+      "date": 1435671972296
+    },
+    {
+      "type": "remove",
+      "id": "a26b9d78f60f3cd4",
+      "date": 1435671975681
+    },
+    {
+      "type": "remove",
+      "id": "03e977741703eddd",
+      "date": 1435671978719
+    },
+    {
+      "type": "remove",
+      "id": "baa9e54077c2611b",
+      "date": 1435671981715
+    },
+    {
+      "type": "remove",
+      "id": "1d9db9562afa22c8",
+      "date": 1435671989052
+    },
+    {
+      "type": "remove",
+      "id": "4021c92f8de9b536",
+      "date": 1435671991578
+    },
+    {
+      "type": "remove",
+      "id": "3629dc6e49d5179f",
+      "date": 1435671994529
+    },
+    {
+      "type": "remove",
+      "id": "ae9ae184f27c1bbe",
+      "date": 1435671997570
+    },
+    {
+      "type": "remove",
+      "id": "929a6ea656fdae87",
+      "date": 1435672009825
+    },
+    {
+      "type": "remove",
+      "id": "e3b8417c82184508",
+      "date": 1435672051098
+    },
+    {
+      "type": "remove",
+      "id": "ea5619cb9cf13532",
+      "date": 1435672058760
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e039e78a02c654d3"
+      },
+      "id": "e039e78a02c654d3",
+      "type": "add",
+      "after": "684de35267939b29",
+      "date": 1435672357186
+    },
+    {
+      "type": "edit",
+      "id": "e039e78a02c654d3",
+      "item": {
+        "type": "reference",
+        "id": "e039e78a02c654d3",
+        "site": "future.fedwiki.org",
+        "slug": "lockdown-password-access",
+        "title": "Lockdown Password Access",
+        "text": "To improve security you should only allow ssh pass-wordless (key based) authentication, especially for root:"
+      },
+      "date": 1435672359429
+    },
+    {
+      "type": "move",
+      "order": [
+        "4cc04d35413172f4",
+        "c3507529910c1c67",
+        "9fbb2ae4a9b5615c",
+        "319d34cf9c8cf472",
+        "6199bf50d01b8fe0",
+        "d94e9a4bc8b76eb4",
+        "db87457905898ae3",
+        "b1bae1a506a316ec",
+        "a6635e6678eebd8d",
+        "62c3d3f0f37a7b7f",
+        "17933f47be941991",
+        "4405a8f93edd25ed",
+        "7cbf63f4b6887043",
+        "bf59a2880d25e5b5",
+        "6800db28e7d34f6d",
+        "32206e2b217df192",
+        "d2cddb460e941ead",
+        "7eb969260ba54003",
+        "d57a70e8968c7b24",
+        "f71c1bcff6e830d8",
+        "ced789448671e5c6",
+        "e039e78a02c654d3",
+        "7adb7fb081683c82",
+        "a66f1ffb45c329ac",
+        "03554d98a5bbc56e",
+        "684de35267939b29"
+      ],
+      "id": "e039e78a02c654d3",
+      "date": 1435672361996
+    },
+    {
+      "type": "edit",
+      "id": "ced789448671e5c6",
+      "item": {
+        "type": "paragraph",
+        "id": "ced789448671e5c6",
+        "text": "Now you should:"
+      },
+      "date": 1435672367610
+    }
+  ]
+}

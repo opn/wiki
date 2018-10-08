@@ -1,0 +1,65 @@
+{
+  "title": "ideDocsFetchLibraryNames",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "21cecd3534e69df4",
+      "text": "Returns a list of library names, one per line, which have API entries in the dictionary."
+    },
+    {
+      "type": "code",
+      "id": "57e75df204e5b821",
+      "text": "function ideDocsFetchLibraryNames\n   # Ensure we have a connection\n   try\n      ideDocsInitialize\n   catch tError\n      return tError\n   end try\n   \n   local tRecordSet, tData, tDataSet, tSQL\n   put \"SELECT library_name FROM libraries\" into tSQL\n   put revQueryDatabase(sConnection, tSQL) into tRecordSet\n   if the result is not a number then\n      return \"error fetching library names\" & return & the result\n   end if\n   \n   # Get the docs data from the record set\n   local tCount, tMoreRecords\n   put true into tMoreRecords\n   repeat while tMoreRecords\n      add 1 to tCount\n      get revDatabaseColumnNamed(tRecordSet, \"library_name\", \"tData\")\n      put tData into tDataSet[tCount]\n      revMoveToNextRecord tRecordSet\n      put the result into tMoreRecords\n   end repeat\n   \n   # Close the record set\n   revCloseCursor tRecordSet\n   \n   combine tDataSet with return\n   return tDataSet\nend ideDocsFetchLibraryNames"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "ideDocsFetchLibraryNames",
+        "story": []
+      },
+      "date": 1458339637741
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "21cecd3534e69df4"
+      },
+      "id": "21cecd3534e69df4",
+      "type": "add",
+      "date": 1458339639280
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "57e75df204e5b821",
+        "text": "/*\nReturns a list of library names, one per line, which have API entries in the dictionary.\n*/\nfunction ideDocsFetchLibraryNames\n   # Ensure we have a connection\n   try\n      ideDocsInitialize\n   catch tError\n      return tError\n   end try\n   \n   local tRecordSet, tData, tDataSet, tSQL\n   put \"SELECT library_name FROM libraries\" into tSQL\n   put revQueryDatabase(sConnection, tSQL) into tRecordSet\n   if the result is not a number then\n      return \"error fetching library names\" & return & the result\n   end if\n   \n   # Get the docs data from the record set\n   local tCount, tMoreRecords\n   put true into tMoreRecords\n   repeat while tMoreRecords\n      add 1 to tCount\n      get revDatabaseColumnNamed(tRecordSet, \"library_name\", \"tData\")\n      put tData into tDataSet[tCount]\n      revMoveToNextRecord tRecordSet\n      put the result into tMoreRecords\n   end repeat\n   \n   # Close the record set\n   revCloseCursor tRecordSet\n   \n   combine tDataSet with return\n   return tDataSet\nend ideDocsFetchLibraryNames"
+      },
+      "after": "21cecd3534e69df4",
+      "id": "57e75df204e5b821",
+      "date": 1458339645971
+    },
+    {
+      "type": "edit",
+      "id": "57e75df204e5b821",
+      "item": {
+        "type": "code",
+        "id": "57e75df204e5b821",
+        "text": "function ideDocsFetchLibraryNames\n   # Ensure we have a connection\n   try\n      ideDocsInitialize\n   catch tError\n      return tError\n   end try\n   \n   local tRecordSet, tData, tDataSet, tSQL\n   put \"SELECT library_name FROM libraries\" into tSQL\n   put revQueryDatabase(sConnection, tSQL) into tRecordSet\n   if the result is not a number then\n      return \"error fetching library names\" & return & the result\n   end if\n   \n   # Get the docs data from the record set\n   local tCount, tMoreRecords\n   put true into tMoreRecords\n   repeat while tMoreRecords\n      add 1 to tCount\n      get revDatabaseColumnNamed(tRecordSet, \"library_name\", \"tData\")\n      put tData into tDataSet[tCount]\n      revMoveToNextRecord tRecordSet\n      put the result into tMoreRecords\n   end repeat\n   \n   # Close the record set\n   revCloseCursor tRecordSet\n   \n   combine tDataSet with return\n   return tDataSet\nend ideDocsFetchLibraryNames"
+      },
+      "date": 1458339654101
+    },
+    {
+      "type": "edit",
+      "id": "21cecd3534e69df4",
+      "item": {
+        "type": "paragraph",
+        "id": "21cecd3534e69df4",
+        "text": "Returns a list of library names, one per line, which have API entries in the dictionary."
+      },
+      "date": 1458339664218
+    }
+  ]
+}

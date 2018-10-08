@@ -1,0 +1,165 @@
+{
+  "title": "Monad (functional programming)",
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "story": "",
+        "title": "Monad (functional programming)"
+      },
+      "date": 1466358703317,
+      "source": {
+        "pageTitle": "Monad (functional programming)",
+        "pageSlug": "Monad_(functional_programming)",
+        "url": "https://en.wikipedia.org/wiki/Monad_(functional_programming)",
+        "date": 1466358703317,
+        "link_dictionary": {
+          "wiki_links": {
+            "Free monads": {
+              "section_number": 19,
+              "section_level": 2,
+              "dot_number": 7
+            },
+            "Generic monadic functions": {
+              "section_number": 10,
+              "section_level": 2,
+              "dot_number": 5
+            },
+            "External links": {
+              "section_number": 28,
+              "section_level": 2,
+              "dot_number": 12
+            },
+            "References": {
+              "section_number": 27,
+              "section_level": 2,
+              "dot_number": 11
+            },
+            "Comonads": {
+              "section_number": 20,
+              "section_level": 2,
+              "dot_number": 8
+            },
+            "Formal definition": {
+              "section_number": 5,
+              "section_level": 2,
+              "dot_number": 3
+            },
+            "Other examples": {
+              "section_number": 11,
+              "section_level": 2,
+              "dot_number": 6
+            },
+            "Notes": {
+              "section_number": 26,
+              "section_level": 2,
+              "dot_number": 10
+            },
+            "See also": {
+              "section_number": 25,
+              "section_level": 2,
+              "dot_number": 9
+            },
+            "Syntactic sugar: do-notation": {
+              "section_number": 9,
+              "section_level": 2,
+              "dot_number": 4
+            },
+            "History": {
+              "section_number": 1,
+              "section_level": 2,
+              "dot_number": 1
+            },
+            "Motivating examples": {
+              "section_number": 2,
+              "section_level": 2,
+              "dot_number": 2
+            }
+          },
+          "default": {
+            "transport": "https://livecode.world/mediawiki/importSection"
+          }
+        },
+        "transport": "https://livecode.world/mediawiki/transportAgain",
+        "rev": 724345486,
+        "repo": "https://github.com/LiveCodeWorld/lib_MediaWiki"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1466358716775
+    }
+  ],
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "b1fc2597-0597-4939-af6b-b9c08b2397fe",
+      "text": "In functional programming, a monad is a structure that represents computations defined as sequences of steps: a type with a monad structure defines what it means to chain operations, or nest functions of that type together. This allows the programmer to build pipelines that process data in a series of steps (also called actions), in which each action is decorated with additional processing rules provided by the monad - [https://en.wikipedia.org/wiki/Monad_(functional_programming) wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "fd68bfbf-af4c-4497-ba5c-d9a8900d571b",
+      "text": "Monads allow a programming style where programs are written by putting together highly composable parts. As such, monads have been described as \"programmable semicolons\"; a semicolon is the operator used to chain together individual statements in many imperative programming languages, thus the expression implies that extra code will be executed between the statements in the pipeline. Monads have also been explained with a physical metaphor as assembly lines, where a conveyor belt transports data between functional units that transform it one step at a time. They can also be seen as a functional design pattern to build generic types."
+    },
+    {
+      "type": "paragraph",
+      "id": "de6149b3-9eb3-4c86-97af-65ec49f4e6b4",
+      "text": "Purely functional programs can use monads to structure procedures that include sequenced operations like those found in structured programming. Many common programming concepts can be described in terms of a monad structure without losing the beneficial property of referential transparency, including side effects such as input/output, variable assignment, exception handling, parsing, nondeterminism, concurrency, continuations, or domain-specific languages. This allows these concepts to be defined in a purely functional manner, without major extensions to the language's semantics. Languages like Haskell provide monads in the standard core, allowing programmers to reuse large parts of their formal definition and apply in many different libraries the same interfaces for combining functions."
+    },
+    {
+      "type": "paragraph",
+      "id": "2f67957a-0e46-41d9-913d-a1bf5e648c3e",
+      "text": "A monad is created by defining a type constructor M and two operations, bind and return (where return is often also called unit):"
+    },
+    {
+      "type": "paragraph",
+      "id": "c0caa85a-f5e3-4707-9b15-6bb3b682f707",
+      "text": "The return operation takes a value from a plain type and puts it into a container using the constructor, creating a monadic value: M a."
+    },
+    {
+      "type": "paragraph",
+      "id": "1db24362-9ee9-4eec-98a7-885985d279ae",
+      "text": "The bind operation \">>=\" takes as its arguments a monadic value M a and a function (a → M b) that can transform the value."
+    },
+    {
+      "type": "paragraph",
+      "id": "e907dd87-750c-4d54-b3fb-1c3e0db2ab31",
+      "text": "The bind operator unwraps the plain value a embedded in its input monadic value M a, and feeds it to the function."
+    },
+    {
+      "type": "paragraph",
+      "id": "339a32e2-630c-4d58-ae3c-3c9250aa96da",
+      "text": "The function then creates a new monadic value M b that can be fed to the next bind operators composed in the pipeline."
+    },
+    {
+      "type": "paragraph",
+      "id": "e369c7ad-fd81-435a-954f-e1bb7609a7ca",
+      "text": "With these elements, the programmer composes a sequence of function calls (the \"pipeline\") with several bind operators chained together in an expression. Each function call transforms its input plain type value, and the bind operator handles the returned monadic value, which is fed into the next step in the sequence. Between each pair of composed function calls, the bind operator can inject into the monadic value some additional information that is not accessible within the function, and pass it along. It can also exert finer control of the flow of execution, for example by conditionally calling the function only under some conditions, or executing the function calls in a particular order."
+    },
+    {
+      "type": "paragraph",
+      "id": "5d8297e4-0625-49c9-94fd-013bcd674fb3",
+      "text": "For example, the following code defines a binary operator x//y as safe division that avoids dividing by zero, using the constructors of the Maybe monad Nothing and Just. The monadic values x and y are extracted into the plain values a and b, which are processed by the plain division operator \"/\" only when b is not zero."
+    },
+    {
+      "type": "paragraph",
+      "id": "aa016366-8e65-4c6c-b3c8-824df99e5356",
+      "text": "In the third example expression, a pipeline that chains together two safe divisions, one of the input values to the second \"//\" operator is Nothing; therefore the result is Nothing as well. Notice how the definition of the \"//\" operator doesn't need to check whether any of its input values is Nothing, as the bind operator of the Maybe monad already handles this concern: by definition of bind, when either the x or the y monadic parameters are Nothing (instead of matching the pattern Just value), the \"if b == 0 ...\" function is not executed."
+    },
+    {
+      "type": "paragraph",
+      "id": "f98444f5-39db-45fa-9641-7e423d7bd06b",
+      "text": "The operations that define the monad must fulfil several properties to allow the correct composition of monadic functions (i.e. functions that use values from the monad as their arguments or return value). Because a monad can insert additional operations around a program's domain logic, monads can be considered a sort of aspect-oriented programming. The domain logic can be defined by the application programmer in the pipeline, while required aside bookkeeping operations can be handled by a pre-defined monad built in advance."
+    },
+    {
+      "type": "paragraph",
+      "id": "332051fc-5b30-4de8-8526-63061a64a485",
+      "text": "The name and concept comes from category theory, where monads are one particular kind of functor, a mapping between categories; although the term monad in functional programming contexts is usually used with a meaning corresponding to that of the term strong monad in category theory."
+    },
+    {
+      "type": "markdown",
+      "id": "7389a904-770f-4360-a420-74efedbeb03c",
+      "text": "# See also\n* [[History]]\n* [[Motivating examples]]\n* [[Formal definition]]\n* [[Syntactic sugar: do-notation]]\n* [[Generic monadic functions]]\n* [[Other examples]]\n* [[Free monads]]\n* [[Comonads]]\n* [[See also]]\n* [[Notes]]\n* [[References]]\n* [[External links]]"
+    }
+  ]
+}

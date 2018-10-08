@@ -1,0 +1,306 @@
+{
+  "title": "CALM Theorem",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "092079b2667dd60e",
+      "text": "Conventional distributed systems wisdom dictates that perfect consistency is too expensive to guarantee in general, and consistency mechanisms—if you use them at all—should be reserved for infrequent, small-scale, mission-critical tasks. "
+    },
+    {
+      "type": "video",
+      "id": "52c328fb7ee92556",
+      "text": "VIMEO 53904989\nIn this talk, [[Joe Hellerstein]] describes the [[CALM Theorem]] that links Consistency And Logical Monotonicity, and discuss how it can inform distributed software development. He also gives a taste of Bloom, a \"disorderly\" distributed programming language whose compiler can automatically answer questions like the ones above. Along the way, I'll try to shed light on side questions like \"Should Paxos exist?\" and \"Causality: What is it good for?\""
+    },
+    {
+      "type": "markdown",
+      "id": "f9b2933562553861",
+      "text": "Like most design maxims, these ideas are not so easy to translate into practice; all kinds of unavoidable tactical questions pop up, e.g.:\n\n* Exactly where in my multifaceted system is loose consistency “good enough” to meet application needs?\n* How do I know that my “mission-critical” software isn’t tainted by my “best effort” components?\n* How do I ensure that my design maxims are maintained as software and developer teams evolve?\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "3215f64e159bb2ab",
+      "text": "Until recently, answers to these questions have been more a matter of folklore than mathematics. (One way to tell the difference: a good answer is enforceable by a compiler.)"
+    },
+    {
+      "type": "markdown",
+      "id": "dc8734369f4628f6",
+      "text": "# Eternaleye comments\n"
+    },
+    {
+      "type": "markdown",
+      "id": "49be7d07ba797593",
+      "text": "Some notes from:\n\n- [https://matrix.to/#/!UOiWshZxoMFennjjxm:matrix.org/$15265923551761739uCbNU:matrix.org matrix.org]\n- https://www.reddit.com/r/programming/comments/1kmrd3/the_calm_conjecture_has_been_proven_and_is_now/"
+    },
+    {
+      "type": "markdown",
+      "id": "9bb667191b83691e",
+      "text": "You might want to look at a few of the recent papers on distributed consensus that are on https://eprint.iacr.org/complete/\nIn particular, the latest papers on Algorand and Ouroboros Genesis\nAlong with... basically anything with Elaine Shi in the author list\nIncluding their paper that goes into certain things that are not possible for distributed consensus in the permissionless setting\nScubajump: Also, I feel distributed consensus (in the blockchain sense) is still the wrong tool for that use case\nIn particular, its consistency model is way too strict (strict serializability - single global timeline everyone agrees on)\nWhich has really, really nasty performance implications\nA social network really only needs causal consistency\nAnd in the vast majority of circumstances, it should actually be monotonic - information being added should be hugely more common than information being removed\nConsensus protocols of the blockchain type can't take advantage of that\nEven though the CALM Conjecture means that should be possible to implement in a coordination-free manner\nI also feel that \"rely on distributed storage\" is far too much of a hand-wave\nBecause the cloud is other people's computers - and the incentives for them to store your data are insufficiently studied/explained\nMoreover, \"rely on\" is very fuzzy itself\nWhat's the acceptable probability of loss? What's the acceptable time to recovery if your local node goes down and all the other nodes are sometimes online?\nFurthermore, the resource tracking itself is very much a handwave\nUp until very recently, nobody had a way to prove storing a replica of data\nProofs of network usage are still a myth\nAnd so the SafeNetwork approach is to track resources that we don't know how to track, use that info to hand out money-like tokens we don't know how to ensure stay decentralized, use those tokens to pay nodes you know nothing about to hold data they know nothing about, in the hopes that if your node goes down, they're still around.\nIMO, it's much more realistic to skip the middle and run a second node yourself.\n\nAnd if you can't, pay someone who can, directly"
+    },
+    {
+      "type": "markdown",
+      "id": "509f6ca3eb3d2cc4",
+      "text": "# See also\n"
+    },
+    {
+      "type": "markdown",
+      "id": "669a0f2d104d12a8",
+      "text": "- [[Leslie Lamport]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "CALM Theorem",
+        "story": []
+      },
+      "date": 1527011875818
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "092079b2667dd60e"
+      },
+      "id": "092079b2667dd60e",
+      "type": "add",
+      "date": 1527011877153
+    },
+    {
+      "type": "edit",
+      "id": "092079b2667dd60e",
+      "item": {
+        "type": "paragraph",
+        "id": "092079b2667dd60e",
+        "text": "Conventional distributed systems wisdom dictates that perfect consistency is too expensive to guarantee in general, and consistency mechanisms—if you use them at all—should be reserved for infrequent, small-scale, mission-critical tasks. Like most design maxims, these ideas are not so easy to translate into practice; all kinds of unavoidable tactical questions pop up, e.g.:\n\n* Exactly where in my multifaceted system is loose consistency “good enough” to meet application needs?\n* How do I know that my “mission-critical” software isn’t tainted by my “best effort” components?\n* How do I ensure that my design maxims are maintained as software and developer teams evolve?\n\nUntil recently, answers to these questions have been more a matter of folklore than mathematics. (One way to tell the difference: a good answer is enforceable by a compiler.)\n\nIn this talk, I will describe the CALM Theorem that links Consistency And Logical Monotonicity, and discuss how it can inform distributed software development. I'll also give a taste of Bloom, a \"disorderly\" distributed programming language whose compiler can automatically answer questions like the ones above. Along the way, I'll try to shed light on side questions like \"Should Paxos exist?\" and \"Causality: What is it good for?\""
+      },
+      "date": 1527011894263
+    },
+    {
+      "type": "edit",
+      "id": "092079b2667dd60e",
+      "item": {
+        "type": "paragraph",
+        "id": "092079b2667dd60e",
+        "text": "Conventional distributed systems wisdom dictates that perfect consistency is too expensive to guarantee in general, and consistency mechanisms—if you use them at all—should be reserved for infrequent, small-scale, mission-critical tasks. "
+      },
+      "date": 1527011907242
+    },
+    {
+      "type": "add",
+      "id": "f9b2933562553861",
+      "item": {
+        "type": "paragraph",
+        "id": "f9b2933562553861",
+        "text": "Like most design maxims, these ideas are not so easy to translate into practice; all kinds of unavoidable tactical questions pop up, e.g.:\n\n* Exactly where in my multifaceted system is loose consistency “good enough” to meet application needs?\n* How do I know that my “mission-critical” software isn’t tainted by my “best effort” components?\n* How do I ensure that my design maxims are maintained as software and developer teams evolve?\n\n"
+      },
+      "after": "092079b2667dd60e",
+      "date": 1527011912075
+    },
+    {
+      "type": "edit",
+      "id": "f9b2933562553861",
+      "item": {
+        "type": "markdown",
+        "id": "f9b2933562553861",
+        "text": "Like most design maxims, these ideas are not so easy to translate into practice; all kinds of unavoidable tactical questions pop up, e.g.:\n\n* Exactly where in my multifaceted system is loose consistency “good enough” to meet application needs?\n* How do I know that my “mission-critical” software isn’t tainted by my “best effort” components?\n* How do I ensure that my design maxims are maintained as software and developer teams evolve?\n\n"
+      },
+      "date": 1527011913381
+    },
+    {
+      "type": "add",
+      "id": "3215f64e159bb2ab",
+      "item": {
+        "type": "paragraph",
+        "id": "3215f64e159bb2ab",
+        "text": "Until recently, answers to these questions have been more a matter of folklore than mathematics. (One way to tell the difference: a good answer is enforceable by a compiler.)"
+      },
+      "after": "f9b2933562553861",
+      "date": 1527011915929
+    },
+    {
+      "type": "add",
+      "id": "28cd44b99c6f3258",
+      "item": {
+        "type": "paragraph",
+        "id": "28cd44b99c6f3258",
+        "text": "In this talk, I will describe the CALM Theorem that links Consistency And Logical Monotonicity, and discuss how it can inform distributed software development. I'll also give a taste of Bloom, a \"disorderly\" distributed programming language whose compiler can automatically answer questions like the ones above. Along the way, I'll try to shed light on side questions like \"Should Paxos exist?\" and \"Causality: What is it good for?\""
+      },
+      "after": "3215f64e159bb2ab",
+      "date": 1527011926344
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "52c328fb7ee92556"
+      },
+      "id": "52c328fb7ee92556",
+      "type": "add",
+      "after": "28cd44b99c6f3258",
+      "date": 1527011927581
+    },
+    {
+      "type": "move",
+      "order": [
+        "092079b2667dd60e",
+        "52c328fb7ee92556",
+        "f9b2933562553861",
+        "3215f64e159bb2ab",
+        "28cd44b99c6f3258"
+      ],
+      "id": "52c328fb7ee92556",
+      "date": 1527011929242
+    },
+    {
+      "type": "edit",
+      "id": "52c328fb7ee92556",
+      "item": {
+        "type": "video",
+        "id": "52c328fb7ee92556",
+        "text": "VIMEO 53904989\n(double-click to edit caption)\n"
+      },
+      "date": 1527011938397
+    },
+    {
+      "type": "remove",
+      "id": "28cd44b99c6f3258",
+      "date": 1527011945166
+    },
+    {
+      "type": "edit",
+      "id": "52c328fb7ee92556",
+      "item": {
+        "type": "video",
+        "id": "52c328fb7ee92556",
+        "text": "VIMEO 53904989\nIn this talk, I will describe the CALM Theorem that links Consistency And Logical Monotonicity, and discuss how it can inform distributed software development. I'll also give a taste of Bloom, a \"disorderly\" distributed programming language whose compiler can automatically answer questions like the ones above. Along the way, I'll try to shed light on side questions like \"Should Paxos exist?\" and \"Causality: What is it good for?\""
+      },
+      "date": 1527011952286
+    },
+    {
+      "type": "edit",
+      "id": "52c328fb7ee92556",
+      "item": {
+        "type": "video",
+        "id": "52c328fb7ee92556",
+        "text": "VIMEO 53904989\nIn this talk, [[Joe Hellerstein]] describes the [[CALM Theorem]] that links Consistency And Logical Monotonicity, and discuss how it can inform distributed software development. He also gives a taste of Bloom, a \"disorderly\" distributed programming language whose compiler can automatically answer questions like the ones above. Along the way, I'll try to shed light on side questions like \"Should Paxos exist?\" and \"Causality: What is it good for?\""
+      },
+      "date": 1527012001243
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "509f6ca3eb3d2cc4"
+      },
+      "id": "509f6ca3eb3d2cc4",
+      "type": "add",
+      "after": "3215f64e159bb2ab",
+      "date": 1527012027591
+    },
+    {
+      "type": "edit",
+      "id": "509f6ca3eb3d2cc4",
+      "item": {
+        "type": "markdown",
+        "id": "509f6ca3eb3d2cc4",
+        "text": "# See also\n"
+      },
+      "date": 1527012035726
+    },
+    {
+      "type": "add",
+      "id": "669a0f2d104d12a8",
+      "item": {
+        "type": "markdown",
+        "id": "669a0f2d104d12a8",
+        "text": "- [[Leslie Lamport]]"
+      },
+      "after": "509f6ca3eb3d2cc4",
+      "date": 1527012039037
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "dc8734369f4628f6"
+      },
+      "id": "dc8734369f4628f6",
+      "type": "add",
+      "after": "669a0f2d104d12a8",
+      "date": 1527012139921
+    },
+    {
+      "type": "move",
+      "order": [
+        "092079b2667dd60e",
+        "52c328fb7ee92556",
+        "f9b2933562553861",
+        "3215f64e159bb2ab",
+        "dc8734369f4628f6",
+        "509f6ca3eb3d2cc4",
+        "669a0f2d104d12a8"
+      ],
+      "id": "dc8734369f4628f6",
+      "date": 1527012142490
+    },
+    {
+      "type": "edit",
+      "id": "dc8734369f4628f6",
+      "item": {
+        "type": "markdown",
+        "id": "dc8734369f4628f6",
+        "text": "# Eternaleye comments\n"
+      },
+      "date": 1527012156098
+    },
+    {
+      "type": "add",
+      "id": "49be7d07ba797593",
+      "item": {
+        "type": "markdown",
+        "id": "49be7d07ba797593",
+        "text": "You might want to look at a few of the recent papers on distributed consensus that are on https://eprint.iacr.org/complete/\nIn particular, the latest papers on Algorand and Ouroboros Genesis\nAlong with... basically anything with Elaine Shi in the author list\nIncluding their paper that goes into certain things that are not possible for distributed consensus in the permissionless setting\nScubajump: Also, I feel distributed consensus (in the blockchain sense) is still the wrong tool for that use case\nIn particular, its consistency model is way too strict (strict serializability - single global timeline everyone agrees on)\nWhich has really, really nasty performance implications\nA social network really only needs causal consistency\nAnd in the vast majority of circumstances, it should actually be monotonic - information being added should be hugely more common than information being removed\nConsensus protocols of the blockchain type can't take advantage of that\nEven though the CALM Conjecture means that should be possible to implement in a coordination-free manner\nI also feel that \"rely on distributed storage\" is far too much of a hand-wave\nBecause the cloud is other people's computers - and the incentives for them to store your data are insufficiently studied/explained\nMoreover, \"rely on\" is very fuzzy itself\nWhat's the acceptable probability of loss? What's the acceptable time to recovery if your local node goes down and all the other nodes are sometimes online?\nFurthermore, the resource tracking itself is very much a handwave\nUp until very recently, nobody had a way to prove storing a replica of data\nProofs of network usage are still a myth\nAnd so the SafeNetwork approach is to track resources that we don't know how to track, use that info to hand out money-like tokens we don't know how to ensure stay decentralized, use those tokens to pay nodes you know nothing about to hold data they know nothing about, in the hopes that if your node goes down, they're still around.\nIMO, it's much more realistic to skip the middle and run a second node yourself.\n\nAnd if you can't, pay someone who can, directly"
+      },
+      "after": "dc8734369f4628f6",
+      "date": 1527012178090
+    },
+    {
+      "type": "edit",
+      "id": "49be7d07ba797593",
+      "item": {
+        "type": "markdown",
+        "id": "49be7d07ba797593",
+        "text": "Some notes - https://matrix.to/#/!UOiWshZxoMFennjjxm:matrix.org/$15265923551761739uCbNU:matrix.org\n"
+      },
+      "date": 1527012277957
+    },
+    {
+      "type": "add",
+      "id": "9bb667191b83691e",
+      "item": {
+        "type": "markdown",
+        "id": "9bb667191b83691e",
+        "text": "You might want to look at a few of the recent papers on distributed consensus that are on https://eprint.iacr.org/complete/\nIn particular, the latest papers on Algorand and Ouroboros Genesis\nAlong with... basically anything with Elaine Shi in the author list\nIncluding their paper that goes into certain things that are not possible for distributed consensus in the permissionless setting\nScubajump: Also, I feel distributed consensus (in the blockchain sense) is still the wrong tool for that use case\nIn particular, its consistency model is way too strict (strict serializability - single global timeline everyone agrees on)\nWhich has really, really nasty performance implications\nA social network really only needs causal consistency\nAnd in the vast majority of circumstances, it should actually be monotonic - information being added should be hugely more common than information being removed\nConsensus protocols of the blockchain type can't take advantage of that\nEven though the CALM Conjecture means that should be possible to implement in a coordination-free manner\nI also feel that \"rely on distributed storage\" is far too much of a hand-wave\nBecause the cloud is other people's computers - and the incentives for them to store your data are insufficiently studied/explained\nMoreover, \"rely on\" is very fuzzy itself\nWhat's the acceptable probability of loss? What's the acceptable time to recovery if your local node goes down and all the other nodes are sometimes online?\nFurthermore, the resource tracking itself is very much a handwave\nUp until very recently, nobody had a way to prove storing a replica of data\nProofs of network usage are still a myth\nAnd so the SafeNetwork approach is to track resources that we don't know how to track, use that info to hand out money-like tokens we don't know how to ensure stay decentralized, use those tokens to pay nodes you know nothing about to hold data they know nothing about, in the hopes that if your node goes down, they're still around.\nIMO, it's much more realistic to skip the middle and run a second node yourself.\n\nAnd if you can't, pay someone who can, directly"
+      },
+      "after": "49be7d07ba797593",
+      "date": 1527012278644
+    },
+    {
+      "type": "edit",
+      "id": "49be7d07ba797593",
+      "item": {
+        "type": "markdown",
+        "id": "49be7d07ba797593",
+        "text": "Some notes from [https://matrix.to/#/!UOiWshZxoMFennjjxm:matrix.org/$15265923551761739uCbNU:matrix.org matrix.org]\n"
+      },
+      "date": 1527012294027
+    },
+    {
+      "type": "edit",
+      "id": "49be7d07ba797593",
+      "item": {
+        "type": "markdown",
+        "id": "49be7d07ba797593",
+        "text": "Some notes from:\n\n- [https://matrix.to/#/!UOiWshZxoMFennjjxm:matrix.org/$15265923551761739uCbNU:matrix.org matrix.org]\n- https://www.reddit.com/r/programming/comments/1kmrd3/the_calm_conjecture_has_been_proven_and_is_now/"
+      },
+      "date": 1527012379223
+    }
+  ]
+}

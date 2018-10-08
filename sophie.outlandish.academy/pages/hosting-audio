@@ -1,0 +1,899 @@
+{
+  "title": "Hosting Audio",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "2dca616db6a151fc",
+      "text": "Here we look at strategies for hosting audio files in Fedwiki. This is a specific use-case for creating an [[Audio Archive]] rather than simply a hosting files in a more general media archive."
+    },
+    {
+      "type": "markdown",
+      "id": "a6b10c1484de13ad",
+      "text": "# Aims"
+    },
+    {
+      "type": "paragraph",
+      "id": "92a013244c357b94",
+      "text": "The aim is to host all the audio on our own servers, and also on [[IPFS]] for decentralised access. However we want to make it easy for people to use mobile phones to upload audio from the apps of their choice. "
+    },
+    {
+      "type": "paragraph",
+      "id": "7d94e412edc9dca0",
+      "text": "In the short term this could be achieved by integrating with Dropbox or [[Google Drive]] which if it were possible to drag and drop a url onto a [[Transporter]] could achieve effective hosting, with a later converter moving these hosted files to our own storage."
+    },
+    {
+      "type": "paragraph",
+      "id": "f1a68f459644c0e6",
+      "text": "Look like this hack could work with DropBox at least. In the end we want our own mobile app with sharing extensions."
+    },
+    {
+      "type": "markdown",
+      "id": "d528e62410d30341",
+      "text": "# HTML 5 Audio"
+    },
+    {
+      "type": "paragraph",
+      "id": "334ab6919c25af40",
+      "text": "We can display an HTML5 audio player in wiki using the audio plugin (but not the HTML plugin)."
+    },
+    {
+      "type": "html",
+      "id": "c46e6c623b28cbb3",
+      "text": "This it does not seem to work using an [[HTML5 Audio]] tag (see this HTML in this paragraph item).\n<p>\n\n<audio src=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\">\n</audio>"
+    },
+    {
+      "type": "markdown",
+      "id": "b3b421f798a847ea",
+      "text": "# Hosting audio files on DropBox"
+    },
+    {
+      "type": "paragraph",
+      "id": "10993e4d89e0aec4",
+      "text": "DropBox does not make it easy to host content for display in other web sites. I guess they don;t see this as part of their business model."
+    },
+    {
+      "type": "paragraph",
+      "id": "709f723203f47864",
+      "text": "However it is possible in situations in which Dropbox shows a preview of the media type (such as mp3 audio)."
+    },
+    {
+      "type": "paragraph",
+      "id": "1f79540330acae80",
+      "text": "However I've not figured out a way to obtain an HTTP GET uri for .mp4 audio content for instance. First you need to share the file, then scrape the HTML of the visual preview of the file to obtain the audio tag - [https://www.dropbox.com/home/Apps/Voice%20Record%20Pro?preview=20150414-144719.mp4 dropbox.com]"
+    },
+    {
+      "type": "code",
+      "id": "51cdfa503a63ec32",
+      "text": "<audio \nsrc=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\">\n</audio>"
+    },
+    {
+      "type": "paragraph",
+      "id": "a070e62f7792c12c",
+      "text": "Using the src url you cna then display the audio in an audio plugin as below:"
+    },
+    {
+      "type": "audio",
+      "id": "ca7372bd79cc4843",
+      "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\nA basic test from [[Dropbox]]"
+    },
+    {
+      "type": "paragraph",
+      "id": "ead356f63e68cf56",
+      "text": "You need to use the full strange url for the audio file, which you can obtain by scraping the html of the viewer."
+    },
+    {
+      "type": "paragraph",
+      "id": "f8e6af859495a9d3",
+      "text": "It may be possible to use the [[Dropbox API]] to obtain this url which has the following form:"
+    },
+    {
+      "type": "code",
+      "id": "31f903149e26d685",
+      "text": "https://dl-web.dropbox.com/get/Audio/\nDiscovery.Future%20of%20Biodiversity.mp3\n?_subject_uid=373931789\n&duc_id=dropbox_duc_id\n&w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ"
+    },
+    {
+      "type": "paragraph",
+      "id": "5790fdb65974692d",
+      "text": "Removing the trainling part of the url does not work in case you seek to try it:"
+    },
+    {
+      "type": "audio",
+      "id": "14ead3a810f20b91",
+      "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3\nA broken test from [[Dropbox]] where we remover the \"?_subject_uid=...\" part."
+    },
+    {
+      "type": "markdown",
+      "id": "e685b3fda4b5ad59",
+      "text": "# Hosting using Google Drive\n\nIt seems this is even more problematic. It may be possible via [[Google Music]] as there are some audio tags in the interface, and may be api access?"
+    },
+    {
+      "type": "markdown",
+      "id": "f3d75afd7beaf72e",
+      "text": "Here are some links describing possible hacks:\n\n- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]\n- [https://play.google.com/music/listen#/ap/auto-playlist-recent play.google.com]"
+    },
+    {
+      "type": "code",
+      "id": "d6a9cd8d50cb9a26",
+      "text": "<audio src=\"blob:https://play.google.com/57fa5133-4ca1-4807-86ac-6c241cd6485b\"></audio>"
+    },
+    {
+      "type": "paragraph",
+      "id": "61b9479597e05c9f",
+      "text": "Obtaining a workable url for hot-linking for an mp3 from drive also seems tricky - [https://drive.google.com/file/d/0B0O7x5t4zqPZUXJreE01R012ZzQ/view drive.google.com]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Hosting Audio",
+        "story": []
+      },
+      "date": 1497701058084
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2dca616db6a151fc"
+      },
+      "id": "2dca616db6a151fc",
+      "type": "add",
+      "date": 1497701059543
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c46e6c623b28cbb3"
+      },
+      "id": "c46e6c623b28cbb3",
+      "type": "add",
+      "after": "2dca616db6a151fc",
+      "date": 1497701150764
+    },
+    {
+      "type": "edit",
+      "id": "2dca616db6a151fc",
+      "item": {
+        "type": "paragraph",
+        "id": "2dca616db6a151fc",
+        "text": "Here we look at strategies for hosting audio files in Fedwiki. This is a specific use-case for creating an [[Audio Archive]] rather than simply a hosting files in a more general media archive."
+      },
+      "date": 1497701152035
+    },
+    {
+      "type": "fork",
+      "date": 1497701173630
+    },
+    {
+      "type": "edit",
+      "id": "c46e6c623b28cbb3",
+      "item": {
+        "type": "html",
+        "id": "c46e6c623b28cbb3",
+        "text": "OK\n<p>\n<audio src=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\"></audio>"
+      },
+      "date": 1497701205362
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ca7372bd79cc4843"
+      },
+      "id": "ca7372bd79cc4843",
+      "type": "add",
+      "after": "c46e6c623b28cbb3",
+      "date": 1497701210015
+    },
+    {
+      "type": "edit",
+      "id": "ca7372bd79cc4843",
+      "item": {
+        "type": "audio",
+        "id": "ca7372bd79cc4843",
+        "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\nOK"
+      },
+      "date": 1497701215930
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "14ead3a810f20b91"
+      },
+      "id": "14ead3a810f20b91",
+      "type": "add",
+      "after": "ca7372bd79cc4843",
+      "date": 1497701273194
+    },
+    {
+      "type": "edit",
+      "id": "14ead3a810f20b91",
+      "item": {
+        "type": "audio",
+        "id": "14ead3a810f20b91",
+        "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3\nAnother test from [[Dropbox]]"
+      },
+      "date": 1497701283966
+    },
+    {
+      "type": "edit",
+      "id": "ca7372bd79cc4843",
+      "item": {
+        "type": "audio",
+        "id": "ca7372bd79cc4843",
+        "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\nA basic test from [[Dropbox]]"
+      },
+      "date": 1497701311880
+    },
+    {
+      "type": "edit",
+      "id": "c46e6c623b28cbb3",
+      "item": {
+        "type": "html",
+        "id": "c46e6c623b28cbb3",
+        "text": "So it doesn;t seem to work using an [[HTML5 Audio]] tag (see the HTML in this paragraph item).\n<p>\n<audio src=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\"></audio>"
+      },
+      "date": 1497702699212
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "b3b421f798a847ea"
+      },
+      "id": "b3b421f798a847ea",
+      "type": "add",
+      "after": "14ead3a810f20b91",
+      "date": 1497703132955
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "ca7372bd79cc4843",
+        "14ead3a810f20b91"
+      ],
+      "id": "b3b421f798a847ea",
+      "date": 1497703138351
+    },
+    {
+      "type": "add",
+      "id": "d528e62410d30341",
+      "item": {
+        "type": "paragraph",
+        "id": "d528e62410d30341",
+        "text": "# HTML 5 Audio"
+      },
+      "after": "2dca616db6a151fc",
+      "date": 1497703157519
+    },
+    {
+      "type": "add",
+      "id": "334ab6919c25af40",
+      "item": {
+        "type": "paragraph",
+        "id": "334ab6919c25af40",
+        "text": "We can display an HTML5 audio player in wiki using the audio plugin (but not the HTML plugin)."
+      },
+      "after": "d528e62410d30341",
+      "date": 1497703195395
+    },
+    {
+      "type": "edit",
+      "id": "d528e62410d30341",
+      "item": {
+        "type": "markdown",
+        "id": "d528e62410d30341",
+        "text": "# HTML 5 Audio"
+      },
+      "date": 1497703197090
+    },
+    {
+      "type": "edit",
+      "id": "b3b421f798a847ea",
+      "item": {
+        "type": "paragraph",
+        "id": "b3b421f798a847ea",
+        "text": "# Hosting audio files on DropBox"
+      },
+      "date": 1497703220562
+    },
+    {
+      "type": "add",
+      "id": "10993e4d89e0aec4",
+      "item": {
+        "type": "paragraph",
+        "id": "10993e4d89e0aec4",
+        "text": "DropBox does not make it easy to host content for display in other web sites. However it is possible in situations in which Dropbox shows a preview of the media type (such as mp3 audio)."
+      },
+      "after": "b3b421f798a847ea",
+      "date": 1497703300584
+    },
+    {
+      "type": "edit",
+      "id": "b3b421f798a847ea",
+      "item": {
+        "type": "markdown",
+        "id": "b3b421f798a847ea",
+        "text": "# Hosting audio files on DropBox"
+      },
+      "date": 1497703301665
+    },
+    {
+      "type": "add",
+      "id": "1f79540330acae80",
+      "item": {
+        "type": "paragraph",
+        "id": "1f79540330acae80",
+        "text": "However I've not figured out a way to obtain an HTTP GET uri for .mp4 audio content for instance - "
+      },
+      "after": "10993e4d89e0aec4",
+      "date": 1497703517164
+    },
+    {
+      "type": "edit",
+      "id": "1f79540330acae80",
+      "item": {
+        "type": "paragraph",
+        "id": "1f79540330acae80",
+        "text": "However I've not figured out a way to obtain an HTTP GET uri for .mp4 audio content for instance - [https://www.dropbox.com/home/Apps/Voice%20Record%20Pro?preview=20150414-144719.mp4 dropbox.com]"
+      },
+      "date": 1497703542788
+    },
+    {
+      "type": "edit",
+      "id": "c46e6c623b28cbb3",
+      "item": {
+        "type": "html",
+        "id": "c46e6c623b28cbb3",
+        "text": "This it does not seem to work using an [[HTML5 Audio]] tag (see this HTML in this paragraph item).\n<p>\n\n<audio src=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\">\n</audio>"
+      },
+      "date": 1497703587087
+    },
+    {
+      "type": "edit",
+      "id": "14ead3a810f20b91",
+      "item": {
+        "type": "audio",
+        "id": "14ead3a810f20b91",
+        "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3\nA broken test from [[Dropbox]] where we remover the "
+      },
+      "date": 1497703621262
+    },
+    {
+      "type": "edit",
+      "id": "14ead3a810f20b91",
+      "item": {
+        "type": "audio",
+        "id": "14ead3a810f20b91",
+        "text": "https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3\nA broken test from [[Dropbox]] where we remover the \"?_subject_uid=...\" part."
+      },
+      "date": 1497703643011
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "ead356f63e68cf56"
+      },
+      "id": "ead356f63e68cf56",
+      "type": "add",
+      "after": "14ead3a810f20b91",
+      "date": 1497703650244
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "d528e62410d30341",
+        "334ab6919c25af40",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "10993e4d89e0aec4",
+        "1f79540330acae80",
+        "ca7372bd79cc4843",
+        "ead356f63e68cf56",
+        "14ead3a810f20b91"
+      ],
+      "id": "ead356f63e68cf56",
+      "date": 1497703652600
+    },
+    {
+      "type": "edit",
+      "id": "ead356f63e68cf56",
+      "item": {
+        "type": "paragraph",
+        "id": "ead356f63e68cf56",
+        "text": "You need to use the full strange url for the audio file, which you can obtain by scraping the html of the viewer."
+      },
+      "date": 1497703696459
+    },
+    {
+      "type": "add",
+      "id": "f8e6af859495a9d3",
+      "item": {
+        "type": "paragraph",
+        "id": "f8e6af859495a9d3",
+        "text": "It may be possible to use the [[Dropbox API to obtain this url which has the following form:"
+      },
+      "after": "ead356f63e68cf56",
+      "date": 1497703725213
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "31f903149e26d685"
+      },
+      "id": "31f903149e26d685",
+      "type": "add",
+      "after": "14ead3a810f20b91",
+      "date": 1497703726398
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "d528e62410d30341",
+        "334ab6919c25af40",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "10993e4d89e0aec4",
+        "1f79540330acae80",
+        "ca7372bd79cc4843",
+        "ead356f63e68cf56",
+        "f8e6af859495a9d3",
+        "31f903149e26d685",
+        "14ead3a810f20b91"
+      ],
+      "id": "31f903149e26d685",
+      "date": 1497703727818
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "5790fdb65974692d"
+      },
+      "id": "5790fdb65974692d",
+      "type": "add",
+      "after": "14ead3a810f20b91",
+      "date": 1497703730535
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "d528e62410d30341",
+        "334ab6919c25af40",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "10993e4d89e0aec4",
+        "1f79540330acae80",
+        "ca7372bd79cc4843",
+        "ead356f63e68cf56",
+        "f8e6af859495a9d3",
+        "31f903149e26d685",
+        "5790fdb65974692d",
+        "14ead3a810f20b91"
+      ],
+      "id": "5790fdb65974692d",
+      "date": 1497703732037
+    },
+    {
+      "type": "edit",
+      "id": "5790fdb65974692d",
+      "item": {
+        "type": "paragraph",
+        "id": "5790fdb65974692d",
+        "text": "Removing the trainling part of the url does not work in case yo seek to try it:"
+      },
+      "date": 1497703757031
+    },
+    {
+      "type": "edit",
+      "id": "10993e4d89e0aec4",
+      "item": {
+        "type": "paragraph",
+        "id": "10993e4d89e0aec4",
+        "text": "DropBox does not make it easy to host content for display in other web sites. I guess they don;t see this as part of their business model."
+      },
+      "date": 1497703807528
+    },
+    {
+      "type": "add",
+      "id": "709f723203f47864",
+      "item": {
+        "type": "paragraph",
+        "id": "709f723203f47864",
+        "text": "However it is possible in situations in which Dropbox shows a preview of the media type (such as mp3 audio)."
+      },
+      "after": "10993e4d89e0aec4",
+      "date": 1497703808050
+    },
+    {
+      "type": "edit",
+      "id": "1f79540330acae80",
+      "item": {
+        "type": "paragraph",
+        "id": "1f79540330acae80",
+        "text": "However I've not figured out a way to obtain an HTTP GET uri for .mp4 audio content for instance. First you need to share the file, then scrape the HTML of the visual preview of the file to obtain the audio tag - [https://www.dropbox.com/home/Apps/Voice%20Record%20Pro?preview=20150414-144719.mp4 dropbox.com]"
+      },
+      "date": 1497703857580
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "51cdfa503a63ec32"
+      },
+      "id": "51cdfa503a63ec32",
+      "type": "add",
+      "after": "14ead3a810f20b91",
+      "date": 1497703861538
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "d528e62410d30341",
+        "334ab6919c25af40",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "10993e4d89e0aec4",
+        "709f723203f47864",
+        "1f79540330acae80",
+        "51cdfa503a63ec32",
+        "ca7372bd79cc4843",
+        "ead356f63e68cf56",
+        "f8e6af859495a9d3",
+        "31f903149e26d685",
+        "5790fdb65974692d",
+        "14ead3a810f20b91"
+      ],
+      "id": "51cdfa503a63ec32",
+      "date": 1497703864307
+    },
+    {
+      "type": "edit",
+      "id": "51cdfa503a63ec32",
+      "item": {
+        "type": "code",
+        "id": "51cdfa503a63ec32",
+        "text": "<audio src=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\"></audio>"
+      },
+      "date": 1497703888575
+    },
+    {
+      "type": "edit",
+      "id": "51cdfa503a63ec32",
+      "item": {
+        "type": "code",
+        "id": "51cdfa503a63ec32",
+        "text": "<audio \nsrc=\"https://dl-web.dropbox.com/get/Audio/Discovery.Future%20of%20Biodiversity.mp3?_subject_uid=373931789&amp;duc_id=dropbox_duc_id&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ\" preload=\"auto\">\n</audio>"
+      },
+      "date": 1497703902663
+    },
+    {
+      "type": "add",
+      "id": "a070e62f7792c12c",
+      "item": {
+        "type": "paragraph",
+        "id": "a070e62f7792c12c",
+        "text": "Using the src url you cna then display the audio in an audio plugin as below:"
+      },
+      "after": "1f79540330acae80",
+      "date": 1497703941424
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "d528e62410d30341",
+        "334ab6919c25af40",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "10993e4d89e0aec4",
+        "709f723203f47864",
+        "1f79540330acae80",
+        "51cdfa503a63ec32",
+        "a070e62f7792c12c",
+        "ca7372bd79cc4843",
+        "ead356f63e68cf56",
+        "f8e6af859495a9d3",
+        "31f903149e26d685",
+        "5790fdb65974692d",
+        "14ead3a810f20b91"
+      ],
+      "id": "a070e62f7792c12c",
+      "date": 1497703943747
+    },
+    {
+      "type": "edit",
+      "id": "f8e6af859495a9d3",
+      "item": {
+        "type": "paragraph",
+        "id": "f8e6af859495a9d3",
+        "text": "It may be possible to use the [[Dropbox API]] to obtain this url which has the following form:"
+      },
+      "date": 1497703954625
+    },
+    {
+      "type": "edit",
+      "id": "31f903149e26d685",
+      "item": {
+        "type": "code",
+        "id": "31f903149e26d685",
+        "text": "https://dl-web.dropbox.com/get/Audio/\nDiscovery.Future%20of%20Biodiversity.mp3\n?_subject_uid=373931789\n&amp;duc_id=dropbox_duc_id\n&amp;w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ"
+      },
+      "date": 1497704023427
+    },
+    {
+      "type": "edit",
+      "id": "31f903149e26d685",
+      "item": {
+        "type": "code",
+        "id": "31f903149e26d685",
+        "text": "https://dl-web.dropbox.com/get/Audio/\nDiscovery.Future%20of%20Biodiversity.mp3\n?_subject_uid=373931789\n&duc_id=dropbox_duc_id\n&w=AABUkxx7RTzB8t94fNSnVaxg3ORZWOqJ_3IswHrwuLdyNQ"
+      },
+      "date": 1497704051024
+    },
+    {
+      "type": "edit",
+      "id": "5790fdb65974692d",
+      "item": {
+        "type": "paragraph",
+        "id": "5790fdb65974692d",
+        "text": "Removing the trainling part of the url does not work in case you seek to try it:"
+      },
+      "date": 1497704087887
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e685b3fda4b5ad59"
+      },
+      "id": "e685b3fda4b5ad59",
+      "type": "add",
+      "after": "14ead3a810f20b91",
+      "date": 1497705137644
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d6a9cd8d50cb9a26"
+      },
+      "id": "d6a9cd8d50cb9a26",
+      "type": "add",
+      "after": "e685b3fda4b5ad59",
+      "date": 1497705201673
+    },
+    {
+      "type": "edit",
+      "id": "e685b3fda4b5ad59",
+      "item": {
+        "type": "markdown",
+        "id": "e685b3fda4b5ad59",
+        "text": "# Hosting using Google Drive\n\nIt seems this is even more problematic. It may be possible via [[Google Music]] as there are some audio tags in the interface, and may be api access ?"
+      },
+      "date": 1497705204204
+    },
+    {
+      "type": "edit",
+      "id": "d6a9cd8d50cb9a26",
+      "item": {
+        "type": "code",
+        "id": "d6a9cd8d50cb9a26",
+        "text": "<audio src=\"blob:https://play.google.com/57fa5133-4ca1-4807-86ac-6c241cd6485b\"></audio>"
+      },
+      "date": 1497705205017
+    },
+    {
+      "type": "edit",
+      "id": "e685b3fda4b5ad59",
+      "item": {
+        "type": "markdown",
+        "id": "e685b3fda4b5ad59",
+        "text": "# Hosting using Google Drive\n\nIt seems this is even more problematic. It may be possible via [[Google Music]] as there are some audio tags in the interface, and may be api access?"
+      },
+      "date": 1497705221273
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f3d75afd7beaf72e"
+      },
+      "id": "f3d75afd7beaf72e",
+      "type": "add",
+      "after": "d6a9cd8d50cb9a26",
+      "date": 1497705222299
+    },
+    {
+      "type": "move",
+      "order": [
+        "2dca616db6a151fc",
+        "d528e62410d30341",
+        "334ab6919c25af40",
+        "c46e6c623b28cbb3",
+        "b3b421f798a847ea",
+        "10993e4d89e0aec4",
+        "709f723203f47864",
+        "1f79540330acae80",
+        "51cdfa503a63ec32",
+        "a070e62f7792c12c",
+        "ca7372bd79cc4843",
+        "ead356f63e68cf56",
+        "f8e6af859495a9d3",
+        "31f903149e26d685",
+        "5790fdb65974692d",
+        "14ead3a810f20b91",
+        "e685b3fda4b5ad59",
+        "f3d75afd7beaf72e",
+        "d6a9cd8d50cb9a26"
+      ],
+      "id": "f3d75afd7beaf72e",
+      "date": 1497705224112
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "paragraph",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:"
+      },
+      "date": 1497705245044
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "paragraph",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]"
+      },
+      "date": 1497705279283
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "paragraph",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:"
+      },
+      "date": 1497705284699
+    },
+    {
+      "type": "add",
+      "id": "efd79ccc0fabf31a",
+      "item": {
+        "type": "paragraph",
+        "id": "efd79ccc0fabf31a",
+        "text": "- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]"
+      },
+      "after": "f3d75afd7beaf72e",
+      "date": 1497705284932
+    },
+    {
+      "type": "remove",
+      "id": "efd79ccc0fabf31a",
+      "date": 1497705292581
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "paragraph",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]"
+      },
+      "date": 1497705295685
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "markdown",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]"
+      },
+      "date": 1497705296962
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "markdown",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:\n\n- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]"
+      },
+      "date": 1497705303573
+    },
+    {
+      "type": "edit",
+      "id": "f3d75afd7beaf72e",
+      "item": {
+        "type": "markdown",
+        "id": "f3d75afd7beaf72e",
+        "text": "Here are some links describing possible hacks:\n\n- [https://webapps.stackexchange.com/questions/65763/how-can-i-hotlink-an-mp3-in-google-drive-with-a-url-ending-in-mp3 webapps.stackexchange.com]\n- [https://play.google.com/music/listen#/ap/auto-playlist-recent play.google.com]"
+      },
+      "date": 1497705328614
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "61b9479597e05c9f"
+      },
+      "id": "61b9479597e05c9f",
+      "type": "add",
+      "after": "d6a9cd8d50cb9a26",
+      "date": 1497705355427
+    },
+    {
+      "type": "edit",
+      "id": "61b9479597e05c9f",
+      "item": {
+        "type": "paragraph",
+        "id": "61b9479597e05c9f",
+        "text": "Obtaining a workable url for hot-linking for an mp3 from drive also seems tricky - [https://drive.google.com/file/d/0B0O7x5t4zqPZUXJreE01R012ZzQ/view drive.google.com]"
+      },
+      "date": 1497705404474
+    },
+    {
+      "type": "add",
+      "id": "a6b10c1484de13ad",
+      "item": {
+        "type": "paragraph",
+        "id": "a6b10c1484de13ad",
+        "text": "# Aims"
+      },
+      "after": "2dca616db6a151fc",
+      "date": 1497705424793
+    },
+    {
+      "type": "add",
+      "id": "92a013244c357b94",
+      "item": {
+        "type": "paragraph",
+        "id": "92a013244c357b94",
+        "text": "The aim is to host all the audio on our own servers, and also on [[IPFS]] for decentralised access. However we want to make it easy for people to use mobile phones to upload audio from the apps of their choice. "
+      },
+      "after": "a6b10c1484de13ad",
+      "date": 1497705517128
+    },
+    {
+      "type": "edit",
+      "id": "a6b10c1484de13ad",
+      "item": {
+        "type": "markdown",
+        "id": "a6b10c1484de13ad",
+        "text": "# Aims"
+      },
+      "date": 1497705518845
+    },
+    {
+      "type": "add",
+      "id": "7d94e412edc9dca0",
+      "item": {
+        "type": "paragraph",
+        "id": "7d94e412edc9dca0",
+        "text": "In the short term this could be achieved by integrating with Dropbox or [[Google Drive]] which if it were possible to drag and drop a url onto a [[Transporter]] could achieve effective hosting, with a later converter moving these hosted files to our own storage."
+      },
+      "after": "92a013244c357b94",
+      "date": 1497705569786
+    },
+    {
+      "type": "add",
+      "id": "f1a68f459644c0e6",
+      "item": {
+        "type": "paragraph",
+        "id": "f1a68f459644c0e6",
+        "text": "Look like this hack could work with DropBox at least. In the end we want our own mobile app with sharing extensions."
+      },
+      "after": "7d94e412edc9dca0",
+      "date": 1497705626109
+    },
+    {
+      "type": "fork",
+      "site": "hosting.permanent.wiki",
+      "date": 1518209714185
+    }
+  ]
+}

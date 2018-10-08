@@ -1,0 +1,81 @@
+{
+  "title": "Implementing Liquid Wiki",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "72f8c77cae14fa50",
+      "text": "Here we start the basis of a [[functional specification]] for [[Liquid Wiki]]:"
+    },
+    {
+      "type": "markdown",
+      "id": "14dce7f6d27680ea",
+      "text": "[[Holochain]] provides seemingly an extremely well matched paradigm for the storage of [[Federated Wiki]] content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n### High level implementation structure\n* retain the current node.js/express server for fedwiki, and all the various tools it provides. \n* extend/alter the express server such that content provenance is managed by Holochain in some way (see the Wiki Page Entry below).\n* early implementations would hold all the holochain nodes inside one container running on a DO droplet, each node representing some FedWiki site. Creating a new wiki site would push through a request to the Holochain Pre-Incubator, which would create a new Holochain Agent ID, register ports with the OS, and return that data to some intermediary service that can managed interfacing with the Holochain Node rest API's of each Agent/FedWiki site\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+    },
+    {
+      "type": "markdown",
+      "id": "4975818131e55ea6",
+      "text": "# Front End Development\n\n## Asset Upload\n\n* Front and or back end need to rewrite the `asset/` URL when the IPFS service has completed its journey of hashingtons\n"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Implementing Liquid Wiki",
+        "story": []
+      },
+      "date": 1517185562440
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "72f8c77cae14fa50"
+      },
+      "id": "72f8c77cae14fa50",
+      "type": "add",
+      "date": 1517185563984
+    },
+    {
+      "type": "edit",
+      "id": "72f8c77cae14fa50",
+      "item": {
+        "type": "paragraph",
+        "id": "72f8c77cae14fa50",
+        "text": "Here we start the basis of a functional specification for [[Liquid Wiki]]:"
+      },
+      "date": 1517185597028
+    },
+    {
+      "type": "edit",
+      "id": "72f8c77cae14fa50",
+      "item": {
+        "type": "paragraph",
+        "id": "72f8c77cae14fa50",
+        "text": "Here we start the basis of a [[functional specification]] for [[Liquid Wiki]]:"
+      },
+      "date": 1517185604075
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "14dce7f6d27680ea",
+        "text": "[[Holochain]] provides seemingly an extremely well matched paradigm for the storage of [[Federated Wiki]] content. \n\n* Federated Wiki behaviour is managed by the browser.\n* Most behaviour is implemented as client side plugins that are loaded as JSON on page load\n* Some plugins have serverside components, that are ajax'd by the browser. The server side components are loaded as npm modules into the node server\n* Transporters are services which run in processes external to the main Node.js process, that are also accessed by REST through ajax calls.\n\n* all page edits and forks are stored inside the page's JSON object. This should be ... openned slightly into the Holochain paradigm, and this process is deeply addative to the existing Federated Wiki paradigm, and both fit nicely into each other. (see the (very) draft Entry specifications below)\n\n### High level implementation structure\n* retain the current node.js/express server for fedwiki, and all the various tools it provides. \n* extend/alter the express server such that content provenance is managed by Holochain in some way (see the Wiki Page Entry below).\n* early implementations would hold all the holochain nodes inside one container running on a DO droplet, each node representing some FedWiki site. Creating a new wiki site would push through a request to the Holochain Pre-Incubator, which would create a new Holochain Agent ID, register ports with the OS, and return that data to some intermediary service that can managed interfacing with the Holochain Node rest API's of each Agent/FedWiki site\n\n## Entry Types to back Federated Wiki\n\n### Wiki Page Entry\n* Monolithic json blob for entire page?\n* OR each page is an anchor with some fixed hash, onto which the various json objects that make up a wiki page are are added, updated and deleted.\n* OR some infrastructure where only hashes are stored on holochain, and *all* content is stored on IPFS\n\n### Edit Entry\n* a public entry that allows interested parties to determine if edits have taken place to pieces of content.\n\n### Fork Transaction Entry\n* a two party transaction which provides guaranteed provenance of forked wiki content\n\n\n### Assets\nassets are large files or sometimes whole applications\nimages and such are loaded into the wiki dom\napplications are loaded into a separate browser tab at \"arms length\"\n\n\n* Seems to me that actually the holochain backend wont be aware of the various asset storage specifications, as it is managed by other server side services.\n* For example, IPFS assets will require that the IPFS local server has hashed and stored the file, and returned that hash to the client, so that the client can display it. That IPFS hash will then be inside some JSON blob.\n\n"
+      },
+      "after": "72f8c77cae14fa50",
+      "id": "14dce7f6d27680ea",
+      "date": 1517185633805
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "4975818131e55ea6",
+        "text": "# Front End Development\n\n## Asset Upload\n\n* Front and or back end need to rewrite the `asset/` URL when the IPFS service has completed its journey of hashingtons\n"
+      },
+      "after": "14dce7f6d27680ea",
+      "id": "4975818131e55ea6",
+      "date": 1517185641162
+    }
+  ]
+}

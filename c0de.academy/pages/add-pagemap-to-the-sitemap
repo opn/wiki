@@ -1,0 +1,761 @@
+{
+  "title": "Add PageMap to the Sitemap",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "206715dbcc704d5e",
+      "text": "Suppose you've defined [[PageMaps]] with a \"pagetype\" attribute as in this example:"
+    },
+    {
+      "type": "code",
+      "id": "682552757f7709be",
+      "text": "<PageMap>\n  <DataObject type=\"document\">\n    <Attribute name=\"pagetype\">\n      Product Details\n    </Attribute>\n  </DataObject>\n</PageMap>\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "78016eb0a0a9b101",
+      "text": "You can create a refinement with a \"rewrite\" (query addition) using the \"more:\" operator to match an attribute value:"
+    },
+    {
+      "type": "paragraph",
+      "id": "ef0aafa9611c8ccf",
+      "text": "\n"
+    },
+    {
+      "type": "code",
+      "id": "e2ca087d3b378246",
+      "text": "more:pagemap:document-pagetype:Product*Details"
+    },
+    {
+      "type": "paragraph",
+      "id": "b346aa17f8183d00",
+      "text": "In that example the asterisk allows the single \"more:\" operator to match the two words in the attribute value."
+    },
+    {
+      "type": "paragraph",
+      "id": "f88123c3d18715f0",
+      "text": "Of course alternatively you could omit the space in the attribute value in the pagemap (e.g. \"ProductDetails\") in which case you wouldn't need to use the asterisk syntax in the query."
+    },
+    {
+      "type": "paragraph",
+      "id": "4d4270f53ed31a7f",
+      "text": "The 'asterisk syntax' might not yet be described in documentation, but hxu-cse mentioned it in another discussion - [https://groups.google.com/a/googleproductforums.com/d/msg/customsearch/xiHI497NOLM/e6MX6gaMayIJ groups.google.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "918c1b8fd040fec5",
+      "text": "# Documentation"
+    },
+    {
+      "type": "paragraph",
+      "id": "728377d716b7bf57",
+      "text": "In the Structured Search documentation titled \"Filtering and sorting search results\",  see the \"Web search\" section's \"Filter by Attribute\" subsection: - [http://code.google.com/apis/customsearch/docs/structured_search.html#filter_by_attribute code.google.com]\n\n"
+    },
+    {
+      "type": "paragraph",
+      "id": "2cc7a98fb0f4358c",
+      "text": "For information on how to provide structured data (PageMaps etc.) see [http://code.google.com/apis/customsearch/docs/structured_data.html code.google.com]"
+    },
+    {
+      "type": "markdown",
+      "id": "aa2cdc92658e5a11",
+      "text": "# Pagemap Examples"
+    },
+    {
+      "type": "paragraph",
+      "id": "cfc7e86a43e39c36",
+      "text": "Below is an example in which we add two <[[DataObject]]> tags - one for a [[Adding Thumbnails]], and on for marking up a page with two [[Refinements]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "ba070a45efc6ad1f",
+      "text": "Let's take a look at sme [[Pagemap Examples]]. The example below is taken from this discussion: [https://productforums.google.com/forum/#!topic/customsearch/sctyjImlB-g productforums.google.com]"
+    },
+    {
+      "type": "code",
+      "id": "42ad93a7ae746545",
+      "text": "<PageMap>\n  <DataObject type=\"thumbnail\">\n    <Attribute name=\"src\" value=\"http://images6.cpcache.com/product/17930066_150x150_Front.jpg\"/>\n    <Attribute name=\"class\" value=\"search_thumb\"/>\n    <Attribute name=\"width\" value=\"150\"/>\n    <Attribute name=\"height\" value=\"150\"/>\n    <Attribute name=\"alt\" value=\" ~ Peace On Earth Value T-Shirt\" />\n  </DataObject>\n\n  <DataObject type=\"document\">\n    <Attribute name=\"pagetype\">\n      Products\n    </Attribute>\n    <Attribute name=\"department\">\n      Men's Apparel\n    </Attribute>\n  </DataObject>\n</PageMap>"
+    },
+    {
+      "type": "paragraph",
+      "id": "658087249ce3f7bd",
+      "text": "From this we can created refinements in the control panel, respectively with the optional search words:"
+    },
+    {
+      "type": "code",
+      "id": "405c123156ef298a",
+      "text": "more:pagemap:document-pagetype:Products\nmore:pagemap:document-department:Men's*Wear"
+    },
+    {
+      "type": "paragraph",
+      "id": "bdaa98a202788899",
+      "text": "This generates the following FacetItems in the context XML:"
+    },
+    {
+      "type": "code",
+      "id": "a5d0e31ea50b2753",
+      "text": "<FacetItem>\n  <Label name=\"products\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-pagetype:Products\n    </Rewrite>\n  </Label>\n  <Title>Products</Title>\n</FacetItem>\n<FacetItem>\n  <Label name=\"men_s_wear\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-department:Men&apos;s*Wear\n    </Rewrite>\n  </Label>\n  <Title>Men&apos;s Wear</Title>\n</FacetItem>"
+    },
+    {
+      "type": "paragraph",
+      "id": "845f7058db38c5ee",
+      "text": "You can then download the context XML file from the Advanced page, re-sorted the FacetItems so they'd appear in the order you want on the CSE and uploaded the new XML file via the Advanced page.\n"
+    },
+    {
+      "type": "reference",
+      "id": "f8485e1bbb113571",
+      "site": "dev.himalayan.academy",
+      "slug": "build-and-submit-a-sitemap",
+      "title": "Build and submit a sitemap",
+      "text": "Here is how you build and submit a [[google Site Map]]:"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Add PageMap to the Sitemap",
+        "story": []
+      },
+      "date": 1459537101546
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e2ca087d3b378246"
+      },
+      "id": "e2ca087d3b378246",
+      "type": "add",
+      "date": 1459537102667
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "206715dbcc704d5e",
+        "text": "Suppose you've defined PageMaps with a \"pagetype\" attribute as in this example:"
+      },
+      "id": "206715dbcc704d5e",
+      "date": 1459537111706
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "682552757f7709be",
+        "text": "<PageMap>\n      <DataObject type=\"document\">\n        <Attribute name=\"pagetype\">Product Details</Attribute>\n      </DataObject>\n</PageMap>\n"
+      },
+      "after": "206715dbcc704d5e",
+      "id": "682552757f7709be",
+      "date": 1459537115119
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "78016eb0a0a9b101",
+        "text": "You can create a refinement with a \"rewrite\" (query addition) using the \"more:\" operator to match an attribute value:"
+      },
+      "after": "682552757f7709be",
+      "id": "78016eb0a0a9b101",
+      "date": 1459537119399
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ef0aafa9611c8ccf",
+        "text": "\n  more:pagemap:document-pagetype:Product*Details\n\n"
+      },
+      "after": "78016eb0a0a9b101",
+      "id": "ef0aafa9611c8ccf",
+      "date": 1459537125895
+    },
+    {
+      "type": "edit",
+      "id": "ef0aafa9611c8ccf",
+      "item": {
+        "type": "paragraph",
+        "id": "ef0aafa9611c8ccf",
+        "text": "\n"
+      },
+      "date": 1459537134505
+    },
+    {
+      "type": "edit",
+      "id": "e2ca087d3b378246",
+      "item": {
+        "type": "code",
+        "id": "e2ca087d3b378246",
+        "text": "more:pagemap:document-pagetype:Product*Details"
+      },
+      "date": 1459537139155
+    },
+    {
+      "type": "edit",
+      "id": "682552757f7709be",
+      "item": {
+        "type": "code",
+        "id": "682552757f7709be",
+        "text": "<PageMap>\n  <DataObject type=\"document\">\n    <Attribute name=\"pagetype\">Product Details</Attribute>\n  </DataObject>\n</PageMap>\n"
+      },
+      "date": 1459537163568
+    },
+    {
+      "type": "edit",
+      "id": "682552757f7709be",
+      "item": {
+        "type": "code",
+        "id": "682552757f7709be",
+        "text": "<PageMap>\n  <DataObject type=\"document\">\n    <Attribute name=\"pagetype\">\n      Product Details\n    </Attribute>\n  </DataObject>\n</PageMap>\n"
+      },
+      "date": 1459537184916
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "b346aa17f8183d00",
+        "text": "In that example the asterisk allows the single \"more:\" operator to match the two words in the attribute value."
+      },
+      "after": "e2ca087d3b378246",
+      "id": "b346aa17f8183d00",
+      "date": 1459537198298
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "f88123c3d18715f0",
+        "text": "Of course alternatively you could omit the space in the attribute value in the pagemap (e.g. \"ProductDetails\") in which case you wouldn't need to use the asterisk syntax in the query."
+      },
+      "after": "b346aa17f8183d00",
+      "id": "f88123c3d18715f0",
+      "date": 1459537204000
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "4d4270f53ed31a7f",
+        "text": "The 'asterisk syntax' might not yet be described in documentation, but hxu-cse mentioned it in another discussion - [https://groups.google.com/a/googleproductforums.com/d/msg/customsearch/xiHI497NOLM/e6MX6gaMayIJ groups.google.com]"
+      },
+      "after": "f88123c3d18715f0",
+      "id": "4d4270f53ed31a7f",
+      "date": 1459537209817
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "728377d716b7bf57",
+        "text": "You've already read the relevant documentation but I'll include these reference links for other readers:\n\nIn the Structured Search documentation  (formerly titled \"Drilling deeper into search results\", recently revised and now titled \"Filtering and sorting search results\"),  see the \"Web search\" section's \"Filter by Attribute\" subsection:\n\nhttp://code.google.com/apis/customsearch/docs/structured_search.html#filter_by_attribute\n\nFor information on how to provide structured data (PageMaps etc.) see:\n\nhttp://code.google.com/apis/customsearch/docs/structured_data.html"
+      },
+      "after": "4d4270f53ed31a7f",
+      "id": "728377d716b7bf57",
+      "date": 1459537221051
+    },
+    {
+      "type": "add",
+      "id": "918c1b8fd040fec5",
+      "item": {
+        "type": "paragraph",
+        "id": "918c1b8fd040fec5",
+        "text": "# Documentation"
+      },
+      "after": "4d4270f53ed31a7f",
+      "date": 1459537232132
+    },
+    {
+      "type": "edit",
+      "id": "918c1b8fd040fec5",
+      "item": {
+        "type": "markdown",
+        "id": "918c1b8fd040fec5",
+        "text": "# Documentation"
+      },
+      "date": 1459537233373
+    },
+    {
+      "type": "edit",
+      "id": "728377d716b7bf57",
+      "item": {
+        "type": "paragraph",
+        "id": "728377d716b7bf57",
+        "text": "You've already read the relevant documentation but I'll include these reference links for other readers:\n\nIn the Structured Search documentation  (formerly titled \"Drilling deeper into search results\", recently revised and now titled \"Filtering and sorting search results\"),  see the \"Web search\" section's \"Filter by Attribute\" subsection: - [http://code.google.com/apis/customsearch/docs/structured_search.html#filter_by_attribute code.google.com]\n\n"
+      },
+      "date": 1459537267037
+    },
+    {
+      "type": "add",
+      "id": "2cc7a98fb0f4358c",
+      "item": {
+        "type": "paragraph",
+        "id": "2cc7a98fb0f4358c",
+        "text": "For information on how to provide structured data (PageMaps etc.) see [http://code.google.com/apis/customsearch/docs/structured_data.html code.google.com]"
+      },
+      "after": "728377d716b7bf57",
+      "date": 1459537283301
+    },
+    {
+      "item": {
+        "type": "markdown",
+        "id": "aa2cdc92658e5a11",
+        "text": "# Example"
+      },
+      "id": "aa2cdc92658e5a11",
+      "type": "add",
+      "after": "2cc7a98fb0f4358c",
+      "date": 1459541624998
+    },
+    {
+      "type": "edit",
+      "id": "aa2cdc92658e5a11",
+      "item": {
+        "type": "markdown",
+        "id": "aa2cdc92658e5a11",
+        "text": "# Example"
+      },
+      "date": 1459541635851
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "42ad93a7ae746545",
+        "text": "<PageMap>\n<DataObject type=\"thumbnail\">\n<Attribute name=\"src\" value=\"http://images6.cpcache.com/product/17930066_150x150_Front.jpg\"/>\n<Attribute name=\"class\" value=\"search_thumb\"/>\n<Attribute name=\"width\" value=\"150\"/>\n<Attribute name=\"height\" value=\"150\"/>\n<Attribute name=\"alt\" value=\" ~ Peace On Earth Value T-Shirt\" />\n</DataObject>\n<DataObject type=\"document\">\n<Attribute name=\"pagetype\">Products</Attribute>\n<Attribute name=\"department\">Men's Apparel</Attribute>\n</DataObject>\n</PageMap>"
+      },
+      "id": "42ad93a7ae746545",
+      "type": "add",
+      "after": "658087249ce3f7bd",
+      "date": 1459541653779
+    },
+    {
+      "type": "move",
+      "order": [
+        "206715dbcc704d5e",
+        "682552757f7709be",
+        "78016eb0a0a9b101",
+        "ef0aafa9611c8ccf",
+        "e2ca087d3b378246",
+        "b346aa17f8183d00",
+        "f88123c3d18715f0",
+        "4d4270f53ed31a7f",
+        "918c1b8fd040fec5",
+        "728377d716b7bf57",
+        "2cc7a98fb0f4358c",
+        "42ad93a7ae746545",
+        "aa2cdc92658e5a11",
+        "658087249ce3f7bd"
+      ],
+      "id": "42ad93a7ae746545",
+      "date": 1459541658634,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "edit",
+      "id": "aa2cdc92658e5a11",
+      "item": {
+        "type": "markdown",
+        "id": "aa2cdc92658e5a11",
+        "text": "# Example"
+      },
+      "date": 1459541661739
+    },
+    {
+      "type": "add",
+      "id": "658087249ce3f7bd",
+      "item": {
+        "type": "paragraph",
+        "id": "658087249ce3f7bd",
+        "text": "From this we can created refinements in the control panel, respectively with the optional search words:"
+      },
+      "after": "aa2cdc92658e5a11",
+      "date": 1459541663308
+    },
+    {
+      "type": "edit",
+      "id": "42ad93a7ae746545",
+      "item": {
+        "type": "code",
+        "id": "42ad93a7ae746545",
+        "text": "<PageMap>\n<DataObject type=\"thumbnail\">\n<Attribute name=\"src\" value=\"http://images6.cpcache.com/product/17930066_150x150_Front.jpg\"/>\n<Attribute name=\"class\" value=\"search_thumb\"/>\n<Attribute name=\"width\" value=\"150\"/>\n<Attribute name=\"height\" value=\"150\"/>\n<Attribute name=\"alt\" value=\" ~ Peace On Earth Value T-Shirt\" />\n</DataObject>\n<DataObject type=\"document\">\n<Attribute name=\"pagetype\">Products</Attribute>\n<Attribute name=\"department\">Men's Apparel</Attribute>\n</DataObject>\n</PageMap>"
+      },
+      "date": 1459541673114
+    },
+    {
+      "type": "edit",
+      "id": "658087249ce3f7bd",
+      "item": {
+        "type": "paragraph",
+        "id": "658087249ce3f7bd",
+        "text": "From this we can created refinements in the control panel, respectively with the optional search words:"
+      },
+      "date": 1459541711352
+    },
+    {
+      "type": "add",
+      "id": "ccbb0bf865c5e25a",
+      "item": {
+        "type": "paragraph",
+        "id": "ccbb0bf865c5e25a",
+        "text": ""
+      },
+      "after": "658087249ce3f7bd",
+      "date": 1459541713846
+    },
+    {
+      "type": "add",
+      "id": "bdaa98a202788899",
+      "item": {
+        "type": "paragraph",
+        "id": "bdaa98a202788899",
+        "text": "This generates the following FacetItems in the context XML:"
+      },
+      "after": "ccbb0bf865c5e25a",
+      "date": 1459541718558
+    },
+    {
+      "type": "add",
+      "id": "338c77b01041b8a1",
+      "item": {
+        "type": "paragraph",
+        "id": "338c77b01041b8a1",
+        "text": ""
+      },
+      "after": "bdaa98a202788899",
+      "date": 1459541724375
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "405c123156ef298a",
+        "text": "more:pagemap:document-pagetype:Products\nmore:pagemap:document-department:Men's*Wear"
+      },
+      "id": "405c123156ef298a",
+      "type": "add",
+      "after": "845f7058db38c5ee",
+      "date": 1459541749564
+    },
+    {
+      "type": "add",
+      "id": "845f7058db38c5ee",
+      "item": {
+        "type": "paragraph",
+        "id": "845f7058db38c5ee",
+        "text": "You can then download the context XML file from the Advanced page, re-sorted the FacetItems so they'd appear in the order you want on the CSE and uploaded the new XML file via the Advanced page.\n"
+      },
+      "after": "338c77b01041b8a1",
+      "date": 1459541753208
+    },
+    {
+      "type": "remove",
+      "id": "ccbb0bf865c5e25a",
+      "date": 1459541756127
+    },
+    {
+      "type": "edit",
+      "id": "405c123156ef298a",
+      "item": {
+        "type": "code",
+        "id": "405c123156ef298a",
+        "text": "more:pagemap:document-pagetype:Products\nmore:pagemap:document-department:Men's*Wear"
+      },
+      "date": 1459541761010
+    },
+    {
+      "item": {
+        "type": "code",
+        "id": "a5d0e31ea50b2753",
+        "text": "<FacetItem>\n  <Label name=\"products\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-pagetype:Products\n    </Rewrite>\n  </Label>\n  <Title>Products</Title>\n</FacetItem>\n<FacetItem>\n  <Label name=\"men_s_wear\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-department:Men&apos;s*Wear\n    </Rewrite>\n  </Label>\n  <Title>Men&apos;s Wear</Title>\n</FacetItem>"
+      },
+      "id": "a5d0e31ea50b2753",
+      "type": "add",
+      "after": "845f7058db38c5ee",
+      "date": 1459541766694
+    },
+    {
+      "type": "move",
+      "order": [
+        "206715dbcc704d5e",
+        "682552757f7709be",
+        "78016eb0a0a9b101",
+        "ef0aafa9611c8ccf",
+        "e2ca087d3b378246",
+        "b346aa17f8183d00",
+        "f88123c3d18715f0",
+        "4d4270f53ed31a7f",
+        "918c1b8fd040fec5",
+        "728377d716b7bf57",
+        "2cc7a98fb0f4358c",
+        "aa2cdc92658e5a11",
+        "42ad93a7ae746545",
+        "658087249ce3f7bd",
+        "405c123156ef298a",
+        "bdaa98a202788899",
+        "a5d0e31ea50b2753",
+        "338c77b01041b8a1",
+        "845f7058db38c5ee"
+      ],
+      "id": "a5d0e31ea50b2753",
+      "date": 1459541768412
+    },
+    {
+      "type": "remove",
+      "id": "338c77b01041b8a1",
+      "date": 1459541771769
+    },
+    {
+      "type": "edit",
+      "id": "a5d0e31ea50b2753",
+      "item": {
+        "type": "code",
+        "id": "a5d0e31ea50b2753",
+        "text": "<FacetItem>\n  <Label name=\"products\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-pagetype:Products\n    </Rewrite>\n  </Label>\n  <Title>Products</Title>\n</FacetItem>\n<FacetItem>\n  <Label name=\"men_s_wear\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-department:Men&apos;s*Wear\n    </Rewrite>\n  </Label>\n  <Title>Men&apos;s Wear</Title>\n</FacetItem>"
+      },
+      "date": 1459541774706
+    },
+    {
+      "type": "edit",
+      "id": "a5d0e31ea50b2753",
+      "item": {
+        "type": "code",
+        "id": "a5d0e31ea50b2753",
+        "text": "<FacetItem>\n  <Label name=\"products\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-pagetype:Products\n    </Rewrite>\n  </Label>\n  <Title>Products</Title>\n</FacetItem>\n<FacetItem>\n  <Label name=\"men_s_wear\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-department:Men&apos;s*Wear\n    </Rewrite>\n  </Label>\n  <Title>Men&apos;s Wear</Title>\n</FacetItem>"
+      },
+      "date": 1459541812100
+    },
+    {
+      "type": "edit",
+      "id": "a5d0e31ea50b2753",
+      "item": {
+        "type": "code",
+        "id": "a5d0e31ea50b2753",
+        "text": "<FacetItem>\n  <Label name=\"products\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-pagetype:Products\n    </Rewrite>\n  </Label>\n  <Title>Products</Title>\n</FacetItem>\n<FacetItem>\n  <Label name=\"men_s_wear\" mode=\"BOOST\">\n    <Rewrite>\n      more:pagemap:document-department:Men&apos;s*Wear\n    </Rewrite>\n  </Label>\n  <Title>Men&apos;s Wear</Title>\n</FacetItem>"
+      },
+      "date": 1459541850724
+    },
+    {
+      "type": "fork",
+      "date": 1459541863858
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "cfc7e86a43e39c36"
+      },
+      "id": "cfc7e86a43e39c36",
+      "type": "add",
+      "after": "845f7058db38c5ee",
+      "date": 1459541867737
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example taken from this discussion:"
+      },
+      "date": 1459541878988
+    },
+    {
+      "type": "move",
+      "order": [
+        "206715dbcc704d5e",
+        "682552757f7709be",
+        "78016eb0a0a9b101",
+        "ef0aafa9611c8ccf",
+        "e2ca087d3b378246",
+        "b346aa17f8183d00",
+        "f88123c3d18715f0",
+        "4d4270f53ed31a7f",
+        "918c1b8fd040fec5",
+        "728377d716b7bf57",
+        "2cc7a98fb0f4358c",
+        "aa2cdc92658e5a11",
+        "cfc7e86a43e39c36",
+        "42ad93a7ae746545",
+        "658087249ce3f7bd",
+        "405c123156ef298a",
+        "bdaa98a202788899",
+        "a5d0e31ea50b2753",
+        "845f7058db38c5ee"
+      ],
+      "id": "cfc7e86a43e39c36",
+      "date": 1459541881152
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example taken from this discussion: [https://productforums.google.com/forum/#!topic/customsearch/sctyjImlB-g productforums.google.com]"
+      },
+      "date": 1459541907845
+    },
+    {
+      "type": "edit",
+      "id": "728377d716b7bf57",
+      "item": {
+        "type": "paragraph",
+        "id": "728377d716b7bf57",
+        "text": "In the Structured Search documentation titled \"Filtering and sorting search results\",  see the \"Web search\" section's \"Filter by Attribute\" subsection: - [http://code.google.com/apis/customsearch/docs/structured_search.html#filter_by_attribute code.google.com]\n\n"
+      },
+      "date": 1459541948685
+    },
+    {
+      "type": "edit",
+      "id": "42ad93a7ae746545",
+      "item": {
+        "type": "code",
+        "id": "42ad93a7ae746545",
+        "text": "<PageMap>\n  <DataObject type=\"thumbnail\">\n    <Attribute name=\"src\" value=\"http://images6.cpcache.com/product/17930066_150x150_Front.jpg\"/>\n    <Attribute name=\"class\" value=\"search_thumb\"/>\n    <Attribute name=\"width\" value=\"150\"/>\n    <Attribute name=\"height\" value=\"150\"/>\n    <Attribute name=\"alt\" value=\" ~ Peace On Earth Value T-Shirt\" />\n  </DataObject>\n\n  <DataObject type=\"document\">\n    <Attribute name=\"pagetype\">Products</Attribute>\n    <Attribute name=\"department\">Men's Apparel</Attribute>\n  </DataObject>\n</PageMap>"
+      },
+      "date": 1459542015353
+    },
+    {
+      "type": "edit",
+      "id": "42ad93a7ae746545",
+      "item": {
+        "type": "code",
+        "id": "42ad93a7ae746545",
+        "text": "<PageMap>\n  <DataObject type=\"thumbnail\">\n    <Attribute name=\"src\" value=\"http://images6.cpcache.com/product/17930066_150x150_Front.jpg\"/>\n    <Attribute name=\"class\" value=\"search_thumb\"/>\n    <Attribute name=\"width\" value=\"150\"/>\n    <Attribute name=\"height\" value=\"150\"/>\n    <Attribute name=\"alt\" value=\" ~ Peace On Earth Value T-Shirt\" />\n  </DataObject>\n\n  <DataObject type=\"document\">\n    <Attribute name=\"pagetype\">\n      Products\n    </Attribute>\n    <Attribute name=\"department\">\n      Men's Apparel\n    </Attribute>\n  </DataObject>\n</PageMap>"
+      },
+      "date": 1459542074643
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example in which we add two <DataObject> tags - one for a [[Adding a thumbnail]], and on for marking up a [[Refinement]]."
+      },
+      "date": 1459542158937
+    },
+    {
+      "type": "add",
+      "id": "ba070a45efc6ad1f",
+      "item": {
+        "type": "paragraph",
+        "id": "ba070a45efc6ad1f",
+        "text": "The example is taken from this discussion: [https://productforums.google.com/forum/#!topic/customsearch/sctyjImlB-g productforums.google.com]"
+      },
+      "after": "cfc7e86a43e39c36",
+      "date": 1459542163803
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example in which we add two <DataObject> tags - one for a [[Adding a thumbnail]], and on for marking up a page with two [[Refinements]]."
+      },
+      "date": 1459542183596
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example in which we add two <DataObject> tags - one for a [[Adding Thumbnails to PageMap]], and on for marking up a page with two [[Refinements]]."
+      },
+      "date": 1459542405770
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example in which we add two <DataObject> tags - one for a [[Adding Thumbnails]], and on for marking up a page with two [[Refinements]]."
+      },
+      "date": 1459542435098
+    },
+    {
+      "type": "edit",
+      "id": "206715dbcc704d5e",
+      "item": {
+        "type": "paragraph",
+        "id": "206715dbcc704d5e",
+        "text": "Suppose you've defined [[PageMaps]] with a \"pagetype\" attribute as in this example:"
+      },
+      "date": 1459543194262
+    },
+    {
+      "type": "edit",
+      "id": "cfc7e86a43e39c36",
+      "item": {
+        "type": "paragraph",
+        "id": "cfc7e86a43e39c36",
+        "text": "Below is an example in which we add two <[[DataObject]]> tags - one for a [[Adding Thumbnails]], and on for marking up a page with two [[Refinements]]."
+      },
+      "date": 1459543276906
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "f8485e1bbb113571"
+      },
+      "id": "f8485e1bbb113571",
+      "type": "add",
+      "after": "845f7058db38c5ee",
+      "date": 1460156012248
+    },
+    {
+      "type": "edit",
+      "id": "f8485e1bbb113571",
+      "item": {
+        "type": "reference",
+        "id": "f8485e1bbb113571",
+        "site": "dev.himalayan.academy",
+        "slug": "build-and-submit-a-sitemap",
+        "title": "Build and submit a sitemap",
+        "text": "Here is how you build and submit a [[google Site Map]]:"
+      },
+      "date": 1460156014664
+    },
+    {
+      "type": "fork",
+      "site": "dev.himalayan.academy",
+      "date": 1489220935179
+    },
+    {
+      "type": "edit",
+      "id": "aa2cdc92658e5a11",
+      "item": {
+        "type": "markdown",
+        "id": "aa2cdc92658e5a11",
+        "text": "# [[Pagemap Examples]]"
+      },
+      "date": 1489224542060
+    },
+    {
+      "type": "edit",
+      "id": "aa2cdc92658e5a11",
+      "item": {
+        "type": "markdown",
+        "id": "aa2cdc92658e5a11",
+        "text": "# Pagemap Examples"
+      },
+      "date": 1489224720645
+    },
+    {
+      "type": "edit",
+      "id": "ba070a45efc6ad1f",
+      "item": {
+        "type": "paragraph",
+        "id": "ba070a45efc6ad1f",
+        "text": "Let's take a look at sme [[Pagemap Examples]]. The example below is taken from this discussion: [https://productforums.google.com/forum/#!topic/customsearch/sctyjImlB-g productforums.google.com]"
+      },
+      "date": 1489224806615
+    }
+  ]
+}

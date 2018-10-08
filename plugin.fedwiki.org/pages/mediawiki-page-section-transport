@@ -1,0 +1,901 @@
+{
+  "title": "Mediawiki Page Section Transport",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "728921eae995ab44",
+      "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] by simply dragging and dropping a Wikipedia section page url onto the transporter:"
+    },
+    {
+      "type": "transport",
+      "id": "10ea2af363e51a5f",
+      "text": "POST https://rest.livecode.world/mediawiki/importSection"
+    },
+    {
+      "type": "markdown",
+      "id": "5a4d4c50029ad335",
+      "text": "# To Do"
+    },
+    {
+      "type": "markdown",
+      "id": "1e7deed8de779e92",
+      "text": "* Implement new [[Provenance at Creation]] feature...\n* Get this to work with [[Other Mediawikis]]\n* Test the various features in actual use"
+    },
+    {
+      "type": "html",
+      "id": "20084356ff8e69ce",
+      "text": "<blockquote><b style='color: darkred'>Question: </b>\n\nhow would I store information for a [[Mediawiki Page Section Transport]]?<p>"
+    },
+    {
+      "type": "paragraph",
+      "id": "3466b1e6dbc576ba",
+      "text": "Let's take an example where the [[Mediawiki Page Transport]] which is called by dropping a WIkipedia URL for at the \"Spacecraft\" page, and send (via an HTTP POST) to \"https://livecode.world/mediawiki\"."
+    },
+    {
+      "type": "paragraph",
+      "id": "4bc8b7ebf17a836b",
+      "text": "This results in the following <source item> being added to a <create> action in the journal of the \"Spacecraft\" fedwiki page:"
+    },
+    {
+      "type": "code",
+      "id": "e7825e2e969378d3",
+      "text": "source = { url, date, transport, repo }\nurl = \"https://en.wikipedia.org/wiki/Spacecraft\"\ndate = 1458105780000\ntransport = \"https://livecode.world/mediawiki\"\nrepo = \"https://github.com/opn/mediwiki.lc\""
+    },
+    {
+      "type": "paragraph",
+      "id": "30c3f524b2c84199",
+      "text": "This result in an imported table-of-contents (TOC), which includes and internal Fedwiki link to a (currently non-existent) page for the section \"History\" on the Spacecraft page."
+    },
+    {
+      "type": "markdown",
+      "id": "edb55de70c40a897",
+      "text": "Selecting the \"History\" link  may result in one of a number of different scenarios:\n* The page does not exist\n* An older version of the imported page exists locally\n* An unrelated page called History already exists."
+    },
+    {
+      "type": "paragraph",
+      "id": "f17f8fcaf6f775cb",
+      "text": "We need to obtain the information for the \"history\" link that it is section 1 of the page \"Spacecraft\" on wikipedia. "
+    },
+    {
+      "text": "<blockquote><b style='color: darkgreen'>Suggestion: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>",
+      "id": "5d5109251e131123",
+      "type": "html",
+      "alias": "20084356ff8e69ce"
+    },
+    {
+      "type": "markdown",
+      "id": "9546dbda40035b5a",
+      "text": "# About"
+    },
+    {
+      "type": "paragraph",
+      "id": "2f510a54dc58ba34",
+      "text": "The importSection handler in the code below, obtains from its data from a [[Mediawiki API]] call, which in the case of the History Section for the Spacecraft project looks like the following:"
+    },
+    {
+      "type": "code",
+      "id": "c3c5c7e974d4392b",
+      "text": "/w/api.php?action=parse&format=json\n&page=Spacecraft\n&prop=text|images|wikitext|... |sections\n&section=1\n&redirects"
+    },
+    {
+      "type": "paragraph",
+      "id": "44f98188f264ec24",
+      "text": "The url should take the following form:"
+    },
+    {
+      "type": "code",
+      "id": "9d5b25d0378a3212",
+      "text": "https://en.wikipedia.org/w/index.php?title=Spacecraft&action=edit&section=1"
+    },
+    {
+      "type": "paragraph",
+      "id": "5cbe66ed25934d16",
+      "text": "and it will also usually be achieved by dragging and dropping the \"edit\" link next to the section title on a Wikipedia page. This results in HTML being sent to the transporter of the following form:"
+    },
+    {
+      "type": "code",
+      "id": "26dbf2e078161baf",
+      "text": "{\"text\":\"https://en.wikipedia.org/w/index.php?title=Spacecraft&action=edit&section=1\",\"html\":\"<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html;charset=UTF-8\\\"><a href=\\\"https://en.wikipedia.org/w/index.php?title=Spacecraft&action=edit&section=1\\\">edit</a>\"}"
+    },
+    {
+      "type": "paragraph",
+      "id": "5c0c56fb914d80f1",
+      "text": "In both cases we extract the same url and extract the page title (\"Spacecraft\"), and the section number (1), which we pass on to the key handler "
+    },
+    {
+      "type": "markdown",
+      "id": "d9f45aae0a436d21",
+      "text": "# Code"
+    },
+    {
+      "type": "code",
+      "id": "8869c0772777be8e",
+      "text": "on importSection\n   put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n   put \"^https:\\/\\/(..)\\.wikipedia.org\\/w\\/index.php\\?title=(.+)&action=edit&section=(.+)$\" into someReg\n   if matchText (droppedURL, someReg, someLang, sectionTitle, sectionNum) is true then\n      set the itemdelimiter to \"&\"\n      put item 1 of sectionNum into sectionNum\n      fedwiki_ParseWikipediaEditLink sectionTitle, sectionNum, droppedURL, someLang\n   else\n      put fedwiki_ConstructErrorJSON (\"Not a Wikipedia edit link!\") into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end if\nend importSection"
+    },
+    {
+      "type": "paragraph",
+      "id": "7f947f7965d5c9d7",
+      "text": "The code simply takes the dropped \"text\"element of the [[json]] above - and assumes it is an edit link url.  I then and extracts the page title and section number passing this on to the [[Mediawiki Api]] using the library handler:"
+    },
+    {
+      "type": "paragraph",
+      "id": "981c743b17ca4068",
+      "text": "Here is the relevant handler in the [[Mediawiki Transport]] which you can find in the [[mediaWiki.lc controller]] over here on [https://github.com/LiveCodeWorld/lib_MediaWiki githib]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Mediawiki Page Section Transport",
+        "story": []
+      },
+      "date": 1458684396155
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2f510a54dc58ba34"
+      },
+      "id": "2f510a54dc58ba34",
+      "type": "add",
+      "date": 1458684408077
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] from the data extracted from a [[Mediawiki API]] call. "
+      },
+      "id": "728921eae995ab44",
+      "date": 1458684410623
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "aa55c73a9ad4b99a",
+        "text": "Simply drag and drop a Wikipedia section page url from this site onto the transporter:"
+      },
+      "after": "728921eae995ab44",
+      "id": "aa55c73a9ad4b99a",
+      "date": 1458684414062
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://livecode.world/mediawiki/importSection"
+      },
+      "after": "aa55c73a9ad4b99a",
+      "id": "10ea2af363e51a5f",
+      "date": 1458684416048
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] "
+      },
+      "date": 1458684436912
+    },
+    {
+      "type": "remove",
+      "id": "aa55c73a9ad4b99a",
+      "date": 1458684439659
+    },
+    {
+      "type": "edit",
+      "id": "728921eae995ab44",
+      "item": {
+        "type": "paragraph",
+        "id": "728921eae995ab44",
+        "text": "This [[Transport]] allows you to create a fedwiki [[ghost page]] by simply dragging and dropping a Wikipedia section page url onto the transporter:"
+      },
+      "date": 1458684472230
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "9546dbda40035b5a",
+        "text": "# About"
+      },
+      "after": "10ea2af363e51a5f",
+      "id": "9546dbda40035b5a",
+      "date": 1458684479596
+    },
+    {
+      "type": "edit",
+      "id": "2f510a54dc58ba34",
+      "item": {
+        "type": "paragraph",
+        "id": "2f510a54dc58ba34",
+        "text": "from the data extracted from a [[Mediawiki API]] call. "
+      },
+      "date": 1458684484462
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "44f98188f264ec24",
+        "text": "The url should take the following form:"
+      },
+      "after": "2f510a54dc58ba34",
+      "id": "44f98188f264ec24",
+      "date": 1458684490627
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "9d5b25d0378a3212",
+        "text": "https://en.wikipedia.org/w/index.php?title=Spacecraft&action=edit&section=1"
+      },
+      "after": "44f98188f264ec24",
+      "id": "9d5b25d0378a3212",
+      "date": 1458684494843
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5cbe66ed25934d16",
+        "text": "and it will also usually be achieved by dragging and dropping the \"edit\" link next to the section title on a Wikipedia page. This results in HTML being sent to the transporter of the following form:"
+      },
+      "after": "9d5b25d0378a3212",
+      "id": "5cbe66ed25934d16",
+      "date": 1458684498803
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "5c0c56fb914d80f1",
+        "text": "In both cases we extract the same url and extract the page title (\"Spacecraft\"), and the section number (1), which we pass on to the key handler "
+      },
+      "after": "5cbe66ed25934d16",
+      "id": "5c0c56fb914d80f1",
+      "date": 1458684502291
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "26dbf2e078161baf",
+        "text": "{\"text\":\"https://en.wikipedia.org/w/index.php?title=Spacecraft&action=edit&section=1\",\"html\":\"<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html;charset=UTF-8\\\"><a href=\\\"https://en.wikipedia.org/w/index.php?title=Spacecraft&action=edit&section=1\\\">edit</a>\"}"
+      },
+      "after": "5c0c56fb914d80f1",
+      "id": "26dbf2e078161baf",
+      "date": 1458684506208
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1"
+      ],
+      "id": "26dbf2e078161baf",
+      "date": 1458684511155
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "d9f45aae0a436d21",
+        "text": "# Code"
+      },
+      "after": "5c0c56fb914d80f1",
+      "id": "d9f45aae0a436d21",
+      "date": 1458684515016
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "8869c0772777be8e",
+        "text": "on importSection\n   put fedwiki_GetDroppedUrl ($_POST_RAW) into droppedURL\n   put \"^https:\\/\\/(..)\\.wikipedia.org\\/w\\/index.php\\?title=(.+)&action=edit&section=(.+)$\" into someReg\n   if matchText (droppedURL, someReg, someLang, sectionTitle, sectionNum) is true then\n      set the itemdelimiter to \"&\"\n      put item 1 of sectionNum into sectionNum\n      fedwiki_ParseWikipediaEditLink sectionTitle, sectionNum, droppedURL, someLang\n   else\n      put fedwiki_ConstructErrorJSON (\"Not a Wikipedia edit link!\") into pageJSON\n      fedwiki_ReturnJSON pageJSON\n   end if\nend importSection"
+      },
+      "after": "26dbf2e078161baf",
+      "id": "8869c0772777be8e",
+      "date": 1458684519624
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "8869c0772777be8e",
+        "d9f45aae0a436d21"
+      ],
+      "id": "8869c0772777be8e",
+      "date": 1458684525690
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e"
+      ],
+      "id": "d9f45aae0a436d21",
+      "date": 1458684528799
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "7f947f7965d5c9d7",
+        "text": "The code simply takes the dropped \"text\"element of the josn above - and assumes it is an edit link url.  I then and extracts the page title and section number passing this on to the [[Mediawiki Api]] using the library handler:"
+      },
+      "after": "8869c0772777be8e",
+      "id": "7f947f7965d5c9d7",
+      "date": 1458684535352
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "981c743b17ca4068",
+        "text": "Here is the relevant handler in the [[Mediawiki Transport]] which you can find in the [[mediaWiki.lc controller]] over here on [fdas github]"
+      },
+      "after": "7f947f7965d5c9d7",
+      "id": "981c743b17ca4068",
+      "date": 1458684539191
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "* Test the various features in actual use\n* Implement new [[Provenance at Creation]] feature...\n* Get this to work with [[Other Mediawikis]]"
+      },
+      "after": "981c743b17ca4068",
+      "id": "1e7deed8de779e92",
+      "date": 1458684542931
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "markdown",
+        "id": "5a4d4c50029ad335",
+        "text": "# To Do"
+      },
+      "after": "981c743b17ca4068",
+      "id": "5a4d4c50029ad335",
+      "date": 1458684547476
+    },
+    {
+      "type": "add",
+      "item": {
+        "id": "75633ef66b929467",
+        "type": "reference",
+        "site": "plugin.fedwiki.org",
+        "slug": "question",
+        "title": "Question",
+        "text": "[[Question]]: how would I store information for a [[Wikipedia Section Transporter]]?"
+      },
+      "after": "728921eae995ab44",
+      "id": "75633ef66b929467",
+      "date": 1458684687394
+    },
+    {
+      "type": "edit",
+      "id": "75633ef66b929467",
+      "item": {
+        "id": "75633ef66b929467",
+        "type": "reference",
+        "site": "plugin.fedwiki.org",
+        "slug": "question",
+        "title": "Question",
+        "text": "[[Question]]: how would I store information for a [[Mediawiki Page Section Transporter]]?"
+      },
+      "date": 1458684708991
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: darkred'>Question: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>"
+      },
+      "after": "728921eae995ab44",
+      "id": "20084356ff8e69ce",
+      "date": 1458684773181
+    },
+    {
+      "type": "remove",
+      "id": "75633ef66b929467",
+      "date": 1458684781641
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: darkred'>Question: </b>\n\nhow would I store information for a [[Mediawiki Page Section Transporter]]?<p>"
+      },
+      "date": 1458684789563
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "5a4d4c50029ad335",
+        "20084356ff8e69ce",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068",
+        "1e7deed8de779e92"
+      ],
+      "id": "5a4d4c50029ad335",
+      "date": 1458684828470
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "5a4d4c50029ad335",
+        "20084356ff8e69ce",
+        "1e7deed8de779e92",
+        "10ea2af363e51a5f",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068"
+      ],
+      "id": "1e7deed8de779e92",
+      "date": 1458684836606
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "5a4d4c50029ad335",
+        "20084356ff8e69ce",
+        "1e7deed8de779e92",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068"
+      ],
+      "id": "10ea2af363e51a5f",
+      "date": 1458684843208
+    },
+    {
+      "type": "add",
+      "id": "3466b1e6dbc576ba",
+      "item": {
+        "type": "paragraph",
+        "id": "3466b1e6dbc576ba",
+        "text": "Let's take an example where the [[Mediawiki Page Transport]] which is called by dropping a WIkipedia URL for at the \"Spacecraft\" page, and send (via an HTTP POST) to \"https://livecode.world/mediawiki\"."
+      },
+      "after": "728921eae995ab44",
+      "date": 1458684948212
+    },
+    {
+      "type": "edit",
+      "id": "3466b1e6dbc576ba",
+      "item": {
+        "type": "paragraph",
+        "id": "3466b1e6dbc576ba",
+        "text": "Let's take an example where the [[Mediawiki Page Transport]] which is called by dropping a WIkipedia URL for at the \"Spacecraft\" page, and send (via an HTTP POST) to \"https://livecode.world/mediawiki\"."
+      },
+      "date": 1458685075652
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "5a4d4c50029ad335",
+        "20084356ff8e69ce",
+        "3466b1e6dbc576ba",
+        "1e7deed8de779e92",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068"
+      ],
+      "id": "3466b1e6dbc576ba",
+      "date": 1458685079775
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "20084356ff8e69ce",
+        "3466b1e6dbc576ba",
+        "30c3f524b2c84199",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068"
+      ],
+      "id": "1e7deed8de779e92",
+      "date": 1458685230777,
+      "error": {
+        "type": "error",
+        "msg": "Internal Server Error",
+        "response": "Server Ignoring move. Try reload."
+      }
+    },
+    {
+      "type": "add",
+      "id": "30c3f524b2c84199",
+      "item": {
+        "type": "paragraph",
+        "id": "30c3f524b2c84199",
+        "text": "This result in an imported table-of-contents (TOC), which includes and internal Fedwiki link to a (currently non-existent) page for the section \"History\" on the Spacecraft page."
+      },
+      "after": "3466b1e6dbc576ba",
+      "date": 1458685235690
+    },
+    {
+      "type": "fork",
+      "date": 1458685238258
+    },
+    {
+      "type": "add",
+      "id": "edb55de70c40a897",
+      "item": {
+        "type": "paragraph",
+        "id": "edb55de70c40a897",
+        "text": "Selecting the History link  may result in one of a number of different scenarios:* The page does not exist* An older version of the imported page exists locally* An unrelated page called History already exists."
+      },
+      "after": "30c3f524b2c84199",
+      "date": 1458685372015
+    },
+    {
+      "type": "edit",
+      "id": "edb55de70c40a897",
+      "item": {
+        "type": "markdown",
+        "id": "edb55de70c40a897",
+        "text": "Selecting the History link  may result in one of a number of different scenarios:* The page does not exist* An older version of the imported page exists locally* An unrelated page called History already exists."
+      },
+      "date": 1458685373124
+    },
+    {
+      "type": "edit",
+      "id": "edb55de70c40a897",
+      "item": {
+        "type": "markdown",
+        "id": "edb55de70c40a897",
+        "text": "Selecting the History link  may result in one of a number of different scenarios:\n* The page does not exist\n* An older version of the imported page exists locally\n* An unrelated page called History already exists."
+      },
+      "date": 1458685383088
+    },
+    {
+      "type": "edit",
+      "id": "1e7deed8de779e92",
+      "item": {
+        "type": "markdown",
+        "id": "1e7deed8de779e92",
+        "text": "* Implement new [[Provenance at Creation]] feature...\n* Get this to work with [[Other Mediawikis]]\n* Test the various features in actual use"
+      },
+      "date": 1458685400761
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "code",
+        "id": "e7825e2e969378d3",
+        "text": "source = { url, date, transport, repo }\nurl = \"https://en.wikipedia.org/wiki/Hypertext\"\ndate = 1458105780000\ntransport = \"http://localhost:4020/proxy\"\nrepo = \"https://github.com/ward/transport-proxy\""
+      },
+      "after": "3466b1e6dbc576ba",
+      "id": "e7825e2e969378d3",
+      "date": 1458685483613
+    },
+    {
+      "type": "edit",
+      "id": "e7825e2e969378d3",
+      "item": {
+        "type": "code",
+        "id": "e7825e2e969378d3",
+        "text": "source = { url, date, transport, repo }\nurl = \"https://en.wikipedia.org/wiki/Spacecraft\"\ndate = 1458105780000\ntransport = \"https://livecode.world/mediawiki\"\nrepo = \"https://github.com/opn/mediwiki.lc\""
+      },
+      "date": 1458685543201
+    },
+    {
+      "type": "add",
+      "id": "4bc8b7ebf17a836b",
+      "item": {
+        "type": "paragraph",
+        "id": "4bc8b7ebf17a836b",
+        "text": "This results in the following <source item> being added to a <create> action in the journal of the \"Spacecraft\" fedwiki page:"
+      },
+      "after": "3466b1e6dbc576ba",
+      "date": 1458685612752
+    },
+    {
+      "type": "add",
+      "id": "f17f8fcaf6f775cb",
+      "item": {
+        "type": "paragraph",
+        "id": "f17f8fcaf6f775cb",
+        "text": "We need to obtain the information for the \"history\" link that it is section 1 of the page \"Spacecraft\" on wikipedia. "
+      },
+      "after": "30c3f524b2c84199",
+      "date": 1458685759243
+    },
+    {
+      "type": "add",
+      "id": "eccf096028e4b615",
+      "item": {
+        "type": "paragraph",
+        "id": "eccf096028e4b615",
+        "text": "In order to do this we need to record an associative array in the JSON of the \"Spacecraft} fedwiki page. "
+      },
+      "after": "f17f8fcaf6f775cb",
+      "date": 1458685761302
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "20084356ff8e69ce",
+        "3466b1e6dbc576ba",
+        "4bc8b7ebf17a836b",
+        "e7825e2e969378d3",
+        "30c3f524b2c84199",
+        "edb55de70c40a897",
+        "f17f8fcaf6f775cb",
+        "eccf096028e4b615",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068"
+      ],
+      "id": "edb55de70c40a897",
+      "date": 1458685769697
+    },
+    {
+      "type": "edit",
+      "id": "edb55de70c40a897",
+      "item": {
+        "type": "markdown",
+        "id": "edb55de70c40a897",
+        "text": "Selecting the \"History\" link  may result in one of a number of different scenarios:\n* The page does not exist\n* An older version of the imported page exists locally\n* An unrelated page called History already exists."
+      },
+      "date": 1458685783399
+    },
+    {
+      "type": "edit",
+      "id": "eccf096028e4b615",
+      "item": {
+        "type": "paragraph",
+        "id": "eccf096028e4b615",
+        "text": "[[Suggestion]]: in order to do this we need to record an associative array in the JSON of the \"Spacecraft\" fedwiki page, and this information needs to "
+      },
+      "date": 1458685910187
+    },
+    {
+      "type": "edit",
+      "id": "2f510a54dc58ba34",
+      "item": {
+        "type": "paragraph",
+        "id": "2f510a54dc58ba34",
+        "text": "The importSection handler in the code below, obtains from its data from a [[Mediawiki API]] call, which in the case of the History Section for the Spacecraft project looks like the following:"
+      },
+      "date": 1458686047063
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c3c5c7e974d4392b"
+      },
+      "id": "c3c5c7e974d4392b",
+      "type": "add",
+      "after": "981c743b17ca4068",
+      "date": 1458686161721
+    },
+    {
+      "type": "edit",
+      "id": "c3c5c7e974d4392b",
+      "item": {
+        "type": "code",
+        "id": "c3c5c7e974d4392b",
+        "text": "/w/api.php?action=parse&format=json&page=Spacecraft&prop=text|images|wikitext|externallinks|links|categories|sections&section=1&redirects"
+      },
+      "date": 1458686165269
+    },
+    {
+      "type": "edit",
+      "id": "c3c5c7e974d4392b",
+      "item": {
+        "type": "code",
+        "id": "c3c5c7e974d4392b",
+        "text": "/w/api.php?action=parse&format=json\n&page=Spacecraft\n&prop=text|images|wikitext|externallinks|links|categories|sections\n&section=1\n&redirects"
+      },
+      "date": 1458686198967
+    },
+    {
+      "type": "move",
+      "order": [
+        "728921eae995ab44",
+        "10ea2af363e51a5f",
+        "5a4d4c50029ad335",
+        "1e7deed8de779e92",
+        "20084356ff8e69ce",
+        "3466b1e6dbc576ba",
+        "4bc8b7ebf17a836b",
+        "e7825e2e969378d3",
+        "30c3f524b2c84199",
+        "edb55de70c40a897",
+        "f17f8fcaf6f775cb",
+        "eccf096028e4b615",
+        "9546dbda40035b5a",
+        "2f510a54dc58ba34",
+        "c3c5c7e974d4392b",
+        "44f98188f264ec24",
+        "9d5b25d0378a3212",
+        "5cbe66ed25934d16",
+        "26dbf2e078161baf",
+        "5c0c56fb914d80f1",
+        "d9f45aae0a436d21",
+        "8869c0772777be8e",
+        "7f947f7965d5c9d7",
+        "981c743b17ca4068"
+      ],
+      "id": "c3c5c7e974d4392b",
+      "date": 1458686215444
+    },
+    {
+      "type": "edit",
+      "id": "c3c5c7e974d4392b",
+      "item": {
+        "type": "code",
+        "id": "c3c5c7e974d4392b",
+        "text": "/w/api.php?action=parse&format=json\n&page=Spacecraft\n&prop=text|images|wikitext|... |sections\n&section=1\n&redirects"
+      },
+      "date": 1458686243808
+    },
+    {
+      "type": "edit",
+      "id": "981c743b17ca4068",
+      "item": {
+        "type": "paragraph",
+        "id": "981c743b17ca4068",
+        "text": "Here is the relevant handler in the [[Mediawiki Transport]] which you can find in the [[mediaWiki.lc controller]] over here on [https://github.com/LiveCodeWorld/lib_MediaWiki githib]"
+      },
+      "date": 1458686388484
+    },
+    {
+      "type": "edit",
+      "id": "7f947f7965d5c9d7",
+      "item": {
+        "type": "paragraph",
+        "id": "7f947f7965d5c9d7",
+        "text": "The code simply takes the dropped \"text\"element of the [[json]] above - and assumes it is an edit link url.  I then and extracts the page title and section number passing this on to the [[Mediawiki Api]] using the library handler:"
+      },
+      "date": 1458686470303
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "<blockquote><b style='color: darkgreen'>Suggestion: </b>\n\nor you can copy this formatting here (as it looks prettier :)\n<p>",
+        "id": "5d5109251e131123",
+        "type": "html",
+        "alias": "20084356ff8e69ce"
+      },
+      "after": "eccf096028e4b615",
+      "id": "5d5109251e131123",
+      "date": 1458686568465
+    },
+    {
+      "type": "remove",
+      "id": "eccf096028e4b615",
+      "date": 1458686617141
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "text": "<blockquote><b style='color: darkgreen'>Suggestion: </b>\n\nin order to do this we need to record an associative array in the JSON of the \"Spacecraft\" fedwiki page, and this information needs to get sent along with the POST to the tranporter.\n<p>",
+        "id": "20084356ff8e69ce",
+        "type": "html"
+      },
+      "date": 1458686626878
+    },
+    {
+      "type": "edit",
+      "id": "20084356ff8e69ce",
+      "item": {
+        "type": "html",
+        "id": "20084356ff8e69ce",
+        "text": "<blockquote><b style='color: darkred'>Question: </b>\n\nhow would I store information for a [[Mediawiki Page Section Transport]]?<p>"
+      },
+      "date": 1458686686825
+    },
+    {
+      "type": "edit",
+      "id": "10ea2af363e51a5f",
+      "item": {
+        "type": "transport",
+        "id": "10ea2af363e51a5f",
+        "text": "POST https://rest.livecode.world/mediawiki/importSection"
+      },
+      "date": 1498149991423
+    }
+  ]
+}

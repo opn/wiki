@@ -1,0 +1,379 @@
+{
+  "title": "revmetadatalibrary",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "0a25cccf68927219",
+      "text": "Metadata library, this allows the setting and getting of metadata items on LiveCode objects. The metadata is divided into types, which map to the custom property sets cREVGeneral, cREVDatabase etc."
+    },
+    {
+      "type": "reference",
+      "id": "2e790b115b5c102a",
+      "site": "ide.livecode.world",
+      "slug": "revmetadataget",
+      "title": "revMetadataGet",
+      "text": "Sets the specified metadata item for pObject to pValue"
+    },
+    {
+      "type": "reference",
+      "id": "138fe7e88d83470b",
+      "site": "ide.livecode.world",
+      "slug": "revmetadataset",
+      "title": "revMetadataSet",
+      "text": "Sets the specified metadata item for pObject to pValue"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "revmetadatalibrary",
+        "story": []
+      },
+      "date": 1458388656958
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "39e7dd9a1560241a"
+      },
+      "id": "39e7dd9a1560241a",
+      "type": "add",
+      "date": 1458388658760
+    },
+    {
+      "type": "edit",
+      "id": "39e7dd9a1560241a",
+      "item": {
+        "type": "code",
+        "id": "39e7dd9a1560241a",
+        "text": "# Returns\n#   A list of available metadata types\nprivate function metadataTypes\n  return \"general,database,geometry,table,debugger\"\nend metadataTypes\n\n# Parameters\n#   pType : a metadata type\n# Returns\n#   The name of the custom property set the stores metadata items of this type\nprivate function metadataPropertySetFromTypeName pType\n  return kTypePrefix & toUpper(char 1 of pType) & char 2 to -1 of pType\nend metadataPropertySetFromTypeName\n\n# Parameters\n#   pObject : reference to an object\n#   pType : a metadata type\n#   pTag : the name of the metadata item to retrieve\n# Returns\n#   The value of the specified metadata item for the specified object.\nfunction revMetadataGet pObject, pType, pTag\n   if pType is not among the items of metadataTypes() then\n      throw \"invalid_type: \" & pType\n   end if\n   \n   local tPropertyName\n   put metadataPropertySetFromTypeName(pType) & \"[\" & pTag & \"]\" into tPropertyName\n   lock messages\n   get the tPropertyName of pObject\n   unlock messages\n   return it\nend revMetadataGet\n\nprivate command log pMessage\n   put pMessage & return after msg\nend log\n\n# Parameters\n#   pObject : reference to an object\n#   pType : a metadata type\n#   pTag : the name of the metadata item to set\n#   pValue : the new value to set the item to.\n# Description\n#   Sets the specified metadata item for pObject to pValue\ncommand revMetadataSet pObject, pType, pTag, pValue\n   if pType is not among the items of metadataTypes() then\n      throw \"invalid_type: \" & pType\n   end if\n   \n   local tPropertyName\n   put metadataPropertySetFromTypeName(pType) & \"[\" & pTag & \"]\" into tPropertyName\n   \n   # Lock messages around this for now to ensure that revCommon does not interfere with this..\n   lock messages\n   set the tPropertyName of pObject to pValue\n   unlock messages\nend revMetadataSet"
+      },
+      "date": 1458388699568
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0a25cccf68927219"
+      },
+      "id": "0a25cccf68927219",
+      "type": "add",
+      "after": "39e7dd9a1560241a",
+      "date": 1458388702296
+    },
+    {
+      "type": "edit",
+      "id": "0a25cccf68927219",
+      "item": {
+        "type": "paragraph",
+        "id": "0a25cccf68927219",
+        "text": "Metadata library, this allows the setting and getting of metadata items on LiveCode objects. The metadata is divided into types, which map to the custom property sets cREVGeneral, cREVDatabase etc."
+      },
+      "date": 1458388729163
+    },
+    {
+      "type": "move",
+      "order": [
+        "0a25cccf68927219",
+        "39e7dd9a1560241a"
+      ],
+      "id": "0a25cccf68927219",
+      "date": 1458388733030
+    },
+    {
+      "type": "edit",
+      "id": "39e7dd9a1560241a",
+      "item": {
+        "type": "code",
+        "id": "39e7dd9a1560241a",
+        "text": "command revMetadataSet pObject, pType, pTag, pValue\n   if pType is not among the items of metadataTypes() then\n      throw \"invalid_type: \" & pType\n   end if\n   \n   local tPropertyName\n   put metadataPropertySetFromTypeName(pType) & \"[\" & pTag & \"]\" into tPropertyName\n   \n   # Lock messages around this for now to ensure that revCommon does not interfere with this..\n   lock messages\n   set the tPropertyName of pObject to pValue\n   unlock messages\nend revMetadataSet"
+      },
+      "date": 1458388762998
+    },
+    {
+      "type": "add",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "paragraph",
+        "id": "7f1674e62d6b8124",
+        "text": "# Parameters\n#   pObject : reference to an object\n#   pType : a metadata type\n#   pTag : the name of the metadata item to retrieve\n# Returns\n#   The value of the specified metadata item for the specified object."
+      },
+      "after": "0a25cccf68927219",
+      "date": 1458388820670
+    },
+    {
+      "type": "add",
+      "id": "b91deef4c5b1be75",
+      "item": {
+        "type": "paragraph",
+        "id": "b91deef4c5b1be75",
+        "text": "function revMetadataGet pObject, pType, pTag\n   if pType is not among the items of metadataTypes() then\n      throw \"invalid_type: \" & pType\n   end if\n   \n   local tPropertyName\n   put metadataPropertySetFromTypeName(pType) & \"[\" & pTag & \"]\" into tPropertyName\n   lock messages\n   get the tPropertyName of pObject\n   unlock messages\n   return it\nend revMetadataGet"
+      },
+      "after": "7f1674e62d6b8124",
+      "date": 1458388845545
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "c503f60f47a07d32"
+      },
+      "id": "c503f60f47a07d32",
+      "type": "add",
+      "after": "39e7dd9a1560241a",
+      "date": 1458388850405
+    },
+    {
+      "type": "remove",
+      "id": "b91deef4c5b1be75",
+      "date": 1458388851492
+    },
+    {
+      "type": "edit",
+      "id": "c503f60f47a07d32",
+      "item": {
+        "type": "code",
+        "id": "c503f60f47a07d32",
+        "text": "function revMetadataGet pObject, pType, pTag\n   if pType is not among the items of metadataTypes() then\n      throw \"invalid_type: \" & pType\n   end if\n   \n   local tPropertyName\n   put metadataPropertySetFromTypeName(pType) & \"[\" & pTag & \"]\" into tPropertyName\n   lock messages\n   get the tPropertyName of pObject\n   unlock messages\n   return it\nend revMetadataGet"
+      },
+      "date": 1458388852866
+    },
+    {
+      "type": "move",
+      "order": [
+        "0a25cccf68927219",
+        "7f1674e62d6b8124",
+        "c503f60f47a07d32",
+        "39e7dd9a1560241a"
+      ],
+      "id": "c503f60f47a07d32",
+      "date": 1458388854428
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# Parameters\n#   pObject : reference to an object\n#   pType : a metadata type\n#   pTag : the name of the metadata item to retrieve\n# Returns\n#   The value of the specified metadata item for the specified object."
+      },
+      "date": 1458388883499
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458388907467
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# Parameters\n-- pObject : reference to an object\n-- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458388950844
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458388958734
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "0a99c44502e29156"
+      },
+      "id": "0a99c44502e29156",
+      "type": "add",
+      "after": "39e7dd9a1560241a",
+      "date": 1458388961684
+    },
+    {
+      "type": "edit",
+      "id": "0a99c44502e29156",
+      "item": {
+        "type": "markdown",
+        "id": "0a99c44502e29156",
+        "text": "# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to set\n- pValue : the new value to set the item to.\n# Description\nSets the specified metadata item for pObject to pValue"
+      },
+      "date": 1458388984887
+    },
+    {
+      "type": "move",
+      "order": [
+        "0a25cccf68927219",
+        "7f1674e62d6b8124",
+        "c503f60f47a07d32",
+        "0a99c44502e29156",
+        "39e7dd9a1560241a"
+      ],
+      "id": "0a99c44502e29156",
+      "date": 1458388987439
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# function revMetadataGet pObject, pType, pTag\n# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458389056849
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# function revMetadataGet\n# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458389066681
+    },
+    {
+      "type": "edit",
+      "id": "0a99c44502e29156",
+      "item": {
+        "type": "markdown",
+        "id": "0a99c44502e29156",
+        "text": "# command revMetadataSet\nSets the specified metadata item for pObject to pValue\n# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to set\n- pValue : the new value to set the item to."
+      },
+      "date": 1458389104819
+    },
+    {
+      "type": "edit",
+      "id": "7f1674e62d6b8124",
+      "item": {
+        "type": "markdown",
+        "id": "7f1674e62d6b8124",
+        "text": "# function [[revMetadataGet]]\nSets the specified metadata item for pObject to pValue\n# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458389145628
+    },
+    {
+      "type": "remove",
+      "id": "7f1674e62d6b8124",
+      "date": 1458389160369
+    },
+    {
+      "type": "remove",
+      "id": "c503f60f47a07d32",
+      "date": 1458389167860
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "a3977e9d16d9facd"
+      },
+      "id": "a3977e9d16d9facd",
+      "type": "add",
+      "after": "39e7dd9a1560241a",
+      "date": 1458389170104
+    },
+    {
+      "type": "edit",
+      "id": "a3977e9d16d9facd",
+      "item": {
+        "type": "reference",
+        "id": "a3977e9d16d9facd",
+        "site": "ide.livecode.world",
+        "slug": "revmetadataget",
+        "title": "revMetadataGet",
+        "text": "Sets the specified metadata item for pObject to pValue\n# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to retrieve\n# Returns\nThe value of the specified metadata item for the specified object."
+      },
+      "date": 1458389172219
+    },
+    {
+      "type": "remove",
+      "id": "a3977e9d16d9facd",
+      "date": 1458389176164
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "2e790b115b5c102a"
+      },
+      "id": "2e790b115b5c102a",
+      "type": "add",
+      "after": "39e7dd9a1560241a",
+      "date": 1458389189956
+    },
+    {
+      "type": "edit",
+      "id": "2e790b115b5c102a",
+      "item": {
+        "type": "reference",
+        "id": "2e790b115b5c102a",
+        "site": "ide.livecode.world",
+        "slug": "revmetadataget",
+        "title": "revMetadataGet",
+        "text": "Sets the specified metadata item for pObject to pValue"
+      },
+      "date": 1458389192009
+    },
+    {
+      "type": "move",
+      "order": [
+        "0a25cccf68927219",
+        "2e790b115b5c102a",
+        "0a99c44502e29156",
+        "39e7dd9a1560241a"
+      ],
+      "id": "2e790b115b5c102a",
+      "date": 1458389194445
+    },
+    {
+      "type": "edit",
+      "id": "0a99c44502e29156",
+      "item": {
+        "type": "markdown",
+        "id": "0a99c44502e29156",
+        "text": "# command [[revMetadataSet]]\nSets the specified metadata item for pObject to pValue\n# Parameters\n- pObject : reference to an object\n- pType : a metadata type\n- pTag : the name of the metadata item to set\n- pValue : the new value to set the item to."
+      },
+      "date": 1458389313451
+    },
+    {
+      "type": "remove",
+      "id": "0a99c44502e29156",
+      "date": 1458389319296
+    },
+    {
+      "type": "remove",
+      "id": "39e7dd9a1560241a",
+      "date": 1458389322216
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "138fe7e88d83470b"
+      },
+      "id": "138fe7e88d83470b",
+      "type": "add",
+      "after": "2e790b115b5c102a",
+      "date": 1458389337773
+    },
+    {
+      "type": "edit",
+      "id": "138fe7e88d83470b",
+      "item": {
+        "type": "reference",
+        "id": "138fe7e88d83470b",
+        "site": "ide.livecode.world",
+        "slug": "revmetadataset",
+        "title": "revMetadataSet",
+        "text": "Sets the specified metadata item for pObject to pValue"
+      },
+      "date": 1458389339502
+    }
+  ]
+}

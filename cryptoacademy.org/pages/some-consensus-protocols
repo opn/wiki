@@ -1,0 +1,63 @@
+{
+  "title": "Some consensus protocols",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "a49e93de-8918-44ab-9acb-56e25195adf9",
+      "text": "An example of a polynomial time binary consensus protocol that tolerates Byzantine failures is the Phase King algorithm [http://www.springerlink.com/content/gx21355767268411/ Cloture Votes: n/4-resilient Distributed Consensus in t + 1 rounds] by Garay and Berman. The algorithm solves consensus in a synchronous message passing model with ''n'' processes and up to ''f'' failures, provided ''n'' > 4''f'' - [https://en.wikipedia.org/wiki/Consensus_(computer_science)#Some_consensus_protocols wikipedia]"
+    },
+    {
+      "type": "paragraph",
+      "id": "00fa5d4c-a717-4cee-8ff9-5b1f34e29910",
+      "text": "In the phase king algorithm, there are ''f'' + 1 phases, with 2 rounds per phase."
+    },
+    {
+      "type": "paragraph",
+      "id": "631fd85c-6811-4079-9d4b-fc8d89e19b2c",
+      "text": "Each process keeps track of its preferred output (initially equal to the process's own input value).  In the first round of each phase each process broadcasts its own preferred value to all other processes. It then receives the values from all processes and determines which value is the majority value and its count. In the second round of the phase, the process whose id matches the current phase number is designated the king of the phase. The king broadcasts the majority value it observed in the first round and serves as a tie breaker.  Each process then updates its preferred value as follows.  If the count of the majority value the process observed in the first round is greater than ''n''/2 + ''f'', the process changes its preference to that majority value; otherwise it uses the phase king's value. At the end of ''f'' + 1 phases the processes output their preferred values."
+    },
+    {
+      "type": "paragraph",
+      "id": "2db94656-aa60-4809-8744-b3ad8c8465b2",
+      "text": "Google has implemented a distributed lock service ([[Distributed lock manager]]) library called Chubby ([[Distributed lock manager#Google's Chubby lock service]]).  Chubby maintains lock information in small files which are stored in a replicated database to achieve high availability in the face of failures. The database is implemented on top of a fault-tolerant log layer which is based on the Paxos consensus algorithm ([[Paxos algorithm]]). In this scheme, Chubby clients communicate with the Paxos ''master'' in order to access/update the replicated log; i.e., read/write to the files."
+    },
+    {
+      "type": "paragraph",
+      "id": "320680c0-c0a8-4d15-8758-519b38f4583a",
+      "text": "[[Bitcoin]] uses [[proof of work]] to maintain consensus in its [[peer-to-peer]] network. Nodes in the bitcoin network attempt to solve a cryptographic proof-of-work problem, where probability of finding the solution is proportional to the computational effort, in hashes per second, expended, and the node that solves the problem has their version of the block of transactions added to the peer-to-peer distributed timestamp server accepted by all of the other nodes. As any node in the network can attempt to solve the proof-of-work problem, a [[Sybil attack]] becomes unfeasible unless the attacker has over 50% of the computational resources of the network."
+    },
+    {
+      "type": "paragraph",
+      "id": "810e1892-6cfc-4120-8e2d-9ec1b8d67965",
+      "text": "Many peer-to-peer online [[Real-time strategy]] games use a modified [[Lockstep protocol]] as a consensus protocol in order to manage game state between players in a game.  Each game action results in a game state delta broadcast to all other players in the game along with a hash of the total game state.  Each player validates the change by applying the delta to their own game state and comparing the game state hashes.  If the hashes do not agree then a vote is cast, and those players whose game state is in the minority are disconnected and removed from the game (known as a desync.)"
+    },
+    {
+      "type": "paragraph",
+      "id": "6f3e5672-b936-4d33-81b4-2255c90cc3e9",
+      "text": "Another well-known approach is called MSR-type algorithms which have been used widely from computer science to control theory.[http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6481629 Resilient Asymptotic Consensus in Robust Networks][http://www.sciencedirect.com/science/article/pii/S0167691115000419?np=y Consensus of second-order multi-agent systems in the presence of locally bounded faults]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "story": "",
+        "title": "Some consensus protocols"
+      },
+      "date": 1466345238854,
+      "source": {
+        "pageTitle": "Consensus (computer science)",
+        "pageSlug": "Consensus_(computer_science)",
+        "url": "https://en.wikipedia.org/wiki/Consensus_(computer_science)#Some_consensus_protocols",
+        "date": 1466345238854,
+        "transport": "https://livecode.world/mediawiki/transportAgain",
+        "rev": 722154906,
+        "repo": "https://github.com/LiveCodeWorld/lib_MediaWiki"
+      }
+    },
+    {
+      "type": "fork",
+      "date": 1466345284222
+    }
+  ]
+}
